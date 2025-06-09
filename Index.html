@@ -1,27 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HD Heed – Because we care, we provide HD care</title>
   <style>
-    /* Basic Reset */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Brush Script MT', cursive;
       line-height: 1.6;
-      background-color: #fff;
+      background-color: #f8f8ff;
       color: #333;
+      animation: fadeIn 1s ease-in;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
     header {
-      background-color: #512b8a; /* NDIS-inspired purple */
+      background-color: #512b8a;
       color: #fff;
       padding: 1rem 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+
     header .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -30,102 +38,179 @@
       justify-content: space-between;
       padding: 0 20px;
     }
+
+    .logo img {
+      max-height: 90px;
+    }
+
     header nav ul {
       list-style: none;
       display: flex;
     }
+
     header nav ul li {
       margin-left: 20px;
     }
+
     header nav ul li a {
       color: #fff;
       text-decoration: none;
       font-weight: bold;
+      transition: color 0.3s;
     }
-    /* Hero Section */
+
+    header nav ul li a:hover {
+      color: #ffc107;
+    }
+
     .hero {
-      background: url('hero-image-placeholder.jpg') no-repeat center center/cover;
+      background: url('images/hero.jpg') no-repeat center center/cover;
       min-height: 60vh;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    /* Overlay for text readability */
+
     .hero::before {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
       background-color: rgba(81, 43, 138, 0.6);
     }
+
     .hero-content {
       position: relative;
       text-align: center;
       color: #fff;
       padding: 20px;
+      animation: fadeIn 2s ease-in-out;
     }
+
     .hero-content h1 {
-      font-size: 2.5rem;
+      font-size: 3.5rem;
       margin-bottom: 10px;
     }
+
     .hero-content p {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       margin-bottom: 20px;
     }
+
     .btn {
       background-color: #fff;
       color: #512b8a;
-      padding: 10px 20px;
+      padding: 12px 25px;
       text-decoration: none;
-      border-radius: 4px;
+      border-radius: 5px;
       font-weight: bold;
+      transition: background-color 0.3s, color 0.3s;
     }
-    /* Section Styles */
+
+    .btn:hover {
+      background-color: #512b8a;
+      color: #fff;
+    }
+
     section {
       padding: 60px 20px;
+      animation: fadeIn 1s ease-in;
     }
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
     }
+
     h2 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-bottom: 20px;
       text-align: center;
       color: #512b8a;
     }
+
     p {
       margin-bottom: 20px;
       text-align: center;
     }
-    /* Footer */
+
+    .section-image {
+      display: block;
+      margin: 0 auto 20px auto;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    /* Different background for each section */
+    .about {
+      background-color: #fff0f5;
+    }
+
+    .services {
+      background-color: #f0f8ff;
+    }
+
+    .contact {
+      background-color: #f5fffa;
+    }
+
+    /* CTA Banner */
+    .cta-banner {
+      background-color: #512b8a;
+      color: #fff;
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 1.8rem;
+    }
+
+    .cta-banner a {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #fff;
+      color: #512b8a;
+      padding: 10px 25px;
+      border-radius: 5px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .cta-banner a:hover {
+      background-color: #ffc107;
+      color: #512b8a;
+    }
+
     footer {
       background-color: #333;
       color: #fff;
       padding: 20px;
       text-align: center;
     }
+
     footer a {
       color: #fff;
       text-decoration: underline;
     }
-    /* Responsive Adjustments */
+
     @media (max-width: 768px) {
       header .container {
         flex-direction: column;
       }
+
       header nav ul {
         flex-direction: column;
         margin-top: 10px;
       }
+
       header nav ul li {
         margin: 10px 0;
       }
+
       .hero-content h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
     }
   </style>
@@ -135,7 +220,7 @@
   <header>
     <div class="container">
       <div class="logo">
-        <img src="logo-placeholder.png" alt="HD Heed Logo" style="max-height:50px;">
+        <img src="images/logo.png" alt="HD Heed Logo">
       </div>
       <nav>
         <ul>
@@ -161,6 +246,7 @@
   <section class="about">
     <div class="container">
       <h2>About Us</h2>
+      <img src="images/about.jpg" alt="About Us" class="section-image">
       <p>HD Heed is a new NDIS provider in NSW, founded by experienced professionals in disability and aged care. We are dedicated to delivering compassionate, high-quality support tailored to your needs.</p>
     </div>
   </section>
@@ -169,6 +255,7 @@
   <section class="services">
     <div class="container">
       <h2>Our Services</h2>
+      <img src="images/services.jpg" alt="Our Services" class="section-image">
       <p>We offer a range of NDIS services – from personal care to community participation – designed to empower you to live independently. Explore our services to learn how we can support your journey.</p>
       <a href="services.html" class="btn">View Services</a>
     </div>
@@ -178,10 +265,17 @@
   <section class="contact">
     <div class="container">
       <h2>Contact Us</h2>
+      <img src="images/contact.jpg" alt="Contact Us" class="section-image">
       <p>Get in touch today to discuss your needs or to request a callback. We’re here to help!</p>
       <a href="contact.html" class="btn">Contact Us</a>
     </div>
   </section>
+
+  <!-- CTA Banner -->
+  <div class="cta-banner">
+    Ready to start your journey with HD Heed?<br>
+    <a href="contact.html">Let’s Connect</a>
+  </div>
 
   <!-- Footer -->
   <footer>
