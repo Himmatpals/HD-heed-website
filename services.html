@@ -2,117 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Our Services | HD Heed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Services – HD Heed</title>
+  <meta name="description" content="Explore HD Heed's full range of NDIS services tailored to your needs, including Personal Care, Community Participation, Support Coordination, Respite, and Nursing Care." />
+  <link rel="icon" href="images/favicon.ico" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --purple: #512b8a;
+      --accent: #ffc107;
+      --bg-light: #f8f8ff;
+      --font-heading: 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
     }
-
-    body {
-      font-family: 'Brush Script MT', cursive;
-      line-height: 1.6;
-      background-color: #f8f8ff;
-      color: #333;
-      animation: fadeIn 1s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1s forwards;
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    header {
-      background-color: #512b8a;
-      color: #fff;
-      padding: 1rem 0;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    header .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-    }
-
-    .logo img {
-      max-height: 90px;
-    }
-
-    header nav ul {
-      list-style: none;
-      display: flex;
-    }
-
-    header nav ul li {
-      margin-left: 20px;
-    }
-
-    header nav ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-
-    header nav ul li a:hover {
-      color: #ffc107;
-    }
-
-    .btn {
-      background-color: #512b8a;
-      color: #fff;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      background-color: #fff;
-      color: #512b8a;
-    }
-
-    footer {
-      background-color: #333;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-
-    footer a {
-      color: #fff;
-      text-decoration: underline;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
+    a { text-decoration: none; color: inherit; }
+    .skip-link { position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus { position:static; width:auto; height:auto; background:var(--purple); color:#fff; padding:8px; z-index:100; }
+    header { background:var(--purple); box-shadow:0 4px 6px rgba(0,0,0,0.1); position:sticky; top:0; z-index:50; }
+    header .container { max-width:1200px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
+    .logo img { height:60px; }
+    nav ul { list-style:none; display:flex; gap:1rem; }
+    nav a { color:#fff; padding:0.5rem 1rem; font-weight:600; border-radius:4px; transition:background .3s, color .3s; }
+    nav a:hover, nav a:focus { background:#fff; color:var(--purple); }
+    main { overflow:hidden; }
+    .hero { position:relative; background:url('images/hero.jpg') center/cover no-repeat; min-height:60vh; display:flex; align-items:center; justify-content:center; }
+    .hero::before { content:''; position:absolute; inset:0; background:rgba(81,43,138,0.7); }
+    .hero-content { position:relative; text-align:center; color:#fff; animation:fadeInDown 1s ease-out; }
+    .hero-logo { display:block; margin:0 auto 1rem; max-width:150px; }
+    .hero-content h1 { font-family:var(--font-heading); font-size:3rem; margin-bottom:0.5rem; }
+    .hero-content p { font-size:1.25rem; margin-bottom:1.5rem; }
+    .btn { display:inline-block; background:var(--accent); color:var(--purple); padding:0.75rem 2rem; font-weight:700; border-radius:50px; transition:transform .3s, box-shadow .3s; }
+    .btn:hover, .btn:focus { transform:translateY(-3px); box-shadow:0 6px 12px rgba(0,0,0,0.2); }
+    section { padding:4rem 1rem; }
+    .container { max-width:1000px; margin:auto; }
+    h2 { font-family:var(--font-heading); font-size:2.5rem; color:var(--purple); text-align:center; margin-bottom:1rem; position:relative; }
+    h2::after { content:''; width:60px; height:4px; background:var(--accent); position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); }
+    p { text-align:center; margin-bottom:2rem; }
+    .services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem; }
+    .service-card { background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-align:center; transition:transform .3s, box-shadow .3s; }
+    .service-card:hover, .service-card:focus-within { transform:translateY(-5px); box-shadow:0 8px 16px rgba(0,0,0,0.2); }
+    .service-card h3 { font-size:1.25rem; margin:1rem 0; color:var(--purple); }
+    .service-card p { font-size:1rem; }
+    .trust { background:#fff; padding:2rem 1rem; }
+    .logo-grid { display:flex; justify-content:center; flex-wrap:wrap; gap:2rem; }
+    .logo-grid img { height:50px; filter:grayscale(100%); transition:filter .3s; }
+    .logo-grid img:hover { filter:none; }
+    .cta-banner { background:var(--purple); color:#fff; text-align:center; padding:3rem 1rem; }
+    .cta-banner a { background:var(--accent); color:var(--purple); padding:0.75rem 2rem; border-radius:50px; font-weight:700; display:inline-block; margin-top:1rem; transition:background .3s; }
+    .cta-banner a:hover, .cta-banner a:focus { background:#fff; }
+    footer { background:#333; color:#fff; text-align:center; padding:1rem; font-size:0.9rem; }
+    footer a { color:var(--accent); }
+    @keyframes fadeInDown { from {opacity:0; transform:translateY(-20px);} to {opacity:1; transform:translateY(0);} }
   </style>
 </head>
 <body>
-  <!-- Header with Navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <header>
     <div class="container">
-      <div class="logo">
-        <img src="images/logo.png" alt="HD Heed Logo">
-      </div>
-      <nav>
+      <div class="logo"><img src="images/logo.png" alt="HD Heed Logo"></div>
+      <nav aria-label="Primary navigation">
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About Us</a></li>
@@ -122,58 +73,55 @@
       </nav>
     </div>
   </header>
-
-  <!-- Services Section -->
-  <section class="services" style="background-color: #f0f8ff; padding: 60px 20px; text-align: center;">
-    <div class="container fade-in" style="max-width: 1200px; margin: auto;">
-      <img src="images/logo.png" alt="HD Heed Logo" style="max-height: 140px; margin-bottom: 30px; animation: fadeInUp 1.2s ease-in-out;">
-      <h2 style="font-size: 3rem; color: #512b8a; font-family: 'Brush Script MT', cursive; animation: fadeInUp 1.4s ease-in-out;">Our Services</h2>
-      <p style="font-size: 1.6rem; color: #333; font-family: 'Brush Script MT', cursive; margin-bottom: 20px; animation: fadeInUp 1.6s ease-in-out;">
-        At HD Heed, we deliver services with heart. Our dedicated team ensures your independence and wellbeing are at the centre of all support we provide.
-      </p>
-
-      <!-- Service Cards (all five) — already perfect -->
-      <!-- Personal Care -->
-      <div class="service fade-in" style="margin-bottom: 60px; animation-delay: 0.2s;">
-        <h3 style="font-size: 2rem; color: #512b8a; font-family: 'Brush Script MT', cursive;">Personal Care</h3>
-        <img src="images/personal-care.jpg" alt="Personal Care" style="width: 100%; max-width: 600px; border-radius: 10px; margin-bottom: 20px;">
-        <p style="font-size: 1.2rem; font-family: 'Brush Script MT', cursive;">Our Personal Care services assist with daily personal activities, including personal hygiene (showering, bathing, oral care), dressing, grooming, toileting, and mobility support. We aim to help participants maintain independence and dignity in their daily routines.</p>
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-content">
+        <img src="images/logo.png" alt="HD Heed Logo" class="hero-logo">
+        <h1 id="hero-heading">Our Services</h1>
+        <p>Discover how HD Heed can support your journey</p>
       </div>
-
-      <!-- Community Participation -->
-      <div class="service fade-in" style="margin-bottom: 60px; animation-delay: 0.4s;">
-        <h3 style="font-size: 2rem; color: #512b8a; font-family: 'Brush Script MT', cursive;">Community Participation</h3>
-        <img src="images/community-participation.jpg" alt="Community Participation" style="width: 100%; max-width: 600px; border-radius: 10px; margin-bottom: 20px;">
-        <p style="font-size: 1.2rem; font-family: 'Brush Script MT', cursive;">We support participants in engaging with their community through social, recreational, and educational activities. This includes assistance in attending events, joining clubs, or participating in community programs, fostering inclusion and personal growth.</p>
+    </section>
+    <section class="services" aria-labelledby="services-heading">
+      <div class="container">
+        <h2 id="services-heading">Our Services</h2>
+        <div class="services-grid">
+          <div class="service-card">
+            <h3>Personal Care</h3>
+            <p>Assistance with daily personal activities—bathing, dressing, grooming—to maintain independence and dignity.</p>
+          </div>
+          <div class="service-card">
+            <h3>Community Participation</h3>
+            <p>Support to engage in social, recreational, and educational activities, fostering inclusion and growth.</p>
+          </div>
+          <div class="service-card">
+            <h3>Support Coordination</h3>
+            <p>Guidance through NDIS plans, connecting you with services, and building capacity to navigate the system.</p>
+          </div>
+          <div class="service-card">
+            <h3>Respite Services</h3>
+            <p>Short-term care solutions—both in-home and accommodation—to give carers a well-deserved break.</p>
+          </div>
+          <div class="service-card">
+            <h3>Nursing Care</h3>
+            <p>Professional clinical support including medication management, wound care, and chronic disease management.</p>
+          </div>
+        </div>
       </div>
-
-      <!-- Support Coordination -->
-      <div class="service fade-in" style="margin-bottom: 60px; animation-delay: 0.6s;">
-        <h3 style="font-size: 2rem; color: #512b8a; font-family: 'Brush Script MT', cursive;">Support Coordination</h3>
-        <img src="images/support-coordination.jpg" alt="Support Coordination" style="width: 100%; max-width: 600px; border-radius: 10px; margin-bottom: 20px;">
-        <p style="font-size: 1.2rem; font-family: 'Brush Script MT', cursive;">Our Support Coordinators help participants understand and implement their NDIS plans. We connect you with service providers, assist in managing your supports, and build your capacity to navigate the NDIS system effectively.</p>
+    </section>
+    <section class="trust" aria-labelledby="trust-heading">
+      <div class="container">
+        <h2 id="trust-heading">Our Credentials</h2>
+        <div class="logo-grid">
+          <img src="images/ndis-logo.png" alt="NDIS Registered Provider Logo">
+          <img src="images/acnc-logo.png" alt="ACNC Charity Logo">
+        </div>
       </div>
-
-      <!-- Respite Services -->
-      <div class="service fade-in" style="margin-bottom: 60px; animation-delay: 0.8s;">
-        <h3 style="font-size: 2rem; color: #512b8a; font-family: 'Brush Script MT', cursive;">Respite Services</h3>
-        <img src="images/respite-services.jpg" alt="Respite Services" style="width: 100%; max-width: 600px; border-radius: 10px; margin-bottom: 20px;">
-        <p style="font-size: 1.2rem; font-family: 'Brush Script MT', cursive;">Our Respite Services offer short-term care solutions, providing participants with a safe and supportive environment while giving primary caregivers a well-deserved break. Options include in-home respite and short-term accommodation.</p>
-      </div>
-
-      <!-- Nursing Care -->
-      <div class="service fade-in" style="margin-bottom: 60px; animation-delay: 1s;">
-        <h3 style="font-size: 2rem; color: #512b8a; font-family: 'Brush Script MT', cursive;">Nursing Care</h3>
-        <img src="images/nursing-care.jpg" alt="Nursing Care" style="width: 100%; max-width: 600px; border-radius: 10px; margin-bottom: 20px;">
-        <p style="font-size: 1.2rem; font-family: 'Brush Script MT', cursive;">Our qualified nurses provide medical care tailored to individual needs, including medication management, wound care, chronic disease management, and health assessments, ensuring participants receive comprehensive health support.</p>
-      </div>
-
-      <!-- Contact Button -->
-      <a href="contact.html" class="btn fade-in" style="animation-delay: 1.2s;">Contact Us to Learn More</a>
+    </section>
+    <div class="cta-banner" role="region" aria-label="Call to action">
+      <p>Ready to explore our services further?</p>
+      <a href="contact.html">Contact Us</a>
     </div>
-  </section>
-
-  <!-- Footer -->
+  </main>
   <footer>
     <p>&copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
   </footer>
