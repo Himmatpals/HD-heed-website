@@ -2,236 +2,75 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HD Heed – Because we care, we provide HD care</title>
+  <meta name="description" content="HD Heed is a registered NDIS provider in NSW delivering compassionate, high-quality support tailored to your needs." />
+  <!-- Favicon -->
+  <link rel="icon" href="images/favicon.ico" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; line-height: 1.6; background: #f8f8ff; color: #333; }
+    a { text-decoration: none; }
+    /* Skip link */
+    .skip-link {
+      position: absolute; top: -40px; left: 0; background: #512b8a; color: #fff;
+      padding: 8px; z-index: 100; transition: top 0.3s;
     }
-    body {
-      font-family: 'Brush Script MT', cursive;
-      line-height: 1.6;
-      background-color: #f8f8ff;
-      color: #333;
-      animation: fadeIn 1s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1s forwards;
-    }
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    header {
-      background-color: #512b8a;
-      color: #fff;
-      padding: 1rem 0;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    header .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-    }
-
-    .logo img {
-      max-height: 90px;
-    }
-
-    header nav ul {
-      list-style: none;
-      display: flex;
-    }
-
-    header nav ul li {
-      margin-left: 20px;
-    }
-
-    header nav ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-
-    header nav ul li a:hover {
-      color: #ffc107;
-    }
-
-    .hero {
-      background: url('images/hero.jpg') no-repeat center center/cover;
-      min-height: 60vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(81, 43, 138, 0.6);
-    }
-
-    .hero-content {
-      position: relative;
-      text-align: center;
-      color: #fff;
-      padding: 20px;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    .hero-content h1 {
-      font-size: 3.5rem;
-      margin-bottom: 10px;
-    }
-
-    .hero-content p {
-      font-size: 1.4rem;
-      margin-bottom: 20px;
-    }
-
-    .btn {
-      background-color: #fff;
-      color: #512b8a;
-      padding: 12px 25px;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .btn:hover {
-      background-color: #512b8a;
-      color: #fff;
-    }
-
-    section {
-      padding: 60px 20px;
-      animation: fadeIn 1s ease-in;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    h2 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      text-align: center;
-      color: #512b8a;
-    }
-
-    p {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .section-image {
-      display: block;
-      margin: 0 auto 20px auto;
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-
-    .about {
-      background-color: #fff0f5;
-    }
-
-    .services {
-      background-color: #f0f8ff;
-    }
-
-    .contact {
-      background-color: #f5fffa;
-    }
-
-    .cta-banner {
-      background-color: #512b8a;
-      color: #fff;
-      text-align: center;
-      padding: 40px 20px;
-      font-size: 1.8rem;
-    }
-
-    .cta-banner a {
-      display: inline-block;
-      margin-top: 20px;
-      background-color: #fff;
-      color: #512b8a;
-      padding: 10px 25px;
-      border-radius: 5px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .cta-banner a:hover {
-      background-color: #ffc107;
-      color: #512b8a;
-    }
-
-    footer {
-      background-color: #333;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-
-    footer a {
-      color: #fff;
-      text-decoration: underline;
-    }
-
+    .skip-link:focus { top: 0; }
+    /* Header */
+    header { background: #512b8a; color: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    header .container { max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: space-between; padding: 1rem; }
+    .logo img { max-height: 90px; }
+    nav ul { list-style: none; display: flex; }
+    nav li { margin-left: 1rem; }
+    nav a { color: #fff; font-weight: bold; padding: 0.5rem; }
+    nav a:hover, nav a:focus { background: #fff; color: #512b8a; border-radius: 4px; }
+    /* Main */
+    main { margin-top: 1rem; }
+    .hero { background: url('images/hero.jpg') center/cover no-repeat; min-height: 60vh; position: relative; display: flex; align-items: center; justify-content: center; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: rgba(81,43,138,0.6); }
+    .hero-content { position: relative; text-align: center; color: #fff; padding: 2rem; }
+    .hero-content h1 { font-size: 3rem; margin-bottom: 0.5rem; }
+    .hero-content p { font-size: 1.25rem; margin-bottom: 1rem; }
+    .btn { background: #fff; color: #512b8a; padding: 0.75rem 1.5rem; border-radius: 5px; font-weight: bold; }
+    .btn:hover, .btn:focus { background: #ffc107; color: #512b8a; }
+    /* Sections */
+    section { padding: 4rem 1rem; }
+    .container { max-width: 1000px; margin: auto; }
+    h2 { color: #512b8a; font-size: 2rem; margin-bottom: 1rem; text-align: center; }
+    p { max-width: 700px; margin: auto 0 2rem; text-align: center; }
+    .section-image { display: block; margin: 1rem auto; max-width: 100%; border-radius: 8px; }
+    /* Background variants */
+    .about { background: #fff0f5; }
+    .services { background: #f0f8ff; }
+    .contact { background: #f5fffa; }
+    /* Trust Indicators */
+    .trust { background: #fff; padding: 2rem 1rem; border-top: 1px solid #ddd; }
+    .trust .logo-grid { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .logo-grid img { max-height: 60px; }
+    /* CTA Banner */
+    .cta-banner { background: #512b8a; color: #fff; text-align: center; padding: 2rem 1rem; }
+    .cta-banner a { background: #fff; color: #512b8a; padding: 0.75rem 1.5rem; border-radius: 5px; font-weight: bold; }
+    .cta-banner a:hover, .cta-banner a:focus { background: #ffc107; }
+    /* Footer */
+    footer { background: #333; color: #fff; text-align: center; padding: 1rem; }
+    footer a { color: #fff; }
+    /* Responsive */
     @media (max-width: 768px) {
-      header .container {
-        flex-direction: column;
-      }
-
-      header nav ul {
-        flex-direction: column;
-        margin-top: 10px;
-      }
-
-      header nav ul li {
-        margin: 10px 0;
-      }
-
-      .hero-content h1 {
-        font-size: 2.5rem;
-      }
+      nav ul { flex-direction: column; }
+      nav li { margin: 0.5rem 0; }
+      .hero-content h1 { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <!-- Header -->
   <header>
     <div class="container">
-      <div class="logo">
-        <img src="images/logo.png" alt="HD Heed Logo">
-      </div>
-      <nav>
+      <div class="logo"><img src="images/logo.png" alt="HD Heed Logo"></div>
+      <nav aria-label="Primary">
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About Us</a></li>
@@ -242,44 +81,64 @@
     </div>
   </header>
 
-  <section class="hero" style="padding: 0;">
-  <img src="images/hd-heed-banner.jpg" alt="HD Heed Banner" style="width: 100%; height: auto; display: block;">
-</section>
-<div style="text-align: center; margin-top: 20px;">
-  <a href="contact.html" class="btn">Request a Callback</a>
-</div>
+  <!-- Hero Section -->
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-content">
+        <h1 id="hero-heading">HD Heed</h1>
+        <p>Because we care, we provide HD care</p>
+        <a href="contact.html" class="btn">Request a Callback</a>
+      </div>
+    </section>
 
-  <section class="about fade-in">
-    <div class="container">
-      <h2>About Us</h2>
-      <img src="images/about.jpg" alt="About Us" class="section-image">
-      <p>HD Heed is a new NDIS provider in NSW, founded by experienced professionals in disability and aged care. We are dedicated to delivering compassionate, high-quality support tailored to your needs.</p>
+    <!-- About Section -->
+    <section class="about" aria-labelledby="about-heading">
+      <div class="container">
+        <h2 id="about-heading">About Us</h2>
+        <img src="images/about.jpg" alt="Team at HD Heed providing support" class="section-image">
+        <p>Founded by experienced disability and aged care professionals, HD Heed is a registered NDIS provider dedicated to empowering individuals to live independently and confidently.</p>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" aria-labelledby="services-heading">
+      <div class="container">
+        <h2 id="services-heading">Our Services</h2>
+        <img src="images/services.jpg" alt="Support activities at HD Heed" class="section-image">
+        <p>We offer a comprehensive range of NDIS supports, including Personal Care, Community Participation, Support Coordination, Respite Services, and Nursing Care—all tailored to your unique needs.</p>
+        <a href="services.html" class="btn">View Services</a>
+      </div>
+    </section>
+
+    <!-- Trust Indicators -->
+    <section class="trust" aria-labelledby="trust-heading">
+      <div class="container">
+        <h2 id="trust-heading">Our Credentials</h2>
+        <div class="logo-grid">
+          <img src="images/ndis-logo.png" alt="NDIS Registered Provider">
+          <img src="images/acnc-logo.png" alt="ACNC Charity">
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" aria-labelledby="contact-heading">
+      <div class="container">
+        <h2 id="contact-heading">Contact Us</h2>
+        <img src="images/contact.jpg" alt="Customer service at HD Heed" class="section-image">
+        <p>Ready to discuss your NDIS plan and how we can support you? Reach out today and let us tailor a care plan that works for you.</p>
+        <a href="contact.html" class="btn">Contact Us</a>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <div class="cta-banner" role="region" aria-label="Call to action">
+      Ready to start your journey with HD Heed?<br>
+      <a href="contact.html">Let’s Connect</a>
     </div>
-  </section>
+  </main>
 
-  <section class="services fade-in">
-    <div class="container">
-      <h2>Our Services</h2>
-      <img src="images/services.jpg" alt="Our Services" class="section-image">
-      <p>We offer a range of NDIS services – from personal care to community participation – designed to empower you to live independently. Explore our services to learn how we can support your journey.</p>
-      <a href="services.html" class="btn">View Services</a>
-    </div>
-  </section>
-
-  <section class="contact fade-in">
-    <div class="container">
-      <h2>Contact Us</h2>
-      <img src="images/contact.jpg" alt="Contact Us" class="section-image">
-      <p>Get in touch today to discuss your needs or to request a callback. We’re here to help!</p>
-      <a href="contact.html" class="btn">Contact Us</a>
-    </div>
-  </section>
-
-  <div class="cta-banner">
-    Ready to start your journey with HD Heed?<br>
-    <a href="contact.html">Let’s Connect</a>
-  </div>
-
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
   </footer>
