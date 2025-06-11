@@ -31,18 +31,19 @@
     h2{color:var(--purple);font-size:2rem;margin-bottom:1rem;text-align:center;position:relative;}
     h2::after{content:'';width:60px;height:4px;background:var(--accent);position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);}
     p{margin-bottom:1.5rem;line-height:1.6;text-align:center;}
-    .founders{display:flex;flex-direction:column;gap:2rem;margin:2rem 0;}
-    .founder-card{background:#fff;padding:1.5rem;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1);display:flex;flex-direction:column;align-items:center;gap:1rem;}
-    .founder-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;}
-    .founder-card h3{color:var(--purple);font-size:1.25rem;}
-    .btn{display:inline-block;background:var(--accent);color:var(--purple);padding:.75rem 1.5rem;border-radius:50px;font-weight:700;transition:background .3s;}
-    .btn:hover,.btn:focus{background:#fff;}
+    .founders{display:flex;flex-direction:column;align-items:center;gap:2rem;margin:2rem 0;}
+    @media(min-width:600px){.founders{flex-direction:row;justify-content:center;}}
+    .founder-card{background:#fff;padding:1.5rem;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1);text-align:center;max-width:320px;transition:transform .3s;}
+    .founder-card:hover, .founder-card:focus-within{transform:translateY(-5px);}
+    .founder-card a{color:inherit;display:block;}
+    .founder-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:1rem;}
+    .founder-card h3{color:var(--purple);font-size:1.25rem;margin-bottom:.5rem;}
+    .founder-card p{font-size:1rem;margin-bottom:.5rem;}
     .cta-banner{background:var(--purple);color:#fff;text-align:center;padding:2rem 1rem;margin-top:2rem;}
-    .cta-banner a{background:#fff;color:var(--purple);padding:.75rem 1.5rem;border-radius:50px;font-weight:700;transition:background .3s;}
-    .cta-banner a:hover,.cta-banner a:focus{background:var(--accent);color:var(--purple);}
+    .cta-banner a{display:inline-block;background:#fff;color:var(--purple);padding:.75rem 1.5rem;border-radius:50px;font-weight:700;transition:background .3s,color .3s;}
+    .cta-banner a:hover, .cta-banner a:focus{background:var(--accent);color:var(--purple);}
     footer{background:#333;color:#fff;text-align:center;padding:1rem;font-size:.9rem;}
     footer a{color:var(--accent);}
-    @media(min-width:600px){.founders{flex-direction:row;justify-content:center;}}
   </style>
 </head>
 <body>
@@ -59,6 +60,7 @@
     </nav>
   </header>
   <main id="main-content">
+    <!-- Hero Banner -->
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-content">
         <img src="images/logo.png" alt="HD Heed Logo">
@@ -66,25 +68,32 @@
         <p>Your trusted NDIS provider in NSW, led by experienced professionals.</p>
       </div>
     </section>
+    <!-- Our Story -->
     <section aria-labelledby="story-heading">
       <h2 id="story-heading">Our Story</h2>
-      <p>HD Heed was founded by two dedicated nurses, Mat Syan and Jazz Syan, who each bring over five years of experience in disability and aged care. Their shared vision is to empower individuals through compassionate, personalized NDIS support that fosters independence and confidence.</p>
+      <p>HD Heed was founded by two dedicated nurses, <a href="mat-syan.html">Mat Syan</a> and <a href="jazz-syan.html">Jazz Syan</a>, each bringing over five years of experience in disability and aged care. Their vision is to empower individuals through compassionate, personalised NDIS support that fosters independence and confidence.</p>
     </section>
+    <!-- Meet Our Founders -->
     <section aria-labelledby="founders-heading">
       <h2 id="founders-heading">Meet Our Founders</h2>
       <div class="founders">
         <div class="founder-card">
-          <img src="images/mat-syan.jpg" alt="Mat Syan">
-          <h3>Mat Syan</h3>
-          <p>Registered Nurse with over five years in disability and aged care. Passionate about person-centered support and community inclusion.</p>
+          <a href="mat-syan.html">
+            <img src="images/mat-syan.jpg" alt="Mat Syan">
+            <h3>Mat Syan</h3>
+            <p>Registered Nurse with 5+ years in disability and aged care. Passionate about person-centered support and community inclusion.</p>
+          </a>
         </div>
         <div class="founder-card">
-          <img src="images/jazz-syan.jpg" alt="Jazz Syan">
-          <h3>Jazz Syan</h3>
-          <p>Registered Nurse specializing in holistic care plans and client advocacy. Committed to empowering participants through tailored supports.</p>
+          <a href="jazz-syan.html">
+            <img src="images/jazz-syan.jpg" alt="Jazz Syan">
+            <h3>Jazz Syan</h3>
+            <p>Registered Nurse specialising in holistic care plans and client advocacy. Committed to empowering participants through tailored supports.</p>
+          </a>
         </div>
       </div>
     </section>
+    <!-- CTA Banner -->
     <div class="cta-banner" role="region" aria-label="Call to action">
       <p>Interested in learning more about our team?</p>
       <a href="contact.html" class="btn">Get in Touch</a>
