@@ -20,8 +20,8 @@
     body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
     a { text-decoration: none; color: inherit; }
     .skip-link { position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
-    .skip-link:focus { position: static; width: auto; height: auto; background: var(--purple); color: #fff; padding: 8px; z-index:100; }
-    header { background: var(--purple); box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: sticky; top:0; z-index:50; }
+    .skip-link:focus { position: static; width: auto; height: auto; background: var(--purple); color: #fff; padding: 8px; z-index: 100; }
+    header { background: var(--purple); box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 50; }
     header .container { max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: space-between; padding: 1rem; }
     .logo img { height: 60px; }
     nav ul { list-style: none; display: flex; gap: 1rem; }
@@ -29,7 +29,7 @@
     nav a:hover, nav a:focus { background: #fff; color: var(--purple); }
     main { overflow: hidden; }
     .hero { position: relative; background: url('images/hero.jpg') center/cover no-repeat; min-height: 70vh; display: flex; align-items: center; justify-content: center; }
-    .hero::before { content: ''; position: absolute; inset:0; background: rgba(81,43,138,0.7); }
+    .hero::before { content: ''; position: absolute; inset: 0; background: rgba(81,43,138,0.7); }
     .hero-content { position: relative; text-align: center; color: #fff; animation: fadeInDown 1s ease-out; }
     .hero-logo { display: block; margin: 0 auto 1rem; max-width: 150px; }
     .hero-content h1 { font-family: var(--font-heading); font-size: 3.5rem; margin-bottom: 0.5rem; }
@@ -39,27 +39,31 @@
     section { padding: 4rem 1rem; }
     .container { max-width: 1000px; margin: auto; }
     h2 { font-family: var(--font-heading); font-size: 2.5rem; color: var(--purple); text-align: center; margin-bottom: 1rem; position: relative; }
-    h2::after { content: ''; width: 60px; height:4px; background: var(--accent); position: absolute; bottom: -10px; left:50%; transform: translateX(-50%); }
+    h2::after { content: ''; width: 60px; height: 4px; background: var(--accent); position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); }
     p { text-align: center; margin-bottom: 2rem; }
     .section-image { display: block; margin: 1rem auto; max-width: 100%; border-radius: 8px; animation: fadeIn 2s ease; }
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:2rem; }
-    .service-card { background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-align:center; transition: transform .3s, box-shadow .3s; }
-    .service-card:hover, .service-card:focus-within { transform: translateY(-5px); box-shadow:0 8px 16px rgba(0,0,0,0.2); }
-    .service-card h3 { font-size:1.25rem; margin:1rem 0; color: var(--purple); }
-    .service-card p { font-size:1rem; }
-    .trust { background: #fff; padding:2rem 1rem; }
-    .logo-grid { display:flex; justify-content:center; flex-wrap:wrap; gap:2rem; }
-    .logo-grid img { height:50px; filter:grayscale(100%); transition: filter .3s; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+    .service-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; transition: transform .3s, box-shadow .3s; }
+    .service-card a { display: block; color: inherit; }
+    .service-card:hover, .service-card:focus-within { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+    .service-card h3 { font-size: 1.25rem; margin: 1rem 0; color: var(--purple); }
+    .service-card p { font-size: 1rem; }
+    .trust { background: #fff; padding: 2rem 1rem; }
+    .logo-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem; }
+    .logo-grid img { height: 50px; filter: grayscale(100%); transition: filter .3s; }
     .logo-grid img:hover { filter: none; }
-    .cta-banner { background: var(--purple); color: #fff; text-align:center; padding:3rem 1rem; animation: fadeInUp 1s ease; }
-    .cta-banner a { background: var(--accent); color: var(--purple); padding:0.75rem 2rem; border-radius:50px; font-weight:700; display:inline-block; margin-top:1rem; transition:background .3s; }
-    .cta-banner a:hover, .cta-banner a:focus { background:#fff; }
-    footer { background:#333; color:#fff; text-align:center; padding:1rem; font-size:0.9rem; }
+    .cta-banner { background: var(--purple); color: #fff; text-align: center; padding: 3rem 1rem; animation: fadeInUp 1s ease; }
+    .cta-banner a { background: var(--accent); color: var(--purple); padding: 0.75rem 2rem; border-radius: 50px; font-weight: 700; display: inline-block; margin-top: 1rem; transition: background .3s; }
+    .cta-banner a:hover, .cta-banner a:focus { background: #fff; }
+    footer { background: #333; color: #fff; text-align: center; padding: 1rem; font-size: 0.9rem; }
     footer a { color: var(--accent); }
-    @keyframes fadeInDown { from { opacity:0; transform:translateY(-20px);} to {opacity:1;transform:translateY(0);} }
-    @keyframes fadeInUp { from { opacity:0; transform:translateY(20px);} to {opacity:1;transform:translateY(0);} }
-    @keyframes fadeIn { from { opacity:0;} to {opacity:1;} }
-    @media (max-width:768px){ nav ul{flex-direction:column;align-items:center;} .hero-content h1{font-size:2rem;} }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @media (max-width: 768px) {
+      nav ul { flex-direction: column; align-items: center; }
+      .hero-content h1 { font-size: 2rem; }
+    }
   </style>
 </head>
 <body>
@@ -98,24 +102,40 @@
         <h2 id="services-heading">Our Services</h2>
         <div class="services-grid">
           <div class="service-card">
-            <h3>Personal Care</h3>
-            <p>Assistance with everyday tasks like bathing, dressing, and grooming.</p>
+            <a href="personal-care.html">
+              <h3>Personal Care</h3>
+              <p>Assistance with everyday tasks like bathing, dressing, and grooming.</p>
+            </a>
           </div>
           <div class="service-card">
-            <h3>Community Participation</h3>
-            <p>Supporting you to engage in community activities and events.</p>
+            <a href="domestic-assistance.html">
+              <h3>Domestic Assistance</h3>
+              <p>Help with cleaning, laundry, and household tasks to keep your space safe and welcoming.</p>
+            </a>
           </div>
           <div class="service-card">
-            <h3>Support Coordination</h3>
-            <p>Guiding you through NDIS plans, providers, and services.</p>
+            <a href="community-participation.html">
+              <h3>Community Participation</h3>
+              <p>Supporting you to engage in community activities, outings, and personal interests.</p>
+            </a>
           </div>
           <div class="service-card">
-            <h3>Respite Services</h3>
-            <p>Short-term accommodation and relief support for carers.</p>
+            <a href="nursing-care.html">
+              <h3>Nursing Care</h3>
+              <p>Medication management, wound care, and chronic condition monitoring at home.</p>
+            </a>
           </div>
           <div class="service-card">
-            <h3>Nursing Care</h3>
-            <p>Professional health care and clinical support tailored to needs.</p>
+            <a href="daily-living-skills.html">
+              <h3>Daily Living Skills Support</h3>
+              <p>Skill-building in cooking, budgeting, and other life tasks to support independence.</p>
+            </a>
+          </div>
+          <div class="service-card">
+            <a href="carer-relief.html">
+              <h3>In-Home Carer Relief</h3>
+              <p>Short-term support to relieve primary carers while ensuring continued care.</p>
+            </a>
           </div>
         </div>
       </div>
