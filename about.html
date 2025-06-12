@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Us | HD Heed</title>
+  <meta name="description" content="Learn about the team behind HD Heed – experienced RNs committed to compassionate and person-centred care in disability and aged support." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -13,12 +14,9 @@
       --font-heading: 'Inter', sans-serif;
       --font-body: 'Inter', sans-serif;
     }
-    body {
-      margin: 0;
-      font-family: var(--font-body);
-      background: var(--bg-light);
-      color: #333;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
+    a { text-decoration: none; color: inherit; }
     header, footer {
       background-color: var(--purple);
       color: white;
@@ -30,8 +28,8 @@
       display: flex;
       justify-content: center;
       gap: 1.5rem;
-      padding: 0;
       margin: 0;
+      padding: 0;
     }
     nav a {
       color: white;
@@ -41,67 +39,95 @@
     nav a:hover {
       text-decoration: underline;
     }
+    .hero {
+      background: url('images/about-banner.jpg') center center / cover no-repeat;
+      padding: 100px 20px;
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(81, 43, 138, 0.6);
+    }
+    .hero h2, .hero p {
+      position: relative;
+      z-index: 1;
+    }
+    .hero h2 {
+      font-size: 3rem;
+    }
+    .hero p {
+      font-size: 1.25rem;
+    }
     .container {
       max-width: 1000px;
       margin: auto;
       padding: 40px 20px;
+      text-align: center;
     }
-    h2 {
-      font-size: 2.5rem;
+    h3 {
+      font-size: 2rem;
       color: var(--purple);
       margin-bottom: 1rem;
     }
     p {
       font-size: 1.1rem;
       line-height: 1.6;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
-    .team {
-      display: flex;
-      flex-wrap: wrap;
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 30px;
-      justify-content: center;
-      margin-top: 2rem;
+      margin-top: 40px;
     }
-    .team-member {
+    .team-card {
       background: white;
+      border-radius: 12px;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      flex: 1 1 250px;
-      transition: transform 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
     }
-    .team-member:hover {
+    .team-card:hover {
       transform: translateY(-5px);
     }
-    .team-member img {
-      max-width: 150px;
-      border-radius: 50%;
+    .team-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 8px;
       margin-bottom: 15px;
     }
-    .team-member h3 {
-      margin: 10px 0 5px;
-      font-size: 1.3rem;
+    .team-card h4 {
+      font-size: 1.25rem;
       color: var(--purple);
+      margin-bottom: 0.5rem;
     }
-    .team-member a {
+    .team-card a {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--purple);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    footer {
+      background-color: var(--purple);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    footer a {
       color: var(--accent);
       text-decoration: underline;
-      font-weight: 600;
-    }
-    .contact-link {
-      display: block;
-      margin-top: 30px;
-      text-align: center;
-      font-weight: 600;
-      color: var(--purple);
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>About Us</h1>
+    <h1>HD Heed</h1>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -111,34 +137,37 @@
     </nav>
   </header>
 
+  <section class="hero">
+    <h2>About Us</h2>
+    <p>Meet the dedicated team behind HD Heed</p>
+  </section>
+
   <div class="container">
-    <h2>Our Story</h2>
+    <h3>Our Story</h3>
     <p>HD Heed was founded by a team of dedicated Registered Nurses who bring together more than 15 years of combined experience in disability and aged care. Having worked closely with people of all abilities, ages, and backgrounds, our team has seen firsthand the importance of person-centred care that is not just clinically sound—but warm, respectful, and empowering.</p>
-
     <p>From supporting individuals with high physical needs to guiding families through dementia care and daily living challenges, we understand what quality support truly means. At HD Heed, we believe care is not just a service—it's a relationship, a promise, and a commitment to dignity and independence.</p>
-
     <p>That’s why we created HD Heed: to bring heart and excellence together in every interaction. Our goal is to provide consistent, compassionate care tailored to each individual’s goals and lifestyle, while giving families peace of mind. Whether it’s a few hours of in-home help or ongoing support, we aim to make every moment meaningful.</p>
 
-    <h2>Meet the Team</h2>
-    <div class="team">
-      <div class="team-member">
-        <img src="images/mat.jpg" alt="Mat Syan">
-        <h3>Mat Syan</h3>
-        <a href="mat-syan.html">Read Profile</a>
+    <h3>Meet Our Team</h3>
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="images/mat-syan.jpg" alt="Mat Syan">
+        <h4>Mat Syan</h4>
+        <a href="mat-syan.html">Read More</a>
       </div>
-      <div class="team-member">
-        <img src="images/jazz.jpg" alt="Jazz Syan">
-        <h3>Jazz Syan</h3>
-        <a href="jazz-syan.html">Read Profile</a>
+      <div class="team-card">
+        <img src="images/jazz-syan.jpg" alt="Jazz Syan">
+        <h4>Jazz Syan</h4>
+        <a href="jazz-syan.html">Read More</a>
       </div>
-      <div class="team-member">
-        <img src="images/nancy.jpg" alt="Nancy Khokhar">
-        <h3>Nancy Khokhar</h3>
-        <a href="nancy-khokhar.html">Read Profile</a>
+      <div class="team-card">
+        <img src="images/nancy-khokar.jpg" alt="Nancy Khokhar">
+        <h4>Nancy Khokhar</h4>
+        <a href="nancy-khokar.html">Read More</a>
       </div>
     </div>
 
-    <a class="contact-link" href="contact.html">Get in touch →</a>
+    <p style="margin-top: 40px;">Want to know more about our team? <a href="contact.html">Please get in touch</a>.</p>
   </div>
 
   <footer>
