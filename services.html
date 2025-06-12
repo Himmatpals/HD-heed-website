@@ -2,146 +2,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Our Services – HD Heed</title>
-  <meta name="description" content="Explore HD Heed's full range of NDIS services tailored to your needs, including Personal Care, Community Participation, Support Coordination, Respite, and Nursing Care." />
-  <link rel="icon" href="images/favicon.ico" />
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Services | HD Heed</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    :root {
-      --purple: #512b8a;
-      --accent: #ffc107;
-      --bg-light: #f8f8ff;
-      --font-heading: 'Inter', sans-serif;
-      --font-body: 'Inter', sans-serif;
+    body {
+      font-family: 'Brush Script MT', cursive;
+      background-color: #f8f8ff;
+      color: #333;
+      margin: 0;
+      padding: 0;
     }
-    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-    body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
-    a { text-decoration: none; color: inherit; }
-    .skip-link { position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; }
-    .skip-link:focus { position:static; width:auto; height:auto; background:var(--purple); color:#fff; padding:8px; z-index:100; }
-    header { background:var(--purple); box-shadow:0 4px 6px rgba(0,0,0,0.1); position:sticky; top:0; z-index:50; }
-    header .container { max-width:1200px; margin:auto; display:flex; align-items:center; justify-content:space-between; padding:1rem; }
-    .logo img { height:60px; }
-    nav ul { list-style:none; display:flex; gap:1rem; }
-    nav a { color:#fff; padding:0.5rem 1rem; font-weight:600; border-radius:4px; transition:background .3s, color .3s; }
-    nav a:hover, nav a:focus { background:#fff; color:var(--purple); }
-    main { overflow:hidden; }
-    .hero { position:relative; background:url('images/hero.jpg') center/cover no-repeat; min-height:60vh; display:flex; align-items:center; justify-content:center; }
-    .hero::before { content:''; position:absolute; inset:0; background:rgba(81,43,138,0.7); }
-    .hero-content { position:relative; text-align:center; color:#fff; animation:fadeInDown 1s ease-out; }
-    .hero-logo { display:block; margin:0 auto 1rem; max-width:150px; }
-    .hero-content h1 { font-family:var(--font-heading); font-size:3rem; margin-bottom:0.5rem; }
-    .hero-content p { font-size:1.25rem; margin-bottom:1.5rem; }
-    .services { padding:4rem 1rem; }
-    .container { max-width:1000px; margin:auto; }
-    h2 { font-family:var(--font-heading); font-size:2.5rem; color:var(--purple); text-align:center; margin-bottom:1rem; position:relative; }
-    h2::after { content:''; width:60px; height:4px; background:var(--accent); position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); }
-    .services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem; }
-    .service-card { background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-align:center; transition:transform .3s, box-shadow .3s; }
-    .service-card a { display:block; color:inherit; }
-    .service-card:hover, .service-card:focus-within { transform:translateY(-5px); box-shadow:0 8px 16px rgba(0,0,0,0.2); }
-    .service-card h3 { font-size:1.25rem; margin:1rem 0; color:var(--purple); }
-    .service-card p { font-size:1rem; }
-    .trust { background:#fff; padding:2rem 1rem; }
-    .logo-grid { display:flex; justify-content:center; flex-wrap:wrap; gap:2rem; }
-    .logo-grid img { height:50px; filter:grayscale(100%); transition:filter .3s; }
-    .logo-grid img:hover { filter:none; }
-    .cta-banner { background:var(--purple); color:#fff; text-align:center; padding:3rem 1rem; }
-    .cta-banner a { background:var(--accent); color:var(--purple); padding:0.75rem 2rem; border-radius:50px; font-weight:700; display:inline-block; margin-top:1rem; transition:background .3s; }
-    .cta-banner a:hover, .cta-banner a:focus { background:#fff; }
-    footer { background:#333; color:#fff; text-align:center; padding:1rem; font-size:0.9rem; }
-    footer a { color:var(--accent); }
-    @keyframes fadeInDown { from {opacity:0; transform:translateY(-20px);} to {opacity:1; transform:translateY(0);} }
+    header, footer {
+      background-color: #512b8a;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .hero {
+      background: url('service-banner.jpg') center center / cover no-repeat;
+      padding: 100px 20px;
+      color: white;
+      text-align: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    h2 {
+      color: #512b8a;
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .service-box {
+      margin-bottom: 40px;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .service-box img {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 8px;
+      display: block;
+      margin: 20px auto;
+    }
+    .service-box a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #512b8a;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .service-box a:hover {
+      background-color: #3e216e;
+    }
   </style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
   <header>
-    <div class="container">
-      <div class="logo"><img src="images/logo.png" alt="HD Heed Logo"></div>
-      <nav aria-label="Primary navigation">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
+    <h1>HD Heed</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </header>
 
-  <main id="main-content">
-    <!-- Hero Banner -->
-    <section class="hero" aria-labelledby="hero-heading">
-      <div class="hero-content">
-        <img src="images/logo.png" alt="HD Heed Logo" class="hero-logo">
-        <h1 id="hero-heading">Our Services</h1>
-        <p>Discover how HD Heed can support your journey</p>
-      </div>
-    </section>
+  <section class="hero">
+    <h2>Our Services</h2>
+    <p>Compassionate, reliable NDIS support tailored to your needs.</p>
+  </section>
 
-    <!-- Services Grid -->
-    <section class="services" aria-labelledby="services-heading">
-      <div class="container">
-        <h2 id="services-heading">Our Services</h2>
-        <div class="services-grid">
-          <div class="service-card">
-            <a href="personal-care.html">
-              <h3>Personal Care</h3>
-              <p>Assistance with daily personal activities—bathing, dressing, grooming—to maintain independence and dignity.</p>
-            </a>
-          </div>
-          <div class="service-card">
-            <a href="community-participation.html">
-              <h3>Community Participation</h3>
-              <p>Support to engage in social, recreational, and educational activities, fostering inclusion and growth.</p>
-            </a>
-          </div>
-          <div class="service-card">
-            <a href="support-coordination.html">
-              <h3>Support Coordination</h3>
-              <p>Guidance through NDIS plans, connecting you with services, and building capacity to navigate the system.</p>
-            </a>
-          </div>
-          <div class="service-card">
-            <a href="respite-services.html">
-              <h3>Respite Services</h3>
-              <p>Short-term care solutions—both in-home and accommodation—to give carers a well-deserved break.</p>
-            </a>
-          </div>
-          <div class="service-card">
-            <a href="nursing-care.html">
-              <h3>Nursing Care</h3>
-              <p>Professional clinical support including medication management, wound care, and chronic disease management.</p>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Trust Indicators -->
-    <section class="trust" aria-labelledby="trust-heading">
-      <div class="container">
-        <h2 id="trust-heading">Our Credentials</h2>
-        <div class="logo-grid">
-          <img src="images/ndis-logo.png" alt="NDIS Registered Provider Logo">
-          <img src="images/acnc-logo.png" alt="ACNC Charity Logo">
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Banner -->
-    <div class="cta-banner" role="region" aria-label="Call to action">
-      <p>Ready to explore our services further?</p>
-      <a href="contact.html">Contact Us</a>
+  <div class="container">
+    <div class="service-box">
+      <h3>Personal Care</h3>
+      <img src="images/personal-care.jpg" alt="Personal Care">
+      <p>We assist with showering, grooming, toileting, mobility, dressing, and other daily personal care activities to maintain your comfort and independence.</p>
+      <a href="personal-care.html">Learn More</a>
     </div>
-  </main>
 
-  <!-- Footer -->
+    <div class="service-box">
+      <h3>Domestic Assistance</h3>
+      <img src="images/domestic-assistance.jpg" alt="Domestic Assistance">
+      <p>We help with household tasks such as cleaning, laundry, and meal preparation so your home stays safe and welcoming.</p>
+      <a href="domestic-assistance.html">Learn More</a>
+    </div>
+
+    <div class="service-box">
+      <h3>Community Participation</h3>
+      <img src="images/community-participation.jpg" alt="Community Participation">
+      <p>We support you in joining community activities that promote inclusion, learning, social interaction and personal growth.</p>
+      <a href="community-participation.html">Learn More</a>
+    </div>
+
+    <div class="service-box">
+      <h3>Nursing Care</h3>
+      <img src="images/nursing-care.jpg" alt="Nursing Care">
+      <p>Our experienced nurses provide medication administration, wound care, chronic condition monitoring, and general health support at home.</p>
+      <a href="nursing-care.html">Learn More</a>
+    </div>
+
+    <div class="service-box">
+      <h3>Daily Living Skills Support</h3>
+      <img src="images/daily-living-skills.jpg" alt="Daily Living Skills">
+      <p>We work with participants to build skills in budgeting, cooking, travel training, communication, and other essential daily tasks to foster independence.</p>
+      <a href="daily-living-skills.html">Learn More</a>
+    </div>
+
+    <div class="service-box">
+      <h3>In-Home Carer Relief</h3>
+      <img src="images/carer-relief.jpg" alt="Carer Relief">
+      <p>We provide short-term in-home support to allow primary carers a break, ensuring the participant continues to receive care and companionship.</p>
+      <a href="carer-relief.html">Learn More</a>
+    </div>
+  </div>
+
   <footer>
-    <p>&copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
+    <p>&copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html" style="color: #fff; text-decoration: underline;">Privacy Policy</a></p>
   </footer>
 </body>
 </html>
