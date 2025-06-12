@@ -1,22 +1,166 @@
-<!-- Service Detail -->
-<section>
-  <h2>What We Offer</h2>
-  <p>
-    Our Personal Care services are designed to support you in managing your day-to-day activities while preserving your dignity, comfort, and independence.
-  </p>
-  <ul style="text-align: left; line-height: 1.6; margin-top: 1rem;">
-    <li><strong>Personal Hygiene:</strong> Assistance with bathing, showering, grooming, oral hygiene, hair care, and nail care (non-clinical).</li>
-    <li><strong>Dressing & Undressing:</strong> Support in choosing appropriate clothes, putting them on and taking them off with respect and dignity.</li>
-    <li><strong>Toileting Assistance:</strong> Support with continence aids, using the toilet, and maintaining hygiene and comfort.</li>
-    <li><strong>Mobility Support:</strong> Help with moving around the house, using walking aids, transferring from bed to chair, etc.</li>
-    <li><strong>Meal Preparation:</strong> Assistance with making simple meals that suit your dietary preferences and needs.</li>
-    <li><strong>Medication Prompting:</strong> Reminders to take prescribed medications (non-clinical, unless done by a nurse).</li>
-    <li><strong>Skin Care:</strong> Support with applying moisturiser, monitoring for skin changes, and general care (non-wound care).</li>
-    <li><strong>Morning and Evening Routines:</strong> Assistance with getting ready for the day or bedtime, including help with routines.</li>
-    <li><strong>Empowerment & Independence:</strong> Our support workers are trained to encourage participation and independence wherever possible.</li>
-  </ul>
-  <p style="margin-top: 2rem;">
-    At HD Heed, we understand that every person is unique. Our approach is flexible and respectful, tailored to your preferences, cultural background, and daily lifestyle. Whether you need light support or more frequent personal care, our friendly and reliable staff are here to help.
-  </p>
-  <a href="services.html" class="btn">Back to Services</a>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Personal Care – HD Heed</title>
+  <meta name="description" content="HD Heed Personal Care: assistance with daily tasks like bathing, dressing, grooming to maintain independence and dignity."/>
+  <link rel="icon" href="images/favicon.ico"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --purple: #512b8a;
+      --accent: #ffc107;
+      --bg-light: #f8f8ff;
+      --font-body: 'Inter', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
+    a { text-decoration: none; color: inherit; }
+    header {
+      background: var(--purple);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      position: sticky; top: 0; z-index: 50;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem;
+    }
+    .logo img { height: 60px; }
+    nav ul { list-style: none; display: flex; gap: 1rem; }
+    nav a {
+      color: #fff; padding: .5rem 1rem; font-weight: 600;
+      border-radius: 4px; transition: background .3s;
+    }
+    nav a:hover, nav a:focus { background: #fff; color: var(--purple); }
+    main { overflow: hidden; }
+    .hero {
+      position: relative;
+      background: url('images/service-banner.jpg') center/cover no-repeat;
+      min-height: 60vh;
+      display: flex; align-items: center; justify-content: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(81,43,138,0.7);
+    }
+    .hero-content {
+      position: relative; text-align: center; color: #fff; padding: 2rem;
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero-content h1 {
+      font-size: 2.5rem; margin-bottom: .5rem;
+    }
+    .hero-content p {
+      font-size: 1.1rem;
+    }
+    section {
+      padding: 3rem 1rem;
+      max-width: 900px; margin: auto;
+      animation: fadeInUp 1s ease-in;
+    }
+    h2 {
+      color: var(--purple); font-size: 2rem; margin-bottom: 1rem;
+      text-align: center;
+      position: relative;
+    }
+    h2::after {
+      content: '';
+      width: 60px; height: 4px;
+      background: var(--accent);
+      position: absolute; bottom: -10px; left: 50%;
+      transform: translateX(-50%);
+    }
+    ul {
+      text-align: left;
+      padding-left: 1rem;
+      margin-top: 1rem;
+      line-height: 1.8;
+    }
+    li strong {
+      color: var(--purple);
+    }
+    p {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--purple);
+      padding: .75rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      transition: background .3s, transform .3s;
+      margin-top: 2rem;
+    }
+    .btn:hover, .btn:focus { background: #fff; transform: translateY(-2px); }
+    footer {
+      background: #333; color: #fff; text-align: center; padding: 1rem;
+    }
+    footer a { color: var(--accent); }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="images/logo.png" alt="HD Heed Logo"></div>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-content">
+        <h1 id="hero-heading">Personal Care</h1>
+        <p>Support that puts your dignity and independence first.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>What We Offer</h2>
+      <ul>
+        <li><strong>Personal Hygiene:</strong> Assistance with showering, bathing, grooming, and maintaining oral hygiene to help you feel fresh and confident every day.</li>
+        <li><strong>Support with Dressing:</strong> Help with choosing appropriate clothing and getting dressed or undressed comfortably and respectfully.</li>
+        <li><strong>Toileting & Continence:</strong> Assistance using the toilet, incontinence management, and maintaining hygiene and dignity.</li>
+        <li><strong>Mobility Assistance:</strong> Help with walking, transferring between bed and chairs, or using mobility aids to move safely at home.</li>
+        <li><strong>Meal Preparation:</strong> Light assistance in preparing and serving nutritious meals tailored to your dietary requirements.</li>
+        <li><strong>Medication Reminders:</strong> Timely non-clinical reminders to take prescribed medications as directed by your GP or healthcare provider.</li>
+        <li><strong>Morning and Evening Routines:</strong> Support to start or end your day comfortably with routines tailored to your needs.</li>
+        <li><strong>Encouragement of Independence:</strong> Wherever possible, our trained staff will encourage and support you to do things yourself at your own pace.</li>
+        <li><strong>Skin Integrity Support:</strong> Assistance applying non-clinical skincare (e.g. moisturiser) and keeping an eye on changes in skin condition.</li>
+      </ul>
+      <p>
+        At HD Heed, we recognise that personal care is not just about physical tasks—it’s about trust, respect, and empowering you to live life on your terms. Every person is different, and we tailor our care to suit your preferences, cultural needs, and level of comfort.
+      </p>
+      <div style="text-align: center;">
+        <a href="services.html" class="btn">← Back to Services</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a>
+  </footer>
+</body>
+</html>
