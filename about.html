@@ -1,106 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About Us – HD Heed</title>
-  <meta name="description" content="Learn about HD Heed, led by Mat Syan and Jazz Syan, delivering compassionate NDIS support in NSW."/>
-  <link rel="icon" href="images/favicon.ico"/>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | HD Heed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {--purple:#512b8a;--accent:#ffc107;--bg-light:#fff0f5;--font-body:'Inter',sans-serif;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:var(--font-body);background:var(--bg-light);color:#333;}
-    a{color:inherit;text-decoration:none;}
-    .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;}
-    .skip-link:focus{position:static;width:auto;height:auto;background:var(--purple);color:#fff;padding:8px;z-index:100;}
-    header{background:var(--purple);padding:1rem;position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 6px rgba(0,0,0,0.1);}
-    .logo img{height:60px;}
-    nav ul{list-style:none;display:flex;gap:1rem;}
-    nav a{color:#fff;padding:.5rem 1rem;font-weight:600;border-radius:4px;transition:background .3s;}
-    nav a:hover,nav a:focus{background:#fff;color:var(--purple);}
-    main{overflow:hidden;}
-    .hero{position:relative;background:url('images/service-banner.jpg') center/cover no-repeat;min-height:50vh;display:flex;align-items:center;justify-content:center;}
-    .hero::before{content:'';position:absolute;inset:0;background:rgba(81,43,138,0.7);}
-    .hero-content{position:relative;text-align:center;color:#fff;padding:2rem;}
-    .hero-content img{max-width:150px;margin-bottom:1rem;}
-    .hero-content h1{font-size:2.5rem;margin-bottom:.5rem;}
-    .hero-content p{font-size:1.1rem;}
-    section{padding:3rem 1rem;max-width:800px;margin:auto;}
-    h2{color:var(--purple);font-size:2rem;margin-bottom:1rem;text-align:center;position:relative;}
-    h2::after{content:'';width:60px;height:4px;background:var(--accent);position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);}
-    p{margin-bottom:1.5rem;line-height:1.6;text-align:center;}
-    .founders{display:flex;flex-direction:column;align-items:center;gap:2rem;margin:2rem 0;}
-    @media(min-width:600px){.founders{flex-direction:row;justify-content:center;}}
-    .founder-card{background:#fff;padding:1.5rem;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1);text-align:center;max-width:320px;transition:transform .3s;}
-    .founder-card:hover, .founder-card:focus-within{transform:translateY(-5px);}
-    .founder-card a{color:inherit;display:block;}
-    .founder-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:1rem;}
-    .founder-card h3{color:var(--purple);font-size:1.25rem;margin-bottom:.5rem;}
-    .founder-card p{font-size:1rem;margin-bottom:.5rem;}
-    .cta-banner{background:var(--purple);color:#fff;text-align:center;padding:2rem 1rem;margin-top:2rem;}
-    .cta-banner a{display:inline-block;background:#fff;color:var(--purple);padding:.75rem 1.5rem;border-radius:50px;font-weight:700;transition:background .3s,color .3s;}
-    .cta-banner a:hover, .cta-banner a:focus{background:var(--accent);color:var(--purple);}
-    footer{background:#333;color:#fff;text-align:center;padding:1rem;font-size:.9rem;}
-    footer a{color:var(--accent);}
+    :root {
+      --purple: #512b8a;
+      --accent: #ffc107;
+      --bg-light: #f8f8ff;
+      --font-heading: 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background: var(--bg-light);
+      color: #333;
+    }
+    header, footer {
+      background-color: var(--purple);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 0;
+      margin: 0;
+    }
+    nav a {
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    h2 {
+      font-size: 2.5rem;
+      color: var(--purple);
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    .team-member {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      flex: 1 1 250px;
+      transition: transform 0.3s;
+    }
+    .team-member:hover {
+      transform: translateY(-5px);
+    }
+    .team-member img {
+      max-width: 150px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+    .team-member h3 {
+      margin: 10px 0 5px;
+      font-size: 1.3rem;
+      color: var(--purple);
+    }
+    .team-member a {
+      color: var(--accent);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .contact-link {
+      display: block;
+      margin-top: 30px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--purple);
+    }
   </style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
   <header>
-    <div class="logo"><img src="images/logo.png" alt="HD Heed Logo"></div>
-    <nav aria-label="Primary navigation">
+    <h1>About Us</h1>
+    <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="services.html">Services</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
       </ul>
     </nav>
   </header>
-  <main id="main-content">
-    <!-- Hero Banner -->
-    <section class="hero" aria-labelledby="hero-heading">
-      <div class="hero-content">
-        <img src="images/logo.png" alt="HD Heed Logo">
-        <h1 id="hero-heading">About Us</h1>
-        <p>Your trusted NDIS provider in NSW, led by experienced professionals.</p>
+
+  <div class="container">
+    <h2>Our Story</h2>
+    <p>HD Heed was founded by a team of dedicated Registered Nurses who bring together more than 15 years of combined experience in disability and aged care. Having worked closely with people of all abilities, ages, and backgrounds, our team has seen firsthand the importance of person-centred care that is not just clinically sound—but warm, respectful, and empowering.</p>
+
+    <p>From supporting individuals with high physical needs to guiding families through dementia care and daily living challenges, we understand what quality support truly means. At HD Heed, we believe care is not just a service—it's a relationship, a promise, and a commitment to dignity and independence.</p>
+
+    <p>That’s why we created HD Heed: to bring heart and excellence together in every interaction. Our goal is to provide consistent, compassionate care tailored to each individual’s goals and lifestyle, while giving families peace of mind. Whether it’s a few hours of in-home help or ongoing support, we aim to make every moment meaningful.</p>
+
+    <h2>Meet the Team</h2>
+    <div class="team">
+      <div class="team-member">
+        <img src="images/mat.jpg" alt="Mat Syan">
+        <h3>Mat Syan</h3>
+        <a href="mat-syan.html">Read Profile</a>
       </div>
-    </section>
-    <!-- Our Story -->
-    <section aria-labelledby="story-heading">
-      <h2 id="story-heading">Our Story</h2>
-      <p>HD Heed was founded by two dedicated nurses, <a href="mat-syan.html">Mat Syan</a> and <a href="jazz-syan.html">Jazz Syan</a>, each bringing over five years of experience in disability and aged care. Their vision is to empower individuals through compassionate, personalised NDIS support that fosters independence and confidence.</p>
-    </section>
-    <!-- Meet Our Founders -->
-    <section aria-labelledby="founders-heading">
-      <h2 id="founders-heading">Meet Our Founders</h2>
-      <div class="founders">
-        <div class="founder-card">
-          <a href="mat-syan.html">
-            <img src="images/mat-syan.jpg" alt="Mat Syan">
-            <h3>Mat Syan</h3>
-            <p>Registered Nurse with 5+ years in disability and aged care. Passionate about person-centered support and community inclusion.</p>
-          </a>
-        </div>
-        <div class="founder-card">
-          <a href="jazz-syan.html">
-            <img src="images/jazz-syan.jpg" alt="Jazz Syan">
-            <h3>Jazz Syan</h3>
-            <p>Registered Nurse specialising in holistic care plans and client advocacy. Committed to empowering participants through tailored supports.</p>
-          </a>
-        </div>
+      <div class="team-member">
+        <img src="images/jazz.jpg" alt="Jazz Syan">
+        <h3>Jazz Syan</h3>
+        <a href="jazz-syan.html">Read Profile</a>
       </div>
-    </section>
-    <!-- CTA Banner -->
-    <div class="cta-banner" role="region" aria-label="Call to action">
-      <p>Interested in learning more about our team?</p>
-      <a href="contact.html" class="btn">Get in Touch</a>
+      <div class="team-member">
+        <img src="images/nancy.jpg" alt="Nancy Khokar">
+        <h3>Nancy Khokar</h3>
+        <a href="nancy-khokar.html">Read Profile</a>
+      </div>
     </div>
-  </main>
+
+    <a class="contact-link" href="contact.html">Get in touch →</a>
+  </div>
+
   <footer>
-    &copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a>
+    <p>&copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
   </footer>
 </body>
 </html>
