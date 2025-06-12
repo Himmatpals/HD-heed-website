@@ -1,103 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Respite Services – HD Heed</title>
-  <meta name="description" content="HD Heed Respite Services: providing short-term care solutions, both in-home and accommodation, giving primary carers a well-deserved break."/>
-  <link rel="icon" href="images/favicon.ico"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <title>In-Home Carer Relief | HD Heed</title>
+  <meta name="description" content="In-home carer relief by HD Heed provides respite support, giving family caregivers a break while ensuring quality care continues at home." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --purple: #512b8a;
       --accent: #ffc107;
       --bg-light: #f8f8ff;
+      --font-heading: 'Inter', sans-serif;
       --font-body: 'Inter', sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
     a { text-decoration: none; color: inherit; }
-    .skip-link { position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; }
-    .skip-link:focus { position:static; width:auto; height:auto; background:var(--purple); color:#fff; padding:8px; z-index:100; }
-    header {
-      background: var(--purple);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      position: sticky; top: 0; z-index: 50;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1rem;
+    header, footer {
+      background-color: var(--purple);
+      color: white;
+      padding: 20px;
+      text-align: center;
     }
-    .logo img { height: 60px; }
-    nav ul { list-style: none; display: flex; gap: 1rem; }
-    nav a { color: #fff; padding: .5rem 1rem; font-weight: 600; border-radius: 4px; transition: background .3s; }
-    nav a:hover, nav a:focus { background: #fff; color: var(--purple); }
-    main { overflow: hidden; }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+    nav a {
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
     .hero {
-      position: relative;
-      background: url('images/service-banner.jpg') center/cover no-repeat;
-      min-height: 60vh;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .hero::before { content: ''; position: absolute; inset: 0; background: rgba(81,43,138,0.7); }
-    .hero-content { position: relative; text-align: center; color: #fff; padding: 2rem; }
-    .hero-content img { max-width: 150px; margin-bottom: 1rem; }
-    .hero-content h1 { font-size: 2.5rem; margin-bottom: .5rem; }
-    .hero-content p { font-size: 1.1rem; }
-    section { padding: 3rem 1rem; max-width: 800px; margin: auto; text-align: center; }
-    h2 {
-      color: var(--purple); font-size: 2rem; margin-bottom: 1rem;
+      background: url('images/service-banner.jpg') center center / cover no-repeat;
+      padding: 100px 20px;
+      color: white;
+      text-align: center;
       position: relative;
     }
-    h2::after {
-      content: ''; width: 60px; height: 4px; background: var(--accent);
-      position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(81, 43, 138, 0.6);
     }
-    .detail-img { width: 100%; border-radius: 8px; margin: 1rem 0; }
-    .btn {
-      display: inline-block; background: var(--accent);
-      color: var(--purple); padding: .75rem 1.5rem;
-      border-radius: 50px; font-weight: 700; transition: background .3s;
+    .hero h2, .hero p {
+      position: relative;
+      z-index: 1;
     }
-    .btn:hover, .btn:focus { background: #fff; }
-    footer { background: #333; color: #fff; text-align: center; padding: 1rem; }
+    .hero h2 {
+      font-size: 3rem;
+    }
+    .hero p {
+      font-size: 1.25rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    h3 {
+      font-size: 1.75rem;
+      color: var(--purple);
+      margin-bottom: 1rem;
+    }
+    p, ul {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .back-link {
+      margin-top: 2rem;
+      display: inline-block;
+      color: var(--purple);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    footer a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
   <header>
-    <div class="logo"><img src="images/logo.png" alt="HD Heed Logo"></div>
-    <nav aria-label="Primary navigation">
+    <h1>HD Heed</h1>
+    <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <main id="main-content">
-    <!-- Hero Banner -->
-    <section class="hero" aria-labelledby="hero-heading">
-      <div class="hero-content">
-        <img src="images/logo.png" alt="HD Heed Logo">
-        <h1 id="hero-heading">Respite Services</h1>
-        <p>Providing a safe, caring environment to give primary carers a break.</p>
-      </div>
-    </section>
+  <section class="hero">
+    <h2>In-Home Carer Relief</h2>
+    <p>Respite that supports both carers and participants.</p>
+  </section>
 
-    <!-- Service Detail -->
-    <section>
-      <h2>What We Offer</h2>
-      <img src="images/respite-services.jpg" alt="Respite Services" class="detail-img">
-      <p>
-        We offer short-term in-home support and alternative accommodation, giving carers
-        a well-deserved break while providing participants with enjoyable, quality care.
-      </p>
-      <a href="services.html" class="btn">Back to Services</a>
-    </section>
-  </main>
+  <div class="container">
+    <h3>What Is In-Home Carer Relief?</h3>
+    <p>Also known as respite care, in-home carer relief gives your primary carers a short break while you continue receiving essential support at home. This helps reduce stress for carers and supports your wellbeing in a familiar environment. Whether it’s for a few hours, overnight, or a weekend, a trained support worker steps in to help with your daily needs.</p>
+
+    <h3>How It Works</h3>
+    <p>Before starting respite care, we work with you and your carer to understand your routines and care requirements. A plan is developed for the scheduled time. Our support worker comes to your home and assists with personal care, mobility, medication, meals, supervision, and companionship — all aligned with your usual routine.</p>
+
+    <h3>What Support Is Provided?</h3>
+    <ul>
+      <li>Personal care (e.g., showering, grooming, toileting)</li>
+      <li>Meal preparation and light housekeeping</li>
+      <li>Medication assistance and reminders</li>
+      <li>Mobility and transfer support</li>
+      <li>Social interaction and activities</li>
+      <li>Optional short outings if pre-arranged</li>
+    </ul>
+
+    <h3>Why Respite Care Matters</h3>
+    <p>This service benefits both the participant and their carer. For carers, it prevents burnout and gives them time to rest, attend appointments, or enjoy personal time. For participants, it’s a chance to engage with someone new and maintain consistent care in the comfort of home.</p>
+
+    <h3>Flexible Options</h3>
+    <p>We offer short-term, regular, or emergency respite. Duration can range from a couple of hours to overnight or multi-day care. We ensure continuity by assigning a consistent team who follow your care plan closely, minimising disruption.</p>
+
+    <h3>A Balanced Approach</h3>
+    <p>NDIS-funded respite allows families to maintain sustainable caregiving over the long term. At HD Heed, we provide this support with compassion, reliability, and professionalism — giving your carer peace of mind while you remain well cared for at home.</p>
+
+    <a class="back-link" href="services.html">&larr; Back to Services</a>
+  </div>
 
   <footer>
-    &copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a>
+    <p>&copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
   </footer>
 </body>
 </html>
