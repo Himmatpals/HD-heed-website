@@ -4,7 +4,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Our Services | HD Heed</title>
   <meta name="description" content="Explore HD Heed’s full range of NDIS services including personal care, domestic help, respite, nursing, and community participation.">
-  <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -15,18 +14,13 @@
       --font-body: 'Inter', sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-    body { font-family: var(--font-body); background: var(--bg-light); color: #333; overflow-x: hidden; }
+    body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
     a { text-decoration: none; color: inherit; }
     header, footer {
       background-color: var(--purple);
       color: white;
       padding: 20px;
       text-align: center;
-      animation: slideDown 1s ease-in-out;
-    }
-    @keyframes slideDown {
-      from { transform: translateY(-100%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
     }
     nav ul {
       list-style: none;
@@ -35,11 +29,11 @@
       gap: 1.5rem;
       margin: 0;
       padding: 0;
-      animation: fadeIn 1.2s ease-in-out;
     }
     nav a {
       color: white;
       font-weight: 600;
+      text-decoration: none;
     }
     nav a:hover {
       text-decoration: underline;
@@ -50,7 +44,6 @@
       color: white;
       text-align: center;
       position: relative;
-      animation: fadeInHero 1.2s ease-in-out;
     }
     .hero::before {
       content: '';
@@ -62,30 +55,31 @@
       position: relative;
       font-size: 3rem;
       z-index: 1;
-      animation: zoomIn 1s ease-in-out;
+      animation: fadeInDown 1.2s ease-in-out;
     }
     .hero p {
       position: relative;
       font-size: 1.25rem;
       z-index: 1;
-      animation: fadeInUp 1.5s ease-in-out;
+      animation: fadeInUp 1.2s ease-in-out;
     }
-    @keyframes fadeInHero {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes zoomIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     @keyframes fadeInUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .container {
       max-width: 1200px;
       margin: auto;
       padding: 40px 20px;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     h2 {
       color: var(--purple);
@@ -97,39 +91,23 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
-      animation: fadeInGrid 1.5s ease-in-out;
-    }
-    @keyframes fadeInGrid {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
     }
     .service-card {
+      display: block;
       background: #fff;
       padding: 1.5rem;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       text-align: center;
       transition: transform 0.3s, box-shadow 0.3s;
-      position: relative;
-      overflow: hidden;
+      color: inherit;
+      text-decoration: none;
+      animation: zoomIn 0.8s ease forwards;
     }
-    .service-card::before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0; left: 0;
-      background: linear-gradient(to right, #ffc10711, #ffc10733);
-      opacity: 0;
-      transition: opacity 0.5s;
-    }
-    .service-card:hover::before {
-      opacity: 1;
-    }
-    .service-card a { display: block; color: inherit; }
-    .service-card:hover, .service-card:focus-within {
-      transform: translateY(-5px) scale(1.03);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    .service-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+      background: #fefefe;
     }
     .service-card h3 {
       font-size: 1.25rem;
@@ -138,6 +116,10 @@
     }
     .service-card p {
       font-size: 1rem;
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
     footer a { color: var(--accent); text-decoration: underline; }
   </style>
@@ -158,42 +140,30 @@
     <p>Compassionate, reliable NDIS support tailored to your needs.</p>
   </section>  <div class="container">
     <div class="services-grid">
-      <div class="service-card">
-        <a href="personal-care.html">
-          <h3>Personal Care</h3>
-          <p>Support with showering, grooming, dressing, and other personal tasks to maintain your dignity and comfort.</p>
-        </a>
-      </div>
-      <div class="service-card">
-        <a href="domestic-assistance.html">
-          <h3>Domestic Assistance</h3>
-          <p>Help with cleaning, laundry, and meal prep to keep your living space safe, clean, and comfortable.</p>
-        </a>
-      </div>
-      <div class="service-card">
-        <a href="community-participation.html">
-          <h3>Community Participation</h3>
-          <p>Get involved in social, cultural, and recreational activities that enrich your life and wellbeing.</p>
-        </a>
-      </div>
-      <div class="service-card">
-        <a href="nursing-care.html">
-          <h3>Nursing Care</h3>
-          <p>Clinical support at home including medications, wound management, and chronic condition monitoring.</p>
-        </a>
-      </div>
-      <div class="service-card">
-        <a href="daily-living-skills.html">
-          <h3>Daily Living Skills Support</h3>
-          <p>Building skills in budgeting, meal prep, communication, public transport use, and more.</p>
-        </a>
-      </div>
-      <div class="service-card">
-        <a href="carer-relief.html">
-          <h3>In-Home Carer Relief</h3>
-          <p>Short-term support in your home while carers rest, ensuring continuity of care and companionship.</p>
-        </a>
-      </div>
+      <a href="personal-care.html" class="service-card">
+        <h3>Personal Care</h3>
+        <p>Support with showering, grooming, dressing, and other personal tasks to maintain your dignity and comfort.</p>
+      </a>
+      <a href="domestic-assistance.html" class="service-card">
+        <h3>Domestic Assistance</h3>
+        <p>Help with cleaning, laundry, and meal prep to keep your living space safe, clean, and comfortable.</p>
+      </a>
+      <a href="community-participation.html" class="service-card">
+        <h3>Community Participation</h3>
+        <p>Get involved in social, cultural, and recreational activities that enrich your life and wellbeing.</p>
+      </a>
+      <a href="nursing-care.html" class="service-card">
+        <h3>Nursing Care</h3>
+        <p>Clinical support at home including medications, wound management, and chronic condition monitoring.</p>
+      </a>
+      <a href="daily-living-skills.html" class="service-card">
+        <h3>Daily Living Skills Support</h3>
+        <p>Building skills in budgeting, meal prep, communication, public transport use, and more.</p>
+      </a>
+      <a href="carer-relief.html" class="service-card">
+        <h3>In-Home Carer Relief</h3>
+        <p>Short-term support in your home while carers rest, ensuring continuity of care and companionship.</p>
+      </a>
     </div>
   </div>  <footer>
     <p>&copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
