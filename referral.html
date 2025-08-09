@@ -1,170 +1,371 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>NDIS Referral | HD Heed</title>
+  <title>Try our Extremely Interactive Referral | HD HeeD</title>
+  <meta name="description" content="Ultra-interactive NDIS referral for HD HeeD. Works on GitHub Pages with Formspree. All questions optional with 'Not sure' options."/>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f6f8; margin:0; }
-    .header { background: #005a9c; color: #fff; padding: 15px 20px; }
-    .header img { height: 40px; vertical-align: middle; }
-    .header nav { display:inline-block; margin-left: 30px; vertical-align: middle; }
-    .header nav a { color:#fff; margin:0 15px; text-decoration:none; font-weight:500; }
-    .container { max-width:900px; margin:auto; padding:25px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-    h1, h2 { color:#005a9c; margin-bottom:10px; }
-    label { display:block; margin-top:15px; font-weight:500; }
-    input, select, textarea { width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; margin-top:5px; }
-    .radio-group, .checkbox-group { margin-top:5px; }
-    .radio-group label, .checkbox-group label { display:inline-block; margin-right:20px; font-weight:normal; }
-    button { background:#005a9c; color:#fff; padding:12px 20px; border:none; border-radius:4px; margin-top:20px; cursor:pointer; }
-    button:hover { background:#00447a; }
-    .footer { text-align:center; padding:15px; color:#777; font-size:14px; margin-top:30px; }
-    .footer a { color:#005a9c; text-decoration:none; }
+    :root{--bg:#0b1220;--ink:#0b1220;--card:#fff;--muted:#6b7280;--ring:#93c5fd;--brand:#2563eb;--brand2:#22c55e;--danger:#ef4444}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(135deg,#0b1220,#111827 60%);color:#e5e7eb;display:flex;justify-content:center;padding:24px}
+    .shell{width:100%;max-width:1100px}
+    .card{background:var(--card);color:var(--ink);border-radius:22px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border-bottom:1px solid #e5e7eb}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(160deg,var(--brand),var(--brand2));box-shadow:inset 0 0 18px rgba(255,255,255,.25)}
+    .title{font-weight:800;letter-spacing:.2px}
+    .subtitle{color:#64748b;font-size:.92rem}
+    .progress{height:10px;background:#eef2f7;border-radius:999px;overflow:hidden;width:320px}
+    .progress>div{height:100%;width:0%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+    main{display:grid;grid-template-columns:280px 1fr;min-height:760px}
+    @media (max-width:920px){main{grid-template-columns:1fr}}
+    nav{background:#f8fafc;border-right:1px solid #e5e7eb;padding:18px;display:flex;flex-direction:column;gap:8px}
+    .step-link{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;cursor:pointer;color:#111827;text-decoration:none;border:1px solid transparent}
+    .step-link.active{background:#eaf2ff;border-color:#dbeafe}.step-link.done .dot{background:var(--brand2)}
+    .dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1}.badge{margin-left:auto;font-size:.75rem;color:#475569}
+    .pane{padding:24px 24px 28px}.block{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:16px}
+    h1,h2{margin:.25rem 0 .5rem 0}.muted{color:#6b7280}
+    .grid{display:grid;gap:14px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media (max-width:720px){.two,.three{grid-template-columns:1fr}}
+    label{font-weight:700;font-size:.95rem;color:#111827}
+    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;outline:none;background:#fff}
+    input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px var(--ring)} textarea{min-height:110px}
+    .chips{display:flex;flex-wrap:wrap;gap:10px}.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;border:1px solid #e5e7eb;cursor:pointer}
+    .chip.active{border-color:var(--brand);box-shadow:0 0 0 3px #dbeafe}
+    .yn3{display:grid;grid-template-columns:1fr 1fr 1fr;background:#f1f5f9;border-radius:12px;overflow:hidden}
+    .yn3 button{appearance:none;padding:10px 12px;border:none;background:transparent;cursor:pointer;font-weight:700}
+    .yn3 button[aria-pressed="true"]{background:#e0ecff}
+    .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+    .btn{appearance:none;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer}
+    .primary{background:var(--brand);color:#fff}.ghost{background:#eef2f7}.danger{background:var(--danger);color:#fff}
+    .hint{font-size:.85rem;color:#64748b}
+    .review{background:#fcfcfd;border:1px dashed #cbd5e1;border-radius:14px;padding:16px}
+    pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px;max-height:280px;overflow:auto}
+    .toast{position:fixed;inset:auto 20px 20px auto;background:#111827;color:#fff;padding:12px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+    .toast.show{opacity:1}
   </style>
 </head>
 <body>
-
-<header class="header">
-  <img src="hd heed.jpg" alt="HD Heed Logo">
-  <nav>
-    <a href="/">Home</a>
-    <a href="/about.html">About Us</a>
-    <a href="/services.html">Services</a>
-    <a href="/contact.html">Contact</a>
-    <a href="/blog.html">Blog</a>
-  </nav>
-</header>
-
-<main class="container">
-  <h1>NDIS Referral Form</h1>
-
-  <form action="https://formspree.io/f/xvgrkkjn" method="POST">
-    <input type="hidden" name="_redirect" value="https://himmatpals.github.io/hd-heed-website/thankyou.html" />
-
-    <h2>Consent</h2>
-    <label>Has the Participant or Primary Carer consented to this referral?</label>
-    <div class="radio-group">
-      <label><input type="radio" name="consent" value="yes"> Yes</label>
-      <label><input type="radio" name="consent" value="no"> No</label>
+  <div class="shell">
+    <div class="card" role="form" aria-labelledby="form-title">
+      <header>
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <div id="form-title" class="title">Try our Extremely Interactive Referral</div>
+            <div class="subtitle">Everything is optional. Choose <strong>Not sure</strong> any time — we’ll discuss later.</div>
+          </div>
+        </div>
+        <div class="progress" aria-label="Progress"><div id="bar"></div></div>
+      </header>
+      <main>
+        <nav id="steps"></nav>
+        <section class="pane" id="pane"></section>
+      </main>
     </div>
+  </div>
 
-    <h2>Person Making Referral</h2>
-    <label>Full Name<input type="text" name="referrer_name"></label>
-    <label>Relationship to Participant<input type="text" name="relationship"></label>
-    <label>Phone<input type="tel" name="phone"></label>
-    <label>Mobile<input type="tel" name="mobile"></label>
-    <label>Email<input type="email" name="email"></label>
+  <div class="toast" id="toast">Saved</div>
 
-    <h2>Participant Details</h2>
-    <label>First Name<input type="text" name="participant_fname"></label>
-    <label>Last Name<input type="text" name="participant_lname"></label>
-    <label>Title<input type="text" name="title"></label>
-    <label>Date of Birth<input type="date" name="dob"></label>
-    <label>NDIS Number<input type="text" name="ndis_number"></label>
-    <label>Gender</label>
-    <div class="radio-group">
-      <label><input type="radio" name="gender" value="male"> Male</label>
-      <label><input type="radio" name="gender" value="female"> Female</label>
-    </div>
-    <label>Marital Status<input type="text" name="marital_status"></label>
-    <label>Street Address<input type="text" name="street"></label>
-    <label>Suburb<input type="text" name="suburb"></label>
-    <label>City<input type="text" name="city"></label>
-    <label>Postcode<input type="text" name="postcode"></label>
-    <label>Home Phone<input type="tel" name="home_phone"></label>
-    <label>Mobile<input type="tel" name="participant_mobile"></label>
-    <label>Email<input type="email" name="participant_email"></label>
-    <label>Language<input type="text" name="language"></label>
-    <label>Is Interpreter Required?</label>
-    <div class="radio-group">
-      <label><input type="radio" name="interpreter" value="yes"> Yes</label>
-      <label><input type="radio" name="interpreter" value="no"> No</label>
-    </div>
-    <label>If Yes, Type of Interpreter<input type="text" name="interpreter_type"></label>
+  <script>
+    // === CONFIG (your Formspree + redirect) ===
+    const FORM_ENDPOINT = "https://formspree.io/f/xvgrkkjn";
+    const REDIRECT_URL  = "https://himmatpals.github.io/hd-heed-website/thankyou.html";
+    const AUTOSAVE_KEY  = "hdheed_referral_v3";
 
-    <h2>Primary Carer</h2>
-    <label>First Name<input type="text" name="carer_fname"></label>
-    <label>Last Name<input type="text" name="carer_lname"></label>
-    <label>Relationship<input type="text" name="carer_relationship"></label>
-    <label>Street Address<input type="text" name="carer_street"></label>
-    <label>Suburb<input type="text" name="carer_suburb"></label>
-    <label>City<input type="text" name="carer_city"></label>
-    <label>Postcode<input type="text" name="carer_postcode"></label>
-    <label>Home Phone<input type="tel" name="carer_home"></label>
-    <label>Mobile<input type="tel" name="carer_mobile"></label>
-    <label>Email<input type="email" name="carer_email"></label>
-    <label>Shared Care / Custody Arrangement?</label>
-    <div class="radio-group">
-      <label><input type="radio" name="custody" value="yes"> Yes</label>
-      <label><input type="radio" name="custody" value="no"> No</label>
-    </div>
+    // === STATE / UTIL ===
+    const state = JSON.parse(localStorage.getItem(AUTOSAVE_KEY) || "{}");
+    const $ = (s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+    const save = ()=>{ localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state)); flash("Saved"); };
+    const flash = (m)=>{ const t=$("#toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1200); };
+    const req = keys => keys.every(k => (state[k]??"").toString().trim().length>0); // used only for hints, not blocking
 
-    <h2>Support from Right at Home</h2>
-    <label>Key Area of Support Requested<textarea name="key_area"></textarea></label>
+    // === WIZARD STEPS ===
+    const Steps = [
+      {id:"consent",     label:"Consent",              render:rConsent},
+      {id:"referrer",    label:"Person Making Referral",render:rReferrer},
+      {id:"participant", label:"Participant Details",  render:rParticipant},
+      {id:"carer",       label:"Primary Carer (NOK)",  render:rCarer},
+      {id:"safety",      label:"Safety & Risks",       render:rSafety},
+      {id:"supports",    label:"Supports",             render:rSupports},
+      {id:"funding",     label:"Funding & Plan",       render:rFunding},
+      {id:"goals",       label:"NDIS Goals",           render:rGoals},
+      {id:"files",       label:"Documents (optional)", render:rFiles},
+      {id:"review",      label:"Review & Consent",     render:rReview},
+      {id:"submit",      label:"Submit",               render:rSubmit},
+    ];
+    let current = 0;
 
-    <h2>NDIS Goals</h2>
-    <label>Goal 1<input type="text" name="goal1"></label>
-    <label>Goal 1 - Service Requested<input type="text" name="goal1_service"></label>
-    <label>Support Category<select name="goal1_category">
-      <option value="">- Please Select -</option>
-      <option value="core">Core</option>
-      <option value="capacity">Capacity Building</option>
-      <option value="capital">Capital</option>
-    </select></label>
+    function init(){ renderNav(); go(0); }
+    function renderNav(){
+      const nav=$("#steps"); nav.innerHTML="";
+      Steps.forEach((s,i)=>{ const a=document.createElement("a");
+        a.className="step-link"; a.innerHTML=`<span class="dot"></span><span>${i+1}. ${s.label}</span><span class="badge" id="b-${s.id}"></span>`;
+        a.href="#"; a.onclick=e=>{e.preventDefault(); go(i)}; nav.appendChild(a);
+      });
+    }
+    function setActive(){
+      $$(".step-link").forEach((el,i)=>{ el.classList.toggle("active",i===current); el.classList.toggle("done",i<current); });
+      $("#bar").style.width = Math.round((current)/(Steps.length-1)*100)+"%";
+    }
+    function go(i){ current=Math.max(0,Math.min(Steps.length-1,i)); setActive(); const pane=$("#pane"); pane.innerHTML=""; Steps[current].render(pane); window.scrollTo({top:0,behavior:"smooth"}); }
 
-    <label>Goal 2<input type="text" name="goal2"></label>
-    <label>Goal 2 - Service Requested<input type="text" name="goal2_service"></label>
-    <label>Support Category<select name="goal2_category">
-      <option value="">- Please Select -</option>
-      <option value="core">Core</option>
-      <option value="capacity">Capacity Building</option>
-      <option value="capital">Capital</option>
-    </select></label>
+    // === FIELD HELPERS ===
+    function input(id,label,o={}){const{type="text",placeholder="",hint=""}=o; const v = state[id]??"";
+      return `<div><label for="${id}">${label}</label>
+      <input id="${id}" name="${id}" type="${type}" placeholder="${placeholder}" value="${v??""}"/>
+      ${hint?`<div class="hint">${hint}</div>`:""}</div>`}
+    function select(id,label,opts,o={}){const v=state[id]??""; return `<div><label for="${id}">${label}</label>
+      <select id="${id}">${["<option value=''>Not sure / discuss later</option>",...opts.map(x=>`<option ${v===x?"selected":""}>${x}</option>`)].join("")}</select></div>`}
+    function yn3(id,label){const v=state[id]; return `<div><label>${label}</label>
+      <div class="yn3"><button type="button" data-yn3="${id}" data-v="yes" aria-pressed="${v==='yes'}">Yes</button>
+      <button type="button" data-yn3="${id}" data-v="no" aria-pressed="${v==='no'}">No</button>
+      <button type="button" data-yn3="${id}" data-v="unsure" aria-pressed="${v==='unsure'}">Not sure</button></div></div>`}
+    function chips(id,values){const sel=new Set(state[id]||[]); return `<div class="chips">${values.map(v=>`<div class="chip ${sel.has(v)?'active':''}" data-chip="${id}" data-value="${v}">${v}</div>`).join("")}</div>`}
+    function bindModel(root){ $$("input,select,textarea",root).forEach(el=>{const k=el.id;if(!k)return; el.value=state[k]??""; el.addEventListener("input",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); el.addEventListener("change",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); }); }
+    function bindYN3(root){ $$("[data-yn3]",root).forEach(btn=>btn.addEventListener("click",()=>{const k=btn.dataset.yn3; state[k]=btn.dataset.v; save(); $$(`[data-yn3='${k}']`,root).forEach(b=>b.setAttribute("aria-pressed", String(b===btn))); })); }
+    function bindChips(root){ $$("[data-chip]",root).forEach(el=>el.addEventListener("click",()=>{const k=el.dataset.chip; const v=el.dataset.value; state[k]=state[k]||[]; const set=new Set(state[k]); set.has(v)?set.delete(v):set.add(v); state[k]=[...set]; el.classList.toggle("active"); save(); })); }
 
-    <label>Goal 3<input type="text" name="goal3"></label>
-    <label>Goal 3 - Service Requested<input type="text" name="goal3_service"></label>
-    <label>Support Category<select name="goal3_category">
-      <option value="">- Please Select -</option>
-      <option value="core">Core</option>
-      <option value="capacity">Capacity Building</option>
-      <option value="capital">Capital</option>
-    </select></label>
+    // === RENDERS ===
+    function rConsent(p){ p.innerHTML = `<div class="block">
+      <h2>Consent</h2>
+      ${yn3("consent","Has the Participant or Primary Carer consented to this referral?")}
+      <div class="hint">If you're not sure, choose <strong>Not sure</strong>. We can discuss consent before we proceed.</div>
+      <div class="btn-row"><button class="btn primary" id="next">Next</button></div></div>`;
+      $("#next",p).onclick=e=>{e.preventDefault(); go(1)};
+      bindYN3(p);
+    }
 
-    <label>Goal 4<input type="text" name="goal4"></label>
-    <label>Goal 4 - Service Requested<input type="text" name="goal4_service"></label>
-    <label>Support Category<select name="goal4_category">
-      <option value="">- Please Select -</option>
-      <option value="core">Core</option>
-      <option value="capacity">Capacity Building</option>
-      <option value="capital">Capital</option>
-    </select></label>
+    function rReferrer(p){ p.innerHTML = `<div class="block">
+      <h2>Person Making Referral</h2>
+      ${input("referrer_name","Full Name")}
+      ${input("relationship","Relationship to Participant")}
+      <div class="grid two">${input("phone","Phone",{type:"tel"})}${input("mobile","Mobile",{type:"tel"})}</div>
+      ${input("email","Email",{type:"email",hint:"We'll send a confirmation"})}
+      <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
+      $("#back",p).onclick=e=>{e.preventDefault(); go(0)}; $("#next",p).onclick=e=>{e.preventDefault(); go(2)};
+      bindModel(p);
+    }
 
-    <label>Current Services Accessed<textarea name="current_services"></textarea></label>
-    <label>Previous Services Accessed<textarea name="previous_services"></textarea></label>
-    <label>Funding Support Area<textarea name="funding_area"></textarea></label>
-    <label>How is your NDIS plan managed?
-      <select name="plan_managed">
-        <option value="">- Please Select -</option>
-        <option value="ndia">NDIA Managed</option>
-        <option value="plan">Plan Managed</option>
-        <option value="self">Self Managed</option>
-      </select>
-    </label>
-    <label>Postcode/Suburb for Service Location<input type="text" name="postcode_lookup"></label>
+    function rParticipant(p){
+      p.innerHTML = `<div class="block"><h2>Participant Details</h2>
+        <div class="grid two">${input("participant_fname","First Name")}${input("participant_lname","Last Name")}</div>
+        <div class="grid two">${input("title","Title")}${input("dob","Date of Birth",{type:"date"})}</div>
+        <div class="grid two">${input("ndis_number","NDIS Number")}${input("marital_status","Marital Status")}</div>
+        <div class="grid two"><div><label>Gender</label>
+          <div class="yn3"><button type="button" data-yn3="gender" data-v="male" aria-pressed="${state.gender==='male'}">Male</button>
+          <button type="button" data-yn3="gender" data-v="female" aria-pressed="${state.gender==='female'}">Female</button>
+          <button type="button" data-yn3="gender" data-v="unsure" aria-pressed="${state.gender==='unsure'}">Not sure</button></div></div>
+          ${input("language","Language")}</div>
+        <div class="grid two">${input("street","Street Address")}${input("suburb","Suburb")}</div>
+        <div class="grid three">${input("city","City")}${input("postcode","Postcode",{hint:"4-digit"})}${input("home_phone","Home Phone",{type:"tel"})}</div>
+        <div class="grid two">${input("participant_mobile","Mobile",{type:"tel"})}${input("participant_email","Email",{type:"email"})}</div>
+        ${yn3("interpreter","Is Interpreter Required?")}
+        ${input("interpreter_type","If yes, which language / type?")}
+        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
+      $("#back",p).onclick=e=>{e.preventDefault(); go(1)}; $("#next",p).onclick=e=>{e.preventDefault(); go(3)};
+      bindModel(p); bindYN3(p);
+    }
 
-    <div class="checkbox-group">
-      <label><input type="checkbox" name="referral_consent" required>
-        I confirm that the person being referred has consented to their details being provided.
-      </label>
-    </div>
+    function rCarer(p){
+      p.innerHTML = `<div class="block"><h2>Primary Carer (Next of Kin)</h2>
+        <div class="grid two">${input("carer_fname","First Name")}${input("carer_lname","Last Name")}</div>
+        ${input("carer_relationship","Relationship")}
+        <div class="grid two">${input("carer_street","Street Address")}${input("carer_suburb","Suburb")}</div>
+        <div class="grid three">${input("carer_city","City")}${input("carer_postcode","Postcode")}${input("carer_home","Home Phone",{type:"tel"})}</div>
+        <div class="grid two">${input("carer_mobile","Mobile",{type:"tel"})}${input("carer_email","Email",{type:"email"})}</div>
+        ${yn3("custody","Shared Care / Custody Arrangement?")}
+        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
+      $("#back",p).onclick=e=>{e.preventDefault(); go(2)}; $("#next",p).onclick=e=>{e.preventDefault(); go(4)};
+      bindModel(p); bindYN3(p);
+    }
 
-    <button type="submit">Submit Referral</button>
-  </form>
-</main>
+    function rSafety(p){
+      p.innerHTML = `<div class="block"><h2>Safety & Immediate Risks</h2>
+        ${yn3("recent_fall","Has the participant had a recent fall?")}
+        ${yn3("wound","Is there a wound / post-op site requiring care?")}
+        ${yn3("uncontrolled_pain","Uncontrolled pain?")}
+        ${yn3("pressure_risk","At risk of pressure injury?")}
+        ${yn3("behaviour_risk","Any behaviours of concern?")}
+        ${input("risk_notes","Risk details (optional)",{placeholder:"Brief notes, dates, locations…"})}
+        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
+      $("#back",p).onclick=e=>{e.preventDefault(); go(3)}; $("#next",p).onclick=e=>{e.preventDefault(); go(5)};
+      bindModel(p); bindYN3(p);
+    }
 
-<footer class="footer">
-  &copy; 2025 <strong>HD Heed</strong>. All rights reserved. | <a href="/privacy.html">Privacy Policy</a>
-</footer>
+    function rSupports(p){
+      p.innerHTML = `<div class="block"><h2>Support from HD HeeD</h2>
+        ${input("key_area","Key Area of Support Requested",{placeholder:"e.g., Community nursing; wound care; personal care; medication support"})}
+        ${yn3("allergies","Any allergies?")}
+        ${input("allergy_list","If yes, list allergies")}
+        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
+      $("#back",p).onclick=e=>{e.preventDefault(); go(4)}; $("#next",p).onclick=e=>{e.preventDefault(); go(6)};
+      bindModel(p); bindYN3(p);
+    }
 
+    function rFunding(p){
+      p.innerHTML = `<div class="block"><h2>Funding & Plan</h2>
+        <div><label>How is your NDIS plan managed?</label>
+          <div class="yn3">
+            <button type="button" data-yn3="plan_managed" data-v="ndia"   aria-pressed="${state.plan_managed==='ndia'}">NDIA Managed</button>
+            <button type="button" data-yn3="plan_managed" data-v="plan"   aria-pressed="${state.plan_managed==='plan'}">Plan Managed</button>
+            <button type="button" data-yn3="plan_managed" data-v="self"   aria-pressed="${state.plan_managed==='self'}">Self Managed</button>
+          </div>
+        </div>
+        ${input("funding_area","Funding Support Area")}
+        ${input("postcode_lookup","Postcode/Suburb for Service Location")}
+        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
+      $("#back",p).onclick=e=>{e.preventDefault(); go(5)}; $("#next",p).onclick=e=>{e.preventDefault(); go(7)};
+      bindModel(p); bindYN3(p);
+    }
+
+    function rGoals(p){
+      const cat=`<option value="">Not sure / discuss later</option><option value="core">Core</option><option value="capacity">Capacity Building</option><option value="capital">Capital</option>`;
+      p.innerHTML = `<div class="block"><h2>NDIS Goals</h2>
+        <div class="grid two">${input("goal1","Goal 1")}${input("goal1_service","Goal 1 - Service Requested")}</div>
+        <label>Support Category<select id="goal1_category">${cat}</select></label>
+        <div class="grid two">${input("goal2","Goal 2")}${input("goal2_service","Goal 2 - Service Requested")}</div>
+        <label>Support Category<select id="goal2_category">${cat}</select></label>
+        <div class="grid two">${input("goal3","Goal 3")}${input("goal3_service","Goal 3 - Service Requested")}</div>
+        <label>Support Category<select id="goal3_category">${cat}</select></label>
+        <div class="grid two">${input("goal4","Goal 4")}${input("goal4_service","Goal 4 - Service Requested")}</div>
+        <label>Support Category<select id="goal4_category">${cat}</select></label>
+        ${input("current_services","Current Services Accessed")}
+        ${input("previous_services","Previous Services Accessed")}
+        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
+      $("#back",p).onclick=e=>{e.preventDefault(); go(6)}; $("#next",p).onclick=e=>{e.preventDefault(); go(8)};
+      bindModel(p);
+    }
+
+    function rFiles(p){
+      p.innerHTML = `<div class="block"><h2>Upload documents (optional)</h2>
+        <div class="muted">Add NDIS plan pages, referrals, scripts, or photos (max 5 files, 10MB each). Skip if not sure.</div>
+        <input id="filesInput" type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt,.rtf,.odt,.xlsx,.xls"/>
+        <div id="fileList" class="hint" style="margin-top:8px"></div>
+        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
+      $("#back",p).onclick=e=>{e.preventDefault(); go(7)}; $("#next",p).onclick=e=>{e.preventDefault(); go(9)};
+      const fi = $('#filesInput',p);
+      fi.onchange = ()=>{ const arr = Array.from(fi.files||[]).slice(0,5);
+        state._files = arr.map(f=>({name:f.name,size:f.size,type:f.type})); save();
+        $('#fileList',p).textContent = arr.map(f=>`${f.name} (${Math.round(f.size/1024)} KB)`).join(', ');
+      };
+    }
+
+    function rReview(p){
+      p.innerHTML = `<div class="block"><h2>Review & Final Consent</h2>
+        <div class="review"><h3>Summary</h3><pre>${buildSummary()}</pre></div>
+        <div><label><input id="referral_consent" type="checkbox" ${state.referral_consent?"checked":""}/> I confirm the person being referred has consented OR I selected "Not sure" and would like HD HeeD to discuss consent with me.</label></div>
+        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Looks good</button></div></div>`;
+      $("#back",p).onclick=e=>{e.preventDefault(); go(8)};
+      $("#next",p).onclick=e=>{e.preventDefault(); state.referral_consent = $("#referral_consent").checked; go(10); };
+      bindModel(p);
+    }
+
+    function rSubmit(p){
+      p.innerHTML = `<div class="block"><h2>Submit Referral</h2>
+        <p class="muted">Submit online (Formspree), or download a copy and email it later. Nothing is mandatory.</p>
+        <div class="btn-row">
+          <button class="btn primary" id="submitOnline">Submit online</button>
+          <button class="btn ghost" id="download">Download .json</button>
+          <button class="btn danger" id="reset">Reset form</button>
+        </div>
+        <div class="hint" style="margin-top:10px">After submission, you'll be redirected to our thank-you page.</div>
+        <div class="review" style="margin-top:12px"><h3>Preview</h3><pre>${buildSummary()}</pre></div></div>`;
+      $("#submitOnline",p).onclick=submitOnline;
+      $("#download",p).onclick=downloadJSON;
+      $("#reset",p).onclick=()=>{ if(confirm("Clear all answers?")){ localStorage.removeItem(AUTOSAVE_KEY); location.reload(); } };
+    }
+
+    // === SUMMARY & SUBMIT ===
+    function yesNoUnsure(k){ return state[k]==="yes"?"Yes": state[k]==="no"?"No": state[k]==="unsure"?"Not sure": (state[k]||""); }
+    function buildSummary(){
+      const L=[];
+      L.push(`Consent: ${yesNoUnsure("consent")}`,"");
+      L.push(`Referrer: ${state.referrer_name||""} (${state.relationship||""})`);
+      L.push(`Contact: ${state.email||""}  Phone: ${state.phone||""}  Mobile: ${state.mobile||""}`,"");
+      L.push(`Participant: ${state.participant_fname||""} ${state.participant_lname||""}  DOB: ${state.dob||""}  Title: ${state.title||""}`);
+      L.push(`NDIS: ${state.ndis_number||""}  Gender: ${yesNoUnsure("gender")||""}  Marital: ${state.marital_status||""}`);
+      L.push(`Address: ${state.street||""}, ${state.suburb||""}, ${state.city||""} ${state.postcode||""}`);
+      L.push(`Phone: ${state.home_phone||""}  Mobile: ${state.participant_mobile||""}  Email: ${state.participant_email||""}`);
+      L.push(`Language: ${state.language||""}  Interpreter: ${yesNoUnsure("interpreter")}  Type: ${state.interpreter_type||""}`,"");
+      L.push(`Carer: ${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""})  Carer email: ${state.carer_email||""}`);
+      L.push(`Custody/shared: ${yesNoUnsure("custody")}`,"");
+      L.push(`Safety – Fall:${yesNoUnsure("recent_fall")}  Wound:${yesNoUnsure("wound")}  Pain:${yesNoUnsure("uncontrolled_pain")}  Pressure:${yesNoUnsure("pressure_risk")}  Behaviour:${yesNoUnsure("behaviour_risk")}`);
+      if(state.risk_notes) L.push("Risk notes: "+state.risk_notes);
+      L.push("");
+      if(state.key_area) L.push("Key area: "+state.key_area);
+      if(state.allergies) L.push("Allergies: "+yesNoUnsure("allergies")+" "+(state.allergy_list||""));
+      L.push("");
+      L.push(`Plan managed: ${yesNoUnsure("plan_managed")}  Funding notes: ${state.funding_area||""}`);
+      if(state.postcode_lookup) L.push("Service location: "+state.postcode_lookup);
+      L.push("");
+      ["1","2","3","4"].forEach(n=>{
+        if(state["goal"+n] || state["goal"+n+"_service"] || state["goal"+n+"_category"]){
+          L.push(`Goal ${n}: ${state["goal"+n]||""} — ${state["goal"+n+"_service"]||""}  [${state["goal"+n+"_category"]||""}]`);
+        }
+      });
+      if(state.current_services) L.push("Current services: "+state.current_services);
+      if(state.previous_services) L.push("Previous services: "+state.previous_services);
+      if(state._files && state._files.length) L.push("", "Files: "+state._files.map(f=>f.name).join(", "));
+      L.push("",`Final consent box ticked: ${state.referral_consent? "Yes":"No"}`);
+      return L.join("\n");
+    }
+
+    function submitOnline(){
+      const fd = new FormData();
+      // Formspree fields
+      fd.append("_subject","New NDIS Referral – "+(state.participant_fname||"")+" "+(state.participant_lname||""));
+      fd.append("_redirect", REDIRECT_URL);
+      fd.append("_gotcha",""); // honeypot
+
+      // Map original names to preserve your email formatting
+      const names=[
+        "consent","referrer_name","relationship","phone","mobile","email",
+        "participant_fname","participant_lname","title","dob","ndis_number","gender","marital_status",
+        "street","suburb","city","postcode","home_phone","participant_mobile","participant_email",
+        "language","interpreter","interpreter_type",
+        "carer_fname","carer_lname","carer_relationship","carer_street","carer_suburb","carer_city","carer_postcode","carer_home","carer_mobile","carer_email","custody",
+        "key_area",
+        "goal1","goal1_service","goal1_category",
+        "goal2","goal2_service","goal2_category",
+        "goal3","goal3_service","goal3_category",
+        "goal4","goal4_service","goal4_category",
+        "current_services","previous_services","funding_area",
+        "plan_managed","postcode_lookup","referral_consent"
+      ];
+      names.forEach(n=> fd.append(n, state[n]??""));
+
+      // Include a readable summary (nice for your email)
+      fd.append("summary", buildSummary());
+
+      // Attach files if present (GitHub Pages supports JS-only uploads to Formspree)
+      const fileInput = document.querySelector('#filesInput');
+      if(fileInput && fileInput.files){
+        Array.from(fileInput.files).slice(0,5).forEach((f,i)=> fd.append('file'+i, f, f.name));
+      }
+
+      fetch(FORM_ENDPOINT,{method:"POST",body:fd,headers:{"Accept":"application/json"}})
+        .then(r=> r.ok ? r.json() : Promise.reject(r))
+        .then(()=>{ alert("Thank you. Your referral has been submitted."); localStorage.removeItem(AUTOSAVE_KEY); window.location.href = REDIRECT_URL; })
+        .catch(()=>{ alert("Submission failed. You can try again or download and email later."); });
+    }
+
+    function downloadJSON(){
+      const blob = new Blob([JSON.stringify(state,null,2)], {type:"application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `HDHeeD_Referral_${Date.now()}.json`;
+      a.click();
+    }
+
+    // BIND GENERIC
+    function bindModel(root){ $$("input,select,textarea",root).forEach(el=>{const k=el.id;if(!k)return; el.value=state[k]??""; el.addEventListener("input",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); el.addEventListener("change",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); }); }
+    function bindYN3(root){ $$("[data-yn3]",root).forEach(btn=>btn.addEventListener("click",()=>{const k=btn.dataset.yn3; state[k]=btn.dataset.v; save(); $$(`[data-yn3='${k}']`,root).forEach(b=>b.setAttribute("aria-pressed", String(b===btn))); })); }
+    function bindChips(root){ $$("[data-chip]",root).forEach(el=>el.addEventListener("click",()=>{const k=el.dataset.chip; const v=el.dataset.value; state[k]=state[k]||[]; const set=new Set(state[k]); set.has(v)?set.delete(v):set.add(v); state[k]=[...set]; el.classList.toggle("active"); save(); })); }
+
+    init();
+  </script>
 </body>
 </html>
+
