@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Try our Extremely Interactive Referral | HD HeeD</title>
-  <meta name="description" content="Ultra-interactive NDIS referral for HD HeeD. Works on GitHub Pages with Formspree. All questions optional with 'Not sure' options."/>
+  <meta name="description" content="Ultra-interactive NDIS referral for HD HeeD. Works on GitHub Pages. All questions optional with 'Not sure' options."/>
   <style>
     :root{--bg:#0b1220;--ink:#0b1220;--card:#fff;--muted:#6b7280;--ring:#93c5fd;--brand:#2563eb;--brand2:#22c55e;--danger:#ef4444}
     *{box-sizing:border-box} html,body{height:100%}
@@ -25,14 +25,12 @@
     .step-link.active{background:#eaf2ff;border-color:#dbeafe}.step-link.done .dot{background:var(--brand2)}
     .dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1}.badge{margin-left:auto;font-size:.75rem;color:#475569}
     .pane{padding:24px 24px 28px}.block{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:16px}
-    h1,h2{margin:.25rem 0 .5rem 0}.muted{color:#6b7280}
+    h2{margin:.25rem 0 .5rem 0}.muted{color:#6b7280}
     .grid{display:grid;gap:14px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
     @media (max-width:720px){.two,.three{grid-template-columns:1fr}}
     label{font-weight:700;font-size:.95rem;color:#111827}
     input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;outline:none;background:#fff}
     input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px var(--ring)} textarea{min-height:110px}
-    .chips{display:flex;flex-wrap:wrap;gap:10px}.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;border:1px solid #e5e7eb;cursor:pointer}
-    .chip.active{border-color:var(--brand);box-shadow:0 0 0 3px #dbeafe}
     .yn3{display:grid;grid-template-columns:1fr 1fr 1fr;background:#f1f5f9;border-radius:12px;overflow:hidden}
     .yn3 button{appearance:none;padding:10px 12px;border:none;background:transparent;cursor:pointer;font-weight:700}
     .yn3 button[aria-pressed="true"]{background:#e0ecff}
@@ -66,20 +64,24 @@
     </div>
   </div>
 
+  <!-- Hidden native form post (no branding shown) -->
+  <form id="silentPost" action="https://formspree.io/f/xvgrkkjn" method="POST" enctype="multipart/form-data" style="display:none;">
+    <input type="hidden" name="_subject" value="">
+    <input type="hidden" name="_redirect" value="https://himmatpals.github.io/hd-heed-website/thankyou.html">
+    <input type="text" name="_gotcha" value="">
+  </form>
+
   <div class="toast" id="toast">Saved</div>
 
   <script>
-    // === CONFIG (your Formspree + redirect) ===
-    const FORM_ENDPOINT = "https://formspree.io/f/xvgrkkjn";
-    const REDIRECT_URL  = "https://himmatpals.github.io/hd-heed-website/thankyou.html";
-    const AUTOSAVE_KEY  = "hdheed_referral_v3";
+    // === CONFIG ===
+    const AUTOSAVE_KEY  = "hdheed_referral_final_v1";
 
     // === STATE / UTIL ===
     const state = JSON.parse(localStorage.getItem(AUTOSAVE_KEY) || "{}");
     const $ = (s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
     const save = ()=>{ localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state)); flash("Saved"); };
     const flash = (m)=>{ const t=$("#toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1200); };
-    const req = keys => keys.every(k => (state[k]??"").toString().trim().length>0); // used only for hints, not blocking
 
     // === WIZARD STEPS ===
     const Steps = [
@@ -97,6 +99,7 @@
     ];
     let current = 0;
 
+    // === NAV ===
     function init(){ renderNav(); go(0); }
     function renderNav(){
       const nav=$("#steps"); nav.innerHTML="";
@@ -116,16 +119,14 @@
       return `<div><label for="${id}">${label}</label>
       <input id="${id}" name="${id}" type="${type}" placeholder="${placeholder}" value="${v??""}"/>
       ${hint?`<div class="hint">${hint}</div>`:""}</div>`}
-    function select(id,label,opts,o={}){const v=state[id]??""; return `<div><label for="${id}">${label}</label>
+    function select(id,label,opts){const v=state[id]??""; return `<div><label for="${id}">${label}</label>
       <select id="${id}">${["<option value=''>Not sure / discuss later</option>",...opts.map(x=>`<option ${v===x?"selected":""}>${x}</option>`)].join("")}</select></div>`}
     function yn3(id,label){const v=state[id]; return `<div><label>${label}</label>
       <div class="yn3"><button type="button" data-yn3="${id}" data-v="yes" aria-pressed="${v==='yes'}">Yes</button>
       <button type="button" data-yn3="${id}" data-v="no" aria-pressed="${v==='no'}">No</button>
       <button type="button" data-yn3="${id}" data-v="unsure" aria-pressed="${v==='unsure'}">Not sure</button></div></div>`}
-    function chips(id,values){const sel=new Set(state[id]||[]); return `<div class="chips">${values.map(v=>`<div class="chip ${sel.has(v)?'active':''}" data-chip="${id}" data-value="${v}">${v}</div>`).join("")}</div>`}
     function bindModel(root){ $$("input,select,textarea",root).forEach(el=>{const k=el.id;if(!k)return; el.value=state[k]??""; el.addEventListener("input",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); el.addEventListener("change",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); }); }
     function bindYN3(root){ $$("[data-yn3]",root).forEach(btn=>btn.addEventListener("click",()=>{const k=btn.dataset.yn3; state[k]=btn.dataset.v; save(); $$(`[data-yn3='${k}']`,root).forEach(b=>b.setAttribute("aria-pressed", String(b===btn))); })); }
-    function bindChips(root){ $$("[data-chip]",root).forEach(el=>el.addEventListener("click",()=>{const k=el.dataset.chip; const v=el.dataset.value; state[k]=state[k]||[]; const set=new Set(state[k]); set.has(v)?set.delete(v):set.add(v); state[k]=[...set]; el.classList.toggle("active"); save(); })); }
 
     // === RENDERS ===
     function rConsent(p){ p.innerHTML = `<div class="block">
@@ -133,8 +134,7 @@
       ${yn3("consent","Has the Participant or Primary Carer consented to this referral?")}
       <div class="hint">If you're not sure, choose <strong>Not sure</strong>. We can discuss consent before we proceed.</div>
       <div class="btn-row"><button class="btn primary" id="next">Next</button></div></div>`;
-      $("#next",p).onclick=e=>{e.preventDefault(); go(1)};
-      bindYN3(p);
+      $("#next",p).onclick=e=>{e.preventDefault(); go(1)}; bindYN3(p);
     }
 
     function rReferrer(p){ p.innerHTML = `<div class="block">
@@ -264,40 +264,40 @@
 
     function rSubmit(p){
       p.innerHTML = `<div class="block"><h2>Submit Referral</h2>
-        <p class="muted">Submit online (Formspree), or download a copy and email it later. Nothing is mandatory.</p>
+        <p class="muted">Submit online now, or download a formatted copy and email later. Nothing is mandatory.</p>
         <div class="btn-row">
           <button class="btn primary" id="submitOnline">Submit online</button>
-          <button class="btn ghost" id="download">Download .json</button>
+          <button class="btn ghost" id="download">Download formatted report</button>
           <button class="btn danger" id="reset">Reset form</button>
         </div>
         <div class="hint" style="margin-top:10px">After submission, you'll be redirected to our thank-you page.</div>
         <div class="review" style="margin-top:12px"><h3>Preview</h3><pre>${buildSummary()}</pre></div></div>`;
       $("#submitOnline",p).onclick=submitOnline;
-      $("#download",p).onclick=downloadJSON;
+      $("#download",p).onclick=downloadReportHTML;
       $("#reset",p).onclick=()=>{ if(confirm("Clear all answers?")){ localStorage.removeItem(AUTOSAVE_KEY); location.reload(); } };
     }
 
     // === SUMMARY & SUBMIT ===
-    function yesNoUnsure(k){ return state[k]==="yes"?"Yes": state[k]==="no"?"No": state[k]==="unsure"?"Not sure": (state[k]||""); }
+    function ynu(k){ return state[k]==="yes"?"Yes": state[k]==="no"?"No": state[k]==="unsure"?"Not sure": (state[k]||""); }
     function buildSummary(){
       const L=[];
-      L.push(`Consent: ${yesNoUnsure("consent")}`,"");
+      L.push(`Consent: ${ynu("consent")}`,"");
       L.push(`Referrer: ${state.referrer_name||""} (${state.relationship||""})`);
       L.push(`Contact: ${state.email||""}  Phone: ${state.phone||""}  Mobile: ${state.mobile||""}`,"");
       L.push(`Participant: ${state.participant_fname||""} ${state.participant_lname||""}  DOB: ${state.dob||""}  Title: ${state.title||""}`);
-      L.push(`NDIS: ${state.ndis_number||""}  Gender: ${yesNoUnsure("gender")||""}  Marital: ${state.marital_status||""}`);
+      L.push(`NDIS: ${state.ndis_number||""}  Gender: ${ynu("gender")}  Marital: ${state.marital_status||""}`);
       L.push(`Address: ${state.street||""}, ${state.suburb||""}, ${state.city||""} ${state.postcode||""}`);
       L.push(`Phone: ${state.home_phone||""}  Mobile: ${state.participant_mobile||""}  Email: ${state.participant_email||""}`);
-      L.push(`Language: ${state.language||""}  Interpreter: ${yesNoUnsure("interpreter")}  Type: ${state.interpreter_type||""}`,"");
+      L.push(`Language: ${state.language||""}  Interpreter: ${ynu("interpreter")}  Type: ${state.interpreter_type||""}`,"");
       L.push(`Carer: ${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""})  Carer email: ${state.carer_email||""}`);
-      L.push(`Custody/shared: ${yesNoUnsure("custody")}`,"");
-      L.push(`Safety – Fall:${yesNoUnsure("recent_fall")}  Wound:${yesNoUnsure("wound")}  Pain:${yesNoUnsure("uncontrolled_pain")}  Pressure:${yesNoUnsure("pressure_risk")}  Behaviour:${yesNoUnsure("behaviour_risk")}`);
+      L.push(`Custody/shared: ${ynu("custody")}`,"");
+      L.push(`Safety – Fall:${ynu("recent_fall")}  Wound:${ynu("wound")}  Pain:${ynu("uncontrolled_pain")}  Pressure:${ynu("pressure_risk")}  Behaviour:${ynu("behaviour_risk")}`);
       if(state.risk_notes) L.push("Risk notes: "+state.risk_notes);
       L.push("");
       if(state.key_area) L.push("Key area: "+state.key_area);
-      if(state.allergies) L.push("Allergies: "+yesNoUnsure("allergies")+" "+(state.allergy_list||""));
+      if(state.allergies) L.push("Allergies: "+ynu("allergies")+" "+(state.allergy_list||""));
       L.push("");
-      L.push(`Plan managed: ${yesNoUnsure("plan_managed")}  Funding notes: ${state.funding_area||""}`);
+      L.push(`Plan managed: ${ynu("plan_managed")}  Funding notes: ${state.funding_area||""}`);
       if(state.postcode_lookup) L.push("Service location: "+state.postcode_lookup);
       L.push("");
       ["1","2","3","4"].forEach(n=>{
@@ -312,14 +312,28 @@
       return L.join("\n");
     }
 
+    // Hidden native form post (more reliable, no branding shown)
     function submitOnline(){
-      const fd = new FormData();
-      // Formspree fields
-      fd.append("_subject","New NDIS Referral – "+(state.participant_fname||"")+" "+(state.participant_lname||""));
-      fd.append("_redirect", REDIRECT_URL);
-      fd.append("_gotcha",""); // honeypot
+      const form = document.getElementById('silentPost');
+      if(!form){ alert("Submit form not found."); return; }
 
-      // Map original names to preserve your email formatting
+      // Clean previously added dynamic inputs
+      Array.from(form.querySelectorAll('input[name]:not([type=hidden]), textarea, select'))
+           .forEach(el => el.remove());
+
+      // Helper to add hidden inputs
+      const add = (name, value) => {
+        const i = document.createElement('input');
+        i.type = 'hidden';
+        i.name = name;
+        i.value = value == null ? '' : String(value);
+        form.appendChild(i);
+      };
+
+      form.querySelector('input[name="_subject"]').value =
+        "New NDIS Referral – " + (state.participant_fname||"") + " " + (state.participant_lname||"");
+
+      // Preserve your original field names
       const names=[
         "consent","referrer_name","relationship","phone","mobile","email",
         "participant_fname","participant_lname","title","dob","ndis_number","gender","marital_status",
@@ -334,38 +348,134 @@
         "current_services","previous_services","funding_area",
         "plan_managed","postcode_lookup","referral_consent"
       ];
-      names.forEach(n=> fd.append(n, state[n]??""));
+      names.forEach(n=> add(n, state[n]));
 
-      // Include a readable summary (nice for your email)
-      fd.append("summary", buildSummary());
+      // Add readable summary
+      add("summary", buildSummary());
 
-      // Attach files if present (GitHub Pages supports JS-only uploads to Formspree)
+      // Attach files by cloning into hidden form
       const fileInput = document.querySelector('#filesInput');
       if(fileInput && fileInput.files){
-        Array.from(fileInput.files).slice(0,5).forEach((f,i)=> fd.append('file'+i, f, f.name));
+        Array.from(fileInput.files).slice(0,5).forEach((f, idx) => {
+          const fileField = document.createElement('input');
+          fileField.type = 'file';
+          fileField.name = 'file' + idx;
+          const dt = new DataTransfer();
+          dt.items.add(f);
+          fileField.files = dt.files;
+          form.appendChild(fileField);
+        });
       }
 
-      fetch(FORM_ENDPOINT,{method:"POST",body:fd,headers:{"Accept":"application/json"}})
-        .then(r=> r.ok ? r.json() : Promise.reject(r))
-        .then(()=>{ alert("Thank you. Your referral has been submitted."); localStorage.removeItem(AUTOSAVE_KEY); window.location.href = REDIRECT_URL; })
-        .catch(()=>{ alert("Submission failed. You can try again or download and email later."); });
+      form.submit();
     }
 
-    function downloadJSON(){
-      const blob = new Blob([JSON.stringify(state,null,2)], {type:"application/json"});
+    // Download a polished, sectioned HTML report (print to PDF if needed)
+    function downloadReportHTML(){
+      const esc = s => (s||"").toString().replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+      const ynuText = k => state[k]==="yes"?"Yes": state[k]==="no"?"No": state[k]==="unsure"?"Not sure": (state[k]||"");
+      const sect = (title, rows) => `
+        <section style="margin:18px 0;">
+          <h2 style="margin:0 0 8px 0;border-bottom:1px solid #e5e7eb;padding-bottom:6px;color:#0f172a;">${esc(title)}</h2>
+          <table style="width:100%;border-collapse:collapse;font:14px system-ui,Segoe UI,Roboto,Arial;">
+            ${rows.map(([k,v])=>`
+              <tr>
+                <td style="padding:8px;border-bottom:1px solid #eee;color:#334155;width:32%">${esc(k)}</td>
+                <td style="padding:8px;border-bottom:1px solid #eee;color:#0f172a">${esc(v)}</td>
+              </tr>`).join('')}
+          </table>
+        </section>`;
+
+      const html = `<!doctype html>
+      <html><head><meta charset="utf-8"><title>HD HeeD Referral – ${esc(state.participant_fname||"")} ${esc(state.participant_lname||"")}</title></head>
+      <body style="margin:0;background:#f6f7fb;padding:24px;">
+      <div style="max-width:900px;margin:auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;">
+        <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h1 style="margin:0;color:#0f172a;font:600 20px system-ui,Segoe UI,Roboto,Arial;">HD HeeD – Referral Summary</h1>
+          <div style="color:#64748b;font:13px system-ui;">Generated ${new Date().toLocaleString()}</div>
+        </header>
+
+        ${sect("Consent", [
+          ["Consent status", ynuText("consent")],
+          ["Final consent box", state.referral_consent ? "Ticked" : "Not ticked"]
+        ])}
+
+        ${sect("Person Making Referral", [
+          ["Full name", state.referrer_name||""],
+          ["Relationship", state.relationship||""],
+          ["Email", state.email||""],
+          ["Phone", state.phone||""],
+          ["Mobile", state.mobile||""]
+        ])}
+
+        ${sect("Participant Details", [
+          ["Name", (state.participant_fname||"")+" "+(state.participant_lname||"")],
+          ["Title", state.title||""],
+          ["DOB", state.dob||""],
+          ["NDIS number", state.ndis_number||""],
+          ["Gender", ynuText("gender")],
+          ["Marital status", state.marital_status||""],
+          ["Address", [state.street, state.suburb, state.city, state.postcode].filter(Boolean).join(", ")],
+          ["Home phone", state.home_phone||""],
+          ["Mobile", state.participant_mobile||""],
+          ["Email", state.participant_email||""],
+          ["Language", state.language||""],
+          ["Interpreter required", ynuText("interpreter")],
+          ["Interpreter type", state.interpreter_type||""]
+        ])}
+
+        ${sect("Primary Carer (NOK)", [
+          ["Name", (state.carer_fname||"")+" "+(state.carer_lname||"")],
+          ["Relationship", state.carer_relationship||""],
+          ["Address", [state.carer_street, state.carer_suburb, state.carer_city, state.carer_postcode].filter(Boolean).join(", ")],
+          ["Home phone", state.carer_home||""],
+          ["Mobile", state.carer_mobile||""],
+          ["Email", state.carer_email||""],
+          ["Shared care / custody", ynuText("custody")]
+        ])}
+
+        ${sect("Safety & Risks", [
+          ["Recent fall", ynuText("recent_fall")],
+          ["Wound / post-op", ynuText("wound")],
+          ["Uncontrolled pain", ynuText("uncontrolled_pain")],
+          ["Pressure injury risk", ynuText("pressure_risk")],
+          ["Behaviours of concern", ynuText("behaviour_risk")],
+          ["Risk notes", state.risk_notes||""]
+        ])}
+
+        ${sect("Supports", [
+          ["Key area of support", state.key_area||""],
+          ["Allergies", ynuText("allergies") + (state.allergy_list? " – " + state.allergy_list : "")]
+        ])}
+
+        ${sect("Funding & Plan", [
+          ["Plan management", ynuText("plan_managed")],
+          ["Funding support area", state.funding_area||""],
+          ["Service location", state.postcode_lookup||""]
+        ])}
+
+        ${sect("NDIS Goals", [
+          ["Goal 1", (state.goal1||"") + (state.goal1_service? " — " + state.goal1_service : "") + (state.goal1_category? " ["+state.goal1_category+"]" : "")],
+          ["Goal 2", (state.goal2||"") + (state.goal2_service? " — " + state.goal2_service : "") + (state.goal2_category? " ["+state.goal2_category+"]" : "")],
+          ["Goal 3", (state.goal3||"") + (state.goal3_service? " — " + state.goal3_service : "") + (state.goal3_category? " ["+state.goal3_category+"]" : "")],
+          ["Goal 4", (state.goal4||"") + (state.goal4_service? " — " + state.goal4_service : "") + (state.goal4_category? " ["+state.goal4_category+"]" : "")]
+        ])}
+
+        ${sect("Attachments", [
+          ["Files", (state._files && state._files.length) ? state._files.map(f=>f.name).join(", ") : "None"]
+        ])}
+
+        <footer style="margin-top:16px;color:#64748b;font:13px system-ui;">© HD HeeD</footer>
+      </div></body></html>`;
+
+      const blob = new Blob([html], {type:"text/html"});
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `HDHeeD_Referral_${Date.now()}.json`;
+      a.download = `HDHeeD_Referral_${Date.now()}.html`;
       a.click();
     }
-
-    // BIND GENERIC
-    function bindModel(root){ $$("input,select,textarea",root).forEach(el=>{const k=el.id;if(!k)return; el.value=state[k]??""; el.addEventListener("input",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); el.addEventListener("change",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); }); }
-    function bindYN3(root){ $$("[data-yn3]",root).forEach(btn=>btn.addEventListener("click",()=>{const k=btn.dataset.yn3; state[k]=btn.dataset.v; save(); $$(`[data-yn3='${k}']`,root).forEach(b=>b.setAttribute("aria-pressed", String(b===btn))); })); }
-    function bindChips(root){ $$("[data-chip]",root).forEach(el=>el.addEventListener("click",()=>{const k=el.dataset.chip; const v=el.dataset.value; state[k]=state[k]||[]; const set=new Set(state[k]); set.has(v)?set.delete(v):set.add(v); state[k]=[...set]; el.classList.toggle("active"); save(); })); }
 
     init();
   </script>
 </body>
 </html>
-
