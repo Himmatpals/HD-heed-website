@@ -1,8 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HD HeeD — Because we care, we provide HD care</title>
+  <meta name="description" content="Registered NDIS provider in NSW. Start a referral or make an enquiry in minutes. Nursing care, personal care, community participation, respite and more." />
+  <meta name="theme-color" content="#2563eb" />
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-B7MGZCJNJT"></script>
   <script>
@@ -11,246 +14,407 @@
     gtag('js', new Date());
     gtag('config', 'G-B7MGZCJNJT');
   </script>
-  <title>HD Heed – Because we care, we provide HD care</title>
-  <meta name="description" content="HD Heed is a registered NDIS provider in NSW delivering compassionate, high-quality support tailored to your needs." />
   <link rel="icon" href="images/favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --purple: #512b8a;
-      --accent: #ffc107;
-      --bg-light: #f8f8ff;
-      --font-heading: 'Inter', sans-serif;
-      --font-body: 'Inter', sans-serif;
+    :root{
+      --purple:#512b8a; --accent:#ffc107; --bg:#f6f7fb; --ink:#0f172a; --muted:#64748b;
+      --brand:#2563eb; --brand2:#22c55e; --ring:#93c5fd; --danger:#ef4444;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
-    a { text-decoration: none; color: inherit; }
-    .skip-link { position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
-    .skip-link:focus { position: static; width: auto; height: auto; background: var(--purple); color: #fff; padding: 8px; z-index: 100; }
-
-    header { background: var(--purple); box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 50; }
-    header .container { max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: space-between; padding: 1rem; }
-    .logo img { height: 60px; }
-    nav ul { list-style: none; display: flex; gap: 1rem; }
-    nav a { color: #fff; padding: 0.5rem 1rem; font-weight: 600; transition: background .3s, color .3s; border-radius: 4px; }
-    nav a:hover, nav a:focus { background: #fff; color: var(--purple); }
-
-    main { overflow: hidden; }
-    .hero { position: relative; background: url('images/hero.jpg') center/cover no-repeat; min-height: 70vh; display: flex; align-items: center; justify-content: center; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: rgba(81,43,138,0.7); }
-    .hero-content { position: relative; text-align: center; color: #fff; animation: fadeInDown 1s ease-out; }
-    .hero-logo { display: block; margin: 0 auto 1rem; max-width: 150px; }
-    .hero-content h1 { font-family: var(--font-heading); font-size: 3.5rem; margin-bottom: 0.5rem; }
-    .hero-content p { font-size: 1.25rem; margin-bottom: 1.5rem; }
-
-    .btn { display: inline-block; background: var(--accent); color: var(--purple); padding: 0.75rem 2rem; font-weight: 700; border-radius: 50px; transition: transform .3s, box-shadow .3s; }
-    .btn:hover, .btn:focus { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
-
-    /* Big flashing enquiry button */
-    .enquiry-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      background: #ff5722;
-      color: #fff !important;
-      font-size: 1.2rem;
-      padding: 1rem 2.5rem;
-      border-radius: 50px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .5px;
-      animation: pulseEnquiry 1.5s infinite;
-      box-shadow: 0 8px 20px rgba(255, 87, 34, 0.45);
-    }
-    .enquiry-btn:hover, .enquiry-btn:focus {
-      background: #ff7043;
-      animation-play-state: paused;
-    }
-    @keyframes pulseEnquiry {
-      0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 87, 34, 0.35); }
-      50% { transform: scale(1.06); box-shadow: 0 0 28px rgba(255, 87, 34, 0.75); }
-      100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 87, 34, 0.35); }
-    }
-
-    section { padding: 4rem 1rem; }
-    .container { max-width: 1000px; margin: auto; }
-    h2 { font-family: var(--font-heading); font-size: 2.5rem; color: var(--purple); text-align: center; margin-bottom: 1rem; position: relative; }
-    h2::after { content: ''; width: 60px; height: 4px; background: var(--accent); position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); }
-    p { text-align: center; margin-bottom: 2rem; }
-    .section-image { display: block; margin: 1rem auto; max-width: 100%; border-radius: 8px; animation: fadeIn 2s ease; }
-
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-    .service-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; transition: transform .3s, box-shadow .3s; }
-    .service-card a { display: block; color: inherit; }
-    .service-card:hover, .service-card:focus-within { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
-    .service-card h3 { font-size: 1.25rem; margin: 1rem 0; color: var(--purple); }
-    .service-card p { font-size: 1rem; }
-
-    .trust { background: #fff; padding: 2rem 1rem; }
-    .logo-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem; }
-    .logo-grid img { height: 50px; filter: grayscale(100%); transition: filter .3s; }
-    .logo-grid img:hover { filter: none; }
-
-    .cta-banner { background: var(--purple); color: #fff; text-align: center; padding: 3rem 1rem; animation: fadeInUp 1s ease; }
-    .cta-banner a { background: var(--accent); color: var(--purple); padding: 0.75rem 2rem; border-radius: 50px; font-weight: 700; display: inline-block; margin-top: 1rem; transition: background .3s; }
-    .cta-banner a:hover, .cta-banner a:focus { background: #fff; }
-
-    footer { background: #333; color: #fff; text-align: center; padding: 1rem; font-size: 0.9rem; }
-    footer a { color: var(--accent); }
-
-    /* Floating Referral Button */
-    .floating-referral {
-      position: fixed;
-      bottom: 40px;
-      right: 60px;
-      width: 3cm;
-      height: 3cm;
-      background: var(--accent);
-      color: var(--purple);
-      font-weight: bold;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      z-index: 1000;
-      text-align: center;
-      line-height: 1.2;
-      padding: 0.5rem;
-      text-decoration: none;
-      animation: pulse 1.8s infinite;
-    }
-    .floating-referral:hover { background: #ffda44; animation-play-state: paused; }
-    @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 193, 7, 0.4); }
-      50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 193, 7, 0.6); }
-      100% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 193, 7, 0.4); }
-    }
-
-    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    @media (max-width: 768px) {
-      nav ul { flex-direction: column; align-items: center; }
-      .hero-content h1 { font-size: 2rem; }
-      .floating-referral { right: 20px; bottom: 20px; width: 2.6cm; height: 2.6cm; }
-    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--ink)}
+    a{color:var(--brand);text-decoration:none}
+    .container{max-width:1120px;margin:0 auto;padding:20px}
+    /* Header */
+    header.site{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb}
+    header .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px}
+    .logo{display:flex;gap:10px;align-items:center}
+    .logo img{height:44px;width:44px;border-radius:10px;object-fit:cover}
+    nav a{margin:0 10px;color:#0f172a;font-weight:700}
+    nav a:hover{color:var(--brand)}
+    /* Hero */
+    .hero{position:relative;min-height:72vh;border-radius:24px;overflow:hidden;background:#111827;color:#fff;display:grid;place-items:center;margin-top:16px}
+    .hero::before{content:"";position:absolute;inset:0;background:url('images/hero.jpg') center/cover no-repeat;filter:brightness(0.55)}
+    .hero > .content{position:relative;text-align:center;padding:22px}
+    .hero h1{font-weight:900;font-size:clamp(26px,4.2vw,48px);margin:6px 0 10px}
+    .hero p{color:#e5e7eb;font-size:clamp(14px,2vw,18px);margin:0 0 16px}
+    .btn{appearance:none;border:none;padding:12px 18px;border-radius:999px;font-weight:900;cursor:pointer}
+    .btn-primary{background:var(--accent);color:#1e1b4b}
+    .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
+    .hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+    /* Big flashing enquiry */
+    .enquiry-btn{background:#ff5722;color:#fff;border:none}
+    .enquiry-btn{font-size:1.1rem;padding:14px 26px;box-shadow:0 10px 28px rgba(255,87,34,.4);animation:pulseEnq 1.5s infinite}
+    .enquiry-btn:hover{background:#ff7043;animation-play-state:paused}
+    @keyframes pulseEnq{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+    /* Hero quick chips */
+    .chipbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+    .chip{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25);padding:8px 12px;border-radius:999px;font-size:13px}
+    /* Main grid */
+    .grid{display:grid;gap:16px}
+    .two{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media (max-width:980px){.two,.three{grid-template-columns:1fr}}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:18px}
+    .badge{display:inline-flex;gap:8px;align-items:center;background:#eaf2ff;color:#1e40af;border:1px solid #bfdbfe;padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px}
+    /* Role pills + router */
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;cursor:pointer}
+    .pill[aria-pressed="true"]{border-color:var(--brand);box-shadow:0 0 0 4px #dbeafe}
+    /* Sections */
+    .section-title{font-weight:900;font-size:clamp(18px,2.6vw,28px);margin:16px 0 10px}
+    .muted{color:var(--muted)}
+    /* Services */
+    .service-card{transition:transform .25s, box-shadow .25s}
+    .service-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(2,6,23,.12)}
+    .service-card h3{margin:6px 0 6px;color:var(--purple)}
+    .section-image{display:block;width:100%;border-radius:14px;object-fit:cover}
+    /* Carousel */
+    .carousel{display:grid;grid-template-columns:1fr;gap:14px}
+    blockquote{margin:0;padding:16px;background:#fff;border:1px solid #e5e7eb;border-radius:14px}
+    .stars{color:#f59e0b}
+    /* Accordion */
+    .accordion .item{border:1px solid #e5e7eb;border-radius:14px;overflow:hidden}
+    .accordion summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:900;background:#fff}
+    .accordion summary::-webkit-details-marker{display:none}
+    .accordion .content{padding:0 16px 16px;color:#334155;background:#fcfdff}
+    /* Sticky CTA */
+    .cta-bar{position:sticky;bottom:12px;z-index:40;margin-top:24px;display:flex;justify-content:center}
+    .cta-bar .inner{display:flex;gap:10px;background:#0b1220;color:#fff;padding:10px;border-radius:999px;box-shadow:0 12px 40px rgba(2,6,23,.35)}
+    /* Footer */
+    footer{margin:26px 0 10px;color:#64748b;font-size:13px;text-align:center}
+    /* Floating referral (keep) */
+    .floating-referral{position:fixed;bottom:34px;right:34px;width:3cm;height:3cm;background:var(--accent);color:#1e1b4b;font-weight:900;font-size:1rem;display:flex;align-items:center;justify-content:center;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.25);z-index:60;text-align:center;line-height:1.2;padding:8px;animation:float 2.2s ease-in-out infinite}
+    .floating-referral:hover{background:#ffda44}
+    @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+    @media (max-width: 768px){.floating-referral{right:16px;bottom:16px;width:2.6cm;height:2.6cm}}
   </style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
-
-  <header>
-    <div class="container">
-      <div class="logo"><img src="images/logo.png" alt="HD Heed Logo"></div>
-      <nav aria-label="Primary navigation">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="blog.html">Our Blogs</a></li>
-        </ul>
+  <!-- HEADER -->
+  <header class="site" aria-label="Site header">
+    <div class="inner container">
+      <div class="logo">
+        <img src="images/logo.png" alt="HD HeeD logo"/>
+        <div>
+          <div style="font-weight:900">HD HeeD</div>
+          <div class="muted" style="font-size:13px">Because we care, we provide HD care</div>
+        </div>
+      </div>
+      <nav aria-label="Top navigation">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="blog.html">Blog</a>
       </nav>
     </div>
   </header>
 
-  <main id="main-content">
-    <section class="hero" aria-labelledby="hero-heading">
-      <div class="hero-content">
-        <img src="images/logo.png" alt="HD Heed Logo" class="hero-logo">
-        <h1 id="hero-heading">HD Heed</h1>
-        <p>Because we care, we provide HD care</p>
-        <a href="contact.html" class="btn">Request a Callback</a>
-        <!-- BIG FLASHING ENQUIRY BUTTON linking to the interactive landing page -->
-        <a href="landing.html" class="enquiry-btn" aria-label="Make an Enquiry (interactive landing page)">Make an Enquiry</a>
+  <main>
+    <!-- HERO (uses your hero image) -->
+    <section class="hero" aria-labelledby="h1">
+      <div class="content">
+        <img src="images/logo.png" alt="" style="width:80px;height:80px;border-radius:18px;object-fit:cover;opacity:.95"/>
+        <h1 id="h1">Get the right help in minutes</h1>
+        <p>Make an enquiry or start a referral — every step is simple, with “Not sure” options throughout.</p>
+        <div class="hero-actions">
+          <a class="btn btn-ghost" href="contact.html">Request a callback</a>
+          <a class="btn enquiry-btn" href="#router">Make an enquiry</a>
+          <a class="btn btn-primary" href="referral.html">Start referral</a>
+        </div>
+        <div class="chipbar">
+          <span class="chip">Registered NDIS Provider</span>
+          <span class="chip">Clinically led care</span>
+          <span class="chip">Person-centred</span>
+        </div>
       </div>
     </section>
 
-    <section class="about" aria-labelledby="about-heading">
-      <div class="container">
-        <h2 id="about-heading">About Us</h2>
-        <img src="images/about.jpg" alt="Team at HD Heed providing support" class="section-image">
-        <p>Founded by experienced disability and aged care professionals, HD Heed is a registered NDIS provider dedicated to empowering individuals to live independently and confidently.</p>
-      </div>
-    </section>
+    <!-- QUICK SELECT + ROUTER + ABOUT IMAGE (merged) -->
+    <section class="container" id="router" style="margin-top:20px">
+      <div class="grid two">
+        <!-- Left: role quick select + 20s router -->
+        <div class="card">
+          <div class="badge">Quick selector</div>
+          <p class="muted" style="margin:10px 0 8px">Who are you?</p>
+          <div class="list" style="display:flex;flex-wrap:wrap;gap:10px">
+            <button class="pill" data-role="participant" aria-pressed="false">Participant</button>
+            <button class="pill" data-role="carer" aria-pressed="false">Family / Carer</button>
+            <button class="pill" data-role="sc" aria-pressed="false">Support Coordinator</button>
+            <button class="pill" data-role="hp" aria-pressed="false">Health Professional</button>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap">
+            <a id="cta-referral" class="btn btn-primary" href="referral.html">Start referral</a>
+            <a id="cta-enquiry" class="btn btn-ghost" href="contact.html">Make an enquiry</a>
+          </div>
 
-    <section class="services" aria-labelledby="services-heading">
-      <div class="container">
-        <h2 id="services-heading">Our Services</h2>
-        <div class="services-grid">
-          <div class="service-card">
-            <a href="personal-care.html">
-              <h3>Personal Care</h3>
-              <p>Assistance with everyday tasks like bathing, dressing, and grooming.</p>
-            </a>
+          <hr style="border:none;border-top:1px dashed #e5e7eb;margin:16px 0">
+          <div class="badge">20-second router</div>
+          <p class="muted" style="margin:10px 0 8px">Answer a few taps; we’ll suggest the best path.</p>
+          <div id="qroot"></div>
+        </div>
+
+        <!-- Right: your About image + summary -->
+        <div class="card">
+          <img class="section-image" src="images/about.jpg" alt="Team at HD HeeD providing support">
+          <h2 class="section-title" style="margin-top:12px">About HD HeeD</h2>
+          <p class="muted" style="text-align:left">
+            Founded by experienced disability and aged care professionals, we provide respectful, person-centred support so people can live independently and confidently.
+          </p>
+          <div class="list" style="gap:8px;flex-wrap:wrap;display:flex">
+            <span class="badge">NDIS Registered</span>
+            <span class="badge">Clinically led</span>
+            <span class="badge">Warm & reliable</span>
           </div>
-          <div class="service-card">
-            <a href="domestic-assistance.html">
-              <h3>Domestic Assistance</h3>
-              <p>Help with cleaning, laundry, and household tasks to keep your space safe and welcoming.</p>
-            </a>
-          </div>
-          <div class="service-card">
-            <a href="community-participation.html">
-              <h3>Community Participation</h3>
-              <p>Supporting you to engage in community activities, outings, and personal interests.</p>
-            </a>
-          </div>
-          <div class="service-card">
-            <a href="nursing-care.html">
-              <h3>Nursing Care</h3>
-              <p>Medication management, wound care, and chronic condition monitoring at home.</p>
-            </a>
-          </div>
-          <div class="service-card">
-            <a href="daily-living-skills.html">
-              <h3>Daily Living Skills Support</h3>
-              <p>Skill-building in cooking, budgeting, and other life tasks to support independence.</p>
-            </a>
-          </div>
-          <div class="service-card">
-            <a href="carer-relief.html">
-              <h3>In-Home Carer Relief</h3>
-              <p>Short-term support to relieve primary carers while ensuring continued care.</p>
-            </a>
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn btn-ghost" href="about.html">More about us</a>
+            <a class="btn btn-primary" href="services.html">Explore services</a>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="trust" aria-labelledby="trust-heading">
-      <div class="container">
-        <h2 id="trust-heading">Our Credentials</h2>
-        <div class="logo-grid">
-          <img src="images/ndis-logo.png" alt="NDIS Registered Provider Logo">
-          <img src="images/acnc-logo.png" alt="ACNC Charity Logo">
+    <!-- SERVICES (merged with your service cards) -->
+    <section class="container" style="margin-top:22px">
+      <h2 class="section-title">What we can help with</h2>
+      <div class="grid three">
+        <div class="card service-card">
+          <h3>Nursing care at home</h3>
+          <p class="muted">Medication, wound care, chronic condition monitoring, and more — delivered at home.</p>
+          <a class="btn btn-link" href="nursing-care.html">Nursing care →</a>
+        </div>
+        <div class="card service-card">
+          <h3>Personal & daily living</h3>
+          <p class="muted">Showering, dressing, grooming, mobility, toileting, and continence care with dignity.</p>
+          <a class="btn btn-link" href="personal-care.html">Personal care →</a>
+        </div>
+        <div class="card service-card">
+          <h3>Community participation</h3>
+          <p class="muted">Support to engage in social, cultural, and recreational activities that enrich life.</p>
+          <a class="btn btn-link" href="community-participation.html">Community participation →</a>
+        </div>
+      </div>
+
+      <div class="grid three" style="margin-top:16px">
+        <div class="card service-card">
+          <h3>Domestic assistance</h3>
+          <p class="muted">Cleaning, laundry, and household tasks to keep your space safe and welcoming.</p>
+          <a class="btn btn-link" href="domestic-assistance.html">Domestic assistance →</a>
+        </div>
+        <div class="card service-card">
+          <h3>Daily living skills</h3>
+          <p class="muted">Skill-building for cooking, budgeting, and other life tasks to support independence.</p>
+          <a class="btn btn-link" href="daily-living-skills.html">Daily living skills →</a>
+        </div>
+        <div class="card service-card">
+          <h3>Respite & carer relief</h3>
+          <p class="muted">Short-term support to give primary carers a break while care continues.</p>
+          <a class="btn btn-link" href="respite-services.html">Respite services →</a>
+          <a class="btn btn-link" href="carer-relief.html" style="margin-left:8px">Carer relief →</a>
         </div>
       </div>
     </section>
 
-    <section class="contact" aria-labelledby="contact-heading">
-      <div class="container">
-        <h2 id="contact-heading">Contact Us</h2>
-        <img src="images/contact.jpg" alt="Customer service at HD Heed" class="section-image">
-        <p>Ready to discuss your NDIS plan and how we can support you? Reach out today and let us tailor a care plan that works for you.</p>
-        <a href="contact.html" class="btn">Contact Us</a>
+    <!-- TRUST/CREDENTIALS with your badges -->
+    <section class="container" style="margin-top:22px">
+      <div class="card" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between">
+        <div style="display:flex;gap:10px;align-items:center">
+          <img src="images/ndis-logo.png" alt="NDIS Registered Provider" style="height:40px"/>
+          <img src="images/acnc-logo.png" alt="ACNC Charity Registered" style="height:40px"/>
+        </div>
+        <div class="muted">Trusted provider • Clinically led • Person-centred</div>
       </div>
     </section>
 
-    <div class="cta-banner" role="region" aria-label="Call to action">
-      <p>Ready to start your journey with HD Heed?</p>
-      <a href="landing.html" aria-label="Go to interactive enquiry & referral landing">Let’s Connect</a>
+    <!-- TESTIMONIALS -->
+    <section class="container" style="margin-top:22px">
+      <h2 class="section-title">What our clients say</h2>
+      <div class="carousel" id="carousel" aria-roledescription="carousel">
+        <blockquote>
+          <div class="stars">★★★★★</div>
+          “The nurse from HD HeeD treated mum’s wound with so much care. Process was simple and quick.”
+          <div class="muted">— Family carer</div>
+        </blockquote>
+        <blockquote hidden>
+          <div class="stars">★★★★★</div>
+          “Easy referral form. They called back within a day and organised personal care supports.”
+          <div class="muted">— Support coordinator</div>
+        </blockquote>
+        <blockquote hidden>
+          <div class="stars">★★★★★</div>
+          “Respectful, on time, and they listened to what I wanted.”
+          <div class="muted">— Participant</div>
+        </blockquote>
+        <div style="display:flex; gap:8px; margin-top:8px">
+          <button class="btn btn-ghost" id="prev" aria-label="Previous testimonial">‹</button>
+          <button class="btn btn-ghost" id="next" aria-label="Next testimonial">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQs -->
+    <section class="container" style="margin-top:22px">
+      <h2 class="section-title">Quick answers</h2>
+      <div class="grid two accordion">
+        <details class="item">
+          <summary>Who can make an enquiry or referral?</summary>
+          <div class="content">Participants, family/carers, support coordinators, and health professionals.</div>
+        </details>
+        <details class="item">
+          <summary>Do I need every detail before I refer?</summary>
+          <div class="content">No. Our forms include “Not sure” everywhere so you can start now and finalise later.</div>
+        </details>
+        <details class="item">
+          <summary>What services do you cover?</summary>
+          <div class="content">Personal care, domestic assistance, community participation, and nursing care at home. See the Services page for details.</div>
+        </details>
+        <details class="item">
+          <summary>How soon will someone get back to me?</summary>
+          <div class="content">We aim to respond promptly after your submission and organise next steps with you.</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- CONTACT SLICE (uses your contact image) -->
+    <section class="container" style="margin-top:22px">
+      <div class="card">
+        <div class="grid two" style="align-items:center">
+          <div>
+            <h2 class="section-title" style="margin-top:0">Prefer to talk?</h2>
+            <p class="muted" style="text-align:left">Call or email and we’ll guide you.</p>
+            <div style="display:flex; flex-wrap:wrap; gap:10px">
+              <a class="btn btn-primary" href="tel:1300HDHEED">Call 1300 HD HEED</a>
+              <a class="btn btn-ghost" href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>
+              <a class="btn btn-primary" href="referral.html">Start referral</a>
+              <a class="btn btn-ghost" href="contact.html">Make an enquiry</a>
+            </div>
+            <!-- Mini enquiry (mail client) -->
+            <form id="miniEnquiry" class="grid" style="gap:10px;margin-top:14px;max-width:520px">
+              <label class="sr-only" for="msg">Your message</label>
+              <textarea id="msg" placeholder="E.g., wound dressing at home in Parramatta…" style="width:100%"></textarea>
+              <div class="grid two" style="gap:10px">
+                <input id="eName" placeholder="Your name" />
+                <input id="eEmail" placeholder="Your email" type="email" />
+              </div>
+              <button class="btn btn-primary" type="submit">Send quick enquiry</button>
+              <div id="miniStatus" class="muted" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+          <div>
+            <img class="section-image" src="images/contact.jpg" alt="Customer service at HD HeeD">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sticky CTA -->
+    <div class="cta-bar" aria-hidden="false">
+      <div class="inner">
+        <a class="btn btn-primary" href="referral.html">Start referral</a>
+        <a class="btn btn-ghost" href="contact.html">Enquiry</a>
+      </div>
     </div>
   </main>
 
   <footer>
-    <p>&copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
+    © 2025 HD HeeD • <a href="privacy.html">Privacy</a> • <a href="sitemap.xml">Sitemap</a>
   </footer>
 
   <!-- Floating Make Referral Button -->
   <a href="referral.html" class="floating-referral" aria-label="Make Referral">Make Referral</a>
+
+  <script>
+    // Quick role mapping keeps CTAs relevant (adds role to URL)
+    const roleMap = {
+      participant:{ref:'referral.html', enq:'contact.html'},
+      carer:{ref:'referral.html', enq:'contact.html'},
+      sc:{ref:'referral.html', enq:'contact.html'},
+      hp:{ref:'referral.html', enq:'contact.html'}
+    };
+    const setRole = (role)=>{
+      document.querySelectorAll("[data-role]").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.role===role)));
+      const ref = document.getElementById("cta-referral");
+      const enq = document.getElementById("cta-enquiry");
+      const p = new URLSearchParams({role});
+      ref.href = (roleMap[role]?.ref || "referral.html") + "?" + p.toString();
+      enq.href = (roleMap[role]?.enq || "contact.html") + "?" + p.toString();
+    };
+    document.querySelectorAll("[data-role]").forEach(b=>{
+      b.addEventListener("click", ()=> setRole(b.dataset.role));
+    });
+
+    // 20-second router (3 small questions)
+    const qroot = document.getElementById("qroot");
+    const q = [
+      {k:"who", q:"Are you a participant, carer, or professional?", opts:["Participant","Carer","Support coordinator","Health professional"]},
+      {k:"urgency", q:"How soon do you need support?", opts:["Urgent (24–72h)","Soon (1–2 weeks)","Exploring options"]},
+      {k:"info", q:"Do you have details handy?", opts:["Yes","Some","Not sure"]}
+    ];
+    const answers = {};
+    function renderQ(i=0){
+      if(i>=q.length){ renderResult(); return; }
+      const step = q[i];
+      qroot.innerHTML = `
+        <div class="grid" style="gap:10px">
+          <div><strong>${step.q}</strong></div>
+          <div class="list" style="display:flex;gap:10px;flex-wrap:wrap">
+            ${step.opts.map(o=>`<button class="pill" data-a="${step.k}" data-v="${o}">${o}</button>`).join("")}
+          </div>
+        </div>`;
+      qroot.querySelectorAll("[data-a]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          answers[btn.dataset.a] = btn.dataset.v;
+          renderQ(i+1);
+        });
+      });
+    }
+    function renderResult(){
+      const urgent = (answers.urgency||"").toLowerCase().includes("urgent");
+      const infoSome = ["Yes","Some"].includes(answers.info);
+      const recommendReferral = urgent || infoSome;
+      const params = new URLSearchParams({
+        role:(answers.who||"").toLowerCase().replace(" ","_"),
+        urgency:answers.urgency||"",
+        info:answers.info||""
+      }).toString();
+      const referUrl = "referral.html?"+params;
+      const enqUrl   = "contact.html?"+params;
+      qroot.innerHTML = `
+        <div class="card" style="background:#f8fafc">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
+            <img src="images/logo.png" alt="" style="width:28px;height:28px;border-radius:8px;object-fit:cover"/>
+            <strong>We recommend ${recommendReferral? "starting a referral" : "making an enquiry"}.</strong>
+          </div>
+          <p class="muted">You can still choose either path — both include “Not sure” options.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <a class="btn btn-primary" href="${referUrl}">Go to referral</a>
+            <a class="btn btn-ghost" href="${enqUrl}">Make an enquiry</a>
+          </div>
+        </div>`;
+    }
+    renderQ(0);
+
+    // Testimonials carousel
+    (function(){
+      const nodes = Array.from(document.querySelectorAll("#carousel blockquote"));
+      let i = 0;
+      const show = idx => nodes.forEach((n,j)=> n.hidden = j!==idx);
+      document.getElementById("prev").addEventListener("click", ()=>{ i = (i-1+nodes.length)%nodes.length; show(i); });
+      document.getElementById("next").addEventListener("click", ()=>{ i = (i+1)%nodes.length; show(i); });
+      setInterval(()=>{ i=(i+1)%nodes.length; show(i); }, 6000);
+      show(0);
+    })();
+
+    // Mini-enquiry (opens email client)
+    document.getElementById("miniEnquiry").addEventListener("submit", (e)=>{
+      e.preventDefault();
+      const body = encodeURIComponent(
+        `Quick enquiry from HD HeeD homepage:\n\nMessage:\n${document.getElementById('msg').value}\n\nName: ${document.getElementById('eName').value}\nEmail: ${document.getElementById('eEmail').value}`
+      );
+      window.location.href = `mailto:info@hdheed.com.au?subject=Quick%20enquiry%20from%20HD%20HeeD&body=${body}`;
+      document.getElementById("miniStatus").textContent = "Thanks — opening your email app…";
+    });
+  </script>
 </body>
 </html>
