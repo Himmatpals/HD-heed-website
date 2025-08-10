@@ -25,65 +25,85 @@
     html,body{height:100%}
     body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--ink)}
     a{color:var(--brand);text-decoration:none}
-    .container{max-width:1120px;margin:0 auto;padding:20px}
+    img{max-width:100%;height:auto;display:block}
+    .container{max-width:1120px;margin:0 auto;padding:16px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
     /* Top contact bar */
     .topbar{background:#0b1220;color:#fff}
-    .topbar .inner{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:6px 20px}
+    .topbar .inner{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 16px}
     .topbar a{color:#fff;font-weight:700}
     .topbar .small{font-size:13px;color:#cbd5e1}
-    .contact-links{display:flex;gap:14px;flex-wrap:wrap}
-    .contact-links a{display:inline-flex;gap:8px;align-items:center}
+    .contact-links{display:flex;gap:12px;flex-wrap:wrap}
+    .contact-links a{display:inline-flex;gap:6px;align-items:center}
 
-    /* Rotating ribbon */
-    .ribbon-rot{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:60}
-    .ribbon-rot .tag{display:inline-block;background:#16a34a;color:#052e16;padding:8px 14px;border-radius:999px;font-weight:900;border:1px solid #22c55e;box-shadow:0 8px 20px rgba(0,0,0,.22);animation:spin 10s linear infinite}
-    @keyframes spin { 0%{transform:translateX(0) rotate(0deg)} 50%{transform:translateX(0) rotate(180deg)} 100%{transform:translateX(0) rotate(360deg)} }
-    @media (max-width:820px){ .ribbon-rot .tag{animation:none} }
+    /* Ribbon (gentle shimmer, no rotation) */
+    .ribbon{position:sticky;top:0;z-index:60;display:flex;justify-content:center;padding:6px 8px;background:transparent}
+    .ribbon .tag{
+      display:inline-flex;align-items:center;gap:8px;
+      background:linear-gradient(90deg,#d1fae5,#bbf7d0,#d1fae5);
+      background-size:200% 100%;
+      color:#065f46;border:1px solid #86efac;
+      padding:8px 14px;border-radius:999px;font-weight:900;
+      box-shadow:0 8px 20px rgba(0,0,0,.12);
+      animation:shine 6s linear infinite, softPulse 2.8s ease-in-out infinite;
+    }
+    .ribbon .dot{width:8px;height:8px;border-radius:50%;background:#10b981}
+    @keyframes shine { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+    @keyframes softPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+    @media (prefers-reduced-motion: reduce){
+      .ribbon .tag{animation:none}
+    }
 
     /* Header */
     header.site{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb}
-    header .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px}
+    header .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
     .logo{display:flex;gap:10px;align-items:center}
     .logo img{height:44px;width:44px;border-radius:10px;object-fit:cover}
     nav a{margin:0 10px;color:#0f172a;font-weight:700}
     nav a:hover{color:var(--brand)}
+    .menu-toggle{display:none;background:#eef2f7;border:1px solid #e5e7eb;border-radius:10px;padding:8px 12px;font-weight:800}
+    .nav-links{display:flex;flex-wrap:wrap}
+    @media (max-width:820px){
+      .menu-toggle{display:inline-block}
+      .nav-links{display:none;flex-direction:column;gap:8px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:8px;position:absolute;top:68px;right:16px}
+      .nav-links.open{display:flex}
+      nav a{padding:10px 12px;border-radius:8px}
+    }
 
     /* Hero */
-    .hero{position:relative;min-height:72vh;border-radius:24px;overflow:hidden;background:#111827;color:#fff;display:grid;place-items:center;margin-top:16px}
+    .hero{position:relative;min-height:66vh;border-radius:20px;overflow:hidden;background:#111827;color:#fff;display:grid;place-items:center;margin:16px 0}
     .hero::before{content:"";position:absolute;inset:0;background:url('images/hero.jpg') center/cover no-repeat;filter:brightness(0.55)}
     .hero > .content{position:relative;text-align:center;padding:22px}
-    .hero h1{font-weight:900;font-size:clamp(26px,4.2vw,48px);margin:6px 0 10px}
-    .hero p{color:#e5e7eb;font-size:clamp(14px,2vw,18px);margin:0 0 16px}
-    .btn{appearance:none;border:none;padding:12px 18px;border-radius:999px;font-weight:900;cursor:pointer}
+    .hero h1{font-weight:900;font-size:clamp(24px,6vw,44px);margin:6px 0 10px}
+    .hero p{color:#e5e7eb;font-size:clamp(14px,3.5vw,18px);margin:0 0 16px}
+    .btn{appearance:none;border:none;padding:14px 18px;border-radius:16px;font-weight:900;cursor:pointer;min-height:44px}
     .btn-primary{background:var(--accent);color:#1e1b4b}
     .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
     .hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-
-    /* Big flashy Make an Enquiry → contact.html */
-    .enquiry-btn{background:var(--enq);color:#fff;border:none;font-size:1.1rem;padding:14px 26px;box-shadow:0 10px 28px rgba(255,87,34,.4);animation:pulseEnq 1.5s infinite}
-    .enquiry-btn:hover{background:#ff7043;animation-play-state:paused}
-    @keyframes pulseEnq{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
-
-    /* Chips */
-    .chipbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+    .hero-actions .btn{flex:1 1 220px;max-width:320px}
+    .enquiry-btn{background:var(--enq);color:#fff;border:none;font-size:1.05rem;padding:16px 22px;box-shadow:0 10px 28px rgba(255,87,34,.35);animation:pulseEnq 1.6s ease-in-out infinite}
+    .enquiry-btn:hover{background:#ff7043}
+    @keyframes pulseEnq{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+    .chipbar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
     .chip{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25);padding:8px 12px;border-radius:999px;font-size:13px}
 
-    /* Main grid / cards */
+    /* Grid & Cards */
     .grid{display:grid;gap:16px}
     .two{grid-template-columns:repeat(2,minmax(0,1fr))}
     .three{grid-template-columns:repeat(3,minmax(0,1fr))}
     @media (max-width:980px){.two,.three{grid-template-columns:1fr}}
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:18px}
     .badge{display:inline-flex;gap:8px;align-items:center;background:#eaf2ff;color:#1e40af;border:1px solid #bfdbfe;padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px}
-    .pill{display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;cursor:pointer}
+
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;cursor:pointer;min-height:44px}
     .pill[aria-pressed="true"]{border-color:var(--brand);box-shadow:0 0 0 4px #dbeafe}
-    .section-title{font-weight:900;font-size:clamp(18px,2.6vw,28px);margin:16px 0 10px}
+    .section-title{font-weight:900;font-size:clamp(18px,4.6vw,28px);margin:16px 0 10px}
     .muted{color:var(--muted)}
     .service-card{transition:transform .25s, box-shadow .25s}
     .service-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(2,6,23,.12)}
     .service-card h3{margin:6px 0 6px;color:var(--purple)}
-    .section-image{display:block;width:100%;border-radius:14px;object-fit:cover}
+    .section-image{width:100%;border-radius:14px;object-fit:cover}
 
     /* Carousel */
     .carousel{display:grid;grid-template-columns:1fr;gap:14px}
@@ -92,28 +112,31 @@
 
     /* Accordion */
     .accordion .item{border:1px solid #e5e7eb;border-radius:14px;overflow:hidden}
-    .accordion summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:900;background:#fff}
+    .accordion summary{list-style:none;cursor:pointer;padding:16px;font-weight:900;background:#fff}
     .accordion summary::-webkit-details-marker{display:none}
     .accordion .content{padding:0 16px 16px;color:#334155;background:#fcfdff}
 
     /* Sticky CTA */
-    .cta-bar{position:sticky;bottom:12px;z-index:40;margin-top:24px;display:flex;justify-content:center}
-    .cta-bar .inner{display:flex;gap:10px;background:#0b1220;color:#fff;padding:10px;border-radius:999px;box-shadow:0 12px 40px rgba(2,6,23,.35)}
+    .cta-bar{position:sticky;bottom:10px;z-index:40;margin-top:24px;display:flex;justify-content:center;padding:0 16px}
+    .cta-bar .inner{display:flex;gap:10px;background:#0b1220;color:#fff;padding:10px;border-radius:999px;box-shadow:0 12px 40px rgba(2,6,23,.35);width:100%;max-width:560px}
+    .cta-bar .btn{flex:1 1 50%}
 
     /* Footer */
     footer{margin:26px 0 10px;color:#64748b;font-size:13px;text-align:center}
 
-    /* Floating referral (keep) */
-    .floating-referral{position:fixed;bottom:34px;right:34px;width:3cm;height:3cm;background:var(--accent);color:#1e1b4b;font-weight:900;font-size:1rem;display:flex;align-items:center;justify-content:center;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.25);z-index:60;text-align:center;line-height:1.2;padding:8px;animation:float 2.2s ease-in-out infinite}
+    /* Floating referral */
+    .floating-referral{position:fixed;bottom:20px;right:20px;width:56px;height:56px;background:var(--accent);color:#1e1b4b;font-weight:900;font-size:.9rem;display:flex;align-items:center;justify-content:center;border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.25);z-index:60;text-align:center;line-height:1.1;padding:6px}
     .floating-referral:hover{background:#ffda44}
-    @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
-    @media (max-width: 768px){.floating-referral{right:16px;bottom:16px;width:2.6cm;height:2.6cm}}
+    @media (min-width:980px){.floating-referral{width:3cm;height:3cm;bottom:34px;right:34px}}
+
+    /* Better tap sizes for links/buttons on mobile */
+    a, button { touch-action: manipulation; }
   </style>
 </head>
 <body>
-  <!-- Rotating ribbon -->
-  <div class="ribbon-rot" aria-hidden="false">
-    <span class="tag" aria-label="Registered NDIS Provider">Registered NDIS Provider</span>
+  <!-- Shimmer ribbon (no rotation) -->
+  <div class="ribbon" aria-hidden="false">
+    <span class="tag"><span class="dot" aria-hidden="true"></span> Registered NDIS Provider</span>
   </div>
 
   <!-- Top contact bar -->
@@ -121,7 +144,7 @@
     <div class="inner container">
       <div class="small">Because we care, we provide HD care</div>
       <div class="contact-links">
-        <a href="tel:0286305500">📞 02 8630 5500</a>
+        <a href="tel:0286305500" aria-label="Call 02 8630 5500">📞 02 8630 5500</a>
         <a href="mailto:info@hdheed.com.au">✉️ info@hdheed.com.au</a>
       </div>
     </div>
@@ -137,12 +160,15 @@
           <div class="muted" style="font-size:13px">NDIS Registered • Clinically led • Person-centred</div>
         </div>
       </div>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks">Menu ☰</button>
       <nav aria-label="Top navigation">
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-        <a href="blog.html">Blog</a>
+        <div id="navLinks" class="nav-links">
+          <a href="index.html" aria-current="page">Home</a>
+          <a href="services.html">Services</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="blog.html">Blog</a>
+        </div>
       </nav>
     </div>
   </header>
@@ -151,7 +177,7 @@
     <!-- HERO -->
     <section class="hero" aria-labelledby="h1">
       <div class="content">
-        <img src="images/logo.png" alt="" style="width:80px;height:80px;border-radius:18px;object-fit:cover;opacity:.95"/>
+        <img src="images/logo.png" alt="" style="width:72px;height:72px;border-radius:18px;object-fit:cover;opacity:.95"/>
         <h1 id="h1">Get the right help in minutes</h1>
         <p>Make an enquiry or start a referral — every step is simple, with “Not sure” options throughout.</p>
         <div class="hero-actions">
@@ -168,10 +194,9 @@
       </div>
     </section>
 
-    <!-- QUICK SELECT + ROUTER + ABOUT (merged) -->
-    <section class="container" id="router" style="margin-top:20px">
+    <!-- QUICK SELECT + ROUTER + ABOUT -->
+    <section class="container" id="router" style="margin-top:12px">
       <div class="grid two">
-        <!-- Left: role quick select + router -->
         <div class="card">
           <div class="badge">Quick selector</div>
           <p class="muted" style="margin:10px 0 8px">Who are you?</p>
@@ -192,7 +217,6 @@
           <div id="qroot"></div>
         </div>
 
-        <!-- Right: About image + summary -->
         <div class="card">
           <img class="section-image" src="images/about.jpg" alt="Team at HD HeeD providing support">
           <h2 class="section-title" style="margin-top:12px">About HD HeeD</h2>
@@ -213,7 +237,7 @@
     </section>
 
     <!-- SERVICES -->
-    <section class="container" style="margin-top:22px">
+    <section class="container" style="margin-top:18px">
       <h2 class="section-title">What we can help with</h2>
       <div class="grid three">
         <div class="card service-card">
@@ -233,7 +257,7 @@
         </div>
       </div>
 
-      <div class="grid three" style="margin-top:16px">
+      <div class="grid three" style="margin-top:12px">
         <div class="card service-card">
           <h3>Domestic assistance</h3>
           <p class="muted">Cleaning, laundry, and household tasks to keep your space safe and welcoming.</p>
@@ -254,7 +278,7 @@
     </section>
 
     <!-- TRUST/CREDENTIALS -->
-    <section class="container" style="margin-top:22px">
+    <section class="container" style="margin-top:18px">
       <div class="card" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between">
         <div style="display:flex;gap:10px;align-items:center">
           <img src="images/ndis-logo.png" alt="NDIS Registered Provider" style="height:40px"/>
@@ -265,7 +289,7 @@
     </section>
 
     <!-- TESTIMONIALS -->
-    <section class="container" style="margin-top:22px">
+    <section class="container" style="margin-top:18px">
       <h2 class="section-title">What our clients say</h2>
       <div class="carousel" id="carousel" aria-roledescription="carousel">
         <blockquote>
@@ -283,7 +307,7 @@
           “Respectful, on time, and they listened to what I wanted.”
           <div class="muted">— Participant</div>
         </blockquote>
-        <div style="display:flex; gap:8px; margin-top:8px">
+        <div style="display:flex; gap:8px; margin-top:8px; justify-content:center">
           <button class="btn btn-ghost" id="prev" aria-label="Previous testimonial">‹</button>
           <button class="btn btn-ghost" id="next" aria-label="Next testimonial">›</button>
         </div>
@@ -291,7 +315,7 @@
     </section>
 
     <!-- FAQs -->
-    <section class="container" style="margin-top:22px">
+    <section class="container" style="margin-top:18px">
       <h2 class="section-title">Quick answers</h2>
       <div class="grid two accordion">
         <details class="item">
@@ -313,8 +337,8 @@
       </div>
     </section>
 
-    <!-- CONTACT SLICE (with quick enquiry to Formspree) -->
-    <section class="container" style="margin-top:22px">
+    <!-- CONTACT SLICE (Quick Enquiry uses Formspree) -->
+    <section class="container" style="margin-top:18px">
       <div class="card">
         <div class="grid two" style="align-items:center">
           <div>
@@ -327,12 +351,11 @@
               <a class="btn btn-ghost" href="contact.html">Make an enquiry</a>
             </div>
 
-            <!-- Quick enquiry (posts to Formspree; falls back to mailto if JS disabled) -->
-            <form id="quickEnquiry" class="grid" style="gap:10px;margin-top:14px;max-width:520px" action="https://formspree.io/f/xvgrkkjn" method="POST">
+            <!-- Quick enquiry (posts to Formspree referral endpoint) -->
+            <form id="quickEnquiry" class="grid" style="gap:10px;margin-top:14px;max-width:560px" action="https://formspree.io/f/xvgrkkjn" method="POST">
               <input type="hidden" name="_subject" value="Quick enquiry from HD HeeD home">
-              <input type="hidden" name="_replyto" value="info@hdheed.com.au">
               <label class="sr-only" for="qe-msg">Your message</label>
-              <textarea id="qe-msg" name="message" placeholder="E.g., wound dressing at home in Parramatta…" required style="width:100%"></textarea>
+              <textarea id="qe-msg" name="message" placeholder="E.g., wound dressing at home in Parramatta…" required style="width:100%;min-height:110px"></textarea>
               <div class="grid two" style="gap:10px">
                 <input id="qe-name" name="name" placeholder="Your name" />
                 <input id="qe-email" name="email" placeholder="Your email" type="email" />
@@ -362,9 +385,19 @@
   </footer>
 
   <!-- Floating Make Referral Button -->
-  <a href="referral.html" class="floating-referral" aria-label="Make Referral">Make Referral</a>
+  <a href="referral.html" class="floating-referral" aria-label="Make Referral">Refer</a>
 
   <script>
+    // Mobile menu
+    const toggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    if (toggle){
+      toggle.addEventListener('click', ()=>{
+        const open = navLinks.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+    }
+
     // Role mapping keeps CTAs relevant (adds role to URL)
     const roleMap = {
       participant:{ref:'referral.html', enq:'contact.html'},
@@ -376,6 +409,7 @@
       document.querySelectorAll("[data-role]").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.role===role)));
       const ref = document.getElementById("cta-referral");
       const enq = document.getElementById("cta-enquiry");
+      if (!ref || !enq) return;
       const p = new URLSearchParams({role});
       ref.href = (roleMap[role]?.ref || "referral.html") + "?" + p.toString();
       enq.href = (roleMap[role]?.enq || "contact.html") + "?" + p.toString();
@@ -391,6 +425,7 @@
     ];
     const answers = {};
     function renderQ(i=0){
+      if(!qroot) return;
       if(i>=q.length){ renderResult(); return; }
       const step = q[i];
       qroot.innerHTML = `
@@ -435,41 +470,40 @@
 
     // Testimonials carousel
     (function(){
+      const prev = document.getElementById("prev");
+      const next = document.getElementById("next");
       const nodes = Array.from(document.querySelectorAll("#carousel blockquote"));
+      if (!nodes.length || !prev || !next) return;
       let i = 0;
       const show = idx => nodes.forEach((n,j)=> n.hidden = j!==idx);
-      document.getElementById("prev").addEventListener("click", ()=>{ i = (i-1+nodes.length)%nodes.length; show(i); });
-      document.getElementById("next").addEventListener("click", ()=>{ i = (i+1)%nodes.length; show(i); });
+      prev.addEventListener("click", ()=>{ i = (i-1+nodes.length)%nodes.length; show(i); });
+      next.addEventListener("click", ()=>{ i = (i+1)%nodes.length; show(i); });
       setInterval(()=>{ i=(i+1)%nodes.length; show(i); }, 6000);
       show(0);
     })();
 
-    // Quick enquiry to Formspree (native submit fallback + JS status)
+    // Quick enquiry to Formspree (with graceful fallback)
     const qeForm = document.getElementById('quickEnquiry');
     const qeStatus = document.getElementById('qe-status');
-    qeForm.addEventListener('submit', function(e){
-      e.preventDefault();
-      const form = e.currentTarget;
-      const data = new FormData(form);
-      qeStatus.textContent = "Sending…";
-      fetch(form.action, { method: "POST", body: data, headers: { "Accept": "application/json" }})
-        .then(r => {
-          if (!r.ok) throw new Error("Network");
-          return r.json();
-        })
-        .then(() => {
-          qeStatus.textContent = "Thanks — we’ve received your enquiry.";
-          form.reset();
-        })
-        .catch(() => {
-          // Fallback to mailto if something blocks fetch
-          const body = encodeURIComponent(
-            `Quick enquiry from HD HeeD home:\n\nMessage:\n${data.get('message')}\n\nName: ${data.get('name')}\nEmail: ${data.get('email')}`
-          );
-          window.location.href = `mailto:info@hdheed.com.au?subject=Quick%20enquiry%20from%20HD%20HeeD&body=${body}`;
-          qeStatus.textContent = "Opening your email app…";
-        });
-    });
+    if (qeForm){
+      qeForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const form = e.currentTarget;
+        const data = new FormData(form);
+        qeStatus.textContent = "Sending…";
+        fetch(form.action, { method: "POST", body: data, headers: { "Accept": "application/json" }})
+          .then(r => { if (!r.ok) throw new Error("Network"); return r.json(); })
+          .then(() => { qeStatus.textContent = "Thanks — we’ve received your enquiry."; form.reset(); })
+          .catch(() => {
+            // Fallback to mailto if something blocks fetch
+            const body = encodeURIComponent(
+              `Quick enquiry from HD HeeD home:\n\nMessage:\n${data.get('message')}\n\nName: ${data.get('name')}\nEmail: ${data.get('email')}`
+            );
+            window.location.href = `mailto:info@hdheed.com.au?subject=Quick%20enquiry%20from%20HD%20HeeD&body=${body}`;
+            qeStatus.textContent = "Opening your email app…";
+          });
+      });
+    }
   </script>
 </body>
 </html>
