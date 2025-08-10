@@ -298,8 +298,27 @@
                 <input id="eEmail" placeholder="Your email" type="email" />
               </div>
               <button class="btn btn-primary" type="submit">Send quick enquiry</button>
-              <div id="miniStatus" class="muted" role="status" aria-live="polite"></div>
-            </form>
+              <!-- Quick Enquiry (inline, no redirect to contact page) -->
+<form action="https://formspree.io/f/xvgrkkjn" method="POST">
+  <!-- optional: send them to your thank-you page after submit -->
+  <input type="hidden" name="_redirect" value="https://himmatpals.github.io/hd-heed-website/thankyou.html">
+  <!-- optional: email subject line -->
+  <input type="hidden" name="_subject" value="HD HeeD — Quick Enquiry">
+
+  <label for="qe-name">Your Name</label>
+  <input id="qe-name" name="name" type="text" required>
+
+  <!-- If you want to keep ONLY name+message, delete this email field.
+       Keeping it helps you reply to people. -->
+  <label for="qe-email">Your Email</label>
+  <input id="qe-email" name="email" type="email">
+
+  <label for="qe-message">Your Message</label>
+  <textarea id="qe-message" name="message" rows="4" required></textarea>
+
+  <button type="submit" class="btn">Send Quick Enquiry</button>
+</form>
+
           </div>
           <div>
             <img class="section-image" src="images/contact.jpg" alt="Customer service at HD HeeD">
