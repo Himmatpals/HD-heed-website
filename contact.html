@@ -7,7 +7,10 @@
   <link rel="icon" href="images/favicon.ico"/>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <!-- Theme (already added by you) -->
   <link rel="stylesheet" href="hdheed-theme.css">
+
+  <!-- Page-specific styles (kept to preserve your visuals) -->
   <style>
     :root {
       --purple: #512b8a;
@@ -18,6 +21,7 @@
     *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
     body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
     a { text-decoration: none; color: inherit; }
+
     .skip-link {
       position: absolute; left: -999px; top: auto;
       width: 1px; height: 1px; overflow: hidden;
@@ -26,6 +30,8 @@
       position: static; width: auto; height: auto;
       background: var(--purple); color: #fff; padding: 8px; z-index: 100;
     }
+
+    /* Header (kept as-is so visuals don't change) */
     header {
       background: var(--purple);
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -40,7 +46,10 @@
       border-radius: 4px; transition: background .3s, color .3s;
     }
     nav a:hover, nav a:focus { background: #fff; color: var(--purple); }
+
     main { overflow: hidden; }
+
+    /* Hero (kept) */
     .hero {
       position: relative;
       background: url('images/service-banner.jpg') center/cover no-repeat;
@@ -55,26 +64,19 @@
     .hero-content {
       position: relative; text-align: center; color: #fff; padding: 2rem;
     }
-    .hero-content img {
-      max-width: 150px; margin-bottom: 1rem;
-    }
-    .hero-content h1 {
-      font-size: 2.5rem; margin-bottom: .5rem;
-    }
-    .hero-content p {
-      font-size: 1.1rem;
-    }
+    .hero-content img { max-width: 150px; margin-bottom: 1rem; }
+    .hero-content h1 { font-size: 2.5rem; margin-bottom: .5rem; }
+    .hero-content p { font-size: 1.1rem; }
+
+    /* Narrow container for the form area (kept) */
     .container {
       max-width: 800px; margin: 2rem auto; padding: 0 1rem;
       animation: fadeInUp 1.5s ease-in-out;
     }
-    form {
-      display: grid; gap: 1rem;
-      margin-top: 1rem;
-    }
-    label {
-      font-weight: 600; margin-bottom: .25rem; display: block;
-    }
+
+    /* Form */
+    form { display: grid; gap: 1rem; margin-top: 1rem; }
+    label { font-weight: 600; margin-bottom: .25rem; display: block; }
     input, textarea {
       width: 100%; padding: .75rem; font-size: 1rem;
       border: 1px solid #ccc; border-radius: 6px;
@@ -84,6 +86,8 @@
       outline: none; border-color: var(--purple);
       box-shadow: 0 0 0 2px rgba(81,43,138,0.3);
     }
+
+    /* Button (kept) */
     .btn {
       display: inline-block; background: var(--accent);
       color: var(--purple); padding: .75rem 1.5rem;
@@ -91,14 +95,15 @@
       text-align: center; border: none; cursor: pointer;
       transition: background .3s, transform .3s;
     }
-    .btn:hover, .btn:focus {
-      background: #fff; transform: translateY(-2px);
-    }
+    .btn:hover, .btn:focus { background: #fff; transform: translateY(-2px); }
+
+    /* Footer (kept) */
     footer {
       background: #333; color: #fff; text-align: center;
       padding: 1rem; font-size: .9rem;
     }
     footer a { color: var(--accent); }
+
     @media (max-width: 600px) {
       .hero-content h1 { font-size: 2rem; }
       nav ul { flex-direction: column; }
@@ -114,50 +119,61 @@
   </style>
 </head>
 <body>
-  <a href="#contact-form" class="skip-link">Skip to contact form</a>  <header>
+  <a href="#contact-form" class="skip-link">Skip to contact form</a>
+
+  <!-- Header (unchanged look) -->
+  <header>
     <div class="logo"><img src="images/logo.png" alt="HD Heed Logo"></div>
     <nav aria-label="Primary navigation">
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
         <li><a href="services.html">Services</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html" aria-current="page">Contact</a></li>
         <li><a href="blog.html">Our Blogs</a></li>
       </ul>
     </nav>
-  </header>  <main>
-    <!-- Hero Banner -->
+  </header>
+
+  <main>
+    <!-- Hero Banner (kept) -->
     <section class="hero" aria-labelledby="contact-heading">
       <div class="hero-content">
         <img src="images/logo.png" alt="HD Heed Logo">
         <h1 id="contact-heading">Contact Us</h1>
         <p>We’re here to answer your questions and discuss your support needs.</p>
       </div>
-    </section><!-- Contact Form -->
-<div class="container" id="contact-form">
-  <p>Please fill out the form below or use the details to call or email us directly.</p>
-  <form action="https://formspree.io/f/xvgrkkjn" method="POST">
-    <input type="hidden" name="_redirect" value="https://himmatpals.github.io/hd-heed-website/thankyou.html"/>
+    </section>
 
-    <label for="name">Your Name</label>
-    <input type="text" name="name" id="name" required/>
+    <!-- Themed white section wrapper (adds consistent spacing like the rest of site) -->
+    <section class="section section--white">
+      <div class="container" id="contact-form">
+        <p>Please fill out the form below or use the details to call or email us directly.</p>
 
-    <label for="email">Your Email</label>
-    <input type="email" name="email" id="email" required/>
+        <form action="https://formspree.io/f/xvgrkkjn" method="POST">
+          <input type="hidden" name="_redirect" value="https://himmatpals.github.io/hd-heed-website/thankyou.html"/>
 
-    <label for="message">Your Message</label>
-    <textarea name="message" id="message" rows="6" required></textarea>
+          <label for="name">Your Name</label>
+          <input type="text" name="name" id="name" required/>
 
-    <button type="submit" class="btn">Send Message</button>
-  </form>
+          <label for="email">Your Email</label>
+          <input type="email" name="email" id="email" required/>
 
-  <div style="margin-top:2rem; text-align:center;">
-    <p><strong>Phone:</strong> 02 8630 5500.</p>
-    <p><strong>Email:</strong> <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></p>
-  </div>
-</div>
+          <label for="message">Your Message</label>
+          <textarea name="message" id="message" rows="6" required></textarea>
 
-  </main>  <footer>
+          <button type="submit" class="btn">Send Message</button>
+        </form>
+
+        <div style="margin-top:2rem; text-align:center;">
+          <p><strong>Phone:</strong> 02 8630 5500.</p>
+          <p><strong>Email:</strong> <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
     &copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a>
   </footer>
 </body>
