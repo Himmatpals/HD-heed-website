@@ -1,45 +1,77 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Our Services | HD Heed</title>
   <meta name="description" content="Explore HD Heed’s full range of NDIS services including personal care, domestic help, respite, nursing, and community participation.">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --purple: #512b8a;
       --accent: #ffc107;
       --bg-light: #f8f8ff;
-      --font-heading: 'Inter', sans-serif;
       --font-body: 'Inter', sans-serif;
     }
-    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font-body); background: var(--bg-light); color: #333; }
     a { text-decoration: none; color: inherit; }
-    header, footer {
-      background-color: var(--purple);
+
+    /* Scrolling Ribbon */
+    .ribbon {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--accent);
+      color: var(--purple);
+      font-weight: bold;
+      padding: 0.5rem 0;
+      overflow: hidden;
+      z-index: 9999;
+    }
+    .ribbon-text {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scrollRibbon 68s linear infinite;
+    }
+    @keyframes scrollRibbon {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    /* Header */
+    header {
+      background: var(--purple);
       color: white;
-      padding: 20px;
+      padding: 1rem;
       text-align: center;
+      padding-top: 3rem; /* space for ribbon */
     }
     nav ul {
       list-style: none;
       display: flex;
       justify-content: center;
-      gap: 1.5rem;
-      margin: 0;
-      padding: 0;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
     }
     nav a {
       color: white;
       font-weight: 600;
-      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background 0.3s;
     }
     nav a:hover {
-      text-decoration: underline;
+      background: white;
+      color: var(--purple);
     }
+
+    /* Hero */
     .hero {
-      background: url('images/service-banner.jpg') center center / cover no-repeat;
+      background: url('images/service-banner.jpg') center/cover no-repeat;
       padding: 100px 20px;
       color: white;
       text-align: center;
@@ -51,94 +83,118 @@
       inset: 0;
       background: rgba(81, 43, 138, 0.6);
     }
-    .hero h2 {
+    .hero-content {
       position: relative;
-      font-size: 3rem;
       z-index: 1;
-      animation: fadeInDown 1.2s ease-in-out;
+      animation: fadeIn 1.5s ease-in-out;
     }
-    .hero p {
-      position: relative;
-      font-size: 1.25rem;
-      z-index: 1;
-      animation: fadeInUp 1.2s ease-in-out;
+    .hero-content h2 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
     }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
+    .hero-content p {
+      font-size: 1.2rem;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+      animation: fadeInUp 1.5s ease-in-out;
+    }
+
+    /* Services Grid */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+    .service-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: zoomIn 0.8s ease forwards;
+    }
+    .service-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.15);
+    }
+    .service-card h3 {
+      color: var(--purple);
+      margin: 1rem 0;
+    }
+    .service-card p {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    /* Footer */
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 40px 20px;
-      animation: fadeIn 1.2s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    h2 {
-      color: var(--purple);
-      font-size: 2.5rem;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    .service-card {
-      display: block;
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
-      color: inherit;
-      text-decoration: none;
-      animation: zoomIn 0.8s ease forwards;
-    }
-    .service-card:hover {
-      transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-      background: #fefefe;
-    }
-    .service-card h3 {
-      font-size: 1.25rem;
-      margin: 1rem 0;
-      color: var(--purple);
-    }
-    .service-card p {
-      font-size: 1rem;
-    }
     @keyframes zoomIn {
       from { transform: scale(0.95); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
-    footer a { color: var(--accent); text-decoration: underline; }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .hero-content h2 { font-size: 1.8rem; }
+      .hero-content p { font-size: 1rem; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- Ribbon -->
+  <div class="ribbon"><span class="ribbon-text">Registered NDIS Provider • Supporting Your Independence • Quality Care You Can Trust •</span></div>
+
+  <!-- Header -->
   <header>
     <h1>HD Heed</h1>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
-        <li><a href="services.html">Services</a></li>
+        <li><a href="services.html" aria-current="page">Services</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li><a href="referral.html">Referral</a></li>
       </ul>
     </nav>
-  </header>  <section class="hero">
-    <h2>Our Services</h2>
-    <p>Compassionate, reliable NDIS support tailored to your needs.</p>
-  </section>  <div class="container">
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Our Services</h2>
+      <p>Compassionate, reliable NDIS support tailored to your needs.</p>
+    </div>
+  </section>
+
+  <!-- Services Grid -->
+  <div class="container">
     <div class="services-grid">
       <a href="personal-care.html" class="service-card">
         <h3>Personal Care</h3>
@@ -165,8 +221,13 @@
         <p>Short-term support in your home while carers rest, ensuring continuity of care and companionship.</p>
       </a>
     </div>
-  </div>  <footer>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p><strong>Phone:</strong> 02 8630 5500 | <strong>Email:</strong> <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></p>
     <p>&copy; 2025 HD Heed. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
   </footer>
+
 </body>
 </html>
