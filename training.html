@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>HD HeeD – Admin Training Simulator (NDIS intake & funding)</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HD HeeD • Admin Conversation Simulator (NDIS Intake & Funding)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#512b8a">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -11,706 +11,674 @@
 <link rel="manifest" href="/site.webmanifest">
 <style>
   :root{
-    --bg:#f6f7fb; --ink:#0f172a; --muted:#64748b; --brand:#512b8a; --accent:#ffc107;
-    --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --panel:#ffffff;
+    --bg:#f6f7fb; --panel:#ffffff; --ink:#0f172a; --muted:#64748b;
+    --brand:#512b8a; --accent:#ffc107; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444;
+    --bubble:#fff; --bubble2:#ebf5ff;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--ink)}
   a{color:#2563eb;text-decoration:none}
-  .container{max-width:1100px;margin:0 auto;padding:16px}
-  header{position:sticky;top:0;z-index:3;background:#fff;border-bottom:1px solid #e5e7eb}
-  header .inner{display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+  header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #e5e7eb}
+  header .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
   .brand{display:flex;gap:10px;align-items:center}
-  .brand .logo{width:36px;height:36px;border-radius:10px;background:#512b8a;color:#fff;font-weight:900;display:grid;place-items:center}
-  .tag{display:inline-flex;gap:8px;align-items:center;background:#eaf2ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:999px;padding:6px 10px;font-weight:800;font-size:12px}
-  .grid{display:grid;gap:16px}
-  .two{grid-template-columns:2fr 1fr}
-  @media (max-width: 960px){.two{grid-template-columns:1fr}}
-  .card{background:var(--panel);border:1px solid #e5e7eb;border-radius:16px;padding:16px}
-  h1{font-size:clamp(20px,3.5vw,28px);margin:8px 0}
-  h2{font-size:clamp(18px,3vw,24px);margin:10px 0}
-  .muted{color:var(--muted)}
-  .scenario-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  @media (max-width:720px){.scenario-list{grid-template-columns:1fr}}
-  .scenario{border:1px solid #e5e7eb;border-radius:14px;padding:12px;cursor:pointer;background:#fff}
-  .scenario:hover{box-shadow:0 18px 40px rgba(2,6,23,.08);transform:translateY(-2px)}
-  .scenario h3{margin:4px 0;color:var(--brand)}
-  .scenario .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
-  .chip{background:#f1f5f9;border:1px solid #e2e8f0;color:#0f172a;border-radius:999px;padding:3px 8px;font-size:12px}
-  .btn{appearance:none;border:none;background:#512b8a;color:#fff;font-weight:900;padding:12px 16px;border-radius:10px;cursor:pointer;min-height:44px}
-  .btn.secondary{background:#0b1220}
-  .btn.ghost{background:#eef2f7;color:#0f172a}
-  .btn.warn{background:#f59e0b}
-  .btn.ok{background:#22c55e}
-  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
-  .step{display:none}
-  .step.active{display:block;animation:fade .25s ease}
-  @keyframes fade{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
-  .q{font-weight:900}
-  .options{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
-  .opt{padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff;cursor:pointer}
-  .opt[aria-pressed="true"]{border-color:#2563eb;box-shadow:0 0 0 4px #dbeafe}
-  .inline{display:flex;gap:8px;flex-wrap:wrap}
-  .field{display:flex;flex-direction:column;gap:6px;margin:6px 0}
-  input,textarea,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px}
-  textarea{min-height:100px}
-  .hint{background:#f8fafc;border:1px dashed #e5e7eb;color:#334155;border-radius:12px;padding:12px;margin-top:12px}
-  .hint strong{color:#0f172a}
-  .inline-badges{display:flex;gap:8px;flex-wrap:wrap}
-  .badge{display:inline-flex;gap:6px;align-items:center;border-radius:999px;padding:4px 10px;border:1px solid #e5e7eb}
+  .logo{width:36px;height:36px;border-radius:9px;background:#512b8a;color:#fff;display:grid;place-items:center;font-weight:900}
+  .small{color:var(--muted);font-size:12px}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{appearance:none;border:none;border-radius:10px;padding:10px 14px;font-weight:900;cursor:pointer;min-height:40px}
+  .btn.primary{background:#512b8a;color:#fff}
+  .btn.ghost{background:#edf2f7}
+  .btn.warn{background:#f59e0b;color:#1f2937}
+  .btn.ok{background:#22c55e;color:#062e12}
+  main{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:16px;grid-template-columns:2fr 1fr}
+  @media (max-width:960px){ main{grid-template-columns:1fr} }
+  .card{background:var(--panel);border:1px solid #e5e7eb;border-radius:16px}
+  .chat{display:flex;flex-direction:column;height:70vh;min-height:560px}
+  .chat-head{padding:12px 14px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}
+  .chat-body{padding:16px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+  .chat-foot{padding:12px;border-top:1px solid #e5e7eb}
+  .row{display:flex;gap:10px;align-items:flex-end}
+  .bubble{max-width:80%;padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;background:var(--bubble)}
+  .agent .bubble{background:#f8f8ff;border-color:#e5e7eb}
+  .caller{justify-content:flex-end}
+  .caller .bubble{background:var(--bubble2);border-color:#cfe3ff}
+  .chipbar{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1px solid #e5e7eb;background:#fff;border-radius:999px;padding:6px 10px;cursor:pointer}
+  .chip[aria-pressed="true"]{border-color:#2563eb;box-shadow:0 0 0 3px #dbeafe}
+  .hint{background:#f8fafc;border:1px dashed #e5e7eb;border-radius:12px;padding:12px;color:#334155}
+  .pane{padding:14px;display:flex;flex-direction:column;gap:12px}
+  .badge{display:inline-flex;gap:6px;align-items:center;border:1px solid #e5e7eb;border-radius:999px;padding:4px 10px}
   .badge.ok{background:#ecfdf5;border-color:#bbf7d0;color:#065f46}
   .badge.warn{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
-  .badge.danger{background:#fef2f2;border-color:#fecaca;color:#991b1b}
-  .sticky-bottom{position:sticky;bottom:8px;z-index:2}
-  .score{font-weight:900}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-  .small{font-size:12px;color:#64748b}
-  .kvd{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
-  .pill{padding:8px 10px;border-radius:999px;border:1px solid #e5e7eb;background:#fff}
-  .right{justify-self:end}
+  .badge.info{background:#eef2ff;border-color:#c7d2fe;color:#3730a3}
+  .grid{display:grid;gap:10px}
+  .two{grid-template-columns:1fr 1fr}
+  .mono{font-family:ui-monospace,Consolas,Menlo,monospace}
+  textarea,input,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px}
+  .toast{position:fixed;right:16px;bottom:16px;background:#0b1220;color:#fff;padding:10px 12px;border-radius:8px;box-shadow:0 12px 30px rgba(2,6,23,.35);display:none;z-index:10}
+  .toast.show{display:block}
+  .modal{position:fixed;inset:40px auto auto 50%;transform:translateX(-50%);max-width:920px;width:94%;background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 24px 80px rgba(2,6,23,.25);display:none;z-index:20}
+  .modal .head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #e5e7eb}
+  .modal .body{padding:14px;max-height:70vh;overflow:auto}
   .divider{height:1px;background:#e5e7eb;margin:10px 0}
-  .toast{position:fixed;right:16px;bottom:16px;background:#0b1220;color:#fff;padding:10px 12px;border-radius:8px;box-shadow:0 12px 30px rgba(2,6,23,.35);display:none}
-  .toast.show{display:block;animation:fade .25s ease}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 </head>
 <body>
 <header>
-  <div class="inner container">
+  <div class="inner">
     <div class="brand">
       <div class="logo">HD</div>
       <div>
-        <div style="font-weight:900">HD HeeD – Admin Training Simulator</div>
-        <div class="small">NDIS intake, plan review, and funding checks • Practice mode</div>
+        <div style="font-weight:900">Admin Conversation Simulator</div>
+        <div class="small">NDIS intake • plan review • funding check • consent • scenarios</div>
       </div>
     </div>
-    <div class="inline">
-      <button id="btnReset" class="btn ghost">Reset progress</button>
-      <button id="btnExportJSON" class="btn secondary">Export JSON</button>
-      <button id="btnExportCSV" class="btn">Export CSV</button>
+    <div class="toolbar">
+      <button id="btnReset" class="btn ghost">Reset</button>
+      <button id="btnExportJSON" class="btn">Export JSON</button>
+      <button id="btnExportCSV" class="btn primary">Export CSV</button>
+      <button id="btnPlan" class="btn warn">Open mock plan</button>
     </div>
   </div>
 </header>
 
-<main class="container grid two">
-  <!-- LEFT: Training flow -->
-  <section class="card">
-    <div id="introStep" class="step active">
-      <h1>Pick a scenario to start</h1>
-      <p class="muted">Each pathway asks one question at a time and adapts based on your answers. Use “Not sure” to keep momentum—just like a real intake.</p>
-
-      <div id="scenarioList" class="scenario-list"></div>
-      <div class="hint">
-        <strong>Tip:</strong> You can open the <em>mock plan</em> at any time during a scenario to check dates, budgets, and goals (like a real call).
-      </div>
+<main>
+  <!-- Conversation / left -->
+  <section class="card chat">
+    <div class="chat-head">
+      <strong>Live practice</strong>
+      <span class="small">Tip: use “Not sure” to keep momentum (like real calls)</span>
     </div>
-
-    <!-- Dynamic stepper goes here -->
-    <div id="stepper"></div>
-
-    <div class="sticky-bottom">
-      <div id="navBar" class="btn-row" style="display:none">
-        <button id="prevBtn" class="btn ghost">Back</button>
-        <button id="nextBtn" class="btn">Next</button>
-        <button id="viewPlanBtn" class="btn warn right">View mock plan</button>
-      </div>
+    <div id="chat" class="chat-body"></div>
+    <div class="chat-foot">
+      <div id="choices" class="chipbar"></div>
     </div>
   </section>
 
-  <!-- RIGHT: Guidance / tools -->
-  <aside class="card" id="guide">
-    <div class="kvd">
-      <h2>Guidance & tools</h2>
-      <button id="copyTemplateBtn" class="btn ghost right">Copy email template</button>
+  <!-- Guidance / right -->
+  <aside class="card pane">
+    <div class="grid two" style="align-items:center">
+      <h3 style="margin:0">Guidance</h3>
+      <div class="grid" style="justify-items:end">
+        <span id="badgeConsent" class="badge warn">Consent?</span>
+        <span id="badgeMgmt" class="badge">Mgmt: —</span>
+        <span id="badgeCat" class="badge">Category: —</span>
+      </div>
     </div>
+    <div id="guidance" class="hint">Welcome. You’ll play **Mat** and handle a call from different caller types. Start with the greeting below.</div>
     <div class="divider"></div>
 
-    <div class="inline-badges" id="statusBadges">
-      <!-- dynamic badges -->
-    </div>
-
-    <div id="guideBody" class="hint" style="margin-top:12px">
-      Pick a scenario on the left to see step-by-step help, answer scripts, funding rules of thumb, and email templates to plan managers/support coordinators.
-    </div>
-
-    <div class="divider"></div>
-
-    <h3>Quick email templates</h3>
-    <details>
-      <summary><strong>Plan manager – Budget snapshot request</strong></summary>
-      <pre class="mono" id="tplPlanManager" style="white-space:pre-wrap">
-Subject: Budget snapshot – [Initials, last 3 of NDIS]
+    <h4>Email templates</h4>
+    <details open>
+      <summary><strong>Plan manager – Budget snapshot</strong></summary>
+      <pre id="tplPM" class="mono" style="white-space:pre-wrap">Subject: Budget snapshot – [Initials, last 3 of NDIS]
 Hi [Name],
-With consent from [Participant], can you confirm available balance by category and whether a PO is needed?
+With consent from [Participant], could you confirm available balance by category and if a PO is needed?
 We plan to commence [service] from [date] in [suburb].
-Thanks, HD HeeD | 02 8630 5500 | info@hdheed.com.au
-      </pre>
+Thanks, HD HeeD | 02 8630 5500 | info@hdheed.com.au</pre>
     </details>
-
     <details>
-      <summary><strong>Support Coordinator / LAC – Funding confirmation</strong></summary>
-      <pre class="mono" id="tplSC" style="white-space:pre-wrap">
-Subject: Funding confirmation – [Participant]
+      <summary><strong>Support Coordinator – Funding confirmation</strong></summary>
+      <pre id="tplSC" class="mono" style="white-space:pre-wrap">Subject: Funding confirmation – [Participant]
 With [Participant]’s consent, can you confirm active plan dates and the category/balance to fund [service] from [date]?
-Thanks, HD HeeD
-      </pre>
+Thanks, HD HeeD</pre>
     </details>
-
     <details>
-      <summary><strong>Self-managed – Invoice details confirmation</strong></summary>
-      <pre class="mono" id="tplSM" style="white-space:pre-wrap">
-Subject: Invoice details – [Participant]
-Could you confirm the billing email, reference/PO (if any), and which category (e.g., Core – Assistance with Daily Life) you prefer us to use? We’ll invoice at/under NDIS limits.
-Thanks, HD HeeD
-      </pre>
+      <summary><strong>Self-managed – Invoice details</strong></summary>
+      <pre id="tplSM" class="mono" style="white-space:pre-wrap">Subject: Invoice details – [Participant]
+Could you confirm the billing email, any reference/PO, and which category (e.g., Core – ADL) you prefer us to use?
+We’ll invoice at/under NDIS limits. Thanks!</pre>
     </details>
   </aside>
 </main>
 
 <!-- Mock Plan Modal -->
-<div id="planModal" class="card" role="dialog" aria-modal="true" aria-labelledby="planTitle" style="display:none;position:fixed;inset:40px auto auto 50%;transform:translateX(-50%);max-width:860px;width:92%;z-index:4">
-  <div class="kvd">
-    <h2 id="planTitle">Mock Plan</h2>
-    <button id="closePlanBtn" class="btn ghost right">Close</button>
+<div id="planModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="planTitle">
+  <div class="head">
+    <h3 id="planTitle" style="margin:0">Mock plan</h3>
+    <button id="closePlan" class="btn ghost">Close</button>
   </div>
-  <div class="divider"></div>
-  <div id="planBody"></div>
+  <div class="body" id="planBody"></div>
 </div>
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ===============================
-   DATA: Scenarios & Mock Plans
-================================*/
-const scenarios = [
-  {
-    id: "pm_core_adl",
-    title: "Plan-managed • Personal care (Core ADL) • Western Sydney",
-    chips: ["Plan-managed","Core – ADL","Personal care","Capacity this week"],
-    mockPlan: {
-      participant: { name: "A. T.", dob: "1992-05-08", ndis: "43…812", address: "Parramatta NSW" },
-      dates: { start: "2025-03-01", end: "2026-02-28" },
-      management: "Plan-managed (BlueLeaf PM)",
-      contacts: { planManager: "pm@blueleafpm.com.au", sc: "sc@helpco.org.au" },
-      budgets: {
-        core_adl: { label: "Core – Assistance with Daily Life", total: 32000, used: 9000 },
-        core_scp: { label: "Core – Social & Community Participation", total: 8000, used: 1000 },
-        cb_idl:   { label: "Capacity – Improved Daily Living", total: 5000, used: 500 }
-      },
+/* ====================================================================================
+   1) Conversation engine
+   - One message at a time (agent Mat ↔ caller).
+   - Branch by caller type, plan type, and service request.
+   ==================================================================================== */
+
+const chatEl = document.getElementById('chat');
+const choicesEl = document.getElementById('choices');
+const guidanceEl = document.getElementById('guidance');
+const toast = document.getElementById('toast');
+
+const badgeConsent = document.getElementById('badgeConsent');
+const badgeMgmt = document.getElementById('badgeMgmt');
+const badgeCat = document.getElementById('badgeCat');
+
+const planModal = document.getElementById('planModal');
+const planBody = document.getElementById('planBody');
+
+/* State kept in localStorage so you can pause/resume */
+const storeKey = 'hdheed_admin_conv_v1';
+let state = {
+  step: 'greet',
+  answers: {
+    callerType: null,
+    consent: null,
+    mgmt: null,
+    service: null,
+    risk: [],
+    category: null,
+    notes: ''
+  },
+  transcript: [] // {who:'agent'|'caller', text}
+};
+try { const prev = JSON.parse(localStorage.getItem(storeKey)||'null'); if (prev) state = prev; } catch(e){}
+
+/* Helper to push messages */
+function say(who, text){
+  state.transcript.push({who, text});
+  renderChat();
+  save();
+}
+function renderChat(){
+  chatEl.innerHTML = state.transcript.map(m=>{
+    const cls = m.who==='agent'?'row agent':'row caller';
+    return `<div class="${cls}"><div class="bubble">${m.text}</div></div>`;
+  }).join('');
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+function setChoices(options){
+  choicesEl.innerHTML = options.map(o=>{
+    return `<button class="chip" data-val="${o.value}">${o.label}</button>`;
+  }).join('');
+  choicesEl.querySelectorAll('.chip').forEach(b=>{
+    b.addEventListener('click', ()=> pick(b.dataset.val));
+  });
+}
+function save(){ localStorage.setItem(storeKey, JSON.stringify(state)); }
+function flash(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), 1500); }
+
+/* ====================================================================================
+   2) Mock plans (varied by caller type and scenario cluster)
+   ==================================================================================== */
+const mockPlans = {
+  // Simple library; we’ll pick one based on early choices.
+  pm_core_adl: {
+    title: "Plan-managed • Core ADL focus",
+    body: planHTML({
+      participant: "A. T. • Parramatta NSW • NDIS 43…812",
+      dates: "2025-03-01 → 2026-02-28",
+      mgmt: "Plan-managed (BlueLeaf PM)",
+      contacts: "PM: pm@blueleafpm.com.au • SC: sc@helpco.org.au",
+      budgets: [
+        ["Core – Assistance with Daily Life", 32000, 9000],
+        ["Core – Social & Community Participation", 8000, 1000],
+        ["Capacity – Improved Daily Living", 5000, 500]
+      ],
       goals: [
         "Live independently and safely at home",
         "Build daily routines and confidence"
       ],
       notes: "No allergies reported. Falls risk: low. Prefers female workers, morning shifts."
-    },
-    steps: [
-      { key:"consent",   q:"Do you have verbal consent to collect details and contact the plan manager/support coordinator?", type:"choice",
-        options:["Yes (verbal)","Not yet","Not sure – will confirm"], tip:"Always get verbal consent first. Note who gave it and when.",
-        score:{yes:2,no:0} },
-      { key:"mgmt",      q:"How is the plan managed?", type:"choice",
-        options:["NDIA-managed","Plan-managed","Self-managed","Not sure"], tip:"Plan-managed → ask PM for budget snapshot; NDIA → ask SC/LAC; Self → confirm billing email and category.",
-        correct:"Plan-managed" },
-      { key:"dates",     q:"Plan dates?", type:"free",
-        placeholder:"Start–End (rough is ok). E.g., Mar 2025 – Feb 2026",
-        tip:"Don’t roster beyond the end date. You can proceed with month/year if exact dates unknown." },
-      { key:"service",   q:"Primary support requested?", type:"choice",
-        options:["Personal care – morning routines","Community access","Nursing (wound care)","Not sure"],
-        tip:"For this scenario, personal care maps to Core – ADL." },
-      { key:"category",  q:"Pick the likely funding category to start with", type:"choice",
-        options:["Core – Assistance with Daily Life","Core – Social & Community Participation","Capacity – Improved Daily Living","Capital"],
-        correct:"Core – Assistance with Daily Life",
-        tip:"Personal care typically draws from Core – ADL. Confirm with PM and capture their email reply." },
-      { key:"pm-email",  q:"Send the PM a budget snapshot request?", type:"choice",
-        options:["Yes – send now","No – later","Not needed"], tip:"Ask for available balance and if a PO is required. Attach rough weekly hours." },
-      { key:"risks",     q:"Any risks or alerts mentioned?", type:"multi",
-        options:["Falls","Behaviours of concern","Allergies","Medications","Interpreter needed","None noted","Not sure"],
-        tip:"Capture risks early. If complex, flag to clinical lead before rostering." },
-      { key:"summary",   q:"Ready to propose a start plan?", type:"text",
-        placeholder:"Draft a one-liner: what, how often, from when (e.g., 6h/week AM).",
-        tip:"Mirror a goal from the plan in your summary to keep alignment clear." }
-    ]
+    })
   },
-  {
-    id: "ndia_nursing",
-    title: "NDIA-managed • Community nursing (wound care) • Blacktown",
-    chips: ["NDIA-managed","Clinical","Wound care"],
-    mockPlan: {
-      participant: { name: "B. K.", dob: "1961-11-22", ndis: "10…553", address: "Blacktown NSW" },
-      dates: { start: "2025-01-10", end: "2025-12-31" },
-      management: "NDIA-managed",
-      contacts: { sc: "case.manager@lwb.org.au" },
-      budgets: {
-        core_cnc: { label: "Core – Community Nursing Care", total: 12000, used: 4000 },
-        cb_idl:   { label: "Capacity – Improved Daily Living", total: 6000, used: 2500 }
-      },
-      goals: ["Manage health safely at home", "Avoid hospital readmissions"],
+  ndia_nursing: {
+    title: "NDIA-managed • Community Nursing Care",
+    body: planHTML({
+      participant: "B. K. • Blacktown NSW • NDIS 10…553",
+      dates: "2025-01-10 → 2025-12-31",
+      mgmt: "NDIA-managed",
+      contacts: "SC: case.manager@lwb.org.au",
+      budgets: [
+        ["Core – Community Nursing Care", 12000, 4000],
+        ["Capacity – Improved Daily Living", 6000, 2500]
+      ],
+      goals: [
+        "Manage health safely at home",
+        "Avoid hospital readmissions"
+      ],
       notes: "Pressure injury stage 2 history. RN oversight required. GP review monthly."
-    },
-    steps: [
-      { key:"consent", q:"Consent to contact SC/LAC and view plan details?", type:"choice",
-        options:["Yes (verbal)","Not yet","Not sure"], tip:"Record who gave consent and date/time." },
-      { key:"mgmt", q:"Management type?", type:"choice",
-        options:["NDIA-managed","Plan-managed","Self-managed","Not sure"], correct:"NDIA-managed",
-        tip:"For NDIA-managed, confirm with SC/LAC before rostering." },
-      { key:"service", q:"Requested service?", type:"choice",
-        options:["Community nursing – wound care","Personal care","Community participation","Not sure"], correct:"Community nursing – wound care" },
-      { key:"category", q:"Best initial category?", type:"choice",
-        options:["Core – Community Nursing Care","Capacity – Improved Daily Living","Core – ADL","Capital"],
-        correct:"Core – Community Nursing Care",
-        tip:"Some plans use Capacity (IDL) for clinical assessment/training; ongoing wound care often from Core – CNC." },
-      { key:"escalation", q:"Risk level & actions?", type:"multi",
-        options:["RN oversight needed","Medication reconciliation","Manual handling plan","Infection prevention supplies","None","Not sure"],
-        tip:"High clinical risk? Confirm RN cover and escalation path before start." },
-      { key:"sc-email", q:"Send SC funding confirmation now?", type:"choice",
-        options:["Yes – send now","No – later"], tip:"Ask for category/balance and note their reply in the file." },
-      { key:"start", q:"Proposed start?", type:"text",
-        placeholder:"E.g., RN wound care 2×/wk for 4 weeks, review in week 5.",
-        tip:"Tie to goals: ‘Manage health safely at home; avoid readmissions.’" }
-    ]
+    })
   },
-  {
-    id: "self_comm_access",
-    title: "Self-managed • Community participation • Auburn",
-    chips: ["Self-managed","Community","Transport"],
-    mockPlan: {
-      participant: { name: "J. S.", dob: "1999-09-06", ndis: "72…904", address: "Auburn NSW" },
-      dates: { start: "2025-06-01", end: "2026-05-31" },
-      management: "Self-managed",
-      contacts: { billingEmail: "js.bills@example.com" },
-      budgets: {
-        core_scp: { label: "Core – Social & Community Participation", total: 9000, used: 1200 }
-      },
-      goals: ["Increase community engagement", "Build confidence in public transport"],
+  self_comm: {
+    title: "Self-managed • Community participation",
+    body: planHTML({
+      participant: "J. S. • Auburn NSW • NDIS 72…904",
+      dates: "2025-06-01 → 2026-05-31",
+      mgmt: "Self-managed",
+      contacts: "Billing: js.bills@example.com",
+      budgets: [
+        ["Core – Social & Community Participation", 9000, 1200]
+      ],
+      goals: [
+        "Increase community engagement",
+        "Build confidence in public transport"
+      ],
       notes: "Prefers SMS. Anxiety in busy places; morning outings better."
-    },
-    steps: [
-      { key:"consent", q:"Consent to collect details and invoice directly?", type:"choice",
-        options:["Yes (verbal)","Not yet","Not sure"], tip:"Confirm billing email and any invoice reference up front." },
-      { key:"mgmt", q:"Management type?", type:"choice",
-        options:["NDIA-managed","Plan-managed","Self-managed","Not sure"], correct:"Self-managed" },
-      { key:"service", q:"Requested support?", type:"choice",
-        options:["Community participation – outings","Personal care","Nursing","Not sure"], correct:"Community participation – outings" },
-      { key:"category", q:"Likely category?", type:"choice",
-        options:["Core – Social & Community Participation","Core – ADL","Capacity – IDL","Capital"],
-        correct:"Core – Social & Community Participation",
-        tip:"Self-managed can choose, but SCP is typical for outings." },
-      { key:"billing", q:"Billing details captured?", type:"multi",
-        options:["Billing email","Invoice reference/PO","Rates acknowledged (≤ NDIS limits)","Not sure"], tip:"Keep invoices simple and timely." },
-      { key:"start", q:"Proposed start?", type:"text",
-        placeholder:"E.g., 3h/week community outings; review at 4 weeks.",
-        tip:"Confirm travel rules if transport involved." }
-    ]
+    })
   },
-  {
-    id: "pm_behaviour_complex",
-    title: "Plan-managed • Personal care + behaviours of concern • Penrith",
-    chips: ["Plan-managed","Complex","Behaviour support"],
-    mockPlan: {
-      participant: { name: "K. R.", dob: "1988-02-17", ndis: "55…221", address: "Penrith NSW" },
-      dates: { start: "2025-04-15", end: "2026-04-14" },
-      management: "Plan-managed (CareFlow PM)",
-      contacts: { planManager: "claims@careflowpm.com", sc: "sc@connectsc.org" },
-      budgets: {
-        core_adl: { label: "Core – Assistance with Daily Life", total: 38000, used: 7000 },
-        cb_bsp:   { label: "Capacity – Behaviour Support", total: 5000, used: 1000 }
-      },
-      goals: ["Safer routines at home", "Reduce incidents during morning care"],
+  complex_behaviour: {
+    title: "Plan-managed • Personal care with BSP (2:1)",
+    body: planHTML({
+      participant: "K. R. • Penrith NSW • NDIS 55…221",
+      dates: "2025-04-15 → 2026-04-14",
+      mgmt: "Plan-managed (CareFlow PM)",
+      contacts: "PM: claims@careflowpm.com • SC: sc@connectsc.org",
+      budgets: [
+        ["Core – Assistance with Daily Life", 38000, 7000],
+        ["Capacity – Behaviour Support", 5000, 1000]
+      ],
+      goals: [
+        "Safer routines at home",
+        "Reduce incidents during morning care"
+      ],
       notes: "Behaviour Support Plan in place. Two-worker mornings recommended."
-    },
-    steps: [
-      { key:"consent", q:"Consent logged?", type:"choice",
-        options:["Yes (verbal)","Not yet","Not sure"] },
-      { key:"service", q:"Requested support?", type:"choice",
-        options:["Personal care – two workers AM","Behaviour support practitioner","Community access","Not sure"], correct:"Personal care – two workers AM" },
-      { key:"category", q:"Likely category for personal care?", type:"choice",
-        options:["Core – Assistance with Daily Life","Capacity – Behaviour Support","Capacity – IDL","Capital"],
-        correct:"Core – Assistance with Daily Life",
-        tip:"Note BSP exists; care plan must reflect strategies; may require 2:1 ratio approval from PM." },
-      { key:"risks", q:"Risk controls to line up before start?", type:"multi",
-        options:["Two-worker roster","BSP reviewed with team","Incident reporting process","Escalation contact set","Not sure"] },
-      { key:"pm-email", q:"Ask PM to confirm 2:1 coverage and budget?", type:"choice",
-        options:["Yes – send now","No – later"] },
-      { key:"start", q:"Proposed start?", type:"text",
-        placeholder:"E.g., 2 workers x 1.5h each weekday mornings (trial 2 weeks), then review.",
-        tip:"Tie to goal: safer routines; reduce incidents during morning care." }
-    ]
+    })
   }
-];
-
-/* Utility: format money */
-const money = n => "$" + Number(n).toLocaleString("en-AU", {maximumFractionDigits:0});
-
-/* ===============================
-   STATE
-================================*/
-const stateKey = "hdheed_admin_training_v1";
-let state = {
-  scenarioId: null,
-  answers: {},   // { stepKey: value }
-  history: [],   // step indices for back nav
-  currentStep: 0
 };
 
-/* Restore from localStorage */
-try{
-  const prev = JSON.parse(localStorage.getItem(stateKey) || "{}");
-  if (prev && prev.scenarioId) state = prev;
-}catch{}
-
-/* ===============================
-   RENDER: Scenario list
-================================*/
-const scenarioList = document.getElementById("scenarioList");
-function renderScenarios(){
-  scenarioList.innerHTML = scenarios.map(s => `
-    <button class="scenario" data-id="${s.id}">
-      <h3>${s.title}</h3>
-      <div class="chips">
-        ${s.chips.map(c => `<span class="chip">${c}</span>`).join("")}
-      </div>
-      <div class="small" style="margin-top:6px">Includes mock plan, budgets & goals</div>
-    </button>
-  `).join("");
-  scenarioList.querySelectorAll(".scenario").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      state.scenarioId = btn.dataset.id;
-      state.answers = {};
-      state.history = [];
-      state.currentStep = 0;
-      saveState();
-      document.getElementById("introStep").style.display="none";
-      renderStepper();
-      updateGuide();
-      flash("Scenario loaded. Work through the questions.");
-    });
-  });
-}
-renderScenarios();
-
-/* ===============================
-   RENDER: Stepper
-================================*/
-const stepper = document.getElementById("stepper");
-const navBar = document.getElementById("navBar");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-const viewPlanBtn = document.getElementById("viewPlanBtn");
-
-function activeScenario(){
-  return scenarios.find(s => s.id === state.scenarioId);
-}
-function currentSteps(){ return activeScenario()?.steps || []; }
-function currentStepObj(){ return currentSteps()[state.currentStep]; }
-
-function renderStepper(){
-  const sc = activeScenario();
-  if (!sc) return;
-  navBar.style.display = "flex";
-  stepper.innerHTML = "";
-  const step = currentStepObj();
-  if (!step) { renderComplete(); return; }
-
-  const wrap = document.createElement("div");
-  wrap.className = "step active";
-
-  // Question
-  const q = document.createElement("div");
-  q.className = "q";
-  q.textContent = step.q;
-  wrap.appendChild(q);
-
-  // Inputs
-  const saved = state.answers[step.key];
-
-  if (step.type === "choice"){
-    const ops = document.createElement("div");
-    ops.className = "options";
-    step.options.forEach(opt=>{
-      const b = document.createElement("button");
-      b.className = "opt";
-      b.type = "button";
-      b.textContent = opt;
-      if (saved === opt) b.setAttribute("aria-pressed","true");
-      b.addEventListener("click",()=>{
-        // toggle select
-        state.answers[step.key] = opt;
-        saveState();
-        renderStepper();
-        updateGuide();
-      });
-      ops.appendChild(b);
-    });
-    wrap.appendChild(ops);
-  }
-
-  if (step.type === "multi"){
-    const ops = document.createElement("div");
-    ops.className = "options";
-    const current = Array.isArray(saved) ? new Set(saved) : new Set();
-    step.options.forEach(opt=>{
-      const b = document.createElement("button");
-      b.className = "opt";
-      b.type = "button";
-      b.textContent = opt;
-      if (current.has(opt)) b.setAttribute("aria-pressed","true");
-      b.addEventListener("click",()=>{
-        if (current.has(opt)) current.delete(opt); else current.add(opt);
-        state.answers[step.key] = Array.from(current);
-        saveState();
-        renderStepper();
-        updateGuide();
-      });
-      ops.appendChild(b);
-    });
-    wrap.appendChild(ops);
-  }
-
-  if (step.type === "text" || step.type === "free"){
-    const field = document.createElement("div");
-    field.className = "field";
-    const ta = document.createElement(step.type === "text" ? "textarea" : "input");
-    ta.placeholder = step.placeholder || "";
-    ta.value = saved || "";
-    ta.addEventListener("input",()=>{
-      state.answers[step.key] = ta.value;
-      saveState();
-    });
-    field.appendChild(ta);
-    wrap.appendChild(field);
-  }
-
-  // Tip box
-  if (step.tip){
-    const tip = document.createElement("div");
-    tip.className = "hint";
-    tip.innerHTML = `<strong>Tip:</strong> ${step.tip}`;
-    wrap.appendChild(tip);
-  }
-
-  // Correctness feedback (if defined)
-  if (step.correct && saved){
-    const ok = saved === step.correct;
-    const fb = document.createElement("div");
-    fb.className = "hint";
-    fb.innerHTML = ok
-      ? `<span class="badge ok">✔ Correct</span> Good pick for this scenario.`
-      : `<span class="badge warn">⚠ Not ideal</span> In this scenario, <strong>${step.correct}</strong> fits best.`;
-    wrap.appendChild(fb);
-  }
-
-  stepper.appendChild(wrap);
-
-  // Nav buttons
-  prevBtn.disabled = state.currentStep === 0;
-  nextBtn.textContent = state.currentStep >= currentSteps().length - 1 ? "Finish" : "Next";
-}
-function renderComplete(){
-  stepper.innerHTML = `
-    <div class="step active">
-      <h2>Great work — scenario completed</h2>
-      <p class="muted">You can export your responses, switch scenarios, or reset and try again.</p>
-      <div class="hint">
-        <strong>Summary:</strong>
-        <div id="summaryList" style="margin-top:8px"></div>
-      </div>
-      <div class="btn-row" style="margin-top:10px">
-        <button id="btnSwitch" class="btn ghost">Switch scenario</button>
-        <button id="btnRestart" class="btn">Restart scenario</button>
-      </div>
-    </div>
-  `;
-  const sl = document.getElementById("summaryList");
-  sl.innerHTML = Object.entries(state.answers).map(([k,v])=>{
-    const val = Array.isArray(v) ? v.join(", ") : v || "(blank)";
-    return `<div><span class="mono">${k}</span>: ${val}</div>`;
-  }).join("");
-  document.getElementById("btnSwitch").addEventListener("click",()=>{
-    document.getElementById("introStep").style.display="block";
-    navBar.style.display="none";
-    stepper.innerHTML = "";
-  });
-  document.getElementById("btnRestart").addEventListener("click",()=>{
-    state.answers = {}; state.history = []; state.currentStep = 0; saveState(); renderStepper(); updateGuide();
-  });
-}
-
-/* ===============================
-   NAV
-================================*/
-prevBtn.addEventListener("click",()=>{
-  if (state.currentStep>0){ state.currentStep--; saveState(); renderStepper(); updateGuide(); }
-});
-nextBtn.addEventListener("click",()=>{
-  const steps = currentSteps();
-  if (!steps.length) return;
-  if (state.currentStep < steps.length - 1){
-    state.currentStep++;
-    saveState();
-    renderStepper();
-    updateGuide();
-  } else {
-    renderComplete();
-    updateGuide();
-  }
-});
-
-/* ===============================
-   GUIDE PANE (dynamic tips/badges)
-================================*/
-const guideBody = document.getElementById("guideBody");
-const statusBadges = document.getElementById("statusBadges");
-
-function updateGuide(){
-  const sc = activeScenario();
-  statusBadges.innerHTML = "";
-  if (!sc){ guideBody.textContent = "Pick a scenario to begin."; return; }
-
-  // Status badges (consent, mgmt, category chosen)
-  const a = state.answers;
-  const badge = (txt, cls="") => `<span class="badge ${cls}">${txt}</span>`;
-  if (a.consent?.startsWith("Yes")) statusBadges.innerHTML += badge("Consent ✔","ok");
-  else statusBadges.innerHTML += badge("Consent?","warn");
-  if (a.mgmt) statusBadges.innerHTML += badge("Mgmt: "+a.mgmt);
-  if (a.category) statusBadges.innerHTML += badge("Category: "+a.category);
-
-  // Contextual guidance text
-  const step = currentStepObj();
-  if (!step){ guideBody.innerHTML = `
-    <div><strong>Scenario complete.</strong> Export your responses with the buttons above and debrief as a team.</div>
+function planHTML({participant,dates,mgmt,contacts,budgets,goals,notes}){
+  const rows = budgets.map(([label,total,used])=>{
+    const avail = total-used; const pct = Math.round(avail/total*100);
+    return `<tr><td>${label}</td><td>$${total.toLocaleString()}</td><td>$${used.toLocaleString()}</td><td>$${avail.toLocaleString()} <span class="small">(${pct}% left)</span></td></tr>`;
+  }).join('');
+  return `
+    <div><strong>Participant:</strong> ${participant}</div>
+    <div><strong>Dates:</strong> ${dates}</div>
+    <div><strong>Managed:</strong> ${mgmt}</div>
+    <div><strong>Contacts:</strong> ${contacts}</div>
     <div class="divider"></div>
-    <div><strong>Pro tips:</strong><ul>
-      <li>Always keep the PM/SC email confirmation as budget proof.</li>
-      <li>Tie your start plan to the participant’s goal wording.</li>
-      <li>Don’t roster past the plan end date without assurance.</li>
-    </ul></div>`; return; }
-
-  // General guidance by step key
-  const maps = {
-    consent: `<strong>Consent:</strong> log who gave it, date/time. Without consent, restrict contacts to public information.`,
-    mgmt: `<strong>Management type:</strong> Plan-managed → email PM for balance/PO; NDIA → ask SC/LAC; Self → confirm billing email and category.`,
-    dates: `<strong>Plan dates:</strong> capture at least month/year. Set a reminder 4–6 weeks before expiry.`,
-    service: `<strong>Service mapping:</strong> choose a plain-English label the caller used, then map to NDIS categories.`,
-    category: `<strong>Funding category:</strong> Core (ADL/SCP) funds daily living & community; Capacity (IDL) funds assessments/therapy/training; Capital funds AT/home mods.`,
-    "pm-email": `<strong>PM email:</strong> attach your proposed hours/frequency. Ask if PO needed.`,
-    sc-email: `<strong>SC email:</strong> request category + balance confirmation for the start plan.`,
-    risks: `<strong>Risks:</strong> falls/behaviour/allergies/meds/interpreter. Pull BSP or med charts if relevant before start.`,
-    escalation: `<strong>Escalation:</strong> set RN cover, incident reporting flow, and contact numbers.`,
-    billing: `<strong>Billing:</strong> for self-managed, confirm billing email and any reference; keep invoices simple & timely.`,
-    summary: `<strong>Start plan:</strong> one line is enough: what, how often, from when, and which goal it serves.`,
-    start: `<strong>Start plan:</strong> write a crisp proposal; book a review date in 4–6 weeks.`
-  };
-  guideBody.innerHTML = maps[step.key] || "Follow the prompt on the left and use the mock plan when needed.";
-
-  // Add quick links to email templates depending on mgmt
-  if (a.mgmt?.includes("Plan-managed")){
-    guideBody.innerHTML += `<div class="divider"></div><div>Use the <em>Plan manager – Budget snapshot</em> template below.</div>`;
-  }else if (a.mgmt?.includes("NDIA")){
-    guideBody.innerHTML += `<div class="divider"></div><div>Use the <em>Support Coordinator – Funding confirmation</em> template below.</div>`;
-  }else if (a.mgmt?.includes("Self")){
-    guideBody.innerHTML += `<div class="divider"></div><div>Use the <em>Self-managed – Invoice details</em> template below.</div>`;
-  }
-}
-
-/* ===============================
-   PLAN MODAL
-================================*/
-const planModal = document.getElementById("planModal");
-const planBody  = document.getElementById("planBody");
-const viewPlanBtnEl = document.getElementById("viewPlanBtn");
-const closePlanBtn = document.getElementById("closePlanBtn");
-viewPlanBtnEl.addEventListener("click", ()=>{
-  const sc = activeScenario(); if (!sc) return;
-  const b = sc.mockPlan.budgets;
-  const budgetRows = Object.values(b).map(v=>{
-    const avail = v.total - v.used;
-    const pct = Math.round(avail / v.total * 100);
-    return `<tr><td>${v.label}</td><td>${money(v.total)}</td><td>${money(v.used)}</td><td>${money(avail)} <span class="small">(${pct}% left)</span></td></tr>`;
-  }).join("");
-  planBody.innerHTML = `
-    <div class="grid" style="gap:8px">
-      <div><strong>Participant:</strong> ${sc.mockPlan.participant.name} • ${sc.mockPlan.participant.address}</div>
-      <div><strong>Dates:</strong> ${sc.mockPlan.dates.start} → ${sc.mockPlan.dates.end}</div>
-      <div><strong>Managed:</strong> ${sc.mockPlan.management}</div>
-      <div><strong>Contacts:</strong> ${Object.entries(sc.mockPlan.contacts).map(([k,v])=>`${k}: ${v}`).join(" • ")}</div>
-    </div>
-    <div class="divider"></div>
-    <h3>Budgets</h3>
-    <div class="card" style="padding:0">
+    <h4>Budgets</h4>
+    <div class="card" style="padding:0;border-radius:12px;border:1px solid #e5e7eb">
       <table style="width:100%;border-collapse:collapse">
-        <thead><tr style="background:#f8fafc"><th style="text-align:left;padding:10px">Category</th><th style="text-align:left;padding:10px">Total</th><th style="text-align:left;padding:10px">Used</th><th style="text-align:left;padding:10px">Available</th></tr></thead>
-        <tbody>
-          ${budgetRows}
-        </tbody>
+        <thead><tr style="background:#f8fafc">
+          <th style="text-align:left;padding:10px">Category</th>
+          <th style="text-align:left;padding:10px">Total</th>
+          <th style="text-align:left;padding:10px">Used</th>
+          <th style="text-align:left;padding:10px">Available</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
       </table>
     </div>
     <div class="divider"></div>
-    <h3>Goals</h3>
-    <ul>${sc.mockPlan.goals.map(g=>`<li>${g}</li>`).join("")}</ul>
+    <h4>Goals</h4>
+    <ul>${goals.map(g=>`<li>${g}</li>`).join('')}</ul>
     <div class="divider"></div>
-    <h3>Notes</h3>
-    <div class="hint">${sc.mockPlan.notes || "—"}</div>
+    <h4>Notes</h4>
+    <div class="hint">${notes}</div>
   `;
-  planModal.style.display="block";
-});
-closePlanBtn.addEventListener("click", ()=> planModal.style.display="none");
-
-/* ===============================
-   EXPORT & RESET
-================================*/
-function saveState(){ localStorage.setItem(stateKey, JSON.stringify(state)); }
-function flash(msg){
-  const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 1600);
 }
 
-document.getElementById("btnReset").addEventListener("click",()=>{
-  localStorage.removeItem(stateKey);
-  state = { scenarioId:null, answers:{}, history:[], currentStep:0 };
-  stepper.innerHTML=""; document.getElementById("introStep").style.display="block"; navBar.style.display="none";
-  updateGuide(); flash("Progress reset.");
-});
+/* ====================================================================================
+   3) Dialogue graph
+   ==================================================================================== */
+
+const D = {
+  greet: {
+    agent: "Hello, this is <strong>Mat</strong> from <strong>HD HeeD</strong>, a registered NDIS provider. How can I help you today?",
+    options: [
+      {label:"I’m a Participant", value:"caller_participant"},
+      {label:"I’m a Family member / Carer", value:"caller_carer"},
+      {label:"I’m a Support Coordinator", value:"caller_sc"},
+      {label:"I’m a Plan Manager", value:"caller_pm"},
+      {label:"I’m a Health Professional", value:"caller_hp"}
+    ],
+    tip: "Start by identifying the caller. You’ll adapt consent, funding checks, and next steps to suit."
+  },
+
+  /* Caller type branches */
+  caller_participant: {
+    callerAck:"I’m a participant looking for support.",
+    agent:"Great — I’ll take a few details so we can help quickly. If you’re not sure on anything, just choose “Not sure”. First — is it okay if I note your details and (if needed) contact your plan manager or support coordinator to confirm funding?",
+    options: yesNoNotSure('consent_pm_sc','consent_confirmed_participant'),
+    tip:"Verbal consent first. Note who gave it and when."
+  },
+  consent_confirmed_participant: {
+    agent:"Thanks. Which type of support are you looking for?",
+    options: serviceOptions('service_pick_participant'),
+    tip:"Pick the caller’s words, then you’ll map it to an NDIS category."
+  },
+
+  caller_carer: {
+    callerAck:"I’m a family member/carer calling on behalf of the participant.",
+    agent:"Thanks for calling. Do you have consent from the participant for us to collect details and, if needed, contact their plan manager/support coordinator?",
+    options: yesNoNotSure('consent_pm_sc','consent_confirmed_carer'),
+    tip:"If no consent yet, collect basic info and arrange follow-up — don’t contact third parties."
+  },
+  consent_confirmed_carer: {
+    agent:"Appreciate it. What support is needed?",
+    options: serviceOptions('service_pick_carer')
+  },
+
+  caller_sc: {
+    callerAck:"I’m a Support Coordinator with a participant to refer.",
+    agent:"Perfect. With the participant’s consent, let’s capture the key details. How is their plan managed?",
+    options: mgmtOptions('mgmt_sc'),
+    tip:"SCs usually know plan details. You’ll still confirm category and balance."
+  },
+
+  caller_pm: {
+    callerAck:"I’m the participant’s Plan Manager.",
+    agent:"Thanks for reaching out. Can I confirm the management type is plan-managed and ask for a budget snapshot by category?",
+    options: [
+      {label:"Yes — plan-managed, I can share balances", value:"mgmt_pm_yes"},
+      {label:"Not sure yet", value:"mgmt_pm_notsure"}
+    ],
+    tip:"If PM is unsure, collect participant details and ask for a later email confirmation."
+  },
+
+  caller_hp: {
+    callerAck:"I’m a nurse/GP/therapist referring a participant.",
+    agent:"Thanks. With the participant’s consent, I’ll confirm funding and next steps. How is their plan managed?",
+    options: mgmtOptions('mgmt_hp')
+  },
+
+  /* Service paths (participant/carer) */
+  service_pick_participant: serviceToMgmt('mgmt_participant'),
+  service_pick_carer: serviceToMgmt('mgmt_carer'),
+
+  mgmt_participant: { agent:"How is your plan managed?", options: mgmtOptions('mgmt_selected') },
+  mgmt_carer:       { agent:"How is the participant’s plan managed?", options: mgmtOptions('mgmt_selected') },
+  mgmt_sc:          { agent:"Thanks. What support are you looking to start?", options: serviceOptions('mgmt_selected') },
+  mgmt_hp:          { agent:"Thanks. What support is needed?", options: serviceOptions('mgmt_selected') },
+
+  mgmt_pm_yes: { callerAck:"Yes, it’s plan-managed. I can provide balances.", agent:"Great — which support is being requested?", options: serviceOptions('mgmt_selected') },
+  mgmt_pm_notsure: { agent:"No worries. We’ll proceed and confirm by email shortly. Which support is being requested?", options: serviceOptions('mgmt_selected') },
+
+  mgmt_selected: {
+    agent:"Thanks. Do you know the plan dates? (Rough month/year is okay.)",
+    options: [
+      {label:"I know them", value:"dates_known"},
+      {label:"Not sure", value:"dates_unknown"}
+    ],
+    tip:"Never roster beyond the plan end date without assurance."
+  },
+
+  dates_known: { agent:"Please capture the plan start and end (free-type).", options: freeType('dates_captured') },
+  dates_unknown: { agent:"That’s fine — we can proceed and confirm later.", options: [{label:"Continue", value:"pre_category"}] },
+  dates_captured: { agent:"Thanks.", options: [{label:"Continue", value:"pre_category"}] },
+
+  pre_category: {
+    agent:"Based on the requested support, which category is the best starting point?",
+    options: categoryOptions('category_picked'),
+    tip:"Rule of thumb: Personal care → Core ADL; Community access → Core SCP; Nursing assessment/training → Capacity IDL; Ongoing wound care → Core CNC."
+  },
+
+  category_picked: {
+    agent:"Got it. Any risks or alerts to note?",
+    options: multiPick([
+      "Falls","Behaviours of concern","Allergies","Medications","Interpreter needed","None","Not sure"
+    ], 'risks_captured'),
+    tip:"Flag complex risks to the clinical lead before rostering."
+  },
+
+  risks_captured: {
+    agent:"How soon do you need support?",
+    options: [
+      {label:"Urgent (24–72h)", value:"urgency_urgent"},
+      {label:"Soon (1–2 weeks)", value:"urgency_soon"},
+      {label:"Exploring options", value:"urgency_explore"}
+    ]
+  },
+
+  urgency_urgent: nextSteps(),
+  urgency_soon:   nextSteps(),
+  urgency_explore:nextSteps(),
+
+  done: {
+    agent:"Great work — that’s the initial admin complete. You can export your transcript and answers, or restart with a different caller.",
+    options: [
+      {label:"Export JSON", value:"export_json"},
+      {label:"Export CSV", value:"export_csv"},
+      {label:"Restart", value:"restart"}
+    ]
+  }
+};
+
+/* ====================================================================================
+   4) Choice builders
+   ==================================================================================== */
+function yesNoNotSure(key,next){
+  return [
+    {label:"Yes (verbal consent)", value: next, onPick: ()=> state.answers.consent = 'Yes (verbal)'},
+    {label:"Not yet", value: next, onPick: ()=> state.answers.consent = 'Not yet'},
+    {label:"Not sure", value: next, onPick: ()=> state.answers.consent = 'Not sure'}
+  ];
+}
+function serviceOptions(next){
+  const opts = [
+    "Personal care (morning/evening routines)",
+    "Community participation (outings/appointments)",
+    "Nursing care (wound/meds/health)",
+    "Daily living skills (cooking/budgeting)",
+    "Respite / carer relief",
+    "Not sure"
+  ];
+  return opts.map(s=> ({label:s, value:next, onPick:()=> state.answers.service = s}));
+}
+function mgmtOptions(next){
+  const opts = [
+    "NDIA-managed","Plan-managed","Self-managed","Not sure"
+  ];
+  return opts.map(m=> ({label:m, value:next, onPick:()=> state.answers.mgmt = m}));
+}
+function categoryOptions(next){
+  const opts = [
+    "Core – Assistance with Daily Life",
+    "Core – Social & Community Participation",
+    "Core – Community Nursing Care",
+    "Capacity – Improved Daily Living",
+    "Capital (AT/Home Mods)",
+    "Not sure"
+  ];
+  return opts.map(c=> ({label:c, value:next, onPick:()=> state.answers.category = c}));
+}
+function multiPick(items, next){
+  return items.map(i=> ({label:i, value:next, multi:true}));
+}
+function freeType(next){
+  return [{label:"Type dates then Continue", value:next, free:true, placeholder:"e.g., Mar 2025 – Feb 2026"}];
+}
+function nextSteps(){
+  return {
+    agent:"Next steps:",
+    options:[
+      {label:"Send email to Plan Manager (budget snapshot)", value:"done", onPick:()=> flash("Use the PM template on the right")},
+      {label:"Send email to Support Coordinator (funding confirm)", value:"done", onPick:()=> flash("Use the SC template on the right")},
+      {label:"Confirm billing details (self-managed)", value:"done", onPick:()=> flash("Use the Self-managed template on the right")},
+      {label:"Open mock plan", value:"open_plan"}
+    ]
+  };
+}
+
+/* ====================================================================================
+   5) Conversation runner
+   ==================================================================================== */
+function startIfNeeded(){
+  if (!state.transcript.length){
+    say('agent', D.greet.agent);
+    setChoices(D.greet.options);
+    guidanceEl.innerHTML = D.greet.tip;
+  }else{
+    renderChat();
+    resumeChoices();
+    updateBadges();
+  }
+}
+function pick(val){
+  // Handle free-text step
+  const currentNode = current();
+  const chosen = (choicesEl.querySelector(`[data-val="${val}"]`)||{});
+  const label = chosen.textContent || val;
+
+  // Capture caller text mirroring
+  say('caller', label);
+
+  // Side effects (onPick)
+  const opt = (currentNode.options||[]).find(o=>o.value===val);
+  if (opt && typeof opt.onPick==='function'){ opt.onPick(); }
+
+  // Special actions
+  if (val==='export_json'){ exportJSON(); return; }
+  if (val==='export_csv'){ exportCSV(); return; }
+  if (val==='restart'){ localStorage.removeItem(storeKey); location.reload(); return; }
+  if (val==='open_plan'){ openPlanForContext(); return; }
+
+  // Multi-select handling
+  if (opt && opt.multi){
+    // Toggle multi
+    state.answers.risk = state.answers.risk || [];
+    const idx = state.answers.risk.indexOf(label);
+    if (idx>=0) state.answers.risk.splice(idx,1); else state.answers.risk.push(label);
+    // Keep options displayed until "Continue" is offered; so re-render a "Continue"
+    showContinue(); updateBadges(); save(); return;
+  }
+
+  // Free-type handling
+  if (opt && opt.free){
+    const input = document.createElement('input');
+    input.type = "text";
+    input.placeholder = opt.placeholder || "Type here…";
+    input.style.marginTop = "8px";
+    const box = document.createElement('div');
+    box.className = "bubble";
+    box.appendChild(input);
+    const row = document.createElement('div'); row.className = "row caller"; row.appendChild(box);
+    chatEl.appendChild(row); chatEl.scrollTop = chatEl.scrollHeight;
+
+    input.addEventListener('keydown', e=>{
+      if (e.key==='Enter'){
+        state.answers.dates = input.value.trim();
+        say('caller', input.value.trim() || "(no dates provided)");
+        state.step = val; save(); advance();
+      }
+    });
+    input.focus();
+    return;
+  }
+
+  // Advance
+  state.step = val; save(); advance();
+}
+function showContinue(){
+  setChoices([{label:"Continue", value:"done"}]);
+}
+function current(){ return D[state.step] || D.greet; }
+function advance(){
+  const node = D[state.step] || {};
+  if (node.callerAck) say('caller', node.callerAck);
+  if (node.agent){ say('agent', node.agent); }
+  // If node is a ref generated by builder
+  if (node.agent && node.options && Array.isArray(node.options)){
+    setChoices(node.options);
+  } else if (node.options && node.options.agent){ // builder result with agent/options inside
+    say('agent', node.options.agent);
+    setChoices(node.options.options);
+  } else if (node.options){
+    setChoices(node.options);
+  } else {
+    // default
+    setChoices([{label:"Continue", value:"done"}]);
+  }
+  // Guidance
+  guidanceEl.innerHTML = node.tip || guidanceForStep(state.step);
+  updateBadges();
+  save();
+}
+function resumeChoices(){
+  const node = current();
+  if (node.options && Array.isArray(node.options)){
+    setChoices(node.options);
+  } else if (node.options && node.options.options){
+    setChoices(node.options.options);
+  } else {
+    setChoices(D.greet.options);
+  }
+}
+
+/* ====================================================================================
+   6) Guidance badges
+   ==================================================================================== */
+function updateBadges(){
+  // Consent
+  const c = state.answers.consent;
+  badgeConsent.textContent = c && c.startsWith('Yes') ? 'Consent ✔' : 'Consent?';
+  badgeConsent.className = c && c.startsWith('Yes') ? 'badge ok' : 'badge warn';
+  // Mgmt
+  const m = state.answers.mgmt || '—';
+  badgeMgmt.textContent = 'Mgmt: ' + m;
+  // Category
+  const cat = state.answers.category || '—';
+  badgeCat.textContent = 'Category: ' + cat;
+}
+function guidanceForStep(step){
+  const map = {
+    caller_participant: "Confirm consent; if not ready, proceed with basics and schedule a follow-up.",
+    caller_carer: "Carer calls: verify consent or capture who will provide it.",
+    caller_sc: "SCs: confirm category & balance; they often know plan details.",
+    caller_pm: "PMs: ask for budget snapshot by category and whether a PO is needed.",
+    caller_hp: "Health professionals: capture risks and clinical needs clearly.",
+    pre_category: "Map services to funding: Personal care → Core ADL; Community → Core SCP; Nursing ongoing → Core CNC; Assessments/training → Capacity IDL.",
+    risks_captured: "Escalate high risks to clinical lead before rostering.",
+    done: "Export your transcript to debrief; restart to try a different caller."
+  };
+  return map[step] || "Follow the prompt and use “Not sure” to keep momentum.";
+}
+
+/* ====================================================================================
+   7) Mock plan opener (choose plan based on context)
+   ==================================================================================== */
+function openPlanForContext(){
+  let plan = mockPlans.pm_core_adl; // default
+  if (state.answers.mgmt?.includes('NDIA')) plan = mockPlans.ndia_nursing;
+  if (state.answers.mgmt?.includes('Self')) plan = mockPlans.self_comm;
+  if ((state.answers.service||'').toLowerCase().includes('behaviour')) plan = mockPlans.complex_behaviour;
+  planBody.innerHTML = `<h3 style="margin-top:0">${plan.title}</h3>${plan.body}`;
+  planModal.style.display = 'block';
+}
+document.getElementById('btnPlan').addEventListener('click', openPlanForContext);
+document.getElementById('closePlan').addEventListener('click', ()=> planModal.style.display='none');
+window.addEventListener('keydown', e=>{ if (e.key==='Escape') planModal.style.display='none'; });
+
+/* ====================================================================================
+   8) Export / Reset
+   ==================================================================================== */
+document.getElementById('btnReset').addEventListener('click', ()=>{ localStorage.removeItem(storeKey); location.reload(); });
 
 function exportJSON(){
-  const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
-  const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "hdheed-training.json" });
+  const payload = {
+    answers: state.answers,
+    transcript: state.transcript,
+    exportedAt: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+  const a = Object.assign(document.createElement('a'), {href:URL.createObjectURL(blob), download:'hdheed-admin-sim.json'});
   document.body.appendChild(a); a.click(); a.remove();
 }
-function toCSV(obj){
-  const rows = Object.entries(obj.answers || {}).map(([k,v])=>{
-    const val = Array.isArray(v) ? v.join("; ") : (v ?? "");
-    return `"${obj.scenarioId}","${k}","${String(val).replace(/"/g,'""')}"`;
-  });
-  return "scenario,field,value\n" + rows.join("\n");
+function toCSV(){
+  const lines = ['field,value'];
+  for (const [k,v] of Object.entries(state.answers)){
+    const val = Array.isArray(v) ? v.join('; ') : (v ?? '');
+    lines.push(`"${k}","${String(val).replace(/"/g,'""')}"`);
+  }
+  return lines.join('\n');
 }
 function exportCSV(){
-  const blob = new Blob([toCSV(state)], {type:"text/csv"});
-  const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "hdheed-training.csv" });
+  const blob = new Blob([toCSV()], {type:"text/csv"});
+  const a = Object.assign(document.createElement('a'), {href:URL.createObjectURL(blob), download:'hdheed-admin-sim.csv'});
   document.body.appendChild(a); a.click(); a.remove();
 }
-document.getElementById("btnExportJSON").addEventListener("click", exportJSON);
-document.getElementById("btnExportCSV").addEventListener("click", exportCSV);
+document.getElementById('btnExportJSON').addEventListener('click', exportJSON);
+document.getElementById('btnExportCSV').addEventListener('click', exportCSV);
 
-/* Copy active template quick */
-document.getElementById("copyTemplateBtn").addEventListener("click",()=>{
-  const a = state.answers || {};
-  let el = null;
-  if (a.mgmt?.includes("Plan-managed")) el = document.getElementById("tplPlanManager");
-  else if (a.mgmt?.includes("NDIA")) el = document.getElementById("tplSC");
-  else if (a.mgmt?.includes("Self")) el = document.getElementById("tplSM");
-  else el = document.getElementById("tplPlanManager");
-  navigator.clipboard.writeText(el.textContent.trim()).then(()=> flash("Template copied"));
-});
-
-/* Init if a previous scenario existed */
-if (state.scenarioId){
-  document.getElementById("introStep").style.display="none";
-  renderStepper();
-  updateGuide();
-}
-
-/* Close modal on Escape */
-window.addEventListener("keydown", e=>{ if (e.key==="Escape") planModal.style.display="none"; });
+/* ====================================================================================
+   9) Boot
+   ==================================================================================== */
+startIfNeeded();
 </script>
 </body>
 </html>
