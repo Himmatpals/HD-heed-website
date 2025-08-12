@@ -11,7 +11,7 @@
     --brand:#6d5bff; --accent:#ffcc33; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; --outline:#1f2a44;
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:radial-gradient(1200px 800px at 80% -20%,#1b2350,transparent),var(--bg);color:var(--ink)}
+  body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:radial-gradient(1200px 800px at 80% -20%,#1b2350,transparent),var(--bg);color:#e7ebff}
   a{color:#8ab4ff;text-decoration:none}
   header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#0d1324,#0b0f1a);border-bottom:1px solid #18203a}
   header .inner{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -21,7 +21,6 @@
   .btn{appearance:none;border:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;min-height:44px;color:#0b0f1a;background:var(--accent);box-shadow:0 6px 20px rgba(255,204,51,.25)}
   .btn.ghost{background:#1a2340;color:#e7ebff;border:1px solid #27335a}
   .btn.secondary{background:#6d5bff;color:#fff}
-  .btn.danger{background:#ef4444;color:#fff}
   .btn:disabled{opacity:.6;cursor:not-allowed}
   main{max-width:1100px;margin:0 auto;padding:18px;display:grid;gap:18px;grid-template-columns:2fr 1fr}
   @media (max-width:960px){ main{grid-template-columns:1fr} }
@@ -36,7 +35,7 @@
   .bubble{flex:1;background:#121938;border:1px solid #27335a;border-radius:14px;padding:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);line-height:1.5}
   .question{font-size:19px;font-weight:900}
   .choices{display:grid;gap:12px}
-  .choice{border:1px solid #27335a;background:linear-gradient(180deg,#121a3a,#0e1530);color:#e7ebff;border-radius:14px;padding:14px;cursor:pointer;position:relative;overflow:hidden;text-align:left}
+  .choice{border:1px solid #27335a;background:linear-gradient(180deg,#121a3a,#0e1530);color:#e7ebff;border-radius:14px;padding:14px;cursor:pointer;text-align:left}
   .choice:hover{box-shadow:0 10px 30px rgba(109,91,255,.18)}
   .choice.correct{outline:2px solid rgba(34,197,94,.95);box-shadow:0 0 0 5px rgba(34,197,94,.15)}
   .choice.wrong{outline:2px solid rgba(239,68,68,.9);box-shadow:0 0 0 5px rgba(239,68,68,.12)}
@@ -59,7 +58,7 @@
     <div class="brand">
       <div class="logo">HD</div>
       <div>
-        <div style="font-weight:900;color:#e7ebff">Mat’s Intake Trainer — Detailed (training.html)</div>
+        <div style="font-weight:900">Mat’s Intake Trainer — Detailed (training.html)</div>
         <div style="color:#9aa3bc;font-size:12px">KBC-style • Multiple choice only • Empathetic admin scripts</div>
       </div>
     </div>
@@ -73,7 +72,6 @@
 </header>
 
 <main>
-  <!-- STAGE -->
   <section class="stage">
     <div class="stage-head">
       <div class="pill">Score: <span id="score">0</span></div>
@@ -87,18 +85,15 @@
       <div class="host">
         <div class="avatar">M</div>
         <div class="bubble" id="matLine">
-          Hello, this is <strong>Mat</strong> from <strong>HD HeeD</strong>, a registered NDIS provider. You’re in the right place — I’ll guide you step by step, and if anything’s unclear just pick “Not sure” and I’ll do the heavy lifting. How can I help you today?
+          Hello, this is <strong>Mat</strong> from <strong>HD HeeD</strong>, a registered NDIS provider. You’re in the right place — I’ll guide you step by step. If anything’s unclear, pick “Not sure” and I’ll handle it. How can I help you today?
         </div>
       </div>
-
       <div class="question" id="questionText">Who’s calling today?</div>
       <div class="choices" id="choices"></div>
-
       <div class="coach" id="coachBox" style="display:none"></div>
     </div>
   </section>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="pill">Consent: <span id="badgeConsent">?</span></div>
     <div class="pill">Mgmt: <span id="badgeMgmt">—</span></div>
@@ -136,10 +131,10 @@ We’ll invoice at/under NDIS limits. Thanks!</pre>
   </aside>
 </main>
 
-<!-- MOCK PLAN MODAL -->
+<!-- Mock plan modal -->
 <div id="planModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="planTitle">
   <div class="head">
-    <h3 id="planTitle" style="margin:0;color:#e7ebff">Mock plan</h3>
+    <h3 id="planTitle" style="margin:0">Mock plan</h3>
     <button id="closePlan" class="btn ghost">Close</button>
   </div>
   <div class="body" id="planBody"></div>
@@ -148,7 +143,6 @@ We’ll invoice at/under NDIS limits. Thanks!</pre>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ====================== STATE & HELPERS ====================== */
 const storeKey='hdheed_training_v1';
 let S = {
   i: 0, score:0, used5050:false, usedHint:false,
@@ -172,171 +166,162 @@ const save=()=> localStorage.setItem(storeKey, JSON.stringify(S));
 const flash=(m)=>{ toast.textContent=m; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),1400); };
 const pct=(n,d)=> Math.round((n/d)*100);
 
-/* ====================== FOLLOW-UPS (Mat’s detailed responses) ====================== */
 const FOLLOWUP = {
   caller: {
-    A: "Thanks for letting me know you’re the participant. I’ll keep this straightforward and do the admin on your behalf where I can. You’ll always have a ‘not sure’ option — we can confirm the details later without slowing you down.",
-    B: "Thanks — supporting carers is important. I’ll keep the questions simple and note anything you’re unsure of. With the participant’s okay, I can contact the plan manager or support coordinator to confirm funding.",
-    C: "Perfect — I’ll capture the essentials and reflect the participant’s goals so your documentation lines up. I’ll also send you a plain-English summary after we confirm budgets.",
-    D: "Great to hear from the Plan Manager. If you’re happy, I’ll request a snapshot of available balances by category and check whether you need a purchase order from us.",
-    E: "Thanks for the clinical handover. I’ll note the key health risks and make sure we line up RN oversight and escalation pathways if needed.",
-    NS:"No worries — I’ll guide you through, step by step."
+    A:"Thanks for letting me know you’re the participant. I’ll keep this straightforward and do the admin on your behalf where I can.",
+    B:"Thanks — supporting carers is important. I’ll keep questions simple and note anything you’re unsure of.",
+    C:"Perfect — I’ll capture the essentials and reflect the participant’s goals so your documentation lines up.",
+    D:"Great to hear from the Plan Manager. I’ll request a snapshot of available balances by category and check for any PO requirement.",
+    E:"Thanks for the clinical handover. I’ll note key risks and make sure RN oversight/escalation is in place.",
+    NS:"No worries — I’ll guide you step by step."
   },
   consent: {
-    A: "Brilliant — thanks for the verbal okay. I’ll record who gave consent and the time. This lets me confirm the right budget quickly so we can start without surprises.",
-    B: "That’s okay — we’ll keep moving with basics and I won’t contact any third parties yet. I’ll send you a short note you can forward to the participant to confirm consent.",
-    C: "No problem at all. I’ll proceed with general questions and park anything that needs consent. We can pick that up once you’re ready.",
-    D: "Understood. I’ll collect only what you’re comfortable sharing and avoid any external contact. If that changes later, we can update the record easily.",
-    NS:"I’ll treat this as ‘not yet’ and keep things simple for now."
+    A:"Brilliant — thanks for the verbal okay. I’ll record who gave consent and when.",
+    B:"That’s okay — we’ll keep moving with basics; I won’t contact third parties yet.",
+    C:"No problem — I’ll park anything that needs consent and proceed with general questions.",
+    D:"Understood — I’ll collect only what you’re comfortable sharing.",
+    NS:"I’ll treat this as ‘not yet’ and keep things simple."
   },
   service: {
-    A: "Personal care — got it. That usually maps to the Core ‘Assistance with Daily Life’ budget. We’ll suggest safe morning/evening routines and adjust to your preferences.",
-    B: "Community participation — excellent. We’ll plan outings or appointments and consider travel needs. This often draws from Core ‘Social & Community Participation’.",
-    C: "Nursing support — thanks for flagging. We’ll check clinical needs like wound care or medication support and ensure appropriate RN oversight. Funding can be Core ‘Community Nursing Care’ or Capacity ‘Improved Daily Living’ depending on the plan.",
-    D: "Daily living skills — great focus for independence. We’ll align to goals like cooking, budgeting, or routines, usually funded by Capacity ‘Improved Daily Living’.",
-    E: "Respite/carer relief — understood. We’ll design sessions that give the primary carer a real break while keeping routines safe. This often comes from Core budgets.",
-    NS:"That’s okay — I’ll suggest a starting option and we can refine it together once we confirm funding and goals."
+    A:"Personal care — usually Core ‘Assistance with Daily Life’. We’ll suggest safe routines and adjust to preferences.",
+    B:"Community participation — often Core ‘Social & Community Participation’. We’ll plan outings and travel.",
+    C:"Nursing support — check clinical needs and RN oversight; often Core ‘Community Nursing Care’.",
+    D:"Daily living skills — typically Capacity ‘Improved Daily Living’.",
+    E:"Respite — often Core budgets; we’ll design safe sessions that give carers a break.",
+    NS:"That’s okay — I’ll suggest a starting option and confirm funding after."
   },
   mgmt: {
-    A: "NDIA-managed — thanks. With your okay, I’ll email the Support Coordinator/LAC to confirm the budget category and available balance before we roster.",
-    B: "Plan-managed — perfect. I’ll request a budget snapshot from the Plan Manager and ask if they need a purchase order. That keeps invoices smooth.",
-    C: "Self-managed — excellent. I’ll confirm your billing email and any invoice reference you prefer, and make sure our rates stay within NDIS limits.",
-    D: "Not sure — totally fine. I’ll proceed and provide you with a short message you can forward to the SC or Plan Manager to confirm the details.",
-    NS:"We’ll confirm management by email on your behalf."
+    A:"NDIA-managed — I’ll confirm budget via the SC/LAC before rostering.",
+    B:"Plan-managed — I’ll request a budget snapshot from the Plan Manager and check PO needs.",
+    C:"Self-managed — I’ll confirm billing email and any invoice reference you prefer.",
+    D:"Not sure — I’ll provide a short message you can forward to confirm details.",
+    NS:"We’ll confirm management by email for you."
   },
   dates: {
-    A: "Great — your plan is active for the next 12 months. We’ll still set a review point about 4–6 weeks before expiry to keep things seamless.",
-    B: "Thanks — expiring soon. We’ll propose a short start plan now and double-check next steps around your review so supports don’t lapse.",
-    C: "No worries — we can start with approximate timing. I’ll confirm exact dates with your SC/Plan Manager and keep you posted.",
-    D: "Okay — if the plan has expired, we’ll prepare a plan-ready proposal and coordinate with your SC/LAC so we can commence as soon as funding is active again.",
-    NS:"We’ll treat dates as ‘to be confirmed’ and handle the follow-up."
+    A:"Great — active ~12 months. We’ll review 4–6 weeks before expiry.",
+    B:"Expiring soon — we’ll propose a short start plan and manage the review timing.",
+    C:"No worries — I’ll confirm dates with SC/PM and keep you posted.",
+    D:"If expired, we’ll prepare a plan-ready proposal and coordinate with SC/LAC.",
+    NS:"We’ll treat dates as ‘to be confirmed’ and follow up."
   },
   category: {
-    A: "Assistance with Daily Life is usually the best fit for personal care and many respite supports. We’ll anchor tasks to the participant’s goals and keep notes clear.",
-    B: "Social & Community Participation suits outings, appointments, and community engagement. We’ll plan safe travel and build confidence over time.",
-    C: "Community Nursing Care is right for ongoing clinical tasks like wound management. We’ll keep an RN in the loop and set escalation pathways.",
-    D: "Improved Daily Living funds learning and clinical assessment/training. Great for building skills and independence with measurable outcomes.",
-    E: "Capital covers equipment or home modifications — not support hours. If equipment is the need, we’ll guide you through quotes/approvals.",
-    NS:"We’ll mark the category as ‘to confirm’ and verify with the SC/PM before rostering."
+    A:"ADL fits personal care/respite. We’ll anchor tasks to goals and keep notes clear.",
+    B:"SCP suits outings and community engagement.",
+    C:"CNC is right for ongoing clinical tasks with RN oversight.",
+    D:"IDL funds learning/assessment/training for independence.",
+    E:"Capital is equipment/home mods — not support hours.",
+    NS:"We’ll verify the category with SC/PM before rostering."
   },
   risk_beh: {
-    A: "Thanks for being open about behaviours. I’ll review the Behaviour Support Plan with our team, consider if two workers are appropriate, and make sure strategies are followed.",
-    B: "Okay — no behaviours flagged. We’ll still do a quick safety check in the first visit and keep communication open.",
-    C: "Understood — we’ll proceed cautiously and ask the SC for guidance if needed.",
-    D: "No pressure. We can revisit this after the first shift if that’s easier.",
-    NS:"I’ll note this for follow-up and ensure the initial roster is conservative and safe."
+    A:"Thanks for flagging behaviours. We’ll review the BSP, consider 2:1, and follow strategies.",
+    B:"No behaviours flagged — we’ll still do a quick safety check on first visit.",
+    C:"We’ll proceed cautiously and ask the SC for guidance if needed.",
+    D:"We can revisit later if easier.",
+    NS:"We’ll mark for follow-up and start conservatively."
   },
   risk_med: {
-    A: "Thanks — where medications or clinical tasks are involved, we’ll confirm charts/authorisations and RN oversight. Safety first.",
-    B: "Good to know — if anything changes, tell us and we’ll reassess promptly.",
-    C: "No worries — I’ll note it as ‘to clarify’ and request details before we roster clinical tasks.",
-    D: "All good. We can reassess once you’re comfortable.",
+    A:"For meds/clinical tasks we’ll confirm charts/authorisations and RN oversight.",
+    B:"Good to know — if anything changes, we’ll reassess.",
+    C:"We’ll clarify details before rostering clinical tasks.",
+    D:"We can reassess when you’re ready.",
     NS:"We’ll start with non-clinical tasks until confirmed."
   },
   risk_int: {
-    A: "We’ll arrange an interpreter so you can get the right support in your preferred language. Thanks for flagging it.",
-    B: "Okay — no interpreter needed. We’ll still check preferred communication (phone/SMS/email).",
-    C: "All good — I’ll keep it as ‘to confirm’ and offer an interpreter later if useful.",
-    D: "No problem — we’ll check back if communication becomes tricky.",
-    NS:"We’ll keep interpreter options open for later."
+    A:"We’ll arrange an interpreter in your preferred language.",
+    B:"Okay — no interpreter needed; we’ll confirm preferred communication.",
+    C:"We’ll keep it ‘to confirm’ and offer later if useful.",
+    D:"No problem — we’ll check back if needed.",
+    NS:"We’ll keep interpreter options open."
   },
   urgency: {
-    A: "Understood — urgent start. I’ll confirm funding today and propose a safe interim roster within 24–72 hours while we lock in the longer-term schedule.",
-    B: "Great — we’ll plan a start in the next 1–2 weeks, confirm the team, and share a clear schedule.",
-    C: "That’s fine — I’ll outline options and costs so you can decide at your pace.",
-    D: "No worries — I’ll keep it flexible and check back when you’re ready.",
-    NS:"We’ll treat timing as ‘to be confirmed’ and hold a spot where possible."
+    A:"Urgent start — we’ll confirm funding today and propose an interim roster within 24–72h.",
+    B:"Soon — we’ll plan a start in 1–2 weeks and confirm your team.",
+    C:"Exploring options — I’ll outline choices and costs at your pace.",
+    D:"Not sure — we’ll keep it flexible and check back.",
+    NS:"Timing will be ‘to be confirmed’; we’ll try to hold a spot."
   },
   next: {
-    A: "I’ll email the Plan Manager now for a budget snapshot and ask about any purchase order. We’ll include your start plan so approval is easy.",
-    B: "I’ll email the Support Coordinator/LAC to confirm the budget category and balance. Once they reply, we’ll lock in start times.",
-    C: "For self-managed, I’ll confirm your billing email and any reference you’d like on invoices. We’ll keep invoices simple and timely.",
-    D: "Let’s open the mock plan so you can see how the budgets and goals look. That helps us pick the right category.",
-    NS:"I’ll take the lead and send the right email based on your plan management. You’ll be looped in on everything."
+    A:"I’ll email the Plan Manager for a budget snapshot and PO details.",
+    B:"I’ll email the Support Coordinator/LAC to confirm category and balance.",
+    C:"For self-managed, I’ll confirm billing email and any invoice reference.",
+    D:"Let’s open the mock plan to review budgets and goals.",
+    NS:"I’ll take the lead and send the right email based on your management."
   }
 };
 
-/* ====================== STEP BUILDERS (Mat leads) ====================== */
 function o(k,t,{set=()=>{},best=false}={}){return {k,t,set,best};}
 function ns(){return {k:'NS',t:'Not sure — please guide me',set:()=>{},best:false};}
 
-function stepCallerType(){
-  return {
-    id:'caller',
-    mat:"Hello, this is <strong>Mat</strong> from <strong>HD HeeD</strong>. You’re in safe hands — I’ll guide everything, and if you’re unsure, pick “Not sure”. Who am I speaking with today?",
-    q:"Who’s calling today?",
-    options:[
-      o('A',"Participant",{set:()=>S.answers.caller='Participant',best:true}),
-      o('B',"Family member / Carer",{set:()=>S.answers.caller='Carer'}),
-      o('C',"Support Coordinator",{set:()=>S.answers.caller='Support Coordinator',best:true}),
-      o('D',"Plan Manager",{set:()=>S.answers.caller='Plan Manager'}),
-      o('E',"Health Professional",{set:()=>S.answers.caller='Health Professional'}),
-      ns()
-    ],
-    next:'consent'
-  };
-}
-function stepConsent(){
-  return {
-    id:'consent',
-    mat:"Before we go further, can I note verbal consent? That simply lets me confirm the right budget with your plan manager or support coordinator so we don’t waste time. You can withdraw it any time.",
-    q:"Consent to collect details and contact PM/SC if needed?",
-    options:[
-      o('A',"Yes, verbal consent",{set:()=>S.answers.consent='Yes',best:true}),
-      o('B',"Not yet",{set:()=>S.answers.consent='Not yet'}),
-      o('C',"Not sure",{set:()=>S.answers.consent='Not sure'}),
-      o('D',"No",{set:()=>S.answers.consent='No'}),
-      ns()
-    ],
-    next:'service'
-  };
-}
-function stepService(){
-  return {
-    id:'service',
-    mat:"Thanks. I’ll tailor supports to your goals. Tell me which area fits best right now — if you’re unsure, pick ‘Not sure’ and I’ll recommend a safe starting point.",
-    q:"Which support is needed?",
-    options:[
-      o('A',"Personal care (morning/evening routines)",{set:()=>S.answers.service='Personal care',best:true}),
-      o('B',"Community participation (outings/appointments)",{set:()=>S.answers.service='Community participation',best:true}),
-      o('C',"Nursing care (wound/medication/health)",{set:()=>S.answers.service='Nursing care',best:true}),
-      o('D',"Daily living skills (cooking/budgeting)",{set:()=>S.answers.service='Daily living skills',best:true}),
-      o('E',"Respite / carer relief",{set:()=>S.answers.service='Respite',best:true}),
-      o('NS',"Not sure — please guide me",{set:()=>S.answers.service='Not sure'})
-    ],
-    next:'mgmt'
-  };
-}
-function stepMgmt(){
-  return {
-    id:'mgmt',
-    mat:"Helpful. Next, how is the NDIS plan managed? This only changes who I email first — the support we offer stays the same.",
-    q:"Plan management type:",
-    options:[
-      o('A',"NDIA-managed",{set:()=>S.answers.mgmt='NDIA-managed',best:true}),
-      o('B',"Plan-managed",{set:()=>S.answers.mgmt='Plan-managed',best:true}),
-      o('C',"Self-managed",{set:()=>S.answers.mgmt='Self-managed',best:true}),
-      o('D',"Not sure",{set:()=>S.answers.mgmt='Not sure'}),
-      ns()
-    ],
-    next:'dates'
-  };
-}
-function stepDates(){
-  return {
-    id:'dates',
-    mat:"Do you know your plan dates? A month and year is perfectly fine. I just need to make sure we don’t plan beyond your end date.",
-    q:"Plan dates known?",
-    options:[
-      o('A',"Yes — active for about 12 months",{set:()=>S.answers.dates='Active 12m',best:true}),
-      o('B',"Yes — expiring within 1–2 months",{set:()=>S.answers.dates='Expiring soon',best:true}),
-      o('C',"Not sure",{set:()=>S.answers.dates='Not sure'}),
-      o('D',"Plan has expired",{set:()=>S.answers.dates='Expired'}),
-      ns()
-    ],
-    next:'category'
-  };
-}
+function stepCallerType(){ return {
+  id:'caller',
+  mat:"Hello, this is <strong>Mat</strong> from <strong>HD HeeD</strong>. You’re in safe hands — I’ll guide everything. Who am I speaking with today?",
+  q:"Who’s calling today?",
+  options:[
+    o('A',"Participant",{set:()=>S.answers.caller='Participant',best:true}),
+    o('B',"Family member / Carer",{set:()=>S.answers.caller='Carer'}),
+    o('C',"Support Coordinator",{set:()=>S.answers.caller='Support Coordinator',best:true}),
+    o('D',"Plan Manager",{set:()=>S.answers.caller='Plan Manager'}),
+    o('E',"Health Professional",{set:()=>S.answers.caller='Health Professional'}),
+    ns()
+  ],
+  next:'consent'
+};}
+function stepConsent(){ return {
+  id:'consent',
+  mat:"Before we go further, can I note verbal consent so I can confirm the right budget with your SC or Plan Manager?",
+  q:"Consent to collect details and contact PM/SC if needed?",
+  options:[
+    o('A',"Yes, verbal consent",{set:()=>S.answers.consent='Yes',best:true}),
+    o('B',"Not yet",{set:()=>S.answers.consent='Not yet'}),
+    o('C',"Not sure",{set:()=>S.answers.consent='Not sure'}),
+    o('D',"No",{set:()=>S.answers.consent='No'}),
+    ns()
+  ],
+  next:'service'
+};}
+function stepService(){ return {
+  id:'service',
+  mat:"Thanks. Which support fits best right now? ‘Not sure’ is always okay — I’ll suggest a safe start.",
+  q:"Which support is needed?",
+  options:[
+    o('A',"Personal care (morning/evening routines)",{set:()=>S.answers.service='Personal care',best:true}),
+    o('B',"Community participation (outings/appointments)",{set:()=>S.answers.service='Community participation',best:true}),
+    o('C',"Nursing care (wound/medication/health)",{set:()=>S.answers.service='Nursing care',best:true}),
+    o('D',"Daily living skills (cooking/budgeting)",{set:()=>S.answers.service='Daily living skills',best:true}),
+    o('E',"Respite / carer relief",{set:()=>S.answers.service='Respite',best:true}),
+    ns()
+  ],
+  next:'mgmt'
+};}
+function stepMgmt(){ return {
+  id:'mgmt',
+  mat:"How is the NDIS plan managed? This only changes who I contact first.",
+  q:"Plan management type:",
+  options:[
+    o('A',"NDIA-managed",{set:()=>S.answers.mgmt='NDIA-managed',best:true}),
+    o('B',"Plan-managed",{set:()=>S.answers.mgmt='Plan-managed',best:true}),
+    o('C',"Self-managed",{set:=>S.answers.mgmt='Self-managed'}), /* <- if your editor breaks this, see next line */
+    ns(),
+    o('D',"Not sure",{set:()=>S.answers.mgmt='Not sure'})
+  ],
+  next:'dates'
+};}
+// quick fix in case some editors mangle => above:
+(function(){ const mg = stepMgmt().options; mg[2].set = ()=>{S.answers.mgmt='Self-managed'}; })();
+
+function stepDates(){ return {
+  id:'dates',
+  mat:"Do you know your plan dates? Month/year is fine. I won’t plan beyond your end date.",
+  q:"Plan dates known?",
+  options:[
+    o('A',"Yes — active for about 12 months",{set:()=>S.answers.dates='Active 12m',best:true}),
+    o('B',"Yes — expiring within 1–2 months",{set:()=>S.answers.dates='Expiring soon',best:true}),
+    o('C',"Not sure",{set:()=>S.answers.dates='Not sure'}),
+    o('D',"Plan has expired",{set:()=>S.answers.dates='Expired'}),
+    ns()
+  ],
+  next:'category'
+};}
 function stepCategory(){
   const s=S.answers.service||'';
   let best = "Core – Assistance with Daily Life";
@@ -347,8 +332,8 @@ function stepCategory(){
   if (/behaviour/i.test(s)) best = "Core – Assistance with Daily Life";
   return {
     id:'category',
-    mat:"Based on what you’ve told me, here’s how funding usually lines up. If we’re not certain yet, we’ll confirm it over email before we roster.",
-    q:"Pick the most likely funding category to start with:",
+    mat:"Let’s pick the most likely funding category. If we’re unsure, I’ll confirm over email before rostering.",
+    q:"Likely category:",
     options:[
       o('A',"Core – Assistance with Daily Life",{set:()=>S.answers.category="Core – Assistance with Daily Life",best:best==="Core – Assistance with Daily Life"}),
       o('B',"Core – Social & Community Participation",{set:()=>S.answers.category="Core – Social & Community Participation",best:best==="Core – Social & Community Participation"}),
@@ -360,41 +345,35 @@ function stepCategory(){
     next:'risk_beh'
   };
 }
-function stepRisk(key,label){
-  return {
-    id:'risk_'+key,
-    mat:"A couple of quick safety checks so we set things up properly. Answer what you can — we’ll do the rest.",
-    q: label,
-    options:[
-      o('A',"Yes",{set:()=>S.answers.risks[key]=true,best:true}),
-      o('B',"No",{set:()=>S.answers.risks[key]=false}),
-      o('C',"Not sure",{set:()=>S.answers.risks[key]=null}),
-      o('D',"Prefer not to say",{set:()=>S.answers.risks[key]=null}),
-      ns()
-    ],
-    next: key==='beh' ? 'risk_med' : key==='med' ? 'risk_int' : 'urgency'
-  };
-}
-function stepUrgency(){
-  return {
-    id:'urgency',
-    mat:"Thanks — final question for today: how quickly would you like to start? I’ll be honest about capacity and keep you updated the whole way.",
-    q:"Start urgency:",
-    options:[
-      o('A',"Urgent (24–72h)",{set:()=>S.answers.urgency='Urgent',best:true}),
-      o('B',"Soon (1–2 weeks)",{set:()=>S.answers.urgency='Soon',best:true}),
-      o('C',"Exploring options",{set:()=>S.answers.urgency='Exploring'}),
-      o('D',"Not sure",{set:()=>S.answers.urgency='Not sure'}),
-      ns()
-    ],
-    next:'next'
-  };
-}
+function stepRisk(key,label){ return {
+  id:'risk_'+key,
+  mat:"Quick safety check. Answer what you can — we’ll do the rest.",
+  q: label,
+  options:[
+    o('A',"Yes",{set:()=>S.answers.risks[key]=true,best:true}),
+    o('B',"No",{set:()=>S.answers.risks[key]=false}),
+    o('C',"Not sure",{set:()=>S.answers.risks[key]=null}),
+    o('D',"Prefer not to say",{set:()=>S.answers.risks[key]=null}),
+    ns()
+  ],
+  next: key==='beh' ? 'risk_med' : key==='med' ? 'risk_int' : 'urgency'
+};}
+function stepUrgency(){ return {
+  id:'urgency',
+  mat:"How quickly would you like to start? I’ll be upfront about capacity and keep you updated.",
+  q:"Start urgency:",
+  options:[
+    o('A',"Urgent (24–72h)",{set:()=>S.answers.urgency='Urgent',best:true}),
+    o('B',"Soon (1–2 weeks)",{set:()=>S.answers.urgency='Soon',best:true}),
+    o('C',"Exploring options",{set:()=>S.answers.urgency='Exploring'}),
+    o('D',"Not sure",{set:()=>S.answers.urgency='Not sure'}),
+    ns()
+  ],
+  next:'next'
+};}
 function stepNext(){
   const m=S.answers.mgmt||'';
-  let bestIdx = 0; // default PM
-  if (/NDIA/i.test(m)) bestIdx = 1;
-  if (/Self/i.test(m)) bestIdx = 2;
+  let bestIdx = 0; if (/NDIA/i.test(m)) bestIdx = 1; if (/Self/i.test(m)) bestIdx = 2;
   const opts = [
     o('A',"Email Plan Manager for budget snapshot",{best:bestIdx===0}),
     o('B',"Email Support Coordinator for funding confirmation",{best:bestIdx===1}),
@@ -402,7 +381,6 @@ function stepNext(){
     o('D',"Open mock plan",{best:false}),
     ns()
   ];
-  // attach quick actions
   opts.forEach(x=>{
     if (x.k==='D') x.action = openPlan;
     if (x.k==='A') x.action = ()=>flash("Use the Plan Manager template");
@@ -417,22 +395,19 @@ function stepNext(){
     next:'wrap'
   };
 }
-function stepWrap(){
-  return {
-    id:'wrap',
-    mat:"That’s the initial admin complete — nice work. I’ll summarise today’s notes, confirm funding by email, and send you start times. Would you like to export this practice run?",
-    q:"What next?",
-    options:[
-      {k:'A',t:"Export JSON",action:exportJSON},
-      {k:'B',t:"Export CSV",action:exportCSV},
-      {k:'C',t:"Restart",action:()=>{localStorage.removeItem(storeKey);location.reload();}},
-      {k:'D',t:"Open mock plan",action:openPlan},
-      {k:'E',t:"Practice again",action:()=>{S.i=0;S.score=0;save();renderStep();}}
-    ]
-  };
-}
+function stepWrap(){ return {
+  id:'wrap',
+  mat:"That’s the initial admin complete — nice work. Export this practice run or restart to try another path.",
+  q:"What next?",
+  options:[
+    {k:'A',t:"Export JSON",action:exportJSON},
+    {k:'B',t:"Export CSV",action:exportCSV},
+    {k:'C',t:"Restart",action:()=>{localStorage.removeItem(storeKey);location.reload();}},
+    {k:'D',t:"Open mock plan",action:openPlan},
+    {k:'E',t:"Practice again",action:()=>{S.i=0;S.score=0;save();renderStep();}}
+  ]
+};}
 
-/* ====================== FLOW ====================== */
 const STEPS = [
   stepCallerType(),
   stepConsent(),
@@ -449,18 +424,15 @@ const STEPS = [
 ];
 
 function detailedFollowup(stepId, key){
-  const mapKey = stepId.replace('risk_',''); // unify risk keys
-  const dict = FOLLOWUP[mapKey];
-  if (!dict) return "";
+  const mapKey = stepId.replace('risk_','');
+  const dict = FOLLOWUP[mapKey]; if (!dict) return "";
   return dict[key] || dict['NS'] || "";
 }
 
-/* ====================== RENDER & CHOOSE ====================== */
 function renderStep(){
   const step = STEPS[S.i] || STEPS[STEPS.length-1];
   matLine.innerHTML = step.mat;
   questionText.innerHTML = step.q;
-
   choicesEl.innerHTML = '';
   step.options.forEach(opt=>{
     const btn = document.createElement('button');
@@ -469,10 +441,9 @@ function renderStep(){
     btn.addEventListener('click',()=> choose(opt, step));
     choicesEl.appendChild(btn);
   });
-
   coachBox.style.display='none';
   scoreEl.textContent = S.score;
-  bar.style.width = pct(S.i, STEPS.length-1) + '%';
+  bar.style.width = Math.round((S.i/(STEPS.length-1))*100) + '%';
   updateBadges();
   save();
 }
@@ -480,8 +451,6 @@ function renderStep(){
 function choose(opt, step){
   say(`Caller: ${opt.k} – ${opt.t}`);
   if (opt.set) opt.set();
-
-  // highlight best/wrong
   const btns = Array.from(choicesEl.children);
   btns.forEach((el,i)=>{
     const o = step.options[i];
@@ -489,50 +458,35 @@ function choose(opt, step){
     if (o===opt && !o.best) el.classList.add('wrong');
     el.disabled = true;
   });
-
-  // score
   if (opt.best) S.score += 10; else if (opt.k==='NS') S.score += 2;
   scoreEl.textContent = S.score;
-
-  // Mat’s detailed follow-up for THIS choice
   const fu = detailedFollowup(step.id, opt.k);
-  if (fu){
-    coachBox.style.display='block';
-    coachBox.innerHTML = fu;
-  }
-
-  // quick actions
+  if (fu){ coachBox.style.display='block'; coachBox.innerHTML = fu; }
   if (opt.action) opt.action();
-
-  // advance
   setTimeout(()=>{
-    const nextId = step.next;
-    const idx = STEPS.findIndex(s=>s.id===nextId);
+    const idx = STEPS.findIndex(s=>s.id===step.next);
     S.i = idx>=0 ? idx : Math.min(S.i+1, STEPS.length-1);
     renderStep();
   }, 1100);
 }
 
-/* ====================== LIFELINES ====================== */
 let usedThisQ5050=false;
 document.getElementById('ll5050').addEventListener('click', ()=>{
   if (S.used5050 || usedThisQ5050) return;
   const step = STEPS[S.i]; if (!step) return;
   const btns = Array.from(choicesEl.children);
   const wrongs = btns.filter((_,i)=>!step.options[i].best && step.options[i].k!=='NS');
-  // hide all wrongs except one (keeps best + one other + Not sure)
   shuffle(wrongs).slice(0, Math.max(0,wrongs.length-1)).forEach(el=> el.style.display='none');
   S.used5050 = true; usedThisQ5050=true; save(); flash('50:50 used');
 });
 document.getElementById('llHint').addEventListener('click', ()=>{
   const step = STEPS[S.i];
   coachBox.style.display='block';
-  coachBox.innerHTML = "<strong>Hint:</strong> Consent first, then management type, then pick the category that best funds the requested support. ‘Not sure’ is safe — we’ll confirm by email.";
+  coachBox.innerHTML = "<strong>Hint:</strong> Consent → Management → Category. ‘Not sure’ is safe — we’ll confirm by email.";
   S.usedHint = true; save(); flash('Hint shown');
 });
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
-/* ====================== MOCK PLAN VIEWER ====================== */
 function planHTML({participant,dates,mgmt,contacts,budgets,goals,notes}){
   const rows = budgets.map(([label,total,used])=>{
     const avail=total-used, pct=Math.round(avail/total*100);
@@ -584,7 +538,7 @@ const plans = {
     contacts:"Billing: js.bills@example.com",
     budgets:[["Core – Social & Community Participation",9000,1200]],
     goals:["Increase community engagement","Build confidence with transport"],
-    notes:"Prefers SMS; mornings best due to anxiety in busy places."
+    notes:"Prefers SMS; mornings best due to anxiety."
   })},
   complex_bsp: {title:"Plan-managed • Personal care with BSP (2:1)", body: planHTML({
     participant:"K. R. • Penrith NSW • NDIS 55…221",
@@ -602,14 +556,13 @@ function openPlan(){
   if (/NDIA/i.test(S.answers.mgmt||'')) p=plans.ndia_nursing;
   if (/Self/i.test(S.answers.mgmt||'')) p=plans.self_comm;
   if ((S.answers.service||'').toLowerCase().includes('behaviour')) p=plans.complex_bsp;
-  planBody.innerHTML = `<h3 style="margin-top:0;color:#e7ebff">${p.title}</h3>${p.body}`;
+  planBody.innerHTML = `<h3 style="margin-top:0">${p.title}</h3>${p.body}`;
   planModal.style.display='block';
 }
 document.getElementById('btnPlan').addEventListener('click', openPlan);
 document.getElementById('closePlan').addEventListener('click', ()=> document.getElementById('planModal').style.display='none');
-window.addEventListener('keydown', e=>{ if (e.key==='Escape') document.getElementById('planModal').style.display='none'); });
+window.addEventListener('keydown', e=>{ if (e.key==='Escape') document.getElementById('planModal').style.display='none'; });
 
-/* ====================== EXPORT & RESET ====================== */
 document.getElementById('btnReset').addEventListener('click', ()=>{ localStorage.removeItem(storeKey); location.reload(); });
 function exportJSON(){
   const payload = {score:S.score, answers:S.answers, transcript:S.transcript, exportedAt:new Date().toISOString()};
@@ -639,7 +592,6 @@ function exportCSV(){
 document.getElementById('btnExportJSON').addEventListener('click', exportJSON);
 document.getElementById('btnExportCSV').addEventListener('click', exportCSV);
 
-/* ====================== PROGRESS & BADGES ====================== */
 function updateBadges(){
   badgeCaller.textContent = S.answers.caller || '—';
   badgeConsent.textContent = S.answers.consent || '?';
@@ -649,7 +601,68 @@ function updateBadges(){
   badgeUrgency.textContent = S.answers.urgency || '—';
 }
 
-/* ====================== BOOT ====================== */
+function renderStep(){
+  const step = STEPS[S.i] || STEPS[STEPS.length-1];
+  matLine.innerHTML = step.mat;
+  questionText.innerHTML = step.q;
+  choicesEl.innerHTML = '';
+  step.options.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className='choice';
+    btn.innerHTML = `<strong>${opt.k}.</strong> ${opt.t}`;
+    btn.addEventListener('click',()=> choose(opt, step));
+    choicesEl.appendChild(btn);
+  });
+  coachBox.style.display='none';
+  scoreEl.textContent = S.score;
+  bar.style.width = Math.round((S.i/(STEPS.length-1))*100) + '%';
+  updateBadges();
+  save();
+}
+
+function choose(opt, step){
+  say(`Caller: ${opt.k} – ${opt.t}`);
+  if (opt.set) opt.set();
+  const btns = Array.from(choicesEl.children);
+  btns.forEach((el,i)=>{
+    const o = step.options[i];
+    if (o.best) el.classList.add('correct');
+    if (o===opt && !o.best) el.classList.add('wrong');
+    el.disabled = true;
+  });
+  if (opt.best) S.score += 10; else if (opt.k==='NS') S.score += 2;
+  scoreEl.textContent = S.score;
+  const fu = detailedFollowup(step.id, opt.k);
+  if (fu){ coachBox.style.display='block'; coachBox.innerHTML = fu; }
+  if (opt.action) opt.action();
+  setTimeout(()=>{
+    const idx = STEPS.findIndex(s=>s.id===step.next);
+    S.i = idx>=0 ? idx : Math.min(S.i+1, STEPS.length-1);
+    renderStep();
+  }, 1100);
+}
+
+function detailedFollowup(stepId, key){
+  const mapKey = stepId.replace('risk_','');
+  const dict = FOLLOWUP[mapKey]; if (!dict) return "";
+  return dict[key] || dict['NS'] || "";
+}
+
+const STEPS = [
+  stepCallerType(),
+  stepConsent(),
+  stepService(),
+  stepMgmt(),
+  stepDates(),
+  stepCategory(),
+  stepRisk('beh','Behaviours of concern or Behaviour Support Plan?'),
+  stepRisk('med','Medications or clinical tasks needed?'),
+  stepRisk('int','Interpreter required?'),
+  stepUrgency(),
+  stepNext(),
+  stepWrap()
+];
+
 renderStep();
 </script>
 </body>
