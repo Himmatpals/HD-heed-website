@@ -193,6 +193,32 @@
     @media (prefers-reduced-motion: reduce){
       .enquiry-btn,.chip,.hero::after,.card,.floating-referral{animation:none}
     }
+
+    /* === Additions/overrides === */
+
+    /* Ella portrait floating above the CTA */
+    .floating-referral { position: fixed; } /* ensure positioned for child */
+    .floating-referral .ella-float-img{
+      position:absolute;
+      top:-54px;
+      left:50%;
+      transform:translateX(-50%);
+      width:64px; height:64px;
+      border-radius:50%;
+      background:#fff;
+      border:3px solid #fff;
+      box-shadow:0 8px 20px rgba(0,0,0,.25);
+      pointer-events:none;
+    }
+
+    /* Lift the floating button exactly 2cm higher than before */
+    .floating-referral{ bottom: calc(24px + 2cm) !important; }
+    @media (min-width:980px){
+      .floating-referral{ bottom: calc(34px + 2cm) !important; }
+    }
+    @media (max-width:480px){
+      .floating-referral{ bottom: calc(12px + 2cm) !important; }
+    }
   </style>
 </head>
 <body>
@@ -464,6 +490,7 @@
   <!-- Floating ELLA Button -->
   <a href="#" class="floating-referral" aria-label="Talk to ELLA"
      onclick="(window.ELLA||window.ALAN).open();return false;">
+    <img src="images/ella/ella-default.png" alt="Ella" class="ella-float-img" aria-hidden="true">
     <span class="title">💬 Talk to ELLA</span>
     <span class="sub">I’m quicker than a phone call, easy to talk to, and can organise help fast.</span>
   </a>
@@ -873,7 +900,7 @@
              o('D','Daily living skills',()=>{S.service='Daily living skills';S.cat='Capacity – Improved Daily Living';}), NS() ]},
     {id:'rostering', q:"What time windows suit you for support visits?",
       opts:[ o('A','Weekday mornings (7–11am)',()=>S.rostering='Weekday AM'),
-             o('B','Weekday afternoons (12–4pm)',()=>S.rostering='Weekday PM'),
+             o('B','Weekday afternoons (12–4pm)',=>S.rostering='Weekday PM'),
              o('C','Evenings (5–9pm)',()=>S.rostering='Evenings'),
              o('D','Weekends',()=>S.rostering='Weekends'), NS('Flexible') ]},
     {id:'pref', q:"Any preferences we should know?",
@@ -885,7 +912,7 @@
       opts:[ o('A','NDIA-managed',()=>S.mgmt='NDIA-managed'),
              o('B','Plan-managed',()=>S.mgmt='Plan-managed'),
              o('C','Self-managed',()=>S.mgmt='Self-managed'),
-             o('D','Not sure',()=>S.mgmt='Not sure'), NS() ]},
+             o('D','Not sure',=>S.mgmt='Not sure'), NS() ]},
     {id:'dates', q:"Do you know the plan dates?",
       opts:[ o('A','Active',()=>S.dates='Active'),
              o('B','Expiring soon',()=>S.dates='Expiring soon'),
@@ -1173,7 +1200,22 @@
     greet.style.display='none';
     panel.style.display='block';
     if (window.speechSynthesis){ pickVoice(); }
-    S.i=0; save(); render();
+
+    // reset flow to start
+    S.i=0; save();
+
+    // Intro text (polished) before Question 1
+    const introMsg = "Hi, I’m Ella — your AI assistant. You don’t need to call our team. Just answer these well-directed multiple-choice questions and our team will be fully prepared when they get in touch with you.";
+
+    // Show intro on screen, speak it, then move to Question 1
+    qEl.textContent = introMsg;
+    optsEl.innerHTML = "";
+    endBox.style.display = "none";
+    setPortrait("default");
+    speak(introMsg);
+
+    // Delay rendering the first question until after the intro
+    setTimeout(() => { render(); }, 4800);
   }
   function closePanel(){ panel.style.display='none'; try{ window.speechSynthesis.cancel(); }catch{} }
 
@@ -1224,4 +1266,3 @@
 <!-- === /ELLA (v3.1) === -->
 </body>
 </html>
-```0
