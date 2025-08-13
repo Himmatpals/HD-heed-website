@@ -1,0 +1,683 @@
+<!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.3 with portraits) === -->
+<style>
+  :root{ --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153; --al-text:#e8edff; --al-accent:#ffc107; }
+  /* Greeting */
+  #alan-greet{position:fixed;right:18px;bottom:18px;z-index:9999;display:none}
+  #alan-greet .card{
+    max-width:560px;width:calc(100vw - 36px);background:#0e1428;color:var(--al-text);
+    border:1px solid var(--al-line);border-radius:16px;box-shadow:0 24px 90px rgba(0,0,0,.55);
+    padding:18px;font-family:Inter,system-ui
+  }
+  #alan-greet h2{margin:0 0 6px 0;font-size:1.28rem}
+  #alan-greet p{margin:0 0 12px 0;opacity:.95;font-size:1rem;line-height:1.5}
+  .al-btn{border:0;border-radius:12px;padding:12px 16px;font-weight:900;cursor:pointer}
+  .al-btn.primary{background:var(--al-accent);color:#2a2100;box-shadow:0 12px 34px rgba(0,0,0,.35)}
+  .al-btn.ghost{background:#121a3a;color:#e7ebff;border:1px solid var(--al-line)}
+
+  /* Panel (wider; expands left) */
+  #alan-panel{position:fixed;right:18px;bottom:18px;z-index:10000;display:none}
+  #alan-panel .wrap{
+    width:680px; max-width:calc(100vw - 36px); max-height:85vh;
+    background:linear-gradient(180deg,#10172a,#0b0f1a);color:var(--al-text);
+    border:1px solid var(--al-line);border-radius:18px;box-shadow:0 28px 110px rgba(0,0,0,.6);overflow:hidden;
+    font-family:Inter,system-ui;display:flex;flex-direction:column
+  }
+  @media (min-width:1100px){ #alan-panel .wrap{ width:860px; } }
+
+  .al-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--al-line);background:#0d1428}
+  .al-head .avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ffcdd2,#ffe0e0);display:grid;place-items:center;color:#5a1b29;font-weight:900}
+  .al-head .ttl{font-weight:900}
+
+  /* Body: bigger portrait column */
+  .al-body{ display:grid; grid-template-columns:220px 1fr; gap:16px;overflow:auto;min-height:0;padding:16px }
+  .al-portrait{position:sticky;top:64px;align-self:start}
+  .al-portrait img{ width:100%;height:auto;display:block; border:none;background:transparent;border-radius:16px; filter: drop-shadow(0 18px 36px rgba(0,0,0,.35)); }
+  .al-main{display:grid;gap:12px}
+  .al-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:#b7c6ff}
+  .al-meter{height:8px;background:#101838;border:1px solid var(--al-line);border-radius:999px;overflow:hidden;flex:1}
+  .al-meter>div{height:100%;background:linear-gradient(90deg,#ffd95c,#ffe78f);width:0%}
+  .al-q{font-size:1.25rem;font-weight:900;line-height:1.4}
+  .al-opts{display:grid;gap:10px}
+  .al-chip{border:1px solid var(--al-line);background:linear-gradient(180deg,#121a3a,#0f172f);color:#e7ebff;border-radius:12px;padding:14px;text-align:left;cursor:pointer;font-size:1.02rem}
+  .al-chip:hover{box-shadow:0 12px 34px rgba(0,0,0,.28)}
+  .al-foot{position:sticky;bottom:0;z-index:2;display:flex;gap:8px;align-items:center;justify-content:space-between;border-top:1px dashed var(--al-line);padding:10px;background:#0b1226}
+  .al-pill{border:1px solid var(--al-line);background:#0f1937;border-radius:999px;padding:6px 10px;color:#cfe0ff;font-size:12px}
+  .al-mic{border:1px solid var(--al-line);background:#101a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;font-weight:800;cursor:pointer}
+  .al-mic.on{background:#13244f}
+  .al-close{border:1px solid var(--al-line);background:#121a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;cursor:pointer}
+
+  /* Inline boxes */
+  .al-inlinebox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px;margin-top:6px}
+  .al-inlinebox input, .al-inlinebox select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px}
+
+  /* End form */
+  .al-endbox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px}
+  .al-endbox input, .al-endbox textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px}
+  .al-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+  @media (max-width:640px){ .al-body{grid-template-columns:1fr} .al-portrait{position:static;max-width:200px;margin:0 auto} }
+</style>
+
+<!-- GREET -->
+<div id="alan-greet" aria-live="polite">
+  <div class="card">
+    <h2>Hi, I’m <strong id="al-greet-name">ELLA</strong> — your intake assistant</h2>
+    <p>
+      Skip the wait — talk to me and I’ll organise help <strong>faster than a phone call</strong>.
+      I’m quick, friendly, and as easy to talk to as our team. I’ll ask a few short questions and do the admin for you.
+    </p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button id="alan-start" class="al-btn primary" aria-label="Let’s talk">Let’s talk</button>
+      <button id="alan-hide" class="al-btn ghost" aria-label="Not now">Not now</button>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div id="alan-panel" role="dialog" aria-label="Chat with ELLA">
+  <div class="wrap">
+    <div class="al-head">
+      <div class="avatar" id="al-avatar">EL</div>
+      <div class="ttl" id="al-title">ELLA — Intake Assistant</div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <span class="al-pill">Voice: <span id="al-voice" style="color:#ffe28f">On</span></span>
+        <button id="al-close" class="al-close" type="button" aria-label="Close">Close</button>
+      </div>
+    </div>
+
+    <div class="al-body">
+      <!-- Left portrait -->
+      <div class="al-portrait">
+        <img id="al-portrait-img" src="images/ella/ella-default.png" alt="Ella — friendly assistant portrait">
+      </div>
+
+      <!-- Right content -->
+      <div class="al-main">
+        <div class="al-meta">
+          <span id="al-step">Step 1/15</span>
+          <div class="al-meter" aria-label="Progress"><div id="al-bar"></div></div>
+        </div>
+        <div id="al-q" class="al-q">…</div>
+        <div id="al-opts" class="al-opts"></div>
+        <div id="al-system" style="font-size:12px;color:#a8b6e8"></div>
+
+        <!-- End details -->
+        <div id="al-end" class="al-endbox" style="display:none">
+          <div style="font-weight:900">Optional details to speed things up</div>
+          <input id="al-name" placeholder="Your name or initials (optional)">
+          <input id="al-email" placeholder="Email (required if no phone)">
+          <input id="al-phone" placeholder="Phone (required if no email)">
+          <textarea id="al-notes" rows="4" placeholder="Anything else you’d like us to know (optional)"></textarea>
+          <div class="al-actions">
+            <button id="al-send" class="al-btn primary" disabled>Send now</button>
+            <button id="al-later" class="al-btn ghost">Do later</button>
+            <button id="al-download" class="al-btn ghost">Download summary</button>
+          </div>
+          <div id="al-contact-warning" style="font-size:12px;color:#ffd95c;display:none">Please provide at least an email or a phone number to send now.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="al-foot">
+      <div class="al-pill">Tap “Click to talk” to speak • Or tap a choice</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="al-mic" class="al-mic" aria-pressed="false">🎤 Click to talk</button>
+        <button id="al-restart" class="al-mic">↻ Restart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ===== Config ===== */
+  const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn";
+  const SITE_EMAIL  = "info@hdheed.com.au";
+  const SITE_PHONE  = "02 8630 5500";
+  const PREFER_MALE_VOICE = false; // prefer female for ELLA
+
+  /* ===== Portraits per step (put images in /images/ella/) ===== */
+  const ELLA_IMAGES = {
+    default: "images/ella/ella-default.png",
+    caller:  "images/ella/ella-caller.png",
+    consent: "images/ella/ella-consent.png",
+    loc:     "images/ella/ella-location.png",
+    service: "images/ella/ella-service.png",
+    rostering:"images/ella/ella-rostering.png",
+    pref:    "images/ella/ella-preferences.png",
+    mgmt:    "images/ella/ella-management.png",
+    dates:   "images/ella/ella-dates.png",
+    hrs:     "images/ella/ella-hours.png",
+    risk_beh:"images/ella/ella-risk-beh.png",
+    risk_med:"images/ella/ella-risk-med.png",
+    risk_int:"images/ella/ella-interpreter.png",
+    urgency: "images/ella/ella-urgency.png",
+    contact_win:"images/ella/ella-contact-window.png",
+    final:   "images/ella/ella-summary.png"
+  };
+
+  /* ===== State & DOM ===== */
+  const SKEY='hdheed_ella_v33';
+  let S = {
+    i:0,
+    caller:null, consent:null,
+    suburb:null, postcode:null,
+    service:null, mgmt:null, dates:null, cat:null,
+    hrs:null,
+    risks:{beh:null, med:null, int:null},
+    interpreter:{language:null},
+    pref:{worker:null, gender:null, transport:null, access:null, none:false},
+    urgency:null, rostering:null,
+    contact_window:null,
+    name:null, email:null, phone:null, route:null,
+    custom:{}, notes:[]
+  };
+  try{ const prev=JSON.parse(localStorage.getItem(SKEY)||'null'); if(prev) S=prev; }catch{}
+  const save=()=>{ try{ localStorage.setItem(SKEY, JSON.stringify(S)); }catch{} };
+  const greet = document.getElementById('alan-greet');
+  const greetName = document.getElementById('al-greet-name');
+  const startBtn = document.getElementById('alan-start');
+  const hideBtn  = document.getElementById('alan-hide');
+  const panel = document.getElementById('alan-panel');
+  const qEl   = document.getElementById('al-q');
+  const optsEl= document.getElementById('al-opts');
+  const stepEl= document.getElementById('al-step');
+  const barEl = document.getElementById('al-bar');
+  const sysEl = document.getElementById('al-system');
+  const micBtn= document.getElementById('al-mic');
+  const restartBtn = document.getElementById('al-restart');
+  const voiceBadge = document.getElementById('al-voice');
+  const endBox = document.getElementById('al-end');
+  const fName = document.getElementById('al-name');
+  const fEmail= document.getElementById('al-email');
+  const fPhone= document.getElementById('al-phone');
+  const fNotes= document.getElementById('al-notes');
+  const btnSend = document.getElementById('al-send');
+  const btnLater= document.getElementById('al-later');
+  const btnDownload= document.getElementById('al-download');
+  const headerTitle = document.getElementById('al-title');
+  const avatar = document.getElementById('al-avatar');
+  const contactWarn = document.getElementById('al-contact-warning');
+  const portraitImg = document.getElementById('al-portrait-img');
+  /* ===== Voice (TTS + SR) ===== */
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recog = null, speaking=false, voice=null, assistantName='ELLA';
+
+  function pickVoice(){
+    const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+    function likeFemale(v){ return /female|samantha|victoria|google uk english female|microsoft (aria|zoe|natasha|jenny|lisa|sonia|hazel)/i.test(v.name); }
+    function likeMale(v){ return /male|daniel|google uk english male|microsoft (david|mark|guy|george)/i.test(v.name); }
+    voice = PREFER_MALE_VOICE ? (voices.find(likeMale)||voices.find(v=>/en/i.test(v.lang))) :
+                                (voices.find(likeFemale)||voices.find(v=>/en/i.test(v.lang)));
+    headerTitle.textContent = `${assistantName} — Intake Assistant`;
+    greetName.textContent = assistantName;
+    avatar.textContent = assistantName.slice(0,2).toUpperCase();
+  }
+  if (SR){
+    recog = new SR(); recog.lang='en-AU'; recog.interimResults=false; recog.continuous=false;
+    recog.onresult = (e)=>{ if (speaking) return; const t=e.results[0][0].transcript; handleSpeech(t); };
+    recog.onend = ()=>{ document.getElementById('al-mic').classList.remove('on'); document.getElementById('al-mic').setAttribute('aria-pressed','false'); };
+  } else { voiceBadge.textContent='Off'; }
+
+  function speak(text){
+    if (!('speechSynthesis' in window)) return;
+    const u = new SpeechSynthesisUtterance(String(text));
+    if (voice) u.voice = voice;
+    u.lang='en-AU';
+    u.onstart=()=>{ speaking=true; try{ recog && recog.abort(); }catch{} };
+    u.onend=()=>{ speaking=false; };
+    window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+  }
+  function listen(){
+    if (!recog || speaking) return;
+    try{
+      document.getElementById('al-mic').classList.add('on');
+      document.getElementById('al-mic').setAttribute('aria-pressed','true');
+      recog.start();
+    }catch{}
+  }
+
+  /* ===== Flow ===== */
+  const NS = (t='Not sure — please guide me')=>({k:'NS',t,apply:()=>{}});
+  const o = (k,t,apply=()=>{})=>({k,t,apply});
+
+  function steps(){ return [
+    {id:'caller', q:"Who am I speaking with today?",
+      opts:[ o('A','Participant',()=>S.caller='Participant'),
+             o('B','Family / Carer',()=>S.caller='Carer'),
+             o('C','Support Coordinator',()=>S.caller='Support Coordinator'),
+             o('D','Plan Manager',()=>S.caller='Plan Manager'), NS() ]},
+    {id:'consent', q:"May I note verbal consent to collect details and, if needed, contact your Support Coordinator or Plan Manager?",
+      opts:[ o('A','Yes',()=>S.consent='Yes'),
+             o('B','Not yet',()=>S.consent='Not yet'),
+             o('C','Not sure',()=>S.consent='Not sure'),
+             o('D','No',()=>S.consent='No'), NS() ]},
+    {id:'loc', q:"Where do you need support?",
+      opts:[ o('A','I’ll type suburb + postcode (required before continuing)',()=>{}),
+             o('B','Greater Sydney (unsure of suburb)',()=>{S.suburb='Greater Sydney';}),
+             o('C','Regional NSW',()=>{S.suburb='Regional NSW';}),
+             o('D','Prefer not to say',()=>{S.suburb=null;}), NS() ]},
+    {id:'service', q:"Which support fits best now?",
+      opts:[ o('A','Personal care',()=>{S.service='Personal care';S.cat='Core – Assistance with Daily Life';}),
+             o('B','Community participation',()=>{S.service='Community participation';S.cat='Core – Social & Community Participation';}),
+             o('C','Nursing care',()=>{S.service='Nursing care';S.cat='Core – Community Nursing Care';}),
+             o('D','Daily living skills',()=>{S.service='Daily living skills';S.cat='Capacity – Improved Daily Living';}), NS() ]},
+    {id:'rostering', q:"What time windows suit you for support visits?",
+      opts:[ o('A','Weekday mornings (7–11am)',()=>S.rostering='Weekday AM'),
+             o('B','Weekday afternoons (12–4pm)',()=>S.rostering='Weekday PM'),
+             o('C','Evenings (5–9pm)',()=>S.rostering='Evenings'),
+             o('D','Weekends',()=>S.rostering='Weekends'), NS('Flexible') ]},
+    {id:'pref', q:"Any preferences we should know?",
+      opts:[ o('A','Worker gender preference',()=>S.pref.gender='Has preference'),
+             o('B','Transport required',()=>S.pref.transport='Yes'),
+             o('C','Keysafe / someone home for access',()=>S.pref.access='Ready'),
+             o('D','No preferences',()=>{S.pref.none=true}), NS() ]},
+    {id:'mgmt', q:"How is the NDIS plan managed?",
+      opts:[ o('A','NDIA-managed',()=>S.mgmt='NDIA-managed'),
+             o('B','Plan-managed',()=>S.mgmt='Plan-managed'),
+             o('C','Self-managed',()=>S.mgmt='Self-managed'),
+             o('D','Not sure',()=>S.mgmt='Not sure'), NS() ]},
+    {id:'dates', q:"Do you know the plan dates?",
+      opts:[ o('A','Active',()=>S.dates='Active'),
+             o('B','Expiring soon',()=>S.dates='Expiring soon'),
+             o('C','Not sure',()=>S.dates='Not sure'),
+             o('D','Expired',()=>S.dates='Expired'), NS() ]},
+    {id:'hrs', q:"Roughly how many support hours per week?",
+      opts:[ o('A','2–4 hrs/week',()=>S.hrs='2–4'),
+             o('B','5–10 hrs/week',()=>S.hrs='5–10'),
+             o('C','10+ hrs/week',()=>S.hrs='10+'),
+             o('D','Not sure',()=>S.hrs='Not sure'), NS() ]},
+    {id:'risk_beh', q:"Any behaviours of concern / Behaviour Support Plan?",
+      opts:[ o('A','Yes',()=>S.risks.beh=true),
+             o('B','No',()=>S.risks.beh=false),
+             o('C','Not sure',()=>S.risks.beh=null),
+             o('D','Prefer not to say',()=>S.risks.beh=null), NS() ]},
+    {id:'risk_med', q:"Any clinical needs (meds / wound care)?",
+      opts:[ o('A','Yes',()=>S.risks.med=true),
+             o('B','No',()=>S.risks.med=false),
+             o('C','Not sure',()=>S.risks.med=null),
+             o('D','Prefer not to say',()=>S.risks.med=null), NS() ]},
+    {id:'risk_int', q:"Would you like an interpreter?",
+      opts:[ o('A','Yes (choose language)',()=>{S.risks.int=true}),
+             o('B','No',()=>S.risks.int=false),
+             o('C','Not sure',()=>S.risks.int=null),
+             o('D','Prefer not to say',()=>S.risks.int=null), NS() ]},
+    {id:'urgency', q:"When would you like to start?",
+      opts:[ o('A','Urgent (24–72h)',()=>S.urgency='Urgent'),
+             o('B','Soon (1–2 weeks)',()=>S.urgency='Soon'),
+             o('C','Exploring options',()=>S.urgency='Exploring'),
+             o('D','Not sure',()=>S.urgency='Not sure'), NS() ]},
+    {id:'contact_win', q:"What time window suits you best to be contacted?",
+      opts:[ o('A','Morning (9–12)',()=>S.contact_window='Morning (9–12)'),
+             o('B','Afternoon (12–4)',()=>S.contact_window='Afternoon (12–4)'),
+             o('C','Evening (4–7)',()=>S.contact_window='Evening (4–7)'),
+             o('D','Anytime',()=>S.contact_window='Anytime'), NS('Just type your preference') ]},
+    {id:'final', q:"Shall I prepare this now as a Referral (A) or a General Enquiry (B)?",
+      opts:[ o('A','Referral',()=>S.route='Referral'),
+             o('B','Enquiry',()=>S.route='Enquiry'),
+             o('C','Review first',()=>S.route='Review'),
+             o('D','Save only (no send)',()=>S.route='Save'), NS() ]}
+  ];}
+
+  /* Labels for the first “typed” option */
+  const CUSTOM_LABELS = {
+    caller:"Want to type who you are?",
+    consent:"Want to type your consent status?",
+    loc:"Want to type your exact suburb and postcode?",
+    service:"Want to type a specific support?",
+    rostering:"Want to type your exact visit times?",
+    pref:"Want to type your preferences?",
+    mgmt:"Want to type plan management?",
+    dates:"Want to type your exact plan dates?",
+    hrs:"Want to type hours per week?",
+    risk_beh:"Want to type behaviour details?",
+    risk_med:"Want to type clinical needs?",
+    risk_int:"Want to type the interpreter language?",
+    urgency:"Want to type when to start?",
+    contact_win:"Want to type your contact window?"
+  };
+  const CUSTOM_PLACEHOLDERS = {
+    caller:"e.g., Participant / Mum / Support Coordinator Jane",
+    consent:"e.g., Yes / Not yet",
+    loc:"Suburb, Postcode",
+    service:"e.g., Nursing care for meds",
+    rostering:"e.g., Tue/Thu 7–9am",
+    pref:"e.g., Female worker, has car",
+    mgmt:"e.g., Plan-managed by ABC PM",
+    dates:"e.g., 01 Oct 2025 – 30 Sep 2026",
+    hrs:"e.g., ~6 hrs/week",
+    risk_beh:"e.g., BSP in place; triggers loud noise",
+    risk_med:"e.g., Webster pack; daily prompting",
+    risk_int:"e.g., Arabic",
+    urgency:"e.g., After hospital discharge next week",
+    contact_win:"e.g., Weekdays after 3pm"
+  };
+
+  /* Render */
+  function setPortrait(stepId){
+    const src = ELLA_IMAGES[stepId] || ELLA_IMAGES.default;
+    portraitImg.src = src; portraitImg.alt = "Ella — " + (stepId||"assistant");
+  }
+
+  function render(){
+    const list = steps(), total = list.length;
+    const step = list[S.i] || list[total-1];
+
+    stepEl.textContent = `Step ${Math.min(S.i+1,total)}/${total}`;
+    barEl.style.width = Math.round(((S.i)/(total-1))*100) + '%';
+
+    // Portrait
+    setPortrait(step.id);
+
+    // Main content
+    qEl.textContent = step.q;
+    optsEl.innerHTML = '';
+    sysEl.textContent = '';
+    endBox.style.display = 'none';
+
+    // 1) STRICT typed option box before chips (except final)
+    if (step.id!=='final'){
+      if (step.id==='loc'){
+        injectLocationBox(true);
+      } else if (step.id==='risk_int'){
+        injectCustomBox(step.id, CUSTOM_LABELS[step.id], CUSTOM_PLACEHOLDERS[step.id], (val)=>{
+          if (val){ S.risks.int = true; S.interpreter.language = val; save(); }
+          next();
+        });
+      } else {
+        injectCustomBox(step.id, CUSTOM_LABELS[step.id], CUSTOM_PLACEHOLDERS[step.id], (val)=>{
+          if (val){ S.custom[step.id]=val; S.notes.push(`[${step.id}] ${val}`); save(); }
+          next();
+        });
+      }
+    }
+
+    // 2) Chips
+    step.opts.forEach(opt=>{
+      const b = document.createElement('button');
+      b.className='al-chip';
+      b.textContent = `${opt.k}) ${opt.t}`;
+      b.addEventListener('click', ()=> choose(opt));
+      optsEl.appendChild(b);
+    });
+
+    speak(step.q); save();
+  }
+
+  /* STRICT typed-answer box */
+  function injectCustomBox(stepId, label, placeholder, onSave){
+    const box=document.createElement('div');
+    box.className='al-inlinebox';
+    const inputId = `al-custom-${stepId}`;
+    box.innerHTML = `
+      <div style="font-weight:700">${label||'Want to type your exact preference?'}</div>
+      <input id="${inputId}" placeholder="${placeholder||'Type here'}" autocomplete="off">
+      <button id="al-custom-save" class="al-btn ghost">Save & continue</button>
+    `;
+    optsEl.appendChild(box);
+    box.querySelector('#al-custom-save').onclick=()=>{
+      const txt=(box.querySelector('#'+inputId).value||'').trim();
+      if(!txt){
+        sysEl.textContent='Please type something or choose one of the options.';
+        speak('Please type something, or choose one of the options.');
+        return; 
+      }
+      onSave && onSave(txt);
+    };
+  }
+
+  function injectLocationBox(required){
+    const locBox=document.createElement('div');
+    locBox.id='al-locbox';
+    locBox.className='al-inlinebox';
+    locBox.innerHTML = `
+      <div style="font-weight:700">Type your suburb and postcode</div>
+      <input id="al-suburb" placeholder="Suburb" ${required?'required':''}>
+      <input id="al-postcode" placeholder="Postcode" ${required?'required':''}>
+      <button id="al-locsave" class="al-btn ghost">Save & continue</button>
+    `;
+    optsEl.appendChild(locBox);
+    locBox.querySelector('#al-locsave').onclick=()=>{
+      const sub=locBox.querySelector('#al-suburb').value.trim();
+      const pc=locBox.querySelector('#al-postcode').value.trim();
+      if (required && (!sub || !pc)){
+        sysEl.textContent='Please add both suburb and postcode.'; speak('Please add both suburb and postcode.'); return;
+      }
+      if (sub) S.suburb=sub; if (pc) S.postcode=pc; save(); sysEl.textContent='Location saved.'; next();
+    };
+  }
+
+  function showInterpreterBox(){
+    const old=document.getElementById('al-intbox'); if (old) old.remove();
+    const box=document.createElement('div');
+    box.id='al-intbox'; box.className='al-inlinebox';
+    box.innerHTML = `
+      <div style="font-weight:700">Interpreter language</div>
+      <input id="al-int-lang" placeholder="e.g., Arabic, Mandarin, AUSLAN" required>
+      <button id="al-int-save" class="al-btn ghost">Save & continue</button>
+    `;
+    optsEl.appendChild(box);
+    document.getElementById('al-int-save').onclick=()=>{
+      const lang=document.getElementById('al-int-lang').value.trim();
+      if (!lang){ sysEl.textContent='Please enter a language.'; speak('Please enter a language.'); return; }
+      S.interpreter.language=lang; S.risks.int=true; save(); sysEl.textContent='Interpreter language saved.'; next();
+    };
+  }
+
+  function choose(opt){
+    const stepId = steps()[S.i].id;
+
+    if (stepId==='loc' && opt.k==='A'){ sysEl.textContent='Enter suburb and postcode, then Save & continue.'; speak('Please enter your suburb and postcode, then press Save and continue.'); return; }
+    if (stepId==='risk_int' && opt.k==='A'){ showInterpreterBox(); return; }
+
+    if (typeof opt.apply==='function') opt.apply();
+    save();
+
+    if (stepId==='final'){ renderSummary(); endBox.style.display='grid'; validateSendButton(); return; }
+    S.i = Math.min(S.i+1, steps().length-1); render();
+  }
+
+  function next(){
+    if (steps()[S.i].id==='final'){ renderSummary(); endBox.style.display='grid'; validateSendButton(); return; }
+    S.i = Math.min(S.i+1, steps().length-1); render();
+  }
+
+  function handleSpeech(text){
+    if (!text) return;
+    const t = text.trim(); const up = t.toUpperCase();
+    let pick=null;
+    if (['A','B','C','D','NS'].includes(up)) pick=up;
+    else if (/participant|client/i.test(t)) pick='A';
+    else if (/carer|family/i.test(t)) pick='B';
+    else if (/support\s*co(ord(inator)?)?/i.test(t)) pick='C';
+    else if (/plan\s*manager|pm\b/i.test(t)) pick='D';
+    else if (/not sure|unsure|don.?t know|flexible/i.test(t)) pick='NS';
+    else if (steps()[S.i].id==='loc'){ if (!S.suburb && /\b[a-zA-Z]{3,}\b/.test(t)) S.suburb = t; save(); sysEl.textContent='Location noted. Enter postcode too, then Save & continue.'; return; }
+    else if (steps()[S.i].id==='risk_int'){ if (/^[a-zA-Z\s]+$/.test(t) && t.length>2){ S.risks.int=true; S.interpreter.language=t; save(); next(); return; } }
+    const step=steps()[S.i];
+    const chosen = step.opts.find(x=>x.k===pick);
+    if (chosen) choose(chosen); else { sysEl.textContent='Noted. Say A, B, C, D or “Not sure”, or tap a button.'; }
+  }
+
+  function renderSummary(){
+    const yn=v=>v===true?'Yes':v===false?'No':(v||'—');
+    const lines = [
+      `Caller: ${S.caller||'—'}`,
+      `Consent: ${S.consent||'—'}`,
+      `Location: ${S.suburb||'—'} ${S.postcode?('('+S.postcode+')'):''}`,
+      `Service: ${S.service||'—'}`,
+      `Windows (visits): ${S.rostering||'—'}`,
+      `Contact window: ${S.contact_window||S.custom['contact_win']||'—'}`,
+      `Prefs: ${S.pref.gender?'Worker gender; ':''}${S.pref.transport?'Transport; ':''}${S.pref.access?'Access ready; ':''}${S.pref.none?'None':''}`.replace(/; $/,''),
+      `Mgmt: ${S.mgmt||'—'} • Dates: ${S.dates||'—'} • Hours: ${S.hrs||'—'}`,
+      `Risks: Beh ${yn(S.risks.beh)} • Med ${yn(S.risks.med)} • Int ${yn(S.risks.int)}`,
+      `Interpreter language: ${S.interpreter.language||'—'}`,
+      `Route: ${S.route||'—'}`
+    ];
+    qEl.textContent = "Great — here’s a quick summary. Add your contact (email or phone required to send).";
+    optsEl.innerHTML = '<div class="al-chip" style="cursor:default;white-space:pre-line">'+lines.join('\n')+'</div>';
+    setPortrait('final');
+    speak("Thank you. Please add an email or phone so I can send this to our team.");
+    fName.value = S.name||''; fEmail.value= S.email||''; fPhone.value= S.phone||''; fNotes.value= (S.notes||[]).join('\n');
+  }
+
+  function validateSendButton(){
+    const ok = (fEmail.value.trim().length>0) || (fPhone.value.trim().length>0);
+    btnSend.disabled = !ok;
+    contactWarn.style.display = ok ? 'none' : 'block';
+  }
+
+  async function submit(){
+    if (!((fEmail.value.trim()) || (fPhone.value.trim()))){
+      validateSendButton(); speak('Please add an email or phone number before sending.'); return;
+    }
+    S.name=fName.value.trim()||S.name; S.email=fEmail.value.trim()||S.email; S.phone=fPhone.value.trim()||S.phone; save();
+
+    const payload = {
+      _subject:`HD HeeD Website – ${S.route||'Enquiry'} via ELLA (voice)`,
+      source:"index-ella-v33",
+      route:S.route, caller:S.caller, consent:S.consent,
+      suburb:S.suburb, postcode:S.postcode,
+      service:S.service, category:S.cat,
+      rostering:S.rostering, contact_window:S.contact_window || S.custom['contact_win'] || '',
+      pref_gender:S.pref.gender, pref_transport:S.pref.transport, pref_access:S.pref.access,
+      plan_mgmt:S.mgmt, plan_dates:S.dates, approx_hours_per_week:S.hrs,
+      risk_behaviours:S.risks.beh, risk_medical:S.risks.med, risk_interpreter:S.risks.int,
+      interpreter_language:S.interpreter.language,
+      name:S.name, email:S.email, phone:S.phone,
+      custom:S.custom, notes:(S.notes||[]).concat(fNotes.value||'').join('\n'),
+      timestamp:new Date().toISOString()
+    };
+    try{
+      const r = await fetch(FS_ENDPOINT, { method:"POST", headers:{ "Content-Type":"application/json", "Accept":"application/json" }, body: JSON.stringify(payload) });
+      const data = await r.json();
+      if (r.ok){ sysEl.innerHTML = `All done — we’ll contact you from <a href="mailto:${SITE_EMAIL}" style="color:#ffd95c">${SITE_EMAIL}</a> or ${SITE_PHONE}.`; speak("All done. We’ll contact you shortly. Thank you."); }
+      else { throw new Error(data?.error || "Submission failed"); }
+    }catch(e){
+      sysEl.innerHTML = `Couldn’t send right now. Please email <a href="mailto:${SITE_EMAIL}" style="color:#ffd95c">${SITE_EMAIL}</a> or call ${SITE_PHONE}. You can download your summary below.`;
+      speak("I couldn’t send right now. You can download your summary and email it to us.");
+    }
+  }
+
+  /* Intro screen BEFORE Q1 */
+  const INTRO_TEXT = "Hi, I’m Ella — your AI assistant. You don’t need to call our team. Just answer these well-directed multiple-choice questions and our team will be fully prepared when they get in touch with you.";
+
+  function showIntro(){
+    // Reset step display but show intro copy and a single begin button
+    stepEl.textContent = 'Intro';
+    barEl.style.width = '0%';
+    setPortrait('default');
+    qEl.textContent = INTRO_TEXT;
+    optsEl.innerHTML = '';
+    const b = document.createElement('button');
+    b.className = 'al-chip';
+    b.textContent = 'Let’s begin';
+    b.addEventListener('click', ()=>{ S.i = 0; save(); render(); });
+    optsEl.appendChild(b);
+    speak(INTRO_TEXT);
+  }
+
+  /* Open/Close/Greet */
+  function openPanel(){
+    greet.style.display='none';
+    panel.style.display='block';
+    if (window.speechSynthesis){ pickVoice(); }
+    // Start with intro first
+    showIntro();
+  }
+  function closePanel(){ panel.style.display='none'; try{ window.speechSynthesis.cancel(); }catch{} }
+
+  // Always show greet on first load this session (new key)
+  if (!sessionStorage.getItem('ella_greeted_v33')){
+    setTimeout(()=>{ greet.style.display='block'; sessionStorage.setItem('ella_greeted_v33','1'); }, 900);
+  }
+
+  // Hooks
+  startBtn.addEventListener('click', openPanel);
+  hideBtn.addEventListener('click', ()=>{ greet.style.display='none'; });
+  const ellaLaunch = document.getElementById('ella-launch');
+  if (ellaLaunch){
+    ellaLaunch.addEventListener('click', (e)=>{
+      e.preventDefault();
+      if (window.ELLA && typeof window.ELLA.open === 'function') {
+        window.ELLA.open();
+      } else if (window.ALAN && typeof window.ALAN.open === 'function') {
+        window.ALAN.open();
+      } else {
+        // Fallback
+        openPanel();
+      }
+    });
+  }
+
+  document.getElementById('al-mic').addEventListener('click', ()=>{ if (!SR){ alert('Voice not supported in this browser. Tap answers instead.'); return; } listen(); });
+  restartBtn.addEventListener('click', ()=>{ localStorage.removeItem(SKEY);
+    S={i:0,caller:null,consent:null,suburb:null,postcode:null,service:null,mgmt:null,dates:null,cat:null,hrs:null,risks:{beh:null,med:null,int:null},interpreter:{language:null},pref:{none:false},urgency:null,rostering:null,contact_window:null,name:null,email:null,phone:null,route:null,custom:{},notes:[]};
+    save(); showIntro();
+  });
+
+  // End box
+  const onContactChange=()=>validateSendButton();
+  fEmail.addEventListener('input', onContactChange);
+  fPhone.addEventListener('input', onContactChange);
+  btnSend.addEventListener('click', submit);
+  btnLater.addEventListener('click', ()=>{ sysEl.textContent='Saved. You can close this window — we’ll follow up soon.'; speak('Saved. You can close this window.'); });
+  btnDownload.addEventListener('click', ()=>{
+    const payload = {
+      route:S.route, caller:S.caller, consent:S.consent,
+      suburb:S.suburb, postcode:S.postcode, service:S.service, category:S.cat,
+      rostering:S.rostering, contact_window:S.contact_window || S.custom['contact_win'] || '',
+      prefs:S.pref, plan_mgmt:S.mgmt, plan_dates:S.dates, approx_hours_per_week:S.hrs,
+      risks:S.risks, interpreter:S.interpreter, urgency:S.urgency,
+      name:fName.value||S.name, email:fEmail.value||S.email, phone:fPhone.value||S.phone,
+      custom:S.custom, notes:(S.notes||[]).concat(fNotes.value||'').join('\n'),
+      timestamp:new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+    const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'hdheed-intake.json'});
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+
+  // Voice list may load async
+  if (window.speechSynthesis){ speechSynthesis.onvoiceschanged = pickVoice; }
+
+  // Public openers
+  window.ALAN = { open: openPanel }; // keep for backward compatibility
+  window.ELLA = { open: openPanel };
+})();
+</script>
+<!-- === /ELLA (v3.3) === -->
+<script>
+const panel = document.getElementById('alan-panel');
+const closeBtn = document.getElementById('al-close');
+
+function closePanel() {
+  panel.style.display = 'none';
+}
+
+function onCloseClick(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  closePanel();
+}
+
+if (closeBtn) {
+  closeBtn.addEventListener('click', onCloseClick);
+}
+
+// Close on ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && panel.style.display === 'block') {
+    closePanel();
+  }
+});
+
+// Close on backdrop click
+panel.addEventListener('click', (e) => {
+  if (e.target === panel) {
+    closePanel();
+  }
+});
+</script>
+</body>
+</html>
