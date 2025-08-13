@@ -570,444 +570,353 @@
       });
     }
   </script>
-  <!-- === HD HeeD • Alan (AI Intake Assistant) — START === -->
+  <!-- === HD HeeD • ALAN (Simple Voice Intake Assistant) — DROP-IN === -->
 <style>
   :root{
-    --alan-accent:#ffc107; --alan-ink:#e7ebff; --alan-bg:#0b0f1a; --alan-panel:#10172a; --alan-line:#25345e;
-    --alan-avatar: url('data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="%23f2d3bd"/><stop offset="1" stop-color="%23e9c5a6"/></linearGradient></defs><rect width="200" height="200" rx="32" ry="32" fill="%239aa8cf"/><circle cx="100" cy="100" r="70" fill="url(%23g)"/><path d="M45 88c3-22 21-44 55-44 31 0 52 18 55 44-7-10-26-20-55-20s-48 10-55 20z" fill="%234a362c"/><circle cx="76" cy="104" r="8" fill="%23333"/><circle cx="124" cy="104" r="8" fill="%23333"/><path d="M80 130c12 14 28 14 40 0" stroke="%23333" stroke-width="5" fill="none" stroke-linecap="round"/><rect x="70" y="150" width="60" height="16" rx="8" fill="%23e7d5c5"/><path d="M55 74c10-10 26-18 45-18s35 8 45 18" stroke="%234a362c" stroke-width="10" fill="none" stroke-linecap="round"/></svg>');
+    --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153;
+    --al-text:#e8edff; --al-accent:#ffc107; --al-soft:#171f3b; --al-good:#1ad1a5;
   }
-  #alan-root{position:fixed;right:20px;bottom:20px;z-index:10000;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
-  #alan-launch{display:flex;align-items:center;gap:10px;background:var(--alan-accent);color:#2b1f04;border:none;border-radius:999px;padding:10px 14px;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer;font-weight:800}
-  #alan-launch::before{content:"";width:32px;height:32px;border-radius:8px;background-image:var(--alan-avatar);background-size:cover;background-position:center;display:inline-block}
-  #alan-panel{position:fixed;right:20px;bottom:90px;width:360px;max-width:92vw;background:linear-gradient(180deg,var(--alan-panel),#0b0f1a);color:var(--alan-ink);border:1px solid var(--alan-line);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.55);display:none;overflow:hidden}
-  #alan-head{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--alan-line);background:#0d1428}
-  #alan-head .pic{width:36px;height:36px;border-radius:10px;background-image:var(--alan-avatar);background-size:cover;background-position:center;box-shadow:0 6px 18px rgba(0,0,0,.35)}
-  #alan-head .ttl{font-weight:900}
-  #alan-log{height:360px;max-height:60vh;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
-  .bubble{max-width:86%;padding:10px 12px;border:1px solid var(--alan-line);border-radius:12px;line-height:1.55}
-  .alan{background:#121938;align-self:flex-start}
-  .you{background:#141c36;align-self:flex-end}
-  .whyneed{font-size:12px;color:#b9c9ff;border-left:3px solid #3aa0ff;background:#0f1b3d;margin-top:6px;padding:6px 8px;border-radius:8px}
-  .choices{display:grid;grid-template-columns:1fr;gap:8px;margin-top:6px}
-  .chip{border:1px solid var(--alan-line);background:linear-gradient(180deg,#121a3a,#0f162f);color:var(--alan-ink);border-radius:10px;padding:10px;text-align:left;cursor:pointer}
-  .chip.recommended::after{content:"Recommended";float:right;font-size:11px;color:#ffe28f;opacity:.9}
-  #alan-quick{display:flex;gap:8px;padding:10px;border-top:1px solid var(--alan-line);background:#0d1428}
-  #alan-input{flex:1;padding:10px;border:1px solid var(--alan-line);border-radius:10px;background:#101a3a;color:var(--alan-ink)}
-  #alan-send{border:none;border-radius:10px;padding:10px 12px;background:var(--alan-accent);font-weight:800;cursor:pointer}
-  #alan-tools{display:flex;gap:8px;padding:8px 10px;border-top:1px dashed var(--alan-line);background:#0b1226}
-  .toolbtn{border:1px solid var(--alan-line);background:#101a3a;color:#dfe6ff;border-radius:999px;padding:6px 10px;font-size:12px;cursor:pointer}
-  .pill{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--alan-line);background:#0f1935;color:#cfe0ff;border-radius:999px;padding:6px 10px;font-size:12px}
-  .ok{color:#0fd7a5}
-  .warn{color:#ffbf47}
-  /* mobile nudge */
-  @media (max-width:480px){ #alan-log{height:50vh} }
+  /* Greeting popover */
+  #alan-greet{position:fixed;right:18px;bottom:18px;z-index:9999;display:none}
+  #alan-greet .card{max-width:340px;width:calc(100vw - 36px);background:#0e1428;color:var(--al-text);
+    border:1px solid var(--al-line);border-radius:14px;box-shadow:0 18px 60px rgba(0,0,0,.45);padding:14px;font-family:Inter,system-ui}
+  #alan-greet h3{margin:0 0 6px 0;font-size:1.05rem}
+  #alan-greet p{margin:0 0 10px 0;opacity:.9;font-size:.95rem;line-height:1.5}
+  .al-btn{border:0;border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer}
+  .al-btn.primary{background:var(--al-accent);color:#2a2100;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .al-btn.ghost{background:#121a3a;color:#e7ebff;border:1px solid var(--al-line)}
+  /* Panel */
+  #alan-panel{position:fixed;right:18px;bottom:18px;z-index:10000;display:none}
+  #alan-panel .wrap{width:420px;max-width:calc(100vw - 36px);background:linear-gradient(180deg,#10172a,#0b0f1a);
+    color:var(--al-text);border:1px solid var(--al-line);border-radius:16px;box-shadow:0 28px 90px rgba(0,0,0,.6);overflow:hidden;font-family:Inter,system-ui}
+  .al-head{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--al-line);background:#0d1428}
+  .al-head .avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#9fb5ff,#c2ceff);
+    display:grid;place-items:center;color:#1b2560;font-weight:900}
+  .al-head .ttl{font-weight:900}
+  .al-body{padding:14px;display:grid;gap:12px}
+  .al-meta{display:flex;align-items:center;gap:8px;font-size:12px;color:#b7c6ff}
+  .al-meter{height:8px;background:#101838;border:1px solid var(--al-line);border-radius:999px;overflow:hidden;flex:1}
+  .al-meter>div{height:100%;background:linear-gradient(90deg,#ffd95c,#ffe78f);width:0%}
+  .al-q{font-size:1.15rem;font-weight:900;line-height:1.4}
+  .al-opts{display:grid;gap:8px}
+  .al-chip{border:1px solid var(--al-line);background:linear-gradient(180deg,#121a3a,#0f172f);color:#e7ebff;
+    border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;font-size:1rem}
+  .al-chip:hover{box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .al-foot{display:flex;gap:8px;align-items:center;justify-content:space-between;border-top:1px dashed var(--al-line);padding:10px;background:#0b1226}
+  .al-pill{border:1px solid var(--al-line);background:#0f1937;border-radius:999px;padding:6px 10px;color:#cfe0ff;font-size:12px}
+  .al-mic{border:1px solid var(--al-line);background:#101a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;font-weight:800;cursor:pointer}
+  .al-mic.on{background:#13244f}
+  .al-close{border:1px solid var(--al-line);background:#121a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;cursor:pointer}
+  /* Mobile tweaks */
+  @media (max-width:480px){ .al-q{font-size:1.05rem} .al-chip{font-size:.98rem} }
 </style>
 
-<div id="alan-root" aria-live="polite">
-  <button id="alan-launch" aria-haspopup="dialog" aria-controls="alan-panel" aria-expanded="false">How can I help?</button>
-  <div id="alan-panel" role="dialog" aria-label="Chat with Alan">
-    <div id="alan-head">
-      <div class="pic" aria-hidden="true"></div>
-      <div class="ttl">Alan — Intake Assistant</div>
-      <div style="margin-left:auto;display:flex;gap:8px">
-        <span class="pill">Voice: <span id="alan-voice-status" class="warn">Off</span></span>
-        <button id="alan-close" class="toolbtn" aria-label="Close">Close</button>
+<div id="alan-greet" aria-live="polite">
+  <div class="card">
+    <h3>Hi, I’m <strong>ALAN</strong>, your intake assistant.</h3>
+    <p>No need to call — <strong>talk to me</strong> and I’ll organise support within a few hours. I’ll ask a few quick questions and take care of the admin.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button id="alan-start" class="al-btn primary" aria-label="Let’s talk">Let’s talk</button>
+      <button id="alan-hide" class="al-btn ghost" aria-label="Not now">Not now</button>
+    </div>
+  </div>
+</div>
+
+<div id="alan-panel" role="dialog" aria-label="Chat with ALAN">
+  <div class="wrap">
+    <div class="al-head">
+      <div class="avatar">AL</div>
+      <div class="ttl">ALAN — Intake Assistant</div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <span class="al-pill">Voice: <span id="al-voice" style="color:#ffe28f">On</span></span>
+        <button id="al-close" class="al-close" aria-label="Close">Close</button>
       </div>
     </div>
-    <div id="alan-log"></div>
-    <div id="alan-tools">
-      <button id="alan-mic" class="toolbtn" aria-pressed="false">🎤 Speak</button>
-      <button id="alan-tts" class="toolbtn" aria-pressed="false">🔊 Read aloud</button>
-      <span class="pill">Consent: <span id="badge-consent">—</span></span>
-      <span class="pill">Mgmt: <span id="badge-mgmt">—</span></span>
-      <span class="pill">Category: <span id="badge-cat">—</span></span>
+    <div class="al-body">
+      <div class="al-meta">
+        <span id="al-step">Step 1/12</span>
+        <div class="al-meter" aria-label="Progress"><div id="al-bar"></div></div>
+      </div>
+      <div id="al-q" class="al-q">…</div>
+      <div id="al-opts" class="al-opts"></div>
+      <div id="al-system" style="font-size:12px;color:#a8b6e8"></div>
     </div>
-    <form id="alan-quick">
-      <input id="alan-input" autocomplete="off" placeholder="Type A/B/C/D/NS or a message…">
-      <button id="alan-send" type="submit">Send</button>
-    </form>
+    <div class="al-foot">
+      <div class="al-pill">Say A, B, C, D or “Not sure”</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="al-mic" class="al-mic" aria-pressed="false">🎤 Listen</button>
+        <button id="al-restart" class="al-mic">↻ Restart</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
 (function(){
-  const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn"; // your working endpoint
+  /* ===== Config ===== */
+  const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn"; // your Formspree form (JSON post)
   const SITE_EMAIL = "info@hdheed.com.au";
   const SITE_PHONE = "02 8630 5500";
 
-  const SKEY = "hdheed_alan_state_v1";
-  let state = {
+  /* ===== State ===== */
+  const SKEY='hdheed_alan_simple_v1';
+  let S = {
     i:0, // step index
     caller:null, consent:null, service:null, mgmt:null, dates:null, cat:null,
     risks:{beh:null, med:null, int:null}, urgency:null, contacts:null, rostering:null,
-    name:null, email:null, phone:null, notes:[],
-    mode:"auto" // auto-advance by default
+    name:null, email:null, phone:null, route:null, notes:[]
   };
-  try{ const prev=JSON.parse(localStorage.getItem(SKEY)||"null"); if(prev) state=prev; }catch{}
+  try{ const prev=JSON.parse(localStorage.getItem(SKEY)||'null'); if(prev) S=prev; }catch{}
+  const save=()=>{ try{ localStorage.setItem(SKEY, JSON.stringify(S)); }catch{} };
 
-  /* DOM */
-  const root = document.getElementById('alan-root');
-  const launch = document.getElementById('alan-launch');
+  /* ===== DOM ===== */
+  const greet = document.getElementById('alan-greet');
+  const startBtn = document.getElementById('alan-start');
+  const hideBtn = document.getElementById('alan-hide');
   const panel = document.getElementById('alan-panel');
-  const log = document.getElementById('alan-log');
-  const form = document.getElementById('alan-quick');
-  const input = document.getElementById('alan-input');
-  const closeBtn = document.getElementById('alan-close');
-  const micBtn = document.getElementById('alan-mic');
-  const ttsBtn = document.getElementById('alan-tts');
-  const vStatus = document.getElementById('alan-voice-status');
-  const bConsent = document.getElementById('badge-consent');
-  const bMgmt = document.getElementById('badge-mgmt');
-  const bCat = document.getElementById('badge-cat');
+  const closeBtn = document.getElementById('al-close');
+  const qEl = document.getElementById('al-q');
+  const optsEl = document.getElementById('al-opts');
+  const stepEl = document.getElementById('al-step');
+  const barEl = document.getElementById('al-bar');
+  const sysEl = document.getElementById('al-system');
+  const micBtn = document.getElementById('al-mic');
+  const restartBtn = document.getElementById('al-restart');
+  const voiceBadge = document.getElementById('al-voice');
 
-  function save(){ try{ localStorage.setItem(SKEY, JSON.stringify(state)); }catch{} }
-  function scrollDown(){ log.scrollTop = log.scrollHeight; }
-  function sayAlan(html, why="", need="", choices=null){
-    const wrap = document.createElement('div');
-    wrap.innerHTML = `
-      <div class="bubble alan">${html}${(why||need)?`<div class="whyneed"><strong>Why:</strong> ${why}${need?`<br><strong>Need:</strong> ${need}`:""}</div>`:""}</div>`;
-    log.appendChild(wrap.firstElementChild);
-    if (choices && choices.length){
-      const set = document.createElement('div'); set.className="choices";
-      choices.forEach(ch=>{
-        const btn=document.createElement('button');
-        btn.type="button"; btn.className="chip"+(ch.rec?" recommended":"");
-        btn.textContent = ch.k + ") " + ch.t;
-        btn.addEventListener('click', ()=>choose(ch));
-        set.appendChild(btn);
-      });
-      log.appendChild(set);
-    }
-    scrollDown(); ttsSpeak(strip(html));
-  }
-  function sayYou(text){
-    const b = document.createElement('div');
-    b.className="bubble you"; b.textContent = text;
-    log.appendChild(b); scrollDown();
-  }
-  function strip(html){ const d=document.createElement('div'); d.innerHTML=html; return d.textContent||d.innerText||""; }
+  /* ===== Voice (TTS + SR) ===== */
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recog = null, listening = false, ttsOn = true;
 
-  function updateBadges(){
-    bConsent.textContent = state.consent || "—";
-    bMgmt.textContent = state.mgmt || "—";
-    bCat.textContent = state.cat || "—";
+  if (SR){
+    recog = new SR(); recog.lang='en-AU'; recog.interimResults=false; recog.continuous=false;
+    recog.onresult = (e)=>{ const t=e.results[0][0].transcript; handleSpeech(t); };
+    recog.onend = ()=>{ listening=false; micBtn.classList.remove('on'); micBtn.setAttribute('aria-pressed','false'); };
+  } else {
+    voiceBadge.textContent='Off';
   }
 
-  /* Steps */
-  const NS = ()=>({k:"NS", t:"Not sure — please guide me"});
-  const o = (k,t,rec=false,apply=()=>{}) => ({k,t,rec,apply});
+  function speak(text){
+    if (!ttsOn || !('speechSynthesis' in window)) return;
+    const u = new SpeechSynthesisUtterance(String(text));
+    u.lang='en-AU';
+    window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+  }
+  function listen(){
+    if (!recog){ return; }
+    try{ listening=true; micBtn.classList.add('on'); micBtn.setAttribute('aria-pressed','true'); recog.start(); }catch{}
+  }
+
+  /* ===== Flow ===== */
+  const NS = (t='Not sure — please guide me')=>({k:'NS',t,apply:()=>{}});
+  const o = (k,t,apply=()=>{})=>({k,t,apply});
 
   function steps(){
     return [
-      { id:"welcome",
-        html:`Hi, I’m <strong>Alan</strong> from <strong>HD HeeD</strong> — a registered NDIS provider. I’ll help you in a few quick steps. You can pick options or just say <em>Not sure</em>, and I’ll do the admin.`,
-        why:"Help you share just enough without stress.", need:"Who’s calling and how I can help.",
-        choices:[
-          o("A","I’m the Participant",true,()=>state.caller="Participant"),
-          o("B","Family / Carer",false,()=>state.caller="Carer"),
-          o("C","Support Coordinator",true,()=>state.caller="Support Coordinator"),
-          o("D","Plan Manager",false,()=>state.caller="Plan Manager"),
+      {id:'caller', q:"Who am I speaking with today?",
+        opts:[
+          o('A','Participant',()=>S.caller='Participant'),
+          o('B','Family / Carer',()=>S.caller='Carer'),
+          o('C','Support Coordinator',()=>S.caller='Support Coordinator'),
+          o('D','Plan Manager',()=>S.caller='Plan Manager'),
           NS()
-        ],
-        next:"consent"
-      },
-      { id:"consent",
-        html:`Can I note verbal consent to collect details and, if needed, contact your SC/PM to confirm the right budget?`,
-        why:"So I can confirm funding quickly and correctly.", need:"Yes/No/Not yet is fine.",
-        choices:[
-          o("A","Yes, consent given",true,()=>state.consent="Yes"),
-          o("B","Not yet",false,()=>state.consent="Not yet"),
-          o("C","Not sure",false,()=>state.consent="Not sure"),
-          o("D","No",false,()=>state.consent="No"),
+        ]},
+      {id:'consent', q:"May I note verbal consent to collect details and, if needed, contact your SC or Plan Manager?",
+        opts:[
+          o('A','Yes',()=>S.consent='Yes'),
+          o('B','Not yet',()=>S.consent='Not yet'),
+          o('C','Not sure',()=>S.consent='Not sure'),
+          o('D','No',()=>S.consent='No'),
           NS()
-        ],
-        next:"service"
-      },
-      { id:"service",
-        html:`Which support fits best right now? We’ll keep it simple and adjust later.`,
-        why:"Match needs to the right team and budget.", need:"Initial focus area.",
-        choices:[
-          o("A","Personal care (mornings/evenings)",true,()=>{state.service="Personal care";state.cat="Core – Assistance with Daily Life";}),
-          o("B","Community participation (appointments/outings)",true,()=>{state.service="Community participation";state.cat="Core – Social & Community Participation";}),
-          o("C","Nursing care (wounds/meds/health)",true,()=>{state.service="Nursing care";state.cat="Core – Community Nursing Care";}),
-          o("D","Daily living skills (cooking/budgeting)",true,()=>{state.service="Daily living skills";state.cat="Capacity – Improved Daily Living";}),
+        ]},
+      {id:'service', q:"Which support fits best now?",
+        opts:[
+          o('A','Personal care',()=>{S.service='Personal care';S.cat='Core – Assistance with Daily Life';}),
+          o('B','Community participation',()=>{S.service='Community participation';S.cat='Core – Social & Community Participation';}),
+          o('C','Nursing care',()=>{S.service='Nursing care';S.cat='Core – Community Nursing Care';}),
+          o('D','Daily living skills',()=>{S.service='Daily living skills';S.cat='Capacity – Improved Daily Living';}),
           NS()
-        ],
-        next:"mgmt"
-      },
-      { id:"mgmt",
-        html:`How is the NDIS plan managed? This only affects who I contact first.`,
-        why:"Determines billing flow & who can confirm budgets.", need:"NDIA / Plan / Self / Unsure.",
-        choices:[
-          o("A","NDIA-managed",true,()=>state.mgmt="NDIA-managed"),
-          o("B","Plan-managed",true,()=>state.mgmt="Plan-managed"),
-          o("C","Self-managed",true,()=>state.mgmt="Self-managed"),
-          o("D","Not sure",false,()=>state.mgmt="Not sure"),
+        ]},
+      {id:'mgmt', q:"How is the NDIS plan managed?",
+        opts:[
+          o('A','NDIA-managed',()=>S.mgmt='NDIA-managed'),
+          o('B','Plan-managed',()=>S.mgmt='Plan-managed'),
+          o('C','Self-managed',()=>S.mgmt='Self-managed'),
+          o('D','Not sure',()=>S.mgmt='Not sure'),
           NS()
-        ],
-        next:"dates"
-      },
-      { id:"dates",
-        html:`Do you know your plan dates? Month/year is fine — I just avoid planning past the end date.`,
-        why:"Avoid gaps; plan reviews on time.", need:"Active / expiring soon / expired / unsure.",
-        choices:[
-          o("A","Active (~12 months)",true,()=>state.dates="Active 12m"),
-          o("B","Expiring in 1–2 months",true,()=>state.dates="Expiring soon"),
-          o("C","Not sure",false,()=>state.dates="Not sure"),
-          o("D","Plan has expired",false,()=>state.dates="Expired"),
+        ]},
+      {id:'dates', q:"Do you know the plan dates?",
+        opts:[
+          o('A','Active',()=>S.dates='Active'),
+          o('B','Expiring soon',()=>S.dates='Expiring soon'),
+          o('C','Not sure',()=>S.dates='Not sure'),
+          o('D','Expired',()=>S.dates='Expired'),
           NS()
-        ],
-        next:"risks_beh"
-      },
-      { id:"risks_beh",
-        html:`Any behaviours of concern or a Behaviour Support Plan?`,
-        why:"Keep everyone safe & match staffing level.", need:"Yes/No/Unsure.",
-        choices:[
-          o("A","Yes",true,()=>state.risks.beh=true),
-          o("B","No",false,()=>state.risks.beh=false),
-          o("C","Not sure",false,()=>state.risks.beh=null),
-          o("D","Prefer not to say",false,()=>state.risks.beh=null),
+        ]},
+      {id:'risk_beh', q:"Any behaviours of concern or a Behaviour Support Plan?",
+        opts:[
+          o('A','Yes',()=>S.risks.beh=true),
+          o('B','No',()=>S.risks.beh=false),
+          o('C','Not sure',()=>S.risks.beh=null),
+          o('D','Prefer not to say',()=>S.risks.beh=null),
           NS()
-        ],
-        next:"risks_med"
-      },
-      { id:"risks_med",
-        html:`Any clinical needs like meds assistance or wound care?`,
-        why:"RN oversight and authorisations if needed.", need:"Yes/No/Unsure.",
-        choices:[
-          o("A","Yes",true,()=>state.risks.med=true),
-          o("B","No",false,()=>state.risks.med=false),
-          o("C","Not sure",false,()=>state.risks.med=null),
-          o("D","Prefer not to say",false,()=>state.risks.med=null),
+        ]},
+      {id:'risk_med', q:"Any clinical needs like medication or wound care?",
+        opts:[
+          o('A','Yes',()=>S.risks.med=true),
+          o('B','No',()=>S.risks.med=false),
+          o('C','Not sure',()=>S.risks.med=null),
+          o('D','Prefer not to say',()=>S.risks.med=null),
           NS()
-        ],
-        next:"risks_int"
-      },
-      { id:"risks_int",
-        html:`Would you like an interpreter?`,
-        why:"Comfortable communication from day one.", need:"Yes/No/Unsure.",
-        choices:[
-          o("A","Yes",true,()=>state.risks.int=true),
-          o("B","No",false,()=>state.risks.int=false),
-          o("C","Not sure",false,()=>state.risks.int=null),
-          o("D","Prefer not to say",false,()=>state.risks.int=null),
+        ]},
+      {id:'risk_int', q:"Would you like an interpreter?",
+        opts:[
+          o('A','Yes',()=>S.risks.int=true),
+          o('B','No',()=>S.risks.int=false),
+          o('C','Not sure',()=>S.risks.int=null),
+          o('D','Prefer not to say',()=>S.risks.int=null),
           NS()
-        ],
-        next:"urgency"
-      },
-      { id:"urgency",
-        html:`How quickly would you like to start? I’ll be upfront about capacity.`,
-        why:"Hold the right slots on the roster.", need:"Urgent / soon / exploring / unsure.",
-        choices:[
-          o("A","Urgent (24–72h)",true,()=>state.urgency="Urgent"),
-          o("B","Soon (1–2 weeks)",true,()=>state.urgency="Soon"),
-          o("C","Exploring options",false,()=>state.urgency="Exploring"),
-          o("D","Not sure",false,()=>state.urgency="Not sure"),
+        ]},
+      {id:'urgency', q:"When would you like to start?",
+        opts:[
+          o('A','Urgent (24–72h)',()=>S.urgency='Urgent'),
+          o('B','Soon (1–2 weeks)',()=>S.urgency='Soon'),
+          o('C','Exploring options',()=>S.urgency='Exploring'),
+          o('D','Not sure',()=>S.urgency='Not sure'),
           NS()
-        ],
-        next:"contacts"
-      },
-      { id:"contacts",
-        html:`Do you have your Support Coordinator or Plan Manager’s contact? If not, I’ll send you a tiny email you can forward.`,
-        why:"Faster funding confirmation.", need:"SC/PM contacts now or later.",
-        choices:[
-          o("A","Yes — I have their email/phone",true,()=>state.contacts="Have details now"),
-          o("B","Not with me — send me a template",false,()=>state.contacts="Will forward template"),
-          o("C","No SC/PM / Not applicable",false,()=>state.contacts="No SC/PM"),
+        ]},
+      {id:'contacts', q:"Do you have your Support Coordinator or Plan Manager’s contact?",
+        opts:[
+          o('A','Yes — I have it now',()=>S.contacts='Have details now'),
+          o('B','Not with me — send a template',()=>S.contacts='Will forward template'),
+          o('C','No SC/PM / Not applicable',()=>S.contacts='No SC/PM'),
           NS()
-        ],
-        next:"rostering"
-      },
-      { id:"rostering",
-        html:`What windows suit you? I’ll match a suitable worker.`,
-        why:"Right person at the right time.", need:"AM/PM/Evenings/Weekends/Flexible.",
-        choices:[
-          o("A","Weekday mornings (7–11am)",true,()=>state.rostering="Weekday AM"),
-          o("B","Weekday afternoons (12–4pm)",false,()=>state.rostering="Weekday PM"),
-          o("C","Evenings (5–9pm)",false,()=>state.rostering="Evenings"),
-          o("D","Weekends only",false,()=>state.rostering="Weekends"),
-          o("E","Flexible windows",true,()=>state.rostering="Flexible"),
+        ]},
+      {id:'rostering', q:"What windows suit you?",
+        opts:[
+          o('A','Weekday mornings',()=>S.rostering='Weekday AM'),
+          o('B','Weekday afternoons',()=>S.rostering='Weekday PM'),
+          o('C','Evenings',()=>S.rostering='Evenings'),
+          o('D','Weekends only',()=>S.rostering='Weekends'),
+          NS('Flexible')
+        ]},
+      {id:'contact', q:"Please say or type your first name, email and phone (initials are fine).",
+        opts:[ NS('I’ll share later') ]},
+      {id:'final', q:"Send this now as a Referral (A) or as a General Enquiry (B)?",
+        opts:[
+          o('A','Referral',()=>S.route='Referral'),
+          o('B','Enquiry',()=>S.route='Enquiry'),
+          o('C','Review first',()=>S.route='Review'),
+          o('D','Save only',()=>S.route='Save'),
           NS()
-        ],
-        next:"contact_detail"
-      },
-      { id:"contact_detail",
-        html:`Great — could I grab your **first name**, **best email** and **phone** so I can send your summary and next steps? (Initials are ok).`,
-        why:"So we can confirm details & send options.", need:"First name/Initials, email, phone.",
-        choices:[
-          o("A","I’ll type my details now",true,()=>{}),
-          o("B","Prefer email only",false,()=>{}),
-          o("C","Prefer phone only",false,()=>{}),
-          o("D","Share later",false,()=>{}),
-          NS()
-        ],
-        next:"final"
-      },
-      { id:"final",
-        html:`Thanks! Based on this, I can <strong>send a summary</strong> to HD HeeD now. Would you like me to send it as a referral or a general enquiry?`,
-        why:"Route to the right team immediately.", need:"Choose referral vs enquiry & permission to submit.",
-        choices:[
-          o("A","Send as a Referral (start process)",true,()=>state.route="Referral"),
-          o("B","Send as a General Enquiry",false,()=>state.route="Enquiry"),
-          o("C","Let me review first",false,()=>state.route="Review"),
-          o("D","Don’t send yet (save only)",false,()=>state.route="Save"),
-          NS()
-        ],
-        next:"wrap"
-      }
+        ]}
     ];
   }
 
-  function current(){ return steps()[state.i] || steps()[steps().length-1]; }
-
-  function startAlan(){
-    panel.style.display="block";
-    launch.setAttribute('aria-expanded','true');
-    if (log.children.length===0){
-      advance(0,true);
-    } else {
-      scrollDown();
-    }
-  }
-  function stopAlan(){
-    panel.style.display="none";
-    launch.setAttribute('aria-expanded','false');
-  }
-
-  function advance(toIndex=null, initial=false){
-    if (toIndex!==null) state.i = toIndex;
-    const st = current();
-    updateBadges(); save();
-    const ch = st.choices.map(x=>({k:x.k, t:x.t, rec:x.rec, apply:x.apply}));
-    sayAlan(st.html, st.why, st.need, ch);
-    if (initial) setTimeout(()=>panel.focus(), 100);
+  function render(){
+    const list = steps();
+    const total = list.length;
+    const step = list[S.i] || list[total-1];
+    stepEl.textContent = `Step ${Math.min(S.i+1,total)}/${total}`;
+    barEl.style.width = Math.round(((S.i)/(total-1))*100) + '%';
+    qEl.textContent = step.q;
+    optsEl.innerHTML = '';
+    step.opts.forEach(opt=>{
+      const b = document.createElement('button');
+      b.className='al-chip';
+      b.textContent = `${opt.k}) ${opt.t}`;
+      b.addEventListener('click', ()=> choose(opt));
+      optsEl.appendChild(b);
+    });
+    save();
+    // speak it
+    speak(step.q);
   }
 
   function choose(opt){
-    // apply and acknowledge
-    if (typeof opt.apply==="function") opt.apply();
-    save(); updateBadges();
-    sayYou(`${opt.k}) ${opt.t}`);
-
-    // micro-coaching
-    const coach = {
-      A:"Got it — I’ll use that to tailor the next step.",
-      B:"No worries — I’ll adapt and keep it simple.",
-      C:"Thanks — I’ll progress and fill gaps later.",
-      D:"Understood — I’ll park that for now.",
-      NS:"All good — I’ll guide you."
-    }[opt.k] || "Thanks — moving on.";
-    sayAlan(`<em>${coach}</em>`);
-
-    // special branch: contact details capture
-    if (steps()[state.i].id==="contact_detail" && /A|B|C/i.test(opt.k)){
-      promptDetails();
+    // special free-entry on contact step
+    if (steps()[S.i].id==='contact' && opt.k==='NS'){
+      sysEl.innerHTML = 'You can also speak or type like: <code>Mat, mat@example.com, 0400 000 000</code>';
+      speak('You can say your name, email and phone when you are ready.');
+      listen(); // wait for details
       return;
     }
+    if (typeof opt.apply==='function') opt.apply();
+    save();
+    next();
+  }
 
-    // wrap actions
-    if (steps()[state.i].id==="final"){
+  function next(){
+    if (steps()[S.i].id==='final'){
       renderSummary();
-      if (state.route==="Referral" || state.route==="Enquiry"){ submitToHeed(); }
+      if (S.route==='Referral' || S.route==='Enquiry'){ submit(); }
       return;
     }
-
-    // go next
-    setTimeout(()=>{ state.i = Math.min(state.i+1, steps().length-1); save(); advance(); }, 450);
+    S.i = Math.min(S.i+1, steps().length-1); save(); render(); if (recog) listen();
   }
 
-  function promptDetails(){
-    sayAlan(
-      `Please type details like: <br><code>Mat, mat@example.com, 0400 000 000</code>`,
-      "So I can send your summary and follow up fast.",
-      "Name/Initials, email, phone."
-    );
-  }
-
-  // free text parser
-  function handleFreeText(msg){
-    // try letter pick first
-    const m = msg.trim().toUpperCase();
-    if (["A","B","C","D","NS"].includes(m)){
-      const ch = current().choices.find(x=>x.k===m) || current().choices.find(x=>x.k==="NS");
-      if (ch) return choose(ch);
-    }
-    // guess intent words for some steps
-    const st = current();
-    const mapWords = [
-      [/participant|client/i,"A"],
-      [/carer|family/i,"B"],
-      [/support\s*co/i,"C"],
-      [/plan\s*manager|pm\b/i,"D"],
-      [/not sure|unsure|don.?t know/i,"NS"]
-    ];
-    for (const [re,k] of mapWords){
-      if (re.test(msg)){ const ch = st.choices.find(x=>x.k===k); if (ch) return choose(ch); }
-    }
-
-    // contact detail capture
-    if (st.id==="contact_detail"){
-      // very light parsing
-      const email = (msg.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0];
-      const phone = (msg.match(/(\+?\d[\d\s\-]{6,}\d)/)||[])[0];
-      const name = msg.replace(email||"","").replace(phone||"","").replace(/[,;|]/g," ").trim();
-      if (email) state.email = email;
-      if (phone) state.phone = phone;
-      if (name) state.name = name;
+  function handleSpeech(text){
+    const t = (text||'').trim();
+    // on contact step — try to parse details
+    if (steps()[S.i].id==='contact'){
+      const email = (t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0];
+      const phone = (t.match(/(\+?\d[\d\s\-]{6,}\d)/)||[])[0];
+      const name = t.replace(email||'','').replace(phone||'','').replace(/[,;|]/g,' ').trim();
+      if (email) S.email=email;
+      if (phone) S.phone=phone;
+      if (name) S.name=name;
       save();
-      sayYou(`${name||''} ${email||''} ${phone||''}`.trim());
-      sayAlan(`<em>Thanks — I’ve recorded your details.</em>`);
-      state.i = Math.min(state.i+1, steps().length-1); save(); return advance();
+      sysEl.textContent = 'Thanks — I’ve recorded your contact details.';
+      next();
+      return;
     }
+    // map speech to a choice
+    const up = t.toUpperCase();
+    const tryKeys = ['A','B','C','D','NS'];
+    let pick = null;
+    if (tryKeys.includes(up)) pick=up;
+    else if (/participant|client/i.test(t)) pick='A';
+    else if (/carer|family/i.test(t)) pick='B';
+    else if (/support\s*co/i.test(t)) pick='C';
+    else if (/plan\s*manager|pm\b/i.test(t)) pick='D';
+    else if (/not sure|unsure|don.?t know|flexible/i.test(t)) pick='NS';
 
-    // otherwise treat as a note
-    state.notes.push(`[User] ${msg}`); save();
-    sayAlan(`<em>Noted.</em>`);
+    const step = steps()[S.i];
+    const chosen = step.opts.find(x=>x.k===pick) || step.opts.find(x=>x.k==='NS');
+    if (chosen){ choose(chosen); }
+    else { S.notes.push(t); save(); sysEl.textContent='Noted. You can answer A, B, C, D or say Not sure.'; if (recog) listen(); }
   }
 
   function renderSummary(){
-    const yesno = v => v===true?'Yes':v===false?'No':(v||'—');
-    const summary = `
-      <table style="width:100%;border-collapse:collapse;border:1px solid ${getComputedStyle(panel).getPropertyValue('--alan-line')}">
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Caller</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.caller||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Consent</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.consent||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Service</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.service||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Plan mgmt</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.mgmt||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Plan dates</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.dates||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Category</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.cat||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Risks</td><td style="padding:6px;border:1px solid var(--alan-line)">Beh: ${yesno(state.risks.beh)} • Med: ${yesno(state.risks.med)} • Int: ${yesno(state.risks.int)}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Urgency</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.urgency||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">SC/PM</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.contacts||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Rostering</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.rostering||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Name</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.name||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Email</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.email||'—'}</td></tr>
-        <tr><td style="padding:6px;border:1px solid var(--alan-line)">Phone</td><td style="padding:6px;border:1px solid var(--alan-line)">${state.phone||'—'}</td></tr>
-      </table>`;
-    sayAlan(`<strong>Review</strong><br>${summary}<br><em>I’ll send this to our team so we can help you quickly.</em>`);
+    const yn=v=>v===true?'Yes':v===false?'No':(v||'—');
+    const lines = [
+      `Caller: ${S.caller||'—'}`,
+      `Consent: ${S.consent||'—'}`,
+      `Service: ${S.service||'—'}`,
+      `Mgmt: ${S.mgmt||'—'}`,
+      `Dates: ${S.dates||'—'}`,
+      `Category: ${S.cat||'—'}`,
+      `Risks: Beh ${yn(S.risks.beh)} • Med ${yn(S.risks.med)} • Int ${yn(S.risks.int)}`,
+      `Urgency: ${S.urgency||'—'}`,
+      `SC/PM: ${S.contacts||'—'}`,
+      `Rostering: ${S.rostering||'—'}`,
+      `Name: ${S.name||'—'} • Email: ${S.email||'—'} • Phone: ${S.phone||'—'}`
+    ];
+    qEl.textContent = "Great — here’s a quick summary. I’ll send this to our team.";
+    optsEl.innerHTML = '<div class="al-chip" style="cursor:default;white-space:pre-line">'+lines.join('\n')+'</div>';
+    speak("Thanks. I’ll send this to our team now.");
   }
 
-  async function submitToHeed(){
+  async function submit(){
     const payload = {
-      _subject: `HD HeeD Website – ${state.route||'Enquiry'} via Alan`,
-      source: "index-alan",
-      route: state.route||'',
-      caller: state.caller||'',
-      consent: state.consent||'',
-      service: state.service||'',
-      plan_mgmt: state.mgmt||'',
-      plan_dates: state.dates||'',
-      category: state.cat||'',
-      risk_behaviours: state.risks.beh,
-      risk_medical: state.risks.med,
-      risk_interpreter: state.risks.int,
-      urgency: state.urgency||'',
-      contacts: state.contacts||'',
-      rostering: state.rostering||'',
-      name: state.name||'',
-      email: state.email||'',
-      phone: state.phone||'',
-      notes: (state.notes||[]).join('\n'),
-      timestamp: new Date().toISOString()
+      _subject:`HD HeeD Website – ${S.route} via ALAN (simple)`,
+      source:"index-alan-simple",
+      route:S.route, caller:S.caller, consent:S.consent, service:S.service,
+      plan_mgmt:S.mgmt, plan_dates:S.dates, category:S.cat,
+      risk_behaviours:S.risks.beh, risk_medical:S.risks.med, risk_interpreter:S.risks.int,
+      urgency:S.urgency, contacts:S.contacts, rostering:S.rostering,
+      name:S.name, email:S.email, phone:S.phone,
+      notes:(S.notes||[]).join('\n'), timestamp:new Date().toISOString()
     };
     try{
       const r = await fetch(FS_ENDPOINT, {
@@ -1017,17 +926,16 @@
       });
       const data = await r.json();
       if (r.ok){
-        sayAlan(`<strong>All done!</strong> I’ve sent your details to our team. We’ll contact you shortly from <a href="mailto:${SITE_EMAIL}">${SITE_EMAIL}</a> or call ${SITE_PHONE}.`);
-      } else {
-        throw new Error(data?.error || "Submission failed");
-      }
+        sysEl.innerHTML = `All done — we’ll contact you from <a href="mailto:${SITE_EMAIL}" style="color:#ffd95c">${SITE_EMAIL}</a> or ${SITE_PHONE}.`;
+        speak("All done. We’ll contact you shortly.");
+      } else { throw new Error(data?.error || "Submission failed"); }
     }catch(e){
-      sayAlan(`<strong>Couldn’t send just now.</strong> Please email <a href="mailto:${SITE_EMAIL}">${SITE_EMAIL}</a> or call ${SITE_PHONE}. You can also <a id="alan-dl" href="#">download your summary</a> and email it.`);
-      const link = log.querySelector('#alan-dl');
-      if(link){
-        link.addEventListener('click',(ev)=>{
-          ev.preventDefault();
-          const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+      sysEl.innerHTML = `Couldn’t send right now. Please email <a href="mailto:${SITE_EMAIL}" style="color:#ffd95c">${SITE_EMAIL}</a> or call ${SITE_PHONE}. <button id="al-dl" class="al-mic" style="margin-left:6px">Download summary</button>`;
+      speak("I couldn’t send right now. You can download your summary and email it to us.");
+      const dlBtn = document.getElementById('al-dl');
+      if (dlBtn){
+        dlBtn.addEventListener('click', ()=>{
+          const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
           const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'hdheed-intake.json'});
           document.body.appendChild(a); a.click(); a.remove();
         });
@@ -1035,50 +943,31 @@
     }
   }
 
-  /* Voice (Speech Recognition + TTS) */
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let recog=null, listening=false, ttsOn=false;
-  if (SR){
-    recog = new SR(); recog.lang = 'en-AU'; recog.continuous=false; recog.interimResults=false;
-    recog.onresult = (e)=>{ const t = e.results[0][0].transcript; sayYou(t); handleFreeText(t); };
-    recog.onend = ()=>{ listening=false; vStatus.textContent="Off"; micBtn.setAttribute('aria-pressed','false'); };
+  /* ===== Open/Close/Greet ===== */
+  function openPanel(){
+    greet.style.display='none';
+    panel.style.display='block';
+    S.i=0; save(); render();
+    if (recog) listen();
   }
-  function ttsSpeak(text){
-    if (!ttsOn) return;
-    if (!window.speechSynthesis) return;
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang='en-AU';
-    window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+  function closePanel(){ panel.style.display='none'; try{ window.speechSynthesis.cancel(); }catch{} }
+
+  // Greeting popup after short delay (first visit per session)
+  if (!sessionStorage.getItem('alan_greeted')){
+    setTimeout(()=>{ greet.style.display='block'; sessionStorage.setItem('alan_greeted','1'); }, 1200);
   }
 
-  /* Events */
-  launch.addEventListener('click', startAlan);
-  closeBtn.addEventListener('click', stopAlan);
-  form.addEventListener('submit',(e)=>{
-    e.preventDefault();
-    const msg = input.value.trim(); if(!msg) return;
-    input.value=''; sayYou(msg); handleFreeText(msg);
-  });
-  micBtn.addEventListener('click', ()=>{
-    if (!recog){ alert("Voice input not supported in this browser."); return; }
-    if (listening){ try{recog.stop();}catch{} return; }
-    try{ recog.start(); listening=true; vStatus.textContent="On"; micBtn.setAttribute('aria-pressed','true'); }catch{}
-  });
-  ttsBtn.addEventListener('click', ()=>{
-    ttsOn = !ttsOn; ttsBtn.setAttribute('aria-pressed', ttsOn?'true':'false');
-    ttsBtn.textContent = ttsOn ? "🔊 Reading…" : "🔊 Read aloud";
-  });
+  // Hooks
+  startBtn.addEventListener('click', openPanel);
+  hideBtn.addEventListener('click', ()=>{ greet.style.display='none'; });
+  closeBtn.addEventListener('click', closePanel);
+  micBtn.addEventListener('click', ()=>{ if (!recog){ alert('Voice not supported in this browser.'); return; } listen(); });
+  restartBtn.addEventListener('click', ()=>{ localStorage.removeItem(SKEY); S={i:0,caller:null,consent:null,service:null,mgmt:null,dates:null,cat:null,risks:{beh:null,med:null,int:null},urgency:null,contacts:null,rostering:null,name:null,email:null,phone:null,route:null,notes:[]}; save(); render(); if (recog) listen(); });
 
-  // auto-pop open after a short delay on first visit
-  if (!sessionStorage.getItem('alan_seen')){
-    setTimeout(()=>{ startAlan(); sessionStorage.setItem('alan_seen','1'); }, 1800);
-  }
-
-  // boot badges
-  updateBadges();
+  // Optional global opener: window.ALAN.open()
+  window.ALAN = { open: openPanel };
 
 })();
 </script>
-<!-- === HD HeeD • Alan — END === -->
-</body>
-</html>
+<!-- === /ALAN (Simple Voice Intake Assistant) === -->
+
