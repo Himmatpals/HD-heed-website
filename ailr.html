@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HD HeeD – NDIS Intake & Onboarding</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: #fafafa;
+      color: #333;
+    }
+    header {
+      background: #512b8a;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    .progress-container {
+      background: #eee;
+      height: 8px;
+      width: 100%;
+      margin-top: 0;
+    }
+    .progress-bar {
+      background: #7c5cc4;
+      height: 8px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    .step {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    .step.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .chip {
+      background: #e5e0f5;
+      padding: 10px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .chip.selected {
+      background: #512b8a;
+      color: #fff;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    button {
+      background: #512b8a;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+    .helper-text {
+      font-size: 14px;
+      color: #555;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>NDIS Participant Onboarding</h1>
+    <p>HD HeeD – Because we care, we provide HD care</p>
+  </header>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <main>
+    <form id="ndisForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" enctype="multipart/form-data">
+
+      <!-- Step 0: Introduction & Consent -->
+      <div class="step active" data-step="0">
+        <h2>Welcome</h2>
+        <p>Thank you for choosing HD HeeD. This form will collect the information we need to start your NDIS supports while ensuring your rights, privacy, and safety. You can skip any question you’re not sure about.</p>
+        <div class="question">
+          <label><strong>Do you consent to us collecting and using your information for service delivery?</strong></label>
+          <div class="chip-group" data-name="consent">
+            <div class="chip">Yes</div>
+            <div class="chip">Not yet</div>
+            <div class="chip">No</div>
+            <div class="chip">Not sure</div>
+          </div>
+          <div class="helper-text">We’ll only share your information with your consent, except where required by law.</div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-buttons">
+        <button type="button" id="prevBtn" disabled>Previous</button>
+        <button type="button" id="nextBtn">Next</button>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    let currentStep = 0;
+    const steps = document.querySelectorAll('.step');
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function showStep(n) {
+      steps.forEach((step, i) => {
+        step.classList.toggle('active', i === n);
+      });
+      progressBar.style.width = ((n) / (steps.length - 1)) * 100 + '%';
+      prevBtn.disabled = n === 0;
+      nextBtn.textContent = n === steps.length - 1 ? 'Submit' : 'Next';
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        showStep(currentStep);
+      } else {
+        document.getElementById('ndisForm').submit();
+      }
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (currentStep > 0) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    });
+
+    // Chip selection
+    document.querySelectorAll('.chip-group').forEach(group => {
+      group.addEventListener('click', e => {
+        if (e.target.classList.contains('chip')) {
+          [...group.children].forEach(chip => chip.classList.remove('selected'));
+          e.target.classList.add('selected');
+          const inputName = group.dataset.name;
+          let hiddenInput = group.querySelector('input[type=hidden]');
+          if (!hiddenInput) {
+            hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = inputName;
+            group.appendChild(hiddenInput);
+          }
+          hiddenInput.value = e.target.textContent;
+        }
+      });
+    });
+
+    showStep(currentStep);
+  </script>
+</body>
+</html>
+<!-- Step 1: Participant Details -->
+      <div class="step" data-step="1">
+        <h2>Participant Details</h2>
+        <div class="question">
+          <label>Full Name</label>
+          <input type="text" name="full_name" placeholder="e.g., John Smith">
+        </div>
+        <div class="question">
+          <label>Date of Birth</label>
+          <input type="date" name="dob">
+        </div>
+        <div class="question">
+          <label>Gender</label>
+          <div class="chip-group" data-name="gender">
+            <div class="chip">Male</div>
+            <div class="chip">Female</div>
+            <div class="chip">Non-binary</div>
+            <div class="chip">Prefer not to say</div>
+            <div class="chip">Other</div>
+          </div>
+        </div>
+        <div class="question">
+          <label>Primary Language</label>
+          <input type="text" name="primary_language" placeholder="English, Punjabi, etc.">
+        </div>
+        <div class="question">
+          <label>NDIS Number</label>
+          <input type="text" name="ndis_number">
+        </div>
+      </div>
+
+      <!-- Step 2: Plan Snapshot -->
+      <div class="step" data-step="2">
+        <h2>Your NDIS Plan</h2>
+        <div class="question">
+          <label>Plan Dates</label>
+          <input type="text" name="plan_dates" placeholder="Start date – End date">
+        </div>
+        <div class="question">
+          <label>Funding Management Type</label>
+          <div class="chip-group" data-name="funding_type">
+            <div class="chip">Self-managed</div>
+            <div class="chip">Plan-managed</div>
+            <div class="chip">NDIA-managed</div>
+            <div class="chip">Combination</div>
+            <div class="chip">Not sure</div>
+          </div>
+        </div>
+        <div class="question">
+          <label>Plan Goals (as per your NDIS plan)</label>
+          <textarea name="plan_goals" rows="4" placeholder="Write your main NDIS goals here"></textarea>
+        </div>
+      </div>
+
+      <!-- Step 3: Contact & Communication Preferences -->
+      <div class="step" data-step="3">
+        <h2>Contact & Communication</h2>
+        <div class="question">
+          <label>Primary Contact Person</label>
+          <input type="text" name="primary_contact">
+        </div>
+        <div class="question">
+          <label>Relationship to Participant</label>
+          <input type="text" name="relationship">
+        </div>
+        <div class="question">
+          <label>Email</label>
+          <input type="email" name="email">
+        </div>
+        <div class="question">
+          <label>Phone</label>
+          <input type="tel" name="phone">
+        </div>
+        <div class="question">
+          <label>Preferred Contact Method</label>
+          <div class="chip-group" data-name="contact_method">
+            <div class="chip">Phone</div>
+            <div class="chip">Email</div>
+            <div class="chip">SMS</div>
+            <div class="chip">In person</div>
+            <div class="chip">Other</div>
+          </div>
+        </div>
+        <div class="question">
+          <label>Preferred Language for Communication</label>
+          <input type="text" name="comm_language" placeholder="English, Punjabi, etc.">
+        </div>
+      </div>
+
+      <!-- Step 4: Support Environment -->
+      <div class="step" data-step="4">
+        <h2>Support Environment</h2>
+        <div class="question">
+          <label>Current Living Situation</label>
+          <div class="chip-group" data-name="living_situation">
+            <div class="chip">Own home</div>
+            <div class="chip">Private rental</div>
+            <div class="chip">Group home</div>
+            <div class="chip">Supported independent living</div>
+            <div class="chip">With family</div>
+            <div class="chip">Other</div>
+          </div>
+        </div>
+        <div class="question">
+          <label>Do you have any pets?</label>
+          <div class="chip-group" data-name="pets">
+            <div class="chip">Yes</div>
+            <div class="chip">No</div>
+          </div>
+        </div>
+        <div class="question">
+          <label>Access considerations</label>
+          <textarea name="access_considerations" rows="3" placeholder="E.g., wheelchair access, ramps, stairs"></textarea>
+        </div>
+      </div>
+
+      <!-- Step 5: Support Needs -->
+      <div class="step" data-step="5">
+        <h2>Support Needs</h2>
+        <div class="question">
+          <label>Which supports do you require? (Select all that apply)</label>
+          <div class="chip-group" data-name="support_needs">
+            <div class="chip">Personal care</div>
+            <div class="chip">Domestic assistance</div>
+            <div class="chip">Meal preparation</div>
+            <div class="chip">Community participation</div>
+            <div class="chip">Transport</div>
+            <div class="chip">Therapy services</div>
+            <div class="chip">Assistive technology</div>
+            <div class="chip">Other</div>
+          </div>
+        </div>
+        <div class="question">
+          <label>Hours or frequency of supports needed</label>
+          <input type="text" name="support_frequency" placeholder="E.g., 3 hours/day, twice a week">
+        </div>
+      </div>
+
+      <!-- Step 6: Health & Clinical Risk Screening -->
+      <div class="step" data-step="6">
+        <h2>Health & Risk Screening</h2>
+        <div class="question">
+          <label>Do you have any medical diagnoses we should be aware of?</label>
+          <textarea name="medical_diagnoses" rows="3"></textarea>
+        </div>
+        <div class="question">
+          <label>Do you take any regular medications?</label>
+          <div class="chip-group" data-name="medications">
+            <div class="chip">Yes</div>
+            <div class="chip">No</div>
+            <div class="chip">Prefer not to say</div>
+          </div>
+        </div>
+        <div class="question">
+          <label>Do you have any allergies?</label>
+          <div class="chip-group" data-name="allergies">
+            <div class="chip">Yes</div>
+            <div class="chip">No</div>
+            <div class="chip">Not sure</div>
+          </div>
+        </div>
+        <div class="question">
+          <label>Mobility considerations</label>
+          <textarea name="mobility_considerations" rows="3" placeholder="E.g., wheelchair, walking aid, falls risk"></textarea>
+        </div>
+      </div>
+      <!-- Step 7: Behaviour & Safety -->
+      <div class="step" data-step="7">
+        <h2>Behaviour & Safety</h2>
+        <div class="question">
+          <label>Behaviours of concern</label>
+          <div class="chip-group" data-name="behaviours" data-multi>
+            <div class="chip">None</div>
+            <div class="chip">Aggression</div>
+            <div class="chip">Absconding</div>
+            <div class="chip">Property damage</div>
+            <div class="chip">Self-injury</div>
+            <div class="chip">Triggers/noise sensitivity</div>
+            <div class="chip">Prefer not to say</div>
+            <div class="chip chip-other" data-target="beh_other">Other</div>
+          </div>
+          <input class="other-input" id="beh_other" type="text" placeholder="Describe other behaviours" hidden>
+        </div>
+
+        <div class="question">
+          <label>Behaviour Support Plan in place?</label>
+          <div class="chip-group" data-name="bsp_in_place">
+            <div class="chip">Yes</div>
+            <div class="chip">No</div>
+            <div class="chip">Not sure</div>
+          </div>
+        </div>
+
+        <div class="question">
+          <label>Known risks</label>
+          <div class="chip-group" data-name="known_risks" data-multi>
+            <div class="chip">Falls</div>
+            <div class="chip">Seizures</div>
+            <div class="chip">Choking/aspiration</div>
+            <div class="chip">Pressure injury</div>
+            <div class="chip">Medication error</div>
+            <div class="chip">Home environment</div>
+            <div class="chip">Prefer not to say</div>
+            <div class="chip chip-other" data-target="risk_other">Other</div>
+          </div>
+          <input class="other-input" id="risk_other" type="text" placeholder="Describe other risks" hidden>
+        </div>
+      </div>
+
+      <!-- Step 8: Assistive Technology & Equipment -->
+      <div class="step" data-step="8">
+        <h2>Assistive Technology & Equipment</h2>
+        <div class="question">
+          <label>Do you use any equipment?</label>
+          <div class="chip-group" data-name="equipment" data-multi>
+            <div class="chip">None</div>
+            <div class="chip">Wheelchair</div>
+            <div class="chip">Walker</div>
+            <div class="chip">Hoist/transfer aid</div>
+            <div class="chip">Pressure care mattress</div>
+            <div class="chip">Communication aid</div>
+            <div class="chip">Hearing/vision aid</div>
+            <div class="chip chip-other" data-target="equip_other">Other</div>
+          </div>
+          <input class="other-input" id="equip_other" type="text" placeholder="List other equipment" hidden>
+        </div>
+        <div class="question">
+          <label>Maintenance/servicing up to date?</label>
+          <div class="chip-group" data-name="equip_service">
+            <div class="chip">Yes</div>
+            <div class="chip">No</div>
+            <div class="chip">Not sure</div>
+            <div class="chip">Prefer not to say</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 9: Transport & Community Access -->
+      <div class="step" data-step="9">
+        <h2>Transport & Community Access</h2>
+        <div class="question">
+          <label>Transport needs</label>
+          <div class="chip-group" data-name="transport" data-multi>
+            <div class="chip">Car required</div>
+            <div class="chip">Wheelchair-access vehicle</div>
+            <div class="chip">Public transport training</div>
+            <div class="chip">Taxi subsidy</div>
+            <div class="chip">Support worker to drive</div>
+            <div class="chip">Prefer not to say</div>
+            <div class="chip chip-other" data-target="transport_other">Other</div>
+          </div>
+          <input class="other-input" id="transport_other" type="text" placeholder="Transport details" hidden>
+        </div>
+        <div class="question">
+          <label>Licensing/Insurance (if support worker to drive your vehicle)</label>
+          <textarea name="transport_licensing" rows="3" placeholder="Any requirements or restrictions"></textarea>
+        </div>
+      </div>
+
+      <!-- Step 10: Home & Daily Living -->
+      <div class="step" data-step="10">
+        <h2>Home & Daily Living</h2>
+        <div class="question">
+          <label>Domestic assistance needs</label>
+          <div class="chip-group" data-name="domestic_needs" data-multi>
+            <div class="chip">Cleaning</div>
+            <div class="chip">Laundry</div>
+            <div class="chip">Meal prep</div>
+            <div class="chip">Shopping</div>
+            <div class="chip">Home organisation</div>
+            <div class="chip">Prefer not to say</div>
+            <div class="chip chip-other" data-target="dom_other">Other</div>
+          </div>
+          <input class="other-input" id="dom_other" type="text" placeholder="Other domestic needs" hidden>
+        </div>
+        <div class="question">
+          <label>Access & entry</label>
+          <div class="chip-group" data-name="access_entry" data-multi>
+            <div class="chip">Keysafe</div>
+            <div class="chip">Family at home</div>
+            <div class="chip">Intercom</div>
+            <div class="chip">Pets present</div>
+            <div class="chip">Prefer not to say</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 11: Key Contacts -->
+      <div class="step" data-step="11">
+        <h2>Key Contacts</h2>
+        <div class="question">
+          <label>Support Coordinator (if applicable)</label>
+          <input type="text" name="sc_name" placeholder="Name">
+          <input type="text" name="sc_org" placeholder="Organisation">
+          <input type="tel"  name="sc_phone" placeholder="Phone">
+          <input type="email" name="sc_email" placeholder="Email">
+        </div>
+        <div class="question">
+          <label>Plan Manager (if applicable)</label>
+          <input type="text" name="pm_name" placeholder="Name">
+          <input type="text" name="pm_org" placeholder="Organisation">
+          <input type="tel"  name="pm_phone" placeholder="Phone">
+          <input type="email" name="pm_email" placeholder="Email">
+        </div>
+        <div class="question">
+          <label>GP / Primary Health Provider</label>
+          <input type="text" name="gp_name" placeholder="Name">
+          <input type="tel"  name="gp_phone" placeholder="Phone">
+          <input type="text" name="gp_clinic" placeholder="Clinic">
+        </div>
+        <div class="question">
+          <label>Emergency Contact</label>
+          <input type="text" name="ec_name" placeholder="Full name">
+          <input type="text" name="ec_relationship" placeholder="Relationship">
+          <input type="tel"  name="ec_phone" placeholder="Phone">
+        </div>
+      </div>
+
+      <!-- Step 12: Uploads -->
+      <div class="step" data-step="12">
+        <h2>Documents (Optional)</h2>
+        <p class="muted">Uploads are optional but help us move faster.</p>
+        <div class="question">
+          <label>Upload NDIS plan (PDF/Image)</label>
+          <input type="file" name="upload_plan" accept=".pdf,.png,.jpg,.jpeg,.webp">
+        </div>
+        <div class="question">
+          <label>Behaviour Support Plan / Risk plan</label>
+          <input type="file" name="upload_bsp" accept=".pdf,.png,.jpg,.jpeg,.webp">
+        </div>
+        <div class="question">
+          <label>Medication chart / care notes</label>
+          <input type="file" name="upload_med" accept=".pdf,.png,.jpg,.jpeg,.webp">
+        </div>
+        <div class="question">
+          <label>Any other relevant document</label>
+          <input type="file" name="upload_other" accept=".pdf,.png,.jpg,.jpeg,.webp" multiple>
+        </div>
+      </div>
+
+      <!-- Step 13: Consent, Acknowledgements & Review -->
+      <div class="step" data-step="13">
+        <h2>Consent, Acknowledgements & Review</h2>
+        <div class="question">
+          <label>Interpreter required?</label>
+          <div class="chip-group" data-name="interpreter_required">
+            <div class="chip">Yes</div>
+            <div class="chip">No</div>
+            <div class="chip">Not sure</div>
+          </div>
+          <input type="text" name="interpreter_language" placeholder="If yes, which language?">
+        </div>
+
+        <div class="question">
+          <label>Consent to collect and share relevant information to coordinate your supports</label>
+          <div class="chip-group" data-name="consent_share">
+            <div class="chip">Yes</div>
+            <div class="chip">No</div>
+          </div>
+        </div>
+
+        <div class="question">
+          <label>Privacy acknowledgement (I have read and understood the privacy notice)</label>
+          <div class="chip-group" data-name="consent_privacy">
+            <div class="chip">I agree</div>
+            <div class="chip">I do not agree</div>
+          </div>
+        </div>
+
+        <div class="question">
+          <label>Any final notes?</label>
+          <textarea name="final_notes" rows="4" placeholder="Anything else to add"></textarea>
+        </div>
+
+        <div class="review-box">
+          <h3>Review your answers</h3>
+          <p class="muted">Click “Build summary” to preview your onboarding summary before sending.</p>
+          <button type="button" class="btn" id="buildSummary">Build summary</button>
+          <pre id="reviewOutput" class="review-output" aria-live="polite"></pre>
+        </div>
+      </div>
+
+      <!-- Wizard Controls -->
+      <div class="wizard-controls">
+        <button type="button" class="btn" id="prevStep">‹ Back</button>
+        <button type="button" class="btn btn-primary" id="nextStep">Next ›</button>
+        <button type="submit" class="btn btn-accent" id="submitAll" disabled>Submit all</button>
+        <div class="muted" id="saveStatus" aria-live="polite"></div>
+      </div>
+    </form>
+  </section>
+</main>
+
+<!-- ===== AILR Page Logic ===== -->
+<script>
+(function(){
+  const form = document.getElementById('ailrForm');
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const prevBtn = document.getElementById('prevStep');
+  const nextBtn = document.getElementById('nextStep');
+  const submitBtn = document.getElementById('submitAll');
+  const buildSummaryBtn = document.getElementById('buildSummary');
+  const reviewOutput = document.getElementById('reviewOutput');
+  const saveStatus = document.getElementById('saveStatus');
+  const progress = document.getElementById('ailrProgress'); // optional if you added a progress bar
+  const STORAGE_KEY = 'ailr_onboarding_v1';
+  let i = 0;
+
+  // Generic state
+  let STATE = load() || {};
+
+  // Helpers
+  function showStep(idx){
+    i = Math.max(0, Math.min(idx, steps.length - 1));
+    steps.forEach((el, j)=> el.hidden = j !== i);
+    prevBtn.disabled = i === 0;
+    nextBtn.hidden = (i === steps.length - 1);
+    submitBtn.hidden = (i !== steps.length - 1);
+    // Enable submit only if key consents are OK:
+    validateFinalConsent();
+    updateProgress();
+    saveStatus.textContent = '';
+  }
+  function updateProgress(){
+    if (!progress) return;
+    const pct = Math.round(((i+1)/steps.length)*100);
+    progress.style.setProperty('--pct', pct + '%');
+  }
+
+  function isMulti(group){ return group.hasAttribute('data-multi'); }
+
+  function setAnswer(name, value, multi=false){
+    if (!name) return;
+    if (multi){
+      const arr = Array.isArray(STATE[name]) ? STATE[name] : [];
+      // Toggle
+      const exists = arr.includes(value);
+      STATE[name] = exists ? arr.filter(v=>v!==value) : arr.concat(value);
+    } else {
+      STATE[name] = value;
+    }
+    autoSave();
+  }
+
+  function autoSave(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+      saveStatus.textContent = 'Saved';
+      setTimeout(()=> saveStatus.textContent = '', 1200);
+    }catch{}
+  }
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'null'); }catch{ return null; }
+  }
+
+  // Wire chip groups (click to select; supports multi & “Other”)
+  document.querySelectorAll('.chip-group').forEach(group=>{
+    const name = group.dataset.name;
+    group.addEventListener('click', (e)=>{
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+
+      // Other toggle
+      if (chip.classList.contains('chip-other')){
+        const tgtId = chip.getAttribute('data-target');
+        const input = document.getElementById(tgtId);
+        if (input){
+          input.hidden = !input.hidden;
+          if (!input.hidden) input.focus();
+        }
+      }
+
+      // Single vs multi
+      if (isMulti(group)){
+        chip.classList.toggle('active');
+        const val = chip.textContent.trim();
+        setAnswer(name, val, true);
+      } else {
+        // Make single selection
+        group.querySelectorAll('.chip').forEach(c=> c.classList.remove('active'));
+        chip.classList.add('active');
+        setAnswer(name, chip.textContent.trim(), false);
+      }
+    });
+  });
+
+  // Persist text inputs / textareas
+  form.querySelectorAll('input[type="text"],input[type="email"],input[type="tel"],input[type="date"],textarea').forEach(inp=>{
+    // Restore
+    const n = inp.name || inp.id;
+    if (STATE[n]) inp.value = STATE[n];
+    // Save on input
+    inp.addEventListener('input', ()=>{
+      STATE[n] = inp.value;
+      autoSave();
+      validateFinalConsent();
+    });
+  });
+
+  // Prev/Next
+  prevBtn.addEventListener('click', ()=> showStep(i-1));
+  nextBtn.addEventListener('click', ()=> showStep(i+1));
+
+  // Build summary
+  if (buildSummaryBtn){
+    buildSummaryBtn.addEventListener('click', ()=>{
+      const clone = {...STATE};
+      // Redact obvious PII in preview if needed (keep as-is here):
+      reviewOutput.textContent = JSON.stringify(clone, null, 2);
+      // Enable submit if consents are good:
+      validateFinalConsent(true);
+    });
+  }
+
+  // Consent gating (Step 13)
+  function validateFinalConsent(fromBuild=false){
+    const okShare   = STATE['consent_share'] === 'Yes';
+    const okPrivacy = STATE['consent_privacy'] === 'I agree';
+    const gateOk    = okShare && okPrivacy;
+    submitBtn.disabled = !gateOk;
+    if (fromBuild && !gateOk){
+      saveStatus.textContent = 'Please accept consent & privacy to submit.';
+    }
+  }
+
+  // Submit (JSON to Formspree)
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    submitBtn.disabled = true;
+    saveStatus.textContent = 'Submitting…';
+
+    try{
+      // Attach light file manifest (files are not sent via JSON; recommend emailing files or separate upload handler)
+      const files = {};
+      ['upload_plan','upload_bsp','upload_med','upload_other'].forEach(n=>{
+        const f = form.querySelector(`[name="${n}"]`);
+        if (f && f.files && f.files.length){
+          files[n] = Array.from(f.files).map(file=>({name:file.name, size:file.size, type:file.type}));
+        }
+      });
+
+      const payload = {
+        _subject: 'HD HeeD — AILR Onboarding',
+        source: 'ailr.html',
+        data: STATE,
+        files,
+        submitted_at: new Date().toISOString()
+      };
+
+      const r = await fetch('https://formspree.io/f/xvgrkkjn', {
+        method:'POST',
+        headers:{'Accept':'application/json','Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+
+      if (!r.ok) throw new Error('Network');
+
+      saveStatus.textContent = 'Submitted. Thank you!';
+      // Optional: clear storage
+      // localStorage.removeItem(STORAGE_KEY);
+    }catch(err){
+      saveStatus.textContent = 'Could not submit now. Your answers are saved on this device.';
+    }finally{
+      submitBtn.disabled = false;
+    }
+  });
+
+  // Restore any chip selections from STATE
+  document.querySelectorAll('.chip-group').forEach(group=>{
+    const name = group.dataset.name;
+    const val = STATE[name];
+    if (!val) return;
+    if (isMulti(group)){
+      const arr = Array.isArray(val)? val : [val];
+      group.querySelectorAll('.chip').forEach(ch=>{
+        if (arr.includes(ch.textContent.trim())) ch.classList.add('active');
+      });
+    } else {
+      group.querySelectorAll('.chip').forEach(ch=>{
+        if (val === ch.textContent.trim()) ch.classList.add('active');
+      });
+    }
+  });
+
+  // Start on first visible step
+  showStep(0);
+})();
+</script>
