@@ -174,23 +174,10 @@
       min-width:280px; max-width:460px; line-height:1.25;
       box-shadow:0 16px 40px rgba(0,0,0,.25);
       animation:bob 2.2s ease-in-out infinite;
-
-      /* NEW: stack avatar above the label */
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
     }
     .floating-referral:hover{ background:#ffda44 }
     .floating-referral .title{ font-size:1rem; display:block }
     .floating-referral .sub{ font-size:.88rem; font-weight:700; opacity:.95; display:block }
-
-    /* NEW: small Ella image inside the button */
-    .floating-referral .ella-btn-img{
-      width:32px; height:32px; border-radius:50%;
-      object-fit:cover; margin-bottom:2px;
-      box-shadow:0 2px 8px rgba(0,0,0,.12);
-    }
-
     @keyframes bob { 0%,100%{transform: translateY(0)} 50%{transform: translateY(-4px)} }
     @media (min-width:980px){
       .floating-referral{ right:34px; bottom:34px; padding:16px 18px; border-radius:18px }
@@ -200,10 +187,6 @@
     @media (max-width:480px){
       .floating-referral{ min-width:auto; max-width:85vw; padding:12px 14px }
       .floating-referral .sub{ display:none } /* keep compact on very small screens */
-    }
-    /* NEW: bump up above sticky CTA on mobile (and respect safe area) */
-    @media (max-width:640px){
-      .floating-referral{ bottom: calc(96px + env(safe-area-inset-bottom)); }
     }
 
     /* Respect reduced motion */
@@ -479,35 +462,13 @@
   </footer>
 
   <!-- Floating ELLA Button -->
-<a href="#" class="floating-referral" aria-label="Talk to ELLA" id="ella-fab">
-  <!-- tiny Ella avatar above the label (already added) -->
-  <img src="images/ella/ella-default.png" alt="Ella" class="ella-btn-img">
-  <span class="title">💬 Talk to ELLA</span>
-  <span class="sub">I’m quicker than a phone call, easy to talk to, and can organise help fast.</span>
-</a>
+  <a href="#" class="floating-referral" aria-label="Talk to ELLA"
+     onclick="(window.ELLA||window.ALAN).open();return false;">
+    <span class="title">💬 Talk to ELLA</span>
+    <span class="sub">I’m quicker than a phone call, easy to talk to, and can organise help fast.</span>
+  </a>
 
-<script>
-  // FIX: robust opener – retries briefly until ELLA is ready
-  (function(){
-    const fab = document.getElementById('ella-fab');
-    if (!fab) return;
-    fab.addEventListener('click', function(e){
-      e.preventDefault();
-      let tries = 0;
-      const tryOpen = () => {
-        tries++;
-        const opener =
-          (window.ELLA && typeof window.ELLA.open === 'function') ? window.ELLA :
-          (window.ALAN && typeof window.ALAN.open === 'function') ? window.ALAN : null;
-
-        if (opener) { opener.open(); return; }
-        if (tries < 30) setTimeout(tryOpen, 100); // retry up to ~3s total
-      };
-      tryOpen();
-    });
-  })();
-</script>
-
+  <script>
     // Mobile menu
     const toggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
@@ -625,7 +586,7 @@
     }
   </script>
 
-<!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.1 with portraits) === -->
+ <!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.1 with portraits) === -->
 <style>
   :root{
     --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153;
@@ -647,7 +608,7 @@
   /* Panel (wider; expands left) */
   #alan-panel{position:fixed;right:18px;bottom:18px;z-index:10000;display:none}
   #alan-panel .wrap{
-    width:680px;
+    width:680px;                 /* wider base */
     max-width:calc(100vw - 36px);
     max-height:85vh;
     background:linear-gradient(180deg,#10172a,#0b0f1a);color:var(--al-text);
@@ -655,17 +616,17 @@
     font-family:Inter,system-ui;display:flex;flex-direction:column
   }
   @media (min-width:1100px){
-    #alan-panel .wrap{ width:860px; }
+    #alan-panel .wrap{ width:860px; } /* extra roomy on desktop */
   }
 
   .al-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--al-line);background:#0d1428}
   .al-head .avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ffcdd2,#ffe0e0);display:grid;place-items:center;color:#5a1b29;font-weight:900}
   .al-head .ttl{font-weight:900}
 
-  /* Body */
+  /* Body: bigger portrait column */
   .al-body{
     display:grid;
-    grid-template-columns:220px 1fr;
+    grid-template-columns:220px 1fr;  /* was 118px */
     gap:16px;overflow:auto;min-height:0;padding:16px
   }
   .al-portrait{position:sticky;top:64px;align-self:start}
@@ -700,22 +661,6 @@
   @media (max-width:640px){
     .al-body{grid-template-columns:1fr}
     .al-portrait{position:static;max-width:200px;margin:0 auto}
-  }
-
-  /* ==== Minimal overrides for the floating “Talk to ELLA” button ==== */
-  /* 1) Add small Ella image support */
-  .floating-referral{            /* keep existing styles; add stacking for the avatar */
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .floating-referral .ella-btn-img{
-    width:32px;height:32px;border-radius:50%;object-fit:cover;margin-bottom:2px;
-    box-shadow:0 2px 8px rgba(0,0,0,.12);
-  }
-  /* 2) Nudge up on mobile so it doesn't overlap the sticky CTA / Enquiry button */
-  @media (max-width:640px){
-    .floating-referral{ bottom: calc(96px + env(safe-area-inset-bottom)); }
   }
 </style>
 
@@ -906,7 +851,7 @@
   const o = (k,t,apply=()=>{})=>({k,t,apply});
 
   function steps(){ return [
-    {id:'caller', q:"Hi, I’m Ella, your AI assistant. I can help you avoid an awkward enquiry by asking some simple questions, so our team is ready with support when they get in touch.\n\nWho am I speaking with today?",
+    {id:'caller', q:"Who am I speaking with today?",
       opts:[ o('A','Participant',()=>S.caller='Participant'),
              o('B','Family / Carer',()=>S.caller='Carer'),
              o('C','Support Coordinator',()=>S.caller='Support Coordinator'),
@@ -938,9 +883,9 @@
              o('D','No preferences',()=>{S.pref.none=true}), NS() ]},
     {id:'mgmt', q:"How is the NDIS plan managed?",
       opts:[ o('A','NDIA-managed',()=>S.mgmt='NDIA-managed'),
-             o('B','Plan-managed',=>S.mgmt='Plan-managed'),
-             o('C','Self-managed',=>S.mgmt='Self-managed'),
-             o('D','Not sure',=>S.mgmt='Not sure'), NS() ]},
+             o('B','Plan-managed',()=>S.mgmt='Plan-managed'),
+             o('C','Self-managed',()=>S.mgmt='Self-managed'),
+             o('D','Not sure',()=>S.mgmt='Not sure'), NS() ]},
     {id:'dates', q:"Do you know the plan dates?",
       opts:[ o('A','Active',()=>S.dates='Active'),
              o('B','Expiring soon',()=>S.dates='Expiring soon'),
@@ -1068,7 +1013,7 @@
     speak(step.q); save();
   }
 
-  /* STRICT typed-answer box */
+  /* STRICT typed-answer box: requires non-empty input before continuing */
   function injectCustomBox(stepId, label, placeholder, onSave){
     const box=document.createElement('div');
     box.className='al-inlinebox';
@@ -1084,7 +1029,7 @@
       if(!txt){
         sysEl.textContent='Please type something or choose one of the options.';
         speak('Please type something, or choose one of the options.');
-        return;
+        return; // do not advance if empty
       }
       onSave && onSave(txt);
     };
@@ -1276,32 +1221,6 @@
   window.ELLA = { open: openPanel };
 })();
 </script>
-  <script>
-(function(){
-  /* ... your existing ELLA code ... */
-
-  // Voice list may load async
-  if (window.speechSynthesis){ speechSynthesis.onvoiceschanged = pickVoice; }
-
-  // Public openers
-  window.ALAN = { open: openPanel }; // keep for backward compatibility
-  window.ELLA = { open: openPanel };
-
-  // FIX: announce that Ella is ready (for the FAB retry logic)
-  document.dispatchEvent(new Event('ella-ready'));
-
-  // FIX: ensure greet runs after page load (still once per tab via sessionStorage)
-  window.addEventListener('load', () => {
-    if (!sessionStorage.getItem('ella_greeted_v31')){
-      setTimeout(()=>{
-        const g = document.getElementById('alan-greet');
-        if (g) { g.style.display = 'block'; sessionStorage.setItem('ella_greeted_v31','1'); }
-      }, 900);
-    }
-  });
-})();
-</script>
-
 <!-- === /ELLA (v3.1) === -->
-
- 
+</body>
+</html>
