@@ -479,15 +479,35 @@
   </footer>
 
   <!-- Floating ELLA Button -->
-  <a href="#" class="floating-referral" aria-label="Talk to ELLA"
-     onclick="(window.ELLA||window.ALAN).open();return false;">
-    <!-- NEW: tiny Ella avatar above the label -->
-    <img src="images/ella/ella-default.png" alt="Ella" class="ella-btn-img">
-    <span class="title">💬 Talk to ELLA</span>
-    <span class="sub">I’m quicker than a phone call, easy to talk to, and can organise help fast.</span>
-  </a>
+<a href="#" class="floating-referral" aria-label="Talk to ELLA" id="ella-fab">
+  <!-- tiny Ella avatar above the label (already added) -->
+  <img src="images/ella/ella-default.png" alt="Ella" class="ella-btn-img">
+  <span class="title">💬 Talk to ELLA</span>
+  <span class="sub">I’m quicker than a phone call, easy to talk to, and can organise help fast.</span>
+</a>
 
-  <script>
+<script>
+  // FIX: robust opener – retries briefly until ELLA is ready
+  (function(){
+    const fab = document.getElementById('ella-fab');
+    if (!fab) return;
+    fab.addEventListener('click', function(e){
+      e.preventDefault();
+      let tries = 0;
+      const tryOpen = () => {
+        tries++;
+        const opener =
+          (window.ELLA && typeof window.ELLA.open === 'function') ? window.ELLA :
+          (window.ALAN && typeof window.ALAN.open === 'function') ? window.ALAN : null;
+
+        if (opener) { opener.open(); return; }
+        if (tries < 30) setTimeout(tryOpen, 100); // retry up to ~3s total
+      };
+      tryOpen();
+    });
+  })();
+</script>
+
     // Mobile menu
     const toggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
