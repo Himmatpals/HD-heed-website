@@ -762,6 +762,44 @@
   const startBtn = document.getElementById('alan-start');
   const hideBtn  = document.getElementById('alan-hide');
   const panel = document.getElementById('alan-panel');
+  <script>
+// … keep your existing constants above …
+
+// --- Robust close handlers (click, ESC, and backdrop) ---
+function onCloseClick(e){
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  closePanel();
+}
+
+// Direct click on the button
+if (closeBtn) {
+  closeBtn.addEventListener('click', onCloseClick);
+}
+
+// Fallback in case the node is re-rendered/replaced
+document.addEventListener('click', (e)=>{
+  if (e.target && e.target.closest && e.target.closest('#al-close')) {
+    onCloseClick(e);
+  }
+}, { capture: true });
+
+// ESC to close
+document.addEventListener('keydown', (e)=>{
+  if (e.key === 'Escape' && panel && panel.style.display === 'block') {
+    closePanel();
+  }
+});
+
+// Click outside the inner wrapper to close (backdrop click)
+if (panel) {
+  panel.addEventListener('click', (e)=>{
+    if (e.target === panel) {
+      closePanel();
+    }
+  });
+}
+</script>
+
   const qEl   = document.getElementById('al-q');
   const optsEl= document.getElementById('al-opts');
   const stepEl= document.getElementById('al-step');
