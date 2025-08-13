@@ -1229,5 +1229,37 @@
 })();
 </script>
 <!-- === /ELLA (v3.3) === -->
+<script>
+const panel = document.getElementById('alan-panel');
+const closeBtn = document.getElementById('al-close');
+
+function closePanel() {
+  panel.style.display = 'none';
+}
+
+function onCloseClick(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  closePanel();
+}
+
+if (closeBtn) {
+  closeBtn.addEventListener('click', onCloseClick);
+}
+
+// Close on ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && panel.style.display === 'block') {
+    closePanel();
+  }
+});
+
+// Close on backdrop click
+panel.addEventListener('click', (e) => {
+  if (e.target === panel) {
+    closePanel();
+  }
+});
+</script>
 </body>
 </html>
