@@ -174,10 +174,23 @@
       min-width:280px; max-width:460px; line-height:1.25;
       box-shadow:0 16px 40px rgba(0,0,0,.25);
       animation:bob 2.2s ease-in-out infinite;
+
+      /* NEW: stack avatar above the label */
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
     }
     .floating-referral:hover{ background:#ffda44 }
     .floating-referral .title{ font-size:1rem; display:block }
     .floating-referral .sub{ font-size:.88rem; font-weight:700; opacity:.95; display:block }
+
+    /* NEW: small Ella image inside the button */
+    .floating-referral .ella-btn-img{
+      width:32px; height:32px; border-radius:50%;
+      object-fit:cover; margin-bottom:2px;
+      box-shadow:0 2px 8px rgba(0,0,0,.12);
+    }
+
     @keyframes bob { 0%,100%{transform: translateY(0)} 50%{transform: translateY(-4px)} }
     @media (min-width:980px){
       .floating-referral{ right:34px; bottom:34px; padding:16px 18px; border-radius:18px }
@@ -187,6 +200,10 @@
     @media (max-width:480px){
       .floating-referral{ min-width:auto; max-width:85vw; padding:12px 14px }
       .floating-referral .sub{ display:none } /* keep compact on very small screens */
+    }
+    /* NEW: bump up above sticky CTA on mobile (and respect safe area) */
+    @media (max-width:640px){
+      .floating-referral{ bottom: calc(96px + env(safe-area-inset-bottom)); }
     }
 
     /* Respect reduced motion */
@@ -464,6 +481,8 @@
   <!-- Floating ELLA Button -->
   <a href="#" class="floating-referral" aria-label="Talk to ELLA"
      onclick="(window.ELLA||window.ALAN).open();return false;">
+    <!-- NEW: tiny Ella avatar above the label -->
+    <img src="images/ella/ella-default.png" alt="Ella" class="ella-btn-img">
     <span class="title">💬 Talk to ELLA</span>
     <span class="sub">I’m quicker than a phone call, easy to talk to, and can organise help fast.</span>
   </a>
@@ -585,6 +604,7 @@
       });
     }
   </script>
+
 <!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.1 with portraits) === -->
 <style>
   :root{
