@@ -570,63 +570,78 @@
       });
     }
   </script>
-  <!-- === HD HeeD • ALAN (Simple Voice Intake Assistant) — DROP-IN === -->
+  <!-- === HD HeeD • ALAN (Refined Voice Intake Assistant) — DROP-IN === -->
 <style>
   :root{
     --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153;
-    --al-text:#e8edff; --al-accent:#ffc107; --al-soft:#171f3b; --al-good:#1ad1a5;
+    --al-text:#e8edff; --al-accent:#ffc107; --al-soft:#0f1733; --al-good:#1ad1a5;
   }
-  /* Greeting popover */
+  /* Greeting popover (bigger) */
   #alan-greet{position:fixed;right:18px;bottom:18px;z-index:9999;display:none}
-  #alan-greet .card{max-width:340px;width:calc(100vw - 36px);background:#0e1428;color:var(--al-text);
-    border:1px solid var(--al-line);border-radius:14px;box-shadow:0 18px 60px rgba(0,0,0,.45);padding:14px;font-family:Inter,system-ui}
-  #alan-greet h3{margin:0 0 6px 0;font-size:1.05rem}
-  #alan-greet p{margin:0 0 10px 0;opacity:.9;font-size:.95rem;line-height:1.5}
-  .al-btn{border:0;border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer}
-  .al-btn.primary{background:var(--al-accent);color:#2a2100;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  #alan-greet .card{
+    max-width:520px;width:calc(100vw - 36px);background:#0e1428;color:var(--al-text);
+    border:1px solid var(--al-line);border-radius:16px;box-shadow:0 24px 90px rgba(0,0,0,.55);
+    padding:18px;font-family:Inter,system-ui
+  }
+  #alan-greet h2{margin:0 0 6px 0;font-size:1.25rem}
+  #alan-greet p{margin:0 0 12px 0;opacity:.95;font-size:1rem;line-height:1.5}
+  .al-btn{border:0;border-radius:12px;padding:12px 16px;font-weight:900;cursor:pointer}
+  .al-btn.primary{background:var(--al-accent);color:#2a2100;box-shadow:0 12px 34px rgba(0,0,0,.35)}
   .al-btn.ghost{background:#121a3a;color:#e7ebff;border:1px solid var(--al-line)}
-  /* Panel */
+  /* Panel (wider) */
   #alan-panel{position:fixed;right:18px;bottom:18px;z-index:10000;display:none}
-  #alan-panel .wrap{width:420px;max-width:calc(100vw - 36px);background:linear-gradient(180deg,#10172a,#0b0f1a);
-    color:var(--al-text);border:1px solid var(--al-line);border-radius:16px;box-shadow:0 28px 90px rgba(0,0,0,.6);overflow:hidden;font-family:Inter,system-ui}
-  .al-head{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--al-line);background:#0d1428}
-  .al-head .avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#9fb5ff,#c2ceff);
-    display:grid;place-items:center;color:#1b2560;font-weight:900}
+  #alan-panel .wrap{
+    width:520px;max-width:calc(100vw - 36px);
+    background:linear-gradient(180deg,#10172a,#0b0f1a);color:var(--al-text);
+    border:1px solid var(--al-line);border-radius:18px;box-shadow:0 28px 110px rgba(0,0,0,.6);overflow:hidden;
+    font-family:Inter,system-ui
+  }
+  .al-head{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--al-line);background:#0d1428}
+  .al-head .avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#9fb5ff,#c2ceff);display:grid;place-items:center;color:#1b2560;font-weight:900}
   .al-head .ttl{font-weight:900}
-  .al-body{padding:14px;display:grid;gap:12px}
-  .al-meta{display:flex;align-items:center;gap:8px;font-size:12px;color:#b7c6ff}
+  .al-body{padding:16px;display:grid;gap:12px}
+  .al-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:#b7c6ff}
   .al-meter{height:8px;background:#101838;border:1px solid var(--al-line);border-radius:999px;overflow:hidden;flex:1}
   .al-meter>div{height:100%;background:linear-gradient(90deg,#ffd95c,#ffe78f);width:0%}
-  .al-q{font-size:1.15rem;font-weight:900;line-height:1.4}
-  .al-opts{display:grid;gap:8px}
-  .al-chip{border:1px solid var(--al-line);background:linear-gradient(180deg,#121a3a,#0f172f);color:#e7ebff;
-    border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;font-size:1rem}
-  .al-chip:hover{box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .al-q{font-size:1.25rem;font-weight:900;line-height:1.4}
+  .al-opts{display:grid;gap:10px}
+  .al-chip{border:1px solid var(--al-line);background:linear-gradient(180deg,#121a3a,#0f172f);color:#e7ebff;border-radius:12px;padding:14px;text-align:left;cursor:pointer;font-size:1.02rem}
+  .al-chip:hover{box-shadow:0 12px 34px rgba(0,0,0,.28)}
   .al-foot{display:flex;gap:8px;align-items:center;justify-content:space-between;border-top:1px dashed var(--al-line);padding:10px;background:#0b1226}
   .al-pill{border:1px solid var(--al-line);background:#0f1937;border-radius:999px;padding:6px 10px;color:#cfe0ff;font-size:12px}
   .al-mic{border:1px solid var(--al-line);background:#101a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;font-weight:800;cursor:pointer}
   .al-mic.on{background:#13244f}
   .al-close{border:1px solid var(--al-line);background:#121a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;cursor:pointer}
-  /* Mobile tweaks */
-  @media (max-width:480px){ .al-q{font-size:1.05rem} .al-chip{font-size:.98rem} }
+  /* End form */
+  .al-endbox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px}
+  .al-endbox input, .al-endbox textarea{
+    width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px
+  }
+  .al-actions{display:flex;gap:8px;flex-wrap:wrap}
+  @media (max-width:520px){ .al-q{font-size:1.1rem} .al-chip{font-size:1rem} }
 </style>
 
+<!-- GREET -->
 <div id="alan-greet" aria-live="polite">
   <div class="card">
-    <h3>Hi, I’m <strong>ALAN</strong>, your intake assistant.</h3>
-    <p>No need to call — <strong>talk to me</strong> and I’ll organise support within a few hours. I’ll ask a few quick questions and take care of the admin.</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <h2>Hi, I’m <strong id="al-greet-name">ALAN</strong> — your intake assistant</h2>
+    <p>
+      Skip the wait — talk to me and I’ll organise help <strong>faster than a phone call</strong>.
+      I’m quick, friendly, and as easy to talk to as our team. I’ll ask a few short questions, and I’ll do the admin for you.
+    </p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button id="alan-start" class="al-btn primary" aria-label="Let’s talk">Let’s talk</button>
       <button id="alan-hide" class="al-btn ghost" aria-label="Not now">Not now</button>
     </div>
   </div>
 </div>
 
+<!-- PANEL -->
 <div id="alan-panel" role="dialog" aria-label="Chat with ALAN">
   <div class="wrap">
     <div class="al-head">
-      <div class="avatar">AL</div>
-      <div class="ttl">ALAN — Intake Assistant</div>
+      <div class="avatar" id="al-avatar">AL</div>
+      <div class="ttl" id="al-title">ALAN — Intake Assistant</div>
       <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
         <span class="al-pill">Voice: <span id="al-voice" style="color:#ffe28f">On</span></span>
         <button id="al-close" class="al-close" aria-label="Close">Close</button>
@@ -634,17 +649,31 @@
     </div>
     <div class="al-body">
       <div class="al-meta">
-        <span id="al-step">Step 1/12</span>
+        <span id="al-step">Step 1/14</span>
         <div class="al-meter" aria-label="Progress"><div id="al-bar"></div></div>
       </div>
       <div id="al-q" class="al-q">…</div>
       <div id="al-opts" class="al-opts"></div>
       <div id="al-system" style="font-size:12px;color:#a8b6e8"></div>
+
+      <!-- End details (hidden until wrap) -->
+      <div id="al-end" class="al-endbox" style="display:none">
+        <div style="font-weight:900">Optional details to speed things up</div>
+        <input id="al-name" placeholder="Your name or initials (optional)">
+        <input id="al-email" placeholder="Email (optional)">
+        <input id="al-phone" placeholder="Phone (optional)">
+        <textarea id="al-notes" rows="4" placeholder="Anything else you’d like us to know (optional)"></textarea>
+        <div class="al-actions">
+          <button id="al-send" class="al-btn primary">Send now</button>
+          <button id="al-later" class="al-btn ghost">Do later</button>
+          <button id="al-download" class="al-btn ghost">Download summary</button>
+        </div>
+      </div>
     </div>
     <div class="al-foot">
-      <div class="al-pill">Say A, B, C, D or “Not sure”</div>
+      <div class="al-pill">Say A, B, C, D or “Not sure” • Click “Click to Talk” when ready</div>
       <div style="display:flex;gap:8px;align-items:center">
-        <button id="al-mic" class="al-mic" aria-pressed="false">🎤 Listen</button>
+        <button id="al-mic" class="al-mic" aria-pressed="false">🎤 Click to Talk</button>
         <button id="al-restart" class="al-mic">↻ Restart</button>
       </div>
     </div>
@@ -654,16 +683,22 @@
 <script>
 (function(){
   /* ===== Config ===== */
-  const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn"; // your Formspree form (JSON post)
-  const SITE_EMAIL = "info@hdheed.com.au";
-  const SITE_PHONE = "02 8630 5500";
+  const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn"; // Formspree JSON POST
+  const SITE_EMAIL  = "info@hdheed.com.au";
+  const SITE_PHONE  = "02 8630 5500";
+  const PREFER_MALE_VOICE = true; // set false to prefer female
 
   /* ===== State ===== */
-  const SKEY='hdheed_alan_simple_v1';
+  const SKEY='hdheed_alan_refined_v1';
   let S = {
-    i:0, // step index
-    caller:null, consent:null, service:null, mgmt:null, dates:null, cat:null,
-    risks:{beh:null, med:null, int:null}, urgency:null, contacts:null, rostering:null,
+    i:0,
+    caller:null, consent:null,
+    suburb:null, postcode:null,
+    service:null, mgmt:null, dates:null, cat:null,
+    hrs:null,
+    risks:{beh:null, med:null, int:null},
+    pref:{worker:null, gender:null, transport:null, access:null},
+    urgency:null, contacts:null, rostering:null,
     name:null, email:null, phone:null, route:null, notes:[]
   };
   try{ const prev=JSON.parse(localStorage.getItem(SKEY)||'null'); if(prev) S=prev; }catch{}
@@ -671,155 +706,193 @@
 
   /* ===== DOM ===== */
   const greet = document.getElementById('alan-greet');
+  const greetName = document.getElementById('al-greet-name');
   const startBtn = document.getElementById('alan-start');
-  const hideBtn = document.getElementById('alan-hide');
+  const hideBtn  = document.getElementById('alan-hide');
   const panel = document.getElementById('alan-panel');
   const closeBtn = document.getElementById('al-close');
-  const qEl = document.getElementById('al-q');
-  const optsEl = document.getElementById('al-opts');
-  const stepEl = document.getElementById('al-step');
+  const qEl   = document.getElementById('al-q');
+  const optsEl= document.getElementById('al-opts');
+  const stepEl= document.getElementById('al-step');
   const barEl = document.getElementById('al-bar');
   const sysEl = document.getElementById('al-system');
-  const micBtn = document.getElementById('al-mic');
+  const micBtn= document.getElementById('al-mic');
   const restartBtn = document.getElementById('al-restart');
   const voiceBadge = document.getElementById('al-voice');
+  const endBox = document.getElementById('al-end');
+  const fName = document.getElementById('al-name');
+  const fEmail= document.getElementById('al-email');
+  const fPhone= document.getElementById('al-phone');
+  const fNotes= document.getElementById('al-notes');
+  const btnSend = document.getElementById('al-send');
+  const btnLater= document.getElementById('al-later');
+  const btnDownload= document.getElementById('al-download');
+  const headerTitle = document.getElementById('al-title');
+  const avatar = document.getElementById('al-avatar');
 
   /* ===== Voice (TTS + SR) ===== */
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let recog = null, listening = false, ttsOn = true;
+  let recog = null, listening = false, speaking=false, ttsOn = true, voice=null, assistantName='ALAN';
+
+  // pick a voice (male if available; else female and rename to ELLA)
+  function pickVoice(){
+    const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+    function likeMale(v){ return /male|daniel|google uk english male|microsoft (david|mark|guy|george)/i.test(v.name); }
+    function likeFemale(v){ return /female|samantha|victoria|google uk english female|microsoft (aria|zoe|natasha|jenny|lisa|sonia|hazel)/i.test(v.name); }
+    if (PREFER_MALE_VOICE){
+      voice = voices.find(likeMale) || voices.find(v=>/en/i.test(v.lang));
+      if (!voice) { assistantName='ELLA'; } // fallback label
+    } else {
+      voice = voices.find(likeFemale) || voices.find(v=>/en/i.test(v.lang));
+      if (!voice) { assistantName='ALAN'; }
+    }
+    // If male voice not found but preference was male → rename to ELLA
+    if (PREFER_MALE_VOICE && voice && likeFemale(voice)) assistantName='ELLA';
+    if (!voice && !('speechSynthesis' in window)) assistantName='ALAN';
+    applyAssistantName();
+  }
+  function applyAssistantName(){
+    headerTitle.textContent = `${assistantName} — Intake Assistant`;
+    greetName.textContent = assistantName;
+    avatar.textContent = assistantName.slice(0,2).toUpperCase();
+  }
 
   if (SR){
     recog = new SR(); recog.lang='en-AU'; recog.interimResults=false; recog.continuous=false;
-    recog.onresult = (e)=>{ const t=e.results[0][0].transcript; handleSpeech(t); };
+    recog.onresult = (e)=>{ if (speaking) return; const t=e.results[0][0].transcript; handleSpeech(t); };
     recog.onend = ()=>{ listening=false; micBtn.classList.remove('on'); micBtn.setAttribute('aria-pressed','false'); };
-  } else {
-    voiceBadge.textContent='Off';
-  }
+  } else { voiceBadge.textContent='Off'; }
 
   function speak(text){
     if (!ttsOn || !('speechSynthesis' in window)) return;
     const u = new SpeechSynthesisUtterance(String(text));
+    if (voice) u.voice = voice;
     u.lang='en-AU';
+    u.onstart=()=>{ speaking=true; /* Prevent TTS→SR feedback */ try{ recog && recog.abort(); }catch{} };
+    u.onend=()=>{ speaking=false; };
     window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
   }
   function listen(){
-    if (!recog){ return; }
+    if (!recog || speaking){ return; }
     try{ listening=true; micBtn.classList.add('on'); micBtn.setAttribute('aria-pressed','true'); recog.start(); }catch{}
   }
 
-  /* ===== Flow ===== */
+  /* ===== Flow (resequenced & concise) ===== */
   const NS = (t='Not sure — please guide me')=>({k:'NS',t,apply:()=>{}});
   const o = (k,t,apply=()=>{})=>({k,t,apply});
 
   function steps(){
     return [
+      // 1 Caller
       {id:'caller', q:"Who am I speaking with today?",
-        opts:[
-          o('A','Participant',()=>S.caller='Participant'),
-          o('B','Family / Carer',()=>S.caller='Carer'),
-          o('C','Support Coordinator',()=>S.caller='Support Coordinator'),
-          o('D','Plan Manager',()=>S.caller='Plan Manager'),
-          NS()
-        ]},
+        opts:[ o('A','Participant',()=>S.caller='Participant'),
+               o('B','Family / Carer',()=>S.caller='Carer'),
+               o('C','Support Coordinator',()=>S.caller='Support Coordinator'),
+               o('D','Plan Manager',()=>S.caller='Plan Manager'),
+               NS() ]},
+      // 2 Consent
       {id:'consent', q:"May I note verbal consent to collect details and, if needed, contact your SC or Plan Manager?",
-        opts:[
-          o('A','Yes',()=>S.consent='Yes'),
-          o('B','Not yet',()=>S.consent='Not yet'),
-          o('C','Not sure',()=>S.consent='Not sure'),
-          o('D','No',()=>S.consent='No'),
-          NS()
-        ]},
+        opts:[ o('A','Yes',()=>S.consent='Yes'),
+               o('B','Not yet',()=>S.consent='Not yet'),
+               o('C','Not sure',()=>S.consent='Not sure'),
+               o('D','No',()=>S.consent='No'),
+               NS() ]},
+      // 3 Location
+      {id:'loc', q:"Where do you need support? (pick one)",
+        opts:[ o('A','I’ll type my suburb/postcode',()=>{}),
+               o('B','Greater Sydney (unsure of suburb)',()=>{S.suburb='Greater Sydney';}),
+               o('C','Regional NSW',()=>{S.suburb='Regional NSW';}),
+               o('D','Prefer not to say',()=>{S.suburb=null;}),
+               NS() ]},
+      // 4 Support
       {id:'service', q:"Which support fits best now?",
-        opts:[
-          o('A','Personal care',()=>{S.service='Personal care';S.cat='Core – Assistance with Daily Life';}),
-          o('B','Community participation',()=>{S.service='Community participation';S.cat='Core – Social & Community Participation';}),
-          o('C','Nursing care',()=>{S.service='Nursing care';S.cat='Core – Community Nursing Care';}),
-          o('D','Daily living skills',()=>{S.service='Daily living skills';S.cat='Capacity – Improved Daily Living';}),
-          NS()
-        ]},
+        opts:[ o('A','Personal care',()=>{S.service='Personal care';S.cat='Core – Assistance with Daily Life';}),
+               o('B','Community participation',()=>{S.service='Community participation';S.cat='Core – Social & Community Participation';}),
+               o('C','Nursing care',()=>{S.service='Nursing care';S.cat='Core – Community Nursing Care';}),
+               o('D','Daily living skills',()=>{S.service='Daily living skills';S.cat='Capacity – Improved Daily Living';}),
+               NS() ]},
+      // 5 Windows
+      {id:'rostering', q:"What time windows suit you?",
+        opts:[ o('A','Weekday mornings (7–11am)',()=>S.rostering='Weekday AM'),
+               o('B','Weekday afternoons (12–4pm)',()=>S.rostering='Weekday PM'),
+               o('C','Evenings (5–9pm)',()=>S.rostering='Evenings'),
+               o('D','Weekends',()=>S.rostering='Weekends'),
+               NS('Flexible') ]},
+      // 6 Preferences
+      {id:'pref', q:"Any preferences we should know?",
+        opts:[ o('A','Worker gender preference',()=>S.pref.gender='Has preference'),
+               o('B','Transport required',()=>S.pref.transport='Yes'),
+               o('C','Keysafe/someone home for access',()=>S.pref.access='Ready'),
+               o('D','No preferences',()=>S.pref='None'),
+               NS() ]},
+      // 7 Management
       {id:'mgmt', q:"How is the NDIS plan managed?",
-        opts:[
-          o('A','NDIA-managed',()=>S.mgmt='NDIA-managed'),
-          o('B','Plan-managed',()=>S.mgmt='Plan-managed'),
-          o('C','Self-managed',()=>S.mgmt='Self-managed'),
-          o('D','Not sure',()=>S.mgmt='Not sure'),
-          NS()
-        ]},
+        opts:[ o('A','NDIA-managed',()=>S.mgmt='NDIA-managed'),
+               o('B','Plan-managed',()=>S.mgmt='Plan-managed'),
+               o('C','Self-managed',()=>S.mgmt='Self-managed'),
+               o('D','Not sure',()=>S.mgmt='Not sure'),
+               NS() ]},
+      // 8 Plan dates
       {id:'dates', q:"Do you know the plan dates?",
-        opts:[
-          o('A','Active',()=>S.dates='Active'),
-          o('B','Expiring soon',()=>S.dates='Expiring soon'),
-          o('C','Not sure',()=>S.dates='Not sure'),
-          o('D','Expired',()=>S.dates='Expired'),
-          NS()
-        ]},
-      {id:'risk_beh', q:"Any behaviours of concern or a Behaviour Support Plan?",
-        opts:[
-          o('A','Yes',()=>S.risks.beh=true),
-          o('B','No',()=>S.risks.beh=false),
-          o('C','Not sure',()=>S.risks.beh=null),
-          o('D','Prefer not to say',()=>S.risks.beh=null),
-          NS()
-        ]},
-      {id:'risk_med', q:"Any clinical needs like medication or wound care?",
-        opts:[
-          o('A','Yes',()=>S.risks.med=true),
-          o('B','No',()=>S.risks.med=false),
-          o('C','Not sure',()=>S.risks.med=null),
-          o('D','Prefer not to say',()=>S.risks.med=null),
-          NS()
-        ]},
+        opts:[ o('A','Active',()=>S.dates='Active'),
+               o('B','Expiring soon',()=>S.dates='Expiring soon'),
+               o('C','Not sure',()=>S.dates='Not sure'),
+               o('D','Expired',()=>S.dates='Expired'),
+               NS() ]},
+      // 9 Hours guide (rough)
+      {id:'hrs', q:"Roughly how many support hours per week?",
+        opts:[ o('A','2–4 hrs/week',()=>S.hrs='2–4'),
+               o('B','5–10 hrs/week',()=>S.hrs='5–10'),
+               o('C','10+ hrs/week',()=>S.hrs='10+'),
+               o('D','Not sure',()=>S.hrs='Not sure'),
+               NS() ]},
+      // 10 Risks (behaviour)
+      {id:'risk_beh', q:"Any behaviours of concern / BSP?",
+        opts:[ o('A','Yes',()=>S.risks.beh=true),
+               o('B','No',()=>S.risks.beh=false),
+               o('C','Not sure',()=>S.risks.beh=null),
+               o('D','Prefer not to say',()=>S.risks.beh=null),
+               NS() ]},
+      // 11 Risks (clinical)
+      {id:'risk_med', q:"Any clinical needs (meds/wound care)?",
+        opts:[ o('A','Yes',()=>S.risks.med=true),
+               o('B','No',()=>S.risks.med=false),
+               o('C','Not sure',()=>S.risks.med=null),
+               o('D','Prefer not to say',()=>S.risks.med=null),
+               NS() ]},
+      // 12 Interpreter
       {id:'risk_int', q:"Would you like an interpreter?",
-        opts:[
-          o('A','Yes',()=>S.risks.int=true),
-          o('B','No',()=>S.risks.int=false),
-          o('C','Not sure',()=>S.risks.int=null),
-          o('D','Prefer not to say',()=>S.risks.int=null),
-          NS()
-        ]},
+        opts:[ o('A','Yes',()=>S.risks.int=true),
+               o('B','No',()=>S.risks.int=false),
+               o('C','Not sure',()=>S.risks.int=null),
+               o('D','Prefer not to say',()=>S.risks.int=null),
+               NS() ]},
+      // 13 Urgency
       {id:'urgency', q:"When would you like to start?",
-        opts:[
-          o('A','Urgent (24–72h)',()=>S.urgency='Urgent'),
-          o('B','Soon (1–2 weeks)',()=>S.urgency='Soon'),
-          o('C','Exploring options',()=>S.urgency='Exploring'),
-          o('D','Not sure',()=>S.urgency='Not sure'),
-          NS()
-        ]},
-      {id:'contacts', q:"Do you have your Support Coordinator or Plan Manager’s contact?",
-        opts:[
-          o('A','Yes — I have it now',()=>S.contacts='Have details now'),
-          o('B','Not with me — send a template',()=>S.contacts='Will forward template'),
-          o('C','No SC/PM / Not applicable',()=>S.contacts='No SC/PM'),
-          NS()
-        ]},
-      {id:'rostering', q:"What windows suit you?",
-        opts:[
-          o('A','Weekday mornings',()=>S.rostering='Weekday AM'),
-          o('B','Weekday afternoons',()=>S.rostering='Weekday PM'),
-          o('C','Evenings',()=>S.rostering='Evenings'),
-          o('D','Weekends only',()=>S.rostering='Weekends'),
-          NS('Flexible')
-        ]},
-      {id:'contact', q:"Please say or type your first name, email and phone (initials are fine).",
-        opts:[ NS('I’ll share later') ]},
-      {id:'final', q:"Send this now as a Referral (A) or as a General Enquiry (B)?",
-        opts:[
-          o('A','Referral',()=>S.route='Referral'),
-          o('B','Enquiry',()=>S.route='Enquiry'),
-          o('C','Review first',()=>S.route='Review'),
-          o('D','Save only',()=>S.route='Save'),
-          NS()
-        ]}
+        opts:[ o('A','Urgent (24–72h)',()=>S.urgency='Urgent'),
+               o('B','Soon (1–2 weeks)',()=>S.urgency='Soon'),
+               o('C','Exploring options',()=>S.urgency='Exploring'),
+               o('D','Not sure',()=>S.urgency='Not sure'),
+               NS() ]},
+      // 14 Route
+      {id:'final', q:"Shall I prepare this now as a Referral (A) or as a General Enquiry (B)?",
+        opts:[ o('A','Referral',()=>S.route='Referral'),
+               o('B','Enquiry',()=>S.route='Enquiry'),
+               o('C','Review first',()=>S.route='Review'),
+               o('D','Save only (no send)',()=>S.route='Save'),
+               NS() ]}
     ];
   }
 
   function render(){
-    const list = steps();
-    const total = list.length;
+    const list = steps(), total = list.length;
     const step = list[S.i] || list[total-1];
+    // progress
     stepEl.textContent = `Step ${Math.min(S.i+1,total)}/${total}`;
     barEl.style.width = Math.round(((S.i)/(total-1))*100) + '%';
+    // question
     qEl.textContent = step.q;
+    // options
     optsEl.innerHTML = '';
     step.opts.forEach(opt=>{
       const b = document.createElement('button');
@@ -828,63 +901,65 @@
       b.addEventListener('click', ()=> choose(opt));
       optsEl.appendChild(b);
     });
-    save();
-    // speak it
+    // special location free entry helper
+    if (step.id==='loc' && !document.getElementById('al-locbox')){
+      const locBox=document.createElement('div');
+      locBox.id='al-locbox';
+      locBox.className='al-endbox';
+      locBox.style.marginTop='6px';
+      locBox.innerHTML = `
+        <input id="al-suburb" placeholder="Suburb (optional)">
+        <input id="al-postcode" placeholder="Postcode (optional)">
+        <button id="al-locsave" class="al-btn ghost">Save location</button>
+      `;
+      optsEl.appendChild(locBox);
+      locBox.querySelector('#al-locsave').onclick=()=>{
+        const sub=locBox.querySelector('#al-suburb').value.trim();
+        const pc=locBox.querySelector('#al-postcode').value.trim();
+        if (sub) S.suburb=sub; if (pc) S.postcode=pc; save();
+        sysEl.textContent='Location noted.'; speak('Thanks, I have your location noted.');
+      };
+    }
+    // speak AFTER render; do not start mic automatically
     speak(step.q);
+    endBox.style.display = 'none';
+    sysEl.textContent = '';
+    save();
   }
 
   function choose(opt){
-    // special free-entry on contact step
-    if (steps()[S.i].id==='contact' && opt.k==='NS'){
-      sysEl.innerHTML = 'You can also speak or type like: <code>Mat, mat@example.com, 0400 000 000</code>';
-      speak('You can say your name, email and phone when you are ready.');
-      listen(); // wait for details
-      return;
-    }
     if (typeof opt.apply==='function') opt.apply();
     save();
-    next();
-  }
-
-  function next(){
+    // move only on click or recognised answer — not automatically
     if (steps()[S.i].id==='final'){
+      // show summary & end box
       renderSummary();
-      if (S.route==='Referral' || S.route==='Enquiry'){ submit(); }
+      endBox.style.display = 'grid';
       return;
     }
-    S.i = Math.min(S.i+1, steps().length-1); save(); render(); if (recog) listen();
+    S.i = Math.min(S.i+1, steps().length-1);
+    render();
   }
 
   function handleSpeech(text){
-    const t = (text||'').trim();
-    // on contact step — try to parse details
-    if (steps()[S.i].id==='contact'){
-      const email = (t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0];
-      const phone = (t.match(/(\+?\d[\d\s\-]{6,}\d)/)||[])[0];
-      const name = t.replace(email||'','').replace(phone||'','').replace(/[,;|]/g,' ').trim();
-      if (email) S.email=email;
-      if (phone) S.phone=phone;
-      if (name) S.name=name;
-      save();
-      sysEl.textContent = 'Thanks — I’ve recorded your contact details.';
-      next();
-      return;
-    }
-    // map speech to a choice
+    if (!text) return;
+    const t = text.trim();
     const up = t.toUpperCase();
-    const tryKeys = ['A','B','C','D','NS'];
-    let pick = null;
-    if (tryKeys.includes(up)) pick=up;
+    // Map speech to choice codes; do NOT advance unless it matches a choice
+    let pick=null;
+    if (['A','B','C','D','NS'].includes(up)) pick=up;
     else if (/participant|client/i.test(t)) pick='A';
     else if (/carer|family/i.test(t)) pick='B';
     else if (/support\s*co/i.test(t)) pick='C';
     else if (/plan\s*manager|pm\b/i.test(t)) pick='D';
     else if (/not sure|unsure|don.?t know|flexible/i.test(t)) pick='NS';
-
-    const step = steps()[S.i];
-    const chosen = step.opts.find(x=>x.k===pick) || step.opts.find(x=>x.k==='NS');
-    if (chosen){ choose(chosen); }
-    else { S.notes.push(t); save(); sysEl.textContent='Noted. You can answer A, B, C, D or say Not sure.'; if (recog) listen(); }
+    else if (steps()[S.i].id==='loc'){ // capture spoken suburb/postcode loosely
+      if (!S.suburb && /\b[a-zA-Z]{3,}\b/.test(t)) S.suburb = t;
+      save(); sysEl.textContent='Location noted.'; return;
+    }
+    const step=steps()[S.i];
+    const chosen = step.opts.find(x=>x.k===pick);
+    if (chosen) choose(chosen); else { sysEl.textContent='Noted. Please say A, B, C, D or “Not sure”, or tap a button.'; }
   }
 
   function renderSummary(){
@@ -892,31 +967,43 @@
     const lines = [
       `Caller: ${S.caller||'—'}`,
       `Consent: ${S.consent||'—'}`,
+      `Location: ${S.suburb||'—'} ${S.postcode?('('+S.postcode+')'):''}`,
       `Service: ${S.service||'—'}`,
-      `Mgmt: ${S.mgmt||'—'}`,
-      `Dates: ${S.dates||'—'}`,
-      `Category: ${S.cat||'—'}`,
+      `Windows: ${S.rostering||'—'}`,
+      `Prefs: ${S.pref.gender||S.pref.transport||S.pref.access ? ([
+        S.pref.gender?'Worker gender':'',
+        S.pref.transport?'Transport':'',
+        S.pref.access?'Access ready':''
+      ].filter(Boolean).join(', ')) : '—'}`,
+      `Mgmt: ${S.mgmt||'—'} • Dates: ${S.dates||'—'} • Hours: ${S.hrs||'—'}`,
       `Risks: Beh ${yn(S.risks.beh)} • Med ${yn(S.risks.med)} • Int ${yn(S.risks.int)}`,
       `Urgency: ${S.urgency||'—'}`,
-      `SC/PM: ${S.contacts||'—'}`,
-      `Rostering: ${S.rostering||'—'}`,
-      `Name: ${S.name||'—'} • Email: ${S.email||'—'} • Phone: ${S.phone||'—'}`
+      `Route: ${S.route||'—'}`
     ];
-    qEl.textContent = "Great — here’s a quick summary. I’ll send this to our team.";
+    qEl.textContent = "Great — here’s a quick summary. Add your details (optional) and I’ll send it to our team.";
     optsEl.innerHTML = '<div class="al-chip" style="cursor:default;white-space:pre-line">'+lines.join('\n')+'</div>';
-    speak("Thanks. I’ll send this to our team now.");
+    speak("Thanks. You can add your contact details if you like, then I will send this to our team.");
+    // preload endbox with any known values
+    fName.value = S.name||'';
+    fEmail.value= S.email||'';
+    fPhone.value= S.phone||'';
+    fNotes.value= (S.notes||[]).join('\n');
   }
 
   async function submit(){
     const payload = {
-      _subject:`HD HeeD Website – ${S.route} via ALAN (simple)`,
-      source:"index-alan-simple",
-      route:S.route, caller:S.caller, consent:S.consent, service:S.service,
-      plan_mgmt:S.mgmt, plan_dates:S.dates, category:S.cat,
+      _subject:`HD HeeD Website – ${S.route||'Enquiry'} via ${assistantName} (voice)`,
+      source:"index-alan-refined",
+      route:S.route, caller:S.caller, consent:S.consent,
+      suburb:S.suburb, postcode:S.postcode,
+      service:S.service, rostering:S.rostering,
+      pref_gender:S.pref.gender, pref_transport:S.pref.transport, pref_access:S.pref.access,
+      plan_mgmt:S.mgmt, plan_dates:S.dates, approx_hours_per_week:S.hrs, category:S.cat,
       risk_behaviours:S.risks.beh, risk_medical:S.risks.med, risk_interpreter:S.risks.int,
-      urgency:S.urgency, contacts:S.contacts, rostering:S.rostering,
+      urgency:S.urgency, contacts:S.contacts,
       name:S.name, email:S.email, phone:S.phone,
-      notes:(S.notes||[]).join('\n'), timestamp:new Date().toISOString()
+      notes:(S.notes||[]).concat(fNotes.value||'').join('\n'),
+      timestamp:new Date().toISOString()
     };
     try{
       const r = await fetch(FS_ENDPOINT, {
@@ -927,19 +1014,11 @@
       const data = await r.json();
       if (r.ok){
         sysEl.innerHTML = `All done — we’ll contact you from <a href="mailto:${SITE_EMAIL}" style="color:#ffd95c">${SITE_EMAIL}</a> or ${SITE_PHONE}.`;
-        speak("All done. We’ll contact you shortly.");
+        speak("All done. We’ll contact you shortly. Thank you.");
       } else { throw new Error(data?.error || "Submission failed"); }
     }catch(e){
-      sysEl.innerHTML = `Couldn’t send right now. Please email <a href="mailto:${SITE_EMAIL}" style="color:#ffd95c">${SITE_EMAIL}</a> or call ${SITE_PHONE}. <button id="al-dl" class="al-mic" style="margin-left:6px">Download summary</button>`;
+      sysEl.innerHTML = `Couldn’t send right now. Please email <a href="mailto:${SITE_EMAIL}" style="color:#ffd95c">${SITE_EMAIL}</a> or call ${SITE_PHONE}. You can download your summary below.`;
       speak("I couldn’t send right now. You can download your summary and email it to us.");
-      const dlBtn = document.getElementById('al-dl');
-      if (dlBtn){
-        dlBtn.addEventListener('click', ()=>{
-          const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
-          const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'hdheed-intake.json'});
-          document.body.appendChild(a); a.click(); a.remove();
-        });
-      }
     }
   }
 
@@ -947,27 +1026,48 @@
   function openPanel(){
     greet.style.display='none';
     panel.style.display='block';
+    if (window.speechSynthesis){ pickVoice(); }
+    // start at first step and SPEAK ONLY; waiting for user to click or speak
     S.i=0; save(); render();
-    if (recog) listen();
   }
   function closePanel(){ panel.style.display='none'; try{ window.speechSynthesis.cancel(); }catch{} }
 
   // Greeting popup after short delay (first visit per session)
-  if (!sessionStorage.getItem('alan_greeted')){
-    setTimeout(()=>{ greet.style.display='block'; sessionStorage.setItem('alan_greeted','1'); }, 1200);
+  if (!sessionStorage.getItem('alan_greeted_refined')){
+    setTimeout(()=>{ greet.style.display='block'; sessionStorage.setItem('alan_greeted_refined','1'); }, 900);
   }
 
   // Hooks
   startBtn.addEventListener('click', openPanel);
   hideBtn.addEventListener('click', ()=>{ greet.style.display='none'; });
   closeBtn.addEventListener('click', closePanel);
-  micBtn.addEventListener('click', ()=>{ if (!recog){ alert('Voice not supported in this browser.'); return; } listen(); });
-  restartBtn.addEventListener('click', ()=>{ localStorage.removeItem(SKEY); S={i:0,caller:null,consent:null,service:null,mgmt:null,dates:null,cat:null,risks:{beh:null,med:null,int:null},urgency:null,contacts:null,rostering:null,name:null,email:null,phone:null,route:null,notes:[]}; save(); render(); if (recog) listen(); });
+  micBtn.addEventListener('click', ()=>{ if (!recog){ alert('Voice not supported in this browser. Tap answers instead.'); return; } listen(); });
+  restartBtn.addEventListener('click', ()=>{ localStorage.removeItem(SKEY); S={i:0,caller:null,consent:null,suburb:null,postcode:null,service:null,mgmt:null,dates:null,cat:null,hrs:null,risks:{beh:null,med:null,int:null},pref:{},urgency:null,contacts:null,rostering:null,name:null,email:null,phone:null,route:null,notes:[]}; save(); render(); });
 
-  // Optional global opener: window.ALAN.open()
+  // End box actions
+  btnSend.addEventListener('click', ()=>{ S.name=fName.value.trim()||S.name; S.email=fEmail.value.trim()||S.email; S.phone=fPhone.value.trim()||S.phone; save(); submit(); });
+  btnLater.addEventListener('click', ()=>{ sysEl.textContent='Saved. You can close this window — we’ll follow up soon.'; speak('Saved. You can close this window.'); });
+  btnDownload.addEventListener('click', ()=>{
+    const payload = {
+      route:S.route, caller:S.caller, consent:S.consent,
+      suburb:S.suburb, postcode:S.postcode, service:S.service, rostering:S.rostering,
+      prefs:S.pref, plan_mgmt:S.mgmt, plan_dates:S.dates, approx_hours_per_week:S.hrs, category:S.cat,
+      risks:S.risks, urgency:S.urgency, contacts:S.contacts,
+      name:fName.value||S.name, email:fEmail.value||S.email, phone:fPhone.value||S.phone,
+      notes:(S.notes||[]).concat(fNotes.value||'').join('\n'), timestamp:new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+    const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'hdheed-intake.json'});
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+
+  // Global opener if you want to trigger from any button: window.ALAN.open()
   window.ALAN = { open: openPanel };
 
+  // Voice list may load async
+  if (window.speechSynthesis){
+    speechSynthesis.onvoiceschanged = pickVoice;
+  }
 })();
 </script>
-<!-- === /ALAN (Simple Voice Intake Assistant) === -->
-
+<!-- === /ALAN (Refined Voice Intake Assistant) === -->
