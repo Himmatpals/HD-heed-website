@@ -1276,6 +1276,32 @@
   window.ELLA = { open: openPanel };
 })();
 </script>
+  <script>
+(function(){
+  /* ... your existing ELLA code ... */
+
+  // Voice list may load async
+  if (window.speechSynthesis){ speechSynthesis.onvoiceschanged = pickVoice; }
+
+  // Public openers
+  window.ALAN = { open: openPanel }; // keep for backward compatibility
+  window.ELLA = { open: openPanel };
+
+  // FIX: announce that Ella is ready (for the FAB retry logic)
+  document.dispatchEvent(new Event('ella-ready'));
+
+  // FIX: ensure greet runs after page load (still once per tab via sessionStorage)
+  window.addEventListener('load', () => {
+    if (!sessionStorage.getItem('ella_greeted_v31')){
+      setTimeout(()=>{
+        const g = document.getElementById('alan-greet');
+        if (g) { g.style.display = 'block'; sessionStorage.setItem('ella_greeted_v31','1'); }
+      }, 900);
+    }
+  });
+})();
+</script>
+
 <!-- === /ELLA (v3.1) === -->
 
  
