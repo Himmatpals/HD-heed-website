@@ -165,17 +165,28 @@
     /* Footer */
     footer{margin:26px 0 10px;color:#64748b;font-size:13px;text-align:center}
 
-    /* Floating referral */
+    /* Floating ELLA button (big with punchline) */
     .floating-referral{
-      position:fixed;bottom:20px;right:20px;width:60px;height:60px;background:var(--accent);color:#1e1b4b;
-      font-weight:900;font-size:.85rem;display:flex;align-items:center;justify-content:center;border-radius:50%;
-      box-shadow:0 16px 40px rgba(0,0,0,.25);z-index:60;text-align:center;line-height:1.1;padding:6px;
-      animation: bob 2.2s ease-in-out infinite;
+      position:fixed; right:20px; bottom:24px; z-index:60;
+      display:flex; align-items:center; gap:10px; text-align:left;
+      background:var(--accent); color:#1e1b4b; text-decoration:none;
+      font-weight:900; padding:14px 16px; border-radius:16px;
+      min-width:280px; max-width:460px; line-height:1.25;
+      box-shadow:0 16px 40px rgba(0,0,0,.25);
+      animation:bob 2.2s ease-in-out infinite;
     }
-    .floating-referral:hover{background:#ffda44}
+    .floating-referral:hover{ background:#ffda44 }
+    .floating-referral .title{ font-size:1rem; display:block }
+    .floating-referral .sub{ font-size:.88rem; font-weight:700; opacity:.95; display:block }
     @keyframes bob { 0%,100%{transform: translateY(0)} 50%{transform: translateY(-4px)} }
     @media (min-width:980px){
-      .floating-referral{width:3cm;height:3cm;border-radius:14px;right:34px;bottom:34px}
+      .floating-referral{ right:34px; bottom:34px; padding:16px 18px; border-radius:18px }
+      .floating-referral .title{ font-size:1.05rem }
+      .floating-referral .sub{ font-size:.95rem }
+    }
+    @media (max-width:480px){
+      .floating-referral{ min-width:auto; max-width:85vw; padding:12px 14px }
+      .floating-referral .sub{ display:none } /* keep compact on very small screens */
     }
 
     /* Respect reduced motion */
@@ -453,7 +464,8 @@
   <!-- Floating ELLA Button -->
   <a href="#" class="floating-referral" aria-label="Talk to ELLA"
      onclick="(window.ELLA||window.ALAN).open();return false;">
-    Talk to ELLA
+    <span class="title">💬 Talk to ELLA</span>
+    <span class="sub">I’m quicker than a phone call, easy to talk to, and can organise help fast.</span>
   </a>
 
   <script>
@@ -573,6 +585,7 @@
       });
     }
   </script>
+
  <!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.1 with portraits) === -->
 <style>
   :root{
@@ -592,22 +605,36 @@
   .al-btn.primary{background:var(--al-accent);color:#2a2100;box-shadow:0 12px 34px rgba(0,0,0,.35)}
   .al-btn.ghost{background:#121a3a;color:#e7ebff;border:1px solid var(--al-line)}
 
-  /* Panel (scrollable body; sticky head/foot; close always visible) */
+  /* Panel (wider; expands left) */
   #alan-panel{position:fixed;right:18px;bottom:18px;z-index:10000;display:none}
   #alan-panel .wrap{
-    width:640px;max-width:calc(100vw - 36px);max-height:85vh;
+    width:680px;                 /* wider base */
+    max-width:calc(100vw - 36px);
+    max-height:85vh;
     background:linear-gradient(180deg,#10172a,#0b0f1a);color:var(--al-text);
     border:1px solid var(--al-line);border-radius:18px;box-shadow:0 28px 110px rgba(0,0,0,.6);overflow:hidden;
     font-family:Inter,system-ui;display:flex;flex-direction:column
   }
+  @media (min-width:1100px){
+    #alan-panel .wrap{ width:860px; } /* extra roomy on desktop */
+  }
+
   .al-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--al-line);background:#0d1428}
   .al-head .avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ffcdd2,#ffe0e0);display:grid;place-items:center;color:#5a1b29;font-weight:900}
   .al-head .ttl{font-weight:900}
 
-  /* Body uses two columns: portrait (sticky) + content */
-  .al-body{display:grid;grid-template-columns:118px 1fr;gap:14px;overflow:auto;min-height:0;padding:14px}
+  /* Body: bigger portrait column */
+  .al-body{
+    display:grid;
+    grid-template-columns:220px 1fr;  /* was 118px */
+    gap:16px;overflow:auto;min-height:0;padding:16px
+  }
   .al-portrait{position:sticky;top:64px;align-self:start}
-  .al-portrait img{width:100%;height:auto;border-radius:12px;display:block;border:1px solid var(--al-line)}
+  .al-portrait img{
+    width:100%;height:auto;display:block;
+    border:none;background:transparent;border-radius:16px;
+    filter: drop-shadow(0 18px 36px rgba(0,0,0,.35));
+  }
   .al-main{display:grid;gap:12px}
   .al-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:#b7c6ff}
   .al-meter{height:8px;background:#101838;border:1px solid var(--al-line);border-radius:999px;overflow:hidden;flex:1}
@@ -630,9 +657,10 @@
   .al-endbox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px}
   .al-endbox input, .al-endbox textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px}
   .al-actions{display:flex;gap:8px;flex-wrap:wrap}
+
   @media (max-width:640px){
     .al-body{grid-template-columns:1fr}
-    .al-portrait{position:static;max-width:160px}
+    .al-portrait{position:static;max-width:200px;margin:0 auto}
   }
 </style>
 
@@ -956,7 +984,7 @@
     sysEl.textContent = '';
     endBox.style.display = 'none';
 
-    // 1) FIRST: typed option (custom box)
+    // 1) FIRST: typed option (custom box) — must type something to continue
     if (step.id!=='final'){
       if (step.id==='loc'){
         injectLocationBox(true);
@@ -1194,3 +1222,5 @@
 })();
 </script>
 <!-- === /ELLA (v3.1) === -->
+</body>
+</html>
