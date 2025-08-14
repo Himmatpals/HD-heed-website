@@ -3,891 +3,627 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AILR — Comprehensive NDIS Onboarding | HD HeeD</title>
-<link rel="icon" href="images/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<title>AILR — Mobile Onboarding | HD HeeD</title>
+<link rel="icon" href="images/favicon.ico" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
 <meta name="theme-color" content="#512b8a" />
 
 <style>
   :root{
-    --ink:#0f172a; --bg:#f6f7fb; --card:#ffffff; --line:#e5e7eb;
-    --brand:#512b8a; --brand2:#2563eb; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444;
-    --muted:#64748b; --chip:#0f1937; --chipline:#2a3b68; --accent:#ffc107;
+    --ink:#0b1220; --muted:#667189; --bg:#0f1426; --panel:#0b1022; --line:#273357;
+    --card:#10172a; --chip:#0e1630; --accent:#ffc107; --brand:#5b3aa6; --ok:#22c55e;
+    --tap:60px; /* min tap height on mobile */
   }
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--ink)}
-  a{color:var(--brand2);text-decoration:none}
-  .container{max-width:1120px;margin:0 auto;padding:16px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px}
-  .shadow{box-shadow:0 16px 40px rgba(2,6,23,.08)}
-  .muted{color:var(--muted)}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  body{
+    margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    background: radial-gradient(120% 120% at 80% -10%, #1a2244, #0b1022), #0b1022; color:#e8edff;
+  }
+  a{color:#9ec5ff;text-decoration:none}
+  img{max-width:100%; display:block}
 
   /* Header */
-  header{background:#0b1220;color:#e5e7eb}
-  header .inner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px}
-  .logo{display:flex;gap:10px;align-items:center}
-  .logo img{width:40px;height:40px;border-radius:10px;object-fit:cover}
-  .crumbs{font-size:13px;color:#94a3b8}
+  header{position:sticky; top:0; z-index:30; background:rgba(10,14,30,.75); backdrop-filter: blur(8px); border-bottom:1px solid rgba(255,255,255,.08)}
+  header .inner{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px}
+  .logo{display:flex; gap:10px; align-items:center}
+  .logo img{width:40px; height:40px; border-radius:10px; object-fit:cover}
+  .tt{font-weight:900}
+  .crumb{font-size:12px; color:#b9c6ff}
 
-  /* Layout */
-  .layout{display:grid;grid-template-columns:320px 1fr;gap:16px;margin-top:16px}
-  @media (max-width:1024px){ .layout{grid-template-columns:1fr} }
+  /* Wizard shell */
+  .wrap{max-width:760px; margin:0 auto; padding:14px}
+  .panel{background:linear-gradient(180deg,#10172a,#0b1022); border:1px solid var(--line); border-radius:16px; box-shadow:0 22px 100px rgba(0,0,0,.45)}
+  .head{display:grid; gap:10px; padding:14px}
+  .toprow{display:flex; align-items:center; gap:12px}
+  .meter{height:10px; border-radius:999px; background:#1a2446; overflow:hidden}
+  .meter>div{height:100%; width:0%; background:linear-gradient(90deg,#a78bfa,#60a5fa)}
 
-  /* Sidebar (desktop) */
-  .side{position:sticky;top:8px;align-self:start;padding:14px}
-  .meter{height:8px;border-radius:999px;background:#e2e8f0;overflow:hidden}
-  .meter>div{height:100%;background:linear-gradient(90deg, #a78bfa,#60a5fa);width:0%}
-  .steps{display:grid;gap:8px;margin-top:10px}
-  .step{display:flex;align-items:center;gap:10px;border:1px dashed var(--line);border-radius:12px;padding:10px;background:#fff}
-  .step[aria-current="step"]{border-color:var(--brand2);background:#f0f8ff}
-  .dot{width:22px;height:22px;display:grid;place-items:center;border-radius:999px;background:#e2e8f0;font-weight:900}
-  .step.done .dot{background:var(--ok);color:#053b22}
-  .step .name{font-weight:800}
+  /* Portrait */
+  .portrait{display:flex; justify-content:center; padding:8px 14px 0}
+  .portrait img{width:min(280px,80vw); border-radius:18px; filter:drop-shadow(0 18px 40px rgba(0,0,0,.45))}
 
-  /* Make sidebar compact & horizontal on small screens */
-  @media (max-width:1024px){
-    .side{position:static;padding:10px}
-    .steps{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory}
-    .step{min-width:260px;scroll-snap-align:start}
+  /* Question */
+  .qbox{padding:10px 14px 2px}
+  .q{font-size:22px; line-height:1.35; font-weight:900}
+  .hint{color:#c9d5ff; opacity:.85; font-size:13px}
+
+  /* Options (KBC-style cards) */
+  .opts{display:grid; gap:10px; padding:12px 14px}
+  .opt{
+    display:flex; align-items:center; gap:12px; padding:14px; border-radius:14px;
+    border:1px solid var(--line); background:linear-gradient(180deg,#0f1735,#0b112a);
+    min-height:var(--tap); cursor:pointer; text-align:left;
   }
+  .opt:active{transform:translateY(1px)}
+  .opt .k{font-weight:900; color:#ffe28f; min-width:28px}
+  .opt .t{font-weight:800}
+  .opt img{width:44px; height:44px; border-radius:10px; object-fit:cover; flex:0 0 auto}
+  .opt[aria-pressed="true"]{outline:3px solid #c7d2fe; border-color:#93c5fd}
+  .opt.ghost{border:1px dashed #3a4a7a; background:#0b1226}
 
-  /* Main form */
-  .pane{padding:18px}
-  h1{font-weight:900;font-size:clamp(22px,3.4vw,32px);margin:8px 0 6px}
-  h2{font-weight:900;font-size:clamp(18px,2.6vw,24px);margin:14px 0 8px}
-  .grid{display:grid;gap:12px}
-  .two{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .three{grid-template-columns:repeat(3,minmax(0,1fr))}
-  @media (max-width:820px){ .two,.three{grid-template-columns:1fr} }
-
-  label{font-weight:800;font-size:14px}
-  .hint{font-size:12px;color:#6b7280}
-  input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], select, textarea{
-    width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fcfdff;font:inherit
+  /* Type-it box */
+  .inline{padding:0 14px 6px}
+  .inline .ibox{
+    border:1px solid var(--line); background:#0d1636; border-radius:14px; padding:12px; display:grid; gap:6px
   }
-  textarea{min-height:110px}
-  .row{display:grid;gap:8px}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{border:1px solid var(--chipline);background:linear-gradient(180deg,#111b3a,#0f1530);color:#e7ebff;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:15px;line-height:1.2}
-  .chip[aria-pressed="true"]{outline:3px solid #c7d2fe;border-color:#93c5fd}
-  .chip.ghost{background:#0b1226;border:1px dashed #334155}
+  .ibox label{font-weight:800; font-size:14px}
+  .ibox input, .ibox textarea, .ibox select{
+    width:100%; padding:12px; border-radius:12px; border:1px solid #2a3b68; background:#0f1b3b; color:#e7ebff; font:inherit
+  }
+  .ibox textarea{min-height:110px}
 
-  .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
-  .btn{appearance:none;border:1px solid #d0d7e2;background:#fff;padding:12px 14px;border-radius:12px;font-weight:900;cursor:pointer}
-  .btn.primary{background:var(--accent);color:#1e1b4b;border-color:#deb302;box-shadow:0 8px 24px rgba(0,0,0,.12)}
-  .btn.brand{background:#3b82f6;color:#fff;border:none}
-  .btn.safe{background:#16a34a;color:#fff;border:none}
-  .btn.warn{background:#f59e0b;color:#1f1300;border:none}
-  .btn.danger{background:#ef4444;color:#fff;border:none}
-  .btn:disabled{opacity:.6;cursor:not-allowed}
-
-  .note{padding:10px;border-radius:12px;background:#f8fafc;border:1px solid #e5e7eb}
-  .error{color:#b91c1c;font-weight:700}
-  .ok{color:#166534;font-weight:700}
+  /* Sticky nav */
+  .nav{
+    position:sticky; bottom:0; z-index:25; padding:12px; background:linear-gradient(180deg,transparent, rgba(7,10,22,.85) 22%, rgba(7,10,22,.95));
+    display:flex; gap:8px; justify-content:space-between
+  }
+  .btn{
+    appearance:none; border:1px solid #40508a; background:#0e1636; color:#e7ebff;
+    padding:14px 16px; border-radius:12px; font-weight:900; cursor:pointer; min-height:var(--tap); flex:1 1 50%;
+  }
+  .btn.primary{background:var(--accent); color:#251a00; border-color:#e0b702}
+  .btn.safe{background:#16a34a; border-color:#0f7f36}
+  .btn:disabled{opacity:.6; cursor:not-allowed}
 
   /* Review */
-  .review-block{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}
-  code.small{font-size:12px;background:#f3f4f6;padding:4px 6px;border-radius:6px}
+  .review{padding:12px 14px 2px}
+  .rblk{border:1px solid var(--line); background:#0e152f; border-radius:14px; padding:12px; margin-bottom:10px}
+  .rblk h3{margin:0 0 6px 0; font-size:16px}
+  .row{display:flex; gap:8px; justify-content:space-between; font-size:14px}
+  .row .k{color:#cbd5ff}
+  .row .v{color:#fff}
 
-  /* ---------- MOBILE FOCUS ---------- */
-  @media (max-width:768px){
-    /* Make tap targets and text friendlier on phones */
-    body{font-size:16px}
-    input,select,textarea{font-size:16px} /* stops iOS zoom */
-    .pane{padding:14px}
-    .chip{padding:14px 16px;font-size:16px}
-    .actions .btn{flex:1 1 100%;padding:14px 16px}
+  /* Desktop sweet spot */
+  @media (min-width:900px){
+    .wrap{padding:28px 16px}
+    .panel{border-radius:18px}
+    .q{font-size:24px}
+    .opt img{width:48px;height:48px}
   }
 
-  /* Mobile top progress (visible under 1024px) */
-  .m-progress{display:none;gap:8px;align-items:center;margin-bottom:10px}
-  .m-meter{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;flex:1}
-  .m-meter>div{height:100%;background:linear-gradient(90deg,#a78bfa,#60a5fa);width:0%}
-  @media (max-width:1024px){ .m-progress{display:flex} }
+  /* iOS zoom fix */
+  input,select,textarea{font-size:16px}
 </style>
 </head>
 <body>
 <header>
-  <div class="inner container">
+  <div class="inner">
     <div class="logo">
-      <img src="images/logo.png" alt="HD HeeD logo">
+      <img src="images/logo.png" alt="HD HeeD"/>
       <div>
-        <div style="font-weight:900">HD HeeD — AILR</div>
-        <div class="crumbs">Comprehensive NDIS Onboarding</div>
+        <div class="tt">HD HeeD — AILR (Mobile)</div>
+        <div class="crumb">Comprehensive NDIS onboarding</div>
       </div>
     </div>
-    <div class="muted" id="saveState">Draft saved</div>
+    <div class="crumb" id="saveState">Draft saved</div>
   </div>
 </header>
 
-<main class="container">
-  <div class="layout">
-    <!-- Sidebar (desktop / compact horizontal on mobile) -->
-    <aside class="card side shadow" aria-label="Progress">
-      <div class="meter" aria-hidden="true"><div id="meterBar" style="width:0%"></div></div>
-      <div class="steps" id="stepList" style="margin-top:10px"></div>
-      <div class="note" style="margin-top:10px">
-        <div style="font-weight:900">Autosave</div>
-        <div class="muted" style="font-size:13px">Your answers save automatically in this browser. You can resume anytime on this device.</div>
+<main class="wrap">
+  <div class="panel" id="wizard">
+    <div class="head">
+      <div class="toprow">
+        <div class="crumb">Step <span id="stepNow">1</span>/<span id="stepTotal">12</span></div>
+        <div class="meter" style="flex:1"><div id="meterBar"></div></div>
       </div>
-    </aside>
+    </div>
 
-    <!-- Main -->
-    <section class="card pane shadow">
-      <!-- Mobile progress bar -->
-      <div class="m-progress" aria-hidden="true">
-        <div class="muted" style="font-weight:800;font-size:13px">Progress</div>
-        <div class="m-meter"><div id="mMeterBar" style="width:0%"></div></div>
+    <div class="portrait"><img id="portrait" src="images/ella/ella-default.png" alt="Assistant portrait"/></div>
+
+    <div class="qbox">
+      <div class="q" id="q">…</div>
+      <div class="hint" id="qh"></div>
+    </div>
+
+    <div class="opts" id="opts"></div>
+
+    <div class="inline" id="inlineBox" hidden>
+      <div class="ibox">
+        <label id="inlineLabel">Type it instead (optional)</label>
+        <input id="inlineInput" placeholder="Type your answer here" />
+        <button class="btn" id="inlineSave" type="button">Save typed answer</button>
       </div>
+    </div>
 
-      <h1>AILR — Intake & Onboarding</h1>
-      <p class="muted">Answer at your pace. Most questions include “Prefer not to say” and a space to type details if you want to add context.</p>
+    <div class="review" id="review" hidden></div>
 
-      <!-- Form -->
-      <form id="ailrForm" class="grid" novalidate>
-        <!-- Section 1: Contact & Identity -->
-        <div class="section" data-id="identity">
-          <h2>1) Contact & Identity</h2>
-          <div class="grid two">
-            <div class="row">
-              <label for="fullName">Participant full name</label>
-              <input id="fullName" name="fullName" placeholder="e.g., Jane Citizen" autocomplete="name" required>
-              <div class="hint">Legal name preferred. If unknown, you may write initials.</div>
-            </div>
-            <div class="row">
-              <label for="preferredName">Preferred name (optional)</label>
-              <input id="preferredName" name="preferredName" placeholder="What should we call you?">
-            </div>
-          </div>
+    <div class="nav">
+      <button class="btn" id="backBtn" type="button">Back</button>
+      <button class="btn primary" id="nextBtn" type="button">Next</button>
+    </div>
+  </div>
 
-          <div class="grid two">
-            <div class="row">
-              <label for="dob">Date of birth</label>
-              <input type="date" id="dob" name="dob">
-            </div>
-            <div class="row">
-              <label for="gender">Gender</label>
-              <select id="gender" name="gender">
-                <option value="">Select…</option>
-                <option>Female</option>
-                <option>Male</option>
-                <option>Non-binary</option>
-                <option>Another term (type below)</option>
-                <option>Prefer not to say</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <label for="genderFree">If another term, add it here (optional)</label>
-            <input id="genderFree" name="genderFree" placeholder="e.g., Woman, Man, Agender…">
-          </div>
-
-          <div class="grid two">
-            <div class="row">
-              <label for="email">Email</label>
-              <input id="email" name="email" type="email" placeholder="name@example.com" autocomplete="email">
-            </div>
-            <div class="row">
-              <label for="phone">Phone</label>
-              <input id="phone" name="phone" type="tel" placeholder="04xx xxx xxx" autocomplete="tel">
-            </div>
-          </div>
-
-          <div class="grid two">
-            <div class="row">
-              <label for="address">Street address</label>
-              <input id="address" name="address" placeholder="Unit, number, street">
-            </div>
-            <div class="row">
-              <label for="suburb">Suburb & Postcode</label>
-              <input id="suburb" name="suburb" placeholder="Suburb, 2000">
-            </div>
-          </div>
-
-          <div class="row">
-            <label for="primaryContact">Best contact person (if not participant)</label>
-            <input id="primaryContact" name="primaryContact" placeholder="Name and relationship (e.g., Mum – Anna)">
-          </div>
-
-          <div class="chips" role="group" aria-label="Who is completing this form?">
-            <button type="button" class="chip" data-name="formRole" data-val="Participant">Participant</button>
-            <button type="button" class="chip" data-name="formRole" data-val="Family / Carer">Family / Carer</button>
-            <button type="button" class="chip" data-name="formRole" data-val="Support Coordinator">Support Coordinator</button>
-            <button type="button" class="chip" data-name="formRole" data-val="Health Professional">Health Professional</button>
-            <button type="button" class="chip ghost" data-name="formRole" data-val="Prefer not to say">Prefer not to say</button>
-          </div>
-
-          <div class="actions">
-            <button class="btn brand next">Save & continue</button>
-          </div>
-        </div>
-
-        <!-- Section 2: NDIS Details -->
-        <div class="section" data-id="ndis">
-          <h2>2) NDIS Details</h2>
-          <div class="grid two">
-            <div class="row">
-              <label for="ndisNumber">NDIS number</label>
-              <input id="ndisNumber" name="ndisNumber" placeholder="If known">
-              <div class="hint">Leave blank if unknown — you can add it later.</div>
-            </div>
-            <div class="row">
-              <label for="planDates">Plan dates</label>
-              <input id="planDates" name="planDates" placeholder="e.g., 01 Oct 2025 – 30 Sep 2026">
-            </div>
-          </div>
-
-          <div class="row">
-            <label for="management">Plan management</label>
-            <select id="management" name="management">
-              <option value="">Select…</option>
-              <option>NDIA-managed</option>
-              <option>Plan-managed</option>
-              <option>Self-managed</option>
-              <option>Mixed</option>
-              <option>Not sure</option>
-            </select>
-          </div>
-
-          <div class="grid two">
-            <div class="row">
-              <label for="scName">Support Coordinator</label>
-              <input id="scName" name="scName" placeholder="Name, org">
-            </div>
-            <div class="row">
-              <label for="scEmail">Support Coordinator email</label>
-              <input id="scEmail" name="scEmail" type="email" placeholder="sc@org.com">
-            </div>
-          </div>
-
-          <div class="grid two">
-            <div class="row">
-              <label for="pmName">Plan Manager (if applicable)</label>
-              <input id="pmName" name="pmName" placeholder="Name, org">
-            </div>
-            <div class="row">
-              <label for="pmEmail">Plan Manager email</label>
-              <input id="pmEmail" name="pmEmail" type="email" placeholder="pm@org.com">
-            </div>
-          </div>
-
-          <div class="row">
-            <label>Budget categories (tick what applies)</label>
-            <div class="chips">
-              <button type="button" class="chip" data-name="budgets" data-multi data-val="Core — Assistance with Daily Life">Core — Assistance with Daily Life</button>
-              <button type="button" class="chip" data-name="budgets" data-multi data-val="Core — Community Nursing Care">Core — Community Nursing Care</button>
-              <button type="button" class="chip" data-name="budgets" data-multi data-val="Core — Social & Community Participation">Core — Social & Community Participation</button>
-              <button type="button" class="chip" data-name="budgets" data-multi data-val="Capacity — Improved Daily Living">Capacity — Improved Daily Living</button>
-              <button type="button" class="chip ghost" data-name="budgets" data-multi data-val="Prefer not to say">Prefer not to say</button>
-            </div>
-          </div>
-
-          <div class="actions">
-            <button class="btn" data-nav="back">Back</button>
-            <button class="btn brand next">Save & continue</button>
-          </div>
-        </div>
-
-        <!-- Section 3: Health & Safety -->
-        <div class="section" data-id="health">
-          <h2>3) Health & Safety</h2>
-          <div class="grid two">
-            <div class="row">
-              <label for="primaryDiagnosis">Primary diagnosis</label>
-              <input id="primaryDiagnosis" name="primaryDiagnosis" placeholder="If known">
-            </div>
-            <div class="row">
-              <label for="otherConditions">Other conditions (optional)</label>
-              <input id="otherConditions" name="otherConditions" placeholder="Comma-separated">
-            </div>
-          </div>
-
-          <div class="row">
-            <label>Clinical needs</label>
-            <div class="chips">
-              <button type="button" class="chip" data-name="clinical" data-multi data-val="Medication prompts">Medication prompts</button>
-              <button type="button" class="chip" data-name="clinical" data-multi data-val="Webster pack">Webster pack</button>
-              <button type="button" class="chip" data-name="clinical" data-multi data-val="Wound care">Wound care</button>
-              <button type="button" class="chip" data-name="clinical" data-multi data-val="Diabetes support">Diabetes support</button>
-              <button type="button" class="chip" data-name="clinical" data-multi data-val="PEG / feeding">PEG / feeding</button>
-              <button type="button" class="chip" data-name="clinical" data-multi data-val="Seizure care plan">Seizure care plan</button>
-              <button type="button" class="chip ghost" data-name="clinical" data-multi data-val="Prefer not to say">Prefer not to say</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <label>Behaviours of concern</label>
-            <div class="chips">
-              <button type="button" class="chip" data-name="behaviours" data-multi data-val="None known">None known</button>
-              <button type="button" class="chip" data-name="behaviours" data-multi data-val="BSP in place">BSP in place</button>
-              <button type="button" class="chip" data-name="behaviours" data-multi data-val="Triggers: loud noise">Triggers: loud noise</button>
-              <button type="button" class="chip" data-name="behaviours" data-multi data-val="History of absconding">History of absconding</button>
-              <button type="button" class="chip ghost" data-name="behaviours" data-multi data-val="Prefer not to say">Prefer not to say</button>
-            </div>
-          </div>
-
-          <div class="grid two">
-            <div class="row">
-              <label for="allergies">Allergies (optional)</label>
-              <input id="allergies" name="allergies" placeholder="Food, medication, other">
-            </div>
-            <div class="row">
-              <label for="gp">GP / Clinic (optional)</label>
-              <input id="gp" name="gp" placeholder="Name, practice, contact">
-            </div>
-          </div>
-
-          <div class="row">
-            <label for="healthNotes">Health notes (free text)</label>
-            <textarea id="healthNotes" name="healthNotes" placeholder="Anything important for safe care, e.g., mobility, seizures, choking risk, etc."></textarea>
-          </div>
-
-          <div class="actions">
-            <button class="btn" data-nav="back">Back</button>
-            <button class="btn brand next">Save & continue</button>
-          </div>
-        </div>
-
-        <!-- Section 4: Daily Living & Support Needs -->
-        <div class="section" data-id="support">
-          <h2>4) Daily Living & Support Needs</h2>
-          <div class="row">
-            <label>Which supports do you need?</label>
-            <div class="chips">
-              <button type="button" class="chip" data-name="supports" data-multi data-val="Personal care (shower, dressing)">Personal care (shower, dressing)</button>
-              <button type="button" class="chip" data-name="supports" data-multi data-val="Community participation">Community participation</button>
-              <button type="button" class="chip" data-name="supports" data-multi data-val="Domestic assistance">Domestic assistance</button>
-              <button type="button" class="chip" data-name="supports" data-multi data-val="Daily living skills">Daily living skills</button>
-              <button type="button" class="chip" data-name="supports" data-multi data-val="Nursing care at home">Nursing care at home</button>
-              <button type="button" class="chip ghost" data-name="supports" data-multi data-val="Prefer not to say">Prefer not to say</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <label>Preferred visit windows</label>
-            <div class="chips">
-              <button type="button" class="chip" data-name="windows" data-multi data-val="Weekday mornings (7–11)">Weekday mornings (7–11)</button>
-              <button type="button" class="chip" data-name="windows" data-multi data-val="Weekday afternoons (12–4)">Weekday afternoons (12–4)</button>
-              <button type="button" class="chip" data-name="windows" data-multi data-val="Evenings (5–9)">Evenings (5–9)</button>
-              <button type="button" class="chip" data-name="windows" data-multi data-val="Weekends">Weekends</button>
-              <button type="button" class="chip ghost" data-name="windows" data-multi data-val="Flexible / Prefer not to say">Flexible / Prefer not to say</button>
-            </div>
-          </div>
-
-          <div class="grid two">
-            <div class="row">
-              <label for="weeklyHours">Approx hours per week</label>
-              <select id="weeklyHours" name="weeklyHours">
-                <option value="">Select…</option>
-                <option>2–4</option>
-                <option>5–10</option>
-                <option>10–20</option>
-                <option>20+</option>
-                <option>Not sure</option>
-              </select>
-            </div>
-            <div class="row">
-              <label for="startTiming">When would you like to start?</label>
-              <select id="startTiming" name="startTiming">
-                <option value="">Select…</option>
-                <option>Urgent (24–72h)</option>
-                <option>Soon (1–2 weeks)</option>
-                <option>Exploring options</option>
-                <option>Not sure</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid two">
-            <div class="row">
-              <label>Worker preferences</label>
-              <div class="chips">
-                <button type="button" class="chip" data-name="prefGender" data-val="Female">Female</button>
-                <button type="button" class="chip" data-name="prefGender" data-val="Male">Male</button>
-                <button type="button" class="chip" data-name="prefGender" data-val="No preference">No preference</button>
-                <button type="button" class="chip ghost" data-name="prefGender" data-val="Prefer not to say">Prefer not to say</button>
-              </div>
-            </div>
-            <div class="row">
-              <label>Access & transport</label>
-              <div class="chips">
-                <button type="button" class="chip" data-name="access" data-multi data-val="Keysafe">Keysafe</button>
-                <button type="button" class="chip" data-name="access" data-multi data-val="Someone home">Someone home</button>
-                <button type="button" class="chip" data-name="access" data-multi data-val="Worker must have car">Worker must have car</button>
-                <button type="button" class="chip ghost" data-name="access" data-multi data-val="Prefer not to say">Prefer not to say</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <label for="supportNotes">Support notes (free text)</label>
-            <textarea id="supportNotes" name="supportNotes" placeholder="Routines, manual handling, equipment, exact windows, etc."></textarea>
-          </div>
-
-          <div class="actions">
-            <button class="btn" data-nav="back">Back</button>
-            <button class="btn brand next">Save & continue</button>
-          </div>
-        </div>
-
-        <!-- Section 5: Communication & Culture -->
-        <div class="section" data-id="comms">
-          <h2>5) Communication & Culture</h2>
-          <div class="grid two">
-            <div class="row">
-              <label for="primaryLanguage">Primary language</label>
-              <input id="primaryLanguage" name="primaryLanguage" placeholder="e.g., English">
-            </div>
-            <div class="row">
-              <label>Interpreter needed?</label>
-              <div class="chips">
-                <button type="button" class="chip" data-name="interpreter" data-val="Yes">Yes</button>
-                <button type="button" class="chip" data-name="interpreter" data-val="No">No</button>
-                <button type="button" class="chip ghost" data-name="interpreter" data-val="Prefer not to say">Prefer not to say</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <label for="interpreterLang">If yes, interpreter language</label>
-            <input id="interpreterLang" name="interpreterLang" placeholder="e.g., Arabic, Mandarin, AUSLAN">
-          </div>
-
-          <div class="row">
-            <label>Cultural / religious preferences (tick all that apply)</label>
-            <div class="chips">
-              <button type="button" class="chip" data-name="cultural" data-multi data-val="Same-gender worker preferred">Same-gender worker preferred</button>
-              <button type="button" class="chip" data-name="cultural" data-multi data-val="Prayer/observance times">Prayer/observance times</button>
-              <button type="button" class="chip" data-name="cultural" data-multi data-val="Dietary practices">Dietary practices</button>
-              <button type="button" class="chip ghost" data-name="cultural" data-multi data-val="Prefer not to say">Prefer not to say</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <label for="communicationNotes">Communication notes</label>
-            <textarea id="communicationNotes" name="communicationNotes" placeholder="Preferred way to communicate, decision-making, any sensitivities."></textarea>
-          </div>
-
-          <div class="actions">
-            <button class="btn" data-nav="back">Back</button>
-            <button class="btn brand next">Save & continue</button>
-          </div>
-        </div>
-
-        <!-- Section 6: Goals & Outcomes -->
-        <div class="section" data-id="goals">
-          <h2>6) Goals & Outcomes</h2>
-          <div class="row">
-            <label>What are your goals right now?</label>
-            <div class="chips">
-              <button type="button" class="chip" data-name="goals" data-multi data-val="Maintain personal hygiene">Maintain personal hygiene</button>
-              <button type="button" class="chip" data-name="goals" data-multi data-val="Increase community participation">Increase community participation</button>
-              <button type="button" class="chip" data-name="goals" data-multi data-val="Build daily living skills">Build daily living skills</button>
-              <button type="button" class="chip" data-name="goals" data-multi data-val="Improve health management">Improve health management</button>
-              <button type="button" class="chip" data-name="goals" data-multi data-val="Carer respite">Carer respite</button>
-              <button type="button" class="chip ghost" data-name="goals" data-multi data-val="Prefer not to say">Prefer not to say</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <label for="goalNotes">Goal notes (free text)</label>
-            <textarea id="goalNotes" name="goalNotes" placeholder="Short sentence or dot points so our team is prepared."></textarea>
-          </div>
-
-          <div class="actions">
-            <button class="btn" data-nav="back">Back</button>
-            <button class="btn brand next">Save & continue</button>
-          </div>
-        </div>
-
-        <!-- Section 7: Documents & Consents -->
-        <div class="section" data-id="consents">
-          <h2>7) Documents & Consents</h2>
-          <div class="row">
-            <label>Do you consent to us contacting your Support Coordinator or Plan Manager, if needed?</label>
-            <div class="chips">
-              <button type="button" class="chip" data-name="consentContact" data-val="Yes">Yes</button>
-              <button type="button" class="chip" data-name="consentContact" data-val="Not yet">Not yet</button>
-              <button type="button" class="chip" data-name="consentContact" data-val="Prefer not to say">Prefer not to say</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <label>Do you consent to us collecting and securely storing the details you provide?</label>
-            <div class="chips">
-              <button type="button" class="chip" data-name="consentCollect" data-val="Yes">Yes</button>
-              <button type="button" class="chip" data-name="consentCollect" data-val="No">No</button>
-              <button type="button" class="chip" data-name="consentCollect" data-val="Prefer not to say">Prefer not to say</button>
-            </div>
-            <div class="hint">We will always handle your information in line with our privacy policy.</div>
-          </div>
-
-          <div class="row">
-            <label for="filesNote">If you have key documents (BSP, care plans, risk assessments), note them here (we’ll request files securely later).</label>
-            <textarea id="filesNote" name="filesNote" placeholder="E.g., BSP (Jan 2025), diabetes care plan, OT manual handling."></textarea>
-          </div>
-
-          <div class="actions">
-            <button class="btn" data-nav="back">Back</button>
-            <button class="btn safe" id="reviewBtn" type="button">Review summary</button>
-          </div>
-        </div>
-
-        <!-- Section 8: Review & Submit -->
-        <div class="section" data-id="review">
-          <h2>8) Review & Submit</h2>
-          <div id="reviewWrap" class="review-block"></div>
-
-          <div class="actions">
-            <button class="btn" data-nav="back">Back</button>
-            <button class="btn brand" id="downloadJson" type="button">Download JSON</button>
-            <button class="btn warn" id="printPdf" type="button">Print / Save as PDF</button>
-            <button class="btn primary" id="submitBtn" type="button">Submit to HD HeeD</button>
-          </div>
-          <div id="submitStatus" class="muted" style="margin-top:8px"></div>
-        </div>
-      </form>
-    </section>
+  <div style="text-align:center; color:#aab6ff; font-size:12px; margin-top:10px">
+    You can close this page anytime — your draft is saved on this device.
   </div>
 </main>
 
-<footer class="container" style="text-align:center;margin:18px 0;color:#64748b;font-size:13px">
+<footer style="text-align:center; color:#8ea5ff; font-size:12px; padding:18px 0">
   © 2025 HD HeeD • <a href="privacy.html">Privacy</a> • <a href="index.html">Home</a>
 </footer>
 
 <script>
 (function(){
-  // ====== Config ======
+  // ===== Config & assets =====
   const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn";
-  const STORAGE_KEY = "hdheed_ailr_v11"; // bumped for fresh CSS/JS
-  const form = document.getElementById("ailrForm");
-  const saveState = document.getElementById("saveState");
-  const meterBar = document.getElementById("meterBar");
-  const mMeterBar = document.getElementById("mMeterBar"); // mobile meter
-  const reviewWrap = document.getElementById("reviewWrap");
-  const submitStatus = document.getElementById("submitStatus");
-  const sections = Array.from(form.querySelectorAll(".section"));
-  const stepList = document.getElementById("stepList");
-
-  // Build sidebar steps
-  const stepNames = [
-    "Contact & Identity","NDIS Details","Health & Safety",
-    "Daily Living & Supports","Communication & Culture","Goals & Outcomes",
-    "Documents & Consents","Review & Submit"
-  ];
-  stepNames.forEach((name,i)=>{
-    const div = document.createElement("div");
-    div.className = "step";
-    div.dataset.index = i;
-    div.innerHTML = `<div class="dot">${i+1}</div><div>
-        <div class="name">${name}</div>
-        <div class="muted" style="font-size:12px">Step ${i+1} of ${stepNames.length}</div>
-      </div>`;
-    div.tabIndex = 0;
-    div.addEventListener("click", ()=> go(i));
-    stepList.appendChild(div);
-  });
-
-  // ====== State & Autosave ======
-  let S = {
-    // Identity
-    fullName:"", preferredName:"", dob:"", gender:"", genderFree:"",
-    email:"", phone:"", address:"", suburb:"", primaryContact:"", formRole:"",
-    // NDIS
-    ndisNumber:"", planDates:"", management:"", scName:"", scEmail:"", pmName:"", pmEmail:"",
-    budgets:[],
-    // Health
-    primaryDiagnosis:"", otherConditions:"", clinical:[], behaviours:[], allergies:"", gp:"", healthNotes:"",
-    // Supports
-    supports:[], windows:[], weeklyHours:"", startTiming:"", prefGender:"", access:[], supportNotes:"",
-    // Comm & Culture
-    primaryLanguage:"", interpreter:"", interpreterLang:"", cultural:[], communicationNotes:"",
-    // Goals
-    goals:[], goalNotes:"",
-    // Consents
-    consentContact:"", consentCollect:"", filesNote:"",
-    // Nav
-    i:0, ts:null
+  const STORAGE_KEY = "hdheed_ailr_mobile_v2";
+  const ELLA_IMAGES = {
+    default:"images/ella/ella-default.png",
+    caller:"images/ella/ella-caller.png",
+    consent:"images/ella/ella-consent.png",
+    loc:"images/ella/ella-location.png",
+    service:"images/ella/ella-service.png",
+    rostering:"images/ella/ella-rostering.png",
+    pref:"images/ella/ella-preferences.png",
+    mgmt:"images/ella/ella-management.png",
+    dates:"images/ella/ella-dates.png",
+    hrs:"images/ella/ella-hours.png",
+    risk_beh:"images/ella/ella-risk-beh.png",
+    risk_med:"images/ella/ella-risk-med.png",
+    risk_int:"images/ella/ella-interpreter.png",
+    urgency:"images/ella/ella-urgency.png",
+    contact_win:"images/ella/ella-contact-window.png",
+    final:"images/ella/ella-summary.png"
   };
 
-  try{
+  // ===== DOM =====
+  const qEl = document.getElementById("q");
+  const qhEl = document.getElementById("qh");
+  const optsEl = document.getElementById("opts");
+  const inlineBox = document.getElementById("inlineBox");
+  const inlineInput = document.getElementById("inlineInput");
+  const inlineSave = document.getElementById("inlineSave");
+  const inlineLabel = document.getElementById("inlineLabel");
+  const portrait = document.getElementById("portrait");
+  const stepNow = document.getElementById("stepNow");
+  const stepTotal = document.getElementById("stepTotal");
+  const meterBar = document.getElementById("meterBar");
+  const backBtn = document.getElementById("backBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const reviewBox = document.getElementById("review");
+  const saveState = document.getElementById("saveState");
+
+  // ===== State =====
+  let S = {
+    i:0,
+    // contact
+    fullName:"", preferredName:"", dob:"", gender:"", genderFree:"", email:"", phone:"",
+    address:"", suburb:"", formRole:"",
+    // ndis
+    ndisNumber:"", planDates:"", management:"", scName:"", scEmail:"", pmName:"", pmEmail:"", budgets:[],
+    // health
+    primaryDiagnosis:"", otherConditions:"", clinical:[], behaviours:[], allergies:"", gp:"", healthNotes:"",
+    // supports
+    supports:[], windows:[], weeklyHours:"", startTiming:"", prefGender:"", access:[], supportNotes:"",
+    // comm
+    primaryLanguage:"", interpreter:"", interpreterLang:"", cultural:[], communicationNotes:"",
+    // goals
+    goals:[], goalNotes:"",
+    // consent
+    consentContact:"", consentCollect:"", filesNote:"",
+    ts:null
+  };
+  try {
     const prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
     if (prev) S = {...S, ...prev};
-  }catch{}
+  } catch {}
 
   const save = ()=>{
     S.ts = new Date().toISOString();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
-    if (saveState) saveState.textContent = "Draft saved";
+    saveState.textContent = "Draft saved";
   };
 
-  // ====== Helpers ======
-  function setCurrent(i){
-    S.i = Math.max(0, Math.min(sections.length-1, i));
-    sections.forEach((sec,idx)=> sec.style.display = idx===S.i ? "block" : "none");
-    stepList.querySelectorAll(".step").forEach((node,idx)=>{
-      node.setAttribute("aria-current", idx===S.i ? "step" : "false");
-      node.classList.toggle("done", idx < S.i);
-    });
-    const pct = Math.round((S.i)/(sections.length-1)*100);
-    meterBar.style.width = pct + "%";
-    mMeterBar.style.width = pct + "%"; // keep mobile meter in sync
-    save();
-  }
-  function go(i){ setCurrent(i); }
-  function next(){ setCurrent(S.i+1); }
-  function back(){ setCurrent(S.i-1); }
+  // ===== Steps (mobile-first, one screen each) =====
+  // type: 'chips' (single/multi), 'input', 'textarea', 'review', 'contact'
+  // multi:true for arrays; image per step; notSure option & typeIt for all where meaningful.
+  const steps = [
+    {
+      id:"who", img:"caller",
+      q:"Who’s completing this onboarding?",
+      hint:"Pick one. You can type a different role if needed.",
+      type:"chips", name:"formRole", multi:false,
+      options:["Participant","Family / Carer","Support Coordinator","Health Professional","Prefer not to say"],
+      allowType:true, typeLabel:"Type your role"
+    },
+    {
+      id:"name", img:"caller",
+      q:"Participant’s full name",
+      hint:"Legal name preferred. If unknown, use initials.",
+      type:"input", name:"fullName", placeholder:"e.g., Jane Citizen", required:false
+    },
+    {
+      id:"contact", img:"contact_win",
+      q:"Best contact details",
+      hint:"Add at least one so we can respond.",
+      type:"contact"
+    },
+    {
+      id:"loc", img:"loc",
+      q:"Where will supports be delivered?",
+      hint:"Type suburb and postcode if you know them.",
+      type:"input", name:"suburb", placeholder:"e.g., Parramatta, 2150", allowType:true
+    },
+    {
+      id:"supports", img:"service",
+      q:"Which supports are you seeking?",
+      hint:"Choose all that apply.",
+      type:"chips", name:"supports", multi:true,
+      options:["Personal care","Community participation","Domestic assistance","Daily living skills","Nursing care at home","Prefer not to say"],
+      allowType:true, typeLabel:"Type specific supports"
+    },
+    {
+      id:"windows", img:"rostering",
+      q:"Preferred visit windows",
+      hint:"Choose all that apply.",
+      type:"chips", name:"windows", multi:true,
+      options:["Weekday mornings (7–11)","Weekday afternoons (12–4)","Evenings (5–9)","Weekends","Flexible / Not sure"],
+      allowType:true, typeLabel:"Type exact windows"
+    },
+    {
+      id:"hours", img:"hrs",
+      q:"Approx hours per week",
+      type:"chips", name:"weeklyHours", multi:false,
+      options:["2–4","5–10","10–20","20+","Not sure"]
+    },
+    {
+      id:"start", img:"urgency",
+      q:"When would you like to start?",
+      type:"chips", name:"startTiming", multi:false,
+      options:["Urgent (24–72h)","Soon (1–2 weeks)","Exploring options","Not sure"]
+    },
+    {
+      id:"mgmt", img:"mgmt",
+      q:"How is the NDIS plan managed?",
+      type:"chips", name:"management", multi:false,
+      options:["NDIA-managed","Plan-managed","Self-managed","Mixed","Not sure"]
+    },
+    {
+      id:"health", img:"risk_med",
+      q:"Any clinical needs?",
+      hint:"Select all that apply.",
+      type:"chips", name:"clinical", multi:true,
+      options:["Medication prompts","Webster pack","Wound care","Diabetes support","Seizure care plan","PEG / feeding","Prefer not to say"],
+      allowType:true, typeLabel:"Type clinical notes"
+    },
+    {
+      id:"beh", img:"risk_beh",
+      q:"Any behaviours of concern?",
+      type:"chips", name:"behaviours", multi:true,
+      options:["None known","BSP in place","Triggers: loud noise","History of absconding","Prefer not to say"],
+      allowType:true, typeLabel:"Type behaviour notes"
+    },
+    {
+      id:"interp", img:"risk_int",
+      q:"Interpreter required?",
+      type:"chips", name:"interpreter", multi:false,
+      options:["Yes","No","Prefer not to say"],
+      allowType:true, typeLabel:"Type interpreter language",
+      onType:(txt)=>{ S.interpreter="Yes"; S.interpreterLang = txt; }
+    },
+    {
+      id:"culture", img:"pref",
+      q:"Any cultural or worker preferences?",
+      type:"chips", name:"cultural", multi:true,
+      options:["Same-gender worker preferred","Prayer/observance times","Dietary practices","Prefer not to say"],
+      allowType:true, typeLabel:"Type preferences",
+      extra: { prefGender: ["Female","Male","No preference","Prefer not to say"] }
+    },
+    {
+      id:"notes", img:"service",
+      q:"Anything else we should know?",
+      type:"textarea", name:"supportNotes", placeholder:"Routines, equipment, exact times, safety notes…"
+    },
+    {
+      id:"consent", img:"consent",
+      q:"Consents",
+      hint:"These help us coordinate care.",
+      type:"chips", name:"consentsCombo", multi:true,
+      options:[
+        "Consent to contact SC/PM if needed",
+        "Consent to collect & securely store details",
+        "Prefer not to say"
+      ]
+    },
+    { id:"review", img:"final", q:"Review & Submit", type:"review" }
+  ];
+  stepTotal.textContent = steps.length;
 
-  setCurrent(S.i||0);
-
-  // Back/Next buttons
-  form.addEventListener("click", (e)=>{
-    const btn = e.target.closest("button");
-    if (!btn) return;
-    if (btn.classList.contains("next")){
-      e.preventDefault();
-      next();
-    }
-    if (btn.dataset.nav === "back"){
-      e.preventDefault();
-      back();
-    }
-  });
-
-  // Binders
-  const bind = (id, key) =>{
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (S[key]) el.value = S[key];
-    el.addEventListener("input", ()=>{ S[key] = el.value; save(); });
-  };
-
-  // Identity
-  bind("fullName","fullName");
-  bind("preferredName","preferredName");
-  bind("dob","dob");
-  bind("gender","gender");
-  bind("genderFree","genderFree");
-  bind("email","email");
-  bind("phone","phone");
-  bind("address","address");
-  bind("suburb","suburb");
-  bind("primaryContact","primaryContact");
-  // NDIS
-  bind("ndisNumber","ndisNumber");
-  bind("planDates","planDates");
-  bind("management","management");
-  bind("scName","scName");
-  bind("scEmail","scEmail");
-  bind("pmName","pmName");
-  bind("pmEmail","pmEmail");
-  // Health
-  bind("primaryDiagnosis","primaryDiagnosis");
-  bind("otherConditions","otherConditions");
-  bind("allergies","allergies");
-  bind("gp","gp");
-  bind("healthNotes","healthNotes");
-  // Supports
-  bind("weeklyHours","weeklyHours");
-  bind("startTiming","startTiming");
-  bind("supportNotes","supportNotes");
-  // Communication
-  bind("primaryLanguage","primaryLanguage");
-  bind("interpreterLang","interpreterLang");
-  bind("communicationNotes","communicationNotes");
-  // Goals
-  bind("goalNotes","goalNotes");
-  // Consents
-  bind("filesNote","filesNote");
-
-  // Single-select chips
-  function initSingle(name, key){
-    const chips = Array.from(document.querySelectorAll(`.chip[data-name="${name}"]:not([data-multi])`));
-    if (!chips.length) return;
-    const setUI = ()=>chips.forEach(c=>c.setAttribute("aria-pressed", String(S[key]===c.dataset.val)));
-    chips.forEach(c=>{
-      c.addEventListener("click", ()=>{ S[key] = c.dataset.val; setUI(); save(); });
-    });
-    setUI();
-  }
-  // Multi-select chips
-  function initMulti(name, key){
-    const chips = Array.from(document.querySelectorAll(`.chip[data-name="${name}"][data-multi]`));
-    if (!chips.length) return;
-    const ensureArray = ()=>{ if (!Array.isArray(S[key])) S[key]=[]; };
-    const setUI = ()=>{
-      ensureArray();
-      chips.forEach(c=>c.setAttribute("aria-pressed", String(S[key].includes(c.dataset.val))));
+  // ===== Render =====
+  function setPortrait(stepId){
+    const map = {
+      who:"caller", name:"caller", contact:"contact_win", loc:"loc", supports:"service",
+      windows:"rostering", hours:"hrs", start:"urgency", mgmt:"mgmt", health:"risk_med",
+      beh:"risk_beh", interp:"risk_int", culture:"pref", notes:"service", consent:"consent", review:"final"
     };
-    chips.forEach(c=>{
-      c.addEventListener("click", ()=>{
-        ensureArray();
-        const v = c.dataset.val;
-        const i = S[key].indexOf(v);
-        if (i>=0) S[key].splice(i,1); else S[key].push(v);
-        setUI(); save();
+    const key = map[stepId] || "default";
+    portrait.src = ELLA_IMAGES[key] || ELLA_IMAGES.default;
+    portrait.alt = "Illustration for " + stepId;
+  }
+
+  function setMeter(i){
+    stepNow.textContent = i+1;
+    const pct = Math.round((i)/(steps.length-1)*100);
+    meterBar.style.width = pct + "%";
+  }
+
+  function chip(label, selected, icon){
+    const el = document.createElement("button");
+    el.type = "button";
+    el.className = "opt";
+    el.setAttribute("aria-pressed", String(!!selected));
+    el.innerHTML = `<div class="k">${icon||"•"}</div><div class="t">${label}</div>`;
+    return el;
+  }
+
+  function setOptionActive(btn, active){
+    btn.setAttribute("aria-pressed", String(active));
+  }
+
+  function render(){
+    const step = steps[S.i];
+    setPortrait(step.id);
+    setMeter(S.i);
+    reviewBox.hidden = true;
+
+    qEl.textContent = step.q;
+    qhEl.textContent = step.hint || "";
+    optsEl.innerHTML = "";
+    inlineBox.hidden = true;
+    inlineInput.value = "";
+
+    nextBtn.textContent = (S.i === steps.length-1) ? "Submit" : "Next";
+    backBtn.disabled = (S.i === 0);
+
+    // TYPES
+    if (step.type === "chips"){
+      const currentVal = S[step.name];
+      const isArray = !!step.multi;
+
+      // primary options
+      step.options.forEach((label, idx)=>{
+        const btn = chip(label, isArray ? (Array.isArray(currentVal) && currentVal.includes(label)) : currentVal===label, String.fromCharCode(65+idx));
+        btn.addEventListener("click", ()=>{
+          if (isArray){
+            if (!Array.isArray(S[step.name])) S[step.name]=[];
+            const i = S[step.name].indexOf(label);
+            (i>=0) ? S[step.name].splice(i,1) : S[step.name].push(label);
+            setOptionActive(btn, S[step.name].includes(label));
+          } else {
+            S[step.name] = label;
+            // single-select: clear other selected visuals
+            optsEl.querySelectorAll(".opt").forEach(n=>setOptionActive(n,false));
+            setOptionActive(btn,true);
+          }
+          save();
+        });
+        optsEl.appendChild(btn);
       });
-    });
-    setUI();
+
+      // Type-it
+      if (step.allowType){
+        inlineBox.hidden = false;
+        inlineLabel.textContent = step.typeLabel || "Type it instead (optional)";
+        inlineSave.onclick = ()=>{
+          const txt = (inlineInput.value||"").trim();
+          if (!txt) return;
+          if (typeof step.onType === "function"){ step.onType(txt); }
+          else {
+            if (step.multi){
+              if (!Array.isArray(S[step.name])) S[step.name]=[];
+              if (!S[step.name].includes(txt)) S[step.name].push(txt);
+            } else {
+              S[step.name] = txt;
+            }
+          }
+          inlineInput.value = "";
+          save();
+          // give a tiny visual confirmation
+          saveState.textContent = "Saved typed answer";
+        };
+      }
+
+      // Culture extra: prefGender
+      if (step.extra && step.extra.prefGender){
+        const sep = document.createElement("div");
+        sep.className = "hint";
+        sep.style.padding = "0 14px";
+        sep.textContent = "Worker gender preference";
+        optsEl.appendChild(sep);
+        step.extra.prefGender.forEach((label, idx)=>{
+          const btn = chip(label, S.prefGender===label, String.fromCharCode(65+idx));
+          btn.addEventListener("click", ()=>{
+            S.prefGender = label; save();
+            optsEl.querySelectorAll(".opt").forEach(n=>n.classList.contains("ghost")||setOptionActive(n,false)); // visual clean for primary block
+            setOptionActive(btn,true);
+          });
+          optsEl.appendChild(btn);
+        });
+      }
+    }
+    else if (step.type === "input"){
+      inlineBox.hidden = false;
+      inlineLabel.textContent = step.placeholder || "Type your answer";
+      inlineInput.value = S[step.name] || "";
+      inlineSave.onclick = ()=>{
+        S[step.name] = (inlineInput.value||"").trim();
+        save();
+      };
+    }
+    else if (step.type === "textarea"){
+      inlineBox.hidden = false;
+      inlineLabel.textContent = step.placeholder || "Type your notes";
+      // swap to textarea
+      inlineBox.querySelector("input").replaceWith(Object.assign(document.createElement("textarea"),{id:"inlineInput", placeholder:step.placeholder||"Type here"}));
+      // rebind
+      const ta = inlineBox.querySelector("#inlineInput");
+      ta.value = S[step.name] || "";
+      inlineSave.onclick = ()=>{
+        S[step.name] = (ta.value||"").trim();
+        save();
+      };
+    }
+    else if (step.type === "contact"){
+      // draw a tiny form in the inline box
+      inlineBox.hidden = false;
+      inlineLabel.textContent = "Add an email or phone (one is enough)";
+      inlineBox.querySelector("input").replaceWith(Object.assign(document.createElement("div"),{id:"contactWrap"}));
+      const wrap = inlineBox.querySelector("#contactWrap");
+      wrap.className = "grid";
+      wrap.style.gap = "8px";
+      wrap.innerHTML = `
+        <input id="c_email" type="email" placeholder="Email" value="${S.email||""}">
+        <input id="c_phone" type="tel" placeholder="Phone" value="${S.phone||""}">
+        <input id="c_address" placeholder="Street address" value="${S.address||""}">
+      `;
+      inlineSave.textContent = "Save contact details";
+      inlineSave.onclick = ()=>{
+        S.email = document.getElementById("c_email").value.trim();
+        S.phone = document.getElementById("c_phone").value.trim();
+        S.address = document.getElementById("c_address").value.trim();
+        save();
+      };
+    }
+    else if (step.type === "review"){
+      buildReview();
+      reviewBox.hidden = false;
+      nextBtn.textContent = "Submit";
+    }
   }
-
-  // Init chip groups
-  initSingle("formRole","formRole");
-  initMulti("budgets","budgets");
-  initMulti("clinical","clinical");
-  initMulti("behaviours","behaviours");
-  initMulti("supports","supports");
-  initMulti("windows","windows");
-  initSingle("prefGender","prefGender");
-  initMulti("access","access");
-  initSingle("interpreter","interpreter");
-  initMulti("cultural","cultural");
-  initMulti("goals","goals");
-  initSingle("consentContact","consentContact");
-  initSingle("consentCollect","consentCollect");
-
-  // Review builder
-  const reviewBtn = document.getElementById("reviewBtn");
-  const submitBtn = document.getElementById("submitBtn");
-  const downloadJson = document.getElementById("downloadJson");
-  const printPdf = document.getElementById("printPdf");
-
-  function kv(label, value){
-    const v = (value===""||value==null) ? "—" : (Array.isArray(value) ? (value.length? value.join("; ") : "—") : value);
-    return `<div><strong>${label}:</strong> <span>${escapeHtml(String(v))}</span></div>`;
-  }
-  function escapeHtml(s){ return s.replace(/[&<>"]/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
 
   function buildReview(){
-    const blocks = [
-      ["Contact & Identity", [
-        kv("Full name", S.fullName),
-        kv("Preferred name", S.preferredName),
-        kv("DOB", S.dob),
-        kv("Gender", S.gender || S.genderFree),
-        kv("Email", S.email),
-        kv("Phone", S.phone),
-        kv("Address", S.address),
-        kv("Suburb / Postcode", S.suburb),
-        kv("Best contact person", S.primaryContact),
-        kv("Form completed by", S.formRole)
-      ]],
-      ["NDIS Details", [
-        kv("NDIS number", S.ndisNumber),
-        kv("Plan dates", S.planDates),
-        kv("Management", S.management),
-        kv("Support Coordinator", S.scName),
-        kv("SC email", S.scEmail),
-        kv("Plan Manager", S.pmName),
-        kv("PM email", S.pmEmail),
-        kv("Budget categories", S.budgets)
-      ]],
-      ["Health & Safety", [
-        kv("Primary diagnosis", S.primaryDiagnosis),
-        kv("Other conditions", S.otherConditions),
-        kv("Clinical needs", S.clinical),
-        kv("Behaviours", S.behaviours),
-        kv("Allergies", S.allergies),
-        kv("GP / Clinic", S.gp),
-        kv("Health notes", S.healthNotes)
-      ]],
-      ["Daily Living & Supports", [
-        kv("Supports needed", S.supports),
-        kv("Preferred windows", S.windows),
-        kv("Hours per week", S.weeklyHours),
-        kv("Start timing", S.startTiming),
-        kv("Worker gender pref", S.prefGender),
-        kv("Access / transport", S.access),
-        kv("Support notes", S.supportNotes)
-      ]],
-      ["Communication & Culture", [
-        kv("Primary language", S.primaryLanguage),
-        kv("Interpreter needed", S.interpreter),
-        kv("Interpreter language", S.interpreterLang),
-        kv("Cultural preferences", S.cultural),
-        kv("Communication notes", S.communicationNotes)
-      ]],
-      ["Goals & Outcomes", [
-        kv("Goals", S.goals),
-        kv("Goal notes", S.goalNotes)
-      ]],
-      ["Documents & Consents", [
-        kv("Consent to contact SC/PM", S.consentContact),
-        kv("Consent to collect details", S.consentCollect),
-        kv("Documents noted", S.filesNote)
-      ]]
+    const b = (title, rows)=>`
+      <div class="rblk">
+        <h3>${title}</h3>
+        ${rows.map(([k,v])=>`<div class="row"><div class="k">${k}</div><div class="v">${fmt(v)}</div></div>`).join("")}
+      </div>`;
+    const rows = (obj)=>Object.entries(obj);
+    const pick = (o, keys)=>keys.map(k=>[k, o[k]||"—"]);
+
+    const identity = [
+      ["Full name", S.fullName],["Preferred name", S.preferredName],["Email", S.email],
+      ["Phone", S.phone],["Address", S.address],["Suburb/Postcode", S.suburb],["Form role", S.formRole]
     ];
-    reviewWrap.innerHTML = blocks.map(([title, rows])=>(
-      `<div style="margin-bottom:14px">
-        <div style="font-weight:900">${title}</div>
-        <div class="grid" style="gap:4px;margin-top:6px">
-          ${rows.map(r=>`<div>${r}</div>`).join("")}
-        </div>
-      </div>`
-    )).join("");
+    const ndis = [
+      ["NDIS number", S.ndisNumber],["Plan dates", S.planDates],["Management", S.management],
+      ["SC", S.scName],["SC email", S.scEmail],["PM", S.pmName],["PM email", S.pmEmail],["Budgets", S.budgets]
+    ];
+    const health = [
+      ["Primary diagnosis", S.primaryDiagnosis],["Other conditions", S.otherConditions],["Clinical needs", S.clinical],
+      ["Behaviours", S.behaviours],["Allergies", S.allergies],["GP/Clinic", S.gp],["Health notes", S.healthNotes]
+    ];
+    const support = [
+      ["Supports", S.supports],["Windows", S.windows],["Hours/week", S.weeklyHours],["Start timing", S.startTiming],
+      ["Worker gender", S.prefGender],["Access/transport", S.access],["Support notes", S.supportNotes]
+    ];
+    const comms = [
+      ["Primary language", S.primaryLanguage],["Interpreter", S.interpreter],["Interpreter language", S.interpreterLang],
+      ["Cultural/worker prefs", S.cultural],["Communication notes", S.communicationNotes]
+    ];
+    const cons = [
+      ["Consent to contact SC/PM", S.consentContact || hasCombo("Consent to contact SC/PM if needed")],
+      ["Consent to collect details", S.consentCollect || hasCombo("Consent to collect & securely store details")],
+      ["Documents note", S.filesNote]
+    ];
+
+    reviewBox.innerHTML = b("Contact & Identity", identity)
+      + b("NDIS Details", ndis)
+      + b("Health & Safety", health)
+      + b("Daily Living & Supports", support)
+      + b("Communication & Culture", comms)
+      + b("Consents", cons);
   }
 
-  document.getElementById("reviewBtn").addEventListener("click", ()=>{ buildReview(); go(sections.length-1); });
-
-  // Submission
-  function minimalContactProvided(){
-    return (S.email && S.email.trim()) || (S.phone && S.phone.trim());
+  function fmt(v){
+    if (Array.isArray(v)) return v.length ? v.join("; ") : "—";
+    return v ? String(v) : "—";
+  }
+  function hasCombo(text){
+    // helper for consent combo step
+    if (!Array.isArray(S.consentsCombo)) return "—";
+    return S.consentsCombo.includes(text) ? "Yes" : "—";
   }
 
-  submitBtn.addEventListener("click", async ()=>{
-    submitStatus.textContent = "";
-    const missing = [];
-    if (!S.fullName) missing.push("Full name");
-    if (!minimalContactProvided()) missing.push("Email or phone");
-    if (missing.length){
-      submitStatus.innerHTML = `<span class="error">Missing:</span> ${missing.join(", ")}. You can still submit, but we recommend filling these in.`;
+  // ===== Nav =====
+  function next(){
+    if (S.i < steps.length-1){
+      S.i++; save(); render();
+    } else {
+      submit();
     }
+  }
+  function back(){ if (S.i>0){ S.i--; save(); render(); } }
 
+  backBtn.addEventListener("click", back);
+  nextBtn.addEventListener("click", next);
+
+  // Swipe nav (mobile)
+  let touchX = null;
+  document.addEventListener("touchstart", e=>{ touchX = e.changedTouches[0].clientX; }, {passive:true});
+  document.addEventListener("touchend", e=>{
+    if (touchX==null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 80){
+      if (dx > 0) back(); else next();
+    }
+    touchX = null;
+  }, {passive:true});
+
+  // ===== Submit =====
+  async function submit(){
     const payload = {
-      _subject: "HD HeeD AILR — Comprehensive Onboarding",
-      source: "ailr.html",
-      data: S,
-      timestamp: new Date().toISOString()
+      _subject:"HD HeeD AILR — Mobile onboarding",
+      source:"ailr-mobile",
+      data:S,
+      timestamp:new Date().toISOString()
     };
-
+    nextBtn.disabled = true; backBtn.disabled = true;
+    nextBtn.textContent = "Sending…";
     try{
       const r = await fetch(FS_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type":"application/json", "Accept":"application/json" },
+        method:"POST",
+        headers:{ "Content-Type":"application/json", "Accept":"application/json" },
         body: JSON.stringify(payload)
       });
       if (!r.ok) throw new Error("Network");
-      submitStatus.innerHTML = `<span class="ok">Submitted.</span> We’ll contact you soon. You can also <a href="#" id="clearDraft">clear your draft</a>.`;
-      document.getElementById("clearDraft").addEventListener("click", (e)=>{
-        e.preventDefault();
-        localStorage.removeItem(STORAGE_KEY);
-        location.reload();
-      });
+      nextBtn.textContent = "Sent ✓";
     }catch(e){
-      submitStatus.innerHTML = `<span class="error">Couldn’t send right now.</span> Please try again later or email <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>.`;
+      nextBtn.textContent = "Try again";
+      nextBtn.disabled = false; backBtn.disabled = false;
+      alert("Couldn’t send right now. Your draft is saved; please try again later.");
     }
-  });
+  }
 
-  // Download JSON
-  document.getElementById("downloadJson").addEventListener("click", ()=>{
-    const blob = new Blob([JSON.stringify(S,null,2)], {type:"application/json"});
-    const a = Object.assign(document.createElement("a"), {href: URL.createObjectURL(blob), download: "hdheed-ailr.json"});
-    document.body.appendChild(a); a.click(); a.remove();
-  });
+  // ===== Init =====
+  // convert legacy consent step split values if user re-opens
+  if (!Array.isArray(S.consentsCombo)) S.consentsCombo = [];
+  render();
 
-  // Print/Save PDF
-  document.getElementById("printPdf").addEventListener("click", ()=>{
-    buildReview();
-    go(sections.length-1);
-    setTimeout(()=>window.print(), 0);
-  });
-
-  // Warn on unload if not submitted
-  window.addEventListener("beforeunload", (e)=>{
-    if (S.fullName || S.email || S.phone) { e.preventDefault(); e.returnValue = ""; }
+  // ===== Keyboard shortcuts (desktop)
+  document.addEventListener("keydown", (e)=>{
+    if (e.key === "ArrowRight") next();
+    if (e.key === "ArrowLeft") back();
   });
 
 })();
