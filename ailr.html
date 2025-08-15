@@ -665,30 +665,28 @@
         ]));
       }
     },
+    
+     /* 14 */{
+  key:"uploads",
+  title:"Documents — please email them",
+  sub:"Please email all relevant documents to info@hdheed.com.au. You can proceed without attachments.",
+  build(m){
+    // Clear any previously saved files and persist empty
+    S.uploads.files = [];
+    save();
 
-    /* 14 */{
-      key:"uploads",
-      title:"Upload documents (optional)",
-      sub:"Examples: NDIS plan, ID, BSP, care plans, GP letters. You can also send them later.",
-      build(m){
-        const box = document.createElement('div');
-        box.className = "drop";
-        box.innerHTML = `
-          <p>Attach files (up to ~10). This is optional — you can continue without uploads.</p>
-          <input id="fileInput" type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic,.rtf,.txt,.xlsx,.xls" />
-          <label for="fileInput">Choose files</label>
-          <div id="fileList" class="hint" style="margin-top:6px"></div>
-        `;
-        m.append(box);
-        box.querySelector("#fileInput").addEventListener("change", (e)=>{
-          const files = Array.from(e.target.files||[]);
-          S.uploads.files = files;
-          const names = files.map(f=> f.name + (f.size?` (${Math.round(f.size/1024)} KB)`:"")).join(" • ");
-          box.querySelector("#fileList").textContent = files.length ? names : "No files selected";
-          save();
-        });
-      }
-    },
+    const box = document.createElement('div');
+    box.className = "inlinebox";
+    box.innerHTML = `
+      <div style="font-weight:800; margin-bottom:6px">Document uploads are disabled</div>
+      <p style="margin:0 0 6px">Please send all relevant documents (e.g., NDIS plan, ID, BSP, care plans, GP letters) to
+      <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>.</p>
+      <p class="hint" style="margin:0">You can continue the form without attachments.</p>
+    `;
+    m.append(box);
+  }
+},
+
 
     /* 15 */{
       key:"review",
