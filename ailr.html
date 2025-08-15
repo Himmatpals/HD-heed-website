@@ -738,7 +738,17 @@
     b.addEventListener('click',onClick);
     return b;
   }
-  function divider(txt){
+  function isValidEmail(e){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e||"").trim());
+}
+
+function isValidPhone(p){
+  const digits = String(p||"").replace(/[^\d]/g,"");   // keep numbers only
+  if (digits.length < 10) return false;                // AU numbers are ~10 digits
+  if (/^(\d)\1{6,}$/.test(digits)) return false;       // reject 0000000000 etc
+  return true;                                         // permissive for AU + intl
+}
+function divider(txt){
     const d = document.createElement('div');
     d.className = "hint"; d.style.margin = "8px 0 4px"; d.innerHTML = txt;
     return d;
