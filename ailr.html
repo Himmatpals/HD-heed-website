@@ -10,7 +10,6 @@
 
 <style>
   :root{
-    /* ELLA tokens reused for visual consistency */
     --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153;
     --al-text:#e8edff; --al-accent:#ffc107; --al-ok:#22c55e; --al-warn:#f59e0b; --al-danger:#ef4444;
   }
@@ -23,21 +22,13 @@
   a{color:#9ec1ff; text-decoration:none}
   img{max-width:100%; height:auto; display:block}
 
-  /* Page shell */
-  header{
-    position:sticky; top:0; z-index:50; background:#0b1226;
-    border-bottom:1px solid var(--al-line);
-  }
-  header .bar{
-    display:flex; align-items:center; gap:12px; padding:10px 16px;
-    max-width:1120px; margin:0 auto;
-  }
+  header{position:sticky; top:0; z-index:50; background:#0b1226; border-bottom:1px solid var(--al-line)}
+  header .bar{display:flex; align-items:center; gap:12px; padding:10px 16px; max-width:1120px; margin:0 auto}
   .brand{display:flex; align-items:center; gap:10px}
   .brand img{width:40px;height:40px;border-radius:10px;object-fit:cover}
   .brand .name{font-weight:900}
   .brand .tag{font-size:12px;color:#b6c8ff}
 
-  /* Hero */
   .hero{ max-width:1120px; margin:14px auto 0; padding:16px; }
   .hero .card{
     background:linear-gradient(180deg,#10172a,#0c1326);
@@ -50,14 +41,9 @@
   .pill{border:1px solid var(--al-line); background:#0f1937; border-radius:999px; padding:6px 10px; color:#cfe0ff; font-size:12px}
   .notice{font-size:13px; color:#99adff}
 
-  /* Wizard layout */
-  .wrap{
-    max-width:1120px; margin:12px auto 24px; padding:0 16px; display:grid; gap:14px;
-    grid-template-columns: 1fr; 
-  }
+  .wrap{ max-width:1120px; margin:12px auto 24px; padding:0 16px; display:grid; gap:14px; grid-template-columns: 1fr; }
   @media (min-width:980px){ .wrap{grid-template-columns: 260px 1fr;} }
 
-  /* Portrait column */
   .portrait{ position:sticky; top:88px; align-self:start; display:none; }
   @media (min-width:980px){ .portrait{ display:block } }
   .portrait .box{
@@ -69,7 +55,6 @@
   .legend{margin-top:10px; display:grid; gap:6px; font-size:13px; color:#b6c8ff}
   .legend b{color:#ffe28f}
 
-  /* Step card */
   .stage{
     border:1px solid var(--al-line); border-radius:18px; padding:16px;
     background:linear-gradient(180deg,#10172a,#0c1326);
@@ -112,7 +97,6 @@
   .btn.warn{background:#173155; color:#ffd95c; border:1px solid #334c85}
   .hint{font-size:12px; color:#9fb4ff}
 
-  /* Review table */
   .review{display:grid; gap:10px}
   details.card{ border:1px solid var(--al-line); background:#0f1731; border-radius:12px; padding:10px }
   summary{cursor:pointer; font-weight:900}
@@ -121,22 +105,17 @@
   .kv div b{min-width:210px; color:#ffe28f; font-weight:800}
   @media (max-width:520px){ .kv div{flex-direction:column} .kv div b{min-width:unset} }
 
-  /* Checks alignment */
   .ck-list{ list-style:none; padding:0; margin:0; display:grid; gap:8px }
   .ck-row{ display:flex; align-items:center; gap:10px; }
   .ck-row input[type="checkbox"]{ width:18px; height:18px; }
 
-  /* Dropzone */
-  .drop{
-    border:2px dashed #2a3b68; border-radius:12px; padding:12px; text-align:center; color:#cfe0ff
-  }
+  .drop{ border:2px dashed #2a3b68; border-radius:12px; padding:12px; text-align:center; color:#cfe0ff }
   .drop input{display:none}
   .drop label{display:inline-block; padding:10px 12px; border-radius:10px; border:1px solid var(--al-line); background:#121a3a; cursor:pointer; font-weight:800}
 
   .hide{display:none}
   .ok{color:var(--al-ok)} .warntext{color:var(--al-warn)} .danger{color:var(--al-danger)}
 
-  /* Modal viewer */
   .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.6); z-index:1000;}
   .modal.open{display:flex}
   .modal .panel{
@@ -179,7 +158,6 @@
 </section>
 
 <div class="wrap" id="app">
-  <!-- Portrait column -->
   <aside class="portrait">
     <div class="box">
       <img id="portrait" src="images/ella/ella-default.png" alt="Assistant portrait">
@@ -190,17 +168,16 @@
     </div>
   </aside>
 
-  <!-- Stage / Wizard -->
   <main class="stage" role="region" aria-live="polite">
     <div class="head">
-      <span id="stepTxt" class="step">Step 1/99</span>
+      <span id="stepTxt" class="step">Step 1/17</span>
       <div class="meter" aria-label="Progress"><div id="bar"></div></div>
     </div>
 
     <div id="q" class="q">…</div>
     <p id="sub" class="sub"></p>
 
-    <div id="opts" class="opts"><!-- dynamic --></div>
+    <div id="opts" class="opts"></div>
 
     <div class="foot">
       <div class="hint" id="saveHint">Draft saved</div>
@@ -229,46 +206,42 @@
 
 <script>
 (function(){
-  /* ====== Config ====== */
-  const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn"; // your Formspree endpoint
-  const STORAGE_KEY = "hdheed_ailr_v12";
+  /* ===== Config ===== */
+  const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn";
+  const STORAGE_KEY = "hdheed_ailr_v14";
 
-  // map each step to a portrait image (reusing your ELLA set)
   const AILR_IMAGES = {
-    intro: "images/ella/ella-default.png",
-    caller: "images/ella/ella-caller.png",
-    participant: "images/ella/ella-service.png",
-    contacts: "images/ella/ella-contact-window.png",
-    comms: "images/ella/ella-interpreter.png",
-    living: "images/ella/ella-location.png",
-    clinical: "images/ella/ella-hours.png",
-    medications: "images/ella/ella-urgency.png",
-    risks: "images/ella/ella-risk-beh.png",
-    bsp: "images/ella/ella-risk-beh.png",
-    supports: "images/ella/ella-rostering.png",
-    schedule: "images/ella/ella-rostering.png",
-    policies: "images/ella/ella-summary.png",
-    consents: "images/ella/ella-consent.png",
-    uploads: "images/ella/ella-dates.png",
-    review: "images/ella/ella-summary.png",
-    submit: "images/ella/ella-summary.png"
+    intro:"images/ella/ella-default.png",
+    caller:"images/ella/ella-caller.png",
+    participant:"images/ella/ella-service.png",
+    contacts:"images/ella/ella-contact-window.png",
+    comms:"images/ella/ella-interpreter.png",
+    living:"images/ella/ella-location.png",
+    clinical:"images/ella/ella-hours.png",
+    medications:"images/ella/ella-urgency.png",
+    risks:"images/ella/ella-risk-beh.png",
+    bsp:"images/ella/ella-risk-beh.png",
+    supports:"images/ella/ella-rostering.png",
+    schedule:"images/ella/ella-rostering.png",
+    policies:"images/ella/ella-summary.png",
+    consents:"images/ella/ella-consent.png",
+    uploads:"images/ella/ella-dates.png",
+    review:"images/ella/ella-summary.png",
+    submit:"images/ella/ella-summary.png"
   };
 
-  /* ====== State ====== */
+  /* ===== State ===== */
   let S = {
-    i: 0, // index of current step
-    // Who is completing
-    caller: { role:null, name:null, relationship:null, consent:null }, // consent must be "Yes"
+    i:0,
+    caller:{ role:null, name:null, relationship:null, consent:null },
 
-    // Participant basics
-    participant: {
+    participant:{
       legal_name:null, preferred_name:null, pronouns:null, dob:null, ndis_number:null,
       address:{ line1:null, line2:null, suburb:null, postcode:null, state:null },
       plan_mgmt:null, plan_manager:{ org:null, contact:null, email:null, phone:null },
       plan_dates:{ start:null, end:null }
     },
 
-    // Contacts
     contacts:{
       email:null, phone:null,
       emergency:{ name:null, relationship:null, phone:null },
@@ -276,340 +249,187 @@
       gp:{ name:null, practice:null, email:null, phone:null }
     },
 
-    // Communication & preferences
     comms:{
       primary_language:null, interpreter:null, interpreter_language:null,
       cultural_considerations:null,
       preferences:{ worker_gender:null, worker_gender_other:null, transport_required:null }
     },
 
-    // Living & access
-    living:{
-      residence_type:null, lives_with:null, entry_notes:null, keysafe:null, smoking_on_premises:null, hazards:null
-    },
+    living:{ residence_type:null, lives_with:null, entry_notes:null, keysafe:null, smoking_on_premises:null, hazards:null },
 
-    // Health & clinical summary
     clinical:{
-      primary_diagnoses:null, other_diagnoses:null, allergies:"", // allergies REQUIRED (non-empty)
+      primary_diagnoses:null, other_diagnoses:null, allergies:"",
       mobility:null, equipment:null, continence:null, cognition:null, pressure_injury_risk:null,
-      seizures:{ has:null, plan:null, frequency:null }, falls_risk:null, diet_notes:null
+      seizures:{ has:null, plan:null, frequency:null }, falls_risk:null, diet_notes:null,
+      stoma_care:null
     },
 
-    // Medications
-    medications:{
-      has_meds:null, method:"Not sure", storage:null, webster_pack:null, self_admin:null, staff_admin:null, notes:null
-    },
+    medications:{ has_meds:null, method:"Not sure", storage:null, webster_pack:null, self_admin:null, staff_admin:null, notes:null },
 
-    // Risks
     risks:{
       behavioural:{ present:null, notes:null },
       clinical:{ wounds:false, diabetes:false, tracheostomy:false, tube_feeding:false, mental_health:false, other:null },
       environmental:{ animals:false, hoarding:false, weapons:false, other:null },
       home_checklist:{ trip_hazards:false, smoke_alarms:false, lighting:false, bathroom_safety:false, notes:null },
+      other_notes:null,
       overall_rating:"Not sure"
     },
 
-    // Behaviour Support
     bsp:{ has_bsp:null, provider:null, restrictive_practices:null, notes:null },
 
-    // Supports requested & schedule
-    supports:{ types:[], goals:null, outcomes:null },
+    supports:{
+      core:[], capacity:[],
+      core_other:null, capacity_other:null,
+      goals:null, outcomes:null
+    },
+
     schedule:{ windows:[], days:[], start_preference:null, hours_per_week:null, urgency:"Not sure" },
 
-    // Consents & policy acknowledgements
-    policy_ack:{
-      handbook:false, incident:false, complaints:false
-    },
-    emergency_advocacy:null, // Yes / No / Not sure
+    policy_ack:{ handbook:false, incident:false, complaints:false },
+    emergency_advocacy:null,
 
-    // Uploads (filenames only for summary)
-    uploads:{ files:[] }, // actual File objects live only in memory
+    uploads:{ files:[] },
 
-    // Submit contact
     submitter:{ name:null, email:null, phone:null },
 
-    // Internal notes
     notes:[]
   };
 
-  // Attempt to restore from localStorage
+  // Restore
   try{
     const prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
-    if (prev && typeof prev === "object") Object.assign(S, prev);
+    if (prev && typeof prev==="object") Object.assign(S, prev);
   }catch{}
+  // Clamp step index
+  if (typeof S.i!=="number" || S.i<0) S.i=0;
 
-  const save = ()=>{ try{
-    const clone = structuredClone(S);
-    clone.uploads = { files: [] }; // don't persist actual files
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
-    setSaveHint("Draft saved");
-  }catch{} };
+  const save=()=>{ try{ const clone=structuredClone(S); clone.uploads={files:[]}; localStorage.setItem(STORAGE_KEY, JSON.stringify(clone)); setSaveHint("Draft saved"); }catch{} };
 
-  /* ====== DOM references ====== */
-  const qEl = document.getElementById("q");
-  const subEl = document.getElementById("sub");
-  const optsEl = document.getElementById("opts");
-  const stepTxt = document.getElementById("stepTxt");
-  const barEl = document.getElementById("bar");
-  const backBtn = document.getElementById("backBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  const saveExitBtn = document.getElementById("saveExitBtn");
-  const portrait = document.getElementById("portrait");
-  const saveHint = document.getElementById("saveHint");
+  /* ===== DOM ===== */
+  const qEl=document.getElementById("q"), subEl=document.getElementById("sub"), optsEl=document.getElementById("opts");
+  const stepTxt=document.getElementById("stepTxt"), barEl=document.getElementById("bar");
+  const backBtn=document.getElementById("backBtn"), nextBtn=document.getElementById("nextBtn"), saveExitBtn=document.getElementById("saveExitBtn");
+  const portrait=document.getElementById("portrait"), saveHint=document.getElementById("saveHint");
 
-  const docModal = document.getElementById('docModal');
-  const docTitle = document.getElementById('docTitle');
-  const docViewer = document.getElementById('docViewer');
-  const docDownload = document.getElementById('docDownload');
-  const docClose = document.getElementById('docClose');
-
-  function openDoc(title, href){
-    docTitle.textContent = title;
-    docViewer.src = href;
-    docDownload.href = href;
-    docModal.classList.add('open');
-    docModal.setAttribute('aria-hidden','false');
-  }
-  function closeDoc(){
-    docModal.classList.remove('open');
-    docModal.setAttribute('aria-hidden','true');
-    docViewer.src = "";
-  }
+  const docModal=document.getElementById('docModal'), docTitle=document.getElementById('docTitle'),
+        docViewer=document.getElementById('docViewer'), docDownload=document.getElementById('docDownload'), docClose=document.getElementById('docClose');
+  function openDoc(title, href){ docTitle.textContent=title; docViewer.src=href; docDownload.href=href; docModal.classList.add('open'); docModal.setAttribute('aria-hidden','false'); }
+  function closeDoc(){ docModal.classList.remove('open'); docModal.setAttribute('aria-hidden','true'); docViewer.src=""; }
   docClose.addEventListener('click', closeDoc);
-  docModal.addEventListener('click', (e)=>{ if (e.target===docModal) closeDoc(); });
+  docModal.addEventListener('click', e=>{ if(e.target===docModal) closeDoc(); });
 
-  function setSaveHint(t){ saveHint.textContent = t; }
-  function setPortrait(key){
-    portrait.src = AILR_IMAGES[key] || AILR_IMAGES.intro;
-    portrait.alt = "Assistant — " + (key||"");
-  }
+  function setSaveHint(t){ saveHint.textContent=t; }
+  function setPortrait(key){ portrait.src=AILR_IMAGES[key]||AILR_IMAGES.intro; portrait.alt="Assistant — "+(key||""); }
 
-  /* ====== Step builders ====== */
-  const Steps = [
-    /* 0 */{
-      key:"intro",
-      title:"Welcome — let’s begin",
-      sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
+  /* ===== Steps ===== */
+  const Steps=[
+    { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
       build(m){
         m.append(radioChips("Who is completing this form?", S.caller, "role", [
-          ["I’m the participant","Participant"],
-          ["Family / Carer","Carer"],
-          ["Support Coordinator","Support Coordinator"],
-          ["Health Professional","Health Professional"],
-          ["Prefer not to say","Prefer not to say"]
+          ["I’m the participant","Participant"],["Family / Carer","Carer"],["Support Coordinator","Support Coordinator"],["Health Professional","Health Professional"],["Prefer not to say","Prefer not to say"]
         ]));
-        m.append(row("two",[
-          input("Your name (optional)", S.caller, "name"),
-          input("Relationship (if any)", S.caller, "relationship")
-        ]));
+        m.append(row("two",[ input("Your name (optional)",S.caller,"name"), input("Relationship (if any)",S.caller,"relationship") ]));
       }
     },
 
-    /* 1 */{
-      key:"caller",
-      title:"Consent to proceed",
-      sub:"We require verbal consent to collect details for onboarding.",
+    { key:"caller", title:"Consent to proceed", sub:"We require verbal consent to collect details for onboarding.",
       build(m){
         m.append(radioChips("Do you give verbal consent to collect details and, if needed, liaise with your Support Coordinator/Plan Manager?", S.caller, "consent", [
-          ["Yes, I consent","Yes"],
-          ["Not yet","Not yet"],
-          ["No","No"],
-          ["Not sure","Not sure"]
+          ["Yes, I consent","Yes"],["Not yet","Not yet"],["No","No"],["Not sure","Not sure"]
         ]));
-        const warn = document.createElement('div');
-        warn.className = "hint";
-        warn.innerHTML = "Note: If you select <b>Not yet</b> or <b>No</b>, you won’t be able to continue.";
-        m.append(warn);
+        m.append(divider("Note: If you select Not yet / No, you won’t be able to continue."));
       }
     },
 
-    /* 2 */{
-      key:"participant",
-      title:"Participant — legal details",
-      sub:"Legal name is required for service setup later; preferred name helps our team address the participant correctly.",
+    { key:"participant", title:"Participant — legal details", sub:"Legal name, DOB and address are required for setup.",
       build(m){
-        m.append(row("two",[
-          input("Legal name", S.participant, "legal_name"),
-          input("Preferred name (optional)", S.participant, "preferred_name")
-        ]));
-        m.append(row("three",[
-          input("Pronouns (optional)", S.participant, "pronouns"),
-          input("Date of birth", S.participant, "dob","date"),
-          input("NDIS number (optional)", S.participant, "ndis_number")
-        ]));
+        m.append(row("two",[ input("Legal name",S.participant,"legal_name"), input("Preferred name (optional)",S.participant,"preferred_name") ]));
+        m.append(row("three",[ input("Pronouns (optional)",S.participant,"pronouns"), input("Date of birth",S.participant,"dob","date"), input("NDIS number (optional)",S.participant,"ndis_number") ]));
         m.append(divider("Address"));
-        m.append(row("two",[
-          input("Address line 1", S.participant.address, "line1"),
-          input("Address line 2 (optional)", S.participant.address, "line2")
-        ]));
-        m.append(row("three",[
-          input("Suburb", S.participant.address, "suburb"),
-          input("Postcode", S.participant.address, "postcode"),
-          input("State", S.participant.address, "state")
-        ]));
+        m.append(row("two",[ input("Address line 1",S.participant.address,"line1"), input("Address line 2 (optional)",S.participant.address,"line2") ]));
+        m.append(row("three",[ input("Suburb",S.participant.address,"suburb"), input("Postcode",S.participant.address,"postcode"), input("State",S.participant.address,"state") ]));
         m.append(divider("Plan management"));
         m.append(radioChips("Plan management", S.participant, "plan_mgmt", [
-          ["NDIA-managed","NDIA-managed"],
-          ["Plan-managed","Plan-managed"],
-          ["Self-managed","Self-managed"],
-          ["Not sure","Not sure"],
-          ["Prefer not to say","Prefer not to say"],
+          ["NDIA-managed","NDIA-managed"],["Plan-managed","Plan-managed"],["Self-managed","Self-managed"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"]
         ]));
-        m.append(typeBox("Plan manager (org & contact; optional)", "Org & name (if applicable)", (v)=>{ S.participant.plan_manager.org = v; save(); }));
-        m.append(row("three",[
-          input("Plan manager contact name", S.participant.plan_manager, "contact"),
-          input("Plan manager email", S.participant.plan_manager, "email","email"),
-          input("Plan manager phone", S.participant.plan_manager, "phone","tel")
-        ]));
-        m.append(row("two",[
-          input("Plan start date", S.participant.plan_dates, "start","date"),
-          input("Plan end date", S.participant.plan_dates, "end","date")
-        ]));
+        m.append(typeBox("Plan manager (org & contact; optional)","Org & name (if applicable)",v=>{ S.participant.plan_manager.org=v; save(); }));
+        m.append(row("three",[ input("Plan manager contact",S.participant.plan_manager,"contact"), input("Plan manager email",S.participant.plan_manager,"email","email"), input("Plan manager phone",S.participant.plan_manager,"phone","tel") ]));
+        m.append(row("two",[ input("Plan start date",S.participant.plan_dates,"start","date"), input("Plan end date",S.participant.plan_dates,"end","date") ]));
       }
     },
 
-    /* 3 */{
-      key:"contacts",
-      title:"Contacts — how we reach you",
-      sub:"Provide at least one method — email or phone is required at submission.",
+    { key:"contacts", title:"Contacts — how we reach you", sub:"Provide at least one: email or phone.",
       build(m){
-        m.append(row("two",[
-          input("Participant email", S.contacts, "email","email"),
-          input("Participant phone", S.contacts, "phone","tel")
-        ]));
+        m.append(row("two",[ input("Participant email",S.contacts,"email","email"), input("Participant phone",S.contacts,"phone","tel") ]));
         m.append(divider("Emergency contact"));
-        m.append(row("three",[
-          input("Name", S.contacts.emergency, "name"),
-          input("Relationship", S.contacts.emergency, "relationship"),
-          input("Phone", S.contacts.emergency, "phone","tel")
-        ]));
+        m.append(row("three",[ input("Name",S.contacts.emergency,"name"), input("Relationship",S.contacts.emergency,"relationship"), input("Phone",S.contacts.emergency,"phone","tel") ]));
         m.append(divider("Support Coordinator (if any)"));
-        m.append(row("two",[
-          input("Name", S.contacts.support_coordinator, "name"),
-          input("Organisation", S.contacts.support_coordinator, "org")
-        ]));
-        m.append(row("two",[
-          input("Email", S.contacts.support_coordinator, "email","email"),
-          input("Phone", S.contacts.support_coordinator, "phone","tel")
-        ]));
+        m.append(row("two",[ input("Name",S.contacts.support_coordinator,"name"), input("Organisation",S.contacts.support_coordinator,"org") ]));
+        m.append(row("two",[ input("Email",S.contacts.support_coordinator,"email","email"), input("Phone",S.contacts.support_coordinator,"phone","tel") ]));
         m.append(divider("GP / Primary care"));
-        m.append(row("three",[
-          input("GP name", S.contacts.gp, "name"),
-          input("Practice", S.contacts.gp, "practice"),
-          input("Phone", S.contacts.gp, "phone","tel")
-        ]));
-        m.append(input("GP email (optional)", S.contacts.gp, "email","email"));
+        m.append(row("three",[ input("GP name",S.contacts.gp,"name"), input("Practice",S.contacts.gp,"practice"), input("Phone",S.contacts.gp,"phone","tel") ]));
+        m.append(input("GP email (optional)",S.contacts.gp,"email","email"));
       }
     },
 
-    /* 4 */{
-      key:"comms",
-      title:"Communication & preferences",
-      sub:"Tell us what helps the participant feel comfortable and understood.",
+    { key:"comms", title:"Communication & preferences", sub:"Tell us what helps the participant feel comfortable and understood.",
       build(m){
-        m.append(row("two",[
-          input("Primary language", S.comms, "primary_language"),
-          input("Interpreter language (if needed)", S.comms, "interpreter_language")
-        ]));
+        m.append(row("two",[ input("Primary language",S.comms,"primary_language"), input("Interpreter language (if needed)",S.comms,"interpreter_language") ]));
         m.append(radioChips("Interpreter", S.comms, "interpreter", [
-          ["Interpreter required","Yes"],
-          ["Interpreter not required","No"],
-          ["Not sure","Not sure"],
-          ["Prefer not to say","Prefer not to say"]
+          ["Interpreter required","Yes"],["Interpreter not required","No"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"]
         ]));
-        m.append(typeBox("Cultural / religious considerations (optional)", "Anything to respect (optional)", (v)=> { S.comms.cultural_considerations = v; save(); }));
-        m.append(row("two",[
-          select("Worker gender preference", S.comms.preferences, "worker_gender", ["No preference","Female","Male","Other / type below"]),
-          input("Other preference (type if selected)", S.comms.preferences, "worker_gender_other")
-        ]));
+        m.append(typeBox("Cultural / religious considerations (optional)","Anything to respect (optional)",v=>{ S.comms.cultural_considerations=v; save(); }));
+        m.append(row("two",[ select("Worker gender preference",S.comms.preferences,"worker_gender",["No preference","Female","Male","Other / type below"]), input("Other preference (type if selected)",S.comms.preferences,"worker_gender_other") ]));
         m.append(radioChips("Transport required?", S.comms.preferences, "transport_required", [
           ["Yes","Yes"],["No","No"],["Not sure","Not sure"]
         ]));
       }
     },
 
-    /* 5 */{
-      key:"living",
-      title:"Living situation & access",
-      sub:"This helps us plan safe, respectful visits.",
+    { key:"living", title:"Living situation & access", sub:"This helps us plan safe, respectful visits.",
       build(m){
-        m.append(select("Residence type", S.living, "residence_type", ["Private home","Unit/Apartment","Group home","Supported accommodation","Other","Prefer not to say"]));
-        m.append(input("Lives with (names or relationships)", S.living, "lives_with"));
-        m.append(input("Entry notes (e.g., gate, pets, parking)", S.living, "entry_notes"));
-        m.append(radioChips("Keysafe available?", S.living, "keysafe", [
-          ["Yes","Yes"],["No","No"],["Not sure","Not sure"]
-        ]));
-        m.append(radioChips("Smoking on premises?", S.living, "smoking_on_premises", [
-          ["Yes","Yes"],["No","No"],["Prefer not to say","Prefer not to say"]
-        ]));
-        m.append(typeBox("Any hazards we should know about?", "e.g., steep stairs, loose rugs, reactive pets", (v)=> { S.living.hazards = v; save(); }));
+        m.append(select("Residence type",S.living,"residence_type",["Private home","Unit/Apartment","Group home","Supported accommodation","Other","Prefer not to say"]));
+        m.append(input("Lives with (names or relationships)",S.living,"lives_with"));
+        m.append(input("Entry notes (e.g., gate, pets, parking)",S.living,"entry_notes"));
+        m.append(radioChips("Keysafe available?",S.living,"keysafe",[["Yes","Yes"],["No","No"],["Not sure","Not sure"]]));
+        m.append(radioChips("Smoking on premises?",S.living,"smoking_on_premises",[["Yes","Yes"],["No","No"],["Prefer not to say","Prefer not to say"]]));
+        m.append(typeBox("Any hazards we should know about?","e.g., steep stairs, loose rugs, reactive pets",v=>{ S.living.hazards=v; save(); }));
       }
     },
 
-    /* 6 */{
-      key:"clinical",
-      title:"Health & clinical summary",
-      sub:"Share as much as you’re comfortable with now; we can confirm details later. <b>Allergies is required</b> (write “No known allergies” if none).",
+    { key:"clinical", title:"Health & clinical summary", sub:'Share what you can now; we can confirm later. <b>Allergies is required</b> (write “No known allergies” if none).',
       build(m){
-        m.append(typeBox("Primary diagnoses", "e.g., Autism Spectrum Disorder, MS", (v)=> { S.clinical.primary_diagnoses = v; save(); }));
-        m.append(typeBox("Other diagnoses (optional)", "Type here", (v)=> { S.clinical.other_diagnoses = v; save(); }));
-        // Allergies - mandatory text input
-        const allergiesBox = input("Allergies (required — write “No known allergies” if none)", S.clinical, "allergies");
-        m.append(allergiesBox);
-        m.append(row("two",[
-          select("Mobility", S.clinical, "mobility", ["Independent","With aid","Requires transfer","Bed-bound","Prefer not to say"]),
-          input("Equipment / aids (optional)", S.clinical, "equipment")
-        ]));
-        m.append(row("two",[
-          select("Continence", S.clinical, "continence", ["Independent","Needs prompting","Incontinent","Catheter / stoma","Prefer not to say"]),
-          select("Cognition", S.clinical, "cognition", ["Clear","Mild impairment","Moderate","Severe","Prefer not to say"])
-        ]));
-        m.append(row("two",[
-          select("Pressure injury risk", S.clinical, "pressure_injury_risk", ["Low","Medium","High","Not sure"]),
-          select("Falls risk", S.clinical, "falls_risk", ["Low","Medium","High","Not sure"])
-        ]));
+        m.append(typeBox("Primary diagnoses","e.g., Autism Spectrum Disorder, MS",v=>{ S.clinical.primary_diagnoses=v; save(); }));
+        m.append(typeBox("Other diagnoses (optional)","Type here",v=>{ S.clinical.other_diagnoses=v; save(); }));
+        m.append(input("Allergies (required — write “No known allergies” if none)",S.clinical,"allergies"));
+        m.append(row("two",[ select("Mobility",S.clinical,"mobility",["Independent","With aid","Requires transfer","Bed-bound","Prefer not to say"]), input("Equipment / aids (optional)",S.clinical,"equipment") ]));
+        m.append(row("two",[ select("Continence",S.clinical,"continence",["Independent","Needs prompting","Incontinent","Catheter / stoma","Prefer not to say"]), select("Cognition",S.clinical,"cognition",["Clear","Mild impairment","Moderate","Severe","Prefer not to say"]) ]));
+        m.append(row("two",[ select("Pressure injury risk",S.clinical,"pressure_injury_risk",["Low","Medium","High","Not sure"]), select("Falls risk",S.clinical,"falls_risk",["Low","Medium","High","Not sure"]) ]));
         m.append(row("three",[
-          radioChipsInline("Seizures?", S.clinical.seizures, "has", [
-            ["No",false],["Yes",true],["Not sure",null]
-          ]),
-          input("Seizure plan (if any)", S.clinical.seizures, "plan"),
-          input("Frequency (if applicable)", S.clinical.seizures, "frequency")
+          radioChipsInline("Seizures?",S.clinical.seizures,"has",[["No",false],["Yes",true],["Not sure",null]]),
+          input("Seizure plan (if any)",S.clinical.seizures,"plan"),
+          input("Frequency (if applicable)",S.clinical.seizures,"frequency")
         ]));
-        m.append(input("Diet / swallowing notes (optional)", S.clinical, "diet_notes"));
+        m.append(radioChipsInline("Stoma/ostomy care required?",S.clinical,"stoma_care",[["Yes",true],["No",false],["Not sure",null]]));
+        m.append(input("Diet / swallowing notes (optional)",S.clinical,"diet_notes"));
       }
     },
 
-    /* 7 */{
-      key:"medications",
-      title:"Medication management",
-      sub:"Tell us if medications are part of daily support.",
+    { key:"medications", title:"Medication management", sub:"Tell us if medications are part of daily support.",
       build(m){
-        m.append(radioChips("Participant has medications?", S.medications, "has_meds", [
-          ["Yes",true],["No",false],["Not sure",null]
-        ]));
-        m.append(select("How are meds managed?", S.medications, "method", ["Self-administered","Prompting only","Staff administer","Family administers","Not sure"]));
-        m.append(row("two",[
-          radioChipsInline("Webster pack?", S.medications, "webster_pack", [["Yes",true],["No",false],["Not sure",null]]),
-          input("Storage location (optional)", S.medications, "storage")
-        ]));
-        m.append(row("two",[
-          radioChipsInline("Self-admin?", S.medications, "self_admin", [["Yes",true],["No",false],["Not sure",null]]),
-          radioChipsInline("Staff admin?", S.medications, "staff_admin", [["Yes",true],["No",false],["Not sure",null]])
-        ]));
-        m.append(typeBox("Medication notes (optional)", "List regular and PRN meds if you like", (v)=> { S.medications.notes = v; save(); }));
+        m.append(radioChips("Participant has medications?",S.medications,"has_meds",[["Yes",true],["No",false],["Not sure",null]]));
+        m.append(select("How are meds managed?",S.medications,"method",["Self-administered","Prompting only","Staff administer","Family administers","Not sure"]));
+        m.append(row("two",[ radioChipsInline("Webster pack?",S.medications,"webster_pack",[["Yes",true],["No",false],["Not sure",null]]), input("Storage location (optional)",S.medications,"storage") ]));
+        m.append(row("two",[ radioChipsInline("Self-admin?",S.medications,"self_admin",[["Yes",true],["No",false],["Not sure",null]]), radioChipsInline("Staff admin?",S.medications,"staff_admin",[["Yes",true],["No",false],["Not sure",null]]) ]));
+        m.append(typeBox("Medication notes (optional)","List regular and PRN meds if you like",v=>{ S.medications.notes=v; save(); }));
       }
     },
 
-    /* 8 */{
-      key:"risks",
-      title:"Risk assessment — quick overview",
-      sub:"We’ll use this to plan safe, appropriate supports.",
+    { key:"risks", title:"Risk assessment — quick overview", sub:"We’ll use this to plan safe, appropriate supports.",
       build(m){
         m.append(divider("Behavioural"));
-        m.append(radioChips("Behaviours of concern present?", S.risks.behavioural, "present", [
-          ["None","None"],["Present","Present"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"]
-        ]));
-        m.append(typeBox("Behaviour notes (optional)", "Triggers / strategies / BSP provider", (v)=> { S.risks.behavioural.notes = v; save(); }));
+        m.append(radioChips("Behaviours of concern present?",S.risks.behavioural,"present",[["None","None"],["Present","Present"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"]]));
+        m.append(typeBox("Behaviour notes (optional)","Triggers / strategies / BSP provider",v=>{ S.risks.behavioural.notes=v; save(); }));
 
         m.append(divider("Clinical"));
         m.append(checks("Select applicable", S.risks.clinical, {
@@ -619,6 +439,7 @@
           tube_feeding:"Enteral tube feeding",
           mental_health:"Significant mental health needs"
         }));
+        m.append(typeBox("Other clinical concerns (optional)","Type here",v=>{ S.risks.clinical.other=v; save(); }));
 
         m.append(divider("Environmental"));
         m.append(checks("Select applicable", S.risks.environmental, {
@@ -626,6 +447,7 @@
           hoarding:"Hoarding / clutter",
           weapons:"Weapons on site"
         }));
+        m.append(typeBox("Other environmental concerns (optional)","Type here",v=>{ S.risks.environmental.other=v; save(); }));
 
         m.append(divider("Home risk checklist (quick)"));
         m.append(checks("Tick any present", S.risks.home_checklist, {
@@ -634,540 +456,311 @@
           lighting:"Poor lighting",
           bathroom_safety:"Bathroom lacks safety rails / mats"
         }));
-        m.append(input("Home risk notes (optional)", S.risks.home_checklist, "notes"));
+        m.append(input("Home risk notes (optional)",S.risks.home_checklist,"notes"));
 
-        m.append(select("Overall risk rating (your view)", S.risks, "overall_rating", ["Low","Medium","High","Not sure"]));
+        m.append(typeBox("Other risk notes (optional)","Anything else we should consider",v=>{ S.risks.other_notes=v; save(); }));
+
+        m.append(select("Overall risk rating (your view)",S.risks,"overall_rating",["Low","Medium","High","Not sure"]));
       }
-    },
+    ),
 
-    /* 9 */{
-      key:"bsp",
-      title:"Behaviour Support Plan (if applicable)",
-      sub:"Always shown, only fill if required.",
+    { key:"bsp", title:"Behaviour Support Plan (if applicable)", sub:"Always shown — only fill if required.",
       build(m){
-        m.append(radioChips("BSP in place?", S.bsp, "has_bsp", [
-          ["Yes",true],["No",false],["Not sure",null]
-        ]));
-        m.append(radioChipsInline("Restrictive practices involved?", S.bsp, "restrictive_practices", [
-          ["Yes",true],["No",false],["Not sure",null]
-        ]));
-        m.append(row("two",[
-          input("BSP provider (if any)", S.bsp, "provider"),
-          input("Notes (optional)", S.bsp, "notes")
-        ]));
+        m.append(radioChips("BSP in place?",S.bsp,"has_bsp",[["Yes",true],["No",false],["Not sure",null]]));
+        m.append(radioChipsInline("Restrictive practices involved?",S.bsp,"restrictive_practices",[["Yes",true],["No",false],["Not sure",null]]));
+        m.append(row("two",[ input("BSP provider (if any)",S.bsp,"provider"), input("Notes (optional)",S.bsp,"notes") ]));
       }
-    },
+    ),
 
-    /* 10 */{
-      key:"supports",
-      title:"Supports requested & goals",
-      sub:"Choose the support types and share goals/outcomes.",
+    { key:"supports", title:"Supports requested & goals", sub:"Choose support categories and share goals/outcomes.",
       build(m){
-        m.append(checks("Support types (choose all that apply)", S.supports, {
-          t1:"Personal care",
-          t2:"Domestic assistance",
-          t3:"Community participation",
-          t4:"Nursing care at home",
-          t5:"Daily living skills",
-          t6:"Respite / carer relief"
-        }, "types"));
-        m.append(typeBox("Goals (participant’s goals)", "Type goals or outcomes in the plan", (v)=> { S.supports.goals = v; save(); }));
-        m.append(typeBox("Preferred outcomes / focus areas", "What does success look like?", (v)=> { S.supports.outcomes = v; save(); }));
-      }
-    },
+        m.append(divider("<b>Core</b> (select all that apply)"));
+        m.append(checks("Core supports", S.supports, {
+          daily_life:"Assistance with Daily Life",
+          community:"Social & Community Participation",
+          transport:"Transport",
+          nursing:"Community Nursing Care",
+          domestic:"Domestic assistance",
+          respite:"Respite / carer relief"
+        }, "core"));
+        m.append(typeBox("Other Core (optional)","Type any other core support",v=>{ S.supports.core_other=v; save(); }));
 
-    /* 11 */{
-      key:"schedule",
-      title:"Schedule & urgency",
-      sub:"Tell us the visit windows that suit, and how soon you’d like to begin.",
+        m.append(divider("<b>Capacity Building</b> (select all that apply)"));
+        m.append(checks("Capacity Building", S.supports, {
+          improved_daily_living:"Improved Daily Living",
+          increased_participation:"Increased Social & Community Participation",
+          health_wellbeing:"Improved Health & Wellbeing",
+          relationships:"Improved Relationships",
+          employment:"Finding & Keeping a Job",
+          home_living:"Improved Living Arrangements / Home Living",
+          lifelong_learning:"Lifelong Learning",
+          choice_control:"Improved Life Choices",
+          support_coordination:"Support Coordination"
+        }, "capacity"));
+        m.append(typeBox("Other Capacity Building (optional)","Type any other capacity building support",v=>{ S.supports.capacity_other=v; save(); }));
+
+        m.append(typeBox("Goals (participant’s goals)","Type goals or outcomes in the plan",v=>{ S.supports.goals=v; save(); }));
+        m.append(typeBox("Preferred outcomes / focus areas","What does success look like?",v=>{ S.supports.outcomes=v; save(); }));
+      }
+    ),
+
+    { key:"schedule", title:"Schedule & urgency", sub:"Tell us the visit windows that suit, and how soon you’d like to begin.",
       build(m){
         m.append(checks("Time windows", S.schedule, {
-          w1:"Weekday mornings (7–11am)",
-          w2:"Weekday afternoons (12–4pm)",
-          w3:"Evenings (5–9pm)",
-          w4:"Weekends"
+          w1:"Weekday mornings (7–11am)", w2:"Weekday afternoons (12–4pm)", w3:"Evenings (5–9pm)", w4:"Weekends"
         }, "windows"));
-        m.append(checks("Days", S.schedule, {
-          d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun"
-        }, "days"));
-        m.append(row("two",[
-          input("Approx. hours per week", S.schedule, "hours_per_week","number"),
-          select("Urgency", S.schedule, "urgency", ["Urgent (24–72h)","Soon (1–2 weeks)","Exploring options","Not sure"])
-        ]));
-        m.append(input("Start preference / date (optional)", S.schedule, "start_preference"));
+        m.append(checks("Days", S.schedule, { d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun" }, "days"));
+        m.append(row("two",[ input("Approx. hours per week",S.schedule,"hours_per_week","number"), select("Urgency",S.schedule,"urgency",["Urgent (24–72h)","Soon (1–2 weeks)","Exploring options","Not sure"]) ]));
+        m.append(input("Start preference / date (optional)",S.schedule,"start_preference"));
       }
-    },
+    ),
 
-    /* 12 */{
-      key:"policies",
-      title:"Handbook & Key Policies",
-      sub:"Please review each document below. You can view inline or download a copy.",
+    { key:"policies", title:"Handbook & Key Policies", sub:"Please review each document below. You can view inline or download a copy.",
       build(m){
-        m.append(policyCard(
-          "Client Handbook",
-          "docs/client-handbook.pdf",
-          "handbook"
-        ));
-        m.append(policyCard(
-          "Incident Management — Participant Information",
-          "docs/incident-management.pdf",
-          "incident"
-        ));
-        m.append(policyCard(
-          "Complaints & Feedback — Participant Information",
-          "docs/complaints-feedback.pdf",
-          "complaints"
-        ));
+        m.append(policyCard("Client Handbook","docs/client-handbook.pdf","handbook"));
+        m.append(policyCard("Incident Management — Participant Information","docs/incident-management.pdf","incident"));
+        m.append(policyCard("Complaints & Feedback — Participant Information","docs/complaints-feedback.pdf","complaints"));
       }
-    },
+    ),
 
-    /* 13 */{
-      key:"consents",
-      title:"Acknowledgements & Emergency Advocacy",
-      sub:"Tick the acknowledgements after reviewing the documents. You can withdraw consent at any time.",
+    { key:"consents", title:"Acknowledgements & Emergency Advocacy", sub:"Tick the acknowledgements after reviewing the documents. You can withdraw consent at any time.",
       build(m){
-        // Required acks
-        m.append(checkAck("I acknowledge the Client Handbook", S.policy_ack, "handbook"));
-        m.append(checkAck("I understand the Incident Management process", S.policy_ack, "incident"));
-        m.append(checkAck("I have received Complaints & Feedback information", S.policy_ack, "complaints"));
-
-        // Emergency advocacy consent (radio — exclusive)
-        m.append(divider("Emergency advocacy (liaison)"));
-        m.append(radioChips("Do you consent to HD HeeD liaising as your advocate in emergencies (to coordinate safe care)?", S, "emergency_advocacy", [
-          ["Yes","Yes"],["No","No"],["Not sure","Not sure"]
-        ]));
+        m.append(checkAck("I acknowledge the Client Handbook",S.policy_ack,"handbook"));
+        m.append(checkAck("I understand the Incident Management process",S.policy_ack,"incident"));
+        m.append(checkAck("I have received Complaints & Feedback information",S.policy_ack,"complaints"));
+        m.append(divider("Emergency advocacy (liaison) — optional"));
+        m.append(radioChips("Do you consent to HD HeeD liaising as your advocate in emergencies (to coordinate safe care)?", S, "emergency_advocacy", [["Yes","Yes"],["No","No"],["Not sure","Not sure"]]));
       }
-    },
+    ),
 
-    /* 14 */{
-      key:"uploads",
-      title:"Upload documents (optional)",
-      sub:"Examples: NDIS plan, ID, BSP, care plans, GP letters. You can also send them later.",
+    { key:"uploads", title:"Upload documents (optional)", sub:"Examples: NDIS plan, ID, BSP, care plans, GP letters. You can also send them later.",
       build(m){
-        const box = document.createElement('div');
-        box.className = "drop";
-        box.innerHTML = `
+        const box=document.createElement('div'); box.className="drop";
+        box.innerHTML=`
           <p>Attach files (up to ~10). This is optional — you can continue without uploads.</p>
           <input id="fileInput" type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic,.rtf,.txt,.xlsx,.xls" />
           <label for="fileInput">Choose files</label>
           <div id="fileList" class="hint" style="margin-top:6px"></div>
         `;
         m.append(box);
-        box.querySelector("#fileInput").addEventListener("change", (e)=>{
-          const files = Array.from(e.target.files||[]);
-          S.uploads.files = files;
-          const names = files.map(f=> f.name + (f.size?` (${Math.round(f.size/1024)} KB)`:"")).join(" • ");
-          box.querySelector("#fileList").textContent = files.length ? names : "No files selected";
-          save();
+        box.querySelector("#fileInput").addEventListener("change", e=>{
+          const files=Array.from(e.target.files||[]); S.uploads.files=files;
+          const names=files.map(f=> f.name+(f.size?` (${Math.round(f.size/1024)} KB)`:"")).join(" • ");
+          box.querySelector("#fileList").textContent=files.length?names:"No files selected"; save();
         });
       }
-    },
+    ),
 
-    /* 15 */{
-      key:"review",
-      title:"Review your answers",
-      sub:"Check the sections below. You can go back to edit anything.",
+    { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
       build(m){ m.append(renderReview()); }
     },
 
-    /* 16 */{
-      key:"submit",
-      title:"Submit your onboarding",
-      sub:"Provide a contact. At least an email or phone is required to submit.",
+    { key:"submit", title:"Submit your onboarding", sub:"Provide a contact. At least an email or phone is required to submit.",
       build(m){
-        m.append(row("two",[
-          input("Your name (submitter)", S.submitter, "name"),
-          input("Email (required if no phone)", S.submitter, "email","email")
-        ]));
-        m.append(input("Phone (required if no email)", S.submitter, "phone","tel"));
-
-        const actions = document.createElement('div');
-        actions.style = "display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
-        const btnSend = button("Send now","primary", async ()=>{
-          if (!((S.submitter.email && S.submitter.email.trim()) || (S.submitter.phone && S.submitter.phone.trim()))){
-            alert("Please provide at least an email or a phone number to submit.");
-            return;
-          }
-          try{
-            await sendToFormspree();
-            alert("All done — we’ve received your onboarding. We’ll be in touch shortly.");
-            // Optionally clear storage after submit:
-            // localStorage.removeItem(STORAGE_KEY);
-          }catch(e){
-            alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e?.message||e));
-          }
+        m.append(row("two",[ input("Your name (submitter)",S.submitter,"name"), input("Email (required if no phone)",S.submitter,"email","email") ]));
+        m.append(input("Phone (required if no email)",S.submitter,"phone","tel"));
+        const actions=document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
+        const btnSend=button("Send now","primary", async ()=>{
+          if (!((S.submitter.email&&S.submitter.email.trim())||(S.submitter.phone&&S.submitter.phone.trim()))){ alert("Please provide at least an email or a phone number to submit."); return; }
+          try{ await sendToFormspree(); alert("All done — we’ve received your onboarding. We’ll be in touch shortly."); }catch(e){ alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n"+(e?.message||e)); }
         });
-        const btnPdf = button("Print / Save summary as PDF","ghost", ()=>{
-          openPrintableSummary();
-        });
-        actions.append(btnSend, btnPdf);
-        m.append(actions);
-        const hint = document.createElement('div');
-        hint.className = "hint";
-        hint.textContent = "We’ll contact you from info@hdheed.com.au or 02 8630 5500.";
-        m.append(hint);
+        const btnPdf=button("Print / Save summary as PDF","ghost", ()=>{ openPrintableSummary(); });
+        actions.append(btnSend, btnPdf); m.append(actions);
+        const hint=document.createElement('div'); hint.className="hint"; hint.textContent="We’ll contact you from info@hdheed.com.au or 02 8630 5500."; m.append(hint);
       }
     }
   ];
 
-  /* ====== Helpers to render controls ====== */
-  function button(txt,variant="ghost",onClick){
-    const b = document.createElement('button');
-    b.className = "btn " + variant;
-    b.type="button"; b.textContent = txt;
-    b.addEventListener('click',onClick);
-    return b;
-  }
-  function divider(txt){
-    const d = document.createElement('div');
-    d.className = "hint"; d.style.margin = "8px 0 4px"; d.innerHTML = txt;
-    return d;
-  }
-  function row(cols, children){
-    const r = document.createElement('div'); r.className = "row " + (cols||"");
-    children.forEach(ch=> r.append(ch));
-    return r;
-  }
-  function input(label, obj, key, type="text"){
-    const box = document.createElement('div'); box.className="inlinebox";
-    const id = `in_${key}_${Math.random().toString(36).slice(2,7)}`;
-    box.innerHTML = `<label for="${id}" style="font-weight:800">${label}</label>`;
-    const i = document.createElement('input');
-    i.id=id; i.type = type; i.value = obj[key]??""; i.placeholder = "";
-    i.addEventListener('input', ()=>{ obj[key] = i.value || null; save(); });
-    box.append(i); return box;
-  }
-  function select(label, obj, key, options){
-    const box = document.createElement('div'); box.className="inlinebox";
-    const id = `sel_${key}_${Math.random().toString(36).slice(2,7)}`;
-    box.innerHTML = `<label for="${id}" style="font-weight:800">${label}</label>`;
-    const s = document.createElement('select'); s.id=id;
-    s.innerHTML = `<option value="">Select…</option>` + options.map(o=> `<option value="${o}">${o}</option>`).join("");
-    if (obj[key] !== null && obj[key] !== undefined) s.value = obj[key];
-    s.addEventListener('change', ()=>{ obj[key] = s.value || null; save(); });
-    box.append(s); return box;
-  }
-  // Exclusive chips (radio behaviour)
-  function radioChips(label, obj, key, items){
-    const wrap = document.createElement('div'); wrap.className="inlinebox";
-    const groupId = `rg_${key}_${Math.random().toString(36).slice(2,7)}`;
-    wrap.innerHTML = `<label style="font-weight:800">${label}</label>`;
-    const roww = document.createElement('div'); roww.style = "display:flex; gap:8px; flex-wrap:wrap";
-    const buttons = [];
-    items.forEach(([txt,val])=>{
-      const b = document.createElement('button'); b.type="button"; b.className="al-chip"; b.textContent = txt;
-      if (obj[key]===val) b.setAttribute("aria-pressed","true");
-      b.addEventListener('click', ()=>{
-        obj[key] = val; // set
-        // toggle exclusivity
-        buttons.forEach(x=> x.removeAttribute("aria-pressed"));
-        b.setAttribute("aria-pressed","true");
-        save();
-      });
-      buttons.push(b); roww.append(b);
-    });
-    // helpers
-    wrap.append(roww);
-    return wrap;
-  }
-  // Inline variant (same behaviour)
-  function radioChipsInline(label, obj, key, items){ return radioChips(label, obj, key, items); }
+  /* ===== Helpers ===== */
+  function button(txt,variant="ghost",onClick){ const b=document.createElement('button'); b.className="btn "+variant; b.type="button"; b.textContent=txt; b.addEventListener('click',onClick); return b; }
+  function divider(txt){ const d=document.createElement('div'); d.className="hint"; d.style.margin="8px 0 4px"; d.innerHTML=txt; return d; }
+  function row(cols,children){ const r=document.createElement('div'); r.className="row "+(cols||""); children.forEach(ch=>r.append(ch)); return r; }
+  function input(label,obj,key,type="text"){ const box=document.createElement('div'); box.className="inlinebox"; const id=`in_${key}_${Math.random().toString(36).slice(2,7)}`; box.innerHTML=`<label for="${id}" style="font-weight:800">${label}</label>`; const i=document.createElement('input'); i.id=id; i.type=type; i.value=obj[key]??""; i.addEventListener('input',()=>{ obj[key]=i.value||null; save(); }); box.append(i); return box; }
+  function select(label,obj,key,options){ const box=document.createElement('div'); box.className="inlinebox"; const id=`sel_${key}_${Math.random().toString(36).slice(2,7)}`; box.innerHTML=`<label for="${id}" style="font-weight:800">${label}</label>`; const s=document.createElement('select'); s.id=id; s.innerHTML=`<option value="">Select…</option>`+options.map(o=>`<option value="${o}">${o}</option>`).join(""); if(obj[key]!==null&&obj[key]!==undefined) s.value=obj[key]; s.addEventListener('change',()=>{ obj[key]=s.value||null; save(); }); box.append(s); return box; }
+  function radioChips(label,obj,key,items){ const wrap=document.createElement('div'); wrap.className="inlinebox"; wrap.innerHTML=`<label style="font-weight:800">${label}</label>`; const roww=document.createElement('div'); roww.style="display:flex; gap:8px; flex-wrap:wrap"; const buttons=[]; items.forEach(([txt,val])=>{ const b=document.createElement('button'); b.type="button"; b.className="al-chip"; b.textContent=txt; if(obj[key]===val) b.setAttribute("aria-pressed","true"); b.addEventListener('click',()=>{ obj[key]=val; buttons.forEach(x=>x.removeAttribute("aria-pressed")); b.setAttribute("aria-pressed","true"); save(); }); buttons.push(b); roww.append(b); }); wrap.append(roww); return wrap; }
+  function radioChipsInline(label,obj,key,items){ return radioChips(label,obj,key,items); }
+  function checks(label,targetObj,map,arrayKey){ const box=document.createElement('div'); box.className="inlinebox"; box.innerHTML=`<label style="font-weight:800">${label}</label>`; const list=document.createElement('ul'); list.className="ck-list";
+    if(arrayKey){ if(!Array.isArray(targetObj[arrayKey])) targetObj[arrayKey]=[]; Object.entries(map).forEach(([k,txt])=>{ const id=`ck_${k}_${Math.random().toString(36).slice(2,7)}`; const li=document.createElement('li'); li.className="ck-row"; const c=document.createElement('input'); c.type="checkbox"; c.id=id; c.checked=targetObj[arrayKey].includes(k); const lab=document.createElement('label'); lab.htmlFor=id; lab.textContent=txt; c.addEventListener('change',()=>{ const arr=targetObj[arrayKey]; if(c.checked){ if(!arr.includes(k)) arr.push(k); } else { targetObj[arrayKey]=arr.filter(x=>x!==k); } save(); }); li.append(c,lab); list.append(li); }); }
+    else { Object.entries(map).forEach(([k,txt])=>{ const id=`ck_${k}_${Math.random().toString(36).slice(2,7)}`; const li=document.createElement('li'); li.className="ck-row"; const c=document.createElement('input'); c.type="checkbox"; c.id=id; c.checked=!!targetObj[k]; const lab=document.createElement('label'); lab.htmlFor=id; lab.textContent=txt; c.addEventListener('change',()=>{ targetObj[k]=c.checked; save(); }); li.append(c,lab); list.append(li); }); }
+    box.append(list); return box; }
+  function typeBox(label,placeholder,onSave){ const box=document.createElement('div'); box.className="inlinebox"; const id=`tb_${Math.random().toString(36).slice(2,7)}`; box.innerHTML=`<label for="${id}" style="font-weight:800">${label}</label>`; const i=document.createElement('input'); i.id=id; i.placeholder=placeholder||"Type here"; const btn=document.createElement('button'); btn.type="button"; btn.className="btn ghost"; btn.textContent="Save"; btn.addEventListener('click',()=>{ const v=(i.value||"").trim(); if(!v){ alert("Please type something or use the chips."); return; } onSave(v); i.value=""; setSaveHint("Saved"); }); box.append(i,btn); return box; }
+  function checkAck(text,obj,key){ const box=document.createElement('div'); box.className="inlinebox"; const id=`ack_${key}_${Math.random().toString(36).slice(2,7)}`; const row=document.createElement('div'); row.className="ck-row"; const c=document.createElement('input'); c.type="checkbox"; c.id=id; c.checked=!!obj[key]; const lab=document.createElement('label'); lab.htmlFor=id; lab.textContent=text; c.addEventListener('change',()=>{ obj[key]=c.checked; save(); }); row.append(c,lab); box.append(row); return box; }
+  function policyCard(title,href,key){ const card=document.createElement('div'); card.className="inlinebox"; card.innerHTML=`<div style="font-weight:800">${title}</div>`; const actions=document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap"; const view=button("View inline","ghost",()=>openDoc(title,href)); const dl=document.createElement('a'); dl.className="btn primary"; dl.textContent="Download PDF"; dl.href=href; dl.download=""; actions.append(view,dl); card.append(actions); return card; }
 
-  // Multi-select checks
-  function checks(label, targetObj, map, arrayKey){
-    const box = document.createElement('div'); box.className="inlinebox";
-    box.innerHTML = `<label style="font-weight:800">${label}</label>`;
-    const list = document.createElement('ul'); list.className="ck-list";
-    if (arrayKey){
-      if (!Array.isArray(targetObj[arrayKey])) targetObj[arrayKey] = [];
-      Object.entries(map).forEach(([k,txt])=>{
-        const id = `ck_${k}_${Math.random().toString(36).slice(2,7)}`;
-        const li = document.createElement('li'); li.className = "ck-row";
-        const c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = targetObj[arrayKey].includes(k);
-        const lab = document.createElement('label'); lab.htmlFor = id; lab.textContent = txt;
-        c.addEventListener('change', ()=>{
-          const arr = targetObj[arrayKey];
-          if (c.checked){ if (!arr.includes(k)) arr.push(k); }
-          else { targetObj[arrayKey] = arr.filter(x=>x!==k); }
-          save();
-        });
-        li.append(c, lab); list.append(li);
-      });
-    } else {
-      Object.entries(map).forEach(([k,txt])=>{
-        const id = `ck_${k}_${Math.random().toString(36).slice(2,7)}`;
-        const li = document.createElement('li'); li.className = "ck-row";
-        const c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = !!targetObj[k];
-        const lab = document.createElement('label'); lab.htmlFor = id; lab.textContent = txt;
-        c.addEventListener('change', ()=>{ targetObj[k] = c.checked; save(); });
-        li.append(c, lab); list.append(li);
-      });
-    }
-    box.append(list); return box;
-  }
-
-  // Simple "type and save" helper
-  function typeBox(label, placeholder, onSave){
-    const box = document.createElement('div'); box.className="inlinebox";
-    const id = `tb_${Math.random().toString(36).slice(2,7)}`;
-    box.innerHTML = `<label for="${id}" style="font-weight:800">${label}</label>`;
-    const i = document.createElement('input'); i.id=id; i.placeholder = placeholder||"Type here";
-    const btn = document.createElement('button'); btn.type="button"; btn.className="btn ghost"; btn.textContent = "Save";
-    btn.addEventListener('click', ()=>{
-      const v = (i.value||"").trim();
-      if (!v){ alert("Please type something or use the chips."); return; }
-      onSave(v); i.value=""; setSaveHint("Saved"); 
-    });
-    box.append(i, btn);
-    return box;
-  }
-
-  function checkAck(text, obj, key){
-    const box = document.createElement('div'); box.className="inlinebox";
-    const id = `ack_${key}_${Math.random().toString(36).slice(2,7)}`;
-    const row = document.createElement('div'); row.className = "ck-row";
-    const c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = !!obj[key];
-    const lab = document.createElement('label'); lab.htmlFor = id; lab.textContent = text;
-    c.addEventListener('change', ()=>{ obj[key] = c.checked; save(); });
-    row.append(c, lab); box.append(row);
-    return box;
-  }
-
-  function policyCard(title, href, key){
-    const card = document.createElement('div'); card.className="inlinebox";
-    card.innerHTML = `<div style="font-weight:800">${title}</div>`;
-    const actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap";
-    const view = button("View inline","ghost", ()=> openDoc(title, href));
-    const dl = document.createElement('a'); dl.className="btn primary"; dl.textContent = "Download PDF"; dl.href = href; dl.download = "";
-    actions.append(view, dl);
-    card.append(actions);
-    return card;
-  }
-
+  /* ===== Review ===== */
   function renderReview(){
-    const wrap = document.createElement('div'); wrap.className = "review";
-    function sect(title, pairs){
-      const d = document.createElement('details'); d.className="card"; d.open = true;
-      const s = document.createElement('summary'); s.textContent = title; d.append(s);
-      const kv = document.createElement('div'); kv.className="kv";
-      pairs.forEach(([k,v])=>{
-        const row = document.createElement('div'); const b = document.createElement('b'); b.textContent = k; 
-        const span = document.createElement('span'); span.textContent = v ?? "—";
-        row.append(b, span); kv.append(row);
-      });
-      d.append(kv); return d;
-    }
+    const wrap=document.createElement('div'); wrap.className="review";
+    function sect(title,pairs){ const d=document.createElement('details'); d.className="card"; d.open=true; const s=document.createElement('summary'); s.textContent=title; d.append(s); const kv=document.createElement('div'); kv.className="kv"; pairs.forEach(([k,v])=>{ const row=document.createElement('div'); const b=document.createElement('b'); b.textContent=k; const span=document.createElement('span'); span.textContent=v??"—"; row.append(b,span); kv.append(row); }); d.append(kv); return d; }
     wrap.append(
-      sect("Who is completing", [
-        ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
-      ]),
+      sect("Who is completing", [["Role",S.caller.role],["Name",S.caller.name],["Relationship",S.caller.relationship],["Consent",S.caller.consent]]),
       sect("Participant", [
-        ["Legal name", S.participant.legal_name],
-        ["Preferred name", S.participant.preferred_name],
-        ["Pronouns", S.participant.pronouns],
-        ["DOB", S.participant.dob],
-        ["NDIS number", S.participant.ndis_number],
-        ["Address", [S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
-        ["Plan management", S.participant.plan_mgmt],
-        ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
-        ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
+        ["Legal name",S.participant.legal_name],["Preferred name",S.participant.preferred_name],["Pronouns",S.participant.pronouns],["DOB",S.participant.dob],["NDIS number",S.participant.ndis_number],
+        ["Address",[S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
+        ["Plan management",S.participant.plan_mgmt],
+        ["Plan manager",[S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
+        ["Plan dates",[S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
       ]),
       sect("Contacts", [
-        ["Email", S.contacts.email],
-        ["Phone", S.contacts.phone],
-        ["Emergency contact", [S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(" • ")||"—"],
-        ["Support Coordinator", [S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(" • ")||"—"],
-        ["GP", [S.contacts.gp.name,S.contacts.gp.practice,S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • ")||"—"]
+        ["Email",S.contacts.email],["Phone",S.contacts.phone],
+        ["Emergency",[S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(" • ")||"—"],
+        ["Support Coordinator",[S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(" • ")||"—"],
+        ["GP",[S.contacts.gp.name,S.contacts.gp.practice,S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • ")||"—"]
       ]),
       sect("Communication & preferences", [
-        ["Language", S.comms.primary_language],
-        ["Interpreter", S.comms.interpreter],
-        ["Interpreter language", S.comms.interpreter_language],
-        ["Cultural considerations", S.comms.cultural_considerations],
-        ["Worker gender pref.", S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other || "—"],
-        ["Transport required", S.comms.preferences.transport_required||"—"]
+        ["Language",S.comms.primary_language],["Interpreter",S.comms.interpreter],
+        ["Interpreter language",S.comms.interpreter_language],["Cultural considerations",S.comms.cultural_considerations],
+        ["Worker gender pref.",S.comms.preferences.worker_gender||S.comms.preferences.worker_gender_other||"—"],
+        ["Transport required",S.comms.preferences.transport_required||"—"]
       ]),
       sect("Living & access", [
-        ["Residence type", S.living.residence_type],
-        ["Lives with", S.living.lives_with],
-        ["Entry notes", S.living.entry_notes],
-        ["Keysafe", S.living.keysafe],
-        ["Smoking", S.living.smoking_on_premises],
-        ["Hazards", S.living.hazards]
+        ["Residence type",S.living.residence_type],["Lives with",S.living.lives_with],["Entry notes",S.living.entry_notes],
+        ["Keysafe",S.living.keysafe],["Smoking",S.living.smoking_on_premises],["Hazards",S.living.hazards]
       ]),
       sect("Health & clinical", [
-        ["Primary diagnoses", S.clinical.primary_diagnoses],
-        ["Other diagnoses", S.clinical.other_diagnoses],
-        ["Allergies", S.clinical.allergies],
-        ["Mobility", S.clinical.mobility],
-        ["Equipment", S.clinical.equipment],
-        ["Continence", S.clinical.continence],
-        ["Cognition", S.clinical.cognition],
-        ["Pressure injury risk", S.clinical.pressure_injury_risk],
-        ["Falls risk", S.clinical.falls_risk],
-        ["Seizures", S.clinical.seizures.has===true?"Yes":S.clinical.seizures.has===false?"No":S.clinical.seizures.has],
-        ["Seizure plan", S.clinical.seizures.plan],
-        ["Seizure frequency", S.clinical.seizures.frequency],
-        ["Diet / swallowing", S.clinical.diet_notes]
+        ["Primary diagnoses",S.clinical.primary_diagnoses],["Other diagnoses",S.clinical.other_diagnoses],["Allergies",S.clinical.allergies],
+        ["Mobility",S.clinical.mobility],["Equipment",S.clinical.equipment],["Continence",S.clinical.continence],["Cognition",S.clinical.cognition],
+        ["Pressure injury risk",S.clinical.pressure_injury_risk],["Falls risk",S.clinical.falls_risk],
+        ["Seizures",S.clinical.seizures.has===true?"Yes":S.clinical.seizures.has===false?"No":S.clinical.seizures.has],
+        ["Seizure plan",S.clinical.seizures.plan],["Seizure frequency",S.clinical.seizures.frequency],
+        ["Stoma/ostomy care",boolText(S.clinical.stoma_care)],["Diet / swallowing",S.clinical.diet_notes]
       ]),
       sect("Medications", [
-        ["Has medications", boolText(S.medications.has_meds)],
-        ["Method", S.medications.method],
-        ["Webster pack", boolText(S.medications.webster_pack)],
-        ["Storage", S.medications.storage],
-        ["Self-admin", boolText(S.medications.self_admin)],
-        ["Staff-admin", boolText(S.medications.staff_admin)],
-        ["Notes", S.medications.notes]
+        ["Has medications",boolText(S.medications.has_meds)],["Method",S.medications.method],["Webster pack",boolText(S.medications.webster_pack)],
+        ["Storage",S.medications.storage],["Self-admin",boolText(S.medications.self_admin)],["Staff-admin",boolText(S.medications.staff_admin)],["Notes",S.medications.notes]
       ]),
       sect("Risks", [
-        ["Behavioural", S.risks.behavioural.present],
-        ["Behaviour notes", S.risks.behavioural.notes],
-        ["Clinical concerns", listTrue(S.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health"])],
-        ["Environmental", listTrue(S.risks.environmental, ["animals","hoarding","weapons"])],
-        ["Home risks", listTrue(S.risks.home_checklist, ["trip_hazards","smoke_alarms","lighting","bathroom_safety"])],
-        ["Home notes", S.risks.home_checklist.notes],
-        ["Overall rating", S.risks.overall_rating]
+        ["Behavioural",S.risks.behavioural.present],["Behaviour notes",S.risks.behavioural.notes],
+        ["Clinical concerns", listTrue(S.risks.clinical,["wounds","diabetes","tracheostomy","tube_feeding","mental_health"])],
+        ["Clinical other",S.risks.clinical.other],["Environmental", listTrue(S.risks.environmental,["animals","hoarding","weapons"])],
+        ["Environmental other",S.risks.environmental.other],["Home risks", listTrue(S.risks.home_checklist,["trip_hazards","smoke_alarms","lighting","bathroom_safety"])],
+        ["Home notes",S.risks.home_checklist.notes],["Other risk notes",S.risks.other_notes],
+        ["Overall rating",S.risks.overall_rating]
       ]),
       sect("Behaviour support", [
-        ["BSP in place", boolText(S.bsp.has_bsp)],
-        ["Restrictive practices", boolText(S.bsp.restrictive_practices)],
-        ["Provider", S.bsp.provider],
-        ["Notes", S.bsp.notes]
+        ["BSP in place",boolText(S.bsp.has_bsp)],["Restrictive practices",boolText(S.bsp.restrictive_practices)],["Provider",S.bsp.provider],["Notes",S.bsp.notes]
       ]),
       sect("Supports & schedule", [
-        ["Support types", mapTypes(S.supports.types)],
-        ["Goals", S.supports.goals],
-        ["Outcomes", S.supports.outcomes],
-        ["Windows", mapWindows(S.schedule.windows)],
-        ["Days", mapDays(S.schedule.days)],
-        ["Hours/week", S.schedule.hours_per_week],
-        ["Urgency", S.schedule.urgency],
-        ["Start pref.", S.schedule.start_preference]
+        ["Core supports", mapCore(S.supports.core, S.supports.core_other)],
+        ["Capacity Building", mapCapacity(S.supports.capacity, S.supports.capacity_other)],
+        ["Goals",S.supports.goals],["Outcomes",S.supports.outcomes],
+        ["Windows", mapWindows(S.schedule.windows)],["Days", mapDays(S.schedule.days)],
+        ["Hours/week",S.schedule.hours_per_week],["Urgency",S.schedule.urgency],["Start pref.",S.schedule.start_preference]
       ]),
       sect("Policy acknowledgements", [
-        ["Handbook acknowledged", boolText(S.policy_ack.handbook)],
-        ["Incident management understood", boolText(S.policy_ack.incident)],
-        ["Complaints & feedback info received", boolText(S.policy_ack.complaints)],
-        ["Emergency advocacy consent", S.emergency_advocacy || "—"]
+        ["Handbook acknowledged",boolText(S.policy_ack.handbook)],["Incident management understood",boolText(S.policy_ack.incident)],
+        ["Complaints & feedback info received",boolText(S.policy_ack.complaints)],["Emergency advocacy consent",S.emergency_advocacy||"—"]
       ]),
-      sect("Uploads", [
-        ["Files selected", (S.uploads.files||[]).map(f=>f.name).join(" • ") || "—"]
-      ])
+      sect("Uploads", [[ "Files selected", (S.uploads.files||[]).map(f=>f.name).join(" • ") || "—" ]])
     );
     return wrap;
   }
 
   function boolText(v){ return v===true?"Yes":v===false?"No":(v??"—"); }
-  function listTrue(obj, keys){
-    const map = {
-      wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health",
-      animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"
-    };
-    const list = keys.filter(k=> obj[k]===true).map(k=> map[k]||k);
-    return list.length? list.join(", ") : "—";
+  function listTrue(obj,keys){
+    const map={ wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health",
+                animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons" };
+    const list=keys.filter(k=>obj[k]===true).map(k=>map[k]||k);
+    return list.length?list.join(", "):"—";
   }
-  function mapTypes(arr){ const m={t1:"Personal care",t2:"Domestic assistance",t3:"Community participation",t4:"Nursing care at home",t5:"Daily living skills",t6:"Respite / carer relief"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||"—"; }
   function mapWindows(arr){ const m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||"—"; }
   function mapDays(arr){ const m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||"—"; }
+  function mapCore(arr,other){ const m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; const t=(arr||[]).map(k=>m[k]).filter(Boolean); if(other) t.push("Other: "+other); return t.length?t.join(", "):"—"; }
+  function mapCapacity(arr,other){ const m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; const t=(arr||[]).map(k=>m[k]).filter(Boolean); if(other) t.push("Other: "+other); return t.length?t.join(", "):"—"; }
 
-  /* ====== Navigation, validation & render ====== */
-  function render(){
-    const total = Steps.length;
-    const step = Steps[S.i];
-    stepTxt.textContent = `Step ${S.i+1}/${total}`;
-    barEl.style.width = Math.round((S.i)/(total-1)*100) + "%";
-    setPortrait(step.key);
-    qEl.innerHTML = step.title;
-    subEl.innerHTML = step.sub || "";
-    optsEl.innerHTML = "";
-    step.build(optsEl);
-    save();
-    window.scrollTo({top:0,behavior:"smooth"});
-  }
+  /* ===== Nav / Render / Validation ===== */
+  function render(){ const total=Steps.length, step=Steps[S.i]; stepTxt.textContent=`Step ${S.i+1}/${total}`; barEl.style.width=Math.round((S.i)/(total-1)*100)+"%"; setPortrait(step.key); qEl.innerHTML=step.title; subEl.innerHTML=step.sub||""; optsEl.innerHTML=""; step.build(optsEl); save(); window.scrollTo({top:0,behavior:"smooth"}); }
+  backBtn.addEventListener('click',()=>{ S.i=Math.max(0,S.i-1); render(); });
+  nextBtn.addEventListener('click',()=>{ if(!canProceed(S.i)) return; S.i=Math.min(Steps.length-1,S.i+1); render(); });
+  saveExitBtn.addEventListener('click',()=>{ save(); alert("Saved. You can close this page and return later on the same device."); });
 
-  backBtn.addEventListener('click', ()=>{
-    S.i = Math.max(0, S.i-1); render();
-  });
-  nextBtn.addEventListener('click', ()=>{
-    // Gatekeeping validations:
-    if (!canProceed(S.i)) return;
-    S.i = Math.min(Steps.length-1, S.i+1);
-    render();
-  });
-  saveExitBtn.addEventListener('click', ()=>{ save(); alert("Saved. You can close this page and return later on the same device."); });
-
+  function str(v){ return (v||"").toString().trim(); }
+  function has(val){ return str(val).length>0; }
   function canProceed(idx){
-    const key = Steps[idx].key;
+    const key=Steps[idx].key;
 
-    // 1) Consent must be Yes
-    if (key === "caller"){
-      if (S.caller.consent !== "Yes"){
-        alert("We’re unable to proceed without verbal consent. Please select “Yes”.");
-        return false;
+    if (key==="caller"){
+      if (S.caller.consent!=="Yes"){ alert("We’re unable to proceed without verbal consent. Please select “Yes”."); return false; }
+    }
+
+    if (key==="participant"){
+      const p=S.participant, a=p.address;
+      if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name."); return false; }
+      if (!has(p.dob)){ alert("Please add Date of birth."); return false; }
+      if (!has(a.line1)||!has(a.suburb)||!has(a.postcode)||!has(a.state)){
+        alert("Please complete Address line 1, Suburb, Postcode, and State."); return false;
       }
     }
 
-    // 2) Allergies required (non-empty text)
-    if (key === "clinical"){
-      const a = (S.clinical.allergies||"").trim();
-      if (!a){
-        alert("Allergies is required. If none, please write “No known allergies”.");
-        return false;
+    if (key==="contacts"){
+      if (!has(S.contacts.email) && !has(S.contacts.phone)){
+        alert("Please provide at least one contact method: Email or Phone."); return false;
       }
     }
 
-    // 3) Policy acknowledgements before moving past Consents
-    if (key === "consents"){
+    if (key==="clinical"){
+      if (!has(S.clinical.allergies)){ alert('Allergies is required. If none, please write “No known allergies”.'); return false; }
+    }
+
+    if (key==="supports"){
+      const anyCore=(S.supports.core||[]).length>0 || has(S.supports.core_other);
+      const anyCap=(S.supports.capacity||[]).length>0 || has(S.supports.capacity_other);
+      if (!anyCore && !anyCap){ alert("Please select at least one Core or Capacity Building support (or add an Other)."); return false; }
+    }
+
+    if (key==="schedule"){
+      const someWindow=(S.schedule.windows||[]).length>0;
+      const someDay=(S.schedule.days||[]).length>0;
+      const hours=Number(S.schedule.hours_per_week||0);
+      if (!someWindow && !someDay && !(hours>0)){
+        alert("Please select at least one time window or day, or provide Hours per week."); return false;
+      }
+    }
+
+    if (key==="consents"){
       if (!S.policy_ack.handbook || !S.policy_ack.incident || !S.policy_ack.complaints){
-        alert("Please acknowledge the Handbook, Incident Management and Complaints & Feedback before continuing.");
-        return false;
+        alert("Please acknowledge the Handbook, Incident Management and Complaints & Feedback before continuing."); return false;
+      }
+      // emergency_advocacy can be any of Yes/No/Not sure; but require a choice:
+      if (S.emergency_advocacy===null || S.emergency_advocacy===undefined){
+        alert("Please choose an option for Emergency advocacy consent (Yes/No/Not sure)."); return false;
       }
     }
 
     return true;
   }
 
-  /* ====== Submit: Formspree JSON or multipart if files ====== */
+  /* ===== Submit to Formspree (FormData) ===== */
   async function sendToFormspree(){
-    const hasFiles = (S.uploads.files||[]).length>0;
-    if (hasFiles){
-      const fd = new FormData();
-      fd.append("_subject", "HD HeeD — AILR onboarding submission");
-      fd.append("source", "ailr-v12");
-      fd.append("summary", JSON.stringify(buildPayload(true)));
-      (S.uploads.files||[]).forEach((f,idx)=> fd.append("file"+(idx+1), f, f.name));
-      const r = await fetch(FS_ENDPOINT, { method:"POST", body: fd, headers:{ "Accept":"application/json" }});
-      if (!r.ok) throw new Error("Network / server error");
-      return;
-    } else {
-      const payload = buildPayload(true);
-      const r = await fetch(FS_ENDPOINT, {
-        method:"POST",
-        headers:{ "Content-Type":"application/json", "Accept":"application/json" },
-        body: JSON.stringify(payload)
-      });
-      if (!r.ok) throw new Error("Network / server error");
-      return;
+    const fd=new FormData();
+    fd.append("name", S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
+    fd.append("email", S.submitter.email || S.contacts.email || "");
+    fd.append("phone", S.submitter.phone || S.contacts.phone || "");
+    fd.append("_subject","HD HeeD — AILR onboarding submission");
+    fd.append("message","AILR submission attached as JSON summary (and files if provided).");
+    fd.append("summary", JSON.stringify(buildPayload(true)));
+    (S.uploads.files||[]).forEach((f,idx)=> fd.append("file"+(idx+1), f, f.name));
+
+    const r=await fetch(FS_ENDPOINT,{ method:"POST", body:fd, headers:{ "Accept":"application/json" }});
+    if(!r.ok){
+      // Fallback
+      const minimal = new URLSearchParams();
+      minimal.append("name", S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
+      minimal.append("email", S.submitter.email || S.contacts.email || "");
+      minimal.append("_subject","HD HeeD — AILR onboarding submission");
+      minimal.append("message", JSON.stringify(buildPayload(false)));
+      const r2=await fetch(FS_ENDPOINT,{ method:"POST", headers:{ "Content-Type":"application/x-www-form-urlencoded", "Accept":"application/json" }, body:minimal.toString() });
+      if(!r2.ok) throw new Error("Network / server error");
     }
   }
 
   function buildPayload(includeNotes){
     return {
       _subject:"HD HeeD — AILR onboarding submission",
-      source:"ailr-v12",
-      caller:S.caller,
-      participant:S.participant,
-      contacts:S.contacts,
-      comms:S.comms,
-      living:S.living,
-      clinical:S.clinical,
-      medications:S.medications,
-      risks:S.risks,
-      bsp:S.bsp,
-      supports:S.supports,
-      schedule:S.schedule,
-      policy_ack:S.policy_ack,
-      emergency_advocacy:S.emergency_advocacy,
+      source:"ailr-v14",
+      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
+      living:S.living, clinical:S.clinical, medications:S.medications,
+      risks:S.risks, bsp:S.bsp, supports:S.supports, schedule:S.schedule,
+      policy_ack:S.policy_ack, emergency_advocacy:S.emergency_advocacy,
       uploads:(S.uploads.files||[]).map(f=>({name:f.name,size:f.size,type:f.type})),
       submitter:S.submitter,
       notes: includeNotes ? S.notes : [],
@@ -1176,126 +769,29 @@
   }
 
   function openPrintableSummary(){
-    const p = buildPayload(true);
-    const w = window.open("", "_blank");
-    const style = `
-      <style>
-        body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif; padding:20px}
-        h1{font-size:20px} h2{font-size:16px; margin-top:20px}
-        table{border-collapse:collapse; width:100%; margin:8px 0}
-        td,th{border:1px solid #ddd; padding:6px; text-align:left; vertical-align:top}
-      </style>`;
+    const p=buildPayload(true);
+    const w=window.open("","_blank");
+    const style=`<style>body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif; padding:20px} h1{font-size:20px} h2{font-size:16px; margin-top:20px} table{border-collapse:collapse; width:100%; margin:8px 0} td,th{border:1px solid #ddd; padding:6px; text-align:left; vertical-align:top}</style>`;
     function row(k,v){ return `<tr><th>${k}</th><td>${v||"—"}</td></tr>`; }
-    function join(arr){ return Array.isArray(arr)?arr.join(", "): (arr||"—"); }
-
+    function section(title,rows){ w.document.write(`<h2>${title}</h2><table>${rows.join("")}</table>`); }
     w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>HD HeeD — AILR Summary</title>${style}</head><body>`);
     w.document.write(`<h1>HD HeeD — AILR Summary</h1><div>Timestamp: ${p.timestamp}</div>`);
-
-    function section(title, rows){
-      w.document.write(`<h2>${title}</h2><table>${rows.join("")}</table>`);
-    }
-    section("Who is completing", [
-      row("Role", p.caller.role), row("Name", p.caller.name), row("Relationship", p.caller.relationship), row("Consent", p.caller.consent)
-    ]);
-    section("Participant", [
-      row("Legal name", p.participant.legal_name),
-      row("Preferred name", p.participant.preferred_name),
-      row("Pronouns", p.participant.pronouns),
-      row("DOB", p.participant.dob),
-      row("NDIS number", p.participant.ndis_number),
-      row("Address", [p.participant.address.line1,p.participant.address.line2,p.participant.address.suburb,p.participant.address.state,p.participant.address.postcode].filter(Boolean).join(", ")),
-      row("Plan management", p.participant.plan_mgmt),
-      row("Plan manager", [p.participant.plan_manager.org,p.participant.plan_manager.contact,p.participant.plan_manager.email,p.participant.plan_manager.phone].filter(Boolean).join(" • ")),
-      row("Plan dates", [p.participant.plan_dates.start,p.participant.plan_dates.end].filter(Boolean).join(" → "))
-    ]);
-    section("Contacts", [
-      row("Email", p.contacts.email),
-      row("Phone", p.contacts.phone),
-      row("Emergency", [p.contacts.emergency.name,p.contacts.emergency.relationship,p.contacts.emergency.phone].filter(Boolean).join(" • ")),
-      row("Support Coordinator", [p.contacts.support_coordinator.name,p.contacts.support_coordinator.org,p.contacts.support_coordinator.email,p.contacts.support_coordinator.phone].filter(Boolean).join(" • ")),
-      row("GP", [p.contacts.gp.name,p.contacts.gp.practice,p.contacts.gp.phone,p.contacts.gp.email].filter(Boolean).join(" • "))
-    ]);
-    section("Communication & preferences", [
-      row("Language", p.comms.primary_language),
-      row("Interpreter", p.comms.interpreter),
-      row("Interpreter language", p.comms.interpreter_language),
-      row("Cultural considerations", p.comms.cultural_considerations),
-      row("Worker gender pref.", p.comms.preferences.worker_gender || p.comms.preferences.worker_gender_other || "—"),
-      row("Transport required", p.comms.preferences.transport_required||"—")
-    ]);
-    section("Living & access", [
-      row("Residence type", p.living.residence_type),
-      row("Lives with", p.living.lives_with),
-      row("Entry notes", p.living.entry_notes),
-      row("Keysafe", p.living.keysafe),
-      row("Smoking", p.living.smoking_on_premises),
-      row("Hazards", p.living.hazards)
-    ]);
-    section("Health & clinical", [
-      row("Primary diagnoses", p.clinical.primary_diagnoses),
-      row("Other diagnoses", p.clinical.other_diagnoses),
-      row("Allergies", p.clinical.allergies),
-      row("Mobility", p.clinical.mobility),
-      row("Equipment", p.clinical.equipment),
-      row("Continence", p.clinical.continence),
-      row("Cognition", p.clinical.cognition),
-      row("Pressure injury risk", p.clinical.pressure_injury_risk),
-      row("Falls risk", p.clinical.falls_risk),
-      row("Seizures", p.clinical.seizures.has===true?"Yes":p.clinical.seizures.has===false?"No":p.clinical.seizures.has),
-      row("Seizure plan", p.clinical.seizures.plan),
-      row("Seizure frequency", p.clinical.seizures.frequency),
-      row("Diet / swallowing", p.clinical.diet_notes)
-    ]);
-    section("Medications", [
-      row("Has medications", boolText(p.medications.has_meds)),
-      row("Method", p.medications.method),
-      row("Webster pack", boolText(p.medications.webster_pack)),
-      row("Storage", p.medications.storage),
-      row("Self-admin", boolText(p.medications.self_admin)),
-      row("Staff-admin", boolText(p.medications.staff_admin)),
-      row("Notes", p.medications.notes)
-    ]);
-    section("Risks", [
-      row("Behavioural", p.risks.behavioural.present),
-      row("Behaviour notes", p.risks.behavioural.notes),
-      row("Clinical concerns", listTrue(p.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health"])),
-      row("Environmental", listTrue(p.risks.environmental, ["animals","hoarding","weapons"])),
-      row("Home risks", listTrue(p.risks.home_checklist, ["trip_hazards","smoke_alarms","lighting","bathroom_safety"])),
-      row("Home notes", p.risks.home_checklist.notes),
-      row("Overall rating", p.risks.overall_rating)
-    ]);
-    section("Behaviour support", [
-      row("BSP in place", boolText(p.bsp.has_bsp)),
-      row("Restrictive practices", boolText(p.bsp.restrictive_practices)),
-      row("Provider", p.bsp.provider),
-      row("Notes", p.bsp.notes)
-    ]);
-    section("Supports & schedule", [
-      row("Support types", mapTypes(p.supports.types)),
-      row("Goals", p.supports.goals),
-      row("Outcomes", p.supports.outcomes),
-      row("Windows", mapWindows(p.schedule.windows)),
-      row("Days", mapDays(p.schedule.days)),
-      row("Hours/week", p.schedule.hours_per_week),
-      row("Urgency", p.schedule.urgency),
-      row("Start pref.", p.schedule.start_preference)
-    ]);
-    section("Policy acknowledgements", [
-      row("Handbook acknowledged", boolText(p.policy_ack.handbook)),
-      row("Incident management understood", boolText(p.policy_ack.incident)),
-      row("Complaints & feedback info received", boolText(p.policy_ack.complaints)),
-      row("Emergency advocacy consent", p.emergency_advocacy || "—")
-    ]);
-    section("Uploads", [
-      row("Files", (S.uploads.files||[]).map(f=>f.name).join(" • "))
-    ]);
-
-    w.document.write(`<script>window.onload = function(){ window.print(); }<\/script>`);
-    w.document.write(`</body></html>`);
-    w.document.close();
+    section("Who is completing",[row("Role",p.caller.role),row("Name",p.caller.name),row("Relationship",p.caller.relationship),row("Consent",p.caller.consent)]);
+    section("Participant",[row("Legal name",p.participant.legal_name),row("Preferred name",p.participant.preferred_name),row("Pronouns",p.participant.pronouns),row("DOB",p.participant.dob),row("NDIS number",p.participant.ndis_number),row("Address",[p.participant.address.line1,p.participant.address.line2,p.participant.address.suburb,p.participant.address.state,p.participant.address.postcode].filter(Boolean).join(", ")),row("Plan management",p.participant.plan_mgmt),row("Plan manager",[p.participant.plan_manager.org,p.participant.plan_manager.contact,p.participant.plan_manager.email,p.participant.plan_manager.phone].filter(Boolean).join(" • ")),row("Plan dates",[p.participant.plan_dates.start,p.participant.plan_dates.end].filter(Boolean).join(" → "))]);
+    section("Contacts",[row("Email",p.contacts.email),row("Phone",p.contacts.phone),row("Emergency",[p.contacts.emergency.name,p.contacts.emergency.relationship,p.contacts.emergency.phone].filter(Boolean).join(" • ")),row("Support Coordinator",[p.contacts.support_coordinator.name,p.contacts.support_coordinator.org,p.contacts.support_coordinator.email,p.contacts.support_coordinator.phone].filter(Boolean).join(" • ")),row("GP",[p.contacts.gp.name,p.contacts.gp.practice,p.contacts.gp.phone,p.contacts.gp.email].filter(Boolean).join(" • "))]);
+    section("Communication & preferences",[row("Language",p.comms.primary_language),row("Interpreter",p.comms.interpreter),row("Interpreter language",p.comms.interpreter_language),row("Cultural considerations",p.comms.cultural_considerations),row("Worker gender pref.",p.comms.preferences.worker_gender||p.comms.preferences.worker_gender_other||"—"),row("Transport required",p.comms.preferences.transport_required||"—")]);
+    section("Living & access",[row("Residence type",p.living.residence_type),row("Lives with",p.living.lives_with),row("Entry notes",p.living.entry_notes),row("Keysafe",p.living.keysafe),row("Smoking",p.living.smoking_on_premises),row("Hazards",p.living.hazards)]);
+    section("Health & clinical",[row("Primary diagnoses",p.clinical.primary_diagnoses),row("Other diagnoses",p.clinical.other_diagnoses),row("Allergies",p.clinical.allergies),row("Mobility",p.clinical.mobility),row("Equipment",p.clinical.equipment),row("Continence",p.clinical.continence),row("Cognition",p.clinical.cognition),row("Pressure injury risk",p.clinical.pressure_injury_risk),row("Falls risk",p.clinical.falls_risk),row("Seizures",p.clinical.seizures.has===true?"Yes":p.clinical.seizures.has===false?"No":p.clinical.seizures.has),row("Seizure plan",p.clinical.seizures.plan),row("Seizure frequency",p.clinical.seizures.frequency),row("Stoma/ostomy care",boolText(p.clinical.stoma_care)),row("Diet / swallowing",p.clinical.diet_notes)]);
+    section("Medications",[row("Has medications",boolText(p.medications.has_meds)),row("Method",p.medications.method),row("Webster pack",boolText(p.medications.webster_pack)),row("Storage",p.medications.storage),row("Self-admin",boolText(p.medications.self_admin)),row("Staff-admin",boolText(p.medications.staff_admin)),row("Notes",p.medications.notes)]);
+    section("Risks",[row("Behavioural",p.risks.behavioural.present),row("Behaviour notes",p.risks.behavioural.notes),row("Clinical concerns",listTrue(p.risks.clinical,["wounds","diabetes","tracheostomy","tube_feeding","mental_health"])),row("Clinical other",p.risks.clinical.other),row("Environmental",listTrue(p.risks.environmental,["animals","hoarding","weapons"])),row("Environmental other",p.risks.environmental.other),row("Home risks",listTrue(p.risks.home_checklist,["trip_hazards","smoke_alarms","lighting","bathroom_safety"])),row("Home notes",p.risks.home_checklist.notes),row("Other risk notes",p.risks.other_notes),row("Overall rating",p.risks.overall_rating)]);
+    section("Behaviour support",[row("BSP in place",boolText(p.bsp.has_bsp)),row("Restrictive practices",boolText(p.bsp.restrictive_practices)),row("Provider",p.bsp.provider),row("Notes",p.bsp.notes)]);
+    section("Supports & schedule",[row("Core supports", mapCore(p.supports.core, p.supports.core_other)),row("Capacity Building", mapCapacity(p.supports.capacity, p.supports.capacity_other)),row("Goals",p.supports.goals),row("Outcomes",p.supports.outcomes),row("Windows",mapWindows(p.schedule.windows)),row("Days",mapDays(p.schedule.days)),row("Hours/week",p.schedule.hours_per_week),row("Urgency",p.schedule.urgency),row("Start pref.",p.schedule.start_preference)]);
+    section("Policy acknowledgements",[row("Handbook acknowledged",boolText(p.policy_ack.handbook)),row("Incident management understood",boolText(p.policy_ack.incident)),row("Complaints & feedback info received",boolText(p.policy_ack.complaints)),row("Emergency advocacy consent",p.emergency_advocacy||"—")]);
+    section("Uploads",[row("Files",(S.uploads.files||[]).map(f=>f.name).join(" • "))]);
+    w.document.write(`<script>window.onload=function(){window.print();}<\/script></body></html>`); w.document.close();
   }
 
-  // First render
+  // Initial render
   render();
 
 })();
