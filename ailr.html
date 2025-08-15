@@ -1101,53 +1101,43 @@
 
   /* ====== Submit: reliable Formspree FormData with files ====== */
   async function sendToFormspree(){
-  // ---- build a concise, email-friendly summary (like contact.html) ----
-  const quick = buildQuickSummary();
+  const hasFiles = (S.uploads.files||[]).length>0;
+  const subject = "HD HeeD — AILR onboarding submission";
 
-  // ---- always build FormData (works with and without files) ----
-  const fd = new FormData();
-  fd.append("_subject", "HD HeeD — AILR onboarding submission");
-  fd.append("name",     S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
-  fd.append("email",    S.submitter.email || S.contacts.email || "");
-  fd.append("_replyto", S.submitter.email || S.contacts.email || "");
-  fd.append("phone",    S.submitter.phone || S.contacts.phone || "");
-  fd.append("message",  quick);
+  // Include human-readable fields Formspree can use for routing/reply-to
+  const meta = {
+    _subject: subject,
+    source: "ailr-v12",
+    name: S.submitter.name || S.participant.legal_name || "Unknown",
+    email: S.submitter.email || S.contacts.email || "",
+    phone: S.submitter.phone || S.contacts.phone || "",
+    _replyto: S.submitter.email || S.contacts.email || ""
+  };
 
-  // keep the full JSON for your Formspree dashboard—but keep it compact
-  const summary = buildPayload(true);
-  try {
-    // Trim huge sections that can tip size filters
-    delete summary.notes;
-    if (summary.uploads && summary.uploads.length > 25) summary.uploads = summary.uploads.slice(0,25);
-  } catch {}
-  fd.append("summary", JSON.stringify(summary));
+  if (hasFiles){
+    const fd = new FormData();
+    Object.entries(meta).forEach(([k,v])=> fd.append(k, v || ""));
+    // Keep the summary reasonable in case it’s huge
+    const json = JSON.stringify(buildPayload(true));
+    fd.append("summary", json.length > 180000 ? json.slice(0,180000) + "…(truncated)" : json);
+    (S.uploads.files||[]).forEach((f,idx)=> fd.append("file"+(idx+1), f, f.name));
 
-  // attach files if any
-  (S.uploads.files || []).forEach((f,i)=> fd.append(`file${i+1}`, f, f.name));
-
-  // ---- try AJAX first (same pattern as contact.html) ----
-  try {
-    const res = await fetch(FS_ENDPOINT, {
-      method: "POST",
-      body: fd,
-      headers: { "Accept":"application/json" }
+    const r = await fetch(FS_ENDPOINT, { method:"POST", body: fd, headers:{ "Accept":"application/json" }});
+    if (!r.ok) throw new Error(await r.text().catch(()=> "Network / server error"));
+    return;
+  } else {
+    // JSON path still includes meta so the email shows up cleanly
+    const payload = { ...meta, ...buildPayload(true) };
+    const r = await fetch(FS_ENDPOINT, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+      body: JSON.stringify(payload)
     });
-    let data = {};
-    try { data = await res.json(); } catch {}
-    console.log("Formspree AILR response:", res.status, data);
-
-    if (!res.ok) {
-      // if AJAX fails (CORS/filter/rate), fall back to classic form post
-      throw new Error(data?.errors?.[0]?.message || `Formspree error (${res.status})`);
-    }
-    return; // success
-  } catch (e) {
-    console.warn("AILR fetch failed, falling back to classic form submit:", e?.message || e);
-    // Classic form submit will not include files (browser security won’t let us programmatically set file inputs)
-    // but it WILL deliver the core message instantly like your contact page.
-    submitViaClassicForm(quick, summary);
+    if (!r.ok) throw new Error(await r.text().catch(()=> "Network / server error"));
+    return;
   }
 }
+
 
 // === helpers ===
 function buildQuickSummary(){
