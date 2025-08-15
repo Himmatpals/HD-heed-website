@@ -708,36 +708,27 @@
         const actions = document.createElement('div');
         actions.style = "display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
         const btnSend = button("Send now","primary", async ()=>{
-  const email = (S.submitter.email || S.contacts.email || "").trim();
-  const phone = (S.submitter.phone || S.contacts.phone || "").trim();
-
-  // Must provide at least one contact
-  if (!email && !phone){
-    alert("Please provide at least an email or a phone number to submit.");
-    return;
-  }
-
-  // If an email was typed, it must be valid
-  if (email && !isValidEmail(email)){
-    alert("Can’t send: the email address doesn’t look correct. Please fix it (e.g., name@example.com) or clear it and use phone only.");
-    return;
-  }
-
-  // If a phone was typed, it must be valid
-  if (phone && !isValidPhone(phone)){
-    alert("Can’t send: the phone number doesn’t look correct. Please fix it (include area code) or clear it and use a valid email instead.");
-    return;
-  }
-
-  try{
-    await sendToFormspree();
-    alert("All done — we’ve received your onboarding. We’ll be in touch shortly.");
-    // localStorage.removeItem(STORAGE_KEY); // optional
-  }catch(e){
-    alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e?.message||e));
-  }
-});
-
+          if (!((S.submitter.email && S.submitter.email.trim()) || (S.submitter.phone && S.submitter.phone.trim()))){
+            alert("Please provide at least an email or a phone number to submit.");
+            return;
+          }
+          try{
+            await sendToFormspree();
+            alert("All done — we’ve received your onboarding. We’ll be in touch shortly.");
+          }catch(e){
+            alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e?.message||e));
+          }
+        });
+        const btnPdf = button("Print / Save summary as PDF","ghost", ()=>{ openPrintableSummary(); });
+        actions.append(btnSend, btnPdf);
+        m.append(actions);
+        const hint = document.createElement('div');
+        hint.className = "hint";
+        hint.textContent = "We’ll contact you from info@hdheed.com.au or 02 8630 5500.";
+        m.append(hint);
+      }
+    }
+  ];
 
   /* ====== Helpers to render controls ====== */
   function button(txt,variant="ghost",onClick){
@@ -747,17 +738,7 @@
     b.addEventListener('click',onClick);
     return b;
   }
-  function isValidEmail(e){
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e||"").trim());
-}
-
-function isValidPhone(p){
-  const digits = String(p||"").replace(/[^\d]/g,"");   // keep numbers only
-  if (digits.length < 10) return false;                // AU numbers are ~10 digits
-  if (/^(\d)\1{6,}$/.test(digits)) return false;       // reject 0000000000 etc
-  return true;                                         // permissive for AU + intl
-}
-function divider(txt){
+  function divider(txt){
     const d = document.createElement('div');
     d.className = "hint"; d.style.margin = "8px 0 4px"; d.innerHTML = txt;
     return d;
@@ -1120,111 +1101,18 @@ function divider(txt){
 
   /* ====== Submit: reliable Formspree FormData with files ====== */
   async function sendToFormspree(){
-  const fd = new FormData();
+    const fd = new FormData();
+    fd.append("name", S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
+    fd.append("email", S.submitter.email || S.contacts.email || "");
+    fd.append("phone", S.submitter.phone || S.contacts.phone || "");
+    fd.append("_subject", "HD HeeD — AILR onboarding submission");
+    fd.append("message", "AILR submission attached as JSON summary (and files if provided).");
+    fd.append("summary", JSON.stringify(buildPayload(true)));
+    (S.uploads.files||[]).forEach((f,idx)=> fd.append("file"+(idx+1), f, f.name));
 
-  fd.append("_subject", "HD HeeD — AILR onboarding submission");
-  fd.append("source", "ailr-v12");
-
-  // Preferred reply details (only add a valid email)
-  const replyEmail =
-    (S.submitter.email && S.submitter.email.trim()) ||
-    (S.contacts.email && S.contacts.email.trim()) || "";
-
-  const replyName =
-    (S.submitter.name && S.submitter.name.trim()) ||
-    (S.participant.legal_name && S.participant.legal_name.trim()) || "";
-
-  const replyPhone =
-    (S.submitter.phone && S.submitter.phone.trim()) ||
-    (S.contacts.phone && S.contacts.phone.trim()) || "";
-
-  if (replyName)  fd.append("name",  replyName);
-  if (replyPhone) fd.append("phone", replyPhone);
-  if (replyEmail && isValidEmail(replyEmail)){
-    fd.append("email", replyEmail);    // Formspree will validate this
-    fd.append("_replyto", replyEmail); // lets you click “Reply” in inbox
-  } else {
-    fd.append("_replyto", "no-reply@hdheed.com.au");
+    const r = await fetch(FS_ENDPOINT, { method:"POST", body: fd, headers:{ "Accept":"application/json" }});
+    if (!r.ok) throw new Error("Network / server error");
   }
-
-  // Human-readable summary (becomes email body)
-  fd.append("summary_text", buildEmailSummary());
-
-  // Full JSON payload for back-office reference
-  fd.append("summary_json", JSON.stringify(buildPayload(true)));
-
-  // Attach any uploaded files
-  (S.uploads.files || []).forEach((f, idx) => fd.append("file"+(idx+1), f, f.name));
-
-  const res = await fetch(FS_ENDPOINT, {
-    method: "POST",
-    body: fd,
-    headers: { "Accept":"application/json" }
-  });
-
-  if (!res.ok){
-    const t = await res.text().catch(()=> "");
-    throw new Error(`Formspree error (${res.status}): ${t.slice(0,200)}`);
-  }
-
-  // Optional: parse response JSON
-  await res.json().catch(()=> ({}));
-}
-
-function buildEmailSummary(){
-  const L = [];
-  L.push(`Caller: ${S.caller.role||"-"} • Consent: ${S.caller.consent||"-"}`);
-  L.push(`Participant: ${S.participant.legal_name||"-"} (${S.participant.preferred_name||"-"}) DOB: ${S.participant.dob||"-"}`);
-  L.push(`Contact: ${S.contacts.email||S.submitter.email||"-"} / ${S.contacts.phone||S.submitter.phone||"-"}`);
-  L.push(`Address: ${[S.participant.address.line1,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"-"}`);
-  L.push(`Supports: ${mapTypes(S.supports.types)}`);
-  L.push(`Schedule: ${mapWindows(S.schedule.windows)} ${mapDays(S.schedule.days)} Hrs/wk: ${S.schedule.hours_per_week||"-"} Urgency: ${S.schedule.urgency||"-"}`);
-  L.push(`Clinical: Allergies ${S.clinical.allergies||"-"} • Mobility ${S.clinical.mobility||"-"} • Continence ${S.clinical.continence||"-"} • Seizures ${boolText(S.clinical.seizures.has)}`);
-  L.push(`Risks: Beh ${S.risks.behavioural.present||"-"} • Clin ${listTrue(S.risks.clinical,["wounds","diabetes","tracheostomy","tube_feeding","mental_health"])||"-"} • Env ${listTrue(S.risks.environmental,["animals","hoarding","weapons"])||"-"}`);
-  L.push(`Acks: Handbook ${boolText(S.policy_ack.handbook)} • Incident ${boolText(S.policy_ack.incident)} • Complaints ${boolText(S.policy_ack.complaints)} • Advocacy ${S.emergency_advocacy||"-"}`);
-  return L.join("\n");
-}
-
-// === helpers ===
-function buildQuickSummary(){
-  const safe = (v)=> (v==null || v===undefined || v==="") ? "—" : String(v);
-  return [
-    `Caller: ${safe(S.caller.role)} • Consent: ${safe(S.caller.consent)}`,
-    `Participant: ${safe(S.participant.legal_name)} (${safe(S.participant.preferred_name)})`,
-    `DOB: ${safe(S.participant.dob)} • NDIS: ${safe(S.participant.ndis_number)}`,
-    `Contact: ${safe(S.contacts.email)} / ${safe(S.contacts.phone)}`,
-    `Supports: ${(S.supports && S.supports.types) ? (Array.isArray(S.supports.types) ? S.supports.types.length : S.supports.types) : "—"} • Hours/wk: ${safe(S.schedule.hours_per_week)} • Urgency: ${safe(S.schedule.urgency)}`,
-    `Risk rating: ${safe(S.risks.overall_rating)}`
-  ].join("\n");
-}
-
-function submitViaClassicForm(quickSummary, summaryJSON){
-  // Build a hidden, one-shot <form> that posts like contact.html (multipart/form-data)
-  const form = document.createElement("form");
-  form.action = FS_ENDPOINT;
-  form.method = "POST";
-  form.enctype = "multipart/form-data";
-  form.style.display = "none";
-
-  const add = (name, value) => {
-    const i = document.createElement("input");
-    i.type = "hidden"; i.name = name; i.value = value;
-    form.appendChild(i);
-  };
-
-  add("_subject", "HD HeeD — AILR onboarding submission (fallback)");
-  add("name",     S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
-  add("email",    S.submitter.email || S.contacts.email || "");
-  add("_replyto", S.submitter.email || S.contacts.email || "");
-  add("phone",    S.submitter.phone || S.contacts.phone || "");
-  add("message",  quickSummary);
-  try { add("summary", JSON.stringify(summaryJSON)); } catch {}
-
-  document.body.appendChild(form);
-  form.submit();  // Browser navigates to Formspree "Thank you" page if configured
-  // Note: Files cannot be appended here due to browser security (same as every site).
-}
-
 
   function buildPayload(includeNotes){
     return {
