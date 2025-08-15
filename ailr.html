@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>AILR — Advanced Intake & Long-form Registration | HD HeeD</title>
 <link rel="icon" href="images/favicon.ico" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+<link href=https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap rel="stylesheet" />
 <meta name="theme-color" content="#0b0f1a" />
 
 <style>
@@ -230,7 +230,7 @@
 <script>
 (function(){
   /* ====== Config ====== */
-  const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn"; // your Formspree endpoint (fixed string)
+  const FS_ENDPOINT = https://formspree.io/f/xvgrkkjn; // your Formspree endpoint (fixed string)
   const STORAGE_KEY = "hdheed_ailr_v16"; // bump to avoid stale state causing wrong step
 
   // map each step to a portrait image (reusing your ELLA set)
@@ -671,100 +671,24 @@
       title:"Upload documents (optional)",
       sub:"Examples: NDIS plan, ID, BSP, care plans, GP letters. You can also send them later.",
       build(m){
-  const box = document.createElement('div');
-  box.className = "drop";
-  box.innerHTML = `
-    <p>Attach files (optional, up to ${MAX_FILES}; total ≤ ${Math.round(MAX_TOTAL_BYTES/1024/1024)} MB).</p>
-    <input id="fileInput" type="file" multiple
-      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic,.rtf,.txt,.xlsx,.xls" />
-    <label for="fileInput">Add files</label>
-    <div id="fileList" class="hint" style="margin-top:8px"></div>
-    <div id="fileActions" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap"></div>
-    <div id="fileWarn" class="warntext" style="margin-top:6px"></div>
-  `;
-  m.append(box);
-  const input = box.querySelector('#fileInput');
-  const listEl = box.querySelector('#fileList');
-  const warnEl = box.querySelector('#fileWarn');
-  const actionsEl = box.querySelector('#fileActions');
-
-  function keyOf(f){ return `${f.name}__${f.size}__${f.lastModified||0}`; }
-  function bytes(n){ return (n/1024/1024).toFixed(2) + ' MB'; }
-
-  function repaint(){
-    warnEl.textContent = "";
-    const files = (S.uploads.files||[]);
-    if (!files.length){ listEl.textContent = "No files selected"; actionsEl.innerHTML = ""; return; }
-
-    // List each file + remove
-    const total = files.reduce((a,f)=>a+(f.size||0),0);
-    const ul = document.createElement('ul');
-    ul.style = "list-style:none;padding:0;margin:0;display:grid;gap:6px";
-    files.forEach((f,idx)=>{
-      const li = document.createElement('li');
-      li.style = "display:flex; align-items:center; gap:10px";
-      const rm = document.createElement('button');
-      rm.type="button"; rm.className="btn ghost"; rm.textContent="✕";
-      rm.title="Remove";
-      rm.addEventListener('click', ()=>{
-        const arr = (S.uploads.files||[]).slice();
-        arr.splice(idx,1);
-        S.uploads.files = arr;
-        save();
-        repaint();
-      });
-      const name = document.createElement('span');
-      name.textContent = `${f.name} (${Math.round((f.size||0)/1024)} KB)`;
-      li.append(rm, name); ul.append(li);
-    });
-    listEl.innerHTML = "";
-    listEl.append(ul);
-
-    // Actions (clear all)
-    actionsEl.innerHTML = "";
-    const clr = document.createElement('button');
-    clr.type="button"; clr.className="btn warn"; clr.textContent="Clear all";
-    clr.addEventListener('click', ()=>{ S.uploads.files = []; save(); repaint(); });
-    const info = document.createElement('div');
-    info.className = "hint";
-    info.textContent = `Total: ${bytes(total)} • Files: ${files.length}`;
-    actionsEl.append(clr, info);
-  }
-
-  input.addEventListener('change', (e)=>{
-    const picked = Array.from(e.target.files||[]);
-    if (!picked.length) return;
-
-    // Merge with existing (additive + de-dupe)
-    const existing = (S.uploads.files||[]);
-    const map = new Map(existing.map(f=> [keyOf(f), f]));
-    picked.forEach(f=> map.set(keyOf(f), f));
-    const merged = Array.from(map.values());
-
-    // Enforce count & total size
-    if (merged.length > MAX_FILES){
-      warnEl.textContent = `You can attach up to ${MAX_FILES} files. Extra files were ignored.`;
-    }
-    const trimmed = merged.slice(0, MAX_FILES);
-    const totalBytes = trimmed.reduce((a,f)=>a+(f.size||0),0);
-    if (totalBytes > MAX_TOTAL_BYTES){
-      warnEl.textContent = `Total size ${bytes(totalBytes)} exceeds the limit (${bytes(MAX_TOTAL_BYTES)}). Please remove some files.`;
-      // do not accept this pick; keep previous
-      input.value = "";
-      repaint();
-      return;
-    }
-    S.uploads.files = trimmed;
-    save();
-    input.value = ""; // allow re-select same file names later
-    repaint();
-  });
-
-  // First paint
-  if (!Array.isArray(S.uploads.files)) S.uploads.files = [];
-  repaint();
-}
-
+        const box = document.createElement('div');
+        box.className = "drop";
+        box.innerHTML = `
+          <p>Attach files (up to ~10). This is optional — you can continue without uploads.</p>
+          <input id="fileInput" type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic,.rtf,.txt,.xlsx,.xls" />
+          <label for="fileInput">Choose files</label>
+          <div id="fileList" class="hint" style="margin-top:6px"></div>
+        `;
+        m.append(box);
+        box.querySelector("#fileInput").addEventListener("change", (e)=>{
+          const files = Array.from(e.target.files||[]);
+          S.uploads.files = files;
+          const names = files.map(f=> f.name + (f.size?` (${Math.round(f.size/1024)} KB)`:"")).join(" • ");
+          box.querySelector("#fileList").textContent = files.length ? names : "No files selected";
+          save();
+        });
+      }
+    },
 
     /* 15 */{
       key:"review",
