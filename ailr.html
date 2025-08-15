@@ -1101,48 +1101,92 @@
 
   /* ====== Submit: reliable Formspree FormData with files ====== */
   async function sendToFormspree(){
-  // Build a concise “email-friendly” summary for the message body
-  const safe = (v)=> (v==null || v===undefined || v==="") ? "—" : String(v);
-  const summaryObj = buildPayload(true); // your existing function (full JSON)
-  const quickSummary = [
-    `Caller: ${safe(S.caller.role)} • Consent: ${safe(S.caller.consent)}`,
-    `Participant: ${safe(S.participant.legal_name)} (${safe(S.participant.preferred_name)})`,
-    `DOB: ${safe(S.participant.dob)} • NDIS: ${safe(S.participant.ndis_number)}`,
-    `Contact: ${safe(S.contacts.email)} / ${safe(S.contacts.phone)}`,
-    `Supports: ${mapTypes(S.supports.types)} • Hours/wk: ${safe(S.schedule.hours_per_week)} • Urgency: ${safe(S.schedule.urgency)}`,
-    `Risk rating: ${safe(S.risks.overall_rating)}`,
-  ].join("\n");
+  // ---- build a concise, email-friendly summary (like contact.html) ----
+  const quick = buildQuickSummary();
 
+  // ---- always build FormData (works with and without files) ----
   const fd = new FormData();
-
-  // Required/basic fields for Formspree email
   fd.append("_subject", "HD HeeD — AILR onboarding submission");
   fd.append("name",     S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
   fd.append("email",    S.submitter.email || S.contacts.email || "");
   fd.append("_replyto", S.submitter.email || S.contacts.email || "");
   fd.append("phone",    S.submitter.phone || S.contacts.phone || "");
-  fd.append("message",  quickSummary);
+  fd.append("message",  quick);
 
-  // Full JSON payload, so you have everything in the Formspree dashboard
-  fd.append("summary", JSON.stringify(summaryObj));
+  // keep the full JSON for your Formspree dashboard—but keep it compact
+  const summary = buildPayload(true);
+  try {
+    // Trim huge sections that can tip size filters
+    delete summary.notes;
+    if (summary.uploads && summary.uploads.length > 25) summary.uploads = summary.uploads.slice(0,25);
+  } catch {}
+  fd.append("summary", JSON.stringify(summary));
 
-  // Attach files if provided
-  (S.uploads.files || []).forEach((f, i)=> fd.append(`file${i+1}`, f, f.name));
+  // attach files if any
+  (S.uploads.files || []).forEach((f,i)=> fd.append(`file${i+1}`, f, f.name));
 
-  // Send (ALWAYS multipart/form-data)
-  const res = await fetch(FS_ENDPOINT, {
-    method: "POST",
-    body: fd,
-    headers: { "Accept": "application/json" }
-  });
+  // ---- try AJAX first (same pattern as contact.html) ----
+  try {
+    const res = await fetch(FS_ENDPOINT, {
+      method: "POST",
+      body: fd,
+      headers: { "Accept":"application/json" }
+    });
+    let data = {};
+    try { data = await res.json(); } catch {}
+    console.log("Formspree AILR response:", res.status, data);
 
-  let data = {};
-  try { data = await res.json(); } catch {}
-  console.log("Formspree response:", res.status, data);
-
-  if (!res.ok) {
-    throw new Error(data?.errors?.[0]?.message || "Formspree error");
+    if (!res.ok) {
+      // if AJAX fails (CORS/filter/rate), fall back to classic form post
+      throw new Error(data?.errors?.[0]?.message || `Formspree error (${res.status})`);
+    }
+    return; // success
+  } catch (e) {
+    console.warn("AILR fetch failed, falling back to classic form submit:", e?.message || e);
+    // Classic form submit will not include files (browser security won’t let us programmatically set file inputs)
+    // but it WILL deliver the core message instantly like your contact page.
+    submitViaClassicForm(quick, summary);
   }
+}
+
+// === helpers ===
+function buildQuickSummary(){
+  const safe = (v)=> (v==null || v===undefined || v==="") ? "—" : String(v);
+  return [
+    `Caller: ${safe(S.caller.role)} • Consent: ${safe(S.caller.consent)}`,
+    `Participant: ${safe(S.participant.legal_name)} (${safe(S.participant.preferred_name)})`,
+    `DOB: ${safe(S.participant.dob)} • NDIS: ${safe(S.participant.ndis_number)}`,
+    `Contact: ${safe(S.contacts.email)} / ${safe(S.contacts.phone)}`,
+    `Supports: ${(S.supports && S.supports.types) ? (Array.isArray(S.supports.types) ? S.supports.types.length : S.supports.types) : "—"} • Hours/wk: ${safe(S.schedule.hours_per_week)} • Urgency: ${safe(S.schedule.urgency)}`,
+    `Risk rating: ${safe(S.risks.overall_rating)}`
+  ].join("\n");
+}
+
+function submitViaClassicForm(quickSummary, summaryJSON){
+  // Build a hidden, one-shot <form> that posts like contact.html (multipart/form-data)
+  const form = document.createElement("form");
+  form.action = FS_ENDPOINT;
+  form.method = "POST";
+  form.enctype = "multipart/form-data";
+  form.style.display = "none";
+
+  const add = (name, value) => {
+    const i = document.createElement("input");
+    i.type = "hidden"; i.name = name; i.value = value;
+    form.appendChild(i);
+  };
+
+  add("_subject", "HD HeeD — AILR onboarding submission (fallback)");
+  add("name",     S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
+  add("email",    S.submitter.email || S.contacts.email || "");
+  add("_replyto", S.submitter.email || S.contacts.email || "");
+  add("phone",    S.submitter.phone || S.contacts.phone || "");
+  add("message",  quickSummary);
+  try { add("summary", JSON.stringify(summaryJSON)); } catch {}
+
+  document.body.appendChild(form);
+  form.submit();  // Browser navigates to Formspree "Thank you" page if configured
+  // Note: Files cannot be appended here due to browser security (same as every site).
 }
 
 
