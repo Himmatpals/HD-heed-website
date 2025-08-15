@@ -1101,46 +1101,47 @@
 
   /* ====== Submit: reliable Formspree FormData with files ====== */
   async function sendToFormspree(){
-  const hasFiles = (S.uploads.files||[]).length > 0;
+  // Build a concise “email-friendly” summary for the message body
+  const safe = (v)=> (v==null || v===undefined || v==="") ? "—" : String(v);
+  const summaryObj = buildPayload(true); // your existing function (full JSON)
+  const quickSummary = [
+    `Caller: ${safe(S.caller.role)} • Consent: ${safe(S.caller.consent)}`,
+    `Participant: ${safe(S.participant.legal_name)} (${safe(S.participant.preferred_name)})`,
+    `DOB: ${safe(S.participant.dob)} • NDIS: ${safe(S.participant.ndis_number)}`,
+    `Contact: ${safe(S.contacts.email)} / ${safe(S.contacts.phone)}`,
+    `Supports: ${mapTypes(S.supports.types)} • Hours/wk: ${safe(S.schedule.hours_per_week)} • Urgency: ${safe(S.schedule.urgency)}`,
+    `Risk rating: ${safe(S.risks.overall_rating)}`,
+  ].join("\n");
 
-  if (hasFiles){
-    const fd = new FormData();
-    fd.append("_subject", "HD HeeD — AILR onboarding submission");
-    // Make sure Formspree gets contact fields it expects
-    fd.append("name",    S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
-    fd.append("email",   S.submitter.email || S.contacts.email || "");
-    fd.append("_replyto",S.submitter.email || S.contacts.email || "");
-    fd.append("phone",   S.submitter.phone || S.contacts.phone || "");
-    fd.append("message", "AILR submission summary attached (see 'summary') plus any files.");
-    // Full JSON summary for your records
-    fd.append("summary", JSON.stringify(buildPayload(true)));
-    // Attach files
-    (S.uploads.files||[]).forEach((f,idx)=> fd.append("file"+(idx+1), f, f.name));
+  const fd = new FormData();
 
-    const r = await fetch(FS_ENDPOINT, {
-      method: "POST",
-      body: fd,
-      headers: { "Accept": "application/json" }
-    });
-    if (!r.ok) throw new Error("Network / server error");
-    return;
-  } else {
-    const payload = buildPayload(true);
-    // Include contact fields so replies route like your contact page
-    payload._subject = "HD HeeD — AILR onboarding submission";
-    payload.name     = S.submitter.name || S.participant.legal_name || "HD HeeD AILR";
-    payload.email    = S.submitter.email || S.contacts.email || "";
-    payload._replyto = payload.email;
-    payload.phone    = S.submitter.phone || S.contacts.phone || "";
-    payload.message  = "AILR submission summary in this JSON payload.";
+  // Required/basic fields for Formspree email
+  fd.append("_subject", "HD HeeD — AILR onboarding submission");
+  fd.append("name",     S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
+  fd.append("email",    S.submitter.email || S.contacts.email || "");
+  fd.append("_replyto", S.submitter.email || S.contacts.email || "");
+  fd.append("phone",    S.submitter.phone || S.contacts.phone || "");
+  fd.append("message",  quickSummary);
 
-    const r = await fetch(FS_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type":"application/json", "Accept":"application/json" },
-      body: JSON.stringify(payload)
-    });
-    if (!r.ok) throw new Error("Network / server error");
-    return;
+  // Full JSON payload, so you have everything in the Formspree dashboard
+  fd.append("summary", JSON.stringify(summaryObj));
+
+  // Attach files if provided
+  (S.uploads.files || []).forEach((f, i)=> fd.append(`file${i+1}`, f, f.name));
+
+  // Send (ALWAYS multipart/form-data)
+  const res = await fetch(FS_ENDPOINT, {
+    method: "POST",
+    body: fd,
+    headers: { "Accept": "application/json" }
+  });
+
+  let data = {};
+  try { data = await res.json(); } catch {}
+  console.log("Formspree response:", res.status, data);
+
+  if (!res.ok) {
+    throw new Error(data?.errors?.[0]?.message || "Formspree error");
   }
 }
 
