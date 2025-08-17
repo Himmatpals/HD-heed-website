@@ -1098,43 +1098,86 @@
   }
 
   /* ====== Submit: reliable Formspree FormData with files ====== */
-  async function sendToFormspree(){
+  async function submitOnline(e){
+  e?.preventDefault?.();
+
+  const btn = $("#submitOnline");
+  if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
+
+  try {
     const fd = new FormData();
-    fd.append("name", S.submitter.name || S.participant.legal_name || "HD HeeD AILR");
-    fd.append("email", S.submitter.email || S.contacts.email || "");
-    fd.append("phone", S.submitter.phone || S.contacts.phone || "");
-    fd.append("_subject", "HD HeeD — AILR onboarding submission");
-    fd.append("message", "AILR submission attached as JSON summary (and files if provided).");
-    fd.append("summary", JSON.stringify(buildPayload(true)));
-    (S.uploads.files||[]).forEach((f,idx)=> fd.append("file"+(idx+1), f, f.name));
+    // subject + honeypot (same fields you had)
+    fd.append("_subject", "New NDIS Referral – " + (state.participant_fname||"") + " " + (state.participant_lname||""));
+    fd.append("_gotcha", ""); // spam trap (blank)
 
-    const r = await fetch(FS_ENDPOINT, { method:"POST", body: fd, headers:{ "Accept":"application/json" }});
-    if (!r.ok) throw new Error("Network / server error");
-  }
+    // add all your original fields
+    const names=[
+      "consent","referrer_name","relationship","phone","mobile","email",
+      "participant_fname","participant_lname","title","dob","ndis_number","gender","marital_status",
+      "street","suburb","city","postcode","home_phone","participant_mobile","participant_email",
+      "language","interpreter","interpreter_type",
+      "carer_fname","carer_lname","carer_relationship","carer_street","carer_suburb","carer_city","carer_postcode","carer_home","carer_mobile","carer_email","custody",
+      "key_area",
+      "goal1","goal1_service","goal1_category",
+      "goal2","goal2_service","goal2_category",
+      "goal3","goal3_service","goal3_category",
+      "goal4","goal4_service","goal4_category",
+      "current_services","previous_services","funding_area",
+      "plan_managed","postcode_lookup","referral_consent"
+    ];
+    names.forEach(n => fd.append(n, state[n] ?? ""));
 
-  function buildPayload(includeNotes){
-    return {
-      _subject:"HD HeeD — AILR onboarding submission",
-      source:"ailr-v16",
-      caller:S.caller,
-      participant:S.participant,
-      contacts:S.contacts,
-      comms:S.comms,
-      living:S.living,
-      clinical:S.clinical,
-      medications:S.medications,
-      risks:S.risks,
-      bsp:S.bsp,
-      supports:S.supports,
-      schedule:S.schedule,
-      policy_ack:S.policy_ack,
-      emergency_advocacy:S.emergency_advocacy,
-      uploads:(S.uploads.files||[]).map(f=>({name:f.name,size:f.size,type:f.type})),
-      submitter:S.submitter,
-      notes: includeNotes ? S.notes : [],
-      timestamp:new Date().toISOString()
-    };
+    // human-readable summary
+    fd.append("summary", buildSummary());
+
+    // attach up to 5 files (same as your UI)
+    const fileInput = document.querySelector('#filesInput');
+    if (fileInput && fileInput.files) {
+      Array.from(fileInput.files).slice(0,5).forEach((f, idx) => {
+        fd.append("file"+idx, f, f.name);
+      });
+    }
+
+    // send WITHOUT leaving the page
+    const r = await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      body: fd,
+      headers: { "Accept": "application/json" }
+    });
+
+    // nice Formspree error messages (eg. “email should be an email”)
+    if (!r.ok) {
+      let msg = "Couldn't send right now.";
+      try {
+        const j = await r.json();
+        if (j && Array.isArray(j.errors) && j.errors.length) {
+          msg = j.errors.map(e => e.message).join("\n");
+        }
+      } catch {}
+      throw new Error(msg);
+    }
+
+    // success — clear draft and show in-app thank-you
+    localStorage.removeItem(AUTOSAVE_KEY);
+    $("#steps").style.display = "none";
+    $("#bar").style.width = "100%";
+    const pane = $("#pane");
+    pane.innerHTML = `
+      <div class="block">
+        <h2>Thank you for your submission</h2>
+        <p class="muted">We’ve received your referral and will be in touch soon.</p>
+        <div class="btn-row">
+          <button class="btn ghost" id="new">Start a new referral</button>
+        </div>
+      </div>`;
+    $("#new", pane).onclick = () => location.reload();
+
+  } catch (err) {
+    alert(err.message || "Couldn't send right now. Please try again.");
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "Submit online"; }
   }
+}
 
   function openPrintableSummary(){
     const p = buildPayload(true);
