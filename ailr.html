@@ -1178,6 +1178,40 @@
     if (btn) { btn.disabled = false; btn.textContent = "Submit online"; }
   }
 }
+<script>
+// … keep your code …
+
+async function sendToFormspree(){
+  const fd = new FormData();
+
+  // Subject + basic contact
+  fd.append("_subject", "HD HeeD — AILR onboarding submission");
+  fd.append("name",  S.submitter.name  || S.participant.legal_name || "HD HeeD AILR");
+  fd.append("email", S.submitter.email || S.contacts.email || "");
+  fd.append("phone", S.submitter.phone || S.contacts.phone || "");
+  fd.append("message", "AILR submission attached as JSON summary.");
+
+  // JSON summary of the current state (no files since uploads are disabled)
+  fd.append("summary", JSON.stringify({ ...S, timestamp: new Date().toISOString() }));
+
+  const r = await fetch(FS_ENDPOINT, {  // use your existing constant
+    method: "POST",
+    body: fd,
+    headers: { "Accept": "application/json" }
+  });
+
+  if (!r.ok) {
+    let msg = "Network / server error";
+    try {
+      const j = await r.json();
+      if (Array.isArray(j.errors) && j.errors.length) {
+        msg = j.errors.map(e => e.message).join("\n");
+      }
+    } catch {}
+    throw new Error(msg);
+  }
+}
+</script>
 
   function openPrintableSummary(){
     const p = buildPayload(true);
