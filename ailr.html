@@ -10,7 +10,6 @@
 
 <style>
   :root{
-    /* ELLA tokens reused for visual consistency */
     --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153;
     --al-text:#e8edff; --al-accent:#ffc107; --al-ok:#22c55e; --al-warn:#f59e0b; --al-danger:#ef4444;
   }
@@ -23,7 +22,6 @@
   a{color:#9ec1ff; text-decoration:none}
   img{max-width:100%; height:auto; display:block}
 
-  /* Page shell */
   header{
     position:sticky; top:0; z-index:50; background:#0b1226;
     border-bottom:1px solid var(--al-line);
@@ -37,7 +35,6 @@
   .brand .name{font-weight:900}
   .brand .tag{font-size:12px;color:#b6c8ff}
 
-  /* Hero */
   .hero{ max-width:1120px; margin:14px auto 0; padding:16px; }
   .hero .card{
     background:linear-gradient(180deg,#10172a,#0c1326);
@@ -50,14 +47,12 @@
   .pill{border:1px solid var(--al-line); background:#0f1937; border-radius:999px; padding:6px 10px; color:#cfe0ff; font-size:12px}
   .notice{font-size:13px; color:#99adff}
 
-  /* Wizard layout */
   .wrap{
     max-width:1120px; margin:12px auto 24px; padding:0 16px; display:grid; gap:14px;
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr;
   }
   @media (min-width:980px){ .wrap{grid-template-columns: 260px 1fr;} }
 
-  /* Portrait column */
   .portrait{ position:sticky; top:88px; align-self:start; display:none; }
   @media (min-width:980px){ .portrait{ display:block } }
   .portrait .box{
@@ -69,7 +64,6 @@
   .legend{margin-top:10px; display:grid; gap:6px; font-size:13px; color:#b6c8ff}
   .legend b{color:#ffe28f}
 
-  /* Step card */
   .stage{
     border:1px solid var(--al-line); border-radius:18px; padding:16px;
     background:linear-gradient(180deg,#10172a,#0c1326);
@@ -112,7 +106,6 @@
   .btn.warn{background:#173155; color:#ffd95c; border:1px solid #334c85}
   .hint{font-size:12px; color:#9fb4ff}
 
-  /* Review table */
   .review{display:grid; gap:10px}
   details.card{ border:1px solid var(--al-line); background:#0f1731; border-radius:12px; padding:10px }
   summary{cursor:pointer; font-weight:900}
@@ -121,22 +114,17 @@
   .kv div b{min-width:210px; color:#ffe28f; font-weight:800}
   @media (max-width:520px){ .kv div{flex-direction:column} .kv div b{min-width:unset} }
 
-  /* Checks alignment */
   .ck-list{ list-style:none; padding:0; margin:0; display:grid; gap:8px }
   .ck-row{ display:flex; align-items:center; gap:10px; }
   .ck-row input[type="checkbox"]{ width:18px; height:18px; }
 
-  /* Dropzone */
-  .drop{
-    border:2px dashed #2a3b68; border-radius:12px; padding:12px; text-align:center; color:#cfe0ff
-  }
+  .drop{ border:2px dashed #2a3b68; border-radius:12px; padding:12px; text-align:center; color:#cfe0ff }
   .drop input{display:none}
   .drop label{display:inline-block; padding:10px 12px; border-radius:10px; border:1px solid var(--al-line); background:#121a3a; cursor:pointer; font-weight:800}
 
   .hide{display:none}
   .ok{color:var(--al-ok)} .warntext{color:var(--al-warn)} .danger{color:var(--al-danger)}
 
-  /* Modal viewer */
   .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.6); z-index:1000;}
   .modal.open{display:flex}
   .modal .panel{
@@ -179,7 +167,6 @@
 </section>
 
 <div class="wrap" id="app">
-  <!-- Portrait column -->
   <aside class="portrait">
     <div class="box">
       <img id="portrait" src="images/ella/ella-default.png" alt="Assistant portrait">
@@ -190,7 +177,6 @@
     </div>
   </aside>
 
-  <!-- Stage / Wizard -->
   <main class="stage" role="region" aria-live="polite">
     <div class="head">
       <span id="stepTxt" class="step">Step 1/99</span>
@@ -200,7 +186,7 @@
     <div id="q" class="q">…</div>
     <p id="sub" class="sub"></p>
 
-    <div id="opts" class="opts"><!-- dynamic --></div>
+    <div id="opts" class="opts"></div>
 
     <div class="foot">
       <div class="hint" id="saveHint">Draft saved</div>
@@ -213,7 +199,6 @@
   </main>
 </div>
 
-<!-- Modal viewer -->
 <div id="docModal" class="modal" aria-hidden="true">
   <div class="panel">
     <div class="head">
@@ -228,18 +213,22 @@
 </div>
 
 <script>
-(function(){
+window.addEventListener('DOMContentLoaded', function(){
+
   /* ====== Config ====== */
-  const FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn"; // your Formspree endpoint
-  const STORAGE_KEY = "hdheed_ailr_v16"; // local draft key
+  var FS_ENDPOINT = "https://formspree.io/f/xvgrkkjn";
+  var STORAGE_KEY = "hdheed_ailr_v16";
 
-  /* tiny helpers (also avoid leftover reference errors) */
-  const $ = (s,r=document)=>r.querySelector(s);
-  const FORMSPREE_ENDPOINT = FS_ENDPOINT;
-  const AUTOSAVE_KEY = STORAGE_KEY;
+  /* ====== Safe helpers ====== */
+  function $(s,r){ return (r||document).querySelector(s); }
+  function setSaveHint(t){ var el=$("#saveHint"); if(el) el.textContent=t; }
+  function cloneSafe(obj){
+    try{ if (typeof structuredClone==="function") return structuredClone(obj); }catch(e){}
+    try{ return JSON.parse(JSON.stringify(obj)); }catch(e){ return obj; }
+  }
 
-  /* Portrait images */
-  const AILR_IMAGES = {
+  /* ====== Portrait images ====== */
+  var AILR_IMAGES = {
     intro: "images/ella/ella-default.png",
     caller: "images/ella/ella-caller.png",
     participant: "images/ella/ella-service.png",
@@ -258,9 +247,13 @@
     review: "images/ella/ella-summary.png",
     submit: "images/ella/ella-summary.png"
   };
+  function setPortrait(key){
+    var p = $("#portrait");
+    if (p){ p.src = AILR_IMAGES[key] || AILR_IMAGES.intro; p.alt = "Assistant — " + (key||""); }
+  }
 
   /* ====== State ====== */
-  let S = {
+  var S = {
     i: 0,
     caller: { role:null, name:null, relationship:null, consent:null },
 
@@ -327,208 +320,143 @@
     notes:[]
   };
 
-  // Try restore from localStorage
+  /* Restore draft (safe) */
   try{
-    const prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
-    if (prev && typeof prev === "object") Object.assign(S, prev);
-  }catch{}
+    var prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if (prev && typeof prev==="object") Object.assign(S, prev);
+  }catch(e){}
 
-  const save = ()=>{ try{
-    const clone = structuredClone(S);
-    clone.uploads = { files: [] }; // do not persist file objects
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
-    setSaveHint("Draft saved");
-  }catch{} };
+  function save(){
+    try{
+      var clone = cloneSafe(S);
+      if (clone.uploads) clone.uploads = { files: [] };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
+      setSaveHint("Draft saved");
+    }catch(e){}
+  }
 
   /* ====== DOM refs ====== */
-  const qEl = document.getElementById("q");
-  const subEl = document.getElementById("sub");
-  const optsEl = document.getElementById("opts");
-  const stepTxt = document.getElementById("stepTxt");
-  const barEl = document.getElementById("bar");
-  const backBtn = document.getElementById("backBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  const saveExitBtn = document.getElementById("saveExitBtn");
-  const portrait = document.getElementById("portrait");
-  const saveHint = document.getElementById("saveHint");
+  var qEl = document.getElementById("q");
+  var subEl = document.getElementById("sub");
+  var optsEl = document.getElementById("opts");
+  var stepTxt = document.getElementById("stepTxt");
+  var barEl = document.getElementById("bar");
+  var backBtn = document.getElementById("backBtn");
+  var nextBtn = document.getElementById("nextBtn");
+  var saveExitBtn = document.getElementById("saveExitBtn");
 
-  const docModal = document.getElementById('docModal');
-  const docTitle = document.getElementById('docTitle');
-  const docViewer = document.getElementById('docViewer');
-  const docDownload = document.getElementById('docDownload');
-  const docClose = document.getElementById('docClose');
-
-  function openDoc(title, href){
-    docTitle.textContent = title;
-    docViewer.src = href;
-    docDownload.href = href;
-    docModal.classList.add('open');
-    docModal.setAttribute('aria-hidden','false');
-  }
-  function closeDoc(){
-    docModal.classList.remove('open');
-    docModal.setAttribute('aria-hidden','true');
-    docViewer.src = "";
-  }
-  docClose.addEventListener('click', closeDoc);
-  docModal.addEventListener('click', (e)=>{ if (e.target===docModal) closeDoc(); });
-
-  function setSaveHint(t){ saveHint.textContent = t; }
-  function setPortrait(key){
-    portrait.src = AILR_IMAGES[key] || AILR_IMAGES.intro;
-    portrait.alt = "Assistant — " + (key||"");
-  }
-
-  /* ====== Steps ====== */
-  const Steps = [
-    /* 0 */{
-      key:"intro",
-      title:"Welcome — let’s begin",
-      sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
-      build(m){
-        m.append(radioChips("Who is completing this form?", S.caller, "role", [
+  /* ====== Step builders ====== */
+  var Steps = [
+    { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
+      build:function(m){
+        m.appendChild(radioChips("Who is completing this form?", S.caller, "role", [
           ["I’m the participant","Participant"],
           ["Family / Carer","Carer"],
           ["Support Coordinator","Support Coordinator"],
           ["Health Professional","Health Professional"],
           ["Prefer not to say","Prefer not to say"]
         ]));
-        m.append(row("two",[ input("Your name (optional)", S.caller, "name"), input("Relationship (if any)", S.caller, "relationship") ]));
+        m.appendChild(row("two",[ input("Your name (optional)", S.caller, "name"), input("Relationship (if any)", S.caller, "relationship") ]));
       }
     },
 
-    /* 1 */{
-      key:"caller",
-      title:"Consent to proceed",
-      sub:"We require verbal consent to collect details for onboarding.",
-      build(m){
-        m.append(radioChips("Do you give verbal consent to collect details and, if needed, liaise with your Support Coordinator/Plan Manager?", S.caller, "consent", [
-          ["Yes, I consent","Yes"],
-          ["Not yet","Not yet"],
-          ["No","No"],
-          ["Not sure","Not sure"]
+    { key:"caller", title:"Consent to proceed", sub:"We require verbal consent to collect details for onboarding.",
+      build:function(m){
+        m.appendChild(radioChips("Do you give verbal consent to collect details and, if needed, liaise with your Support Coordinator/Plan Manager?", S.caller, "consent", [
+          ["Yes, I consent","Yes"],["Not yet","Not yet"],["No","No"],["Not sure","Not sure"]
         ]));
-        const warn = document.createElement('div');
-        warn.className = "hint";
+        var warn = document.createElement('div'); warn.className="hint";
         warn.innerHTML = "Note: If you select <b>Not yet</b> or <b>No</b>, you won’t be able to continue.";
-        m.append(warn);
+        m.appendChild(warn);
       }
     },
 
-    /* 2 */{
-      key:"participant",
-      title:"Participant — legal details",
-      sub:"Legal name is required for service setup later; preferred name helps our team address the participant correctly.",
-      build(m){
-        m.append(row("two",[ input("Legal name", S.participant, "legal_name"), input("Preferred name (optional)", S.participant, "preferred_name") ]));
-        m.append(row("three",[ input("Pronouns (optional)", S.participant, "pronouns"), input("Date of birth", S.participant, "dob","date"), input("NDIS number (optional)", S.participant, "ndis_number") ]));
-        m.append(divider("Address"));
-        m.append(row("two",[ input("Address line 1", S.participant.address, "line1"), input("Address line 2 (optional)", S.participant.address, "line2") ]));
-        m.append(row("three",[ input("Suburb", S.participant.address, "suburb"), input("Postcode", S.participant.address, "postcode"), input("State", S.participant.address, "state") ]));
-        m.append(divider("Plan management"));
-        m.append(radioChips("Plan management", S.participant, "plan_mgmt", [
-          ["NDIA-managed","NDIA-managed"],
-          ["Plan-managed","Plan-managed"],
-          ["Self-managed","Self-managed"],
-          ["Not sure","Not sure"],
-          ["Prefer not to say","Prefer not to say"],
+    { key:"participant", title:"Participant — legal details", sub:"Legal name is required for service setup later; preferred name helps our team address the participant correctly.",
+      build:function(m){
+        m.appendChild(row("two",[ input("Legal name", S.participant, "legal_name"), input("Preferred name (optional)", S.participant, "preferred_name") ]));
+        m.appendChild(row("three",[ input("Pronouns (optional)", S.participant, "pronouns"), input("Date of birth", S.participant, "dob","date"), input("NDIS number (optional)", S.participant, "ndis_number") ]));
+        m.appendChild(divider("Address"));
+        m.appendChild(row("two",[ input("Address line 1", S.participant.address, "line1"), input("Address line 2 (optional)", S.participant.address, "line2") ]));
+        m.appendChild(row("three",[ input("Suburb", S.participant.address, "suburb"), input("Postcode", S.participant.address, "postcode"), input("State", S.participant.address, "state") ]));
+        m.appendChild(divider("Plan management"));
+        m.appendChild(radioChips("Plan management", S.participant, "plan_mgmt", [
+          ["NDIA-managed","NDIA-managed"],["Plan-managed","Plan-managed"],["Self-managed","Self-managed"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"],
         ]));
-        m.append(typeBox("Plan manager (org & contact; optional)", "Org & name (if applicable)", (v)=>{ S.participant.plan_manager.org = v; save(); }));
-        m.append(row("three",[ input("Plan manager contact name", S.participant.plan_manager, "contact"), input("Plan manager email", S.participant.plan_manager, "email","email"), input("Plan manager phone", S.participant.plan_manager, "phone","tel") ]));
-        m.append(row("two",[ input("Plan start date", S.participant.plan_dates, "start","date"), input("Plan end date", S.participant.plan_dates, "end","date") ]));
+        m.appendChild(typeBox("Plan manager (org & contact; optional)", "Org & name (if applicable)", function(v){ S.participant.plan_manager.org=v; save(); }));
+        m.appendChild(row("three",[ input("Plan manager contact name", S.participant.plan_manager, "contact"), input("Plan manager email", S.participant.plan_manager, "email","email"), input("Plan manager phone", S.participant.plan_manager, "phone","tel") ]));
+        m.appendChild(row("two",[ input("Plan start date", S.participant.plan_dates, "start","date"), input("Plan end date", S.participant.plan_dates, "end","date") ]));
       }
     },
 
-    /* 3 */{
-      key:"contacts",
-      title:"Contacts — how we reach you",
-      sub:"Provide at least one method — email or phone is required at submission.",
-      build(m){
-        m.append(row("two",[ input("Participant email", S.contacts, "email","email"), input("Participant phone", S.contacts, "phone","tel") ]));
-        m.append(divider("Emergency contact"));
-        m.append(row("three",[ input("Name", S.contacts.emergency, "name"), input("Relationship", S.contacts.emergency, "relationship"), input("Phone", S.contacts.emergency, "phone","tel") ]));
-        m.append(divider("Support Coordinator (if any)"));
-        m.append(row("two",[ input("Name", S.contacts.support_coordinator, "name"), input("Organisation", S.contacts.support_coordinator, "org") ]));
-        m.append(row("two",[ input("Email", S.contacts.support_coordinator, "email","email"), input("Phone", S.contacts.support_coordinator, "phone","tel") ]));
-        m.append(divider("GP / Primary care"));
-        m.append(row("three",[ input("GP name", S.contacts.gp, "name"), input("Practice", S.contacts.gp, "practice"), input("Phone", S.contacts.gp, "phone","tel") ]));
-        m.append(input("GP email (optional)", S.contacts.gp, "email","email"));
+    { key:"contacts", title:"Contacts — how we reach you", sub:"Provide at least one method — email or phone is required at submission.",
+      build:function(m){
+        m.appendChild(row("two",[ input("Participant email", S.contacts, "email","email"), input("Participant phone", S.contacts, "phone","tel") ]));
+        m.appendChild(divider("Emergency contact"));
+        m.appendChild(row("three",[ input("Name", S.contacts.emergency, "name"), input("Relationship", S.contacts.emergency, "relationship"), input("Phone", S.contacts.emergency, "phone","tel") ]));
+        m.appendChild(divider("Support Coordinator (if any)"));
+        m.appendChild(row("two",[ input("Name", S.contacts.support_coordinator, "name"), input("Organisation", S.contacts.support_coordinator, "org") ]));
+        m.appendChild(row("two",[ input("Email", S.contacts.support_coordinator, "email","email"), input("Phone", S.contacts.support_coordinator, "phone","tel") ]));
+        m.appendChild(divider("GP / Primary care"));
+        m.appendChild(row("three",[ input("GP name", S.contacts.gp, "name"), input("Practice", S.contacts.gp, "practice"), input("Phone", S.contacts.gp, "phone","tel") ]));
+        m.appendChild(input("GP email (optional)", S.contacts.gp, "email","email"));
       }
     },
 
-    /* 4 */{
-      key:"comms",
-      title:"Communication & preferences",
-      sub:"Tell us what helps the participant feel comfortable and understood.",
-      build(m){
-        m.append(row("two",[ input("Primary language", S.comms, "primary_language"), input("Interpreter language (if needed)", S.comms, "interpreter_language") ]));
-        m.append(radioChips("Interpreter", S.comms, "interpreter", [
-          ["Interpreter required","Yes"],
-          ["Interpreter not required","No"],
-          ["Not sure","Not sure"],
-          ["Prefer not to say","Prefer not to say"]
+    { key:"comms", title:"Communication & preferences", sub:"Tell us what helps the participant feel comfortable and understood.",
+      build:function(m){
+        m.appendChild(row("two",[ input("Primary language", S.comms, "primary_language"), input("Interpreter language (if needed)", S.comms, "interpreter_language") ]));
+        m.appendChild(radioChips("Interpreter", S.comms, "interpreter", [
+          ["Interpreter required","Yes"],["Interpreter not required","No"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"]
         ]));
-        m.append(typeBox("Cultural / religious considerations (optional)", "Anything to respect (optional)", (v)=> { S.comms.cultural_considerations = v; save(); }));
-        m.append(row("two",[ select("Worker gender preference", S.comms.preferences, "worker_gender", ["No preference","Female","Male","Other / type below"]), input("Other preference (type if selected)", S.comms.preferences, "worker_gender_other") ]));
-        m.append(radioChips("Transport required?", S.comms.preferences, "transport_required", [ ["Yes","Yes"],["No","No"],["Not sure","Not sure"] ]));
+        m.appendChild(typeBox("Cultural / religious considerations (optional)", "Anything to respect (optional)", function(v){ S.comms.cultural_considerations=v; save(); }));
+        m.appendChild(row("two",[ select("Worker gender preference", S.comms.preferences, "worker_gender", ["No preference","Female","Male","Other / type below"]), input("Other preference (type if selected)", S.comms.preferences, "worker_gender_other") ]));
+        m.appendChild(radioChips("Transport required?", S.comms.preferences, "transport_required", [ ["Yes","Yes"],["No","No"],["Not sure","Not sure"] ]));
       }
     },
 
-    /* 5 */{
-      key:"living",
-      title:"Living situation & access",
-      sub:"This helps us plan safe, respectful visits.",
-      build(m){
-        m.append(select("Residence type", S.living, "residence_type", ["Private home","Unit/Apartment","Group home","Supported accommodation","Other","Prefer not to say"]));
-        m.append(input("Lives with (names or relationships)", S.living, "lives_with"));
-        m.append(input("Entry notes (e.g., gate, pets, parking)", S.living, "entry_notes"));
-        m.append(radioChips("Keysafe available?", S.living, "keysafe", [ ["Yes","Yes"],["No","No"],["Not sure","Not sure"] ]));
-        m.append(radioChips("Smoking on premises?", S.living, "smoking_on_premises", [ ["Yes","Yes"],["No","No"],["Prefer not to say","Prefer not to say"] ]));
-        m.append(typeBox("Any hazards we should know about?", "e.g., steep stairs, loose rugs, reactive pets", (v)=> { S.living.hazards = v; save(); }));
+    { key:"living", title:"Living situation & access", sub:"This helps us plan safe, respectful visits.",
+      build:function(m){
+        m.appendChild(select("Residence type", S.living, "residence_type", ["Private home","Unit/Apartment","Group home","Supported accommodation","Other","Prefer not to say"]));
+        m.appendChild(input("Lives with (names or relationships)", S.living, "lives_with"));
+        m.appendChild(input("Entry notes (e.g., gate, pets, parking)", S.living, "entry_notes"));
+        m.appendChild(radioChips("Keysafe available?", S.living, "keysafe", [ ["Yes","Yes"],["No","No"],["Not sure","Not sure"] ]));
+        m.appendChild(radioChips("Smoking on premises?", S.living, "smoking_on_premises", [ ["Yes","Yes"],["No","No"],["Prefer not to say","Prefer not to say"] ]));
+        m.appendChild(typeBox("Any hazards we should know about?", "e.g., steep stairs, loose rugs, reactive pets", function(v){ S.living.hazards=v; save(); }));
       }
     },
 
-    /* 6 */{
-      key:"clinical",
-      title:"Health & clinical summary",
-      sub:"Share as much as you’re comfortable with now; we can confirm details later. <b>Allergies is required</b> (write “No known allergies” if none).",
-      build(m){
-        m.append(typeBox("Primary diagnoses", "e.g., Autism Spectrum Disorder, MS", (v)=> { S.clinical.primary_diagnoses = v; save(); }));
-        m.append(typeBox("Other diagnoses (optional)", "Type here", (v)=> { S.clinical.other_diagnoses = v; save(); }));
-        m.append(input("Allergies (required — write “No known allergies” if none)", S.clinical, "allergies"));
-        m.append(row("two",[ select("Mobility", S.clinical, "mobility", ["Independent","With aid","Requires transfer","Bed-bound","Prefer not to say"]), input("Equipment / aids (optional)", S.clinical, "equipment") ]));
-        m.append(row("two",[ select("Continence", S.clinical, "continence", ["Independent","Needs prompting","Incontinent","Catheter / stoma","Prefer not to say"]), select("Cognition", S.clinical, "cognition", ["Clear","Mild impairment","Moderate","Severe","Prefer not to say"]) ]));
-        m.append(row("two",[ select("Pressure injury risk", S.clinical, "pressure_injury_risk", ["Low","Medium","High","Not sure"]), select("Falls risk", S.clinical, "falls_risk", ["Low","Medium","High","Not sure"]) ]));
-        m.append(row("three",[ radioChipsInline("Seizures?", S.clinical.seizures, "has", [ ["No",false],["Yes",true],["Not sure",null] ]), input("Seizure plan (if any)", S.clinical.seizures, "plan"), input("Frequency (if applicable)", S.clinical.seizures, "frequency") ]));
-        m.append(radioChipsInline("Stoma/ostomy care required?", S.clinical, "stoma_care", [ ["Yes",true],["No",false],["Not sure",null] ]));
-        m.append(input("Diet / swallowing notes (optional)", S.clinical, "diet_notes"));
+    { key:"clinical", title:"Health & clinical summary", sub:"Share as much as you’re comfortable with now; we can confirm details later. <b>Allergies is required</b> (write “No known allergies” if none).",
+      build:function(m){
+        m.appendChild(typeBox("Primary diagnoses", "e.g., Autism Spectrum Disorder, MS", function(v){ S.clinical.primary_diagnoses=v; save(); }));
+        m.appendChild(typeBox("Other diagnoses (optional)", "Type here", function(v){ S.clinical.other_diagnoses=v; save(); }));
+        m.appendChild(input("Allergies (required — write “No known allergies” if none)", S.clinical, "allergies"));
+        m.appendChild(row("two",[ select("Mobility", S.clinical, "mobility", ["Independent","With aid","Requires transfer","Bed-bound","Prefer not to say"]), input("Equipment / aids (optional)", S.clinical, "equipment") ]));
+        m.appendChild(row("two",[ select("Continence", S.clinical, "continence", ["Independent","Needs prompting","Incontinent","Catheter / stoma","Prefer not to say"]), select("Cognition", S.clinical, "cognition", ["Clear","Mild impairment","Moderate","Severe","Prefer not to say"]) ]));
+        m.appendChild(row("two",[ select("Pressure injury risk", S.clinical, "pressure_injury_risk", ["Low","Medium","High","Not sure"]), select("Falls risk", S.clinical, "falls_risk", ["Low","Medium","High","Not sure"]) ]));
+        m.appendChild(row("three",[ radioChipsInline("Seizures?", S.clinical.seizures, "has", [ ["No",false],["Yes",true],["Not sure",null] ]), input("Seizure plan (if any)", S.clinical.seizures, "plan"), input("Frequency (if applicable)", S.clinical.seizures, "frequency") ]));
+        m.appendChild(radioChipsInline("Stoma/ostomy care required?", S.clinical, "stoma_care", [ ["Yes",true],["No",false],["Not sure",null] ]));
+        m.appendChild(input("Diet / swallowing notes (optional)", S.clinical, "diet_notes"));
       }
     },
 
-    /* 7 */{
-      key:"medications",
-      title:"Medication management",
-      sub:"Tell us if medications are part of daily support.",
-      build(m){
-        m.append(radioChips("Participant has medications?", S.medications, "has_meds", [ ["Yes",true],["No",false],["Not sure",null] ]));
-        m.append(select("How are meds managed?", S.medications, "method", ["Self-administered","Prompting only","Staff administer","Family administers","Not sure"]));
-        m.append(row("two",[ radioChipsInline("Webster pack?", S.medications, "webster_pack", [["Yes",true],["No",false],["Not sure",null]]), input("Storage location (optional)", S.medications, "storage") ]));
-        m.append(row("two",[ radioChipsInline("Self-admin?", S.medications, "self_admin", [["Yes",true],["No",false],["Not sure",null]]), radioChipsInline("Staff admin?", S.medications, "staff_admin", [["Yes",true],["No",false],["Not sure",null]]) ]));
-        m.append(typeBox("Medication notes (optional)", "List regular and PRN meds if you like", (v)=> { S.medications.notes = v; save(); }));
+    { key:"medications", title:"Medication management", sub:"Tell us if medications are part of daily support.",
+      build:function(m){
+        m.appendChild(radioChips("Participant has medications?", S.medications, "has_meds", [ ["Yes",true],["No",false],["Not sure",null] ]));
+        m.appendChild(select("How are meds managed?", S.medications, "method", ["Self-administered","Prompting only","Staff administer","Family administers","Not sure"]));
+        m.appendChild(row("two",[ radioChipsInline("Webster pack?", S.medications, "webster_pack", [["Yes",true],["No",false],["Not sure",null]]), input("Storage location (optional)", S.medications, "storage") ]));
+        m.appendChild(row("two",[ radioChipsInline("Self-admin?", S.medications, "self_admin", [["Yes",true],["No",false],["Not sure",null]]), radioChipsInline("Staff admin?", S.medications, "staff_admin", [["Yes",true],["No",false],["Not sure",null]]) ]));
+        m.appendChild(typeBox("Medication notes (optional)", "List regular and PRN meds if you like", function(v){ S.medications.notes=v; save(); }));
       }
-    ),
+    },
 
-    /* 8 */{
-      key:"risks",
-      title:"Risk assessment — quick overview",
-      sub:"We’ll use this to plan safe, appropriate supports.",
-      build(m){
-        m.append(divider("Behavioural"));
-        m.append(radioChips("Behaviours of concern present?", S.risks.behavioural, "present", [ ["None","None"],["Present","Present"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"] ]));
-        m.append(typeBox("Behaviour notes (optional)", "Triggers / strategies / BSP provider", (v)=> { S.risks.behavioural.notes = v; save(); }));
+    { key:"risks", title:"Risk assessment — quick overview", sub:"We’ll use this to plan safe, appropriate supports.",
+      build:function(m){
+        m.appendChild(divider("Behavioural"));
+        m.appendChild(radioChips("Behaviours of concern present?", S.risks.behavioural, "present", [ ["None","None"],["Present","Present"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"] ]));
+        m.appendChild(typeBox("Behaviour notes (optional)", "Triggers / strategies / BSP provider", function(v){ S.risks.behavioural.notes=v; save(); }));
 
-        m.append(divider("Clinical"));
-        m.append(checks("Select applicable", S.risks.clinical, {
+        m.appendChild(divider("Clinical"));
+        m.appendChild(checks("Select applicable", S.risks.clinical, {
           wounds:"Wounds / dressings",
           diabetes:"Diabetes",
           tracheostomy:"Tracheostomy",
@@ -536,49 +464,43 @@
           mental_health:"Significant mental health needs",
           stoma_care:"Stoma care"
         }));
-        m.append(typeBox("Other clinical concerns (optional)", "Type here", (v)=> { S.risks.clinical.other = v; save(); }));
+        m.appendChild(typeBox("Other clinical concerns (optional)", "Type here", function(v){ S.risks.clinical.other=v; save(); }));
 
-        m.append(divider("Environmental"));
-        m.append(checks("Select applicable", S.risks.environmental, {
+        m.appendChild(divider("Environmental"));
+        m.appendChild(checks("Select applicable", S.risks.environmental, {
           animals:"Reactive animals",
           hoarding:"Hoarding / clutter",
           weapons:"Weapons on site"
         }));
-        m.append(typeBox("Other environmental concerns (optional)", "Type here", (v)=> { S.risks.environmental.other = v; save(); }));
+        m.appendChild(typeBox("Other environmental concerns (optional)", "Type here", function(v){ S.risks.environmental.other=v; save(); }));
 
-        m.append(divider("Home risk checklist (quick)"));
-        m.append(checks("Tick any present", S.risks.home_checklist, {
+        m.appendChild(divider("Home risk checklist (quick)"));
+        m.appendChild(checks("Tick any present", S.risks.home_checklist, {
           trip_hazards:"Trip hazards",
           smoke_alarms:"No working smoke alarms",
           lighting:"Poor lighting",
           bathroom_safety:"Bathroom lacks safety rails / mats"
         }));
-        m.append(input("Home risk notes (optional)", S.risks.home_checklist, "notes"));
+        m.appendChild(input("Home risk notes (optional)", S.risks.home_checklist, "notes"));
 
-        m.append(typeBox("Other risk notes (optional)", "Anything else we should consider", (v)=> { S.risks.other_notes = v; save(); }));
+        m.appendChild(typeBox("Other risk notes (optional)", "Anything else we should consider", function(v){ S.risks.other_notes=v; save(); }));
 
-        m.append(select("Overall risk rating (your view)", S.risks, "overall_rating", ["Low","Medium","High","Not sure"]));
+        m.appendChild(select("Overall risk rating (your view)", S.risks, "overall_rating", ["Low","Medium","High","Not sure"]));
       }
     },
 
-    /* 9 */{
-      key:"bsp",
-      title:"Behaviour Support Plan (if applicable)",
-      sub:"Always shown, only fill if required.",
-      build(m){
-        m.append(radioChips("BSP in place?", S.bsp, "has_bsp", [ ["Yes",true],["No",false],["Not sure",null] ]));
-        m.append(radioChipsInline("Restrictive practices involved?", S.bsp, "restrictive_practices", [ ["Yes",true],["No",false],["Not sure",null] ]));
-        m.append(row("two",[ input("BSP provider (if any)", S.bsp, "provider"), input("Notes (optional)", S.bsp, "notes") ]));
+    { key:"bsp", title:"Behaviour Support Plan (if applicable)", sub:"Always shown, only fill if required.",
+      build:function(m){
+        m.appendChild(radioChips("BSP in place?", S.bsp, "has_bsp", [ ["Yes",true],["No",false],["Not sure",null] ]));
+        m.appendChild(radioChipsInline("Restrictive practices involved?", S.bsp, "restrictive_practices", [ ["Yes",true],["No",false],["Not sure",null] ]));
+        m.appendChild(row("two",[ input("BSP provider (if any)", S.bsp, "provider"), input("Notes (optional)", S.bsp, "notes") ]));
       }
     },
 
-    /* 10 */{
-      key:"supports",
-      title:"Supports requested & goals",
-      sub:"Choose the support categories and share goals/outcomes.",
-      build(m){
-        m.append(divider("<b>Core</b> (select all that apply)"));
-        m.append(checks("Core supports", S.supports, {
+    { key:"supports", title:"Supports requested & goals", sub:"Choose the support categories and share goals/outcomes.",
+      build:function(m){
+        m.appendChild(divider("<b>Core</b> (select all that apply)"));
+        m.appendChild(checks("Core supports", S.supports, {
           daily_life:"Assistance with Daily Life",
           community:"Social & Community Participation",
           transport:"Transport",
@@ -586,10 +508,10 @@
           domestic:"Domestic assistance",
           respite:"Respite / carer relief"
         }, "core"));
-        m.append(typeBox("Other Core (optional)","Type any other core support", (v)=>{ S.supports.core_other=v; save(); }));
+        m.appendChild(typeBox("Other Core (optional)","Type any other core support", function(v){ S.supports.core_other=v; save(); }));
 
-        m.append(divider("<b>Capacity Building</b> (select all that apply)"));
-        m.append(checks("Capacity Building", S.supports, {
+        m.appendChild(divider("<b>Capacity Building</b> (select all that apply)"));
+        m.appendChild(checks("Capacity Building", S.supports, {
           improved_daily_living:"Improved Daily Living",
           increased_participation:"Increased Social & Community Participation",
           health_wellbeing:"Improved Health & Wellbeing",
@@ -600,262 +522,252 @@
           choice_control:"Improved Life Choices",
           support_coordination:"Support Coordination"
         }, "capacity"));
-        m.append(typeBox("Other Capacity Building (optional)","Type any other capacity building support", (v)=>{ S.supports.capacity_other=v; save(); }));
+        m.appendChild(typeBox("Other Capacity Building (optional)","Type any other capacity building support", function(v){ S.supports.capacity_other=v; save(); }));
 
-        m.append(typeBox("Goals (participant’s goals)", "Type goals or outcomes in the plan", (v)=> { S.supports.goals = v; save(); }));
-        m.append(typeBox("Preferred outcomes / focus areas", "What does success look like?", (v)=> { S.supports.outcomes = v; save(); }));
+        m.appendChild(typeBox("Goals (participant’s goals)", "Type goals or outcomes in the plan", function(v){ S.supports.goals=v; save(); }));
+        m.appendChild(typeBox("Preferred outcomes / focus areas", "What does success look like?", function(v){ S.supports.outcomes=v; save(); }));
       }
     },
 
-    /* 11 */{
-      key:"schedule",
-      title:"Schedule & urgency",
-      sub:"Tell us the visit windows that suit, and how soon you’d like to begin.",
-      build(m){
-        m.append(checks("Time windows", S.schedule, {
+    { key:"schedule", title:"Schedule & urgency", sub:"Tell us the visit windows that suit, and how soon you’d like to begin.",
+      build:function(m){
+        m.appendChild(checks("Time windows", S.schedule, {
           w1:"Weekday mornings (7–11am)",
           w2:"Weekday afternoons (12–4pm)",
           w3:"Evenings (5–9pm)",
           w4:"Weekends"
         }, "windows"));
-        m.append(checks("Days", S.schedule, {
-          d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun"
-        }, "days"));
-        m.append(row("two",[ input("Approx. hours per week", S.schedule, "hours_per_week","number"), select("Urgency", S.schedule, "urgency", ["Urgent (24–72h)","Soon (1–2 weeks)","Exploring options","Not sure"]) ]));
-        m.append(input("Start preference / date (optional)", S.schedule, "start_preference"));
+        m.appendChild(checks("Days", S.schedule, { d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun" }, "days"));
+        m.appendChild(row("two",[ input("Approx. hours per week", S.schedule, "hours_per_week","number"), select("Urgency", S.schedule, "urgency", ["Urgent (24–72h)","Soon (1–2 weeks)","Exploring options","Not sure"]) ]));
+        m.appendChild(input("Start preference / date (optional)", S.schedule, "start_preference"));
       }
     },
 
-    /* 12 */{
-      key:"policies",
-      title:"Handbook & Key Policies",
-      sub:"Please review each document below. You can view inline or download a copy.",
-      build(m){
-        m.append(policyCard("Client Handbook","docs/client-handbook.pdf","handbook"));
-        m.append(policyCard("Incident Management — Participant Information","docs/incident-management.pdf","incident"));
-        m.append(policyCard("Complaints & Feedback — Participant Information","docs/complaints-feedback.pdf","complaints"));
+    { key:"policies", title:"Handbook & Key Policies", sub:"Please review each document below. You can view inline or download a copy.",
+      build:function(m){
+        m.appendChild(policyCard("Client Handbook","docs/client-handbook.pdf","handbook"));
+        m.appendChild(policyCard("Incident Management — Participant Information","docs/incident-management.pdf","incident"));
+        m.appendChild(policyCard("Complaints & Feedback — Participant Information","docs/complaints-feedback.pdf","complaints"));
       }
     },
 
-    /* 13 */{
-      key:"consents",
-      title:"Acknowledgements & Emergency Advocacy",
-      sub:"Tick the acknowledgements after reviewing the documents. You can withdraw consent at any time.",
-      build(m){
-        m.append(checkAck("I acknowledge the Client Handbook", S.policy_ack, "handbook"));
-        m.append(checkAck("I understand the Incident Management process", S.policy_ack, "incident"));
-        m.append(checkAck("I have received Complaints & Feedback information", S.policy_ack, "complaints"));
+    { key:"consents", title:"Acknowledgements & Emergency Advocacy", sub:"Tick the acknowledgements after reviewing the documents. You can withdraw consent at any time.",
+      build:function(m){
+        m.appendChild(checkAck("I acknowledge the Client Handbook", S.policy_ack, "handbook"));
+        m.appendChild(checkAck("I understand the Incident Management process", S.policy_ack, "incident"));
+        m.appendChild(checkAck("I have received Complaints & Feedback information", S.policy_ack, "complaints"));
 
-        m.append(divider("Emergency advocacy (liaison)"));
-        m.append(radioChips("Do you consent to HD HeeD liaising as your advocate in emergencies (to coordinate safe care)?", S, "emergency_advocacy", [
+        m.appendChild(divider("Emergency advocacy (liaison)"));
+        m.appendChild(radioChips("Do you consent to HD HeeD liaising as your advocate in emergencies (to coordinate safe care)?", S, "emergency_advocacy", [
           ["Yes","Yes"],["No","No"],["Not sure","Not sure"]
         ]));
       }
     },
 
-    /* 14 */{
-      key:"uploads",
-      title:"Documents — please email them",
-      sub:"Please email all relevant documents to info@hdheed.com.au. You can proceed without attachments.",
-      build(m){
-        S.uploads.files = [];
-        save();
-        const box = document.createElement('div');
-        box.className = "inlinebox";
-        box.innerHTML = `
-          <div style="font-weight:800; margin-bottom:6px">Document uploads are disabled</div>
-          <p style="margin:0 0 6px">Please send all relevant documents (e.g., NDIS plan, ID, BSP, care plans, GP letters) to
-          <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>.</p>
-          <p class="hint" style="margin:0">You can continue the form without attachments.</p>
-        `;
-        m.append(box);
+    { key:"uploads", title:"Documents — please email them", sub:"Please email all relevant documents to info@hdheed.com.au. You can proceed without attachments.",
+      build:function(m){
+        S.uploads.files = []; save();
+        var box = document.createElement('div'); box.className="inlinebox";
+        box.innerHTML = '<div style="font-weight:800; margin-bottom:6px">Document uploads are disabled</div>\
+          <p style="margin:0 0 6px">Please send all relevant documents (e.g., NDIS plan, ID, BSP, care plans, GP letters) to \
+          <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>.</p>\
+          <p class="hint" style="margin:0">You can continue the form without attachments.</p>';
+        m.appendChild(box);
       }
     },
 
-    /* 15 */{
-      key:"review",
-      title:"Review your answers",
-      sub:"Check the sections below. You can go back to edit anything.",
-      build(m){ m.append(renderReview()); }
+    { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
+      build:function(m){ m.appendChild(renderReview()); }
     },
 
-    /* 16 */{
-      key:"submit",
-      title:"Submit your onboarding",
-      sub:"Provide a contact. At least an email or phone is required to submit.",
-      build(m){
-        m.append(row("two",[ input("Your name (submitter)", S.submitter, "name"), input("Email (required if no phone)", S.submitter, "email","email") ]));
-        m.append(input("Phone (required if no email)", S.submitter, "phone","tel"));
+    { key:"submit", title:"Submit your onboarding", sub:"Provide a contact. At least an email or phone is required to submit.",
+      build:function(m){
+        m.appendChild(row("two",[ input("Your name (submitter)", S.submitter, "name"), input("Email (required if no phone)", S.submitter, "email","email") ]));
+        m.appendChild(input("Phone (required if no email)", S.submitter, "phone","tel"));
 
-        const actions = document.createElement('div');
-        actions.style = "display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
-        const btnSend = button("Send now","primary", async ()=>{
-          if (!((S.submitter.email && S.submitter.email.trim()) || (S.submitter.phone && S.submitter.phone.trim()))){
+        var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
+        var btnSend = button("Send now","primary", function(){
+          var hasEmail = S.submitter.email && S.submitter.email.trim();
+          var hasPhone = S.submitter.phone && S.submitter.phone.trim();
+          if (!(hasEmail || hasPhone)){
             alert("Please provide at least an email or a phone number to submit.");
             return;
           }
-          try{
-            await sendToFormspree();
+          sendToFormspree().then(function(){
             alert("All done — we’ve received your onboarding. We’ll be in touch shortly.");
-          }catch(e){
-            alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e?.message||e));
-          }
+            try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+            var stage = document.querySelector("main.stage");
+            if (stage){
+              stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
+                <div class="q">Thank you for your submission</div>\
+                <p class="sub">We’ve received your referral and will be in touch soon.</p>\
+                <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
+            }
+          }).catch(function(e){
+            alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e && e.message ? e.message : e));
+          });
         });
-        const btnPdf = button("Print / Save summary as PDF","ghost", ()=>{ openPrintableSummary(); });
-        actions.append(btnSend, btnPdf);
-        m.append(actions);
-        const hint = document.createElement('div');
-        hint.className = "hint";
+        var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
+        actions.appendChild(btnSend); actions.appendChild(btnPdf);
+        m.appendChild(actions);
+        var hint = document.createElement('div'); hint.className="hint";
         hint.textContent = "We’ll contact you from info@hdheed.com.au or 02 8630 5500.";
-        m.append(hint);
+        m.appendChild(hint);
       }
     }
   ];
 
-  /* ====== Controls & helpers ====== */
-  function button(txt,variant="ghost",onClick){
-    const b = document.createElement('button');
-    b.className = "btn " + variant;
+  /* ====== Controls & UI helpers ====== */
+  function button(txt,variant,onClick){
+    var b = document.createElement('button');
+    b.className = "btn " + (variant||"ghost");
     b.type="button"; b.textContent = txt;
     b.addEventListener('click',onClick);
     return b;
   }
   function divider(txt){
-    const d = document.createElement('div');
-    d.className = "hint"; d.style.margin = "8px 0 4px"; d.innerHTML = txt;
+    var d = document.createElement('div'); d.className="hint"; d.style.margin="8px 0 4px"; d.innerHTML = txt;
     return d;
   }
   function row(cols, children){
-    const r = document.createElement('div'); r.className = "row " + (cols||"");
-    children.forEach(ch=> r.append(ch));
+    var r = document.createElement('div'); r.className = "row " + (cols||"");
+    children.forEach(function(ch){ r.appendChild(ch); });
     return r;
   }
-  function input(label, obj, key, type="text"){
-    const box = document.createElement('div'); box.className="inlinebox";
-    const id = `in_${key}_${Math.random().toString(36).slice(2,7)}`;
-    box.innerHTML = `<label for="${id}" style="font-weight:800">${label}</label>`;
-    const i = document.createElement('input');
-    i.id=id; i.type = type; i.value = obj[key]??""; i.placeholder = "";
-    i.addEventListener('input', ()=>{ obj[key] = i.value || null; save(); });
-    box.append(i); return box;
+  function input(label, obj, key, type){
+    var box = document.createElement('div'); box.className="inlinebox";
+    var id = "in_"+key+"_"+Math.random().toString(36).slice(2,7);
+    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
+    var i = document.createElement('input');
+    i.id=id; i.type = type||"text"; i.value = obj[key]||""; i.placeholder = "";
+    i.addEventListener('input', function(){ obj[key] = i.value || null; save(); });
+    box.appendChild(i); return box;
   }
   function select(label, obj, key, options){
-    const box = document.createElement('div'); box.className="inlinebox";
-    const id = `sel_${key}_${Math.random().toString(36).slice(2,7)}`;
-    box.innerHTML = `<label for="${id}" style="font-weight:800">${label}</label>`;
-    const s = document.createElement('select'); s.id=id;
-    s.innerHTML = `<option value="">Select…</option>` + options.map(o=> `<option value="${o}">${o}</option>`).join("");
-    if (obj[key] !== null && obj[key] !== undefined) s.value = obj[key];
-    s.addEventListener('change', ()=>{ obj[key] = s.value || null; save(); });
-    box.append(s); return box;
+    var box = document.createElement('div'); box.className="inlinebox";
+    var id = "sel_"+key+"_"+Math.random().toString(36).slice(2,7);
+    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
+    var s = document.createElement('select'); s.id=id;
+    var html = '<option value="">Select…</option>';
+    options.forEach(function(o){ html += '<option value="'+o+'">'+o+'</option>'; });
+    s.innerHTML = html;
+    if (obj[key]!==null && obj[key]!==undefined) s.value = obj[key];
+    s.addEventListener('change', function(){ obj[key] = s.value || null; save(); });
+    box.appendChild(s); return box;
   }
   function radioChips(label, obj, key, items){
-    const wrap = document.createElement('div'); wrap.className="inlinebox";
-    wrap.innerHTML = `<label style="font-weight:800">${label}</label>`;
-    const roww = document.createElement('div'); roww.style = "display:flex; gap:8px; flex-wrap:wrap";
-    const buttons = [];
-    items.forEach(([txt,val])=>{
-      const b = document.createElement('button'); b.type="button"; b.className="al-chip"; b.textContent = txt;
+    var wrap = document.createElement('div'); wrap.className="inlinebox";
+    wrap.innerHTML = '<label style="font-weight:800">'+label+'</label>';
+    var roww = document.createElement('div'); roww.style="display:flex; gap:8px; flex-wrap:wrap";
+    var buttons = [];
+    items.forEach(function(pair){
+      var txt = pair[0], val = pair[1];
+      var b = document.createElement('button'); b.type="button"; b.className="al-chip"; b.textContent = txt;
       if (obj[key]===val) b.setAttribute("aria-pressed","true");
-      b.addEventListener('click', ()=>{
+      b.addEventListener('click', function(){
         obj[key] = val;
-        buttons.forEach(x=> x.removeAttribute("aria-pressed"));
+        buttons.forEach(function(x){ x.removeAttribute("aria-pressed"); });
         b.setAttribute("aria-pressed","true");
         save();
       });
-      buttons.push(b); roww.append(b);
+      buttons.push(b); roww.appendChild(b);
     });
-    wrap.append(roww);
+    wrap.appendChild(roww);
     return wrap;
   }
   function radioChipsInline(label, obj, key, items){ return radioChips(label, obj, key, items); }
 
   function checks(label, targetObj, map, arrayKey){
-    const box = document.createElement('div'); box.className="inlinebox";
-    box.innerHTML = `<label style="font-weight:800">${label}</label>`;
-    const list = document.createElement('ul'); list.className="ck-list";
+    var box = document.createElement('div'); box.className="inlinebox";
+    box.innerHTML = '<label style="font-weight:800">'+label+'</label>';
+    var list = document.createElement('ul'); list.className="ck-list";
     if (arrayKey){
       if (!Array.isArray(targetObj[arrayKey])) targetObj[arrayKey] = [];
-      Object.entries(map).forEach(([k,txt])=>{
-        const id = `ck_${k}_${Math.random().toString(36).slice(2,7)}`;
-        const li = document.createElement('li'); li.className = "ck-row";
-        const c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = targetObj[arrayKey].includes(k);
-        const lab = document.createElement('label'); lab.htmlFor = id; lab.textContent = txt;
-        c.addEventListener('change', ()=>{
-          const arr = targetObj[arrayKey];
-          if (c.checked){ if (!arr.includes(k)) arr.push(k); }
-          else { targetObj[arrayKey] = arr.filter(x=>x!==k); }
+      Object.keys(map).forEach(function(k){
+        var txt = map[k];
+        var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
+        var li = document.createElement('li'); li.className="ck-row";
+        var c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = targetObj[arrayKey].indexOf(k)!==-1;
+        var lab = document.createElement('label'); lab.htmlFor=id; lab.textContent = txt;
+        c.addEventListener('change', function(){
+          var arr = targetObj[arrayKey];
+          if (c.checked){ if (arr.indexOf(k)===-1) arr.push(k); }
+          else { targetObj[arrayKey] = arr.filter(function(x){ return x!==k; }); }
           save();
         });
-        li.append(c, lab); list.append(li);
+        li.appendChild(c); li.appendChild(lab); list.appendChild(li);
       });
     } else {
-      Object.entries(map).forEach(([k,txt])=>{
-        const id = `ck_${k}_${Math.random().toString(36).slice(2,7)}`;
-        const li = document.createElement('li'); li.className = "ck-row";
-        const c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = !!targetObj[k];
-        const lab = document.createElement('label'); lab.htmlFor = id; lab.textContent = txt;
-        c.addEventListener('change', ()=>{ targetObj[k] = c.checked; save(); });
-        li.append(c, lab); list.append(li);
+      Object.keys(map).forEach(function(k){
+        var txt = map[k];
+        var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
+        var li = document.createElement('li'); li.className="ck-row";
+        var c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = !!targetObj[k];
+        var lab = document.createElement('label'); lab.htmlFor=id; lab.textContent = txt;
+        c.addEventListener('change', function(){ targetObj[k] = c.checked; save(); });
+        li.appendChild(c); li.appendChild(lab); list.appendChild(li);
       });
     }
-    box.append(list); return box;
+    box.appendChild(list); return box;
   }
 
   function typeBox(label, placeholder, onSave){
-    const box = document.createElement('div'); box.className="inlinebox";
-    const id = `tb_${Math.random().toString(36).slice(2,7)}`;
-    box.innerHTML = `<label for="${id}" style="font-weight:800">${label}</label>`;
-    const i = document.createElement('input'); i.id=id; i.placeholder = placeholder||"Type here";
-    const btn = document.createElement('button'); btn.type="button"; btn.className="btn ghost"; btn.textContent = "Save";
-    btn.addEventListener('click', ()=>{
-      const v = (i.value||"").trim();
+    var box = document.createElement('div'); box.className="inlinebox";
+    var id = "tb_"+Math.random().toString(36).slice(2,7);
+    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
+    var i = document.createElement('input'); i.id=id; i.placeholder = placeholder||"Type here";
+    var btn = document.createElement('button'); btn.type="button"; btn.className="btn ghost"; btn.textContent="Save";
+    btn.addEventListener('click', function(){
+      var v = (i.value||"").trim();
       if (!v){ alert("Please type something or use the chips."); return; }
-      onSave(v); i.value=""; setSaveHint("Saved"); 
+      onSave(v); i.value=""; setSaveHint("Saved");
     });
-    box.append(i, btn);
+    box.appendChild(i); box.appendChild(btn);
     return box;
   }
 
   function checkAck(text, obj, key){
-    const box = document.createElement('div'); box.className="inlinebox";
-    const id = `ack_${key}_${Math.random().toString(36).slice(2,7)}`;
-    const row = document.createElement('div'); row.className = "ck-row";
-    const c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = !!obj[key];
-    const lab = document.createElement('label'); lab.htmlFor = id; lab.textContent = text;
-    c.addEventListener('change', ()=>{ obj[key] = c.checked; save(); });
-    row.append(c, lab); box.append(row);
+    var box = document.createElement('div'); box.className="inlinebox";
+    var id = "ack_"+key+"_"+Math.random().toString(36).slice(2,7);
+    var row = document.createElement('div'); row.className="ck-row";
+    var c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = !!obj[key];
+    var lab = document.createElement('label'); lab.htmlFor=id; lab.textContent = text;
+    c.addEventListener('change', function(){ obj[key] = c.checked; save(); });
+    row.appendChild(c); row.appendChild(lab); box.appendChild(row);
     return box;
   }
 
   function policyCard(title, href, key){
-    const card = document.createElement('div'); card.className="inlinebox";
-    card.innerHTML = `<div style="font-weight:800">${title}</div>`;
-    const actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap";
-    const view = button("View inline","ghost", ()=> openDoc(title, href));
-    const dl = document.createElement('a'); dl.className="btn primary"; dl.textContent = "Download PDF"; dl.href = href; dl.download = "";
-    actions.append(view, dl);
-    card.append(actions);
+    var card = document.createElement('div'); card.className="inlinebox";
+    card.innerHTML = '<div style="font-weight:800">'+title+'</div>';
+    var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap";
+    var view = button("View inline","ghost", function(){ openDoc(title, href); });
+    var dl = document.createElement('a'); dl.className="btn primary"; dl.textContent="Download PDF"; dl.href=href; dl.download="";
+    actions.appendChild(view); actions.appendChild(dl);
+    card.appendChild(actions);
     return card;
   }
 
   function renderReview(){
-    const wrap = document.createElement('div'); wrap.className = "review";
+    var wrap = document.createElement('div'); wrap.className="review";
     function sect(title, pairs){
-      const d = document.createElement('details'); d.className="card"; d.open = true;
-      const s = document.createElement('summary'); s.textContent = title; d.append(s);
-      const kv = document.createElement('div'); kv.className="kv";
-      pairs.forEach(([k,v])=>{
-        const row = document.createElement('div'); const b = document.createElement('b'); b.textContent = k; 
-        const span = document.createElement('span'); span.textContent = v ?? "—";
-        row.append(b, span); kv.append(row);
+      var d = document.createElement('details'); d.className="card"; d.open = true;
+      var s = document.createElement('summary'); s.textContent = title; d.appendChild(s);
+      var kv = document.createElement('div'); kv.className="kv";
+      pairs.forEach(function(pair){
+        var k=pair[0], v=pair[1];
+        var row = document.createElement('div'); var b = document.createElement('b'); b.textContent = k;
+        var span = document.createElement('span'); span.textContent = (v===null||v===undefined)?"—":v;
+        row.appendChild(b); row.appendChild(span); kv.appendChild(row);
       });
-      d.append(kv); return d;
+      d.appendChild(kv); return d;
     }
-    wrap.append(
+    wrap.appendChild(
       sect("Who is completing", [
         ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
-      ]),
+      ])
+    );
+    wrap.appendChild(
       sect("Participant", [
         ["Legal name", S.participant.legal_name],
         ["Preferred name", S.participant.preferred_name],
@@ -866,14 +778,18 @@
         ["Plan management", S.participant.plan_mgmt],
         ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
         ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
-      ]),
+      ])
+    );
+    wrap.appendChild(
       sect("Contacts", [
         ["Email", S.contacts.email],
         ["Phone", S.contacts.phone],
         ["Emergency contact", [S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(" • ")||"—"],
         ["Support Coordinator", [S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(" • ")||"—"],
         ["GP", [S.contacts.gp.name,S.contacts.gp.practice,S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • ")||"—"]
-      ]),
+      ])
+    );
+    wrap.appendChild(
       sect("Communication & preferences", [
         ["Language", S.comms.primary_language],
         ["Interpreter", S.comms.interpreter],
@@ -881,7 +797,9 @@
         ["Cultural considerations", S.comms.cultural_considerations],
         ["Worker gender pref.", S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other || "—"],
         ["Transport required", S.comms.preferences.transport_required||"—"]
-      ]),
+      ])
+    );
+    wrap.appendChild(
       sect("Living & access", [
         ["Residence type", S.living.residence_type],
         ["Lives with", S.living.lives_with],
@@ -889,7 +807,9 @@
         ["Keysafe", S.living.keysafe],
         ["Smoking", S.living.smoking_on_premises],
         ["Hazards", S.living.hazards]
-      ]),
+      ])
+    );
+    wrap.appendChild(
       sect("Health & clinical", [
         ["Primary diagnoses", S.clinical.primary_diagnoses],
         ["Other diagnoses", S.clinical.other_diagnoses],
@@ -903,18 +823,17 @@
         ["Seizures", S.clinical.seizures.has===true?"Yes":S.clinical.seizures.has===false?"No":S.clinical.seizures.has],
         ["Seizure plan", S.clinical.seizures.plan],
         ["Seizure frequency", S.clinical.seizures.frequency],
-        ["Stoma/ostomy care", boolText(S.clinical.stoma_care)],
+        ["Stoma/ostomy care", (S.clinical.stoma_care===true?"Yes":S.clinical.stoma_care===false?"No":(S.clinical.stoma_care||"—"))],
         ["Diet / swallowing", S.clinical.diet_notes]
-      ]),
-      sect("Medications", [
-        ["Has medications", boolText(S.medications.has_meds)],
-        ["Method", S.medications.method],
-        ["Webster pack", boolText(S.medications.webster_pack)],
-        ["Storage", S.medications.storage],
-        ["Self-admin", boolText(S.medications.self_admin)],
-        ["Staff-admin", boolText(S.medications.staff_admin)],
-        ["Notes", S.medications.notes]
-      ]),
+      ])
+    );
+    function listTrue(obj, keys){
+      var map = {wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
+                 animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"};
+      var list = keys.filter(function(k){ return obj[k]===true; }).map(function(k){ return map[k]||k; });
+      return list.length? list.join(", ") : "—";
+    }
+    wrap.appendChild(
       sect("Risks", [
         ["Behavioural", S.risks.behavioural.present],
         ["Behaviour notes", S.risks.behavioural.notes],
@@ -926,13 +845,22 @@
         ["Home notes", S.risks.home_checklist.notes],
         ["Other risk notes", S.risks.other_notes],
         ["Overall rating", S.risks.overall_rating]
-      ]),
+      ])
+    );
+    wrap.appendChild(
       sect("Behaviour support", [
-        ["BSP in place", boolText(S.bsp.has_bsp)],
-        ["Restrictive practices", boolText(S.bsp.restrictive_practices)],
+        ["BSP in place", S.bsp.has_bsp===true?"Yes":S.bsp.has_bsp===false?"No":(S.bsp.has_bsp||"—")],
+        ["Restrictive practices", S.bsp.restrictive_practices===true?"Yes":S.bsp.restrictive_practices===false?"No":(S.bsp.restrictive_practices||"—")],
         ["Provider", S.bsp.provider],
         ["Notes", S.bsp.notes]
-      ]),
+      ])
+    );
+    function mapCore(arr,other){ var m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; var t=(arr||[]).map(function(k){return m[k];}).filter(Boolean); if(other) t.push("Other: "+other); return t.length?t.join(", "):"—"; }
+    function mapCapacity(arr,other){ var m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; var t=(arr||[]).map(function(k){return m[k];}).filter(Boolean); if(other) t.push("Other: "+other); return t.length?t.join(", "):"—"; }
+    function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
+    function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
+
+    wrap.appendChild(
       sect("Supports & schedule", [
         ["Core supports", mapCore(S.supports.core, S.supports.core_other)],
         ["Capacity Building", mapCapacity(S.supports.capacity, S.supports.capacity_other)],
@@ -943,43 +871,32 @@
         ["Hours/week", S.schedule.hours_per_week],
         ["Urgency", S.schedule.urgency],
         ["Start pref.", S.schedule.start_preference]
-      ]),
+      ])
+    );
+    wrap.appendChild(
       sect("Policy acknowledgements", [
-        ["Handbook acknowledged", boolText(S.policy_ack.handbook)],
-        ["Incident management understood", boolText(S.policy_ack.incident)],
-        ["Complaints & feedback info received", boolText(S.policy_ack.complaints)],
+        ["Handbook acknowledged", S.policy_ack.handbook===true?"Yes":"No"],
+        ["Incident management understood", S.policy_ack.incident===true?"Yes":"No"],
+        ["Complaints & feedback info received", S.policy_ack.complaints===true?"Yes":"No"],
         ["Emergency advocacy consent", S.emergency_advocacy || "—"]
-      ]),
+      ])
+    );
+    wrap.appendChild(
       sect("Uploads", [
-        ["Files selected", (S.uploads.files||[]).map(f=>f.name).join(" • ") || "—"]
+        ["Files selected", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ") || "—"]
       ])
     );
     return wrap;
   }
 
-  function boolText(v){ return v===true?"Yes":v===false?"No":(v??"—"); }
-  function listTrue(obj, keys){
-    const map = {
-      wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
-      animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"
-    };
-    const list = keys.filter(k=> obj[k]===true).map(k=> map[k]||k);
-    return list.length? list.join(", ") : "—";
-  }
-  function mapCore(arr,other){ const m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; const t=(arr||[]).map(k=>m[k]).filter(Boolean); if(other) t.push("Other: "+other); return t.length?t.join(", "):"—"; }
-  function mapCapacity(arr,other){ const m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; const t=(arr||[]).map(k=>m[k]).filter(Boolean); if(other) t.push("Other: "+other); return t.length?t.join(", "):"—"; }
-  function mapWindows(arr){ const m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||"—"; }
-  function mapDays(arr){ const m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||"—"; }
-
   /* ====== Render & nav ====== */
   function render(){
-    // total steps (dynamic replaces Step 1/99)
-    const total = Steps.length;
-    if (S.i < 0) S.i = 0;
-    if (S.i >= total) S.i = total - 1;
+    var total = Steps.length;
+    if (S.i<0) S.i=0;
+    if (S.i>=total) S.i = total-1;
 
-    const step = Steps[S.i];
-    stepTxt.textContent = `Step ${S.i+1}/${total}`;
+    var step = Steps[S.i];
+    stepTxt.textContent = "Step " + (S.i+1) + "/" + total;
     barEl.style.width = Math.round((S.i)/(total-1)*100) + "%";
     setPortrait(step.key);
     qEl.innerHTML = step.title;
@@ -987,34 +904,25 @@
     optsEl.innerHTML = "";
     step.build(optsEl);
     save();
-    window.scrollTo({top:0,behavior:"smooth"});
+    try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){}
   }
 
-  backBtn.addEventListener('click', ()=>{
-    S.i = Math.max(0, S.i-1); render();
-  });
-  nextBtn.addEventListener('click', ()=>{
-    if (!canProceed(S.i)) return;
-    S.i = Math.min(Steps.length-1, S.i+1);
-    render();
-  });
-  saveExitBtn.addEventListener('click', ()=>{ save(); alert("Saved. You can close this page and return later on the same device."); });
+  backBtn.addEventListener('click', function(){ S.i = Math.max(0, S.i-1); render(); });
+  nextBtn.addEventListener('click', function(){ if (!canProceed(S.i)) return; S.i = Math.min(Steps.length-1, S.i+1); render(); });
+  saveExitBtn.addEventListener('click', function(){ save(); alert("Saved. You can close this page and return later on the same device."); });
 
   function str(v){ return (v||"").toString().trim(); }
   function has(v){ return str(v).length>0; }
 
   function canProceed(idx){
-    const key = Steps[idx].key;
+    var key = Steps[idx].key;
 
-    if (key === "caller"){
-      if (S.caller.consent !== "Yes"){
-        alert("We’re unable to proceed without verbal consent. Please select “Yes”.");
-        return false;
-      }
+    if (key==="caller"){
+      if (S.caller.consent!=="Yes"){ alert("We’re unable to proceed without verbal consent. Please select “Yes”."); return false; }
     }
 
-    if (key === "participant"){
-      const p=S.participant, a=p.address;
+    if (key==="participant"){
+      var p=S.participant, a=p.address;
       if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name."); return false; }
       if (!has(p.dob)){ alert("Please add Date of birth."); return false; }
       if (!has(a.line1)||!has(a.suburb)||!has(a.postcode)||!has(a.state)){
@@ -1022,39 +930,39 @@
       }
     }
 
-    if (key === "contacts"){
+    if (key==="contacts"){
       if (!has(S.contacts.email) && !has(S.contacts.phone)){
         alert("Please provide at least one contact method: Email or Phone."); return false;
       }
     }
 
-    if (key === "clinical"){
+    if (key==="clinical"){
       if (!has(S.clinical.allergies)){
         alert("Allergies is required. If none, please write “No known allergies”.");
         return false;
       }
     }
 
-    if (key === "supports"){
-      const anyCore=(S.supports.core||[]).length>0 || has(S.supports.core_other);
-      const anyCap=(S.supports.capacity||[]).length>0 || has(S.supports.capacity_other);
+    if (key==="supports"){
+      var anyCore=(S.supports.core||[]).length>0 || has(S.supports.core_other);
+      var anyCap=(S.supports.capacity||[]).length>0 || has(S.supports.capacity_other);
       if (!anyCore && !anyCap){
         alert("Please select at least one Core or Capacity Building support (or add an Other).");
         return false;
       }
     }
 
-    if (key === "schedule"){
-      const someWindow=(S.schedule.windows||[]).length>0;
-      const someDay=(S.schedule.days||[]).length>0;
-      const hours=Number(S.schedule.hours_per_week||0);
+    if (key==="schedule"){
+      var someWindow=(S.schedule.windows||[]).length>0;
+      var someDay=(S.schedule.days||[]).length>0;
+      var hours=Number(S.schedule.hours_per_week||0);
       if (!someWindow && !someDay && !(hours>0)){
         alert("Please select at least one time window or day, or provide Hours per week.");
         return false;
       }
     }
 
-    if (key === "consents"){
+    if (key==="consents"){
       if (!S.policy_ack.handbook || !S.policy_ack.incident || !S.policy_ack.complaints){
         alert("Please acknowledge the Handbook, Incident Management and Complaints & Feedback before continuing.");
         return false;
@@ -1069,112 +977,76 @@
   }
 
   /* ====== Formspree send (no redirect) ====== */
-  async function sendToFormspree(){
-    const fd = new FormData();
+  function sendToFormspree(){
+    var fd = new FormData();
     fd.append("_subject", "HD HeeD — AILR onboarding submission");
-    const nameVal  = (S.submitter.name || S.participant.legal_name || "HD HeeD AILR").trim();
-    const emailVal = (S.submitter.email || S.contacts.email || "").trim();
-    const phoneVal = (S.submitter.phone || S.contacts.phone || "").trim();
+
+    var nameVal  = (S.submitter.name || S.participant.legal_name || "HD HeeD AILR").trim();
+    var emailVal = (S.submitter.email || S.contacts.email || "").trim();
+    var phoneVal = (S.submitter.phone || S.contacts.phone || "").trim();
 
     fd.append("name", nameVal);
-    if (emailVal) fd.append("email", emailVal);     // avoid Formspree “email should be an email” error
+    if (emailVal) fd.append("email", emailVal);
     if (phoneVal) fd.append("phone", phoneVal);
 
     fd.append("message", "AILR submission attached as JSON summary.");
     fd.append("summary", JSON.stringify({
       _subject:"HD HeeD — AILR onboarding submission",
       source:"ailr-v16",
-      caller:S.caller,
-      participant:S.participant,
-      contacts:S.contacts,
-      comms:S.comms,
-      living:S.living,
-      clinical:S.clinical,
-      medications:S.medications,
-      risks:S.risks,
-      bsp:S.bsp,
-      supports:S.supports,
-      schedule:S.schedule,
-      policy_ack:S.policy_ack,
+      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
+      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
+      bsp:S.bsp, supports:S.supports, schedule:S.schedule, policy_ack:S.policy_ack,
       emergency_advocacy:S.emergency_advocacy,
-      uploads:(S.uploads.files||[]).map(f=>({name:f.name,size:f.size,type:f.type})),
-      submitter:S.submitter,
-      notes:S.notes,
-      timestamp:new Date().toISOString()
+      uploads:(S.uploads.files||[]).map(function(f){ return {name:f.name,size:f.size,type:f.type}; }),
+      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString()
     }));
 
-    const r = await fetch(FS_ENDPOINT, {
-      method:"POST",
-      body: fd,
-      headers:{ "Accept":"application/json" }
-    });
-
-    if(!r.ok){
-      let msg = "Network / server error";
-      try{
-        const j = await r.json();
-        if (Array.isArray(j.errors) && j.errors.length){
-          msg = j.errors.map(e=>e.message).join("\n");
+    return fetch(FS_ENDPOINT, { method:"POST", body: fd, headers:{ "Accept":"application/json" } })
+      .then(function(r){
+        if(!r.ok){
+          return r.json().then(function(j){
+            var msg = "Network / server error";
+            try{ if (Array.isArray(j.errors) && j.errors.length){ msg = j.errors.map(function(e){return e.message;}).join("\n"); } }catch(e){}
+            throw new Error(msg);
+          }).catch(function(){ throw new Error("Network / server error"); });
         }
-      }catch{}
-      throw new Error(msg);
+      });
+  }
+
+  function openDoc(title, href){
+    var modal = document.getElementById('docModal');
+    var docTitle = document.getElementById('docTitle');
+    var docViewer = document.getElementById('docViewer');
+    var docDownload = document.getElementById('docDownload');
+    docTitle.textContent = title;
+    docViewer.src = href;
+    docDownload.href = href;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.getElementById('docClose').addEventListener('click', closeDoc);
+    modal.addEventListener('click', function(e){ if (e.target===modal) closeDoc(); });
+    function closeDoc(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      docViewer.src = "";
     }
   }
 
-  /* legacy helpers used by print/save */
-  function buildPayload(){ return { ...structuredClone(S), timestamp:new Date().toISOString() }; }
-
-  /* Optional: secondary submit (not used in wizard UI) */
-  async function submitOnline(e){
-    e?.preventDefault?.();
-    const btn = $("#submitOnline");
-    if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
-    try {
-      await sendToFormspree();
-      const stepsEl = $("#steps"); if (stepsEl) stepsEl.style.display = "none";
-      const bar2 = $("#bar"); if (bar2) bar2.style.width = "100%";
-      const pane = $("#pane");
-      if (pane){
-        pane.innerHTML = `
-          <div class="block">
-            <h2>Thank you for your submission</h2>
-            <p class="muted">We’ve received your referral and will be in touch soon.</p>
-            <div class="btn-row">
-              <button class="btn ghost" id="new">Start a new referral</button>
-            </div>
-          </div>`;
-        $("#new", pane)?.addEventListener("click",()=>location.reload());
-      } else {
-        alert("Thank you for your submission. We’ll be in touch soon.");
-      }
-      localStorage.removeItem(AUTOSAVE_KEY);
-    } catch (err) {
-      alert(err.message || "Couldn't send right now. Please try again.");
-    } finally {
-      if (btn) { btn.disabled = false; btn.textContent = "Submit online"; }
-    }
-  }
-
+  function buildPayload(){ var p = cloneSafe(S); p.timestamp = new Date().toISOString(); return p; }
   function openPrintableSummary(){
-    const p = buildPayload();
-    const w = window.open("", "_blank");
-    const style = `
-      <style>
-        body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif; padding:20px}
-        h1{font-size:20px} h2{font-size:16px; margin-top:20px}
-        table{border-collapse:collapse; width:100%; margin:8px 0}
-        td,th{border:1px solid #ddd; padding:6px; text-align:left; vertical-align:top}
-      </style>`;
-    function row(k,v){ return `<tr><th>${k}</th><td>${v||"—"}</td></tr>`; }
+    var p = buildPayload();
+    var w = window.open("", "_blank");
+    var style = '<style>body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif; padding:20px}h1{font-size:20px} h2{font-size:16px; margin-top:20px}table{border-collapse:collapse; width:100%; margin:8px 0}td,th{border:1px solid #ddd; padding:6px; text-align:left; vertical-align:top}</style>';
+    function row(k,v){ return '<tr><th>'+k+'</th><td>'+(v||"—")+'</td></tr>'; }
     function listTruePrint(obj,keys){
-      const map={wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral feeding",mental_health:"Mental health",stoma_care:"Stoma care",animals:"Reactive animals",hoarding:"Hoarding",weapons:"Weapons"};
-      const list=keys.filter(k=>obj[k]===true).map(k=>map[k]||k);
+      var map={wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral feeding",mental_health:"Mental health",stoma_care:"Stoma care",animals:"Reactive animals",hoarding:"Hoarding",weapons:"Weapons"};
+      var list=keys.filter(function(k){return obj[k]===true;}).map(function(k){return map[k]||k;});
       return list.length?list.join(", "):"—";
     }
-    function section(title, rows){ w.document.write(`<h2>${title}</h2><table>${rows.join("")}</table>`); }
+    function section(title, rows){ w.document.write('<h2>'+title+'</h2><table>'+rows.join("")+'</table>'); }
 
-    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>HD HeeD — AILR Summary</title>${style}</head><body>`);
-    w.document.write(`<h1>HD HeeD — AILR Summary</h1><div>Timestamp: ${p.timestamp}</div>`);
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>HD HeeD — AILR Summary</title>'+style+'</head><body>');
+    w.document.write('<h1>HD HeeD — AILR Summary</h1><div>Timestamp: '+p.timestamp+'</div>');
 
     section("Who is completing", [row("Role", p.caller.role), row("Name", p.caller.name), row("Relationship", p.caller.relationship), row("Consent", p.caller.consent)]);
     section("Participant", [
@@ -1237,12 +1109,12 @@
       row("Notes", p.bsp.notes)
     ]);
     section("Supports & schedule", [
-      row("Core supports", (function(){ const m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; const t=(p.supports.core||[]).map(k=>m[k]).filter(Boolean); if(p.supports.core_other) t.push("Other: "+p.supports.core_other); return t.join(", ")||"—"; })()),
-      row("Capacity Building", (function(){ const m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; const t=(p.supports.capacity||[]).map(k=>m[k]).filter(Boolean); if(p.supports.capacity_other) t.push("Other: "+p.supports.capacity_other); return t.join(", ")||"—"; })()),
+      row("Core supports", (function(){ var m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; var t=(p.supports.core||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.core_other) t.push("Other: "+p.supports.core_other); return t.join(", ")||"—"; })()),
+      row("Capacity Building", (function(){ var m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; var t=(p.supports.capacity||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.capacity_other) t.push("Other: "+p.supports.capacity_other); return t.join(", ")||"—"; })()),
       row("Goals", p.supports.goals),
       row("Outcomes", p.supports.outcomes),
-      row("Windows", (function(){const m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (p.schedule.windows||[]).map(k=>m[k]).filter(Boolean).join(", ")||"—";})()),
-      row("Days", (function(){const m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (p.schedule.days||[]).map(k=>m[k]).filter(Boolean).join(", ")||"—";})()),
+      row("Windows", (function(){var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (p.schedule.windows||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})()),
+      row("Days", (function(){var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (p.schedule.days||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})()),
       row("Hours/week", p.schedule.hours_per_week),
       row("Urgency", p.schedule.urgency),
       row("Start pref.", p.schedule.start_preference)
@@ -1253,17 +1125,25 @@
       row("Complaints & feedback info received", p.policy_ack.complaints===true?"Yes":"No"),
       row("Emergency advocacy consent", p.emergency_advocacy||"—")
     ]);
-    section("Uploads", [ row("Files", (S.uploads.files||[]).map(f=>f.name).join(" • ")||"—") ]);
+    section("Uploads", [ row("Files", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ")||"—") ]);
 
-    w.document.write(`<script>window.onload = function(){ window.print(); }<\/script>`);
-    w.document.write(`</body></html>`);
+    w.document.write('<script>window.onload=function(){window.print();}<\/script>');
+    w.document.write('</body></html>');
     w.document.close();
   }
 
-  // Initial render
-  render();
+  /* ====== Kick off ====== */
+  try{
+    render();
+  }catch(e){
+    // If something still blocks, at least show an error inline so you don't see 1/99 forever
+    var stage = document.querySelector("main.stage");
+    if (stage){
+      stage.innerHTML = '<div class="q">There was an error initialising the form.</div><p class="sub">If this persists, please open the page in a modern browser (Chrome/Edge/Safari ≥ 13).<\/p>';
+    }
+  }
 
-})();
+}); // DOMContentLoaded
 </script>
 </body>
 </html>
