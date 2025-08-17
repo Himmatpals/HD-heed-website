@@ -304,7 +304,7 @@
     // Risks
     risks:{
       behavioural:{ present:null, notes:null },
-      clinical:{ wounds:false, diabetes:false, tracheostomy:false, tube_feeding:false, mental_health:false, other:null },
+      clinical:{ wounds:false, diabetes:false, tracheostomy:false, tube_feeding:false, mental_health:false, stoma_care:false, other:null },
       environmental:{ animals:false, hoarding:false, weapons:false, other:null },
       home_checklist:{ trip_hazards:false, smoke_alarms:false, lighting:false, bathroom_safety:false, notes:null },
       other_notes:null,
@@ -545,7 +545,8 @@
           diabetes:"Diabetes",
           tracheostomy:"Tracheostomy",
           tube_feeding:"Enteral tube feeding",
-          mental_health:"Significant mental health needs"
+          mental_health:"Significant mental health needs",
+          stoma_care:"Stoma care"
         }));
         m.append(typeBox("Other clinical concerns (optional)", "Type here", (v)=> { S.risks.clinical.other = v; save(); }));
 
@@ -570,7 +571,7 @@
 
         m.append(select("Overall risk rating (your view)", S.risks, "overall_rating", ["Low","Medium","High","Not sure"]));
       }
-    },
+    ],
 
     /* 9 */{
       key:"bsp",
@@ -939,7 +940,7 @@
       sect("Risks", [
         ["Behavioural", S.risks.behavioural.present],
         ["Behaviour notes", S.risks.behavioural.notes],
-        ["Clinical concerns", listTrue(S.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health"])],
+        ["Clinical concerns", listTrue(S.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])],
         ["Clinical other", S.risks.clinical.other],
         ["Environmental", listTrue(S.risks.environmental, ["animals","hoarding","weapons"])],
         ["Environmental other", S.risks.environmental.other],
@@ -981,7 +982,7 @@
   function boolText(v){ return v===true?"Yes":v===false?"No":(v??"—"); }
   function listTrue(obj, keys){
     const map = {
-      wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health",
+      wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
       animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"
     };
     const list = keys.filter(k=> obj[k]===true).map(k=> map[k]||k);
@@ -1097,7 +1098,54 @@
     return true;
   }
 
-  /* ====== Submit: reliable Formspree FormData with files ====== */
+  /* ====== Submit: reliable Formspree FormData (no redirect) ====== */
+  async function sendToFormspree(){
+    const fd = new FormData();
+    fd.append("_subject", "HD HeeD — AILR onboarding submission");
+    fd.append("name",  S.submitter.name  || S.participant.legal_name || "HD HeeD AILR");
+    fd.append("email", S.submitter.email || S.contacts.email || "");
+    fd.append("phone", S.submitter.phone || S.contacts.phone || "");
+    fd.append("message", "AILR submission attached as JSON summary.");
+    fd.append("summary", JSON.stringify({
+      _subject:"HD HeeD — AILR onboarding submission",
+      source:"ailr-v16",
+      caller:S.caller,
+      participant:S.participant,
+      contacts:S.contacts,
+      comms:S.comms,
+      living:S.living,
+      clinical:S.clinical,
+      medications:S.medications,
+      risks:S.risks,
+      bsp:S.bsp,
+      supports:S.supports,
+      schedule:S.schedule,
+      policy_ack:S.policy_ack,
+      emergency_advocacy:S.emergency_advocacy,
+      uploads:(S.uploads.files||[]).map(f=>({name:f.name,size:f.size,type:f.type})),
+      submitter:S.submitter,
+      notes:S.notes,
+      timestamp:new Date().toISOString()
+    }));
+
+    const r = await fetch(FS_ENDPOINT, {
+      method:"POST",
+      body: fd,
+      headers:{ "Accept":"application/json" }
+    });
+
+    if(!r.ok){
+      let msg = "Network / server error";
+      try{
+        const j = await r.json();
+        if (Array.isArray(j.errors) && j.errors.length){
+          msg = j.errors.map(e=>e.message).join("\n");
+        }
+      }catch{}
+      throw new Error(msg);
+    }
+  }
+
   async function submitOnline(e){
   e?.preventDefault?.();
 
@@ -1178,40 +1226,6 @@
     if (btn) { btn.disabled = false; btn.textContent = "Submit online"; }
   }
 }
-<script>
-// … keep your code …
-
-async function sendToFormspree(){
-  const fd = new FormData();
-
-  // Subject + basic contact
-  fd.append("_subject", "HD HeeD — AILR onboarding submission");
-  fd.append("name",  S.submitter.name  || S.participant.legal_name || "HD HeeD AILR");
-  fd.append("email", S.submitter.email || S.contacts.email || "");
-  fd.append("phone", S.submitter.phone || S.contacts.phone || "");
-  fd.append("message", "AILR submission attached as JSON summary.");
-
-  // JSON summary of the current state (no files since uploads are disabled)
-  fd.append("summary", JSON.stringify({ ...S, timestamp: new Date().toISOString() }));
-
-  const r = await fetch(FS_ENDPOINT, {  // use your existing constant
-    method: "POST",
-    body: fd,
-    headers: { "Accept": "application/json" }
-  });
-
-  if (!r.ok) {
-    let msg = "Network / server error";
-    try {
-      const j = await r.json();
-      if (Array.isArray(j.errors) && j.errors.length) {
-        msg = j.errors.map(e => e.message).join("\n");
-      }
-    } catch {}
-    throw new Error(msg);
-  }
-}
-</script>
 
   function openPrintableSummary(){
     const p = buildPayload(true);
@@ -1225,7 +1239,7 @@ async function sendToFormspree(){
       </style>`;
     function row(k,v){ return `<tr><th>${k}</th><td>${v||"—"}</td></tr>`; }
     function listTruePrint(obj,keys){
-      const map={wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral feeding",mental_health:"Mental health",animals:"Reactive animals",hoarding:"Hoarding",weapons:"Weapons"};
+      const map={wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral feeding",mental_health:"Mental health",stoma_care:"Stoma care",animals:"Reactive animals",hoarding:"Hoarding",weapons:"Weapons"};
       const list=keys.filter(k=>obj[k]===true).map(k=>map[k]||k);
       return list.length?list.join(", "):"—";
     }
@@ -1279,7 +1293,7 @@ async function sendToFormspree(){
     section("Risks", [
       row("Behavioural", p.risks.behavioural.present),
       row("Behaviour notes", p.risks.behavioural.notes),
-      row("Clinical concerns", listTruePrint(p.risks.clinical,["wounds","diabetes","tracheostomy","tube_feeding","mental_health"])),
+      row("Clinical concerns", listTruePrint(p.risks.clinical,["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])),
       row("Clinical other", p.risks.clinical.other),
       row("Environmental", listTruePrint(p.risks.environmental,["animals","hoarding","weapons"])),
       row("Environmental other", p.risks.environmental.other),
