@@ -979,41 +979,57 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 
   /* ====== Formspree send (no redirect) ====== */
-  function sendToFormspree(){
-    var fd = new FormData();
-    fd.append("_subject", "HD HeeD — AILR onboarding submission");
+  /* ====== Formspree send (improved) ====== */
+function sendToFormspree(){
+  var fd = new FormData();
 
-    var nameVal  = (S.submitter.name || S.participant.legal_name || "HD HeeD AILR").trim();
-    var emailVal = (S.submitter.email || S.contacts.email || "").trim();
-    var phoneVal = (S.submitter.phone || S.contacts.phone || "").trim();
+  // ---- Recommended Formspree meta fields
+  fd.append("_subject", "HD HeeD — AILR onboarding submission");
+  // Use the best reply-to we have so Formspree 'Reply' works in email clients
+  var replyTo = (S.submitter.email || S.contacts.email || "").trim();
+  if (replyTo) fd.append("_replyto", replyTo);
 
-    fd.append("name", nameVal);
-    if (emailVal) fd.append("email", emailVal);
-    if (phoneVal) fd.append("phone", phoneVal);
+  // ---- Contact summary for inbox convenience
+  var nameVal  = (S.submitter.name || S.participant.legal_name || "HD HeeD AILR").trim();
+  var emailVal = replyTo;
+  var phoneVal = (S.submitter.phone || S.contacts.phone || "").trim();
+  fd.append("name", nameVal);
+  if (emailVal) fd.append("email", emailVal);
+  if (phoneVal) fd.append("phone", phoneVal);
 
-    fd.append("message", "AILR submission attached as JSON summary.");
-    fd.append("summary", JSON.stringify({
-      _subject:"HD HeeD — AILR onboarding submission",
-      source:"ailr-v16",
-      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
-      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
-      bsp:S.bsp, supports:S.supports, schedule:S.schedule, policy_ack:S.policy_ack,
-      emergency_advocacy:S.emergency_advocacy,
-      uploads:(S.uploads.files||[]).map(function(f){ return {name:f.name,size:f.size,type:f.type}; }),
-      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString()
-    }));
+  // ---- Human-readable message for Formspree dashboard/inbox
+  fd.append("message", "AILR submission included below as JSON 'summary' and also printable within the app.");
 
-    return fetch(FS_ENDPOINT, { method:"POST", body: fd, headers:{ "Accept":"application/json" } })
-      .then(function(r){
-        if(!r.ok){
-          return r.json().then(function(j){
-            var msg = "Network / server error";
-            try{ if (Array.isArray(j.errors) && j.errors.length){ msg = j.errors.map(function(e){return e.message;}).join("\n"); } }catch(e){}
-            throw new Error(msg);
-          }).catch(function(){ throw new Error("Network / server error"); });
+  // ---- Full JSON payload (flatten nothing; keep structure intact)
+  fd.append("summary", JSON.stringify({
+    _subject:"HD HeeD — AILR onboarding submission",
+    source:"ailr-v16",
+    caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
+    living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
+    bsp:S.bsp, supports:S.supports, schedule:S.schedule, policy_ack:S.policy_ack,
+    emergency_advocacy:S.emergency_advocacy,
+    uploads:(S.uploads.files||[]).map(function(f){ return {name:f.name,size:f.size,type:f.type}; }),
+    submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString()
+  }));
+
+  // ---- Submit with robust error handling
+  return fetch(FS_ENDPOINT, { method:"POST", body: fd, headers:{ "Accept":"application/json" } })
+    .then(async function(r){
+      if (r.ok) return; // success
+      // Try to read Formspree errors for better messages
+      var msg = "Network / server error";
+      try {
+        var j = await r.json();
+        if (Array.isArray(j.errors) && j.errors.length){
+          msg = j.errors.map(function(e){ return e.message; }).join("\n");
+        } else if (j.message) {
+          msg = j.message;
         }
-      });
-  }
+      } catch(_){}
+      throw new Error(msg);
+    });
+}
+
 
   function openDoc(title, href){
     var modal = document.getElementById('docModal');
