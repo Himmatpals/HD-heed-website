@@ -586,25 +586,35 @@ window.addEventListener('DOMContentLoaded', function(){
 
         var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
         var btnSend = button("Send now","primary", function(){
-          var hasEmail = S.submitter.email && S.submitter.email.trim();
-          var hasPhone = S.submitter.phone && S.submitter.phone.trim();
-          if (!(hasEmail || hasPhone)){
-            alert("Please provide at least an email or a phone number to submit.");
-            return;
-          }
-          sendToFormspree().then(function(){
-            alert("All done — we’ve received your onboarding. We’ll be in touch shortly.");
-            try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
-            var stage = document.querySelector("main.stage");
-            if (stage){
-              stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
-                <div class="q">Thank you for your submission</div>\
-                <p class="sub">We’ve received your referral and will be in touch soon.</p>\
-                <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
-            }
-          }).catch(function(e){
-            alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e && e.message ? e.message : e));
-          });
+  var hasEmail = S.submitter.email && S.submitter.email.trim();
+  var hasPhone = S.submitter.phone && S.submitter.phone.trim();
+  if (!(hasEmail || hasPhone)){
+    alert("Please provide at least an email or a phone number to submit.");
+    return;
+  }
+
+  // Disable button while sending to prevent double-submits
+  btnSend.disabled = true;
+  var oldTxt = btnSend.textContent;
+  btnSend.textContent = "Sending…";
+
+  sendToFormspree().then(function(){
+    alert("All done — we’ve received your onboarding. We’ll be in touch shortly.");
+    try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+    var stage = document.querySelector("main.stage");
+    if (stage){
+      stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
+        <div class="q">Thank you for your submission</div>\
+        <p class="sub">We’ve received your referral and will be in touch soon.</p>\
+        <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
+    }
+  }).catch(function(e){
+    alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e && e.message ? e.message : e));
+    btnSend.disabled = false;
+    btnSend.textContent = oldTxt;
+  });
+});
+
         });
         var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
         actions.appendChild(btnSend); actions.appendChild(btnPdf);
