@@ -160,7 +160,7 @@
     <div class="meta">
       <span class="pill">NDIS participant onboarding</span>
       <span class="pill">Consents & risks included</span>
-      <span class="pill">Upload documents (optional)</span>
+      <!-- Removed: <span class="pill">Upload documents (optional)</span> -->
     </div>
     <p class="notice">Tip: On mobile, you’ll see one focused screen at a time with large tap targets.</p>
   </div>
@@ -251,7 +251,6 @@ window.addEventListener('DOMContentLoaded', function(){
     var p = $("#portrait");
     if (p){ p.src = AILR_IMAGES[key] || AILR_IMAGES.intro; p.alt = "Assistant — " + (key||""); }
   }
-
   /* ====== State ====== */
   var S = {
     i: 0,
@@ -329,7 +328,7 @@ window.addEventListener('DOMContentLoaded', function(){
   function save(){
     try{
       var clone = cloneSafe(S);
-      if (clone.uploads) clone.uploads = { files: [] };
+      if (clone.uploads) clone.uploads = { files: [] }; // keep uploads empty
       localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
       setSaveHint("Draft saved");
     }catch(e){}
@@ -711,18 +710,19 @@ window.addEventListener('DOMContentLoaded', function(){
     box.appendChild(list); return box;
   }
 
+  /*  >>> MINIMAL CHANGE HERE: remove per-field “Save” button. 
+      typeBox now saves as the user types.  */
   function typeBox(label, placeholder, onSave){
     var box = document.createElement('div'); box.className="inlinebox";
     var id = "tb_"+Math.random().toString(36).slice(2,7);
     box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var i = document.createElement('input'); i.id=id; i.placeholder = placeholder||"Type here";
-    var btn = document.createElement('button'); btn.type="button"; btn.className="btn ghost"; btn.textContent="Save";
-    btn.addEventListener('click', function(){
-      var v = (i.value||"").trim();
-      if (!v){ alert("Please type something or use the chips."); return; }
-      onSave(v); i.value=""; setSaveHint("Saved");
+    var i = document.createElement('input'); // keep input (single-line). If you prefer textarea: use document.createElement('textarea')
+    i.id=id; i.placeholder = placeholder||"Type here";
+    i.addEventListener('input', function(){
+      var v = (i.value||"");
+      try{ if (typeof onSave === "function") onSave(v); } finally { setSaveHint("Draft saved"); }
     });
-    box.appendChild(i); box.appendChild(btn);
+    box.appendChild(i);
     return box;
   }
 
@@ -749,6 +749,7 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 
   function renderReview(){
+    /* unchanged */
     var wrap = document.createElement('div'); wrap.className="review";
     function sect(title, pairs){
       var d = document.createElement('details'); d.className="card"; d.open = true;
@@ -762,6 +763,7 @@ window.addEventListener('DOMContentLoaded', function(){
       });
       d.appendChild(kv); return d;
     }
+      
     wrap.appendChild(
       sect("Who is completing", [
         ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
@@ -1109,12 +1111,12 @@ window.addEventListener('DOMContentLoaded', function(){
       row("Notes", p.bsp.notes)
     ]);
     section("Supports & schedule", [
-      row("Core supports", (function(){ var m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; var t=(p.supports.core||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.core_other) t.push("Other: "+p.supports.core_other); return t.join(", ")||"—"; })()),
-      row("Capacity Building", (function(){ var m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; var t=(p.supports.capacity||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.capacity_other) t.push("Other: "+p.supports.capacity_other); return t.join(", ")||"—"; })()),
+      row("Core supports", (function(){ var m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; var t=(p.supports.core||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.core_other) t.push("Other: "+p.supports.core_other); return t.join(", ")||"—"; })() ),
+      row("Capacity Building", (function(){ var m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; var t=(p.supports.capacity||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.capacity_other) t.push("Other: "+p.supports.capacity_other); return t.join(", ")||"—"; })() ),
       row("Goals", p.supports.goals),
       row("Outcomes", p.supports.outcomes),
-      row("Windows", (function(){var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (p.schedule.windows||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})()),
-      row("Days", (function(){var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (p.schedule.days||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})()),
+      row("Windows", (function(){var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (p.schedule.windows||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})() ),
+      row("Days", (function(){var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (p.schedule.days||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})() ),
       row("Hours/week", p.schedule.hours_per_week),
       row("Urgency", p.schedule.urgency),
       row("Start pref.", p.schedule.start_preference)
@@ -1147,3 +1149,4 @@ window.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
