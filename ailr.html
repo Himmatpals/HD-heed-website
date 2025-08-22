@@ -412,8 +412,7 @@ window.addEventListener('DOMContentLoaded', function(){
         m.appendChild(radioChips("Transport required?", S.comms.preferences, "transport_required", [ ["Yes","Yes"],["No","No"],["Not sure","Not sure"] ]));
       }
     },
-
-    { key:"living", title:"Living situation & access", sub:"This helps us plan safe, respectful visits.",
+{ key:"living", title:"Living situation & access", sub:"This helps us plan safe, respectful visits.",
       build:function(m){
         m.appendChild(select("Residence type", S.living, "residence_type", ["Private home","Unit/Apartment","Group home","Supported accommodation","Other","Prefer not to say"]));
         m.appendChild(input("Lives with (names or relationships)", S.living, "lives_with"));
@@ -987,18 +986,14 @@ window.addEventListener('DOMContentLoaded', function(){
     return true;
   }
 
-  /* ====== Formspree send (no redirect) ====== */
   /* ====== Formspree send (improved) ====== */
 function sendToFormspree(){
   var fd = new FormData();
 
-  // ---- Recommended Formspree meta fields
   fd.append("_subject", "HD HeeD — AILR onboarding submission");
-  // Use the best reply-to we have so Formspree 'Reply' works in email clients
   var replyTo = (S.submitter.email || S.contacts.email || "").trim();
   if (replyTo) fd.append("_replyto", replyTo);
 
-  // ---- Contact summary for inbox convenience
   var nameVal  = (S.submitter.name || S.participant.legal_name || "HD HeeD AILR").trim();
   var emailVal = replyTo;
   var phoneVal = (S.submitter.phone || S.contacts.phone || "").trim();
@@ -1006,10 +1001,8 @@ function sendToFormspree(){
   if (emailVal) fd.append("email", emailVal);
   if (phoneVal) fd.append("phone", phoneVal);
 
-  // ---- Human-readable message for Formspree dashboard/inbox
   fd.append("message", "AILR submission included below as JSON 'summary' and also printable within the app.");
 
-  // ---- Full JSON payload (flatten nothing; keep structure intact)
   fd.append("summary", JSON.stringify({
     _subject:"HD HeeD — AILR onboarding submission",
     source:"ailr-v16",
@@ -1021,11 +1014,9 @@ function sendToFormspree(){
     submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString()
   }));
 
-  // ---- Submit with robust error handling
   return fetch(FS_ENDPOINT, { method:"POST", body: fd, headers:{ "Accept":"application/json" } })
     .then(async function(r){
-      if (r.ok) return; // success
-      // Try to read Formspree errors for better messages
+      if (r.ok) return;
       var msg = "Network / server error";
       try {
         var j = await r.json();
@@ -1038,7 +1029,6 @@ function sendToFormspree(){
       throw new Error(msg);
     });
 }
-
 
   function openDoc(title, href){
     var modal = document.getElementById('docModal');
@@ -1063,7 +1053,7 @@ function sendToFormspree(){
   function openPrintableSummary(){
   var p = buildPayload();
   var w = window.open("", "_blank");
-  var style = 
+  var style = `
     <style>
       @page { size: A4; margin: 16mm; }
       body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif; color:#111; }
@@ -1075,7 +1065,7 @@ function sendToFormspree(){
       th{background:#f6f7fb; width:36%; font-weight:800}
       .section{page-break-inside:avoid}
       .small{font-size:12px; color:#444}
-    </style>;
+    </style>`;
   function row(k,v){ return '<tr><th>'+k+'</th><td>'+(v==null||v===undefined||v===""?'—':String(v))+'</td></tr>'; }
   function listTruePrint(obj,keys){
     var map={wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral feeding",mental_health:"Mental health",stoma_care:"Stoma care",animals:"Reactive animals",hoarding:"Hoarding",weapons:"Weapons"};
@@ -1181,7 +1171,6 @@ function sendToFormspree(){
   try{
     render();
   }catch(e){
-    // If something still blocks, at least show an error inline so you don't see 1/99 forever
     var stage = document.querySelector("main.stage");
     if (stage){
       stage.innerHTML = '<div class="q">There was an error initialising the form.</div><p class="sub">If this persists, please open the page in a modern browser (Chrome/Edge/Safari ≥ 13).<\/p>';
