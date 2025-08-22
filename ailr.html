@@ -1062,103 +1062,123 @@ function sendToFormspree(){
 
   function buildPayload(){ var p = cloneSafe(S); p.timestamp = new Date().toISOString(); return p; }
   function openPrintableSummary(){
-    var p = buildPayload();
-    var w = window.open("", "_blank");
-    var style = '<style>body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif; padding:20px}h1{font-size:20px} h2{font-size:16px; margin-top:20px}table{border-collapse:collapse; width:100%; margin:8px 0}td,th{border:1px solid #ddd; padding:6px; text-align:left; vertical-align:top}</style>';
-    function row(k,v){ return '<tr><th>'+k+'</th><td>'+(v||"—")+'</td></tr>'; }
-    function listTruePrint(obj,keys){
-      var map={wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral feeding",mental_health:"Mental health",stoma_care:"Stoma care",animals:"Reactive animals",hoarding:"Hoarding",weapons:"Weapons"};
-      var list=keys.filter(function(k){return obj[k]===true;}).map(function(k){return map[k]||k;});
-      return list.length?list.join(", "):"—";
-    }
-    function section(title, rows){ w.document.write('<h2>'+title+'</h2><table>'+rows.join("")+'</table>'); }
-
-    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>HD HeeD — AILR Summary</title>'+style+'</head><body>');
-    w.document.write('<h1>HD HeeD — AILR Summary</h1><div>Timestamp: '+p.timestamp+'</div>');
-
-    section("Who is completing", [row("Role", p.caller.role), row("Name", p.caller.name), row("Relationship", p.caller.relationship), row("Consent", p.caller.consent)]);
-    section("Participant", [
-      row("Legal name", p.participant.legal_name), row("Preferred name", p.participant.preferred_name), row("Pronouns", p.participant.pronouns),
-      row("DOB", p.participant.dob), row("NDIS number", p.participant.ndis_number),
-      row("Address", [p.participant.address.line1,p.participant.address.line2,p.participant.address.suburb,p.participant.address.state,p.participant.address.postcode].filter(Boolean).join(", ")),
-      row("Plan management", p.participant.plan_mgmt),
-      row("Plan manager", [p.participant.plan_manager.org,p.participant.plan_manager.contact,p.participant.plan_manager.email,p.participant.plan_manager.phone].filter(Boolean).join(" • ")),
-      row("Plan dates", [p.participant.plan_dates.start,p.participant.plan_dates.end].filter(Boolean).join(" → "))
-    ]);
-    section("Contacts", [
-      row("Email", p.contacts.email), row("Phone", p.contacts.phone),
-      row("Emergency", [p.contacts.emergency.name,p.contacts.emergency.relationship,p.contacts.emergency.phone].filter(Boolean).join(" • ")),
-      row("Support Coordinator", [p.contacts.support_coordinator.name,p.contacts.support_coordinator.org,p.contacts.support_coordinator.email,p.contacts.support_coordinator.phone].filter(Boolean).join(" • ")),
-      row("GP", [p.contacts.gp.name,p.contacts.gp.practice,p.contacts.gp.phone,p.contacts.gp.email].filter(Boolean).join(" • "))
-    ]);
-    section("Communication & preferences", [
-      row("Language", p.comms.primary_language), row("Interpreter", p.comms.interpreter),
-      row("Interpreter language", p.comms.interpreter_language), row("Cultural considerations", p.comms.cultural_considerations),
-      row("Worker gender pref.", p.comms.preferences.worker_gender || p.comms.preferences.worker_gender_other || "—"),
-      row("Transport required", p.comms.preferences.transport_required||"—")
-    ]);
-    section("Living & access", [
-      row("Residence type", p.living.residence_type), row("Lives with", p.living.lives_with),
-      row("Entry notes", p.living.entry_notes), row("Keysafe", p.living.keysafe),
-      row("Smoking", p.living.smoking_on_premises), row("Hazards", p.living.hazards)
-    ]);
-    section("Health & clinical", [
-      row("Primary diagnoses", p.clinical.primary_diagnoses), row("Other diagnoses", p.clinical.other_diagnoses), row("Allergies", p.clinical.allergies),
-      row("Mobility", p.clinical.mobility), row("Equipment", p.clinical.equipment), row("Continence", p.clinical.continence), row("Cognition", p.clinical.cognition),
-      row("Pressure injury risk", p.clinical.pressure_injury_risk), row("Falls risk", p.clinical.falls_risk),
-      row("Seizures", p.clinical.seizures.has===true?"Yes":p.clinical.seizures.has===false?"No":p.clinical.seizures.has),
-      row("Seizure plan", p.clinical.seizures.plan), row("Seizure frequency", p.clinical.seizures.frequency),
-      row("Stoma/ostomy care", (p.clinical.stoma_care===true?"Yes":p.clinical.stoma_care===false?"No":p.clinical.stoma_care)),
-      row("Diet / swallowing", p.clinical.diet_notes)
-    ]);
-    section("Medications", [
-      row("Has medications", p.medications.has_meds===true?"Yes":p.medications.has_meds===false?"No":p.medications.has_meds),
-      row("Method", p.medications.method), row("Webster pack", p.medications.webster_pack===true?"Yes":p.medications.webster_pack===false?"No":p.medications.webster_pack),
-      row("Storage", p.medications.storage), row("Self-admin", p.medications.self_admin===true?"Yes":p.medications.self_admin===false?"No":p.medications.self_admin),
-      row("Staff-admin", p.medications.staff_admin===true?"Yes":p.medications.staff_admin===false?"No":p.medications.staff_admin),
-      row("Notes", p.medications.notes)
-    ]);
-    section("Risks", [
-      row("Behavioural", p.risks.behavioural.present),
-      row("Behaviour notes", p.risks.behavioural.notes),
-      row("Clinical concerns", listTruePrint(p.risks.clinical,["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])),
-      row("Clinical other", p.risks.clinical.other),
-      row("Environmental", listTruePrint(p.risks.environmental,["animals","hoarding","weapons"])),
-      row("Environmental other", p.risks.environmental.other),
-      row("Home risks", listTruePrint(p.risks.home_checklist,["trip_hazards","smoke_alarms","lighting","bathroom_safety"])),
-      row("Home notes", p.risks.home_checklist.notes),
-      row("Other risk notes", p.risks.other_notes),
-      row("Overall rating", p.risks.overall_rating)
-    ]);
-    section("Behaviour support", [
-      row("BSP in place", p.bsp.has_bsp===true?"Yes":p.bsp.has_bsp===false?"No":p.bsp.has_bsp),
-      row("Restrictive practices", p.bsp.restrictive_practices===true?"Yes":p.bsp.restrictive_practices===false?"No":p.bsp.restrictive_practices),
-      row("Provider", p.bsp.provider),
-      row("Notes", p.bsp.notes)
-    ]);
-    section("Supports & schedule", [
-      row("Core supports", (function(){ var m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; var t=(p.supports.core||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.core_other) t.push("Other: "+p.supports.core_other); return t.join(", ")||"—"; })() ),
-      row("Capacity Building", (function(){ var m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; var t=(p.supports.capacity||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.capacity_other) t.push("Other: "+p.supports.capacity_other); return t.join(", ")||"—"; })() ),
-      row("Goals", p.supports.goals),
-      row("Outcomes", p.supports.outcomes),
-      row("Windows", (function(){var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (p.schedule.windows||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})() ),
-      row("Days", (function(){var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (p.schedule.days||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})() ),
-      row("Hours/week", p.schedule.hours_per_week),
-      row("Urgency", p.schedule.urgency),
-      row("Start pref.", p.schedule.start_preference)
-    ]);
-    section("Policy acknowledgements", [
-      row("Handbook acknowledged", p.policy_ack.handbook===true?"Yes":"No"),
-      row("Incident management understood", p.policy_ack.incident===true?"Yes":"No"),
-      row("Complaints & feedback info received", p.policy_ack.complaints===true?"Yes":"No"),
-      row("Emergency advocacy consent", p.emergency_advocacy||"—")
-    ]);
-    section("Uploads", [ row("Files", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ")||"—") ]);
-
-    w.document.write('<script>window.onload=function(){window.print();}<\/script>');
-    w.document.write('</body></html>');
-    w.document.close();
+  var p = buildPayload();
+  var w = window.open("", "_blank");
+  var style = `
+    <style>
+      @page { size: A4; margin: 16mm; }
+      body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif; color:#111; }
+      h1{font-size:20px; margin:0 0 8px 0}
+      .meta{font-size:12px; color:#333; margin-bottom:14px}
+      h2{font-size:16px; margin:18px 0 8px 0; padding-bottom:4px; border-bottom:2px solid #222}
+      table{border-collapse:collapse; width:100%; margin:6px 0 12px 0}
+      th,td{border:1px solid #ccc; padding:6px 8px; text-align:left; vertical-align:top; font-size:13px}
+      th{background:#f6f7fb; width:36%; font-weight:800}
+      .section{page-break-inside:avoid}
+      .small{font-size:12px; color:#444}
+    </style>`;
+  function row(k,v){ return '<tr><th>'+k+'</th><td>'+(v==null||v===undefined||v===""?'—':String(v))+'</td></tr>'; }
+  function listTruePrint(obj,keys){
+    var map={wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral feeding",mental_health:"Mental health",stoma_care:"Stoma care",animals:"Reactive animals",hoarding:"Hoarding",weapons:"Weapons"};
+    var list=keys.filter(function(k){return obj[k]===true;}).map(function(k){return map[k]||k;});
+    return list.length?list.join(", "):"—";
   }
+  function section(title, rows){
+    w.document.write('<div class="section"><h2>'+title+'</h2><table>'+rows.join("")+'</table></div>');
+  }
+
+  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>HD HeeD — AILR Summary</title>'+style+'</head><body>');
+  w.document.write('<h1>HD HeeD — AILR Summary</h1>');
+  w.document.write('<div class="meta">Generated: '+(new Date(p.timestamp||Date.now())).toLocaleString()+'<br><span class="small">Save as PDF from your browser’s Print dialog.</span></div>');
+
+  section("Who is completing", [
+    row("Role", p.caller.role), row("Name", p.caller.name), row("Relationship", p.caller.relationship), row("Consent", p.caller.consent)
+  ]);
+  section("Participant", [
+    row("Legal name", p.participant.legal_name), row("Preferred name", p.participant.preferred_name), row("Pronouns", p.participant.pronouns),
+    row("DOB", p.participant.dob), row("NDIS number", p.participant.ndis_number),
+    row("Address", [p.participant.address.line1,p.participant.address.line2,p.participant.address.suburb,p.participant.address.state,p.participant.address.postcode].filter(Boolean).join(", ")),
+    row("Plan management", p.participant.plan_mgmt),
+    row("Plan manager", [p.participant.plan_manager.org,p.participant.plan_manager.contact,p.participant.plan_manager.email,p.participant.plan_manager.phone].filter(Boolean).join(" • ")),
+    row("Plan dates", [p.participant.plan_dates.start,p.participant.plan_dates.end].filter(Boolean).join(" → "))
+  ]);
+  section("Contacts", [
+    row("Email", p.contacts.email), row("Phone", p.contacts.phone),
+    row("Emergency", [p.contacts.emergency.name,p.contacts.emergency.relationship,p.contacts.emergency.phone].filter(Boolean).join(" • ")),
+    row("Support Coordinator", [p.contacts.support_coordinator.name,p.contacts.support_coordinator.org,p.contacts.support_coordinator.email,p.contacts.support_coordinator.phone].filter(Boolean).join(" • ")),
+    row("GP", [p.contacts.gp.name,p.contacts.gp.practice,p.contacts.gp.phone,p.contacts.gp.email].filter(Boolean).join(" • "))
+  ]);
+  section("Communication & preferences", [
+    row("Language", p.comms.primary_language), row("Interpreter", p.comms.interpreter),
+    row("Interpreter language", p.comms.interpreter_language), row("Cultural considerations", p.comms.cultural_considerations),
+    row("Worker gender pref.", p.comms.preferences.worker_gender || p.comms.preferences.worker_gender_other || "—"),
+    row("Transport required", p.comms.preferences.transport_required||"—")
+  ]);
+  section("Living & access", [
+    row("Residence type", p.living.residence_type), row("Lives with", p.living.lives_with),
+    row("Entry notes", p.living.entry_notes), row("Keysafe", p.living.keysafe),
+    row("Smoking", p.living.smoking_on_premises), row("Hazards", p.living.hazards)
+  ]);
+  section("Health & clinical", [
+    row("Primary diagnoses", p.clinical.primary_diagnoses), row("Other diagnoses", p.clinical.other_diagnoses), row("Allergies", p.clinical.allergies),
+    row("Mobility", p.clinical.mobility), row("Equipment", p.clinical.equipment), row("Continence", p.clinical.continence), row("Cognition", p.clinical.cognition),
+    row("Pressure injury risk", p.clinical.pressure_injury_risk), row("Falls risk", p.clinical.falls_risk),
+    row("Seizures", p.clinical.seizures.has===true?"Yes":p.clinical.seizures.has===false?"No":p.clinical.seizures.has),
+    row("Seizure plan", p.clinical.seizures.plan), row("Seizure frequency", p.clinical.seizures.frequency),
+    row("Stoma/ostomy care", (p.clinical.stoma_care===true?"Yes":p.clinical.stoma_care===false?"No":p.clinical.stoma_care)),
+    row("Diet / swallowing", p.clinical.diet_notes)
+  ]);
+  section("Medications", [
+    row("Has medications", p.medications.has_meds===true?"Yes":p.medications.has_meds===false?"No":p.medications.has_meds),
+    row("Method", p.medications.method), row("Webster pack", p.medications.webster_pack===true?"Yes":p.medications.webster_pack===false?"No":p.medications.webster_pack),
+    row("Storage", p.medications.storage), row("Self-admin", p.medications.self_admin===true?"Yes":p.medications.self_admin===false?"No":p.medications.self_admin),
+    row("Staff-admin", p.medications.staff_admin===true?"Yes":p.medications.staff_admin===false?"No":p.medications.staff_admin),
+    row("Notes", p.medications.notes)
+  ]);
+  section("Risks", [
+    row("Behavioural", p.risks.behavioural.present),
+    row("Behaviour notes", p.risks.behavioural.notes),
+    row("Clinical concerns", listTruePrint(p.risks.clinical,["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])),
+    row("Clinical other", p.risks.clinical.other),
+    row("Environmental", listTruePrint(p.risks.environmental,["animals","hoarding","weapons"])),
+    row("Environmental other", p.risks.environmental.other),
+    row("Home risks", listTruePrint(p.risks.home_checklist,["trip_hazards","smoke_alarms","lighting","bathroom_safety"])),
+    row("Home notes", p.risks.home_checklist.notes),
+    row("Other risk notes", p.risks.other_notes),
+    row("Overall rating", p.risks.overall_rating)
+  ]);
+  section("Behaviour support", [
+    row("BSP in place", p.bsp.has_bsp===true?"Yes":p.bsp.has_bsp===false?"No":p.bsp.has_bsp),
+    row("Restrictive practices", p.bsp.restrictive_practices===true?"Yes":p.bsp.restrictive_practices===false?"No":p.bsp.restrictive_practices),
+    row("Provider", p.bsp.provider),
+    row("Notes", p.bsp.notes)
+  ]);
+  section("Supports & schedule", [
+    row("Core supports", (function(){ var m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; var t=(p.supports.core||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.core_other) t.push("Other: "+p.supports.core_other); return t.join(", ")||"—"; })()),
+    row("Capacity Building", (function(){ var m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; var t=(p.supports.capacity||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.capacity_other) t.push("Other: "+p.supports.capacity_other); return t.join(", ")||"—"; })()),
+    row("Goals", p.supports.goals),
+    row("Outcomes", p.supports.outcomes),
+    row("Windows", (function(){var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (p.schedule.windows||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})()),
+    row("Days", (function(){var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (p.schedule.days||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})()),
+    row("Hours/week", p.schedule.hours_per_week),
+    row("Urgency", p.schedule.urgency),
+    row("Start pref.", p.schedule.start_preference)
+  ]);
+  section("Policy acknowledgements", [
+    row("Handbook acknowledged", p.policy_ack.handbook===true?"Yes":"No"),
+    row("Incident management understood", p.policy_ack.incident===true?"Yes":"No"),
+    row("Complaints & feedback info received", p.policy_ack.complaints===true?"Yes":"No"),
+    row("Emergency advocacy consent", p.emergency_advocacy||"—")
+  ]);
+  section("Uploads (disabled in app)", [
+    row("Files", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ")||"—")
+  ]);
+
+  w.document.write('<script>window.onload=function(){window.print();}<\/script>');
+  w.document.write('</body></html>');
+  w.document.close();
+}
+
 
   /* ====== Kick off ====== */
   try{
