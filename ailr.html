@@ -985,6 +985,151 @@ window.addEventListener('DOMContentLoaded', function(){
 
     return true;
   }
+<script>
+// === NEW: build a clean PLAIN-TEXT summary for the email body ===
+function generateSummaryText(p){
+  function v(x){ return (x===null||x===undefined||x==="") ? "—" : String(x); }
+  function join(arr, sep){ return (arr||[]).filter(Boolean).join(sep||", "); }
+  function listTrue(obj, map){
+    var out=[];
+    for (var k in map){ if (obj && obj[k]===true) out.push(map[k]); }
+    return out.length ? out.join(", ") : "—";
+  }
+  var coreDict={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"};
+  var capDict={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"};
+  var winDict={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"};
+  var dayDict={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"};
+  var clinicalMap={wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral feeding",mental_health:"Mental health",stoma_care:"Stoma care"};
+  var envMap={animals:"Reactive animals",hoarding:"Hoarding",weapons:"Weapons"};
+  var homeMap={trip_hazards:"Trip hazards",smoke_alarms:"No working smoke alarms",lighting:"Poor lighting",bathroom_safety:"Bathroom lacks safety rails / mats"};
+
+  function mapArr(keys, dict){
+    var out = (keys||[]).map(function(k){ return dict[k]; }).filter(Boolean);
+    return out.length ? out.join(", ") : "—";
+  }
+
+  var lines=[];
+  lines.push("HD HeeD — AILR Summary");
+  lines.push("Generated: " + new Date(p.timestamp||Date.now()).toLocaleString());
+  lines.push("");
+
+  lines.push("=== Who is completing ===");
+  lines.push("Role: " + v(p.caller.role));
+  lines.push("Name: " + v(p.caller.name));
+  lines.push("Relationship: " + v(p.caller.relationship));
+  lines.push("Consent: " + v(p.caller.consent));
+  lines.push("");
+
+  lines.push("=== Participant ===");
+  lines.push("Legal name: " + v(p.participant.legal_name));
+  lines.push("Preferred name: " + v(p.participant.preferred_name));
+  lines.push("Pronouns: " + v(p.participant.pronouns));
+  lines.push("DOB: " + v(p.participant.dob));
+  lines.push("NDIS number: " + v(p.participant.ndis_number));
+  lines.push("Address: " + v(join([p.participant.address.line1,p.participant.address.line2,p.participant.address.suburb,p.participant.address.state,p.participant.address.postcode], ", ")));
+  lines.push("Plan management: " + v(p.participant.plan_mgmt));
+  lines.push("Plan manager: " + v(join([p.participant.plan_manager.org,p.participant.plan_manager.contact,p.participant.plan_manager.email,p.participant.plan_manager.phone], " • ")));
+  lines.push("Plan dates: " + v(join([p.participant.plan_dates.start,p.participant.plan_dates.end], " → ")));
+  lines.push("");
+
+  lines.push("=== Contacts ===");
+  lines.push("Email: " + v(p.contacts.email));
+  lines.push("Phone: " + v(p.contacts.phone));
+  lines.push("Emergency: " + v(join([p.contacts.emergency.name,p.contacts.emergency.relationship,p.contacts.emergency.phone], " • ")));
+  lines.push("Support Coordinator: " + v(join([p.contacts.support_coordinator.name,p.contacts.support_coordinator.org,p.contacts.support_coordinator.email,p.contacts.support_coordinator.phone], " • ")));
+  lines.push("GP: " + v(join([p.contacts.gp.name,p.contacts.gp.practice,p.contacts.gp.phone,p.contacts.gp.email], " • ")));
+  lines.push("");
+
+  lines.push("=== Communication & preferences ===");
+  lines.push("Language: " + v(p.comms.primary_language));
+  lines.push("Interpreter: " + v(p.comms.interpreter));
+  lines.push("Interpreter language: " + v(p.comms.interpreter_language));
+  lines.push("Cultural considerations: " + v(p.comms.cultural_considerations));
+  lines.push("Worker gender pref.: " + v(p.comms.preferences.worker_gender || p.comms.preferences.worker_gender_other));
+  lines.push("Transport required: " + v(p.comms.preferences.transport_required));
+  lines.push("");
+
+  lines.push("=== Living & access ===");
+  lines.push("Residence type: " + v(p.living.residence_type));
+  lines.push("Lives with: " + v(p.living.lives_with));
+  lines.push("Entry notes: " + v(p.living.entry_notes));
+  lines.push("Keysafe: " + v(p.living.keysafe));
+  lines.push("Smoking: " + v(p.living.smoking_on_premises));
+  lines.push("Hazards: " + v(p.living.hazards));
+  lines.push("");
+
+  lines.push("=== Health & clinical ===");
+  lines.push("Primary diagnoses: " + v(p.clinical.primary_diagnoses));
+  lines.push("Other diagnoses: " + v(p.clinical.other_diagnoses));
+  lines.push("Allergies: " + v(p.clinical.allergies));
+  lines.push("Mobility: " + v(p.clinical.mobility));
+  lines.push("Equipment: " + v(p.clinical.equipment));
+  lines.push("Continence: " + v(p.clinical.continence));
+  lines.push("Cognition: " + v(p.clinical.cognition));
+  lines.push("Pressure injury risk: " + v(p.clinical.pressure_injury_risk));
+  lines.push("Falls risk: " + v(p.clinical.falls_risk));
+  lines.push("Seizures: " + v(p.clinical.seizures.has===true?"Yes":p.clinical.seizures.has===false?"No":p.clinical.seizures.has));
+  lines.push("Seizure plan: " + v(p.clinical.seizures.plan));
+  lines.push("Seizure frequency: " + v(p.clinical.seizures.frequency));
+  lines.push("Stoma/ostomy care: " + v(p.clinical.stoma_care===true?"Yes":p.clinical.stoma_care===false?"No":p.clinical.stoma_care));
+  lines.push("Diet / swallowing: " + v(p.clinical.diet_notes));
+  lines.push("");
+
+  lines.push("=== Medications ===");
+  lines.push("Has medications: " + v(p.medications.has_meds===true?"Yes":p.medications.has_meds===false?"No":p.medications.has_meds));
+  lines.push("Method: " + v(p.medications.method));
+  lines.push("Webster pack: " + v(p.medications.webster_pack===true?"Yes":p.medications.webster_pack===false?"No":p.medications.webster_pack));
+  lines.push("Storage: " + v(p.medications.storage));
+  lines.push("Self-admin: " + v(p.medications.self_admin===true?"Yes":p.medications.self_admin===false?"No":p.medications.self_admin));
+  lines.push("Staff-admin: " + v(p.medications.staff_admin===true?"Yes":p.medications.staff_admin===false?"No":p.medications.staff_admin));
+  lines.push("Notes: " + v(p.medications.notes));
+  lines.push("");
+
+  lines.push("=== Risks ===");
+  lines.push("Behavioural: " + v(p.risks.behavioural.present));
+  lines.push("Behaviour notes: " + v(p.risks.behavioural.notes));
+  lines.push("Clinical concerns: " + listTrue(p.risks.clinical, clinicalMap));
+  lines.push("Clinical other: " + v(p.risks.clinical.other));
+  lines.push("Environmental: " + listTrue(p.risks.environmental, envMap));
+  lines.push("Environmental other: " + v(p.risks.environmental.other));
+  lines.push("Home risks: " + listTrue(p.risks.home_checklist, homeMap));
+  lines.push("Home notes: " + v(p.risks.home_checklist.notes));
+  lines.push("Other risk notes: " + v(p.risks.other_notes));
+  lines.push("Overall rating: " + v(p.risks.overall_rating));
+  lines.push("");
+
+  lines.push("=== Behaviour support ===");
+  lines.push("BSP in place: " + v(p.bsp.has_bsp===true?"Yes":p.bsp.has_bsp===false?"No":p.bsp.has_bsp));
+  lines.push("Restrictive practices: " + v(p.bsp.restrictive_practices===true?"Yes":p.bsp.restrictive_practices===false?"No":p.bsp.restrictive_practices));
+  lines.push("Provider: " + v(p.bsp.provider));
+  lines.push("Notes: " + v(p.bsp.notes));
+  lines.push("");
+
+  lines.push("=== Supports & schedule ===");
+  var core = mapArr(p.supports.core, coreDict);
+  if (p.supports.core_other) core = (core==="—"?"":core+", ") + ("Other: " + p.supports.core_other);
+  var cap = mapArr(p.supports.capacity, capDict);
+  if (p.supports.capacity_other) cap = (cap==="—"?"":cap+", ") + ("Other: " + p.supports.capacity_other);
+  lines.push("Core supports: " + core);
+  lines.push("Capacity Building: " + cap);
+  lines.push("Goals: " + v(p.supports.goals));
+  lines.push("Outcomes: " + v(p.supports.outcomes));
+  lines.push("Windows: " + mapArr(p.schedule.windows, winDict));
+  lines.push("Days: " + mapArr(p.schedule.days, dayDict));
+  lines.push("Hours/week: " + v(p.schedule.hours_per_week));
+  lines.push("Urgency: " + v(p.schedule.urgency));
+  lines.push("Start pref.: " + v(p.schedule.start_preference));
+  lines.push("");
+
+  lines.push("=== Policy acknowledgements ===");
+  lines.push("Handbook acknowledged: " + (p.policy_ack.handbook===true?"Yes":"No"));
+  lines.push("Incident management understood: " + (p.policy_ack.incident===true?"Yes":"No"));
+  lines.push("Complaints & feedback info received: " + (p.policy_ack.complaints===true?"Yes":"No"));
+  lines.push("Emergency advocacy consent: " + v(p.emergency_advocacy));
+
+  return lines.join("\n");
+}
+</script>
 
   /* ====== Formspree send (improved) ====== */
 function sendToFormspree(){
