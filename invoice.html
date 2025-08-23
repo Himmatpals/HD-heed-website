@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HD HeeD — NDIS Invoicing Suite</title>
+  <link rel="icon" href="/images/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#0b0f1a" />
+  <!-- Optional: SheetJS for XLSX export (graceful fallback to CSV if blocked) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.19.3/dist/xlsx.full.min.js"></script>
+  <style>
+    :root{
+      --ink:#0c1226; --bg:#0b0f1a; --panel:#10172a; --line:#243153;
+      --text:#e8edff; --accent:#7c3aed; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; --muted:#aab5d1;
+      --chip:#1b2540; --white:#ffffff
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;background:var(--bg);color:var(--text)}
+    a{color:var(--accent);text-decoration:none}
+    header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:linear-gradient(180deg,rgba(11,15,26,.95),rgba(11,15,26,.85));backdrop-filter:blur(6px);z-index:50}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:12px;background:url('hd%20heed.jpg') center/cover no-repeat, conic-gradient(from 160deg,#7c3aed,#10b981,#0ea5e9,#7c3aed);box-shadow:0 4px 24px rgba(124,58,237,.45)}
+    .brand h1{margin:0;font-size:18px;letter-spacing:.3px}
+    .chip{padding:6px 10px;background:var(--chip);border:1px solid var(--line);border-radius:999px;color:#c9d4f3;font-size:12px}
+
+    .container{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;max-width:1280px;margin:0 auto;padding:18px}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);min-height:120px}
+    h2.title{margin:0 0 10px;font-size:13px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+    label{font-size:12px;color:var(--muted)}
+    input,select,textarea{width:100%;background:#0d1426;color:var(--text);border:1px solid #1f2b4a;border-radius:10px;padding:10px 12px}
+    input:focus,select:focus,textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 4px rgba(59,130,246,.15);outline:none}
+    textarea{min-height:90px;resize:vertical}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .btn{appearance:none;border:1px solid var(--line);background:#121a31;color:var(--text);padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer}
+    .btn:hover{border-color:#394b79}
+    .btn.primary{background:linear-gradient(180deg,#7c3aed,#4f46e5);border-color:transparent}
+    .btn.ok{background:linear-gradient(180deg,#22c55e,#16a34a);border-color:transparent}
+    .btn.warn{background:linear-gradient(180deg,#f59e0b,#ea580c);border-color:transparent}
+    .btn.bad{background:linear-gradient(180deg,#ef4444,#dc2626);border-color:transparent}
+
+    table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    th,td{padding:10px;border-bottom:1px solid var(--line);font-size:14px}
+    th{background:#0f1730;color:#cfd8f7;text-align:left}
+    tr:last-child td{border-bottom:none}
+    tfoot td{background:#0f1730;font-weight:800}
+    .num{text-align:right}
+
+    .notice{font-size:12px;color:#9fb0db}
+
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:60}
+    .modal .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;max-width:800px;width:96%}
+
+    @media print {
+      body{background:white;color:black}
+      header,.no-print{display:none !important}
+      .container{display:block;max-width:none;padding:0;margin:0}
+      .panel{box-shadow:none;border:none;border-radius:0;padding:0}
+      #invoice-render{display:block}
+      #builder-panel{display:none}
+      @page { size:A4; margin: 15mm }
+    }
+  </style>
+</head>
+<body>
+<header class="no-print">
+  <div class="brand">
+    <div class="logo" aria-label="HD HeeD logo"></div>
+    <h1>HD HeeD — NDIS Invoicing Suite</h1>
+  </div>
+  <div class="row">
+    <span class="chip">Single‑file • Local only • Print/XLSX/CSV</span>
+    <span class="chip">NDIS‑ready • GST handling</span>
+  </div>
+</header>
+
+<main class="container">
+  <!-- LEFT: BUILDER -->
+  <section id="builder-panel" class="panel">
+    <h2 class="title">Invoice Details</h2>
+    <div class="grid">
+      <div style="grid-column: span 4"><label>Invoice Number</label><input id="invNumber" placeholder="1100"/></div>
+      <div style="grid-column: span 4"><label>Invoice Date</label><input id="invDate" type="date"/></div>
+      <div style="grid-column: span 4"><label>Payment Terms</label>
+        <select id="terms"><option value="7">7 days</option><option value="14" selected>14 days</option><option value="21">21 days</option><option value="30">30 days</option></select>
+      </div>
+    </div>
+
+    <h2 class="title" style="margin-top:12px">Your Business</h2>
+    <div class="grid">
+      <div style="grid-column: span 6"><label>Business Name</label><input id="bizName" value="HD HeeD Pty Ltd"/></div>
+      <div style="grid-column: span 6"><label>ABN</label><input id="abn" value="47 665 228 768"/></div>
+      <div style="grid-column: span 6"><label>Email</label><input id="email" value="info@hdheed.com.au"/></div>
+      <div style="grid-column: span 6"><label>Phone</label><input id="phone" value="02 8630 5500"/></div>
+      <div style="grid-column: span 12"><label>Address (optional)</label><input id="address" placeholder="Level 1, Example St, Blacktown NSW"/></div>
+    </div>
+
+    <h2 class="title" style="margin-top:12px">Bank Details (fillable)</h2>
+    <div class="grid">
+      <div style="grid-column: span 4"><label>Account Name</label><input id="accName" placeholder="HD HeeD Pty Ltd"/></div>
+      <div style="grid-column: span 4"><label>BSB</label><input id="bsb" placeholder="000-000"/></div>
+      <div style="grid-column: span 4"><label>Account Number</label><input id="accNumber" placeholder="00000000"/></div>
+    </div>
+
+    <div class="row" style="margin-top:8px">
+      <label class="chip"><input type="checkbox" id="gstFreeDefault" checked style="accent-color:#22c55e;margin-right:8px"> Default GST‑free (NDIS)</label>
+      <label class="chip"><input type="checkbox" id="showLogo" checked style="accent-color:#22c55e;margin-right:8px"> Show logo on invoice</label>
+    </div>
+
+    <h2 class="title" style="margin-top:12px">Bill To</h2>
+    <div class="grid">
+      <div style="grid-column: span 6"><label>Participant Name</label><input id="pName"/></div>
+      <div style="grid-column: span 6"><label>NDIS Number</label><input id="ndisNo"/></div>
+      <div style="grid-column: span 6"><label>Bill To (Plan Manager / Self / NDIA)</label><input id="pmName" placeholder="e.g., XYZ Plan Management (on behalf of Participant)"/></div>
+      <div style="grid-column: span 6"><label>Billing Email</label><input id="pmEmail" placeholder="accounts@planmanager.com.au"/></div>
+      <div style="grid-column: span 12" class="row no-print">
+        <button class="btn" onclick="openClients()">Client Manager</button>
+        <button class="btn" onclick="saveClientFromForm()">Save/Update Client</button>
+        <span class="notice">Tip: Save clients for reuse; next time just select from the Client Manager.</span>
+      </div>
+    </div>
+
+    <h2 class="title" style="margin-top:12px">Line Items</h2>
+    <div class="notice">Add service lines with item code, description, date(s), units and rate. Toggle GST per line if needed (most NDIS supports are GST‑free).</div>
+    <div style="overflow:auto;margin-top:8px">
+      <table id="items">
+        <thead>
+          <tr>
+            <th style="width:14ch">Date</th>
+            <th style="width:20ch">Support Item</th>
+            <th>Description</th>
+            <th class="num" style="width:10ch">Qty/Hrs</th>
+            <th class="num" style="width:12ch">Rate (AUD)</th>
+            <th class="num" style="width:9ch">GST</th>
+            <th class="num" style="width:12ch">Amount</th>
+            <th class="no-print" style="width:7ch">—</th>
+          </tr>
+        </thead>
+        <tbody id="itemBody"></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="6" class="num">Subtotal</td>
+            <td class="num" id="subtotal">$0.00</td>
+            <td class="no-print"></td>
+          </tr>
+          <tr>
+            <td colspan="6" class="num">GST (10%)</td>
+            <td class="num" id="gst">$0.00</td>
+            <td class="no-print"></td>
+          </tr>
+          <tr>
+            <td colspan="6" class="num">Total</td>
+            <td class="num" id="grandTotal">$0.00</td>
+            <td class="no-print"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="row no-print" style="margin-top:10px">
+      <button class="btn" onclick="addItem()">+ Add Line</button>
+      <button class="btn" onclick="addCommon()">+ Add Common Items</button>
+      <button class="btn bad" onclick="clearItems()">Clear Lines</button>
+    </div>
+
+    <h2 class="title" style="margin-top:12px">Notes (optional)</h2>
+    <textarea id="notes" placeholder="Reference, PO, claim type (e.g. Non face‑to‑face / Travel / Cancellation), timesheet ref, etc."></textarea>
+
+    <h2 class="title" style="margin-top:12px">Recurring (optional)</h2>
+    <div class="grid">
+      <div style="grid-column: span 4"><label>Frequency</label>
+        <select id="recurrence"><option value="none">None</option><option value="weekly">Weekly</option><option value="fortnightly">Fortnightly</option><option value="monthly">Monthly</option></select>
+      </div>
+      <div style="grid-column: span 4"><label>Occurrences</label><input id="occurrences" type="number" min="1" value="1"/></div>
+      <div style="grid-column: span 4"><label>Start From (service date)</label><input id="recurStart" type="date"/></div>
+    </div>
+    <div class="notice">Generate future‑dated copies as drafts (you’ll still review before sending/printing). Invoices always use unique, incrementing numbers.</div>
+
+    <div class="controls no-print" style="margin-top:14px">
+      <button class="btn" onclick="saveDraft()">Save Draft</button>
+      <button class="btn warn" onclick="clearDraft()">Clear Draft</button>
+      <button class="btn" onclick="exportCSV()">Export CSV</button>
+      <button class="btn" onclick="exportXLSX()">Export XLSX</button>
+      <button class="btn ok" onclick="previewInvoice()">Preview</button>
+      <button class="btn primary" onclick="printInvoice()">Download PDF</button>
+    </div>
+    <div class="notice" style="margin-top:6px">PDF uses your browser's print to PDF. Only the invoice preview is printed.</div>
+
+    <h2 class="title" style="margin-top:18px">Compliance Checklist</h2>
+    <ul class="notice" id="auditList" style="margin:0 0 6px 16px;line-height:1.6">
+      <li>Provider name & ABN present</li>
+      <li>Unique invoice number & issue date</li>
+      <li>Participant name & NDIS number</li>
+      <li>Each line shows service date, NDIS support code, description, qty, rate</li>
+      <li>GST clearly shown (most NDIS items GST‑free)</li>
+      <li>Totals accurate; bank details included</li>
+    </ul>
+  </section>
+
+  <!-- RIGHT: PREVIEW -->
+  <section id="render-panel" class="panel">
+    <h2 class="title">Preview</h2>
+    <div id="invoice-render" style="background:white;color:#0a0a0a;padding:26px;border-radius:12px">
+      <div style="color:#6b7280">Fill the form then click <strong>Preview</strong>.</div>
+    </div>
+  </section>
+</main>
+
+<!-- CLIENT MANAGER MODAL -->
+<div id="clientModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="clientTitle">
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px">
+      <h3 id="clientTitle" style="margin:0">Client Manager</h3>
+      <button class="btn bad" onclick="closeClients()">Close</button>
+    </div>
+    <div class="grid">
+      <div style="grid-column: span 6">
+        <h4 style="margin:6px 0">Add / Update Client</h4>
+        <label>Participant</label><input id="cName"/>
+        <label>NDIS Number</label><input id="cNdis"/>
+        <label>Bill To</label><input id="cPm" placeholder="Plan Manager / Self / NDIA"/>
+        <label>Billing Email</label><input id="cEmail" placeholder="accounts@planmanager.com.au"/>
+        <div class="row" style="margin-top:8px">
+          <button class="btn ok" onclick="saveClient()">Save Client</button>
+          <button class="btn warn" onclick="resetClientForm()">Reset</button>
+        </div>
+      </div>
+      <div style="grid-column: span 6">
+        <h4 style="margin:6px 0">Saved Clients</h4>
+        <table>
+          <thead><tr><th>Participant</th><th>NDIS #</th><th>Bill To</th><th>Email</th><th class="no-print">Use</th><th class="no-print">Del</th></tr></thead>
+          <tbody id="clientRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Utilities =====
+const $ = (id) => document.getElementById(id);
+const AUD = (n) => (isFinite(n)?n:0).toLocaleString('en-AU',{style:'currency',currency:'AUD'});
+const todayISO = () => new Date().toISOString().slice(0,10);
+const parseFloatSafe = (v)=>{const x=parseFloat(v);return isFinite(x)?x:0};
+const escapeHtml = (s)=> (s||'').replace(/[&<>\"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+
+// ===== Local Storage Keys =====
+const LS_DRAFT = 'hdheed_invoice_draft_v3';
+const LS_SEQ   = 'hdheed_invoice_seq_v2';
+const LS_CLIENTS = 'hdheed_clients_v1';
+
+function nextInvoiceNumber(){
+  let n = parseInt(localStorage.getItem(LS_SEQ)||'1099',10) + 1; // start at 1100
+  localStorage.setItem(LS_SEQ,String(n));
+  return String(n);
+}
+
+// ===== Items =====
+function addItem(data={}){
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="date" value="${data.date||todayISO()}" oninput="recalc()"/></td>
+    <td>
+      <input list="codes" placeholder="01_010_0107_1_1" value="${data.code||''}" oninput="recalc()"/>
+      <datalist id="codes">
+        <option value="01_011_0107_1_1">Assistance with self‑care activities (weekday)</option>
+        <option value="01_012_0107_1_1">Assistance with self‑care activities (evening/Sat)</option>
+        <option value="01_013_0107_1_1">Assistance with self‑care activities (Sun)</option>
+        <option value="01_014_0107_1_1">Assistance with self‑care activities (Public Holiday)</option>
+        <option value="04_104_0136_6_1">Community/social/rec activities</option>
+        <option value="15_056_0128_1_3">Community nursing care</option>
+        <option value="15_210_0128_1_3">Assessment, planning & case conf (RN)</option>
+      </datalist>
+    </td>
+    <td><input placeholder="Description" value="${data.desc||''}" oninput="recalc()"/></td>
+    <td class="num"><input type="number" min="0" step="0.25" value="${data.qty||''}" oninput="recalc()"/></td>
+    <td class="num"><input type="number" min="0" step="0.01" value="${data.rate||''}" oninput="recalc()"/></td>
+    <td class="num"><input type="checkbox" ${ (typeof data.gst==='boolean'?data.gst:!$('gstFreeDefault').checked) ? 'checked':'' } onchange="recalc()"/></td>
+    <td class="num amount">$0.00</td>
+    <td class="no-print"><button class="btn bad" onclick="this.closest('tr').remove(); recalc()">×</button></td>
+  `;
+  $('itemBody').appendChild(tr);
+  recalc();
+}
+function addCommon(){
+  addItem({code:'01_011_0107_1_1',desc:'Self‑care weekday',qty:1,rate:65.09,gst:false});
+  addItem({code:'15_056_0128_1_3',desc:'Community nursing (RN)',qty:1,rate:102.00,gst:false});
+}
+function clearItems(){ $('itemBody').innerHTML=''; recalc(); }
+
+function recalc(){
+  let subtotal=0, gst=0;
+  [...$('itemBody').querySelectorAll('tr')].forEach(tr=>{
+    const qty = parseFloatSafe(tr.children[3].querySelector('input').value);
+    const rate = parseFloatSafe(tr.children[4].querySelector('input').value);
+    const isGST = tr.children[5].querySelector('input').checked;
+    const amt = qty*rate;
+    subtotal += amt;
+    if(isGST){ gst += amt*0.10; }
+    tr.querySelector('.amount').textContent = AUD(amt);
+  });
+  $('subtotal').textContent = AUD(subtotal);
+  $('gst').textContent = AUD(gst);
+  $('grandTotal').textContent = AUD(subtotal + gst);
+}
+
+// ===== Collect/Fill =====
+function collect(){
+  const items = [...$('itemBody').querySelectorAll('tr')].map(tr=>({
+    date: tr.children[0].querySelector('input').value,
+    code: tr.children[1].querySelector('input').value,
+    desc: tr.children[2].querySelector('input').value,
+    qty:  parseFloatSafe(tr.children[3].querySelector('input').value),
+    rate: parseFloatSafe(tr.children[4].querySelector('input').value),
+    gst:  tr.children[5].querySelector('input').checked
+  }));
+  return {
+    invNumber: $('invNumber').value.trim(),
+    invDate: $('invDate').value,
+    terms: $('terms').value,
+    bizName: $('bizName').value.trim(),
+    abn: $('abn').value.trim(),
+    email: $('email').value.trim(),
+    phone: $('phone').value.trim(),
+    address: $('address').value.trim(),
+    accName: $('accName').value.trim(),
+    bsb: $('bsb').value.trim(),
+    accNumber: $('accNumber').value.trim(),
+    pName: $('pName').value.trim(),
+    ndisNo: $('ndisNo').value.trim(),
+    pmName: $('pmName').value.trim(),
+    pmEmail: $('pmEmail').value.trim(),
+    gstFreeDefault: $('gstFreeDefault').checked,
+    showLogo: $('showLogo').checked,
+    notes: $('notes').value,
+    items,
+    recurrence: $('recurrence').value,
+    occurrences: parseInt($('occurrences').value||'1',10),
+    recurStart: $('recurStart').value
+  };
+}
+
+function fill(form){
+  $('invNumber').value = form.invNumber || nextInvoiceNumber();
+  $('invDate').value = form.invDate || todayISO();
+  $('terms').value = form.terms || '14';
+  $('bizName').value = form.bizName || 'HD HeeD Pty Ltd';
+  $('abn').value = form.abn || '47 665 228 768';
+  $('email').value = form.email || 'info@hdheed.com.au';
+  $('phone').value = form.phone || '02 8630 5500';
+  $('address').value = form.address || '';
+  $('accName').value = form.accName || '';
+  $('bsb').value = form.bsb || '';
+  $('accNumber').value = form.accNumber || '';
+  $('pName').value = form.pName || '';
+  $('ndisNo').value = form.ndisNo || '';
+  $('pmName').value = form.pmName || '';
+  $('pmEmail').value = form.pmEmail || '';
+  $('gstFreeDefault').checked = (typeof form.gstFreeDefault==='boolean') ? form.gstFreeDefault : true;
+  $('showLogo').checked = (typeof form.showLogo==='boolean') ? form.showLogo : true;
+  $('notes').value = form.notes || '';
+  $('recurrence').value = form.recurrence || 'none';
+  $('occurrences').value = form.occurrences || 1;
+  $('recurStart').value = form.recurStart || '';
+
+  clearItems();
+  (form.items && form.items.length? form.items : [{}]).forEach(addItem);
+  recalc();
+}
+
+// ===== Draft =====
+function saveDraft(){ localStorage.setItem(LS_DRAFT, JSON.stringify(collect())); alert('Draft saved locally.'); }
+function clearDraft(){ if(confirm('Clear saved draft?')){ localStorage.removeItem(LS_DRAFT); fill({}); } }
+
+// ===== Clients =====
+function loadClients(){ try{ return JSON.parse(localStorage.getItem(LS_CLIENTS)||'[]'); }catch{return []} }
+function saveClients(list){ localStorage.setItem(LS_CLIENTS, JSON.stringify(list)); renderClients(); }
+function renderClients(){
+  const tbody = $('clientRows'); if(!tbody) return;
+  const clients = loadClients();
+  tbody.innerHTML = clients.map((c,i)=>`<tr><td>${escapeHtml(c.name)}</td><td>${escapeHtml(c.ndis)}</td><td>${escapeHtml(c.pm)}</td><td>${escapeHtml(c.email)}</td><td class='no-print'><button class='btn ok' onclick='useClient(${i})'>Use</button></td><td class='no-print'><button class='btn bad' onclick='delClient(${i})'>Del</button></td></tr>`).join('');
+}
+function openClients(){ $('clientModal').style.display='flex'; renderClients(); }
+function closeClients(){ $('clientModal').style.display='none'; }
+function resetClientForm(){ $('cName').value='';$('cNdis').value='';$('cPm').value='';$('cEmail').value=''; }
+function saveClient(){
+  const c = {name:$('cName').value.trim(), ndis:$('cNdis').value.trim(), pm:$('cPm').value.trim(), email:$('cEmail').value.trim()};
+  if(!c.name){ alert('Participant name required'); return; }
+  const list = loadClients();
+  const idx = list.findIndex(x=>x.name.toLowerCase()===c.name.toLowerCase());
+  if(idx>=0) list[idx]=c; else list.push(c);
+  saveClients(list); resetClientForm();
+}
+function delClient(i){ const list = loadClients(); list.splice(i,1); saveClients(list); }
+function useClient(i){ const c = loadClients()[i]; if(!c) return; $('pName').value=c.name; $('ndisNo').value=c.ndis; $('pmName').value=c.pm; $('pmEmail').value=c.email; closeClients(); }
+function saveClientFromForm(){ const c={name:$('pName').value.trim(), ndis:$('ndisNo').value.trim(), pm:$('pmName').value.trim(), email:$('pmEmail').value.trim()}; if(!c.name){alert('Enter Participant name first');return;} const list=loadClients(); const idx=list.findIndex(x=>x.name.toLowerCase()===c.name.toLowerCase()); if(idx>=0) list[idx]=c; else list.push(c); saveClients(list); alert('Client saved.'); }
+
+// ===== Preview / Print =====
+function previewInvoice(){
+  recalc();
+  const d = collect();
+  const due = (()=>{ const dt = new Date(d.invDate||todayISO()); dt.setDate(dt.getDate()+Number(d.terms||14)); return dt.toLocaleDateString('en-AU'); })();
+  const rows = d.items.map(x=>`
+    <tr>
+      <td>${escapeHtml(x.date||'')}</td>
+      <td>${escapeHtml(x.code||'')}</td>
+      <td>${escapeHtml(x.desc||'')}</td>
+      <td class='num'>${Number(x.qty||0)}</td>
+      <td class='num'>${AUD(Number(x.rate||0))}</td>
+      <td class='num'>${x.gst?'10%':''}</td>
+      <td class='num'>${AUD((Number(x.qty||0)*Number(x.rate||0)))}</td>
+    </tr>`).join('');
+  const sub = $('subtotal').textContent; const gst = $('gst').textContent; const tot = $('grandTotal').textContent;
+  $('invoice-render').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+      <div>
+        <div style="font-weight:900;font-size:22px">${escapeHtml(d.bizName||'')}</div>
+        <div>ABN: ${escapeHtml(d.abn||'')}</div>
+        ${d.address?`<div>${escapeHtml(d.address)}</div>`:''}
+        <div>${escapeHtml(d.email||'')} • ${escapeHtml(d.phone||'')}</div>
+      </div>
+      ${d.showLogo?`<div style="width:60px;height:60px;border-radius:14px;background:url('hd%20heed.jpg') center/cover no-repeat, conic-gradient(from 160deg,#7c3aed,#10b981,#0ea5e9,#7c3aed)"></div>`:''}
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:16px;border-top:1px solid #e5e7eb;padding-top:10px">
+      <div>
+        <div style="font-weight:800;font-size:18px">${d.items.some(i=>i.gst)?'Tax Invoice':'Invoice'}</div>
+        <div>Invoice No: <strong>${escapeHtml(d.invNumber)}</strong></div>
+        <div>Invoice Date: <strong>${new Date(d.invDate||todayISO()).toLocaleDateString('en-AU')}</strong></div>
+        <div>Payment Terms: <strong>${d.terms} days (Due ${due})</strong></div>
+      </div>
+      <div>
+        <div style="font-weight:600">Bill To</div>
+        <div>${escapeHtml(d.pName||'')}</div>
+        ${d.ndisNo?`<div>NDIS No: ${escapeHtml(d.ndisNo)}</div>`:''}
+        <div>${escapeHtml(d.pmName||'')}</div>
+        <div>${escapeHtml(d.pmEmail||'')}</div>
+      </div>
+    </div>
+
+    <table style="width:100%;border-collapse:collapse;margin-top:14px">
+      <thead>
+        <tr style="background:#111827;color:white">
+          <th style="text-align:left;padding:10px">Service Date</th>
+          <th style="text-align:left;padding:10px">NDIS Support Item</th>
+          <th style="text-align:left;padding:10px">Description</th>
+          <th style="text-align:right;padding:10px">Qty/Hrs</th>
+          <th style="text-align:right;padding:10px">Rate</th>
+          <th style="text-align:right;padding:10px">GST</th>
+          <th style="text-align:right;padding:10px">Amount</th>
+        </tr>
+      </thead>
+      <tbody>${rows || `<tr><td colspan='7' style='padding:10px;color:#6b7280'>No items yet.</td></tr>`}</tbody>
+      <tfoot>
+        <tr><td colspan="6" style="text-align:right;padding:10px;border-top:1px solid #e5e7eb">Subtotal</td><td style="text-align:right;padding:10px;border-top:1px solid #e5e7eb">${sub}</td></tr>
+        <tr><td colspan="6" style="text-align:right;padding:10px">GST (10%)</td><td style="text-align:right;padding:10px">${gst}</td></tr>
+        <tr><td colspan="6" style="text-align:right;padding:10px;font-weight:900">Total</td><td style="text-align:right;padding:10px;font-weight:900">${tot}</td></tr>
+      </tfoot>
+    </table>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px">
+      <div>
+        <div style="font-weight:600">Bank Details</div>
+        <div>Account Name: ${escapeHtml(d.accName||'')}</div>
+        <div>BSB: ${escapeHtml(d.bsb||'')} • Account No: ${escapeHtml(d.accNumber||'')}</div>
+        <div>Reference: ${escapeHtml(`Invoice ${d.invNumber} – ${d.pName||''}`)}</div>
+      </div>
+      <div>
+        <div style="font-weight:600">Notes</div>
+        <div style="white-space:pre-wrap">${escapeHtml(d.notes||'')}</div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:12px;color:#6b7280">
+      ${d.items.some(i=>i.gst)?'<div>Includes GST where indicated.</div>':'<div>GST‑free supply: Most NDIS supports are GST‑free when eligibility conditions are met.</div>'}
+      <div>For billing queries, contact ${escapeHtml(d.email||'')}.</div>
+    </div>
+  `;
+}
+
+function printInvoice(){ previewInvoice(); window.print(); }
+
+// ===== Export =====
+function invoiceRowsForExport(){
+  const d = collect();
+  const rows = d.items.map(x=>({
+    InvoiceNumber: d.invNumber,
+    InvoiceDate: d.invDate,
+    Participant: d.pName,
+    NDISNumber: d.ndisNo,
+    BillTo: d.pmName,
+    Email: d.pmEmail,
+    ServiceDate: x.date,
+    SupportItem: x.code,
+    Description: x.desc,
+    Qty: x.qty,
+    Rate: x.rate,
+    GST: x.gst? (x.qty*x.rate*0.10).toFixed(2) : '0.00',
+    LineTotal: (x.qty*x.rate).toFixed(2)
+  }));
+  return rows;
+}
+function exportCSV(){
+  const rows = invoiceRowsForExport();
+  if(!rows.length){ alert('No line items to export.'); return; }
+  const headers = Object.keys(rows[0]);
+  const csv = [headers.join(','), ...rows.map(r=>headers.map(h=>JSON.stringify(r[h]??'')).join(','))].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Invoice_${collect().invNumber}.csv`; a.click();
+}
+function exportXLSX(){
+  try{
+    if(typeof XLSX==='undefined'){ throw new Error('XLSX library not loaded'); }
+    const ws = XLSX.utils.json_to_sheet(invoiceRowsForExport());
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Invoice');
+    XLSX.writeFile(wb, `Invoice_${collect().invNumber}.xlsx`);
+  }catch(e){ alert('XLSX export unavailable. Falling back to CSV.'); exportCSV(); }
+}
+
+// ===== Recurring =====
+function generateRecurringDrafts(){
+  const d = collect(); if(d.recurrence==='none'||d.occurrences<=1) return [];
+  const drafts=[]; let start = d.recurStart ? new Date(d.recurStart) : (d.items[0]?.date? new Date(d.items[0].date): new Date());
+  const step = (dt)=>{
+    const nd = new Date(dt);
+    if(d.recurrence==='weekly') nd.setDate(nd.getDate()+7);
+    if(d.recurrence==='fortnightly') nd.setDate(nd.getDate()+14);
+    if(d.recurrence==='monthly') nd.setMonth(nd.getMonth()+1);
+    return nd;
+  };
+  let currentDate = start;
+  for(let i=2;i<=d.occurrences;i++){
+    currentDate = step(currentDate);
+    const copy = JSON.parse(JSON.stringify(d));
+    copy.invNumber = nextInvoiceNumber();
+    copy.invDate = todayISO();
+    copy.items = copy.items.map(x=>({...x, date: currentDate.toISOString().slice(0,10)}));
+    drafts.push(copy);
+  }
+  return drafts;
+}
+
+// ===== Init =====
+(function init(){
+  const saved = localStorage.getItem(LS_DRAFT);
+  if(saved){ try{ fill(JSON.parse(saved)); }catch{ fill({}); } }
+  else { fill({}); }
+
+  // Pre-add one empty line for convenience
+  if(!$('itemBody').children.length){ addItem({}); }
+
+  // Generate recurring drafts & store (for info)
+  window.addEventListener('beforeprint', ()=>previewInvoice());
+})();
+</script>
+</body>
+</html>
