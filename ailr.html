@@ -1129,16 +1129,20 @@ function generateSummaryText(p){
 
   return lines.join("\n");
 }
-</script>
-
-  /* ====== Formspree send (improved) ====== */
+<script>
 function sendToFormspree(){
   var fd = new FormData();
 
-  fd.append("_subject", "HD HeeD — AILR onboarding submission");
+  // Better subject line for your inbox
+  var who = (S.participant.legal_name || "Participant").trim();
+  var urg = (S.schedule.urgency || "—");
+  fd.append("_subject", "HD HeeD — AILR: " + who + " • " + urg);
+
+  // Reply-To for easy reply
   var replyTo = (S.submitter.email || S.contacts.email || "").trim();
   if (replyTo) fd.append("_replyto", replyTo);
 
+  // quick contact fields at top of the email
   var nameVal  = (S.submitter.name || S.participant.legal_name || "HD HeeD AILR").trim();
   var emailVal = replyTo;
   var phoneVal = (S.submitter.phone || S.contacts.phone || "").trim();
@@ -1146,9 +1150,8 @@ function sendToFormspree(){
   if (emailVal) fd.append("email", emailVal);
   if (phoneVal) fd.append("phone", phoneVal);
 
-  fd.append("message", "AILR submission included below as JSON 'summary' and also printable within the app.");
-
-  fd.append("summary", JSON.stringify({
+  // Build the payload (kept, in case you want the raw JSON later)
+  var payload = {
     _subject:"HD HeeD — AILR onboarding submission",
     source:"ailr-v16",
     caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
@@ -1157,7 +1160,17 @@ function sendToFormspree(){
     emergency_advocacy:S.emergency_advocacy,
     uploads:(S.uploads.files||[]).map(function(f){ return {name:f.name,size:f.size,type:f.type}; }),
     submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString()
-  }));
+  };
+
+  // **The clean summary as PLAIN TEXT (robust in all emails)**
+  var pretty = generateSummaryText(payload);
+
+  // Make the top message short, then include the pretty block (Formspree shows fields in order)
+  fd.append("message", "AILR submission — formatted summary is below.");
+  fd.append("summary_pretty", pretty);
+
+  // OPTIONAL: keep JSON for backup (remove this line if you never want JSON)
+  fd.append("summary_json", JSON.stringify(payload));
 
   return fetch(FS_ENDPOINT, { method:"POST", body: fd, headers:{ "Accept":"application/json" } })
     .then(async function(r){
@@ -1174,6 +1187,8 @@ function sendToFormspree(){
       throw new Error(msg);
     });
 }
+</script>
+
 
   function openDoc(title, href){
     var modal = document.getElementById('docModal');
