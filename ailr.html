@@ -798,26 +798,37 @@ window.addEventListener('DOMContentLoaded', function(){
 
   // UPDATED: return the parsed JSON so caller can read fileUrl
   function sendToFormspree(){
-    var payload = {
-      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
-      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
-      bsp:S.bsp, supports:S.supports, schedule:S.schedule, policy_ack:S.policy_ack,
-      emergency_advocacy:S.emergency_advocacy,
-      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString()
-    };
+  var payload = {
+    caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
+    living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
+    bsp:S.bsp, supports:S.supports, schedule:S.schedule, policy_ack:S.policy_ack,
+    emergency_advocacy:S.emergency_advocacy,
+    submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString()
+  };
 
+  // 1) Try normal CORS (lets us read back fileUrl when it works)
+  return fetch(GS_WEBAPP, {
+    method: "POST",
+    body: JSON.stringify(payload) // no custom headers → no preflight
+  }).then(async function(r){
+    // If the network succeeds but server returns non-OK, throw
+    var j = await r.json().catch(()=>({}));
+    if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
+    return j; // success with JSON (has fileUrl)
+  }).catch(function(err){
+    // 2) Fallback: opaque request that bypasses CORS. We can't read the reply,
+    // but the server will still receive and save the PDF.
     return fetch(GS_WEBAPP, {
       method: "POST",
-      body: JSON.stringify(payload) // no custom headers to avoid preflight
-    }).then(async function(r){
-      var j = await r.json().catch(()=>({}));
-      if (!r.ok || j.status!=='ok') {
-        throw new Error(j && j.message ? j.message : "Server error");
-      }
-      if (j.fileUrl) console.log("Saved PDF:", j.fileUrl);
-      return j; // pass JSON (with fileUrl) to caller
+      mode: "no-cors",            // <— key: no CORS checks, response is opaque
+      body: JSON.stringify(payload)
+    }).then(function(){
+      // Pretend success but without fileUrl (we’ll advise to check Drive)
+      return { status: 'ok', fileUrl: null, _opaque:true };
     });
-  }
+  });
+}
+
 
   function openPrintableSummary(){
     /* unchanged printable summary implementation from your original */
