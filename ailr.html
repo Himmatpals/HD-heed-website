@@ -1141,10 +1141,11 @@ function sendToFormspree(){  // keep same name so the "Send now" button still wo
   };
 
   return fetch(GS_WEBAPP, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(payload)
-  }).then(async function(r){
+  method: "POST",
+  // no headers on purpose (avoids CORS preflight)
+  body: JSON.stringify(payload)
+})
+.then(async function(r){
     var j = await r.json().catch(()=>({}));
     if (!r.ok || j.status!=='ok') {
       throw new Error(j.message || "Server error");
