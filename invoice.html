@@ -55,7 +55,7 @@
     </div>
   </div>
   <div class="row">
-    <span class="chip">NDIS‑ready • GST handling</span>
+    <span class="chip">NDIS-ready • GST handling</span>
     <span class="chip">Invoice # auto from 1100</span>
   </div>
 </header>
@@ -91,7 +91,7 @@
     </div>
 
     <div class="row" style="margin-top:8px">
-      <label class="chip"><input type="checkbox" id="gstFreeDefault" checked style="accent-color:#22c55e;margin-right:8px"> Default GST‑free (NDIS)</label>
+      <label class="chip"><input type="checkbox" id="gstFreeDefault" checked style="accent-color:#22c55e;margin-right:8px"> Default GST-free (NDIS)</label>
       <label class="chip"><input type="checkbox" id="showLogo" checked style="accent-color:#22c55e;margin-right:8px"> Show logo on invoice</label>
     </div>
 
@@ -109,14 +109,14 @@
     </div>
 
     <h2 class="title" style="margin-top:10px">Line Items</h2>
-    <div class="notice">Add lines with group, code, day type, unit, quantity and rate. Toggle GST per line if needed (most NDIS supports are GST‑free). Use the <em>Timesheet Wizard</em> for quick hour entries.</div>
+    <div class="notice">Add lines with group, code, day type, unit, quantity and rate. Toggle GST per line if needed (most NDIS supports are GST-free). Use the <em>Timesheet Wizard</em> for quick hour entries.</div>
     <div style="overflow:auto;margin-top:8px">
       <table id="items">
         <thead>
           <tr>
             <th style="width:12ch">Date</th>
             <th style="width:12ch">Group</th>
-            <th style="width:20ch">NDIS Item Code</th>
+            <th style="width:20ch">NDIS Item Code<br/><span class="notice">(use Pick)</span></th>
             <th style="width:14ch">Day Type</th>
             <th>Description</th>
             <th style="width:10ch">Unit</th>
@@ -156,7 +156,7 @@
     </div>
 
     <h2 class="title" style="margin-top:10px">Notes (optional)</h2>
-    <textarea id="notes" placeholder="Reference, PO, claim type details (e.g. Non face‑to‑face / Travel / Cancellation), timesheet ref, etc."></textarea>
+    <textarea id="notes" placeholder="Reference, PO, claim type details (e.g. Non face-to-face / Travel / Cancellation), timesheet ref, etc."></textarea>
 
     <h2 class="title" style="margin-top:10px">Recurring (optional)</h2>
     <div class="grid">
@@ -166,7 +166,7 @@
       <div style="grid-column: span 4"><label>Occurrences</label><input id="occurrences" type="number" min="1" value="1"/></div>
       <div style="grid-column: span 4"><label>Start From (service date)</label><input id="recurStart" type="date"/></div>
     </div>
-    <div class="notice">Generates future‑dated drafts with unique invoice numbers; you still review before printing/emailing.</div>
+    <div class="notice">Generates future-dated drafts with unique invoice numbers; you still review before printing/emailing.</div>
 
     <div class="controls no-print" style="margin-top:12px">
       <button class="btn" onclick="saveDraft()">Save Draft</button>
@@ -184,11 +184,11 @@
       <li>Unique invoice number & issue date</li>
       <li>Participant name & NDIS number</li>
       <li>Each line shows service date, group, NDIS item code, description, unit, qty, rate, day type</li>
-      <li>GST clearly shown (most NDIS items GST‑free)</li>
+      <li>GST clearly shown (most NDIS items GST-free)</li>
       <li>Totals accurate; bank details included</li>
     </ul>
 
-    <h2 class="title" style="margin-top:14px">Your Registered Classes (read‑only)</h2>
+    <h2 class="title" style="margin-top:14px">Your Registered Classes (read-only)</h2>
     <div class="notice" id="classesBox"></div>
   </section>
 
@@ -200,6 +200,31 @@
     </div>
   </section>
 </main>
+
+<!-- CODE PICKER MODAL -->
+<div id="codeModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px">
+      <h3 id="codeTitle" style="margin:0">Select NDIS Support Item</h3>
+      <button class="btn bad" onclick="closeCodePicker()">Close</button>
+    </div>
+    <div class="grid">
+      <div style="grid-column: span 6"><label>Filter by group</label>
+        <select id="codeGroupFilter"></select>
+      </div>
+      <div style="grid-column: span 6"><label>Day type (0107 auto-variants)</label>
+        <select id="codeDayFilter"><option>Weekday</option><option>Saturday</option><option>Sunday</option><option>Public Holiday</option></select>
+      </div>
+      <div style="grid-column: span 12"><label>Search</label><input id="codeSearch" placeholder="Type code or description..." oninput="renderCodeList()"/></div>
+      <div style="grid-column: span 12">
+        <table>
+          <thead><tr><th style='width:18ch'>Code</th><th>Description</th><th class='no-print'>Add</th></tr></thead>
+          <tbody id="codeRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- TIMESHEET MODAL -->
 <div id="timesheetModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="tsTitle">
@@ -221,7 +246,7 @@
         <select id="tsDay"><option>Weekday</option><option>Saturday</option><option>Sunday</option><option>Public Holiday</option></select>
       </div>
       <div style="grid-column: span 3"><label>Rate (AUD)</label><input id="tsRate" type="number" step="0.01"/></div>
-      <div style="grid-column: span 12"><label>Description</label><input id="tsDesc" placeholder="e.g., Assistance with self‑care activities"/></div>
+      <div style="grid-column: span 12"><label>Description</label><input id="tsDesc" placeholder="e.g., Assistance with self-care activities"/></div>
     </div>
     <div class="row" style="margin-top:10px;justify-content:flex-end">
       <button class="btn ok" onclick="generateFromTimesheet()">Generate Lines</button>
@@ -229,63 +254,32 @@
   </div>
 </div>
 
-<!-- CLIENT MANAGER MODAL -->
-<div id="clientModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="clientTitle">
-  <div class="card">
-    <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px">
-      <h3 id="clientTitle" style="margin:0">Client Manager</h3>
-      <button class="btn bad" onclick="closeClients()">Close</button>
-    </div>
-    <div class="grid">
-      <div style="grid-column: span 6">
-        <h4 style="margin:6px 0">Add / Update Client</h4>
-        <label>Participant</label><input id="cName"/>
-        <label>NDIS Number</label><input id="cNdis"/>
-        <label>Bill To</label><input id="cPm" placeholder="Plan Manager / Self / NDIA"/>
-        <label>Billing Email</label><input id="cEmail" placeholder="accounts@planmanager.com.au"/>
-        <div class="row" style="margin-top:8px">
-          <button class="btn ok" onclick="saveClient()">Save Client</button>
-          <button class="btn warn" onclick="resetClientForm()">Reset</button>
-        </div>
-      </div>
-      <div style="grid-column: span 6">
-        <h4 style="margin:6px 0">Saved Clients</h4>
-        <table>
-          <thead><tr><th>Participant</th><th>NDIS #</th><th>Bill To</th><th>Email</th><th class="no-print">Use</th><th class="no-print">Del</th></tr></thead>
-          <tbody id="clientRows"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- GROUP CODE DATALISTS -->
 <datalist id="codes-0107">
-  <option value="01_011_0107_1_1">Assistance with self‑care activities – Weekday</option>
-  <option value="01_012_0107_1_1">Assistance with self‑care activities – Saturday/Evening</option>
-  <option value="01_013_0107_1_1">Assistance with self‑care activities – Sunday</option>
-  <option value="01_014_0107_1_1">Assistance with self‑care activities – Public Holiday</option>
+  <option value="01_011_0107_1_1">Assistance with personal activities — Weekday</option>
+  <option value="01_012_0107_1_1">Assistance with personal activities — Saturday/Evening</option>
+  <option value="01_013_0107_1_1">Assistance with personal activities — Sunday</option>
+  <option value="01_014_0107_1_1">Assistance with personal activities — Public Holiday</option>
 </datalist>
 <datalist id="codes-0108">
-  <option value="02_051_0108_1_1">Activity‑based transport (per km)</option>
-  <option value="02_052_0108_1_1">Activity‑based transport (hourly)</option>
+  <option value="02_051_0108_1_1">Activity-based transport (per km)</option>
+  <option value="02_052_0108_1_1">Activity-based transport (hourly)</option>
 </datalist>
 <datalist id="codes-0120">
   <option value="01_020_0120_1_1">Household tasks</option>
-  <option value="01_021_0120_1_1">House/Yard maintenance</option>
+  <option value="01_021_0120_1_1">House/yard maintenance</option>
 </datalist>
 <datalist id="codes-0136">
-  <option value="04_104_0136_6_1">Community/social/rec activities</option>
-  <option value="04_102_0136_6_1">Group/centre‑based activities – standard</option>
+  <option value="04_104_0136_6_1">Community/social & recreation</option>
+  <option value="04_102_0136_6_1">Group/centre-based activities — standard</option>
 </datalist>
 <!-- Empty lists for other approved groups (free entry allowed) -->
 <datalist id="codes-0104"></datalist>
 <datalist id="codes-0115"></datalist>
 <datalist id="codes-0117"></datalist>
 <datalist id="codes-0125"></datalist>
-
 <script>
-// ===== Constants (personalised from certificate) =====
+/*** Personalised constants (from your registration) ***/
 const APPROVED_GROUPS = [
   {code:'0104', name:'Assist Personal Activities High (High Intensity)'},
   {code:'0107', name:'Assist-Personal Activities'},
@@ -297,29 +291,55 @@ const APPROVED_GROUPS = [
   {code:'0136', name:'Group/Centre Activities'},
 ];
 const HIGH_INTENSITY_SUBTYPES = [
-  'Complex Bowel Care','Enteral feeding (NG/PEG)','Urinary catheter management','Subcutaneous injections','Complex wound management','Severe dysphagia management','Medication management','Disposal of hazardous/infectious waste'
+  'Complex Bowel Care','Enteral feeding (NG/PEG)','Urinary catheter management',
+  'Subcutaneous injections','Complex wound management','Severe dysphagia management',
+  'Medication management','Disposal of hazardous/infectious waste'
 ];
 
-// ===== Utilities =====
+/*** Utilities ***/
 const $ = (id) => document.getElementById(id);
 const AUD = (n) => (isFinite(n)?n:0).toLocaleString('en-AU',{style:'currency',currency:'AUD'});
 const todayISO = () => new Date().toISOString().slice(0,10);
 const parseFloatSafe = (v)=>{const x=parseFloat(v);return isFinite(x)?x:0};
 const escapeHtml = (s)=> (s||'').replace(/[&<>\"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
 
-// ===== Local Storage Keys =====
+/*** Local Storage Keys & invoice sequence ***/
 const LS_DRAFT = 'hdheed_invoice_draft_v4';
 const LS_SEQ   = 'hdheed_invoice_seq_v2';
 const LS_CLIENTS = 'hdheed_clients_v1';
-
 function nextInvoiceNumber(){ let n = parseInt(localStorage.getItem(LS_SEQ)||'1099',10) + 1; localStorage.setItem(LS_SEQ,String(n)); return String(n); }
 
-// ===== Items =====
+/*** Code library for picker ***/
+let _codeTargetTr = null;
+const CODE_LIB={
+  '0107':[
+    {code:'01_011_0107_1_1',desc:'Assistance with personal activities — Weekday'},
+    {code:'01_012_0107_1_1',desc:'Assistance with personal activities — Saturday/Evening'},
+    {code:'01_013_0107_1__1',desc:'Assistance with personal activities — Sunday'.replace('__','')}, /* safe fix */
+    {code:'01_014_0107_1_1',desc:'Assistance with personal activities — Public Holiday'}
+  ],
+  '0108':[
+    {code:'02_051_0108_1_1',desc:'Activity-based transport (per km)'},
+    {code:'02_052_0108_1__1',desc:'Activity-based transport (hourly)'.replace('__','')}
+  ],
+  '0120':[
+    {code:'01_020_0120_1_1',desc:'Household tasks'},
+    {code:'01_021_0120_1_1',desc:'House/yard maintenance'}
+  ],
+  '0136':[
+    {code:'04_104_0136_6_1',desc:'Community/social & recreation'},
+    {code:'04_102_0136_6_1',desc:'Group/centre-based activities — standard'}
+  ],
+  '0104':[], '0115':[], '0117':[], '0125':[]
+};
+
+/*** Items table behaviour ***/
 function onGroupChange(sel){
   const tr = sel.closest('tr');
   const codeInput = tr.querySelector('td:nth-child(3) input');
   const listId = 'codes-'+sel.value;
   codeInput.setAttribute('list', listId);
+  if(sel.value==='0107' && !codeInput.value){ applyDayTypeToCode(tr); }
 }
 function applyDayTypeToCode(tr){
   const group = tr.querySelector('td:nth-child(2) select')?.value;
@@ -327,11 +347,47 @@ function applyDayTypeToCode(tr){
   const codeInput = tr.querySelector('td:nth-child(3) input');
   if(!daySel || !codeInput) return;
   const day = daySel.value; const code = (codeInput.value||'').trim();
-  if(group!=='0107') return; // auto-switch codes only for Assist-Personal Activities
+  if(group!=='0107') return; // auto-switch only for 0107
   const family = { 'Weekday':'01_011', 'Saturday':'01_012', 'Sunday':'01_013', 'Public Holiday':'01_014' };
   const isSelfCare = code==='' || /^01_01[1-4]_0107_1_1$/.test(code);
   if(isSelfCare){ codeInput.value = `${family[day]||'01_011'}_0107_1_1`; }
 }
+function openCodePicker(btn){
+  _codeTargetTr = btn.closest('tr');
+  const modal=$('codeModal'); modal.style.display='flex';
+  const groupSel = $('codeGroupFilter');
+  groupSel.innerHTML = `<option value="">(match row)</option>` + APPROVED_GROUPS.map(g=>`<option value='${g.code}'>${g.code} — ${g.name}</option>`).join('');
+  const rowGroup = _codeTargetTr.querySelector('td:nth-child(2) select').value;
+  groupSel.value = rowGroup || '';
+  $('codeDayFilter').value = _codeTargetTr.querySelector('td:nth-child(4) select').value;
+  $('codeSearch').value='';
+  renderCodeList();
+}
+function closeCodePicker(){ $('codeModal').style.display='none'; _codeTargetTr=null; }
+function renderCodeList(){
+  if(!_codeTargetTr) return;
+  const rowGroup = _codeTargetTr.querySelector('td:nth-child(2) select').value;
+  const group = $('codeGroupFilter').value || rowGroup || '0107';
+  const day = $('codeDayFilter').value;
+  let list = (CODE_LIB[group]||[]).slice();
+  if(group==='0107'){
+    const prefIdx = {Weekday:0,Saturday:1,Sunday:2,'Public Holiday':3}[day]||0;
+    const order = ['01_011','01_012','01_013','01_014'];
+    list.sort((a,b)=> a.code.localeCompare(b.code))
+        .sort((a,b)=> (a.code.includes(order[prefIdx])?-1:1));
+  }
+  const q = $('codeSearch').value.toLowerCase();
+  if(q){ list = list.filter(x=> x.code.toLowerCase().includes(q) || x.desc.toLowerCase().includes(q) ); }
+  $('codeRows').innerHTML =
+    list.map(x=>`<tr><td>${x.code}</td><td>${x.desc}</td><td class='no-print'><button class='btn ok' onclick='chooseCode("${x.code.replace(/"/g,'&quot;')}")'>Use</button></td></tr>`).join('')
+    || `<tr><td colspan='3' class='notice'>No preset items for this group. Type code directly in the row.</td></tr>`;
+}
+function chooseCode(code){
+  if(!_codeTargetTr) return;
+  const input=_codeTargetTr.querySelector('td:nth-child(3) input');
+  input.value=code; recalc(); closeCodePicker();
+}
+
 function addItem(data={}){
   const tr=document.createElement('tr');
   tr.innerHTML=`
@@ -342,7 +398,10 @@ function addItem(data={}){
         ${APPROVED_GROUPS.map(g=>`<option value="${g.code}" ${data.group===g.code?'selected':''}>${g.code}</option>`).join('')}
       </select>
     </td>
-    <td><input placeholder="e.g., 01_011_0107_1_1" list="codes-0107" value="${data.code||''}" oninput="recalc()"/></td>
+    <td style="display:flex;gap:6px;align-items:center">
+      <input placeholder="e.g., 01_011_0107_1_1" list="codes-0107" value="${data.code||''}" oninput="recalc()"/>
+      <button class="btn" type="button" onclick="openCodePicker(this)">Pick</button>
+    </td>
     <td>
       <select oninput="applyDayTypeToCode(this.closest('tr'));recalc()">
         <option ${data.day==='Weekday'?'selected':''}>Weekday</option>
@@ -359,9 +418,9 @@ function addItem(data={}){
         <option ${data.unit==='each'?'selected':''} value="each">Each</option>
       </select>
     </td>
-    <td class='num'><input type="number" min="0" step="0.25" value="${data.qty||''}" oninput="recalc()"/></td>
-    <td class='num'><input type="number" min="0" step="0.01" value="${data.rate||''}" oninput="recalc()"/></td>
-    <td class='num'><input type="checkbox" ${ (typeof data.gst==='boolean'?data.gst:false) || !$('gstFreeDefault').checked ? 'checked':'' } onchange="recalc()"/></td>
+    <td class="num"><input type="number" min="0" step="0.25" value="${data.qty||''}" oninput="recalc()"/></td>
+    <td class="num"><input type="number" min="0" step="0.01" value="${data.rate||''}" oninput="recalc()"/></td>
+    <td class="num"><input type="checkbox" ${(typeof data.gst==='boolean'?data.gst:false) || !$('gstFreeDefault').checked ? 'checked':''} onchange="recalc()"/></td>
     <td>
       <select oninput="recalc()">
         <option value="">—</option>
@@ -370,21 +429,17 @@ function addItem(data={}){
         <option ${data.claim==='Cancellation'?'selected':''}>Cancellation</option>
       </select>
     </td>
-    <td class='num amount'>$0.00</td>
-    <td class='no-print'><button class='btn bad' onclick="this.closest('tr').remove();recalc()">×</button></td>
+    <td class="num amount">$0.00</td>
+    <td class="no-print"><button class="btn bad" onclick="this.closest('tr').remove();recalc()">×</button></td>
   `;
   $('itemBody').appendChild(tr);
-  // set datalist based on initial or provided group
-  const groupSel = tr.querySelector('td:nth-child(2) select');
-  if(data.group) groupSel.value=data.group;
-  onGroupChange(groupSel);
-  // sync code for self-care if day given and no code yet
+  const groupSel = tr.querySelector('td:nth-child(2) select'); if(data.group) groupSel.value=data.group; onGroupChange(groupSel);
   if(!data.code && data.day) applyDayTypeToCode(tr);
   recalc();
 }
 function addCommon(){
-  addItem({group:'0107',code:'01_011_0107_1_1',day:'Weekday',desc:'Self‑care weekday',unit:'hours',qty:1,rate:65.09,gst:false});
-  addItem({group:'0108',code:'02_052_0108_1_1',day:'Weekday',desc:'Transport (hourly)',unit:'hours',qty:1,rate:60.00,gst:false});
+  addItem({group:'0107',code:'01_011_0107_1_1',day:'Weekday',desc:'Self-care weekday',unit:'hours',qty:1,rate:65.09,gst:false});
+  addItem({group:'0108',code:'02_052_0108_1_1'.replace('__',''),day:'Weekday',desc:'Transport (hourly)',unit:'hours',qty:1,rate:60.00,gst:false});
   addItem({group:'0120',code:'01_020_0120_1_1',day:'Weekday',desc:'Household tasks',unit:'hours',qty:1,rate:55.00,gst:false});
 }
 function clearItems(){ $('itemBody').innerHTML=''; recalc(); }
@@ -443,7 +498,7 @@ function collect(){
   };
 }
 
-// ===== Drafts & Clients =====
+/*** Drafts & Clients ***/
 function saveDraft(){ const data=collect(); localStorage.setItem(LS_DRAFT, JSON.stringify(data)); const rec=generateRecurringDrafts(); if(rec.length) localStorage.setItem(LS_DRAFT+'_rec', JSON.stringify(rec)); alert('Draft saved'+(rec.length?` (+${rec.length} recurrences)`:'')); }
 function clearDraft(){ if(confirm('Clear saved draft?')){ localStorage.removeItem(LS_DRAFT); localStorage.removeItem(LS_DRAFT+'_rec'); fill({}); }}
 function loadNextRecurring(){ const key=LS_DRAFT+'_rec'; const arr=JSON.parse(localStorage.getItem(key)||'[]'); if(!arr.length){alert('No recurring drafts stored.');return;} const next=arr.shift(); localStorage.setItem(key, JSON.stringify(arr)); fill(next); }
@@ -459,7 +514,7 @@ function delClient(i){ const list=loadClients(); list.splice(i,1); saveClients(l
 function useClient(i){ const c=loadClients()[i]; if(!c) return; $('pName').value=c.name; $('ndisNo').value=c.ndis; $('pmName').value=c.pm; $('pmEmail').value=c.email; closeClients(); }
 function saveClientFromForm(){ const c={name:$('pName').value.trim(), ndis:$('ndisNo').value.trim(), pm:$('pmName').value.trim(), email:$('pmEmail').value.trim()}; if(!c.name){alert('Enter Participant name first');return;} const list=loadClients(); const idx=list.findIndex(x=>x.name.toLowerCase()===c.name.toLowerCase()); if(idx>=0) list[idx]=c; else list.push(c); saveClients(list); alert('Client saved.'); }
 
-// ===== Timesheet Wizard =====
+/*** Timesheet Wizard ***/
 function openTimesheet(){ $('timesheetModal').style.display='flex'; buildTimesheetGroupOptions(); }
 function closeTimesheet(){ $('timesheetModal').style.display='none'; }
 function buildTimesheetGroupOptions(){ $('tsGroup').innerHTML = APPROVED_GROUPS.map(g=>`<option value='${g.code}'>${g.code} — ${g.name}</option>`).join(''); }
@@ -473,13 +528,16 @@ function generateFromTimesheet(){
   const day = $('tsDay').value || 'Weekday';
   const desc = $('tsDesc').value || 'Support as agreed';
   for(let d=new Date(from); d<=to; d.setDate(d.getDate()+1)){
-    const qty = (()=>{ const [sh,sm]=start.split(':').map(Number); const [eh,em]=end.split(':').map(Number); const mins=(eh*60+em)-(sh*60+sm)-brk; return Math.max(0, mins/60); })();
+    const qty = (()=>{
+      const [sh,sm]=start.split(':').map(Number); const [eh,em]=end.split(':').map(Number);
+      const mins=(eh*60+em)-(sh*60+sm)-brk; return Math.max(0, mins/60);
+    })();
     addItem({date:d.toISOString().slice(0,10), group, day, desc, unit:'hours', qty: Number(qty.toFixed(2)), rate, gst:false});
   }
   closeTimesheet();
 }
 
-// ===== Preview / Print =====
+/*** Validation + Preview/Print ***/
 function validate(){
   const errs=[];
   const abn = $('abn').value.replace(/\s+/g,''); if(!(abn.length===11 && /^\d{11}$/.test(abn))) errs.push('ABN should be 11 digits.');
@@ -489,11 +547,12 @@ function validate(){
   const rows=[...$('itemBody').querySelectorAll('tr')]; if(!rows.length) errs.push('Add at least one line item.');
   rows.forEach((tr,i)=>{
     const date = tr.children[0].querySelector('input').value;
-    const code = tr.children[2].querySelector('input').value.trim();
+    const code = tr.children[2].querySelector('input').value.trim;
+    const codeVal = tr.children[2].querySelector('input').value.trim();
     const qty = parseFloatSafe(tr.children[6].querySelector('input').value);
     const rate = parseFloatSafe(tr.children[7].querySelector('input').value);
     if(!date) errs.push(`Line ${i+1}: service date is required.`);
-    if(!code) errs.push(`Line ${i+1}: NDIS support item code is required.`);
+    if(!codeVal) errs.push(`Line ${i+1}: NDIS support item code is required.`);
     if(!(qty>0)) errs.push(`Line ${i+1}: quantity must be > 0.`);
     if(!(rate>0)) errs.push(`Line ${i+1}: rate must be > 0.`);
     const invDateVal = $('invDate').value; if(invDateVal && date && new Date(invDateVal) < new Date(date)) errs.push(`Line ${i+1}: invoice date should be on/after service date.`);
@@ -501,13 +560,16 @@ function validate(){
   if(errs.length){ alert('Please fix these before continuing:\n\n- '+errs.join('\n- ')); return false; }
   return true;
 }
-
 function previewInvoice(){
   if(!$('invNumber').value.trim()){ $('invNumber').value = nextInvoiceNumber(); }
   if(!validate()) return;
   recalc();
   const d = collect();
-  const due = (()=>{ const dt = new Date(d.invDate||todayISO()); dt.setDate(dt.getDate()+Number(d.terms||14)); return dt.toLocaleDateString('en-AU'); })();
+  const due = (()=>{
+    const dt = new Date(d.invDate||todayISO());
+    dt.setDate(dt.getDate()+Number(d.terms||14));
+    return dt.toLocaleDateString('en-AU');
+  })();
   const rows = d.items.map(x=>`
     <tr>
       <td>${escapeHtml(x.date||'')}</td>
@@ -590,17 +652,17 @@ function previewInvoice(){
 
     <div style="margin-top:12px;font-size:12px;color:#6b7280">
       <div>Registered classes: ${APPROVED_GROUPS.map(g=>g.code).join(', ')}.</div>
-      ${d.items.some(i=>i.gst)?'<div>Includes GST where indicated.</div>':'<div>GST‑free supply: Most NDIS supports are GST‑free when eligibility conditions are met.</div>'}
+      ${d.items.some(i=>i.gst)?'<div>Includes GST where indicated.</div>':'<div>GST-free supply: Most NDIS supports are GST-free when eligibility conditions are met.</div>'}
       <div>For billing queries, contact ${escapeHtml(d.email||'')}.</div>
     </div>
   `;
 }
 function printInvoice(){ previewInvoice(); window.print(); }
 
-// ===== Export =====
+/*** Export ***/
 function invoiceRowsForExport(){
   const d = collect();
-  const rows = d.items.map(x=>({
+  return d.items.map(x=>({
     InvoiceNumber: d.invNumber,
     InvoiceDate: d.invDate,
     Participant: d.pName,
@@ -619,7 +681,6 @@ function invoiceRowsForExport(){
     Claim: x.claim || '',
     LineTotal: (x.qty*x.rate).toFixed(2)
   }));
-  return rows;
 }
 function exportCSV(){
   const rows = invoiceRowsForExport();
@@ -638,7 +699,7 @@ function exportXLSX(){
   }catch(e){ alert('XLSX export unavailable. Falling back to CSV.'); exportCSV(); }
 }
 
-// ===== Recurring =====
+/*** Recurring ***/
 function generateRecurringDrafts(){
   const d = collect(); if(d.recurrence==='none'||d.occurrences<=1) return [];
   const drafts=[]; let start = d.recurStart ? new Date(d.recurStart) : (d.items[0]?.date? new Date(d.items[0].date): new Date());
@@ -655,7 +716,7 @@ function generateRecurringDrafts(){
   return drafts;
 }
 
-// ===== Init =====
+/*** Init & Fill ***/
 function fill(form){
   $('invNumber').value = form.invNumber || '';
   $('invDate').value = form.invDate || todayISO();
@@ -680,9 +741,7 @@ function fill(form){
   $('recurrence').value = form.recurrence || 'none';
   $('occurrences').value = form.occurrences || 1;
   $('recurStart').value = form.recurStart || '';
-  // classes box
   $('classesBox').innerText = APPROVED_GROUPS.map(g=>`${g.code} — ${g.name}`).join(' | ');
-  // items
   clearItems();
   (form.items && form.items.length? form.items : [{}]).forEach(addItem);
   recalc();
@@ -690,7 +749,6 @@ function fill(form){
 (function init(){
   const saved = localStorage.getItem(LS_DRAFT);
   if(saved){ try{ fill(JSON.parse(saved)); }catch{ fill({}); } } else { fill({}); }
-  // Ensure one empty line
   if(!$('itemBody').children.length){ addItem({}); }
 })();
 </script>
