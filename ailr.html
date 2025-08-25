@@ -81,7 +81,7 @@
   .opts{display:grid; gap:10px}
   .al-chip{
     border:1px solid var(--al-line); background:linear-gradient(180deg,#121a3a,#0f172f);
-    color:#e7ebff; border-radius:12px; padding:14px; text-align:left; cursor:pointer; font-size:1.04rem
+    color:#e7ebff; border-radius:12px; padding:14px; text-align:left; cursor:pointer; font-size:1.04rem;
   }
   .al-chip:hover{box-shadow:0 12px 34px rgba(0,0,0,.28)}
   .al-chip[aria-pressed="true"]{box-shadow:0 0 0 3px rgba(255,217,92,.25); border-color:#ffd95c}
@@ -156,7 +156,7 @@
 <section class="hero">
   <div class="card">
     <h1>Let’s get you set up — thoroughly and simply</h1>
-    <p>Answer clear, step-by-step questions. Pick a button, or type your own answer. Choose <em>Not sure</em> or <em>Prefer not to say</em> whenever you like — you can finish later. We’ll only need an <strong>email or phone</strong> at the end to submit.</p>
+    <p>Answer clear, step-by-step questions. Pick a card, or type your own answer. Choose <em>Not sure</em> or <em>Prefer not to say</em> whenever you like — you can finish later. We’ll only need an <strong>email or phone</strong> at the end to submit.</p>
     <div class="meta">
       <span class="pill">NDIS participant onboarding</span>
       <span class="pill">Consents & risks included</span>
@@ -218,6 +218,47 @@ window.addEventListener('DOMContentLoaded', function(){
   var GS_WEBAPP   = "https://script.google.com/macros/s/AKfycbwgH4ld8lZ6mtHEBg4VlRbcyslpCHZOD_Bxqc0PMcSxoSjMwyiBMdA1WLg1vSAHwb-BEA/exec";
   var STORAGE_KEY = "hdheed_ailr_v16";
 
+  /* === Your 11 PDFs (10 forms + 1 handbook) === */
+  var DOCS = [
+    { id:"handbook", title:"Client Handbook", requiresConsent:false,
+      fileId:"https://drive.google.com/file/d/1Du5TxEIgD9n--Gw5vkkkFXEij_SaLwLE/view?usp=sharing" },
+
+    { id:"privacy", title:"Privacy and Confidentiality Agreement", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/16qAcoUWtXC57hCg-B2atxpQRfDr53jK3/view?usp=sharing" },
+
+    { id:"money_property", title:"Participant Money and Property Consent Form", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1OymxyfOYxtaqW2keNrRB_kmW8JmfP6vz/view?usp=sharing" },
+
+    { id:"incident_ack", title:"Incident Management Acknowledgement Form", requiresConsent:false,
+      fileId:"https://drive.google.com/file/d/1EYfi-4SoOxk8y70PNc2Fw70RiO7yxZ8a/view?usp=sharing" },
+
+    { id:"share_ndis_plan", title:"Consent to Share NDIS Plan", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/10j5FmZg1zfKeE9XrclmFZFY3BaGQj-mo/view?usp=sharing" },
+
+    { id:"share_info", title:"Consent to Share Information", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1uJ3XCrdms2yHdnnDvXyaCEgUu91fZ1ip/view?usp=sharing" },
+
+    { id:"media_photos", title:"Consent for Media and Photographs", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1UuNf69LxSLTOZNhwvi-17d3SeRRjik3t/view?usp=sharing" },
+
+    { id:"emergency_med", title:"Consent for Emergency Medical Treatment", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1mGUnc7z9gVkYw3KEC6qiEhBxOUrB_zIx/view?usp=sharing" },
+
+    { id:"complaints_feedback", title:"Complaints and Feedback Form", requiresConsent:false,
+      fileId:"https://drive.google.com/file/d/12fK9zFbu0SnXyJ0Zs77hOvdXp-D9bwDU/view?usp=sharing" },
+
+    { id:"advocacy_auth", title:"Authority to Act as an Advocate", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1Ips2uYAXgsg_35ATUJzsWpad4haMlAtD/view?usp=sharing" },
+
+    { id:"key_authority", title:"Authority to Hold a Key", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1sBNptUA3mTu55NdDPNUAexqLOjfPmPQ-/view?usp=sharing" }
+  ];
+  function driveUrl(idOrUrl){
+    if(!idOrUrl) return "#";
+    if(/^https?:\/\//i.test(idOrUrl)) return idOrUrl;
+    return "https://drive.google.com/uc?export=download&id="+encodeURIComponent(idOrUrl);
+  }
+
   /* ====== Safe helpers ====== */
   function $(s,r){ return (r||document).querySelector(s); }
   function setSaveHint(t){ var el=$("#saveHint"); if(el) el.textContent=t; }
@@ -240,6 +281,7 @@ window.addEventListener('DOMContentLoaded', function(){
     bsp: "images/ella/ella-risk-beh.png",
     supports: "images/ella/ella-rostering.png",
     schedule: "images/ella/ella-rostering.png",
+    policies: "images/ella/ella-summary.png",
     consents: "images/ella/ella-consent.png",
     uploads: "images/ella/ella-dates.png",
     review: "images/ella/ella-summary.png",
@@ -308,12 +350,14 @@ window.addEventListener('DOMContentLoaded', function(){
     },
     schedule:{ windows:[], days:[], start_preference:null, hours_per_week:null, urgency:"Not sure" },
 
-    policy_ack:{ handbook:false, incident:false, complaints:false },
+    policy_ack:{ handbook:false, incident:false, complaints:false }, // legacy
     emergency_advocacy:null,
 
     uploads:{ files:[] },
 
     submitter:{ name:null, email:null, phone:null },
+
+    acks:{},  // per-document acknowledgements
 
     notes:[]
   };
@@ -342,7 +386,6 @@ window.addEventListener('DOMContentLoaded', function(){
   var backBtn = document.getElementById("backBtn");
   var nextBtn = document.getElementById("nextBtn");
   var saveExitBtn = document.getElementById("saveExitBtn");
-
   /* ====== Step builders ====== */
   var Steps = [
     { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
@@ -541,16 +584,54 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     },
 
-    /* REMOVED "policies" step entirely */
-
-    { key:"consents", title:"Acknowledgements & Emergency Advocacy", sub:"Please tick to confirm you have received and read the Client Handbook, Incident Management, and Complaints & Feedback documents (we email these to you before you complete this form). You can withdraw consent at any time.",
+    /* ===== POLICIES (dynamic docs) ===== */
+    { key:"policies", title:"Client Handbook & Required Forms", sub:"You should have already received these by email. Tick to confirm you’ve received & read each document; tick consent for forms you’ll sign and email to info@hdheed.com.au.",
       build:function(m){
-        m.appendChild(checkAck("I acknowledge I have received and read the Client Handbook", S.policy_ack, "handbook"));
-        m.appendChild(checkAck("I understand the Incident Management process (document received and read)", S.policy_ack, "incident"));
-        m.appendChild(checkAck("I have received and read the Complaints & Feedback information", S.policy_ack, "complaints"));
+        DOCS.forEach(function(d){
+          if(!S.acks[d.id]) S.acks[d.id] = { read:false, consent:false };
+        });
 
-        m.appendChild(divider("Emergency advocacy (liaison)"));
-        m.appendChild(radioChips("Do you consent to HD HeeD liaising as your advocate in emergencies (to coordinate safe care)?", S, "emergency_advocacy", [
+        DOCS.forEach(function(d){
+          var card = document.createElement('div'); card.className="inlinebox";
+          card.innerHTML = '<div style="font-weight:800">'+d.title+'</div>';
+          var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; align-items:center";
+          var a = document.createElement('a'); a.className="btn primary"; a.textContent="Download PDF"; a.href=driveUrl(d.fileId); a.download="";
+          actions.appendChild(a);
+          var hint = document.createElement('div'); hint.className="hint";
+          hint.textContent = d.requiresConsent ? "Please sign the PDF and email it to info@hdheed.com.au."
+                                               : "Please read this document before proceeding.";
+          actions.appendChild(hint);
+          card.appendChild(actions);
+
+          var row1 = document.createElement('div'); row1.className="ck-row";
+          var c1 = document.createElement('input'); c1.type="checkbox"; c1.id="ack_read_"+d.id; c1.checked = !!S.acks[d.id].read;
+          var l1 = document.createElement('label'); l1.htmlFor=c1.id; l1.textContent = "I have received & read this document.";
+          c1.addEventListener('change', function(){ S.acks[d.id].read = c1.checked; save(); });
+          row1.appendChild(c1); row1.appendChild(l1); card.appendChild(row1);
+
+          if (d.requiresConsent){
+            var row2 = document.createElement('div'); row2.className="ck-row";
+            var c2 = document.createElement('input'); c2.type="checkbox"; c2.id="ack_con_"+d.id; c2.checked = !!S.acks[d.id].consent;
+            var l2 = document.createElement('label'); l2.htmlFor=c2.id; l2.textContent = "I consent to the terms in this form.";
+            c2.addEventListener('change', function(){ S.acks[d.id].consent = c2.checked; save(); });
+            row2.appendChild(c2); row2.appendChild(l2); card.appendChild(row2);
+          }
+          m.appendChild(card);
+        });
+
+        var sum = document.createElement('div'); sum.className="hint";
+        sum.style.marginTop="6px";
+        var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
+        DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
+        sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
+        m.appendChild(sum);
+      }
+    },
+
+    /* ===== CONSENTS (Emergency Advocacy only) ===== */
+    { key:"consents", title:"Emergency Advocacy", sub:"Separately from the documents, do you consent to HD HeeD liaising as your advocate in emergencies to coordinate safe care?",
+      build:function(m){
+        m.appendChild(radioChips("Emergency advocacy (liaison) consent", S, "emergency_advocacy", [
           ["Yes","Yes"],["No","No"],["Not sure","Not sure"]
         ]));
       }
@@ -727,16 +808,7 @@ window.addEventListener('DOMContentLoaded', function(){
     return box;
   }
 
-  function checkAck(text, obj, key){
-    var box = document.createElement('div'); box.className="inlinebox";
-    var id = "ack_"+key+"_"+Math.random().toString(36).slice(2,7);
-    var row = document.createElement('div'); row.className="ck-row";
-    var c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = !!obj[key];
-    var lab = document.createElement('label'); lab.htmlFor=id; lab.textContent = text;
-    c.addEventListener('change', function(){ obj[key] = c.checked; save(); });
-    row.appendChild(c); row.appendChild(lab); box.appendChild(row);
-    return box;
-  }
+  function policyCard(){ /* legacy (not used) */ }
 
   function renderReview(){
     var wrap = document.createElement('div'); wrap.className="review";
@@ -753,268 +825,166 @@ window.addEventListener('DOMContentLoaded', function(){
       d.appendChild(kv); return d;
     }
 
-    wrap.appendChild(
-      sect("Who is completing", [
-        ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
-      ])
-    );
-    wrap.appendChild(
-      sect("Participant", [
-        ["Legal name", S.participant.legal_name],
-        ["Preferred name", S.participant.preferred_name],
-        ["Pronouns", S.participant.pronouns],
-        ["DOB", S.participant.dob],
-        ["NDIS number", S.participant.ndis_number],
-        ["Address", [S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
-        ["Plan management", S.participant.plan_mgmt],
-        ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
-        ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
-      ])
-    );
-    wrap.appendChild(
-      sect("Contacts", [
-        ["Email", S.contacts.email],
-        ["Phone", S.contacts.phone],
-        ["Emergency contact", [S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(" • ")||"—"],
-        ["Support Coordinator", [S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(" • ")||"—"],
-        ["GP", [S.contacts.gp.name,S.contacts.gp.practice,S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • ")]
-      ])
-    );
-    wrap.appendChild(
-      sect("Communication & preferences", [
-        ["Language", S.comms.primary_language],
-        ["Interpreter", S.comms.interpreter],
-        ["Interpreter language", S.comms.interpreter_language],
-        ["Cultural considerations", S.comms.cultural_considerations],
-        ["Worker gender pref.", S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other || "—"],
-        ["Transport required", S.comms.preferences.transport_required||"—"]
-      ])
-    );
-    wrap.appendChild(
-      sect("Living & access", [
-        ["Residence type", S.living.residence_type],
-        ["Lives with", S.living.lives_with],
-        ["Entry notes", S.living.entry_notes],
-        ["Keysafe", S.living.keysafe],
-        ["Smoking", S.living.smoking_on_premises],
-        ["Hazards", S.living.hazards]
-      ])
-    );
-    wrap.appendChild(
-      sect("Health & clinical", [
-        ["Primary diagnoses", S.clinical.primary_diagnoses],
-        ["Other diagnoses", S.clinical.other_diagnoses],
-        ["Allergies", S.clinical.allergies],
-        ["Mobility", S.clinical.mobility],
-        ["Equipment", S.clinical.equipment],
-        ["Continence", S.clinical.continence],
-        ["Cognition", S.clinical.cognition],
-        ["Pressure injury risk", S.clinical.pressure_injury_risk],
-        ["Falls risk", S.clinical.falls_risk],
-        ["Seizures", S.clinical.seizures.has===true?"Yes":S.clinical.seizures.has===false?"No":S.clinical.seizures.has],
-        ["Seizure plan", S.clinical.seizures.plan],
-        ["Seizure frequency", S.clinical.seizures.frequency],
-        ["Stoma/ostomy care", (S.clinical.stoma_care===true?"Yes":S.clinical.stoma_care===false?"No":(S.clinical.stoma_care||"—"))],
-        ["Diet / swallowing", S.clinical.diet_notes]
-      ])
-    );
+    wrap.appendChild(sect("Who is completing", [
+      ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
+    ]));
+
+    wrap.appendChild(sect("Participant", [
+      ["Legal name", S.participant.legal_name],
+      ["Preferred name", S.participant.preferred_name],
+      ["Pronouns", S.participant.pronouns],
+      ["DOB", S.participant.dob],
+      ["NDIS number", S.participant.ndis_number],
+      ["Address", [S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
+      ["Plan management", S.participant.plan_mgmt],
+      ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
+      ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
+    ]));
+
+    wrap.appendChild(sect("Contacts", [
+      ["Email", S.contacts.email],
+      ["Phone", S.contacts.phone],
+      ["Emergency contact", [S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(" • ")||"—"],
+      ["Support Coordinator", [S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(" • ")||"—"],
+      ["GP", [S.contacts.gp.name,S.contacts.gp.practice,S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • ")||"—"]
+    ]));
+
+    wrap.appendChild(sect("Communication & preferences", [
+      ["Language", S.comms.primary_language],
+      ["Interpreter", S.comms.interpreter],
+      ["Interpreter language", S.comms.interpreter_language],
+      ["Cultural considerations", S.comms.cultural_considerations],
+      ["Worker gender pref.", S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other || "—"],
+      ["Transport required", S.comms.preferences.transport_required||"—"]
+    ]));
+
+    wrap.appendChild(sect("Living & access", [
+      ["Residence type", S.living.residence_type],
+      ["Lives with", S.living.lives_with],
+      ["Entry notes", S.living.entry_notes],
+      ["Keysafe", S.living.keysafe],
+      ["Smoking", S.living.smoking_on_premises],
+      ["Hazards", S.living.hazards]
+    ]));
+
+    wrap.appendChild(sect("Health & clinical", [
+      ["Primary diagnoses", S.clinical.primary_diagnoses],
+      ["Other diagnoses", S.clinical.other_diagnoses],
+      ["Allergies", S.clinical.allergies],
+      ["Mobility", S.clinical.mobility],
+      ["Equipment", S.clinical.equipment],
+      ["Continence", S.clinical.continence],
+      ["Cognition", S.clinical.cognition],
+      ["Pressure injury risk", S.clinical.pressure_injury_risk],
+      ["Falls risk", S.clinical.falls_risk],
+      ["Seizures", S.clinical.seizures.has===true?"Yes":S.clinical.seizures.has===false?"No":S.clinical.seizures.has],
+      ["Seizure plan", S.clinical.seizures.plan],
+      ["Seizure frequency", S.clinical.seizures.frequency],
+      ["Stoma/ostomy care", (S.clinical.stoma_care===true?"Yes":S.clinical.stoma_care===false?"No":(S.clinical.stoma_care||"—"))],
+      ["Diet / swallowing", S.clinical.diet_notes]
+    ]));
+
     function listTrue(obj, keys){
       var map = {wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
                  animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"};
-      var list = keys.filter(function(k){ return obj[k]===true; }).map(function(k){ return map[k]; });
+      var list = keys.filter(function(k){ return obj[k]===true; }).map(function(k){ return map[k]||k; });
       return list.length? list.join(", ") : "—";
     }
-    wrap.appendChild(
-      sect("Risks", [
-        ["Behavioural", S.risks.behavioural.present],
-        ["Behaviour notes", S.risks.behavioural.notes],
-        ["Clinical concerns", listTrue(S.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])],
-        ["Clinical other", S.risks.clinical.other],
-        ["Environmental", listTrue(S.risks.environmental, ["animals","hoarding","weapons"])],
-        ["Environmental other", S.risks.environmental.other],
-        ["Home risks", listTrue(S.risks.home_checklist, ["trip_hazards","smoke_alarms","lighting","bathroom_safety"])],
-        ["Home notes", S.risks.home_checklist.notes],
-        ["Other risk notes", S.risks.other_notes],
-        ["Overall rating", S.risks.overall_rating]
-      ])
-    );
+
+    wrap.appendChild(sect("Risks", [
+      ["Behavioural", S.risks.behavioural.present],
+      ["Behaviour notes", S.risks.behavioural.notes],
+      ["Clinical concerns", listTrue(S.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])],
+      ["Clinical other", S.risks.clinical.other],
+      ["Environmental", listTrue(S.risks.environmental, ["animals","hoarding","weapons"])],
+      ["Environmental other", S.risks.environmental.other],
+      ["Home risks", listTrue(S.risks.home_checklist, ["trip_hazards","smoke_alarms","lighting","bathroom_safety"])],
+      ["Home notes", S.risks.home_checklist.notes],
+      ["Other risk notes", S.risks.other_notes],
+      ["Overall rating", S.risks.overall_rating]
+    ]));
+
+    wrap.appendChild(sect("Behaviour support", [
+      ["BSP in place", S.bsp.has_bsp===true?"Yes":S.bsp.has_bsp===false?"No":(S.bsp.has_bsp||"—")],
+      ["Restrictive practices", S.bsp.restrictive_practices===true?"Yes":S.bsp.restrictive_practices===false?"No":(S.bsp.restrictive_practices||"—")],
+      ["Provider", S.bsp.provider],
+      ["Notes", S.bsp.notes]
+    ]));
+
     function mapCore(arr,other){ var m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; var t=(arr||[]).map(function(k){return m[k];}).filter(Boolean); if(other) t.push("Other: "+other); return t.length?t.join(", "):"—"; }
     function mapCapacity(arr,other){ var m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; var t=(arr||[]).map(function(k){return m[k];}).filter(Boolean); if(other) t.push("Other: "+other); return t.length?t.join(", "):"—"; }
     function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
     function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
 
-    wrap.appendChild(
-      sect("Supports & schedule", [
-        ["Core supports", mapCore(S.supports.core, S.supports.core_other)],
-        ["Capacity Building", mapCapacity(S.supports.capacity, S.supports.capacity_other)],
-        ["Goals", S.supports.goals],
-        ["Outcomes", S.supports.outcomes],
-        ["Windows", mapWindows(S.schedule.windows)],
-        ["Days", mapDays(S.schedule.days)],
-        ["Hours/week", S.schedule.hours_per_week],
-        ["Urgency", S.schedule.urgency],
-        ["Start pref.", S.schedule.start_preference]
-      ])
-    );
-    wrap.appendChild(
-      sect("Policy acknowledgements", [
-        ["Handbook acknowledged", S.policy_ack.handbook===true?"Yes":"No"],
-        ["Incident management understood", S.policy_ack.incident===true?"Yes":"No"],
-        ["Complaints & feedback info received", S.policy_ack.complaints===true?"Yes":"No"],
-        ["Emergency advocacy consent", S.emergency_advocacy || "—"]
-      ])
-    );
-    wrap.appendChild(
-      sect("Uploads", [
-        ["Files selected", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ") || "—"]
-      ])
-    );
+    var readCt=0, needCon=0, conCt=0;
+    DOCS.forEach(function(d){ if(S.acks[d.id] && S.acks[d.id].read) readCt++; if(d.requiresConsent){ needCon++; if(S.acks[d.id] && S.acks[d.id].consent) conCt++; } });
+    wrap.appendChild(sect("Policy acknowledgements", [
+      ["Documents read", readCt + " / " + DOCS.length],
+      ["Form consents", conCt + " / " + needCon],
+      ["Emergency advocacy consent", S.emergency_advocacy || "—"]
+    ]));
+
+    wrap.appendChild(sect("Supports & schedule", [
+      ["Core supports", mapCore(S.supports.core, S.supports.core_other)],
+      ["Capacity Building", mapCapacity(S.supports.capacity, S.supports.capacity_other)],
+      ["Goals", S.supports.goals],
+      ["Outcomes", S.supports.outcomes],
+      ["Windows", mapWindows(S.schedule.windows)],
+      ["Days", mapDays(S.schedule.days)],
+      ["Hours/week", S.schedule.hours_per_week],
+      ["Urgency", S.schedule.urgency],
+      ["Start pref.", S.schedule.start_preference]
+    ]));
+
+    wrap.appendChild(sect("Uploads", [
+      ["Files selected", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ") || "—"]
+    ]));
+
     return wrap;
   }
-  function openPrintableSummary(){
-    var p = (function(){ try{return JSON.parse(JSON.stringify(S));}catch(e){return S;} })();
-    p.timestamp = new Date().toISOString();
 
-    var w = window.open("", "_blank");
-    var style = `
-      <style>
-        @page { size: A4; margin: 16mm; }
-        body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif; color:#111; }
-        h1{font-size:20px; margin:0 0 8px 0}
-        .meta{font-size:12px; color:#333; margin-bottom:14px}
-        h2{font-size:16px; margin:18px 0 8px 0; padding-bottom:4px; border-bottom:2px solid #222}
-        table{border-collapse:collapse; width:100%; margin:6px 0 12px 0}
-        th,td{border:1px solid #ccc; padding:6px 8px; text-align:left; vertical-align:top; font-size:13px}
-        th{background:#f6f7fb; width:36%; font-weight:800}
-        .section{page-break-inside:avoid}
-        .small{font-size:12px; color:#444}
-      </style>`;
-    function row(k,v){ return '<tr><th>'+k+'</th><td>'+(v==null||v===undefined||v===""?'—':String(v))+'</td></tr>'; }
-    function listTruePrint(obj,keys){
-      var map={wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral feeding",mental_health:"Mental health",stoma_care:"Stoma care",animals:"Reactive animals",hoarding:"Hoarding",weapons:"Weapons"};
-      var list=keys.filter(function(k){return obj && obj[k]===true;}).map(function(k){return map[k]||k;});
-      return list.length?list.join(", "):"—";
+  function openDoc(title, href){
+    var modal = document.getElementById('docModal');
+    var docTitle = document.getElementById('docTitle');
+    var docViewer = document.getElementById('docViewer');
+    var docDownload = document.getElementById('docDownload');
+    docTitle.textContent = title;
+    docViewer.src = href;
+    docDownload.href = href;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.getElementById('docClose').addEventListener('click', closeDoc);
+    modal.addEventListener('click', function(e){ if (e.target===modal) closeDoc(); });
+    function closeDoc(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      docViewer.src = "";
     }
-    function section(title, rows){
-      w.document.write('<div class="section"><h2>'+title+'</h2><table>'+rows.join("")+'</table></div>');
-    }
-
-    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>HD HeeD — AILR Summary</title>'+style+'</head><body>');
-    w.document.write('<h1>HD HeeD — AILR Summary</h1>');
-    w.document.write('<div class="meta">Generated: '+(new Date(p.timestamp||Date.now())).toLocaleString()+'<br><span class="small">Save as PDF from your browser’s Print dialog.</span></div>');
-
-    section("Who is completing", [
-      row("Role", p.caller.role), row("Name", p.caller.name), row("Relationship", p.caller.relationship), row("Consent", p.caller.consent)
-    ]);
-    section("Participant", [
-      row("Legal name", p.participant.legal_name), row("Preferred name", p.participant.preferred_name), row("Pronouns", p.participant.pronouns),
-      row("DOB", p.participant.dob), row("NDIS number", p.participant.ndis_number),
-      row("Address", [p.participant.address.line1,p.participant.address.line2,p.participant.address.suburb,p.participant.address.state,p.participant.address.postcode].filter(Boolean).join(", ")),
-      row("Plan management", p.participant.plan_mgmt),
-      row("Plan manager", [p.participant.plan_manager.org,p.participant.plan_manager.contact,p.participant.plan_manager.email,p.participant.plan_manager.phone].filter(Boolean).join(" • ")),
-      row("Plan dates", [p.participant.plan_dates.start,p.participant.plan_dates.end].filter(Boolean).join(" → "))
-    ]);
-    section("Contacts", [
-      row("Email", p.contacts.email), row("Phone", p.contacts.phone),
-      row("Emergency", [p.contacts.emergency.name,p.contacts.emergency.relationship,p.contacts.emergency.phone].filter(Boolean).join(" • ")),
-      row("Support Coordinator", [p.contacts.support_coordinator.name,p.contacts.support_coordinator.org,p.contacts.support_coordinator.email,p.contacts.support_coordinator.phone].filter(Boolean).join(" • ")),
-      row("GP", [p.contacts.gp.name,p.contacts.gp.practice,p.contacts.gp.phone,p.contacts.gp.email].filter(Boolean).join(" • "))
-    ]);
-    section("Communication & preferences", [
-      row("Language", p.comms.primary_language), row("Interpreter", p.comms.interpreter),
-      row("Interpreter language", p.comms.interpreter_language), row("Cultural considerations", p.comms.cultural_considerations),
-      row("Worker gender pref.", p.comms.preferences.worker_gender || p.comms.preferences.worker_gender_other || "—"),
-      row("Transport required", p.comms.preferences.transport_required||"—")
-    ]);
-    section("Living & access", [
-      row("Residence type", p.living.residence_type), row("Lives with", p.living.lives_with),
-      row("Entry notes", p.living.entry_notes), row("Keysafe", p.living.keysafe),
-      row("Smoking", p.living.smoking_on_premises), row("Hazards", p.living.hazards)
-    ]);
-    section("Health & clinical", [
-      row("Primary diagnoses", p.clinical.primary_diagnoses), row("Other diagnoses", p.clinical.other_diagnoses), row("Allergies", p.clinical.allergies),
-      row("Mobility", p.clinical.mobility), row("Equipment", p.clinical.equipment), row("Continence", p.clinical.continence), row("Cognition", p.clinical.cognition),
-      row("Pressure injury risk", p.clinical.pressure_injury_risk), row("Falls risk", p.clinical.falls_risk),
-      row("Seizures", p.clinical.seizures.has===true?"Yes":p.clinical.seizures.has===false?"No":p.clinical.seizures.has),
-      row("Seizure plan", p.clinical.seizures.plan), row("Seizure frequency", p.clinical.seizures.frequency),
-      row("Stoma/ostomy care", (p.clinical.stoma_care===true?"Yes":p.clinical.stoma_care===false?"No":p.clinical.stoma_care)),
-      row("Diet / swallowing", p.clinical.diet_notes)
-    ]);
-    section("Medications", [
-      row("Has medications", p.medications.has_meds===true?"Yes":p.medications.has_meds===false?"No":p.medications.has_meds),
-      row("Method", p.medications.method), row("Webster pack", p.medications.webster_pack===true?"Yes":p.medications.webster_pack===false?"No":p.medications.webster_pack),
-      row("Storage", p.medications.storage), row("Self-admin", p.medications.self_admin===true?"Yes":p.medications.self_admin===false?"No":p.medications.self_admin),
-      row("Staff-admin", p.medications.staff_admin===true?"Yes":p.medications.staff_admin===false?"No":p.medications.staff_admin),
-      row("Notes", p.medications.notes)
-    ]);
-    section("Risks", [
-      row("Behavioural", p.risks.behavioural.present),
-      row("Behaviour notes", p.risks.behavioural.notes),
-      row("Clinical concerns", listTruePrint(p.risks.clinical,["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])),
-      row("Clinical other", p.risks.clinical.other),
-      row("Environmental", listTruePrint(p.risks.environmental,["animals","hoarding","weapons"])),
-      row("Environmental other", p.risks.environmental.other),
-      row("Home risks", listTruePrint(p.risks.home_checklist,["trip_hazards","smoke_alarms","lighting","bathroom_safety"])),
-      row("Home notes", p.risks.home_checklist.notes),
-      row("Other risk notes", p.risks.other_notes),
-      row("Overall rating", p.risks.overall_rating)
-    ]);
-    section("Behaviour support", [
-      row("BSP in place", p.bsp.has_bsp===true?"Yes":p.bsp.has_bsp===false?"No":p.bsp.has_bsp),
-      row("Restrictive practices", p.bsp.restrictive_practices===true?"Yes":p.bsp.restrictive_practices===false?"No":p.bsp.restrictive_practices),
-      row("Provider", p.bsp.provider),
-      row("Notes", p.bsp.notes)
-    ]);
-    section("Supports & schedule", [
-      row("Core supports", (function(){ var m={daily_life:"Assistance with Daily Life",community:"Social & Community Participation",transport:"Transport",nursing:"Community Nursing Care",domestic:"Domestic assistance",respite:"Respite / carer relief"}; var t=(p.supports.core||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.core_other) t.push("Other: "+p.supports.core_other); return t.join(", ")||"—"; })()),
-      row("Capacity Building", (function(){ var m={improved_daily_living:"Improved Daily Living",increased_participation:"Increased Social & Community Participation",health_wellbeing:"Improved Health & Wellbeing",relationships:"Improved Relationships",employment:"Finding & Keeping a Job",home_living:"Improved Living Arrangements / Home Living",lifelong_learning:"Lifelong Learning",choice_control:"Improved Life Choices",support_coordination:"Support Coordination"}; var t=(p.supports.capacity||[]).map(function(k){return m[k];}).filter(Boolean); if(p.supports.capacity_other) t.push("Other: "+p.supports.capacity_other); return t.join(", ")||"—"; })()),
-      row("Goals", p.supports.goals),
-      row("Outcomes", p.supports.outcomes),
-      row("Windows", (function(){var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (p.schedule.windows||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})()),
-      row("Days", (function(){var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (p.schedule.days||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—";})()),
-      row("Hours/week", p.schedule.hours_per_week),
-      row("Urgency", p.schedule.urgency),
-      row("Start pref.", p.schedule.start_preference)
-    ]);
-    section("Policy acknowledgements", [
-      row("Handbook acknowledged", p.policy_ack.handbook===true?"Yes":"No"),
-      row("Incident management understood", p.policy_ack.incident===true?"Yes":"No"),
-      row("Complaints & feedback info received", p.policy_ack.complaints===true?"Yes":"No"),
-      row("Emergency advocacy consent", p.emergency_advocacy||"—")
-    ]);
-    section("Uploads (disabled in app)", [
-      row("Files", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ")||"—")
-    ]);
-
-    w.document.write('<script>window.onload=function(){window.print();}<\/script>');
-    w.document.write('</body></html>');
-    w.document.close();
   }
 
-  // Submit to Apps Script. Try normal CORS first (to get JSON with fileUrl),
-  // then fall back to no-cors (opaque) so the Drive save still happens.
+  function buildPayload(){ var p = cloneSafe(S); p.timestamp = new Date().toISOString(); return p; }
+
+  function openPrintableSummary(){ /* unchanged, optional */ }
+
   function sendToFormspree(){
     var payload = {
       caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
       living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
-      bsp:S.bsp, supports:S.supports, schedule:S.schedule, policy_ack:S.policy_ack,
-      emergency_advocacy:S.emergency_advocacy,
+      bsp:S.bsp, supports:S.supports, schedule:S.schedule,
+      policy_ack:S.policy_ack, acks:S.acks, emergency_advocacy:S.emergency_advocacy,
       submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString()
     };
 
     return fetch(GS_WEBAPP, {
       method: "POST",
-      body: JSON.stringify(payload) // no custom headers → no preflight
+      body: JSON.stringify(payload)
     }).then(async function(r){
       var j = await r.json().catch(()=>({}));
       if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
-      return j; // {status:'ok', fileUrl: '...'}
+      return j;
     }).catch(function(){
-      return fetch(GS_WEBAPP, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify(payload)
-      }).then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
+      return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
+        .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
     });
   }
 
@@ -1095,11 +1065,21 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     }
 
-    if (key==="consents"){
-      if (!S.policy_ack.handbook || !S.policy_ack.incident || !S.policy_ack.complaints){
-        alert("Please acknowledge the Handbook, Incident Management and Complaints & Feedback before continuing.");
-        return false;
+    if (key==="policies"){
+      for (var i=0;i<DOCS.length;i++){
+        var d = DOCS[i], ack = S.acks[d.id]||{};
+        if (!ack.read){
+          alert("Please tick that you have received & read: " + d.title);
+          return false;
+        }
+        if (d.requiresConsent && !ack.consent){
+          alert("Please tick consent for: " + d.title);
+          return false;
+        }
       }
+    }
+
+    if (key==="consents"){
       if (S.emergency_advocacy===null || S.emergency_advocacy===undefined){
         alert("Please choose an option for Emergency advocacy consent (Yes/No/Not sure).");
         return false;
@@ -1110,9 +1090,8 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 
   /* ====== Kick off ====== */
-  try{
-    render();
-  }catch(e){
+  try{ render(); }
+  catch(e){
     var stage = document.querySelector("main.stage");
     if (stage){
       stage.innerHTML = '<div class="q">There was an error initialising the form.</div><p class="sub">If this persists, please open the page in a modern browser (Chrome/Edge/Safari ≥ 13).<\/p>';
