@@ -52,7 +52,7 @@
           <div class="logo" aria-hidden="true"></div>
           <div>
             <div id="form-title" class="title">Try our Extremely Interactive Referral</div>
-            <div class="subtitle">Everything is optional. Choose <strong>Not sure</strong> any time — we’ll discuss later.</div>
+            <div class="subtitle">Everything is optional — except consent, which is required to proceed.</div>
           </div>
         </div>
         <div class="progress" aria-label="Progress"><div id="bar"></div></div>
@@ -85,16 +85,16 @@
 
     // === WIZARD STEPS ===
     const Steps = [
-      {id:"consent",     label:"Consent",              render:rConsent},
-      {id:"referrer",    label:"Person Making Referral",render:rReferrer},
-      {id:"participant", label:"Participant Details",  render:rParticipant},
-      {id:"carer",       label:"Primary Carer (NOK)",  render:rCarer},
-      {id:"safety",      label:"Safety & Risks",       render:rSafety},
-      {id:"supports",    label:"Supports",             render:rSupports},
-      {id:"funding",     label:"Funding & Plan",       render:rFunding},
-      {id:"goals",       label:"NDIS Goals",           render:rGoals},
-      {id:"review",      label:"Review & Consent",     render:rReview},
-      {id:"submit",      label:"Submit",               render:rSubmit},
+      {id:"consent",     label:"Consent",                render:rConsent},
+      {id:"referrer",    label:"Person Making Referral", render:rReferrer},
+      {id:"participant", label:"Participant Details",    render:rParticipant},
+      {id:"carer",       label:"Primary Carer (NOK)",    render:rCarer},
+      {id:"safety",      label:"Safety & Risks",         render:rSafety},
+      {id:"supports",    label:"Supports",               render:rSupports},
+      {id:"funding",     label:"Funding & Plan",         render:rFunding},
+      {id:"goals",       label:"NDIS Goals",             render:rGoals},
+      {id:"review",      label:"Review & Consent",       render:rReview},
+      {id:"submit",      label:"Submit",                 render:rSubmit},
     ];
     let current = 0;
 
@@ -103,8 +103,16 @@
     function renderNav(){
       const nav=$("#steps"); nav.innerHTML="";
       Steps.forEach((s,i)=>{ const a=document.createElement("a");
-        a.className="step-link"; a.innerHTML=`<span class="dot"></span><span>${i+1}. ${s.label}</span><span class="badge" id="b-${s.id}"></span>`;
-        a.href="#"; a.onclick=e=>{e.preventDefault(); go(i)}; nav.appendChild(a);
+        a.className="step-link";
+        a.innerHTML=`<span class="dot"></span><span>${i+1}. ${s.label}</span><span class="badge" id="b-${s.id}"></span>`;
+        a.href="#";
+        a.onclick=e=>{
+          e.preventDefault();
+          // block jumping ahead without initial consent
+          if(i>0 && state.consent!=='yes'){ alert("Consent is required to proceed."); return; }
+          go(i);
+        };
+        nav.appendChild(a);
       });
     }
     function setActive(){
@@ -129,11 +137,16 @@
 
     // === RENDERS ===
     function rConsent(p){ p.innerHTML = `<div class="block">
-      <h2>Consent</h2>
+      <h2>Consent <span class="muted">(required)</span></h2>
       ${yn3("consent","Has the Participant or Primary Carer consented to this referral?")}
-      <div class="hint">If you're not sure, choose <strong>Not sure</strong>. We can discuss consent before we proceed.</div>
+      <div class="hint">Consent is required to proceed.</div>
       <div class="btn-row"><button class="btn primary" id="next">Next</button></div></div>`;
-      $("#next",p).onclick=e=>{e.preventDefault(); go(1)}; bindYN3(p);
+      $("#next",p).onclick=e=>{
+        e.preventDefault();
+        if(state.consent!=='yes'){ alert("Please select Yes to consent before continuing."); return; }
+        go(1);
+      };
+      bindYN3(p);
     }
 
     function rReferrer(p){ p.innerHTML = `<div class="block">
@@ -143,7 +156,8 @@
       <div class="grid two">${input("phone","Phone",{type:"tel"})}${input("mobile","Mobile",{type:"tel"})}</div>
       ${input("email","Email",{type:"email",hint:"We'll send a confirmation"})}
       <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
-      $("#back",p).onclick=e=>{e.preventDefault(); go(0)}; $("#next",p).onclick=e=>{e.preventDefault(); go(2)};
+      $("#back",p).onclick=e=>{e.preventDefault(); go(0)};
+      $("#next",p).onclick=e=>{e.preventDefault(); go(2)};
       bindModel(p);
     }
 
@@ -238,18 +252,24 @@
     }
 
     function rReview(p){
-      p.innerHTML = `<div class="block"><h2>Review & Final Consent</h2>
+      p.innerHTML = `<div class="block"><h2>Review & Final Consent <span class="muted">(required)</span></h2>
         <div class="review"><h3>Summary</h3><pre>${buildSummary()}</pre></div>
-        <div><label><input id="referral_consent" type="checkbox" ${state.referral_consent?"checked":""}/> I confirm the person being referred has consented OR I selected "Not sure" and would like HD HeeD to discuss consent with me.</label></div>
+        <div><label><input id="referral_consent" type="checkbox" ${state.referral_consent?"checked":""}/> I confirm the person being referred has consented.</label></div>
         <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Looks good</button></div></div>`;
       $("#back",p).onclick=e=>{e.preventDefault(); go(7)};
-      $("#next",p).onclick=e=>{e.preventDefault(); state.referral_consent = $("#referral_consent").checked; go(9); };
+      $("#next",p).onclick=e=>{
+        e.preventDefault();
+        const checked = $("#referral_consent").checked;
+        if(state.consent!=='yes'){ alert("Initial consent (Step 1) must be Yes to proceed."); go(0); return; }
+        if(!checked){ alert("Please tick the final consent box to continue."); return; }
+        state.referral_consent = checked; save(); go(9);
+      };
       bindModel(p);
     }
 
     function rSubmit(p){
       p.innerHTML = `<div class="block"><h2>Submit Referral</h2>
-        <p class="muted">Submit online now, or download a formatted copy and email later. Nothing is mandatory.</p>
+        <p class="muted">Submit online now, or download a formatted copy and email later.</p>
         <div class="btn-row">
           <button class="btn primary" id="submitOnline">Submit online</button>
           <button class="btn ghost" id="download">Download formatted report</button>
@@ -298,6 +318,10 @@
 
     // Hidden native form post (more reliable, no branding shown)
     function submitOnline(){
+      // Final gate: both consents must be present
+      if(state.consent!=='yes'){ alert("Consent (Step 1) is required to submit."); go(0); return; }
+      if(!state.referral_consent){ alert("Please tick the final consent box on the Review step before submitting."); go(8); return; }
+
       const form = document.getElementById('silentPost');
       if(!form){ alert("Submit form not found."); return; }
 
@@ -340,7 +364,7 @@
       form.submit();
     }
 
-    // Download a polished, sectioned HTML report (print to PDF if needed)
+    // Download HTML report (print to PDF if needed)
     function downloadReportHTML(){
       const esc = s => (s||"").toString().replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
       const ynuText = k => state[k]==="yes"?"Yes": state[k]==="no"?"No": state[k]==="unsure"?"Not sure": (state[k]||"");
