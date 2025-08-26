@@ -93,7 +93,6 @@
       {id:"supports",    label:"Supports",             render:rSupports},
       {id:"funding",     label:"Funding & Plan",       render:rFunding},
       {id:"goals",       label:"NDIS Goals",           render:rGoals},
-      {id:"files",       label:"Documents (optional)", render:rFiles},
       {id:"review",      label:"Review & Consent",     render:rReview},
       {id:"submit",      label:"Submit",               render:rSubmit},
     ];
@@ -238,27 +237,13 @@
       bindModel(p);
     }
 
-    function rFiles(p){
-      p.innerHTML = `<div class="block"><h2>Upload documents (optional)</h2>
-        <div class="muted">Add NDIS plan pages, referrals, scripts, or photos (max 5 files, 10MB each). Skip if not sure.</div>
-        <input id="filesInput" type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt,.rtf,.odt,.xlsx,.xls"/>
-        <div id="fileList" class="hint" style="margin-top:8px"></div>
-        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
-      $("#back",p).onclick=e=>{e.preventDefault(); go(7)}; $("#next",p).onclick=e=>{e.preventDefault(); go(9)};
-      const fi = $('#filesInput',p);
-      fi.onchange = ()=>{ const arr = Array.from(fi.files||[]).slice(0,5);
-        state._files = arr.map(f=>({name:f.name,size:f.size,type:f.type})); save();
-        $('#fileList',p).textContent = arr.map(f=>`${f.name} (${Math.round(f.size/1024)} KB)`).join(', ');
-      };
-    }
-
     function rReview(p){
       p.innerHTML = `<div class="block"><h2>Review & Final Consent</h2>
         <div class="review"><h3>Summary</h3><pre>${buildSummary()}</pre></div>
         <div><label><input id="referral_consent" type="checkbox" ${state.referral_consent?"checked":""}/> I confirm the person being referred has consented OR I selected "Not sure" and would like HD HeeD to discuss consent with me.</label></div>
         <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Looks good</button></div></div>`;
-      $("#back",p).onclick=e=>{e.preventDefault(); go(8)};
-      $("#next",p).onclick=e=>{e.preventDefault(); state.referral_consent = $("#referral_consent").checked; go(10); };
+      $("#back",p).onclick=e=>{e.preventDefault(); go(7)};
+      $("#next",p).onclick=e=>{e.preventDefault(); state.referral_consent = $("#referral_consent").checked; go(9); };
       bindModel(p);
     }
 
@@ -307,7 +292,6 @@
       });
       if(state.current_services) L.push("Current services: "+state.current_services);
       if(state.previous_services) L.push("Previous services: "+state.previous_services);
-      if(state._files && state._files.length) L.push("", "Files: "+state._files.map(f=>f.name).join(", "));
       L.push("",`Final consent box ticked: ${state.referral_consent? "Yes":"No"}`);
       return L.join("\n");
     }
@@ -352,20 +336,6 @@
 
       // Add readable summary
       add("summary", buildSummary());
-
-      // Attach files by cloning into hidden form
-      const fileInput = document.querySelector('#filesInput');
-      if(fileInput && fileInput.files){
-        Array.from(fileInput.files).slice(0,5).forEach((f, idx) => {
-          const fileField = document.createElement('input');
-          fileField.type = 'file';
-          fileField.name = 'file' + idx;
-          const dt = new DataTransfer();
-          dt.items.add(f);
-          fileField.files = dt.files;
-          form.appendChild(fileField);
-        });
-      }
 
       form.submit();
     }
@@ -459,10 +429,6 @@
           ["Goal 2", (state.goal2||"") + (state.goal2_service? " — " + state.goal2_service : "") + (state.goal2_category? " ["+state.goal2_category+"]" : "")],
           ["Goal 3", (state.goal3||"") + (state.goal3_service? " — " + state.goal3_service : "") + (state.goal3_category? " ["+state.goal3_category+"]" : "")],
           ["Goal 4", (state.goal4||"") + (state.goal4_service? " — " + state.goal4_service : "") + (state.goal4_category? " ["+state.goal4_category+"]" : "")]
-        ])}
-
-        ${sect("Attachments", [
-          ["Files", (state._files && state._files.length) ? state._files.map(f=>f.name).join(", ") : "None"]
         ])}
 
         <footer style="margin-top:16px;color:#64748b;font:13px system-ui;">© HD HeeD</footer>
