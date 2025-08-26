@@ -1,62 +1,73 @@
-<!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.3 with portraits) === -->
-<style>
-  :root{ --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153; --al-text:#e8edff; --al-accent:#ffc107; }
-  /* Greeting */
-  #alan-greet{position:fixed;right:18px;bottom:18px;z-index:9999;display:none}
-  #alan-greet .card{
-    max-width:560px;width:calc(100vw - 36px);background:#0e1428;color:var(--al-text);
-    border:1px solid var(--al-line);border-radius:16px;box-shadow:0 24px 90px rgba(0,0,0,.55);
-    padding:18px;font-family:Inter,system-ui
-  }
-  #alan-greet h2{margin:0 0 6px 0;font-size:1.28rem}
-  #alan-greet p{margin:0 0 12px 0;opacity:.95;font-size:1rem;line-height:1.5}
-  .al-btn{border:0;border-radius:12px;padding:12px 16px;font-weight:900;cursor:pointer}
-  .al-btn.primary{background:var(--al-accent);color:#2a2100;box-shadow:0 12px 34px rgba(0,0,0,.35)}
-  .al-btn.ghost{background:#121a3a;color:#e7ebff;border:1px solid var(--al-line)}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ELLA — Voice Intake Assistant | HD HeeD</title>
+  <meta name="theme-color" content="#0b0f1a"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
 
-  /* Panel (wider; expands left) */
-  #alan-panel{position:fixed;right:18px;bottom:18px;z-index:10000;display:none}
-  #alan-panel .wrap{
-    width:680px; max-width:calc(100vw - 36px); max-height:85vh;
-    background:linear-gradient(180deg,#10172a,#0b0f1a);color:var(--al-text);
-    border:1px solid var(--al-line);border-radius:18px;box-shadow:0 28px 110px rgba(0,0,0,.6);overflow:hidden;
-    font-family:Inter,system-ui;display:flex;flex-direction:column
-  }
-  @media (min-width:1100px){ #alan-panel .wrap{ width:860px; } }
+  <!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.3 with portraits) === -->
+  <style>
+    :root{ --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153; --al-text:#e8edff; --al-accent:#ffc107; }
+    /* Greeting */
+    #alan-greet{position:fixed;right:18px;bottom:18px;z-index:9999;display:none}
+    #alan-greet .card{
+      max-width:560px;width:calc(100vw - 36px);background:#0e1428;color:var(--al-text);
+      border:1px solid var(--al-line);border-radius:16px;box-shadow:0 24px 90px rgba(0,0,0,.55);
+      padding:18px;font-family:Inter,system-ui
+    }
+    #alan-greet h2{margin:0 0 6px 0;font-size:1.28rem}
+    #alan-greet p{margin:0 0 12px 0;opacity:.95;font-size:1rem;line-height:1.5}
+    .al-btn{border:0;border-radius:12px;padding:12px 16px;font-weight:900;cursor:pointer}
+    .al-btn.primary{background:var(--al-accent);color:#2a2100;box-shadow:0 12px 34px rgba(0,0,0,.35)}
+    .al-btn.ghost{background:#121a3a;color:#e7ebff;border:1px solid var(--al-line)}
 
-  .al-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--al-line);background:#0d1428}
-  .al-head .avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ffcdd2,#ffe0e0);display:grid;place-items:center;color:#5a1b29;font-weight:900}
-  .al-head .ttl{font-weight:900}
+    /* Panel (wider; expands left) */
+    #alan-panel{position:fixed;right:18px;bottom:18px;z-index:10000;display:none}
+    #alan-panel .wrap{
+      width:680px; max-width:calc(100vw - 36px); max-height:85vh;
+      background:linear-gradient(180deg,#10172a,#0b0f1a);color:var(--al-text);
+      border:1px solid var(--al-line);border-radius:18px;box-shadow:0 28px 110px rgba(0,0,0,.6);overflow:hidden;
+      font-family:Inter,system-ui;display:flex;flex-direction:column
+    }
+    @media (min-width:1100px){ #alan-panel .wrap{ width:860px; } }
 
-  /* Body: bigger portrait column */
-  .al-body{ display:grid; grid-template-columns:220px 1fr; gap:16px;overflow:auto;min-height:0;padding:16px }
-  .al-portrait{position:sticky;top:64px;align-self:start}
-  .al-portrait img{ width:100%;height:auto;display:block; border:none;background:transparent;border-radius:16px; filter: drop-shadow(0 18px 36px rgba(0,0,0,.35)); }
-  .al-main{display:grid;gap:12px}
-  .al-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:#b7c6ff}
-  .al-meter{height:8px;background:#101838;border:1px solid var(--al-line);border-radius:999px;overflow:hidden;flex:1}
-  .al-meter>div{height:100%;background:linear-gradient(90deg,#ffd95c,#ffe78f);width:0%}
-  .al-q{font-size:1.25rem;font-weight:900;line-height:1.4}
-  .al-opts{display:grid;gap:10px}
-  .al-chip{border:1px solid var(--al-line);background:linear-gradient(180deg,#121a3a,#0f172f);color:#e7ebff;border-radius:12px;padding:14px;text-align:left;cursor:pointer;font-size:1.02rem}
-  .al-chip:hover{box-shadow:0 12px 34px rgba(0,0,0,.28)}
-  .al-foot{position:sticky;bottom:0;z-index:2;display:flex;gap:8px;align-items:center;justify-content:space-between;border-top:1px dashed var(--al-line);padding:10px;background:#0b1226}
-  .al-pill{border:1px solid var(--al-line);background:#0f1937;border-radius:999px;padding:6px 10px;color:#cfe0ff;font-size:12px}
-  .al-mic{border:1px solid var(--al-line);background:#101a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;font-weight:800;cursor:pointer}
-  .al-mic.on{background:#13244f}
-  .al-close{border:1px solid var(--al-line);background:#121a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;cursor:pointer}
+    .al-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--al-line);background:#0d1428}
+    .al-head .avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ffcdd2,#ffe0e0);display:grid;place-items:center;color:#5a1b29;font-weight:900}
+    .al-head .ttl{font-weight:900}
 
-  /* Inline boxes */
-  .al-inlinebox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px;margin-top:6px}
-  .al-inlinebox input, .al-inlinebox select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px}
+    /* Body: bigger portrait column */
+    .al-body{ display:grid; grid-template-columns:220px 1fr; gap:16px;overflow:auto;min-height:0;padding:16px }
+    .al-portrait{position:sticky;top:64px;align-self:start}
+    .al-portrait img{ width:100%;height:auto;display:block; border:none;background:transparent;border-radius:16px; filter: drop-shadow(0 18px 36px rgba(0,0,0,.35)); }
+    .al-main{display:grid;gap:12px}
+    .al-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:#b7c6ff}
+    .al-meter{height:8px;background:#101838;border:1px solid var(--al-line);border-radius:999px;overflow:hidden;flex:1}
+    .al-meter>div{height:100%;background:linear-gradient(90deg,#ffd95c,#ffe78f);width:0%}
+    .al-q{font-size:1.25rem;font-weight:900;line-height:1.4}
+    .al-opts{display:grid;gap:10px}
+    .al-chip{border:1px solid var(--al-line);background:linear-gradient(180deg,#121a3a,#0f172f);color:#e7ebff;border-radius:12px;padding:14px;text-align:left;cursor:pointer;font-size:1.02rem}
+    .al-chip:hover{box-shadow:0 12px 34px rgba(0,0,0,.28)}
+    .al-foot{position:sticky;bottom:0;z-index:2;display:flex;gap:8px;align-items:center;justify-content:space-between;border-top:1px dashed var(--al-line);padding:10px;background:#0b1226}
+    .al-pill{border:1px solid var(--al-line);background:#0f1937;border-radius:999px;padding:6px 10px;color:#cfe0ff;font-size:12px}
+    .al-mic{border:1px solid var(--al-line);background:#101a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;font-weight:800;cursor:pointer}
+    .al-mic.on{background:#13244f}
+    .al-close{border:1px solid var(--al-line);background:#121a3a;color:#e7ebff;border-radius:999px;padding:8px 12px;cursor:pointer}
 
-  /* End form */
-  .al-endbox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px}
-  .al-endbox input, .al-endbox textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px}
-  .al-actions{display:flex;gap:8px;flex-wrap:wrap}
+    /* Inline boxes */
+    .al-inlinebox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px;margin-top:6px}
+    .al-inlinebox input, .al-inlinebox select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px}
 
-  @media (max-width:640px){ .al-body{grid-template-columns:1fr} .al-portrait{position:static;max-width:200px;margin:0 auto} }
-</style>
+    /* End form */
+    .al-endbox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px}
+    .al-endbox input, .al-endbox textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px}
+    .al-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+    @media (max-width:640px){ .al-body{grid-template-columns:1fr} .al-portrait{position:static;max-width:200px;margin:0 auto} }
+  </style>
+</head>
+<body>
 
 <!-- GREET -->
 <div id="alan-greet" aria-live="polite">
@@ -122,6 +133,7 @@
       <div class="al-pill">Tap “Click to talk” to speak • Or tap a choice</div>
       <div style="display:flex;gap:8px;align-items:center">
         <button id="al-mic" class="al-mic" aria-pressed="false">🎤 Click to talk</button>
+        <button id="al-back" class="al-mic">← Back</button>
         <button id="al-restart" class="al-mic">↻ Restart</button>
       </div>
     </div>
@@ -252,12 +264,12 @@
              o('B','Not yet',()=>S.consent='Not yet'),
              o('C','Not sure',()=>S.consent='Not sure'),
              o('D','No',()=>S.consent='No'), NS() ]},
-    {id:'loc', q:"Where do you need support?",
-      opts:[ o('A','I’ll type suburb + postcode (required before continuing)',()=>{}),
-             o('B','Greater Sydney (unsure of suburb)',()=>{S.suburb='Greater Sydney';}),
-             o('C','Regional NSW',()=>{S.suburb='Regional NSW';}),
-             o('D','Prefer not to say',()=>{S.suburb=null;}), NS() ]},
-    {id:'service', q:"Which support fits best now?",
+    {id:'loc', q:"Which area is support required? Please type suburb and postcode.",  // updated prompt
+      opts:[ 
+        // we will NOT render these chips; typed-only box is enforced in render()
+        o('A','(typed only)',()=>{}), o('B','(disabled)',()=>{}), o('C','(disabled)',()=>{}), o('D','(disabled)',()=>{}), NS()
+      ]},
+    {id:'service', q:"Which supports are required?",
       opts:[ o('A','Personal care',()=>{S.service='Personal care';S.cat='Core – Assistance with Daily Life';}),
              o('B','Community participation',()=>{S.service='Community participation';S.cat='Core – Social & Community Participation';}),
              o('C','Nursing care',()=>{S.service='Nursing care';S.cat='Core – Community Nursing Care';}),
@@ -267,11 +279,13 @@
              o('B','Weekday afternoons (12–4pm)',()=>S.rostering='Weekday PM'),
              o('C','Evenings (5–9pm)',()=>S.rostering='Evenings'),
              o('D','Weekends',()=>S.rostering='Weekends'), NS('Flexible') ]},
-    {id:'pref', q:"Any preferences we should know?",
-      opts:[ o('A','Worker gender preference',()=>S.pref.gender='Has preference'),
-             o('B','Transport required',()=>S.pref.transport='Yes'),
-             o('C','Keysafe / someone home for access',()=>S.pref.access='Ready'),
-             o('D','No preferences',()=>{S.pref.none=true}), NS() ]},
+    {id:'pref', q:"Any preferences we should know? (You can choose more than one, then press ✓ Continue)",
+      opts:[ 
+        o('A','Worker gender preference',()=>{}), // handled as toggles
+        o('B','Transport required',()=>{}),
+        o('C','Keysafe / someone home for access',()=>{}),
+        o('D','No preferences',()=>{S.pref.none=true})
+      ]},
     {id:'mgmt', q:"How is the NDIS plan managed?",
       opts:[ o('A','NDIA-managed',()=>S.mgmt='NDIA-managed'),
              o('B','Plan-managed',()=>S.mgmt='Plan-managed'),
@@ -319,7 +333,7 @@
              o('D','Save only (no send)',()=>S.route='Save'), NS() ]}
   ];}
 
-  /* Labels for the first “typed” option */
+  /* Labels/Placeholders for typed boxes */
   const CUSTOM_LABELS = {
     caller:"Want to type who you are?",
     consent:"Want to type your consent status?",
@@ -375,11 +389,16 @@
     sysEl.textContent = '';
     endBox.style.display = 'none';
 
-    // 1) STRICT typed option box before chips (except final)
+    // STRICT typed-only Location (no chips)
+    if (step.id==='loc'){
+      injectLocationBox(true);
+      speak(step.q); save();
+      return;
+    }
+
+    // Typed box before chips (except final)
     if (step.id!=='final'){
-      if (step.id==='loc'){
-        injectLocationBox(true);
-      } else if (step.id==='risk_int'){
+      if (step.id==='risk_int'){
         injectCustomBox(step.id, CUSTOM_LABELS[step.id], CUSTOM_PLACEHOLDERS[step.id], (val)=>{
           if (val){ S.risks.int = true; S.interpreter.language = val; save(); }
           next();
@@ -392,14 +411,18 @@
       }
     }
 
-    // 2) Chips
-    step.opts.forEach(opt=>{
-      const b = document.createElement('button');
-      b.className='al-chip';
-      b.textContent = `${opt.k}) ${opt.t}`;
-      b.addEventListener('click', ()=> choose(opt));
-      optsEl.appendChild(b);
-    });
+    // Chips
+    if (step.id==='pref'){
+      renderPrefChips(); // multi-select UI
+    } else {
+      step.opts.forEach(opt=>{
+        const b = document.createElement('button');
+        b.className='al-chip';
+        b.textContent = `${opt.k}) ${opt.t}`;
+        b.addEventListener('click', ()=> choose(opt));
+        optsEl.appendChild(b);
+      });
+    }
 
     speak(step.q); save();
   }
@@ -464,21 +487,104 @@
     };
   }
 
+  /* Preferences multi-select renderer */
+  function renderPrefChips(){
+    optsEl.innerHTML = ''; // rebuild
+    const toggles = [
+      {k:'A', t:'Worker gender preference', on: !!S.pref.gender},
+      {k:'B', t:'Transport required',        on: !!S.pref.transport},
+      {k:'C', t:'Keysafe / someone home for access', on: !!S.pref.access},
+    ];
+
+    toggles.forEach(tg=>{
+      const b = document.createElement('button');
+      b.className='al-chip';
+      if (tg.on) b.style.borderColor = '#ffd95c';
+      b.textContent = `${tg.k}) ${tg.t}`;
+      b.addEventListener('click', ()=>{
+        // Toggle without advancing
+        if (tg.k==='A') S.pref.gender = S.pref.gender ? null : 'Has preference';
+        if (tg.k==='B') S.pref.transport = S.pref.transport ? null : 'Yes';
+        if (tg.k==='C') S.pref.access = S.pref.access ? null : 'Ready';
+        S.pref.none = false;
+        save();
+        renderPrefChips();
+      });
+      optsEl.appendChild(b);
+    });
+
+    // "No preferences" (clears and advances)
+    {
+      const b = document.createElement('button');
+      b.className='al-chip';
+      b.textContent = `D) No preferences`;
+      b.addEventListener('click', ()=>{
+        S.pref = {worker:null, gender:null, transport:null, access:null, none:true};
+        save();
+        next();
+      });
+      optsEl.appendChild(b);
+    }
+
+    // Continue button to advance with current selections
+    {
+      const b = document.createElement('button');
+      b.id = 'al-pref-continue';
+      b.className='al-chip';
+      b.textContent = `✓ Continue`;
+      b.addEventListener('click', ()=> next());
+      optsEl.appendChild(b);
+    }
+  }
+
   function choose(opt){
     const stepId = steps()[S.i].id;
 
-    if (stepId==='loc' && opt.k==='A'){ sysEl.textContent='Enter suburb and postcode, then Save & continue.'; speak('Please enter your suburb and postcode, then press Save and continue.'); return; }
-    if (stepId==='risk_int' && opt.k==='A'){ showInterpreterBox(); return; }
+    // Location typed-only: keep user in this step until they press Save
+    if (stepId==='loc' && opt.k==='A'){
+      sysEl.textContent='Enter suburb and postcode, then Save & continue.';
+      speak('Please enter your suburb and postcode, then press Save and continue.');
+      return;
+    }
+
+    // Interpreter: if "Yes", show language box and do NOT advance until it's typed
+    if (stepId==='risk_int' && opt.k==='A'){
+      showInterpreterBox();
+      return;
+    }
+
+    // CONSENT REQUIRED: must be "Yes" to proceed
+    if (stepId==='consent' && opt.k!=='A'){
+      if (typeof opt.apply==='function') opt.apply(); // record user's answer
+      save();
+      sysEl.innerHTML = `We need your consent to continue. Please select <strong>A) Yes</strong> to proceed.`;
+      speak('We need your consent to continue. Please select Yes to proceed.');
+      return;
+    }
+
+    // Preferences handled as multi-select; only advance via Continue or D) No preferences
+    if (stepId==='pref' && ['A','B','C'].includes(opt.k)){
+      // toggling handled in renderPrefChips via click handler
+      return;
+    }
 
     if (typeof opt.apply==='function') opt.apply();
     save();
 
-    if (stepId==='final'){ renderSummary(); endBox.style.display='grid'; validateSendButton(); return; }
-    S.i = Math.min(S.i+1, steps().length-1); render();
+    if (stepId==='final'){
+      renderSummary();
+      endBox.style.display='grid';
+      validateSendButton();
+      return;
+    }
+    S.i = Math.min(S.i+1, steps().length-1);
+    render();
   }
 
   function next(){
-    if (steps()[S.i].id==='final'){ renderSummary(); endBox.style.display='grid'; validateSendButton(); return; }
+    if (steps()[S.i].id==='final'){
+      renderSummary(); endBox.style.display='grid'; validateSendButton(); return;
+    }
     S.i = Math.min(S.i+1, steps().length-1); render();
   }
 
@@ -492,7 +598,7 @@
     else if (/support\s*co(ord(inator)?)?/i.test(t)) pick='C';
     else if (/plan\s*manager|pm\b/i.test(t)) pick='D';
     else if (/not sure|unsure|don.?t know|flexible/i.test(t)) pick='NS';
-    else if (steps()[S.i].id==='loc'){ if (!S.suburb && /\b[a-zA-Z]{3,}\b/.test(t)) S.suburb = t; save(); sysEl.textContent='Location noted. Enter postcode too, then Save & continue.'; return; }
+    else if (steps()[S.i].id==='loc'){ sysEl.textContent='Please type suburb and postcode, then Save & continue.'; return; }
     else if (steps()[S.i].id==='risk_int'){ if (/^[a-zA-Z\s]+$/.test(t) && t.length>2){ S.risks.int=true; S.interpreter.language=t; save(); next(); return; } }
     const step=steps()[S.i];
     const chosen = step.opts.find(x=>x.k===pick);
@@ -522,9 +628,15 @@
   }
 
   function validateSendButton(){
-    const ok = (fEmail.value.trim().length>0) || (fPhone.value.trim().length>0);
-    btnSend.disabled = !ok;
-    contactWarn.style.display = ok ? 'none' : 'block';
+    const hasContact = (fEmail.value.trim().length>0) || (fPhone.value.trim().length>0);
+    const hasConsent = (S.consent === 'Yes');
+
+    btnSend.disabled = !(hasContact && hasConsent);
+    contactWarn.style.display = hasContact ? 'none' : 'block';
+
+    if (!hasConsent){
+      sysEl.textContent = 'Consent is required to submit. Please Restart and select “Yes” at the consent step.';
+    }
   }
 
   async function submit(){
@@ -563,7 +675,6 @@
   const INTRO_TEXT = "Hi, I’m Ella — your AI assistant. You don’t need to call our team. Just answer these well-directed multiple-choice questions and our team will be fully prepared when they get in touch with you.";
 
   function showIntro(){
-    // Reset step display but show intro copy and a single begin button
     stepEl.textContent = 'Intro';
     barEl.style.width = '0%';
     setPortrait('default');
@@ -582,7 +693,6 @@
     greet.style.display='none';
     panel.style.display='block';
     if (window.speechSynthesis){ pickVoice(); }
-    // Start with intro first
     showIntro();
   }
   function closePanel(){ panel.style.display='none'; try{ window.speechSynthesis.cancel(); }catch{} }
@@ -604,16 +714,47 @@
       } else if (window.ALAN && typeof window.ALAN.open === 'function') {
         window.ALAN.open();
       } else {
-        // Fallback
         openPanel();
       }
     });
   }
 
   document.getElementById('al-mic').addEventListener('click', ()=>{ if (!SR){ alert('Voice not supported in this browser. Tap answers instead.'); return; } listen(); });
-  restartBtn.addEventListener('click', ()=>{ localStorage.removeItem(SKEY);
-    S={i:0,caller:null,consent:null,suburb:null,postcode:null,service:null,mgmt:null,dates:null,cat:null,hrs:null,risks:{beh:null,med:null,int:null},interpreter:{language:null},pref:{none:false},urgency:null,rostering:null,contact_window:null,name:null,email:null,phone:null,route:null,custom:{},notes:[]};
-    save(); showIntro();
+
+  // Back button
+  const backBtn = document.getElementById('al-back');
+  if (backBtn){
+    backBtn.addEventListener('click', ()=>{
+      if (S.i > 0){
+        if (steps()[S.i].id==='final'){ endBox.style.display='none'; }
+        S.i = S.i - 1;
+        save();
+        render();
+      }
+    });
+  }
+
+  // Robust restart (works from final page)
+  restartBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    try{ window.speechSynthesis && window.speechSynthesis.cancel(); }catch{}
+    localStorage.removeItem(SKEY);
+    S = {
+      i:0, caller:null, consent:null, suburb:null, postcode:null, service:null, mgmt:null,
+      dates:null, cat:null, hrs:null,
+      risks:{beh:null, med:null, int:null},
+      interpreter:{language:null},
+      pref:{worker:null, gender:null, transport:null, access:null, none:false},
+      urgency:null, rostering:null, contact_window:null,
+      name:null, email:null, phone:null, route:null,
+      custom:{}, notes:[]
+    };
+    save();
+    sysEl.textContent = '';
+    optsEl.innerHTML = '';
+    endBox.style.display='none';
+    setPortrait('default');
+    showIntro();
   });
 
   // End box
@@ -646,19 +787,20 @@
   window.ELLA = { open: openPanel };
 })();
 </script>
-<!-- === /ELLA (v3.3) === -->
+
+<!-- Close controls (ESC, backdrop) -->
 <script>
 const panel = document.getElementById('alan-panel');
 const closeBtn = document.getElementById('al-close');
 
-function closePanel() {
+function closePanelDirect() {
   panel.style.display = 'none';
 }
 
 function onCloseClick(e) {
   e.preventDefault();
   e.stopPropagation();
-  closePanel();
+  closePanelDirect();
 }
 
 if (closeBtn) {
@@ -668,16 +810,17 @@ if (closeBtn) {
 // Close on ESC
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && panel.style.display === 'block') {
-    closePanel();
+    closePanelDirect();
   }
 });
 
 // Close on backdrop click
 panel.addEventListener('click', (e) => {
   if (e.target === panel) {
-    closePanel();
+    closePanelDirect();
   }
 });
 </script>
+
 </body>
 </html>
