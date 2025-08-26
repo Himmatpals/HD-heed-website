@@ -582,7 +582,7 @@
 
  <!-- Paste this entire block just BEFORE your closing </body> tag on index.html -->
 
-<!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.3 with portraits • REQUIRED CHANGES) === -->
+<!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.3 — updated) === -->
 <style>
   :root{ --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153; --al-text:#e8edff; --al-accent:#ffc107; }
   /* Greeting */
@@ -598,7 +598,7 @@
   .al-btn.primary{background:var(--al-accent);color:#2a2100;box-shadow:0 12px 34px rgba(0,0,0,.35)}
   .al-btn.ghost{background:#121a3a;color:#e7ebff;border:1px solid var(--al-line)}
 
-  /* Panel (wider; expands left) */
+  /* Panel */
   #alan-panel{position:fixed;right:18px;bottom:18px;z-index:10000;display:none}
   #alan-panel .wrap{
     width:680px; max-width:calc(100vw - 36px); max-height:85vh;
@@ -612,7 +612,7 @@
   .al-head .avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ffcdd2,#ffe0e0);display:grid;place-items:center;color:#5a1b29;font-weight:900}
   .al-head .ttl{font-weight:900}
 
-  /* Body: bigger portrait column */
+  /* Body */
   .al-body{ display:grid; grid-template-columns:220px 1fr; gap:16px;overflow:auto;min-height:0;padding:16px }
   .al-portrait{position:sticky;top:64px;align-self:start}
   .al-portrait img{ width:100%;height:auto;display:block; border:none;background:transparent;border-radius:16px; filter: drop-shadow(0 18px 36px rgba(0,0,0,.35)); }
@@ -632,7 +632,7 @@
 
   /* Inline boxes */
   .al-inlinebox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px;margin-top:6px}
-  .al-inlinebox input, .al-inlinebox select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px}
+  .al-inlinebox input, .al-inlinebox textarea, .al-inlinebox select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3b68;background:#0f1b3b;color:#e7ebff;font-size:14px}
 
   /* End form */
   .al-endbox{border:1px solid var(--al-line);background:#0e162e;border-radius:12px;padding:12px;display:grid;gap:8px}
@@ -755,6 +755,7 @@
     urgency:null, rostering:null,
     contact_window:null,
     name:null, email:null, phone:null, route:null,
+    services:[], // multi-select services
     custom:{}, notes:[]
   };
   try{ const prev=JSON.parse(localStorage.getItem(SKEY)||'null'); if(prev) S=prev; }catch{}
@@ -784,6 +785,7 @@
   const avatar = document.getElementById('al-avatar');
   const contactWarn = document.getElementById('al-contact-warning');
   const portraitImg = document.getElementById('al-portrait-img');
+
   /* ===== Voice (TTS + SR) ===== */
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recog = null, speaking=false, voice=null, assistantName='ELLA';
@@ -801,7 +803,7 @@
   if (SR){
     recog = new SR(); recog.lang='en-AU'; recog.interimResults=false; recog.continuous=false;
     recog.onresult = (e)=>{ if (speaking) return; const t=e.results[0][0].transcript; handleSpeech(t); };
-    recog.onend = ()=>{ document.getElementById('al-mic').classList.remove('on'); document.getElementById('al-mic').setAttribute('aria-pressed','false'); };
+    recog.onend = ()=>{ micBtn.classList.remove('on'); micBtn.setAttribute('aria-pressed','false'); };
   } else { voiceBadge.textContent='Off'; }
 
   function speak(text){
@@ -816,13 +818,13 @@
   function listen(){
     if (!recog || speaking) return;
     try{
-      document.getElementById('al-mic').classList.add('on');
-      document.getElementById('al-mic').setAttribute('aria-pressed','true');
+      micBtn.classList.add('on');
+      micBtn.setAttribute('aria-pressed','true');
       recog.start();
     }catch{}
   }
 
-  /* ===== Flow ===== */
+  /* ===== Flow helpers ===== */
   const NS = (t='Not sure — please guide me')=>({k:'NS',t,apply:()=>{}});
   const o = (k,t,apply=()=>{})=>({k,t,apply});
 
@@ -838,13 +840,11 @@
              o('C','Not sure',()=>S.consent='Not sure'),
              o('D','No',()=>S.consent='No'), NS() ]},
     {id:'loc', q:"Which area is support required? Please type suburb and postcode.",
-      // chips won’t be rendered for this step; typed-only
-      opts:[ o('A','(typed only)',()=>{}), o('B','(disabled)',()=>{}), o('C','(disabled)',()=>{}), o('D','(disabled)',()=>{}), NS() ]},
-    {id:'service', q:"Which supports are required?",
-      opts:[ o('A','Personal care',()=>{S.service='Personal care';S.cat='Core – Assistance with Daily Life';}),
-             o('B','Community participation',()=>{S.service='Community participation';S.cat='Core – Social & Community Participation';}),
-             o('C','Nursing care',()=>{S.service='Nursing care';S.cat='Core – Community Nursing Care';}),
-             o('D','Daily living skills',()=>{S.service='Daily living skills';S.cat='Capacity – Improved Daily Living';}), NS() ]},
+      // chips won’t be shown for this step; typed-only
+      opts:[ o('A','(typed only)',()=>{}) ]},
+    {id:'service', q:"Which supports are required? (You can select more than one, then press ✓ Continue)",
+      // we render chips via renderServiceChips
+      opts:[ o('A','(see list below)',()=>{}) ]},
     {id:'rostering', q:"What time windows suit you for support visits?",
       opts:[ o('A','Weekday mornings (7–11am)',()=>S.rostering='Weekday AM'),
              o('B','Weekday afternoons (12–4pm)',()=>S.rostering='Weekday PM'),
@@ -903,12 +903,93 @@
              o('D','Save only (no send)',()=>S.route='Save'), NS() ]}
   ];}
 
+  /* ===== Plain-English Services (no codes) ===== */
+  const SUPPORT_OPTIONS = [
+    { key:'personal',      label:'Personal care (showering / dressing / toileting / meal prep / prompting)' },
+    { key:'high',          label:'High-intensity personal care (wound care / medications / stoma care / PEG feeds / catheter care / bowel care / pressure care)' },
+    { key:'household',     label:'Household tasks (domestic help / cleaning / laundry / meal prep)' },
+    { key:'life_skills',   label:'Development of life skills (cooking / budgeting / travel training / daily routines)' },
+    { key:'community',     label:'Community participation (appointments / shopping / social & community activities / outings)' },
+    { key:'group',         label:'Group or centre-based activities (programs / day activities)' },
+    { key:'transport',     label:'Assist with travel & transport (support worker transport / escorted travel)' },
+    { key:'shared_living', label:'Daily tasks & shared living (support in SIL / morning–evening routines / overnight assistance)' },
+  ];
+
+  function ensureServiceArray(){
+    if (!Array.isArray(S.services)) S.services = [];
+    if (S.service && !S.services.length) { S.services = [S.service]; S.service = null; }
+  }
+  function toggleService(key){
+    ensureServiceArray();
+    const i = S.services.indexOf(key);
+    if (i>=0) S.services.splice(i,1); else S.services.push(key);
+    save();
+  }
+  function renderServiceChips(){
+    ensureServiceArray();
+    optsEl.innerHTML = '';
+
+    // Friendly multi-select chips
+    SUPPORT_OPTIONS.forEach(opt=>{
+      const b = document.createElement('button');
+      b.className = 'al-chip';
+      b.textContent = opt.label;
+      if (S.services.includes(opt.key)) b.style.borderColor = '#ffd95c';
+      b.addEventListener('click', ()=>{
+        toggleService(opt.key);
+        renderServiceChips();
+      });
+      optsEl.appendChild(b);
+    });
+
+    // Something else — I’ll type it
+    const other = document.createElement('button');
+    other.className = 'al-chip';
+    other.textContent = 'Something else — I’ll type it';
+    other.addEventListener('click', ()=>{
+      // show typed box below and focus it
+      renderServiceChips(); // re-render to place input at the end fresh
+      setTimeout(()=>{
+        const input = document.getElementById('al-custom-service');
+        if (input) input.focus();
+      }, 0);
+    });
+    optsEl.appendChild(other);
+
+    // Not sure — please guide me
+    const ns = document.createElement('button');
+    ns.className = 'al-chip';
+    ns.textContent = 'Not sure — please guide me';
+    ns.addEventListener('click', ()=>{ S.custom['service']='Not sure'; save(); next(); });
+    optsEl.appendChild(ns);
+
+    // Continue button to advance with current selections
+    const cont = document.createElement('button');
+    cont.className = 'al-chip';
+    cont.textContent = '✓ Continue';
+    cont.addEventListener('click', ()=> next());
+    optsEl.appendChild(cont);
+
+    // Optional typed detail box (always visible below list)
+    injectCustomBox(
+      'service',
+      'Want to type a specific support detail?',
+      'e.g., wound dressing frequency; Webster pack; bowel care plan; shopping day',
+      (val)=>{
+        S.custom['service'] = val;
+        S.notes.push(`[service] ${val}`);
+        save();
+        next();
+      }
+    );
+  }
+
   /* Labels/Placeholders for typed boxes */
   const CUSTOM_LABELS = {
     caller:"Want to type who you are?",
     consent:"Want to type your consent status?",
-    loc:"Want to type your exact suburb and postcode?",
-    service:"Want to type a specific support?",
+    loc:"Type your suburb and postcode",
+    service:"Want to type a specific support detail?",
     rostering:"Want to type your exact visit times?",
     pref:"Want to type your preferences?",
     mgmt:"Want to type plan management?",
@@ -924,7 +1005,7 @@
     caller:"e.g., Participant / Mum / Support Coordinator Jane",
     consent:"e.g., Yes / Not yet",
     loc:"Suburb, Postcode",
-    service:"e.g., Nursing care for meds",
+    service:"e.g., wound dressing frequency; Webster pack; bowel care plan; shopping day",
     rostering:"e.g., Tue/Thu 7–9am",
     pref:"e.g., Female worker, has car",
     mgmt:"e.g., Plan-managed by ABC PM",
@@ -949,24 +1030,27 @@
 
     stepEl.textContent = `Step ${Math.min(S.i+1,total)}/${total}`;
     barEl.style.width = Math.round(((S.i)/(total-1))*100) + '%';
-
-    // Portrait
     setPortrait(step.id);
 
-    // Main content
     qEl.textContent = step.q;
     optsEl.innerHTML = '';
     sysEl.textContent = '';
     endBox.style.display = 'none';
 
-    // STRICT typed-only Location (no chips)
+    // Location typed-only
     if (step.id==='loc'){
       injectLocationBox(true);
       speak(step.q); save();
       return;
     }
+    // Services multi-select
+    if (step.id==='service'){
+      renderServiceChips();
+      speak(step.q); save();
+      return;
+    }
 
-    // Typed box before chips (except final)
+    // Typed box (except final)
     if (step.id!=='final'){
       if (step.id==='risk_int'){
         injectCustomBox(step.id, CUSTOM_LABELS[step.id], CUSTOM_PLACEHOLDERS[step.id], (val)=>{
@@ -981,9 +1065,9 @@
       }
     }
 
-    // Chips
+    // Chips (special handling for preferences)
     if (step.id==='pref'){
-      renderPrefChips(); // multi-select UI
+      renderPrefChips();
     } else {
       step.opts.forEach(opt=>{
         const b = document.createElement('button');
@@ -997,13 +1081,13 @@
     speak(step.q); save();
   }
 
-  /* STRICT typed-answer box */
+  /* Typed-answer box */
   function injectCustomBox(stepId, label, placeholder, onSave){
     const box=document.createElement('div');
     box.className='al-inlinebox';
     const inputId = `al-custom-${stepId}`;
     box.innerHTML = `
-      <div style="font-weight:700">${label||'Want to type your exact preference?'}</div>
+      <div style="font-weight:700">${label||'Type here'}</div>
       <input id="${inputId}" placeholder="${placeholder||'Type here'}" autocomplete="off">
       <button id="al-custom-save" class="al-btn ghost">Save & continue</button>
     `;
@@ -1057,7 +1141,7 @@
     };
   }
 
-  /* Preferences multi-select renderer */
+  /* Preferences multi-select */
   function renderPrefChips(){
     optsEl.innerHTML = ''; // rebuild
     const toggles = [
@@ -1082,7 +1166,7 @@
       optsEl.appendChild(b);
     });
 
-    // "No preferences" (clears and advances)
+    // D) No preferences (clears & advances)
     {
       const b = document.createElement('button');
       b.className='al-chip';
@@ -1095,7 +1179,7 @@
       optsEl.appendChild(b);
     }
 
-    // Continue button to advance with current selections
+    // ✓ Continue (advance with current selections)
     {
       const b = document.createElement('button');
       b.id = 'al-pref-continue';
@@ -1106,23 +1190,24 @@
     }
   }
 
+  /* Choose / Next */
   function choose(opt){
     const stepId = steps()[S.i].id;
 
-    // Location typed-only: keep user in this step until they press Save
+    // Location typed-only: keep user here until Save
     if (stepId==='loc' && opt.k==='A'){
       sysEl.textContent='Enter suburb and postcode, then Save & continue.';
       speak('Please enter your suburb and postcode, then press Save and continue.');
       return;
     }
 
-    // Interpreter: if "Yes", show language box and do NOT advance until it's typed
+    // Interpreter: if "Yes", show language box and DO NOT advance until it's typed
     if (stepId==='risk_int' && opt.k==='A'){
       showInterpreterBox();
       return;
     }
 
-    // CONSENT REQUIRED: must be "Yes" to proceed
+    // Consent required
     if (stepId==='consent' && opt.k!=='A'){
       if (typeof opt.apply==='function') opt.apply(); // record user's answer
       save();
@@ -1132,27 +1217,20 @@
     }
 
     // Preferences handled as multi-select; only advance via Continue or D) No preferences
-    if (stepId==='pref' && ['A','B','C'].includes(opt.k)){
-      return; // toggling handled in renderPrefChips
-    }
+    if (stepId==='pref' && ['A','B','C'].includes(opt.k)) return;
 
     if (typeof opt.apply==='function') opt.apply();
     save();
 
     if (stepId==='final'){
-      renderSummary();
-      endBox.style.display='grid';
-      validateSendButton();
-      return;
+      renderSummary(); endBox.style.display='grid'; validateSendButton(); return;
     }
     S.i = Math.min(S.i+1, steps().length-1);
     render();
   }
 
   function next(){
-    if (steps()[S.i].id==='final'){
-      renderSummary(); endBox.style.display='grid'; validateSendButton(); return;
-    }
+    if (steps()[S.i].id==='final'){ renderSummary(); endBox.style.display='grid'; validateSendButton(); return; }
     S.i = Math.min(S.i+1, steps().length-1); render();
   }
 
@@ -1175,11 +1253,15 @@
 
   function renderSummary(){
     const yn=v=>v===true?'Yes':v===false?'No':(v||'—');
+    const svcNames = (S.services||[]).map(k => {
+      const f = SUPPORT_OPTIONS.find(x=>x.key===k);
+      return f ? f.label : k;
+    });
     const lines = [
       `Caller: ${S.caller||'—'}`,
       `Consent: ${S.consent||'—'}`,
       `Location: ${S.suburb||'—'} ${S.postcode?('('+S.postcode+')'):''}`,
-      `Service: ${S.service||'—'}`,
+      `Services: ${svcNames.length ? svcNames.join('; ') : (S.service || '—')}`,
       `Windows (visits): ${S.rostering||'—'}`,
       `Contact window: ${S.contact_window||S.custom['contact_win']||'—'}`,
       `Prefs: ${S.pref.gender?'Worker gender; ':''}${S.pref.transport?'Transport; ':''}${S.pref.access?'Access ready; ':''}${S.pref.none?'None':''}`.replace(/; $/,''),
@@ -1216,7 +1298,10 @@
       source:"index-ella-v33",
       route:S.route, caller:S.caller, consent:S.consent,
       suburb:S.suburb, postcode:S.postcode,
+      // legacy single service fields (if any)
       service:S.service, category:S.cat,
+      // new multi-select services
+      services_selected: S.services || [],
       rostering:S.rostering, contact_window:S.contact_window || S.custom['contact_win'] || '',
       pref_gender:S.pref.gender, pref_transport:S.pref.transport, pref_access:S.pref.access,
       plan_mgmt:S.mgmt, plan_dates:S.dates, approx_hours_per_week:S.hrs,
@@ -1285,7 +1370,7 @@
     });
   }
 
-  document.getElementById('al-mic').addEventListener('click', ()=>{ if (!SR){ alert('Voice not supported in this browser. Tap answers instead.'); return; } listen(); });
+  micBtn.addEventListener('click', ()=>{ if (!SR){ alert('Voice not supported in this browser. Tap answers instead.'); return; } listen(); });
 
   // Back button
   const backBtn = document.getElementById('al-back');
@@ -1313,6 +1398,7 @@
       pref:{worker:null, gender:null, transport:null, access:null, none:false},
       urgency:null, rostering:null, contact_window:null,
       name:null, email:null, phone:null, route:null,
+      services:[],
       custom:{}, notes:[]
     };
     save();
@@ -1332,7 +1418,8 @@
   btnDownload.addEventListener('click', ()=>{
     const payload = {
       route:S.route, caller:S.caller, consent:S.consent,
-      suburb:S.suburb, postcode:S.postcode, service:S.service, category:S.cat,
+      suburb:S.suburb, postcode:S.postcode,
+      services_selected: S.services || [],
       rostering:S.rostering, contact_window:S.contact_window || S.custom['contact_win'] || '',
       prefs:S.pref, plan_mgmt:S.mgmt, plan_dates:S.dates, approx_hours_per_week:S.hrs,
       risks:S.risks, interpreter:S.interpreter, urgency:S.urgency,
@@ -1362,16 +1449,12 @@ const closeBtn = document.getElementById('al-close');
 function closePanelDirect() {
   panel.style.display = 'none';
 }
-
 function onCloseClick(e) {
   e.preventDefault();
   e.stopPropagation();
   closePanelDirect();
 }
-
-if (closeBtn) {
-  closeBtn.addEventListener('click', onCloseClick);
-}
+if (closeBtn) closeBtn.addEventListener('click', onCloseClick);
 
 // Close on ESC
 document.addEventListener('keydown', (e) => {
@@ -1387,4 +1470,4 @@ panel.addEventListener('click', (e) => {
   }
 });
 </script>
-<!-- === /ELLA (v3.3 • REQUIRED CHANGES) === -->
+<!-- === /ELLA (v3.3 — updated) === -->
