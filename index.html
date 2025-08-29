@@ -101,6 +101,7 @@
     .btn:active{transform: translateY(1px)}
     .btn-primary{background:var(--accent);color:#1e1b4b;box-shadow:0 8px 24px rgba(0,0,0,.22)}
     .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
+    .btn-link{background:transparent;color:var(--brand);padding:0}
     .hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
     .hero-actions .btn{flex:1 1 220px;max-width:320px}
     .enquiry-btn{background:var(--enq);color:#fff;border:none;font-size:1.05rem;padding:16px 22px;box-shadow:0 10px 28px rgba(255,87,34,.35);animation:pulseEnq 1.3s ease-in-out infinite}
@@ -142,13 +143,13 @@
 
     /* Sticky CTA */
     .cta-bar{position:sticky;bottom:10px;z-index:40;margin-top:24px;display:flex;justify-content:center;padding:0 16px}
-    .cta-bar .inner{display:flex;gap:10px;background:#0b1220;color:#fff;padding:10px;border-radius:999px;box-shadow:0 12px 40px rgba(2,6,23,.35);width:100%;max-width:560px}
-    .cta-bar .btn{flex:1 1 50%}
+    .cta-bar .inner{display:flex;gap:10px;background:#0b1220;color:#fff;padding:10px;border-radius:999px;box-shadow:0 12px 40px rgba(2,6,23,.35);width:100%;max-width:760px}
+    .cta-bar .btn{flex:1 1 33%}
 
     /* Footer */
     footer{margin:26px 0 10px;color:#64748b;font-size:13px;text-align:center}
 
-    /* Floating ELLA button (big with punchline) */
+    /* Floating ELLA button + quick chips */
     .floating-referral{
       position:fixed; right:20px; bottom:calc(24px + 2cm); z-index:60;
       display:flex; align-items:center; gap:10px; text-align:left;
@@ -162,13 +163,17 @@
     .floating-referral:hover{ background:#ffda44 }
     .floating-referral .title{ font-size:1rem; display:block }
     .floating-referral .sub{ font-size:.88rem; font-weight:700; opacity:.95; display:block }
-
-    /* The floating portrait that sits above the button */
+    .ella-quickchips{
+      position:fixed; right:20px; bottom:calc(24px + 2cm + 68px); z-index:60;
+      display:flex; gap:8px; flex-wrap:wrap; max-width:460px;
+    }
+    .ella-chip{background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;font-weight:800;cursor:pointer}
+    .ella-chip:hover{box-shadow:0 6px 18px rgba(2,6,23,.18)}
     .ella-float-img{
       position:absolute; right:12px; bottom:100%; width:64px; height:64px; 
       border-radius:50%; object-fit:cover; background:#fff;
       box-shadow:0 12px 28px rgba(0,0,0,.28);
-      transform: translateY(8px); /* overlap slightly */
+      transform: translateY(8px);
       border:2px solid rgba(255,255,255,.9);
       pointer-events:none;
     }
@@ -178,16 +183,22 @@
       .floating-referral{ right:34px; bottom:calc(34px + 2cm); padding:16px 18px; border-radius:18px }
       .floating-referral .title{ font-size:1.05rem }
       .floating-referral .sub{ font-size:.95rem }
+      .ella-quickchips{ right:34px; }
     }
     @media (max-width:480px){
       .floating-referral{ min-width:auto; max-width:85vw; padding:12px 14px }
       .floating-referral .sub{ display:none }
+      .ella-quickchips{ max-width:85vw }
     }
 
     /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce){
       .enquiry-btn,.chip,.hero::after,.card,.floating-referral{animation:none}
     }
+
+    /* Mid-page ELLA callout */
+    .ella-callout{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:18px}
+    .ella-callout h3{margin:0;font-size:1.25rem}
   </style>
 </head>
 <body>
@@ -252,16 +263,39 @@
       <div class="content">
         <img src="images/logo.png" alt="" style="width:72px;height:72px;border-radius:18px;object-fit:cover;opacity:.95"/>
         <h1 id="h1">Get the right help in minutes</h1>
-        <p>Make an enquiry or start a referral — every step is simple, with “Not sure” options throughout.</p>
+        <p>Make an enquiry, start a referral, or chat with ELLA — all with simple “Not sure” options.</p>
         <div class="hero-actions">
           <a class="btn btn-ghost" href="tel:0286305500" aria-label="Call HD HeeD on 02 8630 5500">Call 02 8630 5500</a>
           <a class="btn enquiry-btn" href="contact.html" aria-label="Make an Enquiry">Make an Enquiry</a>
           <a class="btn btn-primary" href="referral.html">Start referral</a>
+          <button id="ella-cta-hero" class="btn btn-primary" aria-label="Start with ELLA">Start with ELLA</button>
         </div>
         <div class="chipbar">
           <span class="chip">Registered NDIS Provider</span>
           <span class="chip">Clinically led care</span>
           <span class="chip">Person-centred</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MID-PAGE ELLA CALLOUT -->
+    <section class="container" aria-label="ELLA quick start">
+      <div class="ella-callout">
+        <div style="display:flex;gap:12px;align-items:center">
+          <img src="images/ella/ella-default.png" alt="" style="width:52px;height:52px;border-radius:12px;border:1px solid #e5e7eb">
+          <div>
+            <h3>ELLA — start care in 60 seconds. No long forms.</h3>
+            <div class="muted">Used by participants, carers, coordinators & health professionals.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="ella-cta-mid">Start with ELLA</button>
+          <div class="chipbar" style="margin:0">
+            <button class="pill" data-ella-role="participant" aria-pressed="false">Participant</button>
+            <button class="pill" data-ella-role="carer" aria-pressed="false">Carer</button>
+            <button class="pill" data-ella-role="sc" aria-pressed="false">Support Coordinator</button>
+            <button class="pill" data-ella-role="hp" aria-pressed="false">Health Professional</button>
+          </div>
         </div>
       </div>
     </section>
@@ -281,6 +315,7 @@
           <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap">
             <a id="cta-referral" class="btn btn-primary" href="referral.html">Start referral</a>
             <a id="cta-enquiry" class="btn btn-ghost" href="contact.html">Make an enquiry</a>
+            <button id="cta-ella-inline" class="btn btn-primary">Start with ELLA</button>
           </div>
 
           <hr style="border:none;border-top:1px dashed #e5e7eb;margin:16px 0">
@@ -385,9 +420,13 @@
       </div>
     </section>
 
-    <!-- FAQs -->
+    <!-- FAQs (ELLA NUDGE ABOVE) -->
     <section class="container" style="margin-top:18px">
-      <h2 class="section-title">Quick answers</h2>
+      <div class="card" style="display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap">
+        <div><strong>Not sure where to start?</strong> Ask ELLA — you can skip any question.</div>
+        <button class="btn btn-primary" id="ella-cta-faq">Start with ELLA</button>
+      </div>
+      <h2 class="section-title" style="margin-top:16px">Quick answers</h2>
       <div class="grid two accordion">
         <details class="item">
           <summary>Who can make an enquiry or referral?</summary>
@@ -408,7 +447,7 @@
       </div>
     </section>
 
-    <!-- CONTACT SLICE (Quick Enquiry uses Formspree) -->
+    <!-- CONTACT SLICE -->
     <section class="container" style="margin-top:18px">
       <div class="card">
         <div class="grid two" style="align-items:center">
@@ -420,9 +459,10 @@
               <a class="btn btn-ghost" href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>
               <a class="btn btn-primary" href="referral.html">Start referral</a>
               <a class="btn btn-ghost" href="contact.html">Make an enquiry</a>
+              <button class="btn btn-primary" id="ella-cta-contact">Start with ELLA</button>
             </div>
 
-            <!-- Quick enquiry (posts to Formspree referral endpoint) -->
+            <!-- Quick enquiry (Formspree) -->
             <form id="quickEnquiry" class="grid" style="gap:10px;margin-top:14px;max-width:560px" action="https://formspree.io/f/xvgrkkjn" method="POST">
               <input type="hidden" name="_subject" value="Quick enquiry from HD HeeD home">
               <label class="sr-only" for="qe-msg">Your message</label>
@@ -447,6 +487,7 @@
       <div class="inner">
         <a class="btn btn-primary" href="referral.html">Start referral</a>
         <a class="btn btn-ghost" href="contact.html">Enquiry</a>
+        <button class="btn btn-primary" id="ella-cta-sticky">Start with ELLA</button>
       </div>
     </div>
   </main>
@@ -455,11 +496,19 @@
     © 2025 HD HeeD • <a href="privacy.html">Privacy</a> • <a href="sitemap.xml">Sitemap</a>
   </footer>
 
-  <!-- Floating ELLA Button (converted to <button>) -->
-  <button id="ella-launch" class="floating-referral" aria-label="Talk to ELLA" type="button">
+  <!-- Floating ELLA quick-start chips (fixed) -->
+  <div class="ella-quickchips" aria-label="ELLA quick start audience chips">
+    <button class="ella-chip" data-ella-role="participant">Participant</button>
+    <button class="ella-chip" data-ella-role="carer">Carer</button>
+    <button class="ella-chip" data-ella-role="sc">Support Coordinator</button>
+    <button class="ella-chip" data-ella-role="hp">Health Professional</button>
+  </div>
+
+  <!-- Floating ELLA Button -->
+  <button id="ella-launch" class="floating-referral" aria-label="Start with ELLA" type="button">
     <img src="images/ella/ella-default.png" alt="Ella" class="ella-float-img" aria-hidden="true">
-    <span class="title">💬 Talk to ELLA</span>
-    <span class="sub">I’m quicker than a phone call, easy to talk to, and can organise help fast.</span>
+    <span class="title">💬 Start with ELLA</span>
+    <span class="sub">Start care in 60 seconds. No long forms.</span>
   </button>
 
   <script>
@@ -557,7 +606,7 @@
       show(0);
     })();
 
-    // Quick enquiry to Formspree (with graceful fallback)
+    // Quick enquiry (Formspree)
     const qeForm = document.getElementById('quickEnquiry');
     const qeStatus = document.getElementById('qe-status');
     if (qeForm){
@@ -578,11 +627,23 @@
           });
       });
     }
+
+    // ELLA hero & other CTAs -> open panel
+    const openEllaFromBtn = (btn)=> btn && btn.addEventListener('click', ()=> window.ELLA && window.ELLA.open());
+    ['ella-cta-hero','ella-cta-mid','cta-ella-inline','ella-cta-faq','ella-cta-contact','ella-cta-sticky']
+      .forEach(id => openEllaFromBtn(document.getElementById(id)));
+
+    // Floating quick chips set role + open
+    function tapEllaQuick(role){
+      try{ sessionStorage.setItem('ella_prefill_role', role); }catch{}
+      if (window.ELLA && typeof window.ELLA.open==='function'){ window.ELLA.open(); }
+    }
+    document.querySelectorAll('[data-ella-role]').forEach(el=>{
+      el.addEventListener('click', ()=> tapEllaQuick(el.getAttribute('data-ella-role')));
+    });
   </script>
 
- <!-- Paste this entire block just BEFORE your closing </body> tag on index.html -->
-
-<!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.3 — updated) === -->
+ <!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.4 — prominent) === -->
 <style>
   :root{ --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153; --al-text:#e8edff; --al-accent:#ffc107; }
   /* Greeting */
@@ -647,8 +708,7 @@
   <div class="card">
     <h2>Hi, I’m <strong id="al-greet-name">ELLA</strong> — your intake assistant</h2>
     <p>
-      Skip the wait — talk to me and I’ll organise help <strong>faster than a phone call</strong>.
-      I’m quick, friendly, and as easy to talk to as our team. I’ll ask a few short questions and do the admin for you.
+      <strong>Start care in 60 seconds.</strong> No long forms. I’ll ask a few short questions and organise the next steps for you.
     </p>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button id="alan-start" class="al-btn primary" aria-label="Let’s talk">Let’s talk</button>
@@ -678,7 +738,7 @@
       <!-- Right content -->
       <div class="al-main">
         <div class="al-meta">
-          <span id="al-step">Step 1/15</span>
+          <span id="al-step">Step 1/5</span>
           <div class="al-meter" aria-label="Progress"><div id="al-bar"></div></div>
         </div>
         <div id="al-q" class="al-q">…</div>
@@ -687,7 +747,7 @@
 
         <!-- End details -->
         <div id="al-end" class="al-endbox" style="display:none">
-          <div style="font-weight:900">Optional details to speed things up</div>
+          <div style="font-weight:900">Add contact to send now</div>
           <input id="al-name" placeholder="Your name or initials (optional)">
           <input id="al-email" placeholder="Email (required if no phone)">
           <input id="al-phone" placeholder="Phone (required if no email)">
@@ -721,7 +781,7 @@
   const SITE_PHONE  = "02 8630 5500";
   const PREFER_MALE_VOICE = false; // prefer female for ELLA
 
-  /* ===== Portraits per step (put images in /images/ella/) ===== */
+  /* ===== Portraits per step ===== */
   const ELLA_IMAGES = {
     default: "images/ella/ella-default.png",
     caller:  "images/ella/ella-caller.png",
@@ -738,11 +798,12 @@
     risk_int:"images/ella/ella-interpreter.png",
     urgency: "images/ella/ella-urgency.png",
     contact_win:"images/ella/ella-contact-window.png",
-    final:   "images/ella/ella-summary.png"
+    final:   "images/ella/ella-summary.png",
+    contact: "images/ella/ella-caller.png"
   };
 
   /* ===== State & DOM ===== */
-  const SKEY='hdheed_ella_v33';
+  const SKEY='hdheed_ella_v34';
   let S = {
     i:0,
     caller:null, consent:null,
@@ -755,7 +816,7 @@
     urgency:null, rostering:null,
     contact_window:null,
     name:null, email:null, phone:null, route:null,
-    services:[], // multi-select services
+    services:[],
     custom:{}, notes:[]
   };
   try{ const prev=JSON.parse(localStorage.getItem(SKEY)||'null'); if(prev) S=prev; }catch{}
@@ -786,7 +847,7 @@
   const contactWarn = document.getElementById('al-contact-warning');
   const portraitImg = document.getElementById('al-portrait-img');
 
-  /* ===== Voice (TTS + SR) ===== */
+  /* ===== Voice ===== */
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recog = null, speaking=false, voice=null, assistantName='ELLA';
 
@@ -824,7 +885,36 @@
     }catch{}
   }
 
-  /* ===== Flow helpers ===== */
+  /* ===== 5-step progress (grouped display only) ===== */
+  const GROUPS = [
+    {id:'intro',    range:[-1]},                     // before Qs
+    {id:'profile',  range:['caller','consent','contact']},
+    {id:'details',  range:['loc','service','pref','rostering']},
+    {id:'plan',     range:['mgmt','dates','hrs']},
+    {id:'safety',   range:['risk_beh','risk_med','risk_int']},
+    {id:'timing',   range:['urgency','contact_win']},
+    {id:'final',    range:['final']},
+  ];
+  function groupIndexFor(stepId){
+    for (let g=0; g<GROUPS.length; g++){
+      if (GROUPS[g].range.includes(stepId)) return g;
+    }
+    return 1;
+  }
+  function displayStep(stepId){
+    const g = groupIndexFor(stepId);
+    // Map to 1..5 display: profile=1, details=2, plan+safety=3, timing=4, final=5
+    let disp = 1;
+    if (['profile'].includes(GROUPS[g].id)) disp=1;
+    else if (['details'].includes(GROUPS[g].id)) disp=2;
+    else if (['plan','safety'].includes(GROUPS[g].id)) disp=3;
+    else if (['timing'].includes(GROUPS[g].id)) disp=4;
+    else disp=5; // final
+    stepEl.textContent = `Step ${disp}/5`;
+    barEl.style.width = (disp-1)*25 + '%';
+  }
+
+  /* ===== Steps (added contact step early) ===== */
   const NS = (t='Not sure — please guide me')=>({k:'NS',t,apply:()=>{}});
   const o = (k,t,apply=()=>{})=>({k,t,apply});
 
@@ -839,19 +929,16 @@
              o('B','Not yet',()=>S.consent='Not yet'),
              o('C','Not sure',()=>S.consent='Not sure'),
              o('D','No',()=>S.consent='No'), NS() ]},
-    {id:'loc', q:"Which area is support required? Please type suburb and postcode.",
-      // chips won’t be shown for this step; typed-only
-      opts:[ o('A','(typed only)',()=>{}) ]},
-    {id:'service', q:"Which supports are required? (You can select more than one, then press ✓ Continue)",
-      // we render chips via renderServiceChips
-      opts:[ o('A','(see list below)',()=>{}) ]},
+    {id:'contact', q:"Add your contact so we can get back to you quickly (email or phone).",
+      opts:[ o('A','(type below)',()=>{}) ]},
+    {id:'loc', q:"Which area is support required? Please type suburb and postcode.", opts:[ o('A','(typed only)',()=>{}) ]},
+    {id:'service', q:"Which supports are required? (You can select more than one, then press ✓ Continue)", opts:[ o('A','(see list below)',()=>{}) ]},
     {id:'rostering', q:"What time windows suit you for support visits?",
       opts:[ o('A','Weekday mornings (7–11am)',()=>S.rostering='Weekday AM'),
              o('B','Weekday afternoons (12–4pm)',()=>S.rostering='Weekday PM'),
              o('C','Evenings (5–9pm)',()=>S.rostering='Evenings'),
              o('D','Weekends',()=>S.rostering='Weekends'), NS('Flexible') ]},
     {id:'pref', q:"Any preferences we should know? (You can choose more than one, then press ✓ Continue)",
-      // A/B/C toggled; D advances; Continue advances
       opts:[ o('A','Worker gender preference',()=>{}),
              o('B','Transport required',()=>{}),
              o('C','Keysafe / someone home for access',()=>{}),
@@ -903,7 +990,7 @@
              o('D','Save only (no send)',()=>S.route='Save'), NS() ]}
   ];}
 
-  /* ===== Plain-English Services (no codes) ===== */
+  /* Plain-English Services */
   const SUPPORT_OPTIONS = [
     { key:'personal',      label:'Personal care (showering / dressing / toileting / meal prep / prompting)' },
     { key:'high',          label:'High-intensity personal care (wound care / medications / stoma care / PEG feeds / catheter care / bowel care / pressure care)' },
@@ -915,6 +1002,7 @@
     { key:'shared_living', label:'Daily tasks & shared living (support in SIL / morning–evening routines / overnight assistance)' },
   ];
 
+  /* DOM helpers */
   function ensureServiceArray(){
     if (!Array.isArray(S.services)) S.services = [];
     if (S.service && !S.services.length) { S.services = [S.service]; S.service = null; }
@@ -928,8 +1016,6 @@
   function renderServiceChips(){
     ensureServiceArray();
     optsEl.innerHTML = '';
-
-    // Friendly multi-select chips
     SUPPORT_OPTIONS.forEach(opt=>{
       const b = document.createElement('button');
       b.className = 'al-chip';
@@ -941,56 +1027,31 @@
       });
       optsEl.appendChild(b);
     });
-
-    // Something else — I’ll type it
     const other = document.createElement('button');
     other.className = 'al-chip';
     other.textContent = 'Something else — I’ll type it';
     other.addEventListener('click', ()=>{
-      // show typed box below and focus it
-      renderServiceChips(); // re-render to place input at the end fresh
-      setTimeout(()=>{
-        const input = document.getElementById('al-custom-service');
-        if (input) input.focus();
-      }, 0);
+      renderServiceChips();
+      setTimeout(()=>{ const input = document.getElementById('al-custom-service'); if (input) input.focus(); }, 0);
     });
     optsEl.appendChild(other);
-
-    // Not sure — please guide me
     const ns = document.createElement('button');
     ns.className = 'al-chip';
     ns.textContent = 'Not sure — please guide me';
     ns.addEventListener('click', ()=>{ S.custom['service']='Not sure'; save(); next(); });
     optsEl.appendChild(ns);
-
-    // Continue button to advance with current selections
     const cont = document.createElement('button');
     cont.className = 'al-chip';
     cont.textContent = '✓ Continue';
     cont.addEventListener('click', ()=> next());
     optsEl.appendChild(cont);
-
-    // Optional typed detail box (always visible below list)
-    injectCustomBox(
-      'service',
-      'Want to type a specific support detail?',
-      'e.g., wound dressing frequency; Webster pack; bowel care plan; shopping day',
-      (val)=>{
-        S.custom['service'] = val;
-        S.notes.push(`[service] ${val}`);
-        save();
-        next();
-      }
-    );
+    injectCustomBox('service','Want to type a specific support detail?','e.g., wound dressing frequency; Webster pack; bowel care plan; shopping day',(val)=>{
+      S.custom['service']=val; S.notes.push(`[service] ${val}`); save(); next();
+    });
   }
 
-  /* Labels/Placeholders for typed boxes */
   const CUSTOM_LABELS = {
-    caller:"Want to type who you are?",
-    consent:"Want to type your consent status?",
     loc:"Type your suburb and postcode",
-    service:"Want to type a specific support detail?",
-    rostering:"Want to type your exact visit times?",
     pref:"Want to type your preferences?",
     mgmt:"Want to type plan management?",
     dates:"Want to type your exact plan dates?",
@@ -1002,11 +1063,7 @@
     contact_win:"Want to type your contact window?"
   };
   const CUSTOM_PLACEHOLDERS = {
-    caller:"e.g., Participant / Mum / Support Coordinator Jane",
-    consent:"e.g., Yes / Not yet",
     loc:"Suburb, Postcode",
-    service:"e.g., wound dressing frequency; Webster pack; bowel care plan; shopping day",
-    rostering:"e.g., Tue/Thu 7–9am",
     pref:"e.g., Female worker, has car",
     mgmt:"e.g., Plan-managed by ABC PM",
     dates:"e.g., 01 Oct 2025 – 30 Sep 2026",
@@ -1018,18 +1075,12 @@
     contact_win:"e.g., Weekdays after 3pm"
   };
 
-  /* Render */
-  function setPortrait(stepId){
-    const src = ELLA_IMAGES[stepId] || ELLA_IMAGES.default;
-    portraitImg.src = src; portraitImg.alt = "Ella — " + (stepId||"assistant");
-  }
+  function setPortrait(stepId){ portraitImg.src = (ELLA_IMAGES[stepId] || ELLA_IMAGES.default); portraitImg.alt = "Ella — " + (stepId||"assistant"); }
 
   function render(){
     const list = steps(), total = list.length;
     const step = list[S.i] || list[total-1];
-
-    stepEl.textContent = `Step ${Math.min(S.i+1,total)}/${total}`;
-    barEl.style.width = Math.round(((S.i)/(total-1))*100) + '%';
+    displayStep(step.id);
     setPortrait(step.id);
 
     qEl.textContent = step.q;
@@ -1037,27 +1088,25 @@
     sysEl.textContent = '';
     endBox.style.display = 'none';
 
-    // Location typed-only
+    if (step.id==='contact'){
+      injectContactFirstBox();
+      speak(step.q); save(); return;
+    }
     if (step.id==='loc'){
       injectLocationBox(true);
-      speak(step.q); save();
-      return;
+      speak(step.q); save(); return;
     }
-    // Services multi-select
     if (step.id==='service'){
       renderServiceChips();
-      speak(step.q); save();
-      return;
+      speak(step.q); save(); return;
     }
-
-    // Typed box (except final)
     if (step.id!=='final'){
       if (step.id==='risk_int'){
-        injectCustomBox(step.id, CUSTOM_LABELS[step.id], CUSTOM_PLACEHOLDERS[step.id], (val)=>{
+        injectCustomBox(step.id, "Interpreter language", "e.g., Arabic, Mandarin, AUSLAN", (val)=>{
           if (val){ S.risks.int = true; S.interpreter.language = val; save(); }
           next();
         });
-      } else {
+      } else if (CUSTOM_LABELS[step.id]) {
         injectCustomBox(step.id, CUSTOM_LABELS[step.id], CUSTOM_PLACEHOLDERS[step.id], (val)=>{
           if (val){ S.custom[step.id]=val; S.notes.push(`[${step.id}] ${val}`); save(); }
           next();
@@ -1065,7 +1114,6 @@
       }
     }
 
-    // Chips (special handling for preferences)
     if (step.id==='pref'){
       renderPrefChips();
     } else {
@@ -1081,7 +1129,6 @@
     speak(step.q); save();
   }
 
-  /* Typed-answer box */
   function injectCustomBox(stepId, label, placeholder, onSave){
     const box=document.createElement('div');
     box.className='al-inlinebox';
@@ -1094,18 +1141,13 @@
     optsEl.appendChild(box);
     box.querySelector('#al-custom-save').onclick=()=>{
       const txt=(box.querySelector('#'+inputId).value||'').trim();
-      if(!txt){
-        sysEl.textContent='Please type something or choose one of the options.';
-        speak('Please type something, or choose one of the options.');
-        return; 
-      }
+      if(!txt){ sysEl.textContent='Please type something or choose one of the options.'; speak('Please type something, or choose one of the options.'); return; }
       onSave && onSave(txt);
     };
   }
 
   function injectLocationBox(required){
     const locBox=document.createElement('div');
-    locBox.id='al-locbox';
     locBox.className='al-inlinebox';
     locBox.innerHTML = `
       <div style="font-weight:700">Type your suburb and postcode</div>
@@ -1121,6 +1163,24 @@
         sysEl.textContent='Please add both suburb and postcode.'; speak('Please add both suburb and postcode.'); return;
       }
       if (sub) S.suburb=sub; if (pc) S.postcode=pc; save(); sysEl.textContent='Location saved.'; next();
+    };
+  }
+
+  function injectContactFirstBox(){
+    const box=document.createElement('div');
+    box.className='al-inlinebox';
+    box.innerHTML = `
+      <div style="font-weight:700">Email or phone (one is enough to send)</div>
+      <input id="al-c-email" placeholder="Email">
+      <input id="al-c-phone" placeholder="Phone">
+      <button id="al-contact-save" class="al-btn ghost">Save & continue</button>
+    `;
+    optsEl.appendChild(box);
+    box.querySelector('#al-contact-save').onclick=()=>{
+      const e = box.querySelector('#al-c-email').value.trim();
+      const p = box.querySelector('#al-c-phone').value.trim();
+      if (!e && !p){ sysEl.textContent='Please add at least email or phone.'; speak('Please add at least email or phone.'); return; }
+      if (e) S.email=e; if (p) S.phone=p; save(); sysEl.textContent='Contact saved.'; next();
     };
   }
 
@@ -1141,15 +1201,13 @@
     };
   }
 
-  /* Preferences multi-select */
   function renderPrefChips(){
-    optsEl.innerHTML = ''; // rebuild
+    optsEl.innerHTML = '';
     const toggles = [
       {k:'A', t:'Worker gender preference', on: !!S.pref.gender},
       {k:'B', t:'Transport required',        on: !!S.pref.transport},
       {k:'C', t:'Keysafe / someone home for access', on: !!S.pref.access},
     ];
-
     toggles.forEach(tg=>{
       const b = document.createElement('button');
       b.className='al-chip';
@@ -1165,66 +1223,46 @@
       });
       optsEl.appendChild(b);
     });
+    const none = document.createElement('button');
+    none.className='al-chip';
+    none.textContent = `D) No preferences`;
+    none.addEventListener('click', ()=>{
+      S.pref = {worker:null, gender:null, transport:null, access:null, none:true};
+      save(); next();
+    });
+    optsEl.appendChild(none);
 
-    // D) No preferences (clears & advances)
-    {
-      const b = document.createElement('button');
-      b.className='al-chip';
-      b.textContent = `D) No preferences`;
-      b.addEventListener('click', ()=>{
-        S.pref = {worker:null, gender:null, transport:null, access:null, none:true};
-        save();
-        next();
-      });
-      optsEl.appendChild(b);
-    }
-
-    // ✓ Continue (advance with current selections)
-    {
-      const b = document.createElement('button');
-      b.id = 'al-pref-continue';
-      b.className='al-chip';
-      b.textContent = `✓ Continue`;
-      b.addEventListener('click', ()=> next());
-      optsEl.appendChild(b);
-    }
+    const cont = document.createElement('button');
+    cont.id = 'al-pref-continue';
+    cont.className='al-chip';
+    cont.textContent = `✓ Continue`;
+    cont.addEventListener('click', ()=> next());
+    optsEl.appendChild(cont);
   }
 
-  /* Choose / Next */
   function choose(opt){
     const stepId = steps()[S.i].id;
 
-    // Location typed-only: keep user here until Save
     if (stepId==='loc' && opt.k==='A'){
       sysEl.textContent='Enter suburb and postcode, then Save & continue.';
       speak('Please enter your suburb and postcode, then press Save and continue.');
       return;
     }
+    if (stepId==='risk_int' && opt.k==='A'){ showInterpreterBox(); return; }
 
-    // Interpreter: if "Yes", show language box and DO NOT advance until it's typed
-    if (stepId==='risk_int' && opt.k==='A'){
-      showInterpreterBox();
-      return;
-    }
-
-    // Consent required
     if (stepId==='consent' && opt.k!=='A'){
-      if (typeof opt.apply==='function') opt.apply(); // record user's answer
+      if (typeof opt.apply==='function') opt.apply();
       save();
       sysEl.innerHTML = `We need your consent to continue. Please select <strong>A) Yes</strong> to proceed.`;
       speak('We need your consent to continue. Please select Yes to proceed.');
       return;
     }
-
-    // Preferences handled as multi-select; only advance via Continue or D) No preferences
     if (stepId==='pref' && ['A','B','C'].includes(opt.k)) return;
 
     if (typeof opt.apply==='function') opt.apply();
     save();
 
-    if (stepId==='final'){
-      renderSummary(); endBox.style.display='grid'; validateSendButton(); return;
-    }
+    if (stepId==='final'){ renderSummary(); endBox.style.display='grid'; validateSendButton(); return; }
     S.i = Math.min(S.i+1, steps().length-1);
     render();
   }
@@ -1295,12 +1333,10 @@
 
     const payload = {
       _subject:`HD HeeD Website – ${S.route||'Enquiry'} via ELLA (voice)`,
-      source:"index-ella-v33",
+      source:"index-ella-v34",
       route:S.route, caller:S.caller, consent:S.consent,
       suburb:S.suburb, postcode:S.postcode,
-      // legacy single service fields (if any)
       service:S.service, category:S.cat,
-      // new multi-select services
       services_selected: S.services || [],
       rostering:S.rostering, contact_window:S.contact_window || S.custom['contact_win'] || '',
       pref_gender:S.pref.gender, pref_transport:S.pref.transport, pref_access:S.pref.access,
@@ -1322,8 +1358,7 @@
     }
   }
 
-  /* Intro screen BEFORE Q1 */
-  const INTRO_TEXT = "Hi, I’m Ella — your AI assistant. You don’t need to call our team. Just answer these well-directed multiple-choice questions and our team will be fully prepared when they get in touch with you.";
+  const INTRO_TEXT = "Hi, I’m Ella — your AI assistant. Start care in 60 seconds. You can skip anything you’re not sure about.";
 
   function showIntro(){
     stepEl.textContent = 'Intro';
@@ -1339,18 +1374,22 @@
     speak(INTRO_TEXT);
   }
 
-  /* Open/Close/Greet */
   function openPanel(){
     greet.style.display='none';
     panel.style.display='block';
     if (window.speechSynthesis){ pickVoice(); }
+    // Prefill role from quick chips (optional)
+    try{
+      const pref = sessionStorage.getItem('ella_prefill_role');
+      if (pref){ S.custom['caller_pref']=pref; sessionStorage.removeItem('ella_prefill_role'); }
+    }catch{}
     showIntro();
   }
   function closePanel(){ panel.style.display='none'; try{ window.speechSynthesis.cancel(); }catch{} }
 
-  // Show greet once per session
-  if (!sessionStorage.getItem('ella_greeted_v33')){
-    setTimeout(()=>{ greet.style.display='block'; sessionStorage.setItem('ella_greeted_v33','1'); }, 900);
+  // Show greet once per session (after short delay)
+  if (!sessionStorage.getItem('ella_greeted_v34')){
+    setTimeout(()=>{ greet.style.display='block'; sessionStorage.setItem('ella_greeted_v34','1'); }, 1200);
   }
 
   // Hooks
@@ -1360,19 +1399,16 @@
   if (ellaLaunch){
     ellaLaunch.addEventListener('click', (e)=>{
       e.preventDefault();
-      if (window.ELLA && typeof window.ELLA.open === 'function') {
-        window.ELLA.open();
-      } else if (window.ALAN && typeof window.ALAN.open === 'function') {
-        window.ALAN.open();
-      } else {
-        openPanel();
-      }
+      if (window.ELLA && typeof window.ELLA.open === 'function') window.ELLA.open(); else openPanel();
     });
   }
+  // Public API
+  window.ALAN = { open: openPanel };
+  window.ELLA = { open: openPanel };
 
   micBtn.addEventListener('click', ()=>{ if (!SR){ alert('Voice not supported in this browser. Tap answers instead.'); return; } listen(); });
 
-  // Back button
+  // Back
   const backBtn = document.getElementById('al-back');
   if (backBtn){
     backBtn.addEventListener('click', ()=>{
@@ -1385,7 +1421,7 @@
     });
   }
 
-  // Robust restart (works from final page)
+  // Restart
   restartBtn.addEventListener('click', (e)=>{
     e.preventDefault();
     try{ window.speechSynthesis && window.speechSynthesis.cancel(); }catch{}
@@ -1398,15 +1434,9 @@
       pref:{worker:null, gender:null, transport:null, access:null, none:false},
       urgency:null, rostering:null, contact_window:null,
       name:null, email:null, phone:null, route:null,
-      services:[],
-      custom:{}, notes:[]
+      services:[], custom:{}, notes:[]
     };
-    save();
-    sysEl.textContent = '';
-    optsEl.innerHTML = '';
-    endBox.style.display='none';
-    setPortrait('default');
-    showIntro();
+    save(); sysEl.textContent = ''; optsEl.innerHTML = ''; endBox.style.display='none'; setPortrait('default'); showIntro();
   });
 
   // End box
@@ -1434,10 +1464,6 @@
 
   // Voice list may load async
   if (window.speechSynthesis){ speechSynthesis.onvoiceschanged = pickVoice; }
-
-  // Public openers
-  window.ALAN = { open: openPanel }; // backward compatibility
-  window.ELLA = { open: openPanel };
 })();
 </script>
 
@@ -1470,4 +1496,5 @@ panel.addEventListener('click', (e) => {
   }
 });
 </script>
-<!-- === /ELLA (v3.3 — updated) === -->
+<!-- === /ELLA (v3.4) === -->
+</html>
