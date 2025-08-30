@@ -228,7 +228,7 @@ window.addEventListener('DOMContentLoaded', function(){
       fileId:"https://drive.google.com/file/d/1Du5TxEIgD9n--Gw5vkkkFXEij_SaLwLE/view?usp=sharing" },
 
     { id:"privacy", title:"Privacy and Confidentiality Agreement", requiresConsent:true,
-      fileId:"https://drive.google.com/file/d/16qAcoUWtXC57hCg-B2atxpQRfDr53jK3/view?usp=sharing" },
+      fileId:"https://drive.google.com/file/d/16qAcoUWtXC57hCg-B2atxpQRfDr53jKK3/view?usp=sharing".replace("K3","K3") },
 
     { id:"money_property", title:"Participant Money and Property Consent Form", requiresConsent:true,
       fileId:"https://drive.google.com/file/d/1OymxyfOYxtaqW2keNrRB_kmW8JmfP6vz/view?usp=sharing" },
@@ -389,6 +389,7 @@ window.addEventListener('DOMContentLoaded', function(){
   var backBtn = document.getElementById("backBtn");
   var nextBtn = document.getElementById("nextBtn");
   var saveExitBtn = document.getElementById("saveExitBtn");
+
   /* ====== Step builders (compliant content) ====== */
   var Steps = [
     { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
@@ -423,9 +424,8 @@ window.addEventListener('DOMContentLoaded', function(){
         m.appendChild(row("two",[ input("Address line 1", S.participant.address, "line1"), input("Address line 2 (optional)", S.participant.address, "line2") ]));
         m.appendChild(row("three",[ input("Suburb", S.participant.address, "suburb"), input("Postcode", S.participant.address, "postcode"), input("State", S.participant.address, "state") ]));
         m.appendChild(divider("Plan management"));
-        /* FIX: removed trailing comma at the end of the array below */
         m.appendChild(radioChips("Plan management", S.participant, "plan_mgmt", [
-          ["NDIA-managed","NDIA-managed"],["Plan-managed","Plan-managed"],["Self-managed","Self-managed"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"]
+          ["NDIA-managed","NDIA-managed"],["Plan-managed","Plan-managed"],["Self-managed","Self-managed"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"],
         ]));
         m.appendChild(typeBox("Plan manager (org & contact; optional)", "Org & name (if applicable)", function(v){ S.participant.plan_manager.org=v; save(); }));
         m.appendChild(row("three",[ input("Plan manager contact name", S.participant.plan_manager, "contact"), input("Plan manager email", S.participant.plan_manager, "email","email"), input("Plan manager phone", S.participant.plan_manager, "phone","tel") ]));
@@ -458,7 +458,6 @@ window.addEventListener('DOMContentLoaded', function(){
         m.appendChild(radioChips("Transport required?", S.comms.preferences, "transport_required", [ ["Yes","Yes"],["No","No"],["Not sure","Not sure"] ]));
       }
     },
-
     { key:"living", title:"Living situation & access", sub:"This helps us plan safe, respectful visits.",
       build:function(m){
         m.appendChild(select("Residence type", S.living, "residence_type", ["Private home","Unit/Apartment","Group home","Supported accommodation","Other","Prefer not to say"]));
@@ -615,19 +614,10 @@ window.addEventListener('DOMContentLoaded', function(){
           m.appendChild(card);
         });
 
-        /* FIX: robust counters without arrow functions */
-        var total = DOCS.length, readCt = 0, needCon = 0, conCt = 0;
-        for (var ii=0; ii<DOCS.length; ii++){
-          var did = DOCS[ii].id;
-          var ack = S.acks[did] || {read:false, consent:false};
-          if (ack.read) readCt++;
-          if (DOCS[ii].requiresConsent){
-            needCon++;
-            if (ack.consent) conCt++;
-          }
-        }
         var sum = document.createElement('div'); sum.className="hint";
         sum.style.marginTop="6px";
+        var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
+        DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
         sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
         m.appendChild(sum);
       }
@@ -683,7 +673,6 @@ window.addEventListener('DOMContentLoaded', function(){
           var oldTxt = btnSend.textContent;
           btnSend.textContent = "Sending…";
 
-          /* FIX: no arrow function in catch; robust JSON parse */
           sendToFormspree().then(function(j){
             var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
             alert("All done — we’ve received your onboarding." + pdfMsg);
@@ -751,6 +740,7 @@ window.addEventListener('DOMContentLoaded', function(){
     s.addEventListener('change', function(){ obj[key] = s.value || null; save(); });
     box.appendChild(s); return box;
   }
+  /* onChange callback supported */
   function radioChips(label, obj, key, items, onChange){
     var wrap = document.createElement('div'); wrap.className="inlinebox";
     wrap.innerHTML = '<label style="font-weight:800">'+label+'</label>';
@@ -808,20 +798,6 @@ window.addEventListener('DOMContentLoaded', function(){
     box.appendChild(list); return box;
   }
 
-  function typeBox(label, placeholder, onSave){
-    var box = document.createElement('div'); box.className="inlinebox";
-    var id = "tb_"+Math.random().toString(36).slice(2,7);
-    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var i = document.createElement('input');
-    i.id=id; i.placeholder = placeholder||"Type here";
-    i.addEventListener('input', function(){
-      var v = (i.value||"");
-      try{ if (typeof onSave === "function") onSave(v); } finally { setSaveHint("Draft saved"); }
-    });
-    box.appendChild(i);
-    return box;
-  }
-
   /* ====== Review (on-screen) ====== */
   function renderReview(){
     var wrap = document.createElement('div'); wrap.className="review";
@@ -837,22 +813,6 @@ window.addEventListener('DOMContentLoaded', function(){
       });
       d.appendChild(kv); return d;
     }
-
-    wrap.appendChild(sect("Who is completing", [
-      ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
-    ]));
-
-    wrap.appendChild(sect("Participant", [
-      ["Legal name", S.participant.legal_name],
-      ["Preferred name", S.participant.preferred_name],
-      ["Pronouns", S.participant.pronouns],
-      ["DOB", S.participant.dob],
-      ["NDIS number", S.participant.ndis_number],
-      ["Address", [S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
-      ["Plan management", S.participant.plan_mgmt],
-      ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
-      ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
-    ]));
 
     function mapRequired(arr, other){
       var map = {
@@ -870,6 +830,22 @@ window.addEventListener('DOMContentLoaded', function(){
       if (other) list.push("Other: "+other);
       return list.length ? list.join(", ") : "—";
     }
+
+    wrap.appendChild(sect("Who is completing", [
+      ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
+    ]));
+
+    wrap.appendChild(sect("Participant", [
+      ["Legal name", S.participant.legal_name],
+      ["Preferred name", S.participant.preferred_name],
+      ["Pronouns", S.participant.pronouns],
+      ["DOB", S.participant.dob],
+      ["NDIS number", S.participant.ndis_number],
+      ["Address", [S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
+      ["Plan management", S.participant.plan_mgmt],
+      ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
+      ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
+    ]));
 
     wrap.appendChild(sect("Supports (required)", [
       ["Selected", mapRequired(S.supports.required, S.supports.required_other)],
@@ -967,6 +943,7 @@ window.addEventListener('DOMContentLoaded', function(){
       ["Follow-up", follow]
     ]));
 
+    /* Per-document status ticks */
     var docRows = DOCS.map(function(d){
       var a = S.acks[d.id] || {read:false, consent:false};
       return [d.title, (a.read?"Yes":"No") + (d.requiresConsent ? (" • Consent: " + (a.consent?"Yes":"No")) : "")];
@@ -980,20 +957,19 @@ window.addEventListener('DOMContentLoaded', function(){
     return wrap;
   }
 
-  /* ====== Printable summary (Print/Save PDF) ====== */
+  /* ====== Printable summary (no inline <script> in string) ====== */
   function openPrintableSummary(){
     var w = window.open("", "ailr_print", "width=900,height=700");
     if(!w) { alert("Please allow pop-ups to print or save the summary."); return; }
 
-    function esc(x){ return (x===undefined||x===null)?"—":String(x); }
+    function esc(x){ return (x===undefined||x===null||x==="")?"—":String(x); }
     function listTrue(obj, keys, map){
       var out = [];
-      for (var i=0;i<keys.length;i++){ var k=keys[i]; if(obj[k]===true) out.push(map[k]||k); }
+      keys.forEach(function(k){ if(obj[k]===true) out.push(map[k]||k); });
       return out.length? out.join(", ") : "—";
     }
     function mapArr(arr, dict){
-      var out=[]; (arr||[]).forEach(function(k){ if(dict[k]) out.push(dict[k]); });
-      return out;
+      return (arr||[]).map(function(k){ return dict[k]||k; }).filter(Boolean);
     }
 
     var dictWindows={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"};
@@ -1011,14 +987,14 @@ window.addEventListener('DOMContentLoaded', function(){
     };
     var docStatus = DOCS.map(function(d){
       var a = S.acks[d.id] || {read:false, consent:false};
-      var c = d.requiresConsent ? (" | Consent: " + (a.consent?"Yes":"No")) : "";
-      return "<li><b>"+d.title+":</b> Read: " + (a.read?"Yes":"No") + c + "</li>";
+      var cons = d.requiresConsent ? (" | Consent: " + (a.consent?"Yes":"No")) : "";
+      return "<li><b>"+d.title+":</b> Read: " + (a.read?"Yes":"No") + cons + "</li>";
     }).join("");
 
     var risksMap = {wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
                     animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"};
 
-    var cons = (S.emergency_advocacy===undefined||S.emergency_advocacy===null||S.emergency_advocacy==="") ? "—" : S.emergency_advocacy;
+    var cons = (S.emergency_advocacy==null||S.emergency_advocacy==="") ? "—" : S.emergency_advocacy;
     var follow = (S.emergency_advocacy==="No" || S.emergency_advocacy==="Not sure") ? "Follow-up required at intake" : "—";
 
     var html = `
@@ -1166,9 +1142,9 @@ window.addEventListener('DOMContentLoaded', function(){
   </div>
 
   <p class="muted noprint">Press Ctrl/Cmd + P to save as PDF.</p>
-  <script>window.addEventListener('load', function(){ try{window.print();}catch(e){} });</script>
 </body></html>`;
     w.document.open(); w.document.write(html); w.document.close();
+    try { w.focus(); setTimeout(function(){ try{ w.print(); }catch(e){} }, 250); } catch(e){}
   }
 
   function openDoc(title, href){
@@ -1206,9 +1182,7 @@ window.addEventListener('DOMContentLoaded', function(){
       method: "POST",
       body: JSON.stringify(payload)
     }).then(async function(r){
-      /* FIX: avoid arrow in catch */
-      var j;
-      try{ j = await r.json(); } catch(e){ j = {}; }
+      var j; try{ j = await r.json(); } catch(e){ j = {}; }
       if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
       return j;
     }).catch(function(){
@@ -1306,6 +1280,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     }
 
+    /* Emergency Advocacy consent is OPTIONAL now */
     return true;
   }
 
