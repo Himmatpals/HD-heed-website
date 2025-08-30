@@ -995,54 +995,63 @@ window.addEventListener('DOMContentLoaded', function(){
   function mapDaysSummary(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
 
   function sendToFormspree(){
-    /* Build base payload */
-    var payload = {
-      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
-      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
-      bsp:S.bsp, supports:S.supports, schedule:S.schedule,
-      policy_ack:S.policy_ack, acks:S.acks, emergency_advocacy:S.emergency_advocacy,
-      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
-      _meta:{ app:"AILR", version:"v16" }
-    };
+  // 1) Derive the three policy flags from the document acks
+  var policyAck = {
+    handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
+    incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
+    complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
+  };
 
-    /* === NEW: add human-readable summaries expected by Drive sheet === */
-    try{
-      var addr = S.participant && S.participant.address ? [
-        S.participant.address.line1, S.participant.address.line2,
-        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
-      ].filter(Boolean).join(", ") : "";
+  // 2) Build base payload
+  var payload = {
+    caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
+    living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
+    bsp:S.bsp, supports:S.supports, schedule:S.schedule,
+    policy_ack: policyAck,                 // <<— use derived flags
+    acks:S.acks, emergency_advocacy:S.emergency_advocacy,
+    submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
+    _meta:{ app:"AILR", version:"v16" }
+  };
 
-      var contactSummary = [
-        (S.contacts.email||""),
-        (S.contacts.phone?(" • "+S.contacts.phone):"")
-      ].join("");
+  // 3) Human-readable summaries
+  try{
+    var addr = S.participant && S.participant.address ? [
+      S.participant.address.line1, S.participant.address.line2,
+      S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
+    ].filter(Boolean).join(", ") : "";
 
-      var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
-      var daysSummary     = mapDaysSummary(S.schedule.days);
+    var contactSummary = [
+      (S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")
+    ].join("");
 
-      /* attach to payload in a backwards-compatible way */
-      payload.supports.required_summary = requiredSummary;   // <<— key the Drive expects
-      payload.supports.details_text     = S.supports.details_text || "";
-      payload.schedule.windows_summary  = windowsSummary;
-      payload.schedule.days_summary     = daysSummary;
-      payload.participant.address_summary = addr;
-      payload.contacts.contact_summary    = contactSummary;
-    }catch(e){ /* no-op, keep sending base payload */ }
+    var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
+    var windowsSummary  = mapWindowsSummary(S.schedule.windows);
+    var daysSummary     = mapDaysSummary(S.schedule.days);
 
-    return fetch(GS_WEBAPP, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    }).then(async function(r){
-      var j = await r.json().catch(()=>({}));
-      if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
-      return j;
-    }).catch(function(){
-      /* Fallback opaque success so the user isn’t blocked */
-      return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
-        .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
-    });
-  }
+    payload.supports.required_summary   = requiredSummary;
+    payload.supports.details_text       = S.supports.details_text || "";
+    payload.schedule.windows_summary    = windowsSummary;
+    payload.schedule.days_summary       = daysSummary;
+    payload.participant.address_summary = addr;
+    payload.contacts.contact_summary    = contactSummary;
+  }catch(e){}
+
+  // 4) Send
+  return fetch(GS_WEBAPP, {
+    method: "POST",
+    headers: { "Content-Type":"application/json" },
+    body: JSON.stringify(payload)
+  }).then(async function(r){
+    var j = await r.json().catch(()=>({}));
+    if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
+    return j;
+  }).catch(function(){
+    // Fallback so user isn't blocked
+    return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
+      .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
+  });
+}
+
 
   /* ====== Render & nav ====== */
   function render(){
