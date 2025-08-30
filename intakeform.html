@@ -1,57 +1,39 @@
-# Generate an enhanced, fully generic, fancy HTML client form (no prefilled personal data).
-# Two sections (General + Detailed), 5 headings each, with rich tables, collapsibles, autosave, and print to PDF.
-from pathlib import Path
-
-html = r"""<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Client Master Form — General + Detailed (Blank)</title>
+<title>Client Master Form — General + Detailed (v2)</title>
 <style>
 :root{
-  --bg:#0b1220;
-  --ink:#0b1220;
-  --card:#ffffff;
-  --muted:#6b7280;
-  --brand:#512b8a;
-  --accent:#8b5cf6;
-  --danger:#ef4444;
+  --ink:#0b1220; --card:#ffffff; --muted:#6b7280; --brand:#512b8a; --danger:#ef4444;
 }
 *{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: Inter, Segoe UI, Roboto, Arial, system-ui, -apple-system, "Helvetica Neue", sans-serif;
-  background: linear-gradient(135deg,#f5f3ff 0%, #f8fafc 50%, #eef2ff 100%);
-  color:var(--ink);
-}
+body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(135deg,#f5f3ff 0%,#f8fafc 50%,#eef2ff 100%);color:var(--ink)}
 .container{max-width:1200px;margin:24px auto 80px;padding:0 16px}
-.header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
 .brand{display:flex;align-items:center;gap:12px}
-.logo{width:44px;height:44px;border-radius:12px;background:radial-gradient(120% 120% at 0% 0%, #a78bfa 0%, #7c3aed 40%, #512b8a 100%);display:grid;place-items:center;color:white;font-weight:800;letter-spacing:0.5px;box-shadow:0 8px 24px rgba(81,43,138,0.25)}
+.logo{width:44px;height:44px;border-radius:12px;background:radial-gradient(120% 120% at 0 0,#a78bfa 0,#7c3aed 40%,#512b8a 100%);display:grid;place-items:center;color:#fff;font-weight:800;letter-spacing:.5px;box-shadow:0 8px 24px rgba(81,43,138,.25)}
 .title h1{margin:0;font-size:22px}
 .title p{margin:2px 0 0;color:var(--muted);font-size:13px}
 .actions{display:flex;flex-wrap:wrap;gap:8px}
 button{appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.06)}
-.btn-primary{background:var(--brand);color:white}
-.btn-ghost{background:white;color:var(--brand);border:1px solid #e5e7eb}
-.btn-danger{background:var(--danger);color:white}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-ghost{background:#fff;color:var(--brand);border:1px solid #e5e7eb}
+.btn-danger{background:var(--danger);color:#fff}
 .badge{display:inline-block;background:#ede9fe;color:#4c1d95;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;letter-spacing:.3px}
 .grid{display:grid;gap:16px}
 .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:980px){.grid.cols-2{grid-template-columns:1fr}}
-.card{background:var(--card);border-radius:16px;padding:16px 16px 8px;border:1px solid #e5e7eb;box-shadow:0 10px 30px rgba(81,43,138,0.07)}
-.card h2{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;font-size:15px;text-transform:uppercase;letter-spacing:0.6px;color:#4b5563}
+.card{background:var(--card);border-radius:16px;padding:16px 16px 8px;border:1px solid #e5e7eb;box-shadow:0 10px 30px rgba(81,43,138,.07)}
+.card h2{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;font-size:15px;text-transform:uppercase;letter-spacing:.6px;color:#4b5563}
 .card h3{margin:14px 0 8px;font-size:14px;color:#374151}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media (max-width:700px){.row{grid-template-columns:1fr}}
 label{font-size:12px;color:#6b7280;margin-bottom:6px;display:block}
-input[type="text"],input[type="date"],input[type="tel"],input[type="email"],textarea,select{
-  width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:14px;outline:none;transition:box-shadow .15s,border-color .15s;
-}
+input[type="text"],textarea{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:14px;outline:none;transition:box-shadow .15s,border-color .15s}
 textarea{min-height:96px;resize:vertical}
-input:focus,textarea:focus,select:focus{border-color:#c7d2fe;box-shadow:0 0 0 4px rgba(99,102,241,.15)}
+input:focus,textarea:focus{border-color:#c7d2fe;box-shadow:0 0 0 4px rgba(99,102,241,.15)}
 .kv{display:grid;grid-template-columns:200px 1fr;gap:10px;align-items:center;margin:6px 0}
 @media (max-width:640px){.kv{grid-template-columns:1fr}}
 .hr{height:1px;background:linear-gradient(90deg,#e5e7eb 0,#ede9fe 50%,#e5e7eb 100%);margin:10px 0}
@@ -65,15 +47,7 @@ input:focus,textarea:focus,select:focus{border-color:#c7d2fe;box-shadow:0 0 0 4p
 .table th,.table td{border:1px solid #e5e7eb;padding:8px;border-radius:0;font-size:13px}
 .table th{background:#f9fafb;text-align:left;color:#374151}
 .small{font-size:12px;color:#6b7280}
-footer{margin-top:18px;text-align:center;color:#6b7280;font-size:12px}
-@media print{
-  .actions,.collapsible,button{display:none !important}
-  body{background:white}
-  .container{margin:0;max-width:100%;padding:0 8mm}
-  .card{box-shadow:none;border-color:#e5e7eb;page-break-inside:avoid}
-  .section-title{margin-top:0}
-  footer{display:none}
-}
+@media print{.actions,.collapsible,button{display:none !important}body{background:#fff}.container{margin:0;max-width:100%;padding:0 8mm}.card{box-shadow:none;border-color:#e5e7eb;page-break-inside:avoid}.section-title{margin-top:0}}
 </style>
 </head>
 <body>
@@ -82,76 +56,49 @@ footer{margin-top:18px;text-align:center;color:#6b7280;font-size:12px}
       <div class="brand">
         <div class="logo">HD</div>
         <div class="title">
-          <h1>Client Master Form — General + Detailed</h1>
-          <p>Fancy, printable, and editable (autosaves in your browser). Print to PDF → upload to ShiftCare → Documents.</p>
+          <h1>Client Master Form — General + Detailed (v2)</h1>
+          <p>Autosaves. Print to PDF, or export an editable RTF file mirroring this form.</p>
         </div>
       </div>
       <div class="actions">
-        <button class="btn-ghost" id="saveBtn">Save</button>
-        <button class="btn-danger" id="clearBtn" title="Clears all fields in the form">Clear</button>
+        <button class="btn-ghost" id="saveBtn" title="Save to browser">Save</button>
+        <button class="btn-ghost" id="exportBtn" title="Download editable RTF">Export Editable RTF</button>
+        <button class="btn-danger" id="clearBtn" title="Clear all fields and local save">Clear</button>
         <button class="btn-primary" onclick="window.print()">Print to PDF</button>
       </div>
     </div>
 
-    <div class="note">Use this master once per client. It follows your 5+5 headings but lets you capture <b>all</b> relevant info. Everything below is blank — no prefilled names.</div>
+    <div class="note">Tip: Use <b>Export Editable RTF</b> to download a Word-editable file. RTF opens in Word/Google Docs. No personal data is prefilled.</div>
 
-    <!-- GENERAL INFO — SHIFT QUICK VIEW -->
+    <!-- GENERAL -->
     <div class="section-title">General Info — Shift Quick View <span class="badge">TOP 5</span></div>
     <div class="grid cols-2">
 
-      <!-- 1) Client & Plan -->
       <div class="card">
         <h2>1) Client &amp; Plan</h2>
         <div class="row">
-          <div>
-            <label>Client Name</label>
-            <input type="text" id="g_name" placeholder="Enter full name">
-          </div>
-          <div>
-            <label>Date of Birth</label>
-            <input type="text" id="g_dob" placeholder="DD-MM-YYYY">
-          </div>
+          <div><label>Client Name</label><input type="text" id="g_name" placeholder="Enter full name"></div>
+          <div><label>Date of Birth</label><input type="text" id="g_dob" placeholder="DD-MM-YYYY"></div>
         </div>
         <div class="row">
-          <div>
-            <label>NDIS Number</label>
-            <input type="text" id="g_ndis" placeholder="Enter NDIS #">
-          </div>
-          <div>
-            <label>Plan Dates</label>
-            <input type="text" id="g_plan" placeholder="Start – End (DD/MM/YYYY – DD/MM/YYYY)">
-          </div>
+          <div><label>NDIS Number</label><input type="text" id="g_ndis" placeholder="NDIS #"></div>
+          <div><label>Plan Dates</label><input type="text" id="g_plan" placeholder="Start – End (DD/MM/YYYY – DD/MM/YYYY)"></div>
         </div>
         <div class="row">
-          <div>
-            <label>Management</label>
-            <input type="text" id="g_mgmt" placeholder="NDIA / Plan-managed / Self-managed">
-          </div>
-          <div>
-            <label>PO / Reference (optional)</label>
-            <input type="text" id="g_po" placeholder="PO-xxxxx or leave blank">
-          </div>
+          <div><label>Management</label><input type="text" id="g_mgmt" placeholder="NDIA / Plan-managed / Self-managed"></div>
+          <div><label>PO / Reference (optional)</label><input type="text" id="g_po" placeholder="PO-xxxxx"></div>
         </div>
         <div class="row">
-          <div>
-            <label>Address</label>
-            <input type="text" id="g_addr" placeholder="Unit/Street, Suburb, State, Postcode">
-          </div>
-          <div>
-            <label>Primary Contact (phone/email)</label>
-            <input type="text" id="g_contact" placeholder="04xx xxx xxx · name@example.com">
-          </div>
+          <div><label>Address</label><input type="text" id="g_addr" placeholder="Unit/Street, Suburb, State, Postcode"></div>
+          <div><label>Primary Contact (phone/email)</label><input type="text" id="g_contact" placeholder="04xx xxx xxx · name@example.com"></div>
         </div>
       </div>
 
-      <!-- 2) Contacts & Communication -->
       <div class="card">
         <h2>2) Contacts &amp; Communication</h2>
         <table class="table" id="contactsTable">
           <thead><tr><th>Type</th><th>Name</th><th>Role/Rel</th><th>Phone</th><th>Email</th></tr></thead>
-          <tbody>
-            <tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
-          </tbody>
+          <tbody><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></tbody>
         </table>
         <div style="margin-top:8px;display:flex;gap:8px">
           <button class="btn-ghost" id="addContact">Add Contact</button>
@@ -163,7 +110,6 @@ footer{margin-top:18px;text-align:center;color:#6b7280;font-size:12px}
         </div>
       </div>
 
-      <!-- 3) Alerts & Risks -->
       <div class="card">
         <h2>3) Alerts &amp; Risks</h2>
         <table class="table" id="allergyTable">
@@ -175,65 +121,35 @@ footer{margin-top:18px;text-align:center;color:#6b7280;font-size:12px}
           <button class="btn-ghost" id="delAllergy">Delete Last</button>
         </div>
         <div class="row" style="margin-top:8px">
-          <div>
-            <label>Infection Control Flags</label>
-            <input type="text" id="g_infect" placeholder="MRSA/ESBL/COVID precautions etc.">
-          </div>
-          <div>
-            <label>ACP / Resus Status</label>
-            <input type="text" id="g_acp" placeholder="ACD / Resus status / SDM details">
-          </div>
+          <div><label>Infection Control Flags</label><input type="text" id="g_infect" placeholder="MRSA/ESBL/COVID precautions etc."></div>
+          <div><label>ACP / Resus Status</label><input type="text" id="g_acp" placeholder="ACD / Resus status / SDM details"></div>
         </div>
         <div class="row">
-          <div>
-            <label>Falls / Safety</label>
-            <input type="text" id="g_falls" placeholder="Risk level; aids; supervision; bed/chair alarms">
-          </div>
-          <div>
-            <label>Other Alerts</label>
-            <input type="text" id="g_alerts" placeholder="Seizure risk, choking risk, elopement risk, etc.">
-          </div>
+          <div><label>Falls / Safety</label><input type="text" id="g_falls" placeholder="Risk level; aids; supervision; alarms"></div>
+          <div><label>Other Alerts</label><input type="text" id="g_alerts" placeholder="Seizure, choking, elopement risks etc."></div>
         </div>
       </div>
 
-      <!-- 4) Today’s Actions -->
       <div class="card">
         <h2>4) Today’s Actions</h2>
-        <div class="kv">
-          <label>Medication</label>
-          <input type="text" id="g_med" placeholder="Level (prompt/assist/admin); key times; PRN rule & documentation">
-        </div>
-        <div class="kv">
-          <label>High-Intensity (today)</label>
-          <input type="text" id="g_hi" placeholder="e.g., stoma change day, wound dressing, BGL check, catheter care">
-        </div>
-        <div class="kv">
-          <label>Mobility</label>
-          <input type="text" id="g_mob" placeholder="Aids; transfer method; supervision; manual handling precautions">
-        </div>
-        <div class="kv">
-          <label>Other Task Notes</label>
-          <input type="text" id="g_task" placeholder="Transport/community outing; nutrition prompts; hydration">
-        </div>
+        <div class="kv"><label>Medication</label><input type="text" id="g_med" placeholder="Level (prompt/assist/admin); key times; PRN rule"></div>
+        <div class="kv"><label>High-Intensity (today)</label><input type="text" id="g_hi" placeholder="e.g., stoma change, wound dressing, BGL check"></div>
+        <div class="kv"><label>Mobility</label><input type="text" id="g_mob" placeholder="Aids; transfer method; supervision"></div>
+        <div class="kv"><label>Other Task Notes</label><input type="text" id="g_task" placeholder="Transport/community; hydration; nutrition prompts"></div>
       </div>
 
-      <!-- 5) Checklist & Emergency -->
       <div class="card">
         <h2>5) Shift Checklist &amp; Emergency</h2>
-        <textarea id="g_checklist" placeholder="☐ Medication action documented  ☐ High-intensity task(s) done  ☐ Mobility safety adhered  ☐ Progress note completed"></textarea>
+        <textarea id="g_checklist" placeholder="☐ Medication documented  ☐ High-intensity task(s) done  ☐ Mobility safety adhered  ☐ Progress note completed"></textarea>
         <div class="hr"></div>
-        <div class="kv">
-          <label>Emergency / Red Flags</label>
-          <input type="text" id="g_emerg" placeholder="When to call 000; who to notify after; critical red flags">
-        </div>
+        <div class="kv"><label>Emergency / Red Flags</label><input type="text" id="g_emerg" placeholder="When to call 000; who to notify after; critical red flags"></div>
       </div>
 
     </div>
 
-    <!-- DETAILED INFO — CARE OVERVIEW -->
+    <!-- DETAILED -->
     <div class="section-title" style="margin-top:22px">Detailed Info — Care Overview <span class="badge">TOP 5</span></div>
 
-    <!-- 1) Diagnoses & Background -->
     <div class="card">
       <h2>1) Diagnoses & Background</h2>
       <table class="table" id="dxTable">
@@ -245,87 +161,65 @@ footer{margin-top:18px;text-align:center;color:#6b7280;font-size:12px}
         <button class="btn-ghost" id="delDx">Delete Last</button>
       </div>
       <div class="row" style="margin-top:8px">
-        <div>
-          <label>Key Risks & Alerts</label>
-          <textarea id="d_risk" placeholder="Falls; skin integrity; infection risks; choking/seizure risks; other alerts."></textarea>
-        </div>
-        <div>
-          <label>Communication & Cognition</label>
-          <textarea id="d_comm" placeholder="Language; interpreter; hearing/vision; instruction style; memory/processing baseline."></textarea>
-        </div>
+        <div><label>Key Risks & Alerts</label><textarea id="d_risk" placeholder="Falls; skin; infection; choking; seizure; other alerts."></textarea></div>
+        <div><label>Communication & Cognition</label><textarea id="d_comm" placeholder="Language; interpreter; hearing/vision; instruction style; memory/processing."></textarea></div>
       </div>
       <div class="row">
-        <div>
-          <label>Behaviour Baseline</label>
-          <textarea id="d_beh" placeholder="Triggers; early signs; what works; escalation notes; restrictive practice (if any)."></textarea>
-        </div>
-        <div>
-          <label>Functional Status (Mobility & ADLs)</label>
-          <textarea id="d_func" placeholder="Mobility aid & supervision; transfer method; ADLs independence; community access capacity."></textarea>
-        </div>
+        <div><label>Behaviour Baseline</label><textarea id="d_beh" placeholder="Triggers; early signs; what works; escalation; restrictive practice (if any)."></textarea></div>
+        <div><label>Functional Status (Mobility & ADLs)</label><textarea id="d_func" placeholder="Mobility aid & supervision; transfer method; ADLs independence; community capacity."></textarea></div>
       </div>
     </div>
 
-    <!-- 2) Medication & Behaviour Management -->
     <div class="card">
       <h2>2) Medication & Behaviour Management</h2>
       <h3>Medication List / MAR Summary</h3>
       <table class="table" id="medTable">
         <thead><tr><th>Medicine</th><th>Dose</th><th>Route</th><th>Time</th><th>PRN?</th><th>Indication (PRN)</th><th>Effect Documented?</th></tr></thead>
-        <tbody><tr>
-          <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
-        </tr></tbody>
+        <tbody><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></tbody>
       </table>
       <div style="margin-top:8px;display:flex;gap:8px">
         <button class="btn-ghost" id="addMed">Add Medicine</button>
         <button class="btn-ghost" id="delMed">Delete Last</button>
       </div>
       <div class="row" style="margin-top:8px">
-        <div>
-          <label>Medication Management</label>
-          <textarea id="d_med" placeholder="Level (prompt/assist/admin); storage; double-check rules; refusal/escalation rules; documentation requirements."></textarea>
-        </div>
-        <div>
-          <label>Behaviour Support Summary</label>
-          <textarea id="d_bsp" placeholder="Proactive strategies; response steps; post-incident actions; incident reporting notes."></textarea>
-        </div>
+        <div><label>Medication Management</label><textarea id="d_med" placeholder="Level; storage; double-checks; refusals; escalation rules; documentation."></textarea></div>
+        <div><label>Pain Assessment / Plan</label><textarea id="d_pain" placeholder="Pain scale; regular/PRN analgesia; non-pharmacological strategies; review triggers."></textarea></div>
       </div>
+      <div class="kv"><label>Behaviour Support Summary</label><textarea id="d_bsp" placeholder="Proactive strategies; response steps; post-incident actions; incident reporting."></textarea></div>
     </div>
 
-    <!-- 3) High-Intensity Care Plans -->
     <div class="card">
       <h2>3) High-Intensity Care Plans (Stoma / Wound / Diabetes / etc.)</h2>
       <div class="collapsible"><span>Stoma Care — click to expand</span><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg></div>
-      <div class="content"><textarea id="d_stoma" placeholder="Schedule; step-by-step; appliance; supplies; documentation; red flags & escalation."></textarea></div>
+      <div class="content"><textarea id="d_stoma" placeholder="Schedule; steps; supplies; documentation; red flags & escalation."></textarea></div>
       <div class="collapsible"><span>Wound Care — click to expand</span><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg></div>
-      <div class="content"><textarea id="d_wound" placeholder="Site; dressing; frequency; photo cadence; deterioration signs; escalation."></textarea></div>
+      <div class="content"><textarea id="d_wound" placeholder="Site; dressing; frequency; photos; deterioration signs; escalation."></textarea></div>
       <div class="collapsible"><span>Diabetes Care — click to expand</span><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg></div>
-      <div class="content"><textarea id="d_dm" placeholder="Diet/insulin/oral meds; BGL schedule; hypo/hyper protocols; sick day plan."></textarea></div>
+      <div class="content"><textarea id="d_dm" placeholder="Diet/insulin/oral; BGL schedule; hypo/hyper protocols; sick day plan."></textarea></div>
       <div class="collapsible"><span>Catheter Care — click to expand</span><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg></div>
-      <div class="content"><textarea id="d_catheter" placeholder="Type (IDC/SPC); hygiene; bag change; red flags (blockage, infection); escalation."></textarea></div>
+      <div class="content"><textarea id="d_catheter" placeholder="Type; hygiene; bag changes; red flags; escalation."></textarea></div>
       <div class="collapsible"><span>PEG Feeding — click to expand</span><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg></div>
       <div class="content"><textarea id="d_peg" placeholder="Formula & rate; flushes; position; site care; aspiration risk; escalation."></textarea></div>
       <div class="collapsible"><span>Tracheostomy — click to expand</span><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg></div>
-      <div class="content"><textarea id="d_trach" placeholder="Suction protocol; inner cannula care; emergency equipment; red flags."></textarea></div>
+      <div class="content"><textarea id="d_trach" placeholder="Suction protocol; inner cannula; emergency equipment; red flags."></textarea></div>
       <div class="collapsible"><span>Seizure Management — click to expand</span><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg></div>
-      <div class="content"><textarea id="d_seizure" placeholder="Seizure types; triggers; rescue med (dose/route); when to call 000; post-ictal care."></textarea></div>
+      <div class="content"><textarea id="d_seizure" placeholder="Types; triggers; rescue med; when to call 000; post-ictal care."></textarea></div>
     </div>
 
-    <!-- 4) Daily Living -->
     <div class="card">
       <h2>4) Daily Living (Mobility, Skin/Pressure, Continence, Nutrition, Sleep)</h2>
       <div class="row">
         <div><label>Mobility & Manual Handling</label><textarea id="d_mobility" placeholder="Aid; supervision; transfer method; manual handling plan."></textarea></div>
-        <div><label>Skin & Pressure</label><textarea id="d_skin" placeholder="Pressure devices; reposition schedule; risk score if used; skin checks."></textarea></div>
+        <div><label>Skin & Pressure</label><textarea id="d_skin" placeholder="Pressure devices; reposition schedule; risk score; skin checks."></textarea></div>
       </div>
       <div class="row">
         <div><label>Continence & Toileting</label><textarea id="d_cont" placeholder="Urinary/bowel status; products; timed toileting; UTI/constipation watch-outs."></textarea></div>
-        <div><label>Nutrition & Mealtime</label><textarea id="d_nut" placeholder="Texture; thickened fluids; allergies; mealtime plan; diabetes meal guidance."></textarea></div>
+        <div><label>Nutrition & Mealtime</label><textarea id="d_nut" placeholder="Texture; thickened fluids; allergies; mealtime plan; diabetes guidance."></textarea></div>
       </div>
       <div class="row">
-        <div><label>Sleep & Routine</label><textarea id="d_sleep" placeholder="Usual pattern; night checks; soothing strategies."></textarea></div>
-        <div><label>Equipment & Assistive Tech</label>
+        <div><label>Sleep & Routine</label><textarea id="d_sleep" placeholder="Pattern; night checks; soothing strategies."></textarea></div>
+        <div>
+          <label>Equipment & AT</label>
           <table class="table" id="equipTable">
             <thead><tr><th>Item</th><th>Purpose</th><th>Safety Notes</th></tr></thead>
             <tbody><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></tbody>
@@ -336,34 +230,22 @@ footer{margin-top:18px;text-align:center;color:#6b7280;font-size:12px}
           </div>
         </div>
       </div>
-      <div class="kv" style="margin-top:8px">
-        <label>Transport & Community Access</label>
-        <textarea id="d_transport" placeholder="Travel rules; supervision; known community triggers; activity planning."></textarea>
-      </div>
+      <div class="kv" style="margin-top:8px"><label>Transport & Community Access</label><textarea id="d_transport" placeholder="Travel rules; supervision; known triggers; activity planning."></textarea></div>
     </div>
 
-    <!-- 5) Goals & Reviews -->
     <div class="card">
       <h2>5) Goals & Reviews (Monitoring, Appointments)</h2>
       <table class="table" id="goalsTable">
         <thead><tr><th>Goal</th><th>Measure</th><th>Review Date</th><th>Owner</th></tr></thead>
         <tbody><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></tbody>
       </table>
-      <div style="margin-top:8px;display:flex;gap:8px">
-        <button class="btn-ghost" id="addGoal">Add Goal</button>
-        <button class="btn-ghost" id="delGoal">Delete Last Goal</button>
-      </div>
-
+      <div style="margin-top:8px;display:flex;gap:8px"><button class="btn-ghost" id="addGoal">Add Goal</button><button class="btn-ghost" id="delGoal">Delete Last</button></div>
       <div class="hr"></div>
       <table class="table" id="monitorTable">
         <thead><tr><th>Monitoring / Appointment</th><th>Frequency/Date</th><th>Notes</th></tr></thead>
         <tbody><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></tbody>
       </table>
-      <div style="margin-top:8px;display:flex;gap:8px">
-        <button class="btn-ghost" id="addMon">Add Row</button>
-        <button class="btn-ghost" id="delMon">Delete Last Row</button>
-      </div>
-
+      <div style="margin-top:8px;display:flex;gap:8px"><button class="btn-ghost" id="addMon">Add Row</button><button class="btn-ghost" id="delMon">Delete Last</button></div>
       <div class="hr"></div>
       <div class="row">
         <div>
@@ -372,10 +254,7 @@ footer{margin-top:18px;text-align:center;color:#6b7280;font-size:12px}
             <thead><tr><th>Consent Type</th><th>Status</th><th>Date</th><th>Notes</th></tr></thead>
             <tbody><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></tbody>
           </table>
-          <div style="margin-top:8px;display:flex;gap:8px">
-            <button class="btn-ghost" id="addConsent">Add Consent</button>
-            <button class="btn-ghost" id="delConsent">Delete Last</button>
-          </div>
+          <div style="margin-top:8px;display:flex;gap:8px"><button class="btn-ghost" id="addConsent">Add Consent</button><button class="btn-ghost" id="delConsent">Delete Last</button></div>
         </div>
         <div>
           <label>Legal / Documents</label>
@@ -383,15 +262,12 @@ footer{margin-top:18px;text-align:center;color:#6b7280;font-size:12px}
             <thead><tr><th>Document</th><th>Status / Version</th><th>Expiry / Review</th><th>Notes</th></tr></thead>
             <tbody><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></tbody>
           </table>
-          <div style="margin-top:8px;display:flex;gap:8px">
-            <button class="btn-ghost" id="addLegal">Add Doc</button>
-            <button class="btn-ghost" id="delLegal">Delete Last</button>
-          </div>
+          <div style="margin-top:8px;display:flex;gap:8px"><button class="btn-ghost" id="addLegal">Add Doc</button><button class="btn-ghost" id="delLegal">Delete Last</button></div>
         </div>
       </div>
+      <div class="kv" style="margin-top:8px"><label>Review Notes</label><textarea id="d_review" placeholder="Summary of outcomes, changes, actions to take next."></textarea></div>
     </div>
 
-    <footer>© 2025 — Fancy Client Master Form (Blank). Print to PDF and upload to ShiftCare.</footer>
   </div>
 
 <script>
@@ -405,7 +281,7 @@ document.querySelectorAll('.collapsible').forEach(function(el){
   });
 });
 
-// Add/Delete helpers for multiple tables
+// Helper add/delete for multiple tables
 function addRow(tableId, cols){
   const tbody = document.querySelector('#'+tableId+' tbody');
   const tr = document.createElement('tr');
@@ -419,7 +295,6 @@ function delRow(tableId){
   const tbody = document.querySelector('#'+tableId+' tbody');
   if(tbody.rows.length>0){ tbody.deleteRow(tbody.rows.length-1); saveForm(); }
 }
-
 document.getElementById('addContact').addEventListener('click', ()=>addRow('contactsTable',5));
 document.getElementById('delContact').addEventListener('click', ()=>delRow('contactsTable'));
 document.getElementById('addAllergy').addEventListener('click', ()=>addRow('allergyTable',4));
@@ -439,14 +314,13 @@ document.getElementById('delConsent').addEventListener('click', ()=>delRow('cons
 document.getElementById('addLegal').addEventListener('click', ()=>addRow('legalTable',4));
 document.getElementById('delLegal').addEventListener('click', ()=>delRow('legalTable'));
 
-// Local storage save/load
+// Autosave
 const fields = [
   'g_name','g_dob','g_ndis','g_plan','g_mgmt','g_po','g_addr','g_contact','g_comm',
   'g_infect','g_acp','g_falls','g_alerts','g_med','g_hi','g_mob','g_task','g_checklist','g_emerg',
-  'd_risk','d_comm','d_beh','d_func','d_med','d_bsp','d_stoma','d_wound','d_dm','d_catheter','d_peg','d_trach','d_seizure',
-  'd_mobility','d_skin','d_cont','d_nut','d_sleep','d_transport'
+  'd_risk','d_comm','d_beh','d_func','d_med','d_pain','d_bsp','d_stoma','d_wound','d_dm','d_catheter','d_peg','d_trach','d_seizure',
+  'd_mobility','d_skin','d_cont','d_nut','d_sleep','d_transport','d_review'
 ];
-
 function saveForm(){
   const data = { rows:{
     contacts:[], allergies:[], dx:[], meds:[], equip:[], goals:[], monitor:[], consent:[], legal:[]
@@ -455,7 +329,6 @@ function saveForm(){
     const el = document.getElementById(id);
     data[id] = el ? (el.value || el.innerText || '') : '';
   });
-  // tables
   [['contactsTable','contacts'],['allergyTable','allergies'],['dxTable','dx'],['medTable','meds'],
    ['equipTable','equip'],['goalsTable','goals'],['monitorTable','monitor'],['consentTable','consent'],['legalTable','legal']]
   .forEach(([tid,key])=>{
@@ -465,10 +338,10 @@ function saveForm(){
       data.rows[key].push(row);
     });
   });
-  localStorage.setItem('client_master_form_blank_v1', JSON.stringify(data));
+  localStorage.setItem('client_master_form_v2', JSON.stringify(data));
 }
 function loadForm(){
-  const raw = localStorage.getItem('client_master_form_blank_v1');
+  const raw = localStorage.getItem('client_master_form_v2');
   if(!raw) return;
   try{
     const data = JSON.parse(raw);
@@ -480,15 +353,8 @@ function loadForm(){
       }
     });
     const map = [
-      ['contactsTable','contacts',5],
-      ['allergyTable','allergies',4],
-      ['dxTable','dx',2],
-      ['medTable','meds',7],
-      ['equipTable','equip',3],
-      ['goalsTable','goals',4],
-      ['monitorTable','monitor',3],
-      ['consentTable','consent',4],
-      ['legalTable','legal',4],
+      ['contactsTable','contacts',5],['allergyTable','allergies',4],['dxTable','dx',2],['medTable','meds',7],
+      ['equipTable','equip',3],['goalsTable','goals',4],['monitorTable','monitor',3],['consentTable','consent',4],['legalTable','legal',4],
     ];
     map.forEach(([tid,key,cols])=>{
       const body = document.querySelector('#'+tid+' tbody');
@@ -508,9 +374,114 @@ document.querySelectorAll('input, textarea').forEach(el=>el.addEventListener('in
 document.getElementById('saveBtn').addEventListener('click', saveForm);
 document.getElementById('clearBtn').addEventListener('click', function(){
   if(!confirm('Clear all fields and local save?')) return;
-  localStorage.removeItem('client_master_form_blank_v1'); location.reload();
+  localStorage.removeItem('client_master_form_v2'); location.reload();
 });
 loadForm();
+
+// Export Editable RTF
+function rtfEscape(s){
+  return (s||'').replace(/\\/g,'\\\\').replace(/{/g,'\\{').replace(/}/g,'\\}').replace(/\n/g,'\\par\n');
+}
+function tableToText(id, headers){
+  const rows = []; const tbody = document.querySelector('#'+id+' tbody');
+  if(!tbody) return '';
+  tbody.querySelectorAll('tr').forEach(tr=>{
+    const cells = []; tr.querySelectorAll('td').forEach(td=>cells.push(td.innerText.trim()));
+    if(cells.join('').trim()!==''){ rows.push(cells); }
+  });
+  let out = '';
+  if(rows.length){
+    out += rtfEscape(headers.join(' \t ')) + '\\par\\par\n';
+    rows.forEach(r=>{ out += rtfEscape(r.join(' \t ')) + '\\par\n'; });
+  }
+  return out;
+}
+document.getElementById('exportBtn').addEventListener('click', function(){
+  const now = new Date();
+  const datestamp = now.toISOString().slice(0,10);
+  const name = (document.getElementById('g_name').value || 'Client').replace(/[^A-Za-z0-9 _-]/g,'');
+  let r = '{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Arial;}}\\fs22\\b CLIENT MASTER FORM (Editable Export)\\b0\\par ';
+  r += 'Exported: ' + rtfEscape(datestamp) + '\\par\\par ';
+
+  function line(label, val){ if(val && val.trim()!==''){ r += '\\b ' + rtfEscape(label) + ':\\b0 ' + rtfEscape(val) + '\\par '; } }
+
+  // GENERAL
+  r += '\\b GENERAL INFO — SHIFT QUICK VIEW\\b0\\par ';
+  line('Client Name', document.getElementById('g_name').value);
+  line('DOB', document.getElementById('g_dob').value);
+  line('NDIS Number', document.getElementById('g_ndis').value);
+  line('Plan Dates', document.getElementById('g_plan').value);
+  line('Management', document.getElementById('g_mgmt').value);
+  line('PO/Reference', document.getElementById('g_po').value);
+  line('Address', document.getElementById('g_addr').value);
+  line('Primary Contact', document.getElementById('g_contact').value);
+  r += '\\par';
+  r += tableToText('contactsTable',['Type','Name','Role/Rel','Phone','Email']);
+  line('Communication Notes', document.getElementById('g_comm').value);
+  r += '\\par';
+  r += tableToText('allergyTable',['Allergen','Reaction','Severity','Notes']);
+  line('Infection Control Flags', document.getElementById('g_infect').value);
+  line('ACP / Resus Status', document.getElementById('g_acp').value);
+  line('Falls / Safety', document.getElementById('g_falls').value);
+  line('Other Alerts', document.getElementById('g_alerts').value);
+  r += '\\par';
+  line('Medication (today)', document.getElementById('g_med').value);
+  line('High-Intensity (today)', document.getElementById('g_hi').value);
+  line('Mobility (today)', document.getElementById('g_mob').value);
+  line('Other Task Notes', document.getElementById('g_task').value);
+  line('Shift Checklist', document.getElementById('g_checklist').value);
+  line('Emergency / Red Flags', document.getElementById('g_emerg').value);
+  r += '\\par\\par';
+
+  // DETAILED
+  r += '\\b DETAILED INFO — CARE OVERVIEW\\b0\\par ';
+  r += tableToText('dxTable',['Diagnosis / Problem','Notes']);
+  line('Key Risks & Alerts', document.getElementById('d_risk').value);
+  line('Communication & Cognition', document.getElementById('d_comm').value);
+  line('Behaviour Baseline', document.getElementById('d_beh').value);
+  line('Functional Status', document.getElementById('d_func').value);
+  r += '\\par';
+  r += tableToText('medTable',['Medicine','Dose','Route','Time','PRN?','Indication (PRN)','Effect Documented?']);
+  line('Medication Management', document.getElementById('d_med').value);
+  line('Pain Assessment / Plan', document.getElementById('d_pain').value);
+  line('Behaviour Support Summary', document.getElementById('d_bsp').value);
+  r += '\\par';
+  line('Stoma Care', document.getElementById('d_stoma').value);
+  line('Wound Care', document.getElementById('d_wound').value);
+  line('Diabetes Care', document.getElementById('d_dm').value);
+  line('Catheter Care', document.getElementById('d_catheter').value);
+  line('PEG Feeding', document.getElementById('d_peg').value);
+  line('Tracheostomy', document.getElementById('d_trach').value);
+  line('Seizure Management', document.getElementById('d_seizure').value);
+  r += '\\par';
+  line('Mobility & Manual Handling', document.getElementById('d_mobility').value);
+  line('Skin & Pressure', document.getElementById('d_skin').value);
+  line('Continence & Toileting', document.getElementById('d_cont').value);
+  line('Nutrition & Mealtime', document.getElementById('d_nut').value);
+  line('Sleep & Routine', document.getElementById('d_sleep').value);
+  r += tableToText('equipTable',['Equipment/AT Item','Purpose','Safety Notes']);
+  line('Transport & Community', document.getElementById('d_transport').value);
+  r += '\\par';
+  r += tableToText('goalsTable',['Goal','Measure','Review Date','Owner']);
+  r += tableToText('monitorTable',['Monitoring / Appointment','Frequency/Date','Notes']);
+  r += tableToText('consentTable',['Consent Type','Status','Date','Notes']);
+  r += tableToText('legalTable',['Document','Status / Version','Expiry / Review','Notes']);
+  line('Review Notes', document.getElementById('d_review').value);
+
+  r += '}';
+
+  const blob = new Blob([r], {type:'application/rtf'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (name.trim()?name.replace(/\s+/g,'_'):'Client') + '_Master_Form_' + datestamp + '.rtf';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
 </script>
 </body>
 </html>
+"""
+
+out = Path("/mnt/data/Client_Master_Form_-_Fancy_v2.html")
+out.write_text(html, encoding="utf-8")
+out.as_posix()
