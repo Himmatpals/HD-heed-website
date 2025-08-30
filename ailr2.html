@@ -356,7 +356,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
     policy_ack:{ handbook:false, incident:false, complaints:false },
     emergency_advocacy:null,
-    emergency_instructions:null,   // NEW: instruction if No/Not sure
+    emergency_instructions:null,
     uploads:{ files:[] },
 
     submitter:{ name:null, email:null, phone:null },
@@ -374,7 +374,7 @@ window.addEventListener('DOMContentLoaded', function(){
   function save(){
     try{
       var clone = cloneSafe(S);
-      if (clone.uploads) clone.uploads = { files: [] }; // keep uploads empty
+      if (clone.uploads) clone.uploads = { files: [] };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
       setSaveHint("Draft saved");
     }catch(e){}
@@ -423,8 +423,9 @@ window.addEventListener('DOMContentLoaded', function(){
         m.appendChild(row("two",[ input("Address line 1", S.participant.address, "line1"), input("Address line 2 (optional)", S.participant.address, "line2") ]));
         m.appendChild(row("three",[ input("Suburb", S.participant.address, "suburb"), input("Postcode", S.participant.address, "postcode"), input("State", S.participant.address, "state") ]));
         m.appendChild(divider("Plan management"));
+        /* FIX: removed trailing comma at the end of the array below */
         m.appendChild(radioChips("Plan management", S.participant, "plan_mgmt", [
-          ["NDIA-managed","NDIA-managed"],["Plan-managed","Plan-managed"],["Self-managed","Self-managed"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"],
+          ["NDIA-managed","NDIA-managed"],["Plan-managed","Plan-managed"],["Self-managed","Self-managed"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"]
         ]));
         m.appendChild(typeBox("Plan manager (org & contact; optional)", "Org & name (if applicable)", function(v){ S.participant.plan_manager.org=v; save(); }));
         m.appendChild(row("three",[ input("Plan manager contact name", S.participant.plan_manager, "contact"), input("Plan manager email", S.participant.plan_manager, "email","email"), input("Plan manager phone", S.participant.plan_manager, "phone","tel") ]));
@@ -614,10 +615,19 @@ window.addEventListener('DOMContentLoaded', function(){
           m.appendChild(card);
         });
 
+        /* FIX: robust counters without arrow functions */
+        var total = DOCS.length, readCt = 0, needCon = 0, conCt = 0;
+        for (var ii=0; ii<DOCS.length; ii++){
+          var did = DOCS[ii].id;
+          var ack = S.acks[did] || {read:false, consent:false};
+          if (ack.read) readCt++;
+          if (DOCS[ii].requiresConsent){
+            needCon++;
+            if (ack.consent) conCt++;
+          }
+        }
         var sum = document.createElement('div'); sum.className="hint";
         sum.style.marginTop="6px";
-        var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
-        DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
         sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
         m.appendChild(sum);
       }
@@ -673,6 +683,7 @@ window.addEventListener('DOMContentLoaded', function(){
           var oldTxt = btnSend.textContent;
           btnSend.textContent = "Sending…";
 
+          /* FIX: no arrow function in catch; robust JSON parse */
           sendToFormspree().then(function(j){
             var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
             alert("All done — we’ve received your onboarding." + pdfMsg);
@@ -740,7 +751,6 @@ window.addEventListener('DOMContentLoaded', function(){
     s.addEventListener('change', function(){ obj[key] = s.value || null; save(); });
     box.appendChild(s); return box;
   }
-  /* onChange callback supported (used for Emergency Advocacy extra UI) */
   function radioChips(label, obj, key, items, onChange){
     var wrap = document.createElement('div'); wrap.className="inlinebox";
     wrap.innerHTML = '<label style="font-weight:800">'+label+'</label>';
@@ -957,7 +967,6 @@ window.addEventListener('DOMContentLoaded', function(){
       ["Follow-up", follow]
     ]));
 
-    /* Per-document status so ticks show clearly in summary */
     var docRows = DOCS.map(function(d){
       var a = S.acks[d.id] || {read:false, consent:false};
       return [d.title, (a.read?"Yes":"No") + (d.requiresConsent ? (" • Consent: " + (a.consent?"Yes":"No")) : "")];
@@ -977,14 +986,14 @@ window.addEventListener('DOMContentLoaded', function(){
     if(!w) { alert("Please allow pop-ups to print or save the summary."); return; }
 
     function esc(x){ return (x===undefined||x===null)?"—":String(x); }
-    function yesNo(v){ return v===true?"Yes":v===false?"No":"—"; }
     function listTrue(obj, keys, map){
       var out = [];
-      keys.forEach(function(k){ if(obj[k]===true) out.push(map[k]||k); });
+      for (var i=0;i<keys.length;i++){ var k=keys[i]; if(obj[k]===true) out.push(map[k]||k); }
       return out.length? out.join(", ") : "—";
     }
     function mapArr(arr, dict){
-      return (arr||[]).map(function(k){ return dict[k]||k; }).filter(Boolean);
+      var out=[]; (arr||[]).forEach(function(k){ if(dict[k]) out.push(dict[k]); });
+      return out;
     }
 
     var dictWindows={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"};
@@ -1002,8 +1011,8 @@ window.addEventListener('DOMContentLoaded', function(){
     };
     var docStatus = DOCS.map(function(d){
       var a = S.acks[d.id] || {read:false, consent:false};
-      var cons = d.requiresConsent ? (" | Consent: " + (a.consent?"Yes":"No")) : "";
-      return "<li><b>"+d.title+":</b> Read: " + (a.read?"Yes":"No") + cons + "</li>";
+      var c = d.requiresConsent ? (" | Consent: " + (a.consent?"Yes":"No")) : "";
+      return "<li><b>"+d.title+":</b> Read: " + (a.read?"Yes":"No") + c + "</li>";
     }).join("");
 
     var risksMap = {wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
@@ -1197,7 +1206,9 @@ window.addEventListener('DOMContentLoaded', function(){
       method: "POST",
       body: JSON.stringify(payload)
     }).then(async function(r){
-      var j = await r.json().catch(()=>({}));
+      /* FIX: avoid arrow in catch */
+      var j;
+      try{ j = await r.json(); } catch(e){ j = {}; }
       if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
       return j;
     }).catch(function(){
@@ -1222,7 +1233,6 @@ window.addEventListener('DOMContentLoaded', function(){
     step.build(optsEl);
     save();
 
-    // Hide Next on the LAST page
     nextBtn.style.display = (S.i === total-1) ? "none" : "inline-block";
 
     try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){}
@@ -1296,7 +1306,6 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     }
 
-    /* Emergency Advocacy consent is OPTIONAL now — no gating here */
     return true;
   }
 
