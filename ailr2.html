@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -549,7 +549,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     },
 
-    /* ===== DETAILED SUPPORTS REQUIRED (requested enhancement) ===== */
+    /* ===== DETAILED SUPPORTS REQUIRED ===== */
     { key:"supports", title:"Which supports are required? (select one or more)", sub:"Pick all that apply, then press Next. You can also type specifics if helpful.",
       build:function(m){
         var options = {
@@ -631,7 +631,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     },
 
-    /* ===== EMERGENCY LIAISON CONSENT (now OPTIONAL) ===== */
+    /* ===== EMERGENCY LIAISON CONSENT (OPTIONAL) ===== */
     { key:"consents", title:"Emergency Advocacy (liaison) consent", sub:"Separately from the documents, do you consent to HD HeeD liaising as your advocate in emergencies to coordinate safe care? (Optional)",
       build:function(m){
         m.appendChild(radioChips("Emergency advocacy (liaison) consent", S, "emergency_advocacy", [
@@ -927,14 +927,7 @@ window.addEventListener('DOMContentLoaded', function(){
       ["Home notes", S.risks.home_checklist.notes],
       ["Other risk notes", S.risks.other_notes],
       ["Overall rating", S.risks.overall_rating]
-    ]));
-
-    wrap.appendChild(sect("Behaviour Support Plan", [
-      ["Plan in place", S.bsp.has_bsp===true?"Yes":S.bsp.has_bsp===false?"No":(S.bsp.has_bsp===null?"Not sure":"—")],
-      ["Restrictive practices", S.bsp.restrictive_practices===true?"Yes":S.bsp.restrictive_practices===false?"No":(S.bsp.restrictive_practices===null?"Not sure":"—")],
-      ["Provider", S.bsp.provider],
-      ["Notes", S.bsp.notes]
-    ]));
+    ])]);
 
     function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
     function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
@@ -958,7 +951,6 @@ window.addEventListener('DOMContentLoaded', function(){
 
     return wrap;
   }
-
   function openDoc(title, href){
     var modal = document.getElementById('docModal');
     var docTitle = document.getElementById('docTitle');
@@ -982,14 +974,61 @@ window.addEventListener('DOMContentLoaded', function(){
 
   function openPrintableSummary(){ /* unchanged, optional */ }
 
+  /* ===== Drive/Sheet summary helpers (NEW) ===== */
+  function mapRequiredForSummary(arr, other){
+    var map = {
+      personal_care:"Personal care",
+      high_intensity:"High-intensity personal care",
+      household_tasks:"Household tasks",
+      life_skills:"Development of life skills",
+      community_participation:"Community participation",
+      group_centre:"Group/centre-based activities",
+      travel_transport:"Assist with travel & transport",
+      daily_tasks_sil:"Daily tasks & shared living",
+      not_sure:"Not sure — guide me"
+    };
+    var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
+    if (other) list.push("Other: "+other);
+    return list.length ? list.join(", ") : "";
+  }
+  function mapWindowsSummary(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
+  function mapDaysSummary(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
+
   function sendToFormspree(){
+    /* Build base payload */
     var payload = {
       caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
       living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
       bsp:S.bsp, supports:S.supports, schedule:S.schedule,
       policy_ack:S.policy_ack, acks:S.acks, emergency_advocacy:S.emergency_advocacy,
-      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString()
+      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
+      _meta:{ app:"AILR", version:"v16" }
     };
+
+    /* === NEW: add human-readable summaries expected by Drive sheet === */
+    try{
+      var addr = S.participant && S.participant.address ? [
+        S.participant.address.line1, S.participant.address.line2,
+        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
+      ].filter(Boolean).join(", ") : "";
+
+      var contactSummary = [
+        (S.contacts.email||""),
+        (S.contacts.phone?(" • "+S.contacts.phone):"")
+      ].join("");
+
+      var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
+      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
+      var daysSummary     = mapDaysSummary(S.schedule.days);
+
+      /* attach to payload in a backwards-compatible way */
+      payload.supports.required_summary = requiredSummary;   // <<— key the Drive expects
+      payload.supports.details_text     = S.supports.details_text || "";
+      payload.schedule.windows_summary  = windowsSummary;
+      payload.schedule.days_summary     = daysSummary;
+      payload.participant.address_summary = addr;
+      payload.contacts.contact_summary    = contactSummary;
+    }catch(e){ /* no-op, keep sending base payload */ }
 
     return fetch(GS_WEBAPP, {
       method: "POST",
@@ -999,6 +1038,7 @@ window.addEventListener('DOMContentLoaded', function(){
       if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
       return j;
     }).catch(function(){
+      /* Fallback opaque success so the user isn’t blocked */
       return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
         .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
     });
@@ -1094,8 +1134,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     }
 
-    /* Emergency Advocacy consent is OPTIONAL now — no gating here */
-
+    /* Emergency Advocacy consent is OPTIONAL */
     return true;
   }
 
