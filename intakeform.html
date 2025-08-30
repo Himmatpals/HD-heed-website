@@ -1,0 +1,522 @@
+# Create a fancy, interactive HTML form (single file) the user can fill and print to PDF.
+# It includes two sections (General Quick View & Detailed Overview) with 5 headings total,
+# HD HeeD / NDIS styling, collapsible cards, add-row buttons, localStorage save/clear,
+# and a Print to PDF button. Prefilled with Michael Thompson (training) but editable.
+
+from pathlib import Path
+
+html = r"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>HD HeeD — Client Master Form (Fancy) • General + Detailed</title>
+<style>
+:root{
+  --bg:#0b1220;
+  --ink:#0b1220;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --brand:#512b8a; /* HD HeeD purple */
+  --accent:#8b5cf6;
+  --ok:#16a34a;
+  --warn:#f59e0b;
+  --danger:#ef4444;
+  --ring:#93c5fd;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Inter, Segoe UI, Roboto, Arial, system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  background: linear-gradient(135deg,#f5f3ff 0%, #f8fafc 50%, #eef2ff 100%);
+  color:var(--ink);
+}
+.container{
+  max-width:1100px;
+  margin:24px auto 80px;
+  padding:0 16px;
+}
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;margin-bottom:16px;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;
+}
+.logo{
+  width:44px;height:44px;border-radius:12px;
+  background:radial-gradient(120% 120% at 0% 0%, #a78bfa 0%, #7c3aed 40%, #512b8a 100%);
+  display:grid;place-items:center;color:white;font-weight:800;letter-spacing:0.5px;
+  box-shadow:0 8px 24px rgba(81,43,138,0.25);
+}
+.title{
+  line-height:1.2;
+}
+.title h1{margin:0;font-size:22px}
+.title p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+button{
+  appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+.btn-primary{background:var(--brand);color:white}
+.btn-ghost{background:white;color:var(--brand);border:1px solid #e5e7eb}
+.btn-danger{background:var(--danger);color:white}
+.badge{
+  display:inline-block;background:#ede9fe;color:#4c1d95;border-radius:999px;padding:4px 10px;
+  font-size:12px;font-weight:700;letter-spacing:.3px
+}
+.grid{display:grid;gap:16px}
+.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:900px){.grid.cols-2{grid-template-columns:1fr}}
+
+.card{
+  background:var(--card);border-radius:16px;padding:16px 16px 8px;
+  border:1px solid #e5e7eb;box-shadow:0 10px 30px rgba(81,43,138,0.07);
+}
+.card h2{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin:0 0 10px;font-size:15px;text-transform:uppercase;letter-spacing:0.6px;color:#4b5563
+}
+.card h3{margin:14px 0 8px;font-size:14px;color:#374151}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:700px){.row{grid-template-columns:1fr}}
+label{font-size:12px;color:#6b7280;margin-bottom:6px;display:block}
+input[type="text"],input[type="date"],input[type="tel"],input[type="email"],textarea,select{
+  width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;
+  font-size:14px;outline:none;transition:box-shadow .15s,border-color .15s;
+}
+textarea{min-height:96px;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:#c7d2fe;box-shadow:0 0 0 4px rgba(99,102,241,.15)}
+.kv{display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:center;margin:6px 0}
+@media (max-width:600px){.kv{grid-template-columns:1fr}}
+.small{font-size:12px;color:#6b7280}
+.hr{height:1px;background:linear-gradient(90deg,#e5e7eb 0,#ede9fe 50%,#e5e7eb 100%);margin:10px 0}
+.section-title{margin:16px 0 8px;font-size:16px;font-weight:800;color:#111827}
+
+.tag{display:inline-block;padding:2px 8px;border-radius:8px;background:#f1f5f9;color:#0f172a;font-size:11px;font-weight:700;margin:0 6px 6px 0}
+.note{background:#f8fafc;border:1px dashed #dbeafe;border-radius:12px;padding:10px;font-size:12px;color:#334155}
+
+.collapsible{cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;background:#faf5ff;border:1px solid #e9d5ff;margin:6px 0}
+.collapsible span{font-weight:700;color:#4c1d95}
+.collapsible svg{transition:transform .2s ease}
+.content{display:none;margin-top:8px}
+
+.table{width:100%;border-collapse:collapse;margin-top:6px}
+.table th,.table td{border:1px solid #e5e7eb;padding:8px;border-radius:0;font-size:13px}
+.table th{background:#f9fafb;text-align:left;color:#374151}
+
+footer{margin-top:18px;text-align:center;color:#6b7280;font-size:12px}
+
+@media print{
+  .actions,.collapsible,button{display:none !important}
+  body{background:white}
+  .container{margin:0;max-width:100%;padding:0 8mm}
+  .card{box-shadow:none;border-color:#e5e7eb;page-break-inside:avoid}
+  .section-title{margin-top:0}
+  footer{display:none}
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">HD</div>
+        <div class="title">
+          <h1>Client Master Form — General + Detailed</h1>
+          <p>Fancy, printable, and editable (autosaves in your browser). Use Print to PDF and upload to ShiftCare → Documents.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn-ghost" id="saveBtn">Save</button>
+        <button class="btn-danger" id="clearBtn" title="Clears all fields in the form">Clear</button>
+        <button class="btn-primary" onclick="window.print()">Print to PDF</button>
+      </div>
+    </div>
+
+    <div class="note">Tip: Fields auto-save locally as you type. “Clear” wipes the saved copy. Use <b>Print to PDF</b> to generate a file for upload.</div>
+
+    <div class="section-title">General Info — Shift Quick View <span class="badge">TOP 5</span></div>
+    <div class="grid cols-2">
+
+      <!-- 1) Client & Plan -->
+      <div class="card">
+        <h2>1) Client &amp; Plan</h2>
+        <div class="row">
+          <div>
+            <label>Client Name</label>
+            <input type="text" id="g_name" placeholder="Michael Thompson">
+          </div>
+          <div>
+            <label>DOB</label>
+            <input type="text" id="g_dob" placeholder="12-03-1985">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>NDIS Number</label>
+            <input type="text" id="g_ndis" placeholder="430123456">
+          </div>
+          <div>
+            <label>Plan Dates</label>
+            <input type="text" id="g_plan" placeholder="01/07/2025 – 30/06/2026">
+          </div>
+        </div>
+        <div class="kv">
+          <label>Management</label>
+          <input type="text" id="g_mgmt" placeholder="Plan-managed (Demo Plan Management)">
+        </div>
+      </div>
+
+      <!-- 2) Contacts & Communication -->
+      <div class="card">
+        <h2>2) Contacts &amp; Communication</h2>
+        <div class="row">
+          <div>
+            <label>NOK / SDM</label>
+            <input type="text" id="g_nok" placeholder="Sharon Thompson (sister) — 0400 000 000">
+          </div>
+          <div>
+            <label>GP / NP</label>
+            <input type="text" id="g_gp" placeholder="Dr Lim — (02) 8000 0000">
+          </div>
+        </div>
+        <div class="kv">
+          <label>Communication</label>
+          <input type="text" id="g_comm" placeholder="English; short, single-step instructions; allow processing time.">
+        </div>
+      </div>
+
+      <!-- 3) Alerts & Risks -->
+      <div class="card">
+        <h2>3) Alerts &amp; Risks</h2>
+        <div class="kv">
+          <label>Allergies / Alerts</label>
+          <input type="text" id="g_alerts" placeholder="NKDA; no infection flags">
+        </div>
+        <div class="kv">
+          <label>Falls / Safety</label>
+          <input type="text" id="g_falls" placeholder="High falls risk; 4WW with supervision; brakes on when stationary.">
+        </div>
+        <div class="kv">
+          <label>Skin / Wound</label>
+          <input type="text" id="g_skin" placeholder="Stoma site care; L forearm skin tear monitoring.">
+        </div>
+        <div class="kv">
+          <label>Behaviour cues</label>
+          <input type="text" id="g_beh" placeholder="Noise/crowds/time pressure → raised voice/pacing; use calm tone, reduce stimuli, offer choices.">
+        </div>
+      </div>
+
+      <!-- 4) Today’s Actions -->
+      <div class="card">
+        <h2>4) Today’s Actions</h2>
+        <div class="kv">
+          <label>Medication</label>
+          <input type="text" id="g_med" placeholder="PROMPTS ONLY — 07:00 prompts from dosette; record taken/refusal; note side-effects.">
+        </div>
+        <div class="kv">
+          <label>Stoma</label>
+          <input type="text" id="g_stoma" placeholder="Tue/Fri change; PRN for leakage. If today, cleanse/dry, fit 2-piece 45 mm, check seal, document.">
+        </div>
+        <div class="kv">
+          <label>Wound</label>
+          <input type="text" id="g_wound" placeholder="Daily visual check; weekly photo; escalate if ↑exudate/odour/pain/spreading redness.">
+        </div>
+        <div class="kv">
+          <label>Mobility</label>
+          <input type="text" id="g_mob" placeholder="4WW with supervision; pace activity; encourage hydration.">
+        </div>
+      </div>
+
+      <!-- 5) Checklist & Emergency -->
+      <div class="card">
+        <h2>5) Shift Checklist &amp; Emergency</h2>
+        <textarea id="g_checklist" placeholder="☐ Med prompt documented  ☐ If Tue/Fri: stoma change & skin checked  ☐ Wound check done  ☐ Behaviour noted  ☐ Progress note completed"></textarea>
+        <div class="hr"></div>
+        <div class="kv">
+          <label>Emergency / Red Flags</label>
+          <input type="text" id="g_emerg" placeholder="Call 000 for chest pain, severe SOB, collapse, uncontrolled bleeding; then notify NOK & GP.">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-title" style="margin-top:22px">Detailed Info — Care Overview <span class="badge">TOP 5</span></div>
+
+    <!-- 1) Diagnoses & Background -->
+    <div class="card">
+      <h2>1) Diagnoses & Background</h2>
+      <div class="row">
+        <div>
+          <label>Primary Diagnoses</label>
+          <textarea id="d_dx" placeholder="ABI — episodic frustration under overstimulation; T2DM — diet controlled."></textarea>
+        </div>
+        <div>
+          <label>Key Risks & Alerts</label>
+          <textarea id="d_risk" placeholder="Allergies: NKDA; Infection: none known; Falls: high; Skin integrity risks: stoma site; L forearm skin tear."></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Communication & Cognition</label>
+          <textarea id="d_comm" placeholder="Short, single-step instructions; allow processing time; confirm understanding."></textarea>
+        </div>
+        <div>
+          <label>Behaviour Baseline</label>
+          <textarea id="d_beh" placeholder="Triggers: noise/crowds/time pressure; Early signs: raised voice, short answers, pacing."></textarea>
+        </div>
+      </div>
+      <div class="kv">
+        <label>Functional Status (mobility & ADLs)</label>
+        <textarea id="d_func" placeholder="Ambulates with 4WW and supervision; independent/continent; regular diet with diabetes-friendly choices."></textarea>
+      </div>
+    </div>
+
+    <!-- 2) Medication & Behaviour Management -->
+    <div class="card">
+      <h2>2) Medication & Behaviour Management</h2>
+      <div class="row">
+        <div>
+          <label>Medication Management</label>
+          <textarea id="d_med" placeholder="PROMPTS ONLY; 07:00 prompts from dosette; record taken/refusal; PRN per order with effect within 1–2h; storage in original packs/dosette; escalate adverse effects/refusal >24h with risk."></textarea>
+        </div>
+        <div>
+          <label>Behaviour Support Summary</label>
+          <textarea id="d_bsp" placeholder="Proactive: quiet space; single-step instructions; clear timeframes; validate feelings. Response: calm tone; reduce stimuli; increase distance; offer choices/break; safety first; post-incident document/debrief."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3) High-Intensity Care Plans -->
+    <div class="card">
+      <h2>3) High-Intensity Care Plans (Stoma / Wound / Diabetes)</h2>
+      <div class="collapsible"><span>Stoma Care — click to expand</span>
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="content">
+        <textarea id="d_stoma" placeholder="Schedule: Tue/Fri; PRN for leakage. Steps: hand hygiene/PPE → remove appliance → cleanse with warm water → dry → fit 2-piece 45 mm cut-to-fit → check seal/comfort → document skin/output. Red flags: persistent leakage, bleeding, ↑pain, fever → GP/000."></textarea>
+      </div>
+
+      <div class="collapsible"><span>Wound Care — click to expand</span>
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="content">
+        <textarea id="d_wound" placeholder="Left forearm skin tear. Daily visual check (exudate/odour/pain/size); weekly photo; protect from trauma; escalate deterioration to RN/GP/Wound CNC."></textarea>
+      </div>
+
+      <div class="collapsible"><span>Diabetes Care — click to expand</span>
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4c1d95" d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="content">
+        <textarea id="d_dm" placeholder="Diet-controlled. BGL check only if symptomatic (sweating, tremor, confusion); treat hypoglycaemia per protocol; encourage balanced meals and hydration."></textarea>
+      </div>
+    </div>
+
+    <!-- 4) Daily Living -->
+    <div class="card">
+      <h2>4) Daily Living (Mobility, Skin/Pressure, Continence, Nutrition, Sleep)</h2>
+      <div class="row">
+        <div>
+          <label>Mobility & Manual Handling</label>
+          <textarea id="d_mobility" placeholder="4WW with supervision; brakes on when stationary; high falls risk; pace activities."></textarea>
+        </div>
+        <div>
+          <label>Skin & Pressure</label>
+          <textarea id="d_skin" placeholder="Monitor stoma area; protect forearm wound; reposition/pressure relief if seated >2 hours."></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Continence & Toileting</label>
+          <textarea id="d_cont" placeholder="Independent/continent; consider timed toileting if routines assist."></textarea>
+        </div>
+        <div>
+          <label>Nutrition & Mealtime</label>
+          <textarea id="d_nut" placeholder="Regular diet; diabetes-friendly choices; encourage hydration; no dysphagia recorded (training)."></textarea>
+        </div>
+      </div>
+      <div class="kv">
+        <label>Sleep & Routine</label>
+        <textarea id="d_sleep" placeholder="Typical pattern; quiet environment; consider night checks ×2 when unwell."></textarea>
+      </div>
+    </div>
+
+    <!-- 5) Goals & Reviews -->
+    <div class="card">
+      <h2>5) Goals & Reviews (Monitoring, Appointments)</h2>
+      <table class="table" id="goalsTable">
+        <thead><tr><th style="width:40%">Goal</th><th style="width:20%">Measure</th><th style="width:20%">Review Date</th><th style="width:20%">Owner</th></tr></thead>
+        <tbody>
+          <tr>
+            <td contenteditable="true">Community access 1×/week with prompts</td>
+            <td contenteditable="true">Attendance noted</td>
+            <td contenteditable="true">2025-10-30</td>
+            <td contenteditable="true">Key Worker</td>
+          </tr>
+          <tr>
+            <td contenteditable="true">Maintain intact peristomal skin 4/4 weeks</td>
+            <td contenteditable="true">Weekly photo review</td>
+            <td contenteditable="true">2025-10-30</td>
+            <td contenteditable="true">RN</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button class="btn-ghost" id="addGoal">Add Goal</button>
+        <button class="btn-ghost" id="delGoal">Delete Last Goal</button>
+      </div>
+
+      <div class="hr"></div>
+      <table class="table" id="monitorTable">
+        <thead><tr><th style="width:40%">Monitoring / Appointment</th><th style="width:25%">Frequency/Date</th><th style="width:35%">Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td contenteditable="true">Stoma change</td>
+            <td contenteditable="true">Tue/Fri</td>
+            <td contenteditable="true">PRN for leakage</td>
+          </tr>
+          <tr>
+            <td contenteditable="true">Wound photo</td>
+            <td contenteditable="true">Weekly</td>
+            <td contenteditable="true">Left forearm</td>
+          </tr>
+          <tr>
+            <td contenteditable="true">Goals review</td>
+            <td contenteditable="true">Quarterly</td>
+            <td contenteditable="true">Update outcomes</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button class="btn-ghost" id="addMon">Add Row</button>
+        <button class="btn-ghost" id="delMon">Delete Last Row</button>
+      </div>
+    </div>
+
+    <footer>
+      © 2025 HD HeeD — Fancy Client Master Form. This is a training template. Print to PDF and upload to ShiftCare → Documents.
+    </footer>
+  </div>
+
+<script>
+// Collapsibles
+document.querySelectorAll('.collapsible').forEach(function(el){
+  el.addEventListener('click', function(){
+    const content = this.nextElementSibling;
+    const icon = this.querySelector('svg');
+    if(content.style.display==='block'){ content.style.display='none'; icon.style.transform='rotate(0deg)'; }
+    else { content.style.display='block'; icon.style.transform='rotate(180deg)'; }
+  });
+});
+
+// Add/Delete goal rows
+document.getElementById('addGoal').addEventListener('click', function(){
+  const tbody = document.querySelector('#goalsTable tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>';
+  tbody.appendChild(tr);
+  saveForm();
+});
+document.getElementById('delGoal').addEventListener('click', function(){
+  const tbody = document.querySelector('#goalsTable tbody');
+  if(tbody.rows.length>0){ tbody.deleteRow(tbody.rows.length-1); saveForm(); }
+});
+
+// Add/Delete monitoring rows
+document.getElementById('addMon').addEventListener('click', function(){
+  const tbody = document.querySelector('#monitorTable tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>';
+  tbody.appendChild(tr);
+  saveForm();
+});
+document.getElementById('delMon').addEventListener('click', function(){
+  const tbody = document.querySelector('#monitorTable tbody');
+  if(tbody.rows.length>0){ tbody.deleteRow(tbody.rows.length-1); saveForm(); }
+});
+
+// Local storage save/load
+const fields = [
+  'g_name','g_dob','g_ndis','g_plan','g_mgmt','g_nok','g_gp','g_comm','g_alerts','g_falls','g_skin','g_beh','g_med','g_stoma','g_wound','g_mob','g_checklist','g_emerg',
+  'd_dx','d_risk','d_comm','d_beh','d_func','d_med','d_bsp','d_stoma','d_wound','d_dm','d_mobility','d_skin','d_cont','d_nut','d_sleep'
+];
+
+function saveForm(){
+  const data = { rows:{ goals:[], monitor:[] } };
+  fields.forEach(id=>{
+    const el = document.getElementById(id);
+    data[id] = el ? el.value || el.innerText || '' : '';
+  });
+  // goals table
+  document.querySelectorAll('#goalsTable tbody tr').forEach(tr=>{
+    const row = [];
+    tr.querySelectorAll('td').forEach(td=>row.push(td.innerText));
+    data.rows.goals.push(row);
+  });
+  // monitor table
+  document.querySelectorAll('#monitorTable tbody tr').forEach(tr=>{
+    const row = [];
+    tr.querySelectorAll('td').forEach(td=>row.push(td.innerText));
+    data.rows.monitor.push(row);
+  });
+  localStorage.setItem('hdheed_client_master_form', JSON.stringify(data));
+}
+
+function loadForm(){
+  const raw = localStorage.getItem('hdheed_client_master_form');
+  if(!raw) return;
+  try{
+    const data = JSON.parse(raw);
+    fields.forEach(id=>{
+      const el = document.getElementById(id);
+      if(el && data[id]!==undefined){
+        if(el.tagName==='TEXTAREA' || el.tagName==='INPUT') el.value = data[id];
+        else el.innerText = data[id];
+      }
+    });
+    // rebuild tables
+    if(data.rows){
+      // goals
+      const gBody = document.querySelector('#goalsTable tbody');
+      gBody.innerHTML = '';
+      (data.rows.goals||[]).forEach(r=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td contenteditable="true">${r[0]||''}</td><td contenteditable="true">${r[1]||''}</td><td contenteditable="true">${r[2]||''}</td><td contenteditable="true">${r[3]||''}</td>`;
+        gBody.appendChild(tr);
+      });
+      // monitor
+      const mBody = document.querySelector('#monitorTable tbody');
+      mBody.innerHTML = '';
+      (data.rows.monitor||[]).forEach(r=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td contenteditable="true">${r[0]||''}</td><td contenteditable="true">${r[1]||''}</td><td contenteditable="true">${r[2]||''}</td>`;
+        mBody.appendChild(tr);
+      });
+    }
+  }catch(e){ console.warn('Load error',e); }
+}
+
+fields.forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('input', saveForm);
+});
+
+document.getElementById('saveBtn').addEventListener('click', saveForm);
+document.getElementById('clearBtn').addEventListener('click', function(){
+  if(!confirm('Clear all fields and local save?')) return;
+  localStorage.removeItem('hdheed_client_master_form');
+  location.reload();
+});
+
+loadForm();
+</script>
+</body>
+</html>
+"""
+
+out = Path("/mnt/data/HD_HeeD_Client_Master_Form.html")
+out.write_text(html, encoding="utf-8")
+out.as_posix()
