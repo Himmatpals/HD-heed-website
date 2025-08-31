@@ -635,11 +635,28 @@ window.addEventListener('DOMContentLoaded', function(){
 
     /* ===== DOCUMENTS (EMAIL REMINDERS) ===== */
     {
-      key:"uploads",
-      title:"Documents — please email them",
-      sub:"You can proceed without attachments. Email documents to <a href=\"mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.\">info@hdheed.com.au</a> or bring them to the first visit.",
-      build:function(m){
-        S.uploads.files = []; save();
+      {
+  key:"uploads",
+  title:"Documents — please email them",
+  sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
+        <div class="consent-box" style="margin-top:10px">\
+          <b>What to send (simple reminder)</b>\
+          <ul>\
+            <li>Photo ID (e.g., driver licence or passport)</li>\
+            <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
+            <li>NDIS plan (latest)</li>\
+            <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
+            <li>Medication chart / current medication list (if any)</li>\
+            <li>Signed consent forms — Refer to step 13.</li>\
+          </ul>\
+        </div>',
+  build:function(m){
+    // No uploads here; we simply remind and let them proceed.
+    S.uploads.files = [];
+    save();
+  }
+}
+
 
         var box = document.createElement('div');
         box.className = "inlinebox";
