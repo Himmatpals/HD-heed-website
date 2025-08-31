@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HD HeeD — Wound Management Plan & Evaluation</title>
+<style>
+  :root{
+    --ink:#0e0e0f; --muted:#6b7280; --line:#e5e7eb; --brand:#512b8a; --bg:#fafafa;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:14px/1.35 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif}
+  header{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:20px;margin:16px auto 0;max-width:900px;background:#fff;border:1px solid var(--line);border-bottom:none;border-radius:12px 12px 0 0
+  }
+  .brand h1{font-size:18px;margin:0;color:var(--brand)}
+  .brand small{display:block;color:var(--muted)}
+  .actions{display:flex;gap:8px}
+  .btn{appearance:none;border:1px solid var(--brand);background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+  .btn.secondary{background:#fff;color:var(--brand)}
+  main{
+    margin:0 auto 32px;max-width:900px;background:#fff;border:1px solid var(--line);border-radius:0 0 12px 12px;padding:20px
+  }
+  h2{font-size:16px;margin:24px 0 12px;color:#111}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  label{display:block;font-weight:600;margin:8px 0 4px}
+  input[type="text"],input[type="date"],input[type="time"],input[type="number"],select,textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff
+  }
+  textarea{min-height:110px;resize:vertical}
+  .box{border:1px solid var(--line);border-radius:10px;padding:14px}
+  .muted{color:var(--muted)}
+  .hr{height:1px;background:var(--line);margin:16px 0}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .chip{display:inline-block;border:1px solid var(--line);padding:6px 10px;border-radius:999px;margin:4px 6px 0 0}
+  .w100{width:100%}
+  .percent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  @media print{
+    header,.actions{display:none !important}
+    body{background:#fff}
+    main{border:none;border-radius:0;padding:0 0 12px 0}
+    .page-break{page-break-before:always}
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>HD HeeD — Wound Management Plan & Evaluation</h1>
+      <small>One wound per record. “Date of Wound” must not be altered.</small>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="box">
+      <h2>Wound Identification</h2>
+      <div class="grid">
+        <div>
+          <label>Participant</label>
+          <input type="text" placeholder="Full name" />
+        </div>
+        <div>
+          <label>Record ID</label>
+          <input type="text" placeholder="Auto/Manual" />
+        </div>
+      </div>
+
+      <label>Description of Wound</label>
+      <textarea placeholder="Short clinical description (e.g., traumatic laceration to L shin)"></textarea>
+
+      <div class="grid">
+        <div>
+          <label>Date of Wound (do not alter)</label>
+          <input type="date" />
+        </div>
+        <div>
+          <label>Position / Anatomical Site</label>
+          <input type="text" placeholder="e.g., Left pretibial; sacrum; R forearm" />
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Type of Wound</label>
+          <select>
+            <option value="">Select</option>
+            <option>Pressure</option><option>Surgical</option><option>Traumatic</option><option>Diabetic/Neuropathic</option><option>Venous</option><option>Arterial</option><option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label>If ‘Other’, please describe</label>
+          <input type="text" placeholder="Details" />
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Location when wound acquired</label>
+          <select>
+            <option value="">Select</option>
+            <option>Home</option><option>Residential facility</option><option>Hospital</option><option>Community</option><option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label>Initial & Ongoing Photos (file ref)</label>
+          <input type="text" placeholder="Photo filenames / references" />
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Staging / Classification</h2>
+      <div class="grid-3">
+        <div>
+          <label>Pressure Injury Stage</label>
+          <select>
+            <option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option>
+          </select>
+        </div>
+        <div>
+          <label>Skin Tear (STAR Category)</label>
+          <select>
+            <option value="">Select</option><option>Cat 1</option><option>Cat 2</option><option>Cat 3</option>
+          </select>
+        </div>
+        <div>
+          <label>Incontinence Associated Dermatitis</label>
+          <select>
+            <option value="">Select</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Wound Assessment</h2>
+      <div class="grid">
+        <div><label>Length (cm)</label><input type="number" step="0.1" min="0" /></div>
+        <div><label>Width (cm)</label><input type="number" step="0.1" min="0" /></div>
+      </div>
+      <div class="grid">
+        <div><label>Depth (cm)</label><input type="number" step="0.1" min="0" /></div>
+        <div class="w100"></div>
+      </div>
+
+      <h3 style="margin-top:8px;font-size:14px">Wound Bed (% totals = 100)</h3>
+      <div class="percent-grid">
+        <div><label>Granulation</label><input type="number" min="0" max="100" placeholder="%" /></div>
+        <div><label>Epithelial</label><input type="number" min="0" max="100" placeholder="%" /></div>
+        <div><label>Hypergranulation</label><input type="number" min="0" max="100" placeholder="%" /></div>
+        <div><label>Slough</label><input type="number" min="0" max="100" placeholder="%" /></div>
+        <div><label>Eschar</label><input type="number" min="0" max="100" placeholder="%" /></div>
+        <div><label>Sutures / Clips</label><input type="number" min="0" max="100" placeholder="%" /></div>
+        <div><label>Hardware</label><input type="number" min="0" max="100" placeholder="%" /></div>
+        <div><label>Tendon</label><input type="number" min="0" max="100" placeholder="%" /></div>
+        <div><label>Bone</label><input type="number" min="0" max="100" placeholder="%" /></div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Exudate — Type</label>
+          <select>
+            <option value="">Select</option>
+            <option>Serous</option><option>Purulent</option><option>Haemoserous</option><option>Blood</option><option>Haemopurulent</option><option>None</option>
+          </select>
+        </div>
+        <div>
+          <label>Exudate — Amount</label>
+          <select>
+            <option value="">Select</option><option>Heavy</option><option>Moderate</option><option>Light</option><option>None</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Odour</label>
+          <select>
+            <option value="">Select</option><option>Malodour (offensive)</option><option>Nil odour</option>
+          </select>
+        </div>
+        <div></div>
+      </div>
+
+      <label>Surrounding Skin</label>
+      <div class="row">
+        <label class="chip"><input type="checkbox"> Normal skin</label>
+        <label class="chip"><input type="checkbox"> Dry skin</label>
+        <label class="chip"><input type="checkbox"> Erythema</label>
+        <label class="chip"><input type="checkbox"> Oedematous</label>
+        <label class="chip"><input type="checkbox"> Macerated</label>
+        <label class="chip"><input type="checkbox"> Venous staining</label>
+        <label class="chip"><input type="checkbox"> Undermined</label>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Microbiology</h2>
+      <div class="grid">
+        <div>
+          <label>Swab taken & sent?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option><option>N/A</option></select>
+        </div>
+        <div>
+          <label>Date collected</label>
+          <input type="date" />
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <label>Result received?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option><option>N/A</option></select>
+        </div>
+        <div>
+          <label>Pathology result / comments</label>
+          <input type="text" placeholder="Organism, sensitivities, ABx plan..." />
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Pain</h2>
+      <div class="grid">
+        <div>
+          <label>Pain present?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </div>
+        <div>
+          <label>If YES, commence pain charting / assessment</label>
+          <input type="text" placeholder="Abbey / Verbal / Open Pain Assessment" />
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Lower Limb Clinical Assessment (if applicable)</h2>
+      <div class="grid-3">
+        <div>
+          <label>Colour</label>
+          <select><option value="">Select</option><option>Normal</option><option>Pale</option><option>Red</option><option>Cyanotic</option></select>
+        </div>
+        <div>
+          <label>Temperature</label>
+          <select><option value="">Select</option><option>Warm</option><option>Cool</option><option>Cold</option></select>
+        </div>
+        <div>
+          <label>Movement</label>
+          <select><option value="">Select</option><option>Normal</option><option>Reduced</option></select>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div>
+          <label>Sensation</label>
+          <select><option value="">Select</option><option>Intact</option><option>Reduced</option><option>Absent</option></select>
+        </div>
+        <div>
+          <label>Swelling</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </div>
+        <div>
+          <label>Pulses</label>
+          <select><option value="">Select</option><option>Palpable</option><option>Weak</option><option>Absent</option></select>
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <label>Capillary Refill</label>
+          <select><option value="">Select</option><option>&lt; 2s</option><option>&gt; 2s</option></select>
+        </div>
+        <div></div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Interventions / Care Plan</h2>
+      <div class="grid">
+        <div>
+          <label>Wound status</label>
+          <select><option value="">Select</option><option>Healing</option><option>Static</option><option>Deteriorating</option></select>
+        </div>
+        <div>
+          <label>Goal of intervention / healing</label>
+          <select><option value="">Select</option><option>Heal</option><option>Prevent infection</option><option>Maintain integrity</option></select>
+        </div>
+      </div>
+
+      <label>Cleansing agent</label>
+      <input type="text" placeholder="e.g., NS 0.9%, chlorhexidine, Prontosan" />
+
+      <div class="grid">
+        <div>
+          <label>Primary dressing</label>
+          <input type="text" placeholder="e.g., Hydrocolloid, Alginate, Film, Foam, Hydrogel" />
+        </div>
+        <div>
+          <label>Secondary dressing</label>
+          <input type="text" placeholder="e.g., Crepe bandage, Fixomull, Foam cover" />
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Frequency of dressing change</label>
+          <select><option value="">Select</option><option>Daily</option><option>Second daily</option><option>Twice weekly</option><option>Weekly</option><option>Other</option></select>
+        </div>
+        <div>
+          <label>Wound care specialist required?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </div>
+      </div>
+
+      <label>Specialist review & recommendations (include date/time)</label>
+      <textarea placeholder="e.g., 05/09/2025 10:30 — Wound CNC: switch to silver foam, review in 7 days..."></textarea>
+
+      <label>Allied Health referral</label>
+      <input type="text" placeholder="e.g., Podiatry, Physio, GP follow-up" />
+    </section>
+
+    <section class="box">
+      <h2>Wound Dressing Check / Review</h2>
+      <div class="grid-3">
+        <div>
+          <label>Date dressing change attended</label>
+          <input type="date" />
+        </div>
+        <div>
+          <label>Next dressing change due</label>
+          <input type="date" />
+        </div>
+        <div>
+          <label>Reason for review</label>
+          <select><option>Routine review</option><option>Change of care needs required</option></select>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div>
+          <label>Date wound reviewed by RN</label>
+          <input type="date" />
+        </div>
+        <div>
+          <label>Next RN review due</label>
+          <input type="date" />
+        </div>
+        <div></div>
+      </div>
+
+      <label>Comments</label>
+      <textarea placeholder="Progress, edge migration, granulation %, pain changes, dressing tolerance, education provided..."></textarea>
+    </section>
+
+    <section class="box">
+      <h2>Record Management</h2>
+      <div class="grid">
+        <div>
+          <label>Vendor Wound ID</label>
+          <input type="text" />
+        </div>
+        <div>
+          <label>Completed by RN</label>
+          <input type="text" placeholder="Name & signature on print" />
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <label>Date</label>
+          <input type="date" />
+        </div>
+        <div></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
