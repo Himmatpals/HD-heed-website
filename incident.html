@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HD HeeD — Incident Record</title>
+<style>
+  :root{
+    --ink:#0e0e0f; --muted:#6b7280; --line:#e5e7eb; --brand:#512b8a; --bg:#fafafa;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:14px/1.35 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif}
+  header{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:20px;margin:16px auto 0;max-width:900px;background:#fff;border:1px solid var(--line);border-bottom:none;border-radius:12px 12px 0 0
+  }
+  .brand h1{font-size:18px;margin:0;color:var(--brand)}
+  .brand small{display:block;color:var(--muted)}
+  .actions{display:flex;gap:8px}
+  .btn{appearance:none;border:1px solid var(--brand);background:var(--brand);color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+  .btn.secondary{background:#fff;color:var(--brand)}
+  main{
+    margin:0 auto 32px;max-width:900px;background:#fff;border:1px solid var(--line);border-radius:0 0 12px 12px;padding:20px
+  }
+  h2{font-size:16px;margin:24px 0 12px;color:#111}
+  p.note{margin:0 0 12px;color:#933}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  label{display:block;font-weight:600;margin:8px 0 4px}
+  input[type="text"],input[type="date"],input[type="time"],input[type="number"],select,textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff
+  }
+  textarea{min-height:110px;resize:vertical}
+  .checkline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .checkline input{margin-right:6px}
+  .box{border:1px solid var(--line);border-radius:10px;padding:14px}
+  .muted{color:var(--muted)}
+  .hr{height:1px;background:var(--line);margin:16px 0}
+  .foot{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:8px}
+  .sig{height:38px;border-bottom:1px solid var(--ink);min-width:240px}
+  .status{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  @media print{
+    header,.actions{display:none !important}
+    body{background:#fff}
+    main{border:none;border-radius:0;padding:0 0 12px 0}
+    .page-break{page-break-before:always}
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>HD HeeD — Incident Record</h1>
+      <small>Record exactly one incident per form. Mark as <b>RESOLVED</b> when complete.</small>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+  </header>
+
+  <main>
+    <p class="note"><b>Do not alter the Date of Incident once chosen.</b></p>
+
+    <section class="box">
+      <h2>Incident Details</h2>
+      <div class="grid">
+        <div>
+          <label>Participant</label>
+          <input type="text" placeholder="Full name" />
+        </div>
+        <div>
+          <label>Record ID</label>
+          <input type="text" placeholder="Auto/Manual" />
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <label>Date of Incident</label>
+          <input type="date" />
+        </div>
+        <div>
+          <label>Time of Incident (24hr)</label>
+          <input type="time" />
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <label>Time (Minutes)</label>
+          <input type="number" min="0" placeholder="e.g., 05" />
+        </div>
+        <div>
+          <label>Location of Incident</label>
+          <input type="text" placeholder="Room / Bathroom / Community / Other" />
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <label>Witness present?</label>
+          <select>
+            <option value="">Select</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+        <div>
+          <label>Witness name & details</label>
+          <input type="text" placeholder="Name, contact, role" />
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Incident Classification</h2>
+      <div class="grid">
+        <div>
+          <label>General Incident Type</label>
+          <input type="text" placeholder="Fall / Medication / Behaviour / Skin / Other" />
+        </div>
+        <div>
+          <label>If 'Other', specify</label>
+          <input type="text" placeholder="Describe" />
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div>
+          <label>Pressure Injury Stage</label>
+          <select>
+            <option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option>
+          </select>
+        </div>
+        <div>
+          <label>Skin Tear Stage</label>
+          <select>
+            <option value="">Select</option><option>Cat 1</option><option>Cat 2</option><option>Cat 3</option>
+          </select>
+        </div>
+        <div>
+          <label>Incontinence Associated Dermatitis Stage</label>
+          <select>
+            <option value="">Select</option><option>Mild</option><option>Moderate</option><option>Severe</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Narrative</h2>
+      <label>Details of incident / explanation <span class="muted">(What you saw, what you did, who you notified)</span></label>
+      <textarea placeholder="Enter full narrative..."></textarea>
+
+      <div class="grid">
+        <div>
+          <label>What was the resident doing?</label>
+          <input type="text" placeholder="Walking / In bed / Showering / Other" />
+        </div>
+        <div>
+          <label>Where did the incident happen?</label>
+          <input type="text" placeholder="Specify exact place" />
+        </div>
+      </div>
+
+      <label>Actions taken</label>
+      <textarea placeholder="Immediate first aid, observations, escalation, referrals, safeguards..."></textarea>
+    </section>
+
+    <section class="box">
+      <h2>Outcomes</h2>
+      <div class="grid">
+        <div>
+          <label>Did the resident sustain an injury?</label>
+          <select>
+            <option value="">Select</option><option>Yes</option><option>No</option>
+          </select>
+        </div>
+        <div>
+          <label>Injury sustained</label>
+          <input type="text" placeholder="e.g., skin tear to R forearm" />
+        </div>
+      </div>
+      <label>Details of injury</label>
+      <textarea placeholder="Describe injuries, site, size, pain, bleeding, neuro obs if head strike, etc."></textarea>
+
+      <div class="grid">
+        <div>
+          <label>Hospitalisation required?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </div>
+        <div>
+          <label>Medical treatment required (GP/Locum)?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Incident Severity Rating (ISR)</h2>
+      <div class="grid">
+        <div>
+          <label>ISR (select most applicable)</label>
+          <select>
+            <option value="">Select</option>
+            <option>No treatment or injury</option>
+            <option>Onsite treatment by staff (minor)</option>
+            <option>Priority 2 reportable (low level harm)</option>
+            <option>Priority 1 reportable (harm requiring treatment)</option>
+            <option>Priority 1 — Unexpected death</option>
+            <option>Near miss</option>
+            <option>Stage 1–2 pressure injury</option>
+            <option>Transfer to hospital due to unrecognised deterioration</option>
+            <option>Major injury leading to long-term incapacity</option>
+            <option>Unexplained absence (police involvement)</option>
+            <option>Medication incident — minor (e.g., missed signature)</option>
+            <option>Medication error resulting in serious harm or death</option>
+            <option>Coroner’s Court request</option>
+            <option>Missing S8 medications</option>
+            <option>Allegation/suspicion of unlawful sexual contact</option>
+            <option>Skin tear requiring ongoing wound management</option>
+            <option>NDIS unauthorised restrictive practice (without harm)</option>
+            <option>Multiple permanent injuries / irreversible effects</option>
+          </select>
+        </div>
+        <div>
+          <label>Date of evaluation</label>
+          <input type="date" />
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Were Care Plan interventions being followed?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </div>
+        <div>
+          <label>Investigation / findings / evaluation</label>
+          <textarea placeholder="Root cause, contributing factors, preventability, learning..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Notifications & Open Disclosure</h2>
+      <label>Open disclosure discussion details</label>
+      <textarea placeholder="What went wrong, needs/concerns addressed, apology, prevention steps..."></textarea>
+
+      <div class="grid-3">
+        <div>
+          <label>Resident contacted?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+          <div class="grid">
+            <input type="date" aria-label="Resident contact date" />
+            <input type="time" aria-label="Resident contact time" />
+          </div>
+        </div>
+        <div>
+          <label>Substitute Decision Maker contacted?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+          <div class="grid">
+            <input type="date" aria-label="SDM date" />
+            <input type="time" aria-label="SDM time" />
+          </div>
+        </div>
+        <div>
+          <label>GP / NP contacted?</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+          <div class="grid">
+            <input type="date" aria-label="GP date" />
+            <input type="time" aria-label="GP time" />
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div>
+          <label>SIRS (Aged Care)</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </div>
+        <div>
+          <label>NDIS Commission</label>
+          <select><option value="">Select</option><option>Yes</option><option>No</option></select>
+        </div>
+        <div>
+          <label>Police / WorkSafe</label>
+          <select><option value="">Select</option><option>Police</option><option>WorkSafe</option><option>None</option></select>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Reportable incident?</label>
+          <select><option value="">Select</option><option>Yes — Priority 1</option><option>Yes — Priority 2</option><option>No</option></select>
+        </div>
+        <div>
+          <label>Final Status</label>
+          <select><option>Open</option><option>Resolved</option></select>
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Completion</h2>
+      <div class="foot">
+        <div style="flex:1">
+          <div class="status">
+            <div>
+              <label>RN completing record</label>
+              <input type="text" placeholder="Name" />
+            </div>
+            <div class="sig" title="Signature line"></div>
+          </div>
+        </div>
+        <div style="width:220px">
+          <label>Date</label>
+          <input type="date" />
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
