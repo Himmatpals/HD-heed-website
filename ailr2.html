@@ -628,14 +628,13 @@ window.addEventListener('DOMContentLoaded', function(){
         sum.style.marginTop="6px";
         var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
         DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
-        sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
-        m.appendChild(sum);
-      }
-    },
+sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
+m.appendChild(sum);
+}
+},
 
-    /* ===== DOCUMENTS (EMAIL REMINDERS) ===== */
-    {
-      {
+/* ===== DOCUMENTS (EMAIL REMINDERS) ===== */
+{
   key:"uploads",
   title:"Documents — please email them",
   sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
@@ -651,11 +650,12 @@ window.addEventListener('DOMContentLoaded', function(){
           </ul>\
         </div>',
   build:function(m){
-    // No uploads here; we simply remind and let them proceed.
+    // No uploads here; just a reminder list.
     S.uploads.files = [];
     save();
   }
-}
+},
+
 
 
         var box = document.createElement('div');
