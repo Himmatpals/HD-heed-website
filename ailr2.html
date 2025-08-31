@@ -625,9 +625,9 @@ window.addEventListener('DOMContentLoaded', function(){
         });
 
         var sum = document.createElement('div'); sum.className="hint";
-        sum.style.marginTop="6px";
-        var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
-        DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
+sum.style.marginTop="6px";
+var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
+DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
 sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
 m.appendChild(sum);
 }
@@ -650,7 +650,7 @@ m.appendChild(sum);
           </ul>\
         </div>',
   build:function(m){
-    // No uploads here; just a reminder list.
+    // Just a reminder; no file uploads collected here.
     S.uploads.files = [];
     save();
   }
@@ -658,39 +658,8 @@ m.appendChild(sum);
 
 
 
-        var box = document.createElement('div');
-        box.className = "inlinebox";
-        box.innerHTML = [
-          '<div style="font-weight:800; margin-bottom:6px">What to send (simple reminder — not mandatory)</div>',
-          '<ul class="doc-list">',
-            '<li><b>Photo ID</b> (e.g., driver licence or passport) — bring to first visit or email securely</li>',
-            '<li><b>Medicare card</b> (optional, for GP/pharmacy liaison or emergencies)</li>',
-            '<li><b>NDIS plan</b> (latest)</li>',
-            '<li><b>Care plans</b> (e.g., BSP, diabetes plan, seizure plan)</li>',
-            '<li><b>Medication chart / current medication list</b> (or ask your pharmacy to email us)</li>',
-            '<li><b>Signed consent forms (if applicable)</b> — see the Client Handbook & Consents section above</li>',
-          '</ul>',
-          '<p class="doc-privacy">We store information securely and restrict access. Please avoid sending sensitive documents via SMS or untrusted apps.</p>'
-        ].join('');
-        m.appendChild(box);
 
-        var actions = document.createElement('div');
-        actions.style = "display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:6px";
-        var mail = document.createElement('a');
-        mail.className = "btn primary";
-        mail.textContent = "Email documents";
-        mail.href = "mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20(if%20available).";
-        actions.appendChild(mail);
-
-        var hint = document.createElement('div');
-        hint.className = "hint";
-        hint.textContent = "You can continue this form now and email documents later.";
-        actions.appendChild(hint);
-
-        m.appendChild(actions);
-      }
-    },
-
+        
     { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
       build:function(m){ m.appendChild(renderReview()); }
     },
