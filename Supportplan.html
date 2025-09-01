@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HD HeeD — Participant’s Support Plan (Copy / Record)</title>
+<meta name="color-scheme" content="light only" />
+<style>
+  :root{
+    --brand:#6a1b9a; --accent:#8e24aa; --ink:#1a1a1a; --muted:#666c7a;
+    --line:#e6e6ef; --light:#f7f4fb; --panel:#ffffff; --warn:#b00020; --softred:#ffe9ed;
+  }
+  html,body{margin:0;padding:0;background:var(--light);color:var(--ink);font:15px/1.58 "Inter", Segoe UI, Roboto, Arial, sans-serif}
+  .container{max-width:1040px;margin:24px auto;padding:0 16px}
+  header.hero{background:linear-gradient(92deg,var(--brand),var(--accent));color:#fff;padding:20px 0;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+  .hero-wrap{display:flex;align-items:center;gap:16px}
+  .hero img{height:72px;width:auto;border-radius:12px;background:#fff;object-fit:contain;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+  .hero h1{margin:0;font-size:26px;font-weight:800;letter-spacing:.2px}
+  .hero p{margin:4px 0 0;font-size:14px;opacity:.95}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 8px 28px rgba(20,16,38,.06);margin:18px 0}
+  h2.section{margin:0 0 14px;font-size:20px;font-weight:800;color:var(--brand);display:flex;align-items:center;gap:10px}
+  h3.sub{margin:16px 0 8px;font-size:16px;font-weight:700;color:var(--accent)}
+  p,li{color:var(--ink)} ul{margin:6px 0 12px 22px}
+  label{display:block;font-weight:700;margin:10px 0 6px}
+  input[type="text"],input[type="date"],input[type="email"],input[type="tel"],select,textarea{
+    width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:15px;
+    transition:border .2s, box-shadow .2s, background-color .2s
+  }
+  textarea{min-height:96px;resize:vertical}
+  .grid{display:grid;gap:14px}
+  .grid-2{grid-template-columns:1fr 1fr}
+  .grid-3{grid-template-columns:1fr 1fr 1fr}
+  .ticks{display:flex;gap:18px;flex-wrap:wrap;margin:6px 0}
+  .ticks label{display:flex;align-items:center;gap:8px;font-weight:600}
+  .ticks input{transform:scale(1.1)}
+  .req{border-color:var(--warn)!important;background:var(--softred);box-shadow:0 0 0 2px rgba(176,0,32,.10)}
+  .req::placeholder{color:#b65668}
+  .ok{border-color:var(--line)!important;background:#fff;box-shadow:none}
+  .hint{font-size:13px;color:var(--muted)}
+  .icon{width:34px;height:34px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:#efe6f6;border:1px solid #eadcf8}
+  .shade-lilac{background:#fbf7ff;border:1px solid #eadcf8}
+  .shade-blue{background:#f7fbff;border:1px solid #d8e9fb}
+  .shade-green{background:#f9fff9;border:1px solid #d7f2da}
+  .shade-rose{background:#fff8fb;border:1px solid #f6cfe0}
+  .shade-amber{background:#fffef7;border:1px solid #f3e6b3}
+  .shade-slate{background:#fffefe;border:1px solid #e9e9e9}
+  table{border-collapse:collapse;width:100%;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:10px;vertical-align:top}
+  th{background:#f3e9f7;color:#3c096c;font-weight:800}
+  .actions{display:flex;gap:10px;justify-content:flex-end;margin:10px 0 22px}
+  .btn{appearance:none;border:none;border-radius:12px;padding:11px 16px;font-weight:800;cursor:pointer}
+  .btn.primary{background:var(--brand);color:#fff}.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--brand)}
+  .btn.primary:hover{background:var(--accent)}
+  @media print{
+    body{background:#fff}.actions{display:none}.card{box-shadow:none;border:1px solid #ddd;border-radius:10px;break-inside:avoid}header.hero{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="container hero-wrap">
+    <img src="hd heed.jpg" alt="HD HeeD logo">
+    <div>
+      <h1>Participant’s Support Plan — Copy / Record</h1>
+      <p>HD HeeD Pty Ltd • Registered NDIS Provider • Phone: 02 8630 5500 • Email: info@hdheed.com.au</p>
+    </div>
+  </div>
+</header>
+
+<div class="container actions">
+  <button class="btn primary" onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="container">
+
+  <!-- Plan linkage / storage -->
+  <section class="card shade-lilac">
+    <h2 class="section">
+      <span class="icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6a1b9a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/>
+        </svg>
+      </span>
+      Support Plan – Attachment / Storage
+    </h2>
+    <p>Select whether a copy is attached or specify where it is stored for retrieval on request.</p>
+    <div class="grid grid-2">
+      <div>
+        <label>Attachment status</label>
+        <select id="sp_attach" class="req">
+          <option value="">Select</option>
+          <option>Copy attached to this record</option>
+          <option>Stored elsewhere (specify location below)</option>
+        </select>
+      </div>
+      <div>
+        <label>Storage location / path (if not attached)</label>
+        <input type="text" id="sp_storage" class="req" placeholder="e.g., ShiftCare › Files › <ParticipantName> › Plans › 2025-08-12.pdf">
+      </div>
+    </div>
+    <div>
+      <label>Notes (version, who uploaded, checksum if used)</label>
+      <input type="text" placeholder="e.g., v1.2 uploaded by RN Smith 2025-09-01 14:10; SHA256: …">
+    </div>
+  </section>
+
+  <!-- Participant details -->
+  <section class="card shade-blue">
+    <h2 class="section">
+      <span class="icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#145da0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="7" r="4"/><path d="M17 11a4 4 0 1 0-4-4"/><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/>
+        </svg>
+      </span>
+      Participant Details
+    </h2>
+    <div class="grid grid-3">
+      <div><label>Participant name</label><input class="req" type="text" placeholder="Full name"></div>
+      <div><label>NDIS number</label><input class="req" type="text" placeholder="e.g., 4300 123 456"></div>
+      <div><label>Date of birth</label><input class="req" type="date"></div>
+    </div>
+    <div class="grid grid-3">
+      <div><label>Primary contact</label><input class="req" type="text" placeholder="Self / Representative name"></div>
+      <div><label>Phone</label><input class="req" type="tel" placeholder="04xx xxx xxx"></div>
+      <div><label>Email</label><input class="req" type="email" placeholder="name@example.com"></div>
+    </div>
+    <div class="grid grid-2">
+      <div><label>Address</label><input class="req" type="text" placeholder="Street, Suburb, State, Postcode"></div>
+      <div>
+        <label>Funding management</label>
+        <div class="ticks">
+          <label><input type="checkbox"> Plan-managed</label>
+          <label><input type="checkbox"> Self-managed</label>
+          <label><input type="checkbox"> NDIA-managed</label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plan overview -->
+  <section class="card shade-green">
+    <h2 class="section">
+      <span class="icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b8a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3h18v4H3z"/><path d="M8 7v14"/><path d="M3 11h18"/><path d="M3 16h18"/>
+        </svg>
+      </span>
+      Plan Overview
+    </h2>
+    <div class="grid grid-3">
+      <div><label>Plan start date</label><input class="req" type="date"></div>
+      <div><label>Plan end date</label><input class="req" type="date"></div>
+      <div><label>Plan version / reference</label><input class="req" type="text" placeholder="e.g., 2025 Plan v1"></div>
+    </div>
+    <label>Participant goals (as stated in plan)</label>
+    <textarea class="req" placeholder="List the participant’s NDIS goals verbatim or summarised."></textarea>
+    <label>Strengths, preferences, communication</label>
+    <textarea class="req" placeholder="Strengths, routines, preferred name, communication method, cultural or language needs, interpreter required, etc."></textarea>
+  </section>
+
+  <!-- Supports summary -->
+  <section class="card shade-rose">
+    <h2 class="section">
+      <span class="icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b00059" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+        </svg>
+      </span>
+      Supports & Budget Summary
+    </h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:36px">#</th>
+          <th>Support category / item</th>
+          <th>Outcome/goal link</th>
+          <th>Provider(s)</th>
+          <th>Frequency / volume</th>
+          <th>Budget (if applicable)</th>
+        </tr>
+      </thead>
+      <tbody id="tbl_supports">
+        <tr>
+          <td>1</td>
+          <td><input class="req" type="text" placeholder="e.g., Community Nursing (0104)"></td>
+          <td><input class="req" type="text" placeholder="Goal this support contributes to"></td>
+          <td><input class="req" type="text" placeholder="e.g., HD HeeD + other providers"></td>
+          <td><input class="req" type="text" placeholder="e.g., 2 x RN/week × 12 weeks"></td>
+          <td><input class="req" type="text" placeholder="$ or N/A"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="actions"><button class="btn ghost" type="button" onclick="addRow('tbl_supports')">Add support</button></div>
+    <p class="hint">Note: Include non-NDIS expenses if relevant (e.g., consumables not covered) and how they’re paid.</p>
+  </section>
+
+  <!-- Risks & safeguards -->
+  <section class="card shade-amber">
+    <h2 class="section">
+      <span class="icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9c6f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
+        </svg>
+      </span>
+      Risks, Safeguards & Adjustments
+    </h2>
+    <label>Identified risks and mitigation strategies</label>
+    <textarea class="req" placeholder="E.g., Falls risk—use shower chair; Medication safety—locked box and RN blister pack checks; Behaviours of concern—PBS plan link."></textarea>
+    <label>Reasonable adjustments / accessibility needs</label>
+    <textarea class="req" placeholder="Communication aids, interpreter, mobility aids, sensory preferences, etc."></textarea>
+    <div class="ticks">
+      <label><input type="checkbox"> Personal Emergency Preparation Plan completed and filed</label>
+      <label><input type="checkbox"> Incident Management & complaints information provided</label>
+      <label><input type="checkbox"> Consent & information sharing discussed</label>
+    </div>
+  </section>
+
+  <!-- Coordination & contacts -->
+  <section class="card shade-slate">
+    <h2 class="section">
+      <span class="icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3 6 12H2"/><path d="M2 7l10 6L22 7"/>
+        </svg>
+      </span>
+      Key Contacts & Coordination
+    </h2>
+    <div class="grid grid-3">
+      <div><label>Support Coordinator</label><input type="text" class="req" placeholder="Name / Org"></div>
+      <div><label>Phone</label><input type="tel" class="req" placeholder="Phone"></div>
+      <div><label>Email</label><input type="email" class="req" placeholder="Email"></div>
+    </div>
+    <div class="grid grid-3">
+      <div><label>Plan Manager (if any)</label><input type="text" placeholder="Name / Org"></div>
+      <div><label>Phone</label><input type="tel" placeholder="Phone"></div>
+      <div><label>Email</label><input type="email" placeholder="Email"></div>
+    </div>
+    <label>Other providers & roles</label>
+    <textarea class="req" placeholder="GP, pharmacy, allied health, behaviour support practitioner, SIL/SDA provider, etc. Include contact details."></textarea>
+  </section>
+
+  <!-- Review & signatures -->
+  <section class="card shade-green">
+    <h2 class="section">
+      <span class="icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b8a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 3l5 5-5 5"/><path d="M8 21l-5-5 5-5"/><path d="M20 8H4"/>
+        </svg>
+      </span>
+      Review, Updates & Sign-off
+    </h2>
+    <div class="grid grid-3">
+      <div><label>Date prepared</label><input class="req" type="date"></div>
+      <div><label>Next review due</label><input class="req" type="date"></div>
+      <div><label>Version</label><input class="req" type="text" placeholder="e.g., v1.0"></div>
+    </div>
+    <div class="grid grid-2">
+      <div>
+        <label>Participant / Representative name</label>
+        <input class="req" type="text" placeholder="Name">
+      </div>
+      <div>
+        <label>Signature date</label>
+        <input class="req" type="date">
+      </div>
+    </div>
+    <div class="grid grid-2">
+      <div>
+        <label>HD HeeD authorised person</label>
+        <input class="req" type="text" value="HD HeeD Pty Ltd">
+      </div>
+      <div>
+        <label>Signature date</label>
+        <input class="req" type="date">
+      </div>
+    </div>
+  </section>
+
+  <div class="actions">
+    <button class="btn primary" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+</div>
+
+<script>
+  const requiredSelectors = 'input.req, textarea.req, select.req';
+  function checkField(el){
+    const val = (el.value||'').trim();
+    if(val) { el.classList.add('ok'); el.classList.remove('req'); }
+    else { el.classList.add('req'); el.classList.remove('ok'); }
+  }
+  function initRequired(){
+    document.querySelectorAll(requiredSelectors).forEach(el=>{
+      checkField(el);
+      el.addEventListener('input', ()=>checkField(el));
+      el.addEventListener('change', ()=>checkField(el));
+      el.addEventListener('blur', ()=>checkField(el));
+    });
+  }
+  document.addEventListener('DOMContentLoaded', initRequired);
+
+  function addRow(tblId){
+    const body = document.querySelector(`#${tblId} tbody`) || document.getElementById(tblId);
+    const tr = document.createElement('tr');
+    const idx = (body.querySelectorAll('tr').length||0)+1;
+    tr.innerHTML = `
+      <td>${idx}</td>
+      <td><input class="req" type="text" placeholder="Support item / category"></td>
+      <td><input class="req" type="text" placeholder="Goal link"></td>
+      <td><input class="req" type="text" placeholder="Provider(s)"></td>
+      <td><input class="req" type="text" placeholder="Frequency / volume"></td>
+      <td><input class="req" type="text" placeholder="Budget"></td>
+    `;
+    body.appendChild(tr);
+    tr.querySelectorAll('input,textarea,select').forEach(el=>{
+      el.classList.add('req'); el.classList.remove('ok');
+      el.addEventListener('input', ()=>checkField(el));
+      el.addEventListener('change', ()=>checkField(el));
+    });
+  }
+
+  window.addEventListener('beforeprint', ()=>{
+    const img = document.querySelector('header.hero img');
+    if(img && img.decode) { try { img.decode(); } catch(e){} }
+  });
+</script>
+</body>
+</html>
