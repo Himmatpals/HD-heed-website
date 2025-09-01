@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -140,12 +140,6 @@
   .modal .body{flex:1; background:#0e162e}
   .modal embed{width:100%; height:100%}
   .modal .foot{padding:10px; border-top:1px solid var(--al-line); display:flex; gap:8px; justify-content:flex-end}
-
-  /* --- doc list for Uploads step --- */
-  .doc-list{ margin:8px 0 0 18px; color:#cfe0ff }
-  .doc-list li{ margin:6px 0 }
-  .doc-list b{ color:#ffe28f }
-  .doc-privacy{ margin-top:8px; font-size:12px; color:#9fb4ff }
 </style>
 </head>
 <body>
@@ -220,6 +214,7 @@
     </div>
   </div>
 </div>
+
 <script>
 window.addEventListener('DOMContentLoaded', function(){
 
@@ -353,9 +348,12 @@ window.addEventListener('DOMContentLoaded', function(){
     bsp:{ has_bsp:null, provider:null, restrictive_practices:null, notes:null },
 
     supports:{
+      /* NEW detailed required supports */
       required:[],
       required_other:null,
       details_text:null,
+
+      /* keep goals/outcomes + legacy categories (optional) */
       core:[], capacity:[],
       core_other:null, capacity_other:null,
       goals:null, outcomes:null
@@ -399,7 +397,7 @@ window.addEventListener('DOMContentLoaded', function(){
   var nextBtn = document.getElementById("nextBtn");
   var saveExitBtn = document.getElementById("saveExitBtn");
 
-  /* ====== Step builders (compliant content) ====== */
+/* ====== Step builders (compliant content) ====== */
   var Steps = [
     { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
       build:function(m){
@@ -625,41 +623,35 @@ window.addEventListener('DOMContentLoaded', function(){
         });
 
         var sum = document.createElement('div'); sum.className="hint";
-sum.style.marginTop="6px";
-var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
-DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
-sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
-m.appendChild(sum);
-}
-},
+        sum.style.marginTop="6px";
+        var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
+        DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
+        sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
+        m.appendChild(sum);
+      }
+    },
 
-/* ===== DOCUMENTS (EMAIL REMINDERS) ===== */
-{
-  key:"uploads",
-  title:"Documents — please email them",
-  sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
-        <div class="consent-box" style="margin-top:10px">\
-          <b>What to send (simple reminder)</b>\
-          <ul>\
-            <li>Photo ID (e.g., driver licence or passport)</li>\
-            <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
-            <li>NDIS plan (latest)</li>\
-            <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
-            <li>Medication chart / current medication list (if any)</li>\
-            <li>Signed consent forms — Refer to step 13.</li>\
-          </ul>\
-        </div>',
-  build:function(m){
-    // Just a reminder; no file uploads collected here.
-    S.uploads.files = [];
-    save();
-  }
-},
+    /* ===== EMERGENCY LIAISON CONSENT (OPTIONAL) ===== */
+    { key:"consents", title:"Emergency Advocacy (liaison) consent", sub:"Separately from the documents, do you consent to HD HeeD liaising as your advocate in emergencies to coordinate safe care? (Optional)",
+      build:function(m){
+        m.appendChild(radioChips("Emergency advocacy (liaison) consent", S, "emergency_advocacy", [
+          ["Yes","Yes"],["No","No"],["Not sure","Not sure"]
+        ]));
+      }
+    },
 
+    { key:"uploads", title:"Documents — please email them", sub:"Please email all relevant documents to info@hdheed.com.au. You can proceed without attachments.",
+      build:function(m){
+        S.uploads.files = []; save();
+        var box = document.createElement('div'); box.className="inlinebox";
+        box.innerHTML = '<div style="font-weight:800; margin-bottom:6px">Document uploads are disabled</div>\
+          <p style="margin:0 0 6px">Please send all relevant documents (e.g., NDIS plan, ID, <b>Behaviour Support Plan</b>, <b>medication charts</b>, care plans, GP letters) to \
+          <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>.</p>\
+          <p class="hint" style="margin:0">You can continue the form without attachments.</p>';
+        m.appendChild(box);
+      }
+    },
 
-
-
-        
     { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
       build:function(m){ m.appendChild(renderReview()); }
     },
@@ -1003,62 +995,63 @@ m.appendChild(sum);
   function mapDaysSummary(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
 
   function sendToFormspree(){
-    // 1) Derive the three policy flags from the document acks
-    var policyAck = {
-      handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-      incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-      complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
-    };
+  // 1) Derive the three policy flags from the document acks
+  var policyAck = {
+    handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
+    incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
+    complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
+  };
 
-    // 2) Build base payload
-    var payload = {
-      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
-      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
-      bsp:S.bsp, supports:S.supports, schedule:S.schedule,
-      policy_ack: policyAck,
-      acks:S.acks, emergency_advocacy:S.emergency_advocacy,
-      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
-      _meta:{ app:"AILR", version:"v16" }
-    };
+  // 2) Build base payload
+  var payload = {
+    caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
+    living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
+    bsp:S.bsp, supports:S.supports, schedule:S.schedule,
+    policy_ack: policyAck,                 // <<— use derived flags
+    acks:S.acks, emergency_advocacy:S.emergency_advocacy,
+    submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
+    _meta:{ app:"AILR", version:"v16" }
+  };
 
-    // 3) Human-readable summaries
-    try{
-      var addr = S.participant && S.participant.address ? [
-        S.participant.address.line1, S.participant.address.line2,
-        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
-      ].filter(Boolean).join(", ") : "";
+  // 3) Human-readable summaries
+  try{
+    var addr = S.participant && S.participant.address ? [
+      S.participant.address.line1, S.participant.address.line2,
+      S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
+    ].filter(Boolean).join(", ") : "";
 
-      var contactSummary = [
-        (S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")
-      ].join("");
+    var contactSummary = [
+      (S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")
+    ].join("");
 
-      var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
-      var daysSummary     = mapDaysSummary(S.schedule.days);
+    var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
+    var windowsSummary  = mapWindowsSummary(S.schedule.windows);
+    var daysSummary     = mapDaysSummary(S.schedule.days);
 
-      payload.supports.required_summary   = requiredSummary;
-      payload.supports.details_text       = S.supports.details_text || "";
-      payload.schedule.windows_summary    = windowsSummary;
-      payload.schedule.days_summary       = daysSummary;
-      payload.participant.address_summary = addr;
-      payload.contacts.contact_summary    = contactSummary;
-    }catch(e){}
+    payload.supports.required_summary   = requiredSummary;
+    payload.supports.details_text       = S.supports.details_text || "";
+    payload.schedule.windows_summary    = windowsSummary;
+    payload.schedule.days_summary       = daysSummary;
+    payload.participant.address_summary = addr;
+    payload.contacts.contact_summary    = contactSummary;
+  }catch(e){}
 
-    // 4) Send
-    return fetch(GS_WEBAPP, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    }).then(async function(r){
-      var j = await r.json().catch(()=>({}));
-      if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
-      return j;
-    }).catch(function(){
-      // Fallback so user isn't blocked
-      return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
-        .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
-    });
-  }
+  // 4) Send
+  return fetch(GS_WEBAPP, {
+    method: "POST",
+    headers: { "Content-Type":"application/json" },
+    body: JSON.stringify(payload)
+  }).then(async function(r){
+    var j = await r.json().catch(()=>({}));
+    if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
+    return j;
+  }).catch(function(){
+    // Fallback so user isn't blocked
+    return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
+      .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
+  });
+}
+
 
   /* ====== Render & nav ====== */
   function render(){
@@ -1159,7 +1152,7 @@ m.appendChild(sum);
   catch(e){
     var stage = document.querySelector("main.stage");
     if (stage){
-      stage.innerHTML = '<div class="q">There was an error initialising the form.</div><p class="sub">If this persists, please open the page in a modern browser (Chrome/Edge/Safari ≥ 13).</p>';
+      stage.innerHTML = '<div class="q">There was an error initialising the form.</div><p class="sub">If this persists, please open the page in a modern browser (Chrome/Edge/Safari ≥ 13).<\/p>';
     }
   }
 
@@ -1167,3 +1160,4 @@ m.appendChild(sum);
 </script>
 </body>
 </html>
+
