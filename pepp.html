@@ -3,19 +3,20 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>HD HeeD — Personal Emergency Preparation Plan (Copy / Record)</title>
+<title>HD HeeD — Personal Emergency Preparation Plan (Smart)</title>
 <meta name="color-scheme" content="light only" />
 <style>
   :root{
     --brand:#6a1b9a; --accent:#8e24aa; --ink:#1a1a1a; --muted:#666c7a;
     --line:#e6e6ef; --light:#f7f4fb; --panel:#ffffff; --warn:#b00020; --softred:#ffe9ed;
+    --ok:#20a464; --okbg:#e8f7f0;
   }
   html,body{margin:0;padding:0;background:var(--light);color:var(--ink);font:15px/1.58 "Inter", Segoe UI, Roboto, Arial, sans-serif}
   .container{max-width:1040px;margin:24px auto;padding:0 16px}
   header.hero{background:linear-gradient(92deg,var(--brand),var(--accent));color:#fff;padding:20px 0;box-shadow:0 2px 10px rgba(0,0,0,.1)}
   .hero-wrap{display:flex;align-items:center;gap:16px}
   .hero img{height:72px;width:auto;border-radius:12px;background:#fff;object-fit:contain;box-shadow:0 2px 10px rgba(0,0,0,.15)}
-  .hero h1{margin:0;font-size:26px;font-weight:800;letter-spacing:.2px}
+  .hero h1{margin:0;font-size:26px;font-weight:800}
   .hero p{margin:4px 0 0;font-size:14px;opacity:.95}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 8px 28px rgba(20,16,38,.06);margin:18px 0}
   h2.section{margin:0 0 14px;font-size:20px;font-weight:800;color:var(--brand);display:flex;align-items:center;gap:10px}
@@ -33,10 +34,8 @@
   .ticks{display:flex;gap:18px;flex-wrap:wrap;margin:6px 0}
   .ticks label{display:flex;align-items:center;gap:8px;font-weight:600}
   .ticks input{transform:scale(1.1)}
-  .req{border-color:var(--warn)!important;background:var(--softred);box-shadow:0 0 0 2px rgba(176,0,32,.10)}
-  .req::placeholder{color:#b65668}
-  .ok{border-color:var(--line)!important;background:#fff;box-shadow:none}
-  .hint{font-size:13px;color:var(--muted)}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .mini{font-size:12.5px;color:var(--muted)}
   .icon{width:34px;height:34px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:#efe6f6;border:1px solid #eadcf8}
   .shade-lilac{background:#fbf7ff;border:1px solid #eadcf8}
   .shade-blue{background:#f7fbff;border:1px solid #d8e9fb}
@@ -47,10 +46,20 @@
   table{border-collapse:collapse;width:100%;margin-top:8px}
   th,td{border:1px solid var(--line);padding:10px;vertical-align:top}
   th{background:#f3e9f7;color:#3c096c;font-weight:800}
+
+  .req{border-color:var(--warn)!important;background:var(--softred)}
+  .ok{border-color:var(--line)!important;background:#fff}
+  .suggested{background:#fff8f1;border-color:#f3d3a6}
+  .review-ok{background:var(--okbg)!important;border-color:var(--ok)!important}
+
   .actions{display:flex;gap:10px;justify-content:flex-end;margin:10px 0 22px}
   .btn{appearance:none;border:none;border-radius:12px;padding:11px 16px;font-weight:800;cursor:pointer}
-  .btn.primary{background:var(--brand);color:#fff}.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--brand)}
+  .btn.primary{background:var(--brand);color:#fff}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--brand)}
   .btn.primary:hover{background:var(--accent)}
+  .row-between{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);padding:8px 10px;border-radius:999px;background:#fff}
+  .pill input{transform:scale(1.05)}
   @media print{
     body{background:#fff}.actions{display:none}.card{box-shadow:none;border:1px solid #ddd;border-radius:10px;break-inside:avoid}header.hero{box-shadow:none}
   }
@@ -61,65 +70,89 @@
   <div class="container hero-wrap">
     <img src="hd heed.jpg" alt="HD HeeD logo">
     <div>
-      <h1>Personal Emergency Preparation Plan — Copy / Record</h1>
+      <h1>Personal Emergency Preparation Plan — Copy / Record (Smart)</h1>
       <p>HD HeeD Pty Ltd • Registered NDIS Provider • Phone: 02 8630 5500 • Email: info@hdheed.com.au</p>
     </div>
   </div>
 </header>
 
 <div class="container actions">
+  <button class="btn ghost" id="applyDefaults">Apply HD HeeD Defaults</button>
   <button class="btn primary" onclick="window.print()">Print / Save as PDF</button>
 </div>
 
 <div class="container">
 
+  <!-- Smart controls -->
+  <section class="card shade-slate" id="sec_defaults">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+          </svg>
+        </span>
+        Smart Suggestions & Defaults
+      </h2>
+      <label class="pill"><input type="checkbox" id="acceptAll"> Mark all suggestions reviewed</label>
+    </div>
+    <p class="mini">Apply defaults, skim for client-specific changes, tick “Mark section reviewed” and you’re done.</p>
+  </section>
+
   <!-- Attachment / storage -->
-  <section class="card shade-lilac">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6a1b9a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21.44 11.05l-7.9 7.9a5 5 0 1 1-7.07-7.07l9.19-9.19a3.5 3.5 0 0 1 4.95 4.95l-9.19 9.19a2 2 0 0 1-2.83-2.83l7.78-7.78"/>
-        </svg>
-      </span>
-      Emergency Plan – Attachment / Storage
-    </h2>
+  <section class="card shade-lilac" id="sec_attach">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6a1b9a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.44 11.05l-7.9 7.9a5 5 0 1 1-7.07-7.07l9.19-9.19a3.5 3.5 0 0 1 4.95 4.95l-9.19 9.19a2 2 0 0 1-2.83-2.83l7.78-7.78"/>
+          </svg>
+        </span>
+        Emergency Plan – Attachment / Storage
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_attach"> Mark section reviewed</label>
+    </div>
     <div class="grid grid-2">
       <div>
         <label>Attachment status</label>
-        <select id="ep_attach" class="req">
+        <select id="ep_attach" class="req suggested">
           <option value="">Select</option>
           <option>Copy attached to this record</option>
-          <option>Stored elsewhere (specify location below)</option>
+          <option selected>Stored elsewhere (specify location below)</option>
         </select>
       </div>
       <div>
-        <label>Storage location / path (if not attached)</label>
-        <input class="req" type="text" placeholder="e.g., ShiftCare › Files › <ParticipantName> › Emergency Plan › 2025-08-12.pdf">
+        <label>Storage location / path</label>
+        <input class="req suggested" id="ep_path" value="ShiftCare › Files › <ParticipantName> › Emergency Plan › 2025-09-01 PEP.pdf">
+        <div class="hint">Use the same file name pattern every time.</div>
       </div>
     </div>
     <div>
       <label>Notes (version, who uploaded)</label>
-      <input type="text" placeholder="e.g., v2.0 uploaded by RN 2025-09-01 10:30">
+      <input class="suggested" value="Version 2.0, uploaded by RN; tested to open on mobile and desktop.">
     </div>
   </section>
 
   <!-- Participant snapshot -->
-  <section class="card shade-blue">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#145da0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="7" r="4"/><path d="M17 11a4 4 0 1 0-4-4"/><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/>
-        </svg>
-      </span>
-      Participant Snapshot
-    </h2>
+  <section class="card shade-blue" id="sec_participant">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#145da0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="7" r="4"/><path d="M17 11a4 4 0 1 0-4-4"/><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/>
+          </svg>
+        </span>
+        Participant Snapshot
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_participant"> Mark section reviewed</label>
+    </div>
     <div class="grid grid-3">
       <div><label>Participant name</label><input class="req" type="text" placeholder="Full name"></div>
-      <div><label>NDIS number</label><input class="req" type="text" placeholder="e.g., 4300 123 456"></div>
+      <div><label>NDIS number</label><input class="req" type="text" placeholder="4300 123 456"></div>
       <div><label>DOB</label><input class="req" type="date"></div>
     </div>
     <div class="grid grid-3">
-      <div><label>Primary contact (self/rep)</label><input class="req" type="text"></div>
+      <div><label>Primary contact (self/rep)</label><input class="req suggested" value="Self (Participant)"></div>
       <div><label>Phone</label><input class="req" type="tel" placeholder="04xx xxx xxx"></div>
       <div><label>Email</label><input class="req" type="email" placeholder="name@example.com"></div>
     </div>
@@ -127,9 +160,9 @@
       <div><label>Home address</label><input class="req" type="text" placeholder="Street, Suburb, State, Postcode"></div>
       <div>
         <label>Living situation</label>
-        <select class="req">
+        <select class="req suggested">
           <option value="">Select</option>
-          <option>Alone</option>
+          <option selected>Alone</option>
           <option>With family</option>
           <option>With housemates</option>
           <option>SIL / SDA</option>
@@ -140,43 +173,49 @@
   </section>
 
   <!-- Risk profile -->
-  <section class="card shade-amber">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9c6f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
-        </svg>
-      </span>
-      Risk Profile & Triggers
-    </h2>
+  <section class="card shade-amber" id="sec_risk">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9c6f00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
+          </svg>
+        </span>
+        Risk Profile & Triggers
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_risk"> Mark section reviewed</label>
+    </div>
     <label>Health conditions & critical risks</label>
-    <textarea class="req" placeholder="E.g., epilepsy, insulin-dependent diabetes, anaphylaxis, oxygen dependence, dysphagia, behaviours of concern (describe)."></textarea>
+    <textarea class="req suggested">Insulin-dependent diabetes; high falls risk; pressure injury history (stage 2); dysphagia. Carry hypo kit; RN to check skin during visits.</textarea>
     <label>Environmental risks</label>
-    <textarea class="req" placeholder="E.g., bushfire zone (RFS cat), flood plain, power outage prone, stairs, pets, weapons, chemicals."></textarea>
+    <textarea class="req suggested">Bushfire-prone LGA; power outages during summer; front stairs; large dog (secured during visits).</textarea>
     <label>Personal triggers / early warning signs</label>
-    <textarea class="req" placeholder="List signs that indicate deterioration or behaviour escalation; what helps."></textarea>
+    <textarea class="req suggested">Early confusion with infections; decreased oral intake; dizziness on standing; increased agitation in heat.</textarea>
   </section>
 
   <!-- Equipment & essentials -->
-  <section class="card shade-green">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b8a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 18V5l12-2v13"/><path d="M6 8l-3 1v11l3-1 12 2V9z"/>
-        </svg>
-      </span>
-      Life-Sustaining Equipment & Essentials
-    </h2>
+  <section class="card shade-green" id="sec_equip">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b8a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"/><path d="M6 8l-3 1v11l3-1 12 2V9z"/>
+          </svg>
+        </span>
+        Life-Sustaining Equipment & Essentials
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_equip"> Mark section reviewed</label>
+    </div>
     <table>
       <thead><tr><th style="width:36px">#</th><th>Equipment / Medication</th><th>Dependency / Priority</th><th>Power backup / duration</th><th>Storage / location</th><th>Supplier / contact</th></tr></thead>
       <tbody id="tbl_equip">
         <tr>
           <td>1</td>
-          <td><input class="req" type="text" placeholder="E.g., oxygen concentrator, PEG feeds, insulin, seizure meds"></td>
-          <td><input class="req" type="text" placeholder="Critical / High / Moderate"></td>
-          <td><input class="req" type="text" placeholder="UPS 2hrs; spare battery 4hrs; generator?"></td>
-          <td><input class="req" type="text" placeholder="Where kept; access info"></td>
-          <td><input class="req" type="text" placeholder="Company / phone / after-hours"></td>
+          <td><input class="req suggested" value="Insulin (pen sets) & glucose monitoring kit"></td>
+          <td><input class="req suggested" value="High — daily medication"></td>
+          <td><input class="req suggested" value="Battery glucometer; spare batteries 6 months"></td>
+          <td><input class="req suggested" value="Bathroom cabinet; kit in kitchen drawer"></td>
+          <td><input class="req suggested" value="Local pharmacy — 02 xxxx xxxx"></td>
         </tr>
       </tbody>
     </table>
@@ -184,224 +223,249 @@
   </section>
 
   <!-- Contacts & call tree -->
-  <section class="card shade-slate">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 7l10 6L22 7"/><path d="M22 17l-10 6-10-6"/>
-        </svg>
-      </span>
-      Emergency Contacts & Call Tree
-    </h2>
+  <section class="card shade-slate" id="sec_contacts">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 7l10 6L22 7"/><path d="M22 17l-10 6-10-6"/>
+          </svg>
+        </span>
+        Emergency Contacts & Call Tree
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_contacts"> Mark section reviewed</label>
+    </div>
     <table>
       <thead><tr><th style="width:36px">#</th><th>Name / Role</th><th>Relationship</th><th>Phone</th><th>Email</th><th>Escalation order</th></tr></thead>
       <tbody id="tbl_contacts">
         <tr>
           <td>1</td>
-          <td><input class="req" type="text" placeholder="e.g., Next of kin / Guardian"></td>
-          <td><input class="req" type="text" placeholder="Mother / Friend / SDM"></td>
+          <td><input class="req suggested" value="Next of kin — ______"></td>
+          <td><input class="req suggested" value="Family"></td>
           <td><input class="req" type="tel" placeholder="04xx xxx xxx"></td>
           <td><input class="req" type="email" placeholder="name@example.com"></td>
-          <td><input class="req" type="text" placeholder="1, 2, 3…"></td>
+          <td><input class="req suggested" value="1"></td>
         </tr>
       </tbody>
     </table>
     <div class="actions"><button class="btn ghost" type="button" onclick="addRow('tbl_contacts')">Add contact</button></div>
     <div class="ticks">
-      <label><input type="checkbox"> Participant agrees to share plan with the above contacts</label>
-      <label><input type="checkbox"> Consent recorded in file</label>
+      <label><input type="checkbox" class="suggested"> Participant agrees to share plan with the above contacts</label>
+      <label><input type="checkbox" class="suggested"> Consent recorded in file</label>
     </div>
   </section>
 
   <!-- Evacuation & shelter -->
-  <section class="card shade-blue">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#145da0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/>
-        </svg>
-      </span>
-      Evacuation, Shelter & Routes
-    </h2>
+  <section class="card shade-blue" id="sec_routes">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#145da0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/>
+          </svg>
+        </span>
+        Evacuation, Shelter & Routes
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_routes"> Mark section reviewed</label>
+    </div>
     <label>Primary evacuation route & transport plan</label>
-    <textarea class="req" placeholder="Who drives? Accessible vehicle? Meeting point? Alternative route?"></textarea>
+    <textarea class="req suggested">Neighbour drives to community centre; alternative: taxi/ambulance as needed. Keep go-bag by front door.</textarea>
     <label>Safe places / shelters</label>
-    <textarea class="req" placeholder="Neighbour, community hub, LGA refuge, hospital; include addresses."></textarea>
+    <textarea class="req suggested">Neighbour’s house two doors down; Local Council refuge at ______; nearest hospital: ______.</textarea>
     <div class="grid grid-2">
-      <div><label>Pets / service animals plan</label><input class="req" type="text" placeholder="Pet’s name, carrier, food, vet docs"></div>
-      <div><label>Go-bag location & contents</label><input class="req" type="text" placeholder="Where stored; contents (IDs, meds list, chargers, etc.)"></div>
+      <div><label>Pets / service animals plan</label><input class="req suggested" value="Dog secured; carrier & food in go-bag; vet docs inside folder."></div>
+      <div><label>Go-bag location & contents</label><input class="req suggested" value="Hall cupboard — IDs, meds list, chargers, water, snacks, torch."></div>
     </div>
   </section>
 
   <!-- Hazard-specific actions -->
-  <section class="card shade-rose">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b00059" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-      </span>
-      Hazard-Specific Actions
-    </h2>
+  <section class="card shade-rose" id="sec_hazards">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b00059" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </span>
+        Hazard-Specific Actions
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_hazards"> Mark section reviewed</label>
+    </div>
     <div class="grid grid-3">
       <div>
         <h3 class="sub">Bushfire</h3>
-        <textarea class="req" placeholder="Triggers to leave, leave early location, PPE, meds & equipment checklist."></textarea>
+        <textarea class="req suggested">Leave early trigger: Catastrophic rating. Pack go-bag, turn off gas, close windows, inform HD HeeD, go to refuge.</textarea>
       </div>
       <div>
         <h3 class="sub">Flood / Storm</h3>
-        <textarea class="req" placeholder="Sandbags, move equipment, power isolation, upstairs refuge, emergency numbers."></textarea>
+        <textarea class="req suggested">Move equipment off floor; charge phones; sandbags; avoid driving through water; call SES 132 500 if needed.</textarea>
       </div>
       <div>
         <h3 class="sub">Heat / Power Outage</h3>
-        <textarea class="req" placeholder="Cooling options, hydration schedule, power backup for life-sustaining equipment."></textarea>
+        <textarea class="req suggested">Use cooling plan; hydrate hourly; relocate to air-conditioned venue if indoor temp >30°C for 2+ hrs.</textarea>
       </div>
     </div>
     <div class="grid grid-2">
       <div>
         <h3 class="sub">Infectious Disease / Pandemic</h3>
-        <textarea class="req" placeholder="PPE stock, telehealth options, staffing contingencies, essential visitors only, isolation area."></textarea>
+        <textarea class="req suggested">Limit visitors; PPE ready; telehealth where possible; RN to screen prior to visit; isolation area arranged.</textarea>
       </div>
       <div>
         <h3 class="sub">Other Risks</h3>
-        <textarea class="req" placeholder="Violence, chemical hazard nearby, etc. List actions."></textarea>
+        <textarea class="req" placeholder="Add site-specific actions, e.g., nearby chemical plant, rail corridor, etc."></textarea>
       </div>
     </div>
   </section>
 
   <!-- Communication & accessibility -->
-  <section class="card shade-green">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b8a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a4 4 0 0 1-4 4H7l-4 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
-        </svg>
-      </span>
-      Communication & Accessibility
-    </h2>
+  <section class="card shade-green" id="sec_comm">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b8a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a4 4 0 0 1-4 4H7l-4 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+          </svg>
+        </span>
+        Communication & Accessibility
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_comm"> Mark section reviewed</label>
+    </div>
     <label>Preferred communication (everyday & in emergencies)</label>
-    <textarea class="req" placeholder="Phone, SMS, AAC, interpreter language, hearing/vision supports, plain language, Easy Read."></textarea>
+    <textarea class="req suggested">Phone/SMS preferred; plain language; confirm understanding; large print; no interpreter required.</textarea>
     <div class="ticks">
-      <label><input type="checkbox"> Interpreter required</label>
-      <label><input type="checkbox"> Easy Read materials provided</label>
-      <label><input type="checkbox"> Visual schedule / social story provided</label>
+      <label><input type="checkbox" class="suggested"> Interpreter required</label>
+      <label><input type="checkbox" class="suggested"> Easy Read materials provided</label>
+      <label><input type="checkbox" class="suggested"> Visual schedule / social story provided</label>
     </div>
   </section>
 
   <!-- Drills & training -->
-  <section class="card shade-slate">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
-        </svg>
-      </span>
-      Drills, Reviews & Responsibilities
-    </h2>
+  <section class="card shade-slate" id="sec_drills">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+          </svg>
+        </span>
+        Drills, Reviews & Responsibilities
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_drills"> Mark section reviewed</label>
+    </div>
     <div class="grid grid-3">
       <div><label>Plan created</label><input class="req" type="date"></div>
-      <div><label>Last drill / test</label><input class="req" type="date"></div>
-      <div><label>Next review due</label><input class="req" type="date"></div>
+      <div><label>Last drill / test</label><input class="req suggested" type="date" value="2025-08-01"></div>
+      <div><label>Next review due</label><input class="req suggested" type="date" value="2026-02-01"></div>
     </div>
     <label>Responsibilities (participant, family, providers)</label>
-    <textarea class="req" placeholder="Who does what during preparation, evacuation, shelter-in-place, and recovery."></textarea>
+    <textarea class="req suggested">Participant: keep go-bag ready; charge phone. Family: transport if safe. HD HeeD: activate contact tree; coordinate essential supports; update plan after event.</textarea>
     <div class="ticks">
-      <label><input type="checkbox"> Participant/rep received a copy of this plan</label>
-      <label><input type="checkbox"> Consent to share with key contacts</label>
-      <label><input type="checkbox"> Equipment lists reviewed quarterly</label>
+      <label><input type="checkbox" class="suggested"> Participant/rep received a copy of this plan</label>
+      <label><input type="checkbox" class="suggested"> Consent to share with key contacts</label>
+      <label><input type="checkbox" class="suggested"> Equipment lists reviewed quarterly</label>
     </div>
   </section>
 
   <!-- Sign-off -->
-  <section class="card shade-green">
-    <h2 class="section">
-      <span class="icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b8a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
-        </svg>
-      </span>
-      Sign-off
-    </h2>
-    <div class="grid grid-2">
-      <div>
-        <label>Participant / Representative name</label>
-        <input class="req" type="text" placeholder="Name">
-      </div>
-      <div>
-        <label>Date</label>
-        <input class="req" type="date">
-      </div>
+  <section class="card shade-green" id="sec_sign">
+    <div class="row-between">
+      <h2 class="section">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b8a3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+          </svg>
+        </span>
+        Sign-off
+      </h2>
+      <label class="pill"><input type="checkbox" data-review="sec_sign"> Mark section reviewed</label>
     </div>
     <div class="grid grid-2">
-      <div>
-        <label>HD HeeD authorised person</label>
-        <input class="req" type="text" value="HD HeeD Pty Ltd">
-      </div>
-      <div>
-        <label>Date</label>
-        <input class="req" type="date">
-      </div>
+      <div><label>Participant / Representative name</label><input class="req" type="text" placeholder="Name"></div>
+      <div><label>Date</label><input class="req" type="date"></div>
+    </div>
+    <div class="grid grid-2">
+      <div><label>HD HeeD authorised person</label><input class="req suggested" value="HD HeeD Pty Ltd"></div>
+      <div><label>Date</label><input class="req" type="date"></div>
     </div>
   </section>
 
   <div class="actions">
+    <button class="btn ghost" id="applyDefaults2">Apply HD HeeD Defaults</button>
     <button class="btn primary" onclick="window.print()">Print / Save as PDF</button>
   </div>
-
 </div>
 
 <script>
-  const requiredSelectors = 'input.req, textarea.req, select.req';
-  function checkField(el){
-    const val = (el.value||'').trim();
-    if(val) { el.classList.add('ok'); el.classList.remove('req'); }
-    else { el.classList.add('req'); el.classList.remove('ok'); }
+  const requiredSel='input.req, textarea.req, select.req';
+  function setState(el){
+    const val=(el.value||'').trim();
+    if(!val){ el.classList.add('req'); el.classList.remove('ok','review-ok'); return; }
+    if(el.classList.contains('suggested') && !el.dataset.edited && !el.classList.contains('review-ok')){
+      el.classList.add('req'); el.classList.remove('ok'); return;
+    }
+    el.classList.remove('req'); el.classList.add('ok');
   }
-  function initRequired(){
-    document.querySelectorAll(requiredSelectors).forEach(el=>{
-      checkField(el);
-      el.addEventListener('input', ()=>checkField(el));
-      el.addEventListener('change', ()=>checkField(el));
-      el.addEventListener('blur', ()=>checkField(el));
+  function bind(el){ ['input','change','blur'].forEach(ev=>el.addEventListener(ev,()=>{el.dataset.edited="1"; setState(el);})); }
+  function init(){
+    document.querySelectorAll(requiredSel).forEach(el=>{ setState(el); bind(el); });
+    document.querySelectorAll('[data-review]').forEach(cb=>{
+      cb.addEventListener('change', ()=>{
+        const secId=cb.getAttribute('data-review');
+        document.querySelectorAll('#'+secId+' .suggested').forEach(f=>{
+          f.classList.add('review-ok'); f.classList.remove('req'); f.dataset.edited="1";
+        });
+      });
+    });
+    document.getElementById('acceptAll')?.addEventListener('change',()=>{
+      document.querySelectorAll('.suggested').forEach(f=>{
+        f.classList.add('review-ok'); f.classList.remove('req'); f.dataset.edited="1";
+      });
     });
   }
-  document.addEventListener('DOMContentLoaded', initRequired);
+  document.addEventListener('DOMContentLoaded', init);
 
+  // Defaults
+  function applyDefaults(){
+    const set=(sel,v)=>{const el=document.querySelector(sel); if(!el) return; el.value=v; el.classList.add('suggested'); el.dataset.edited=""; setState(el);};
+    set('#ep_attach','Stored elsewhere (specify location below)');
+    set('#ep_path','ShiftCare › Files › <ParticipantName> › Emergency Plan › 2025-09-01 PEP.pdf');
+    // snapshot defaults
+    const pcs=document.querySelectorAll('#sec_participant .suggested'); pcs.forEach(e=>{e.dataset.edited=""; setState(e);});
+    // risk defaults already present; mark them as suggested
+    document.querySelectorAll('#sec_risk .suggested, #sec_routes .suggested, #sec_drills .suggested, #sec_equip .suggested, #sec_contacts .suggested, #sec_comm .suggested, #sec_sign .suggested')
+      .forEach(e=>{ e.dataset.edited=""; setState(e); });
+  }
+  document.getElementById('applyDefaults')?.addEventListener('click', applyDefaults);
+  document.getElementById('applyDefaults2')?.addEventListener('click', applyDefaults);
+
+  // Row helpers
   function addRow(id){
-    const body = document.getElementById(id).querySelector('tbody');
-    const tr = document.createElement('tr');
-    const idx = body.querySelectorAll('tr').length + 1;
+    const body=document.getElementById(id).querySelector('tbody');
+    const tr=document.createElement('tr');
+    const idx=body.querySelectorAll('tr').length+1;
     if(id==='tbl_equip'){
-      tr.innerHTML = `
+      tr.innerHTML=`
         <td>${idx}</td>
-        <td><input class="req" type="text" placeholder="Equipment / Medication"></td>
-        <td><input class="req" type="text" placeholder="Critical / High / Moderate"></td>
-        <td><input class="req" type="text" placeholder="Backup / duration"></td>
-        <td><input class="req" type="text" placeholder="Storage / location"></td>
-        <td><input class="req" type="text" placeholder="Supplier / contact"></td>
-      `;
+        <td><input class="req" placeholder="Equipment / Medication"></td>
+        <td><input class="req" placeholder="Critical / High / Moderate"></td>
+        <td><input class="req" placeholder="Backup / duration"></td>
+        <td><input class="req" placeholder="Storage / location"></td>
+        <td><input class="req" placeholder="Supplier / contact"></td>`;
     } else if(id==='tbl_contacts'){
-      tr.innerHTML = `
+      tr.innerHTML=`
         <td>${idx}</td>
-        <td><input class="req" type="text" placeholder="Name / Role"></td>
-        <td><input class="req" type="text" placeholder="Relationship"></td>
+        <td><input class="req" placeholder="Name / Role"></td>
+        <td><input class="req" placeholder="Relationship"></td>
         <td><input class="req" type="tel" placeholder="Phone"></td>
         <td><input class="req" type="email" placeholder="Email"></td>
-        <td><input class="req" type="text" placeholder="Order"></td>
-      `;
+        <td><input class="req" placeholder="Order"></td>`;
     }
     body.appendChild(tr);
-    tr.querySelectorAll('input,textarea,select').forEach(el=>{
-      el.classList.add('req'); el.classList.remove('ok');
-      el.addEventListener('input', ()=>checkField(el));
-      el.addEventListener('change', ()=>checkField(el));
-    });
+    tr.querySelectorAll('input').forEach(el=>{ bind(el); setState(el); });
   }
 
-  window.addEventListener('beforeprint', ()=>{
-    const img = document.querySelector('header.hero img');
-    if(img && img.decode) { try { img.decode(); } catch(e){} }
-  });
+  // Ensure logo prints
+  window.addEventListener('beforeprint', ()=>{ const img=document.querySelector('header.hero img'); if(img?.decode){ try{img.decode();}catch(e){} } });
 </script>
 </body>
 </html>
