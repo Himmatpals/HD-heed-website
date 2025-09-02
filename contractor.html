@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HD HeeD — Simple Contractor Agreement + Policy Acknowledgements</title>
+<meta name="color-scheme" content="light only" />
+<style>
+  :root{--brand:#6a1b9a;--accent:#8e24aa;--ink:#1a1a1a;--muted:#666c7a;--line:#e6e6ef;--light:#f7f4fb;--panel:#fff;--warn:#b00020;--softred:#ffe9ed;}
+  html,body{margin:0;padding:0;background:var(--light);color:var(--ink);font:15px/1.58 "Inter", Segoe UI, Roboto, Arial, sans-serif}
+  .container{max-width:1040px;margin:24px auto;padding:0 16px}
+  header.hero{background:linear-gradient(92deg,var(--brand),var(--accent));color:#fff;padding:20px 0;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+  .hero-wrap{display:flex;align-items:center;gap:16px}
+  .hero img{height:72px;width:auto;border-radius:12px;background:#fff;object-fit:contain;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+  .hero h1{margin:0;font-size:26px;font-weight:800;letter-spacing:.2px}
+  .hero p{margin:4px 0 0;font-size:14px;opacity:.95}
+  .actions{display:flex;gap:10px;justify-content:flex-end;margin:10px 0 22px}
+  .btn{appearance:none;border:none;border-radius:12px;padding:11px 16px;font-weight:800;cursor:pointer}
+  .btn.primary{background:var(--brand);color:#fff}.btn.primary:hover{background:var(--accent)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 8px 28px rgba(20,16,38,.06);margin:18px 0}
+  h2.section{margin:0 0 14px;font-size:20px;font-weight:800;color:var(--brand);display:flex;align-items:center;gap:10px}
+  h3.sub{margin:16px 0 8px;font-size:16px;font-weight:700;color:var(--accent)}
+  p,li{color:var(--ink)} ul,ol{margin:6px 0 12px 22px}
+  .grid{display:grid;gap:14px}.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr 1fr 1fr}
+  label{display:block;font-weight:700;margin:10px 0 6px}
+  input[type="text"],textarea,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:15px;transition:.2s}
+  textarea{min-height:96px;resize:vertical}
+  /* required styling */
+  .req{border-color:var(--warn)!important;background:var(--softred);} .req::placeholder{color:#b65668}
+  .ok{border-color:var(--line)!important;background:#fff;}
+  .ticks{display:flex;gap:18px;flex-wrap:wrap;margin:6px 0}.ticks label{display:flex;align-items:center;gap:8px;font-weight:600}.ticks input{transform:scale(1.15)}
+  .sig{height:58px;border-bottom:2px solid #222;margin:12px 0}
+  /* Print-friendly lines for handwriting */
+  .printline{display:block;border-bottom:2px solid #222;height:28px;border-radius:0;background:transparent}
+  .asline input[type="text"]{border:0;border-bottom:2px solid #222;border-radius:0;background:transparent}
+  /* Avoid browser date UI/format by using text inputs, no placeholders like dd/mm/yyyy */
+  .narrow{max-width:240px}
+  /* colors for sections */
+  .shade-lilac{background:#fbf7ff;border:1px solid #eadcf8}
+  .shade-blue{background:#f7fbff;border:1px solid #d8e9fb}
+  .shade-green{background:#f9fff9;border:1px solid #d7f2da}
+  .shade-rose{background:#fff8fb;border:1px solid #f6cfe0}
+  .shade-amber{background:#fffef7;border:1px solid #f3e6b3}
+  .shade-sand{background:#fffdf9;border:1px solid #f2dfc4}
+  .shade-violet{background:#f7f7ff;border:1px solid #d6d6ff}
+  @media print{
+    body{background:#fff}
+    .actions{display:none}
+    .card{box-shadow:none;border:1px solid #ddd;border-radius:10px;break-inside:avoid}
+    header.hero{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="container hero-wrap">
+    <img src="hd heed.jpg" alt="HD HeeD logo">
+    <div>
+      <h1>HD HeeD — Simple Contractor Agreement + Policy Acknowledgements</h1>
+      <p>Registered NDIS Provider • ABN 47 665 228 768 • Phone: 02 8630 5500 • Email: info@hdheed.com.au</p>
+    </div>
+  </div>
+</header>
+
+<div class="container actions">
+  <button class="btn primary" onclick="window.print()">Download (PDF)</button>
+</div>
+
+<div class="container">
+
+  <!-- Simple Agreement -->
+  <section class="card shade-lilac">
+    <h2 class="section">Parties</h2>
+    <div class="grid grid-2">
+      <div>
+        <label>Provider (Company)</label>
+        <input class="req" type="text" value="HD HeeD Pty Ltd">
+      </div>
+      <div>
+        <label>Worker Full Name</label>
+        <input class="req" type="text" placeholder="">
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <div>
+        <label>ABN (if contractor)</label>
+        <input class="req" type="text" placeholder="">
+      </div>
+      <div>
+        <label>Role/Position</label>
+        <input class="req" type="text" placeholder="e.g., Support Worker (Personal Care)">
+      </div>
+      <div>
+        <label>Start Date</label>
+        <input class="req narrow" type="text" placeholder="" aria-label="Start Date (handwrite if printing)">
+        <span class="printline" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="ticks">
+      <label><input type="checkbox"> Employee</label>
+      <label><input type="checkbox"> Contractor (independent)</label>
+    </div>
+  </section>
+
+  <section class="card shade-blue">
+    <h2 class="section">Engagement (Short Form)</h2>
+    <ul>
+      <li>The Worker provides personal care and related supports to HD HeeD participants under the NDIS.</li>
+      <li>The Worker will: hold a valid NDIS Worker Screening Check; comply with the NDIS Code of Conduct; and follow HD HeeD policies (Incident &amp; Complaints, Privacy, Safeguarding, WHS).</li>
+      <li>Payment: at the agreed rate below, invoiced (contractor) or payroll (employee).</li>
+      <li>Either party may end this arrangement with <span style="color:red;font-weight:bold">[1–2 weeks]</span> notice. Serious misconduct/compliance breaches may lead to immediate termination.</li>
+      <li>Confidentiality applies during and after the engagement. Records and property are returned on exit.</li>
+    </ul>
+    <div class="grid grid-3">
+      <div><label>Rate/Fees</label><input class="req" type="text" placeholder="e.g., $X/hour (ex/incl GST)"></div>
+      <div><label>GST</label><input class="req" type="text" placeholder="Registered? Yes/No"></div>
+      <div><label>Invoice/Payroll Cycle</label><input class="req" type="text" placeholder="e.g., Fortnightly on Fridays"></div>
+    </div>
+  </section>
+
+  <section class="card shade-green">
+    <h2 class="section">Insurance &amp; Credentials</h2>
+    <div class="ticks">
+      <label><input type="checkbox"> Covered under Provider insurance</label>
+      <label><input type="checkbox"> Holds own insurance (contractor)</label>
+    </div>
+    <div class="grid grid-3">
+      <div><label>NDIS Worker Screening (ID)</label><input class="req" type="text" placeholder=""></div>
+      <div><label>WWCC (if applicable)</label><input class="req" type="text" placeholder=""></div>
+      <div><label>Police Check</label><input class="req" type="text" placeholder=""></div>
+    </div>
+    <div class="grid grid-3">
+      <div><label>First Aid (Expiry)</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+      <div><label>CPR (Expiry)</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+      <div><label>Vaccinations</label><input class="req" type="text" placeholder="COVID-19 / Influenza — dates"><span class="printline" aria-hidden="true"></span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section">Agreement Signatures</h2>
+    <div class="grid grid-2">
+      <div class="card" style="margin:0">
+        <p><b>Provider’s authorised person</b></p>
+        <div class="sig"></div>
+        <div class="grid grid-2">
+          <div><label>Name</label><input class="req" type="text" value="HD HeeD Pty Ltd"></div>
+          <div><label>Date</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+        </div>
+      </div>
+      <div class="card" style="margin:0">
+        <p><b>Worker (Contractor/Employee)</b></p>
+        <div class="sig"></div>
+        <div class="grid grid-2">
+          <div><label>Full Name</label><input class="req" type="text" placeholder=""></div>
+          <div><label>Date</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Policy Acknowledgements -->
+  <section class="card shade-rose">
+    <h2 class="section">Policy Acknowledgements (Sign Each)</h2>
+    <p>By signing each section below, the Worker confirms they have read, understood, and will comply with the policy.</p>
+  </section>
+
+  <section class="card shade-lilac">
+    <h2 class="section">NDIS Code of Conduct</h2>
+    <ul>
+      <li>Respect rights and preferences; support self-determination.</li>
+      <li>Respect privacy; keep information confidential.</li>
+      <li>Provide safe, competent supports within scope; act with integrity.</li>
+      <li>Raise/act on concerns; prevent and respond to abuse/neglect.</li>
+      <li>No higher prices for NDIS participants for the same goods/services.</li>
+    </ul>
+    <div class="grid grid-3">
+      <div><label>Worker Name</label><input class="req" type="text" placeholder=""></div>
+      <div><label>Signature</label><div class="sig"></div></div>
+      <div><label>Date</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+    </div>
+  </section>
+
+  <section class="card shade-blue">
+    <h2 class="section">Incident Reporting &amp; Complaints</h2>
+    <ul>
+      <li>Report incidents/injuries/near-misses immediately and document.</li>
+      <li>Escalate reportable incidents without delay; call emergency services first if needed.</li>
+      <li>Support complaints without reprisal; cooperate with investigations; keep confidentiality.</li>
+    </ul>
+    <div class="grid grid-3">
+      <div><label>Worker Name</label><input class="req" type="text" placeholder=""></div>
+      <div><label>Signature</label><div class="sig"></div></div>
+      <div><label>Date</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+    </div>
+  </section>
+
+  <section class="card shade-sand">
+    <h2 class="section">Privacy &amp; Confidentiality</h2>
+    <ul>
+      <li>Follow Privacy Act 1988 (Cth) and HD HeeD Privacy Policy.</li>
+      <li>Share information only with consent or legal authority; secure records; report breaches.</li>
+      <li>Return all records on exit; confidentiality continues after engagement.</li>
+    </ul>
+    <div class="grid grid-3">
+      <div><label>Worker Name</label><input class="req" type="text" placeholder=""></div>
+      <div><label>Signature</label><div class="sig"></div></div>
+      <div><label>Date</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+    </div>
+  </section>
+
+  <section class="card shade-green">
+    <h2 class="section">Safeguarding &amp; Duty of Care</h2>
+    <ul>
+      <li>Identify risks and take reasonable steps to prevent harm; respect dignity of risk.</li>
+      <li>Maintain professional boundaries; never abuse or exploit.</li>
+      <li>Report suspected abuse/neglect immediately; work within training/competency.</li>
+    </ul>
+    <div class="grid grid-3">
+      <div><label>Worker Name</label><input class="req" type="text" placeholder=""></div>
+      <div><label>Signature</label><div class="sig"></div></div>
+      <div><label>Date</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+    </div>
+  </section>
+
+  <section class="card shade-violet">
+    <h2 class="section">Workplace Health &amp; Safety (WHS)</h2>
+    <ul>
+      <li>Take reasonable care of own and others’ safety; be fit for work.</li>
+      <li>Follow procedures/training; use PPE correctly.</li>
+      <li>Report hazards, incidents, injuries, near-misses promptly.</li>
+    </ul>
+    <div class="grid grid-3">
+      <div><label>Worker Name</label><input class="req" type="text" placeholder=""></div>
+      <div><label>Signature</label><div class="sig"></div></div>
+      <div><label>Date</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+    </div>
+  </section>
+
+  <section class="card shade-amber">
+    <h2 class="section">Consolidated Signature — All Policy Acknowledgements</h2>
+    <p>By signing below, I confirm I have read and understood all policies above and agree to comply with them.</p>
+    <div class="grid grid-2">
+      <div class="card" style="margin:0">
+        <p><b>Worker</b></p>
+        <div class="sig"></div>
+        <div class="grid grid-2">
+          <div><label>Full Name</label><input class="req" type="text" placeholder=""></div>
+          <div><label>Date</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+        </div>
+      </div>
+      <div class="card" style="margin:0">
+        <p><b>Provider Representative</b></p>
+        <div class="sig"></div>
+        <div class="grid grid-2">
+          <div><label>Name</label><input class="req" type="text" value="HD HeeD Pty Ltd"></div>
+          <div><label>Date</label><input class="req narrow" type="text" placeholder=""><span class="printline" aria-hidden="true"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Required fields toggle red until filled
+  const requiredSelectors='input.req, textarea.req, select.req';
+  function checkField(el){const v=(el.value||'').trim(); if(v){el.classList.add('ok');el.classList.remove('req');} else {el.classList.add('req');el.classList.remove('ok');}}
+  document.addEventListener('DOMContentLoaded', ()=>{
+    document.querySelectorAll(requiredSelectors).forEach(el=>{
+      checkField(el); el.addEventListener('input',()=>checkField(el)); el.addEventListener('change',()=>checkField(el));
+    });
+  });
+</script>
+</body>
+</html>
