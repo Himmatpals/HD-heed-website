@@ -1,24 +1,479 @@
-<ul>
-  <li><input type="checkbox"> NDIS Worker Screening Check – Clearance received (Reference #: <span style="color:red;">[NDIS Check ID]</span>)</li>
-  <li><input type="checkbox"> Working With Children Check – Verified (WWCC No.: <span style="color:red;">[WWCC Number]</span>, Expiry: <span style="color:red;">[Date]</span>)</li>
-  <li><input type="checkbox"> National Police Check – provided (Date of issue: <span style="color:red;">[Date]</span>)</li>
-  <li><input type="checkbox"> First Aid Certificate – copy received (Expiry: <span style="color:red;">[Date]</span>)</li>
-  <li><input type="checkbox"> CPR Certificate – current (Expiry: <span style="color:red;">[Date]</span>)</li>
-  <li><input type="checkbox"> COVID-19 Vaccination evidence – sighted (Date of last dose: <span style="color:red;">[Date]</span>)</li>
-  <li><input type="checkbox"> Other required vaccinations – <span style="color:red;">[List if any, e.g. Flu]</span></li>
-  <li><input type="checkbox"> NDIS Worker Orientation Module – completed (Certificate dated: <span style="color:red;">[Date]</span>)</li>
-  <li><input type="checkbox"> Induction policy forms signed:
-    <ul>
-      <li>NDIS Code of Conduct <input type="checkbox"></li>
-      <li>Incident/Complaints <input type="checkbox"></li>
-      <li>Privacy/Confidentiality <input type="checkbox"></li>
-      <li>Safeguarding/Duty of Care <input type="checkbox"></li>
-      <li>WHS <input type="checkbox"></li>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HD HeeD — Editable Compliance Checklist</title>
+<meta name="color-scheme" content="light only" />
+<style>
+  :root{
+    --brand:#6a1b9a; --accent:#8e24aa; --ink:#1a1a1a; --muted:#666c7a;
+    --line:#e6e6ef; --light:#f7f4fb; --panel:#ffffff; --warn:#b00020; --softred:#ffe9ed;
+    --ok:#111;
+  }
+  html,body{margin:0;padding:0;background:var(--light);color:var(--ink);font:15px/1.58 "Inter", Segoe UI, Roboto, Arial, sans-serif}
+  .container{max-width:980px;margin:24px auto;padding:0 16px}
+
+  /* Header */
+  header.hero{background:linear-gradient(92deg,var(--brand),var(--accent));color:#fff;padding:20px 0;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+  .hero-wrap{display:flex;align-items:center;gap:16px}
+  .hero img{height:72px;width:auto;border-radius:12px;background:#fff;object-fit:contain;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+  .hero h1{margin:0;font-size:24px;font-weight:800}
+  .hero p{margin:4px 0 0;font-size:13px;opacity:.95}
+
+  /* Card */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 8px 28px rgba(20,16,38,.06);margin:18px 0}
+  .shade-slate{background:#fffefe;border:1px solid #ececec}
+
+  /* Title (editable) */
+  .title-edit{
+    width:100%;border:none;border-bottom:2px solid var(--line);
+    font-size:20px;font-weight:800;padding:8px 4px;margin:4px 0 10px;background:transparent;outline:none
+  }
+
+  /* Toolbar & buttons */
+  .actions{display:flex;gap:10px;justify-content:flex-end;margin:12px 0 22px}
+  .btn{appearance:none;border:none;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+  .btn.primary{background:var(--brand);color:#fff}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--brand)}
+  .btn.primary:hover{background:var(--accent)}
+  .minirow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 10px}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);padding:8px 10px;border-radius:999px;background:#fff;font-weight:700}
+
+  /* Checklist */
+  ul.checklist{list-style:none;padding:0;margin:0}
+  li.item{
+    display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line);
+    border-radius:12px;margin:10px 0;background:#fff
+  }
+  .check{margin-top:3px}
+  input[type="checkbox"]{transform:scale(1.2)}
+  .text{flex:1;min-height:20px}
+  .text[contenteditable="true"]{outline:none}
+  .req{color:var(--warn);font-style:italic;background:var(--softred);padding:0 2px;border-radius:4px}
+  .oktext{color:var(--ok);font-style:normal;background:transparent}
+  .muted{color:var(--muted);font-size:13px}
+
+  /* Item controls */
+  .controls{display:flex;gap:6px}
+  .iconbtn{
+    background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px
+  }
+  .iconbtn:hover{box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .icon{width:16px;height:16px;stroke:#6a1b9a}
+
+  /* Sublist */
+  ul.sub{list-style:none;margin:8px 0 0 28px;padding:0}
+  ul.sub li.item{margin:6px 0;padding:10px}
+
+  /* Print */
+  @media print{
+    body{background:#fff}
+    .actions,.iconbtn,.pill,.minirow{display:none!important}
+    .card{box-shadow:none;border:1px solid #ddd;border-radius:10px;break-inside:avoid}
+    header.hero{box-shadow:none}
+    .title-edit{border-color:transparent}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container hero-wrap">
+    <img src="hd heed.jpg" alt="HD HeeD logo">
+    <div>
+      <h1>HD HeeD — Editable Checklist</h1>
+      <p>ABN 47 665 228 768 • Phone: 02 8630 5500 • Email: info@hdheed.com.au</p>
+    </div>
+  </div>
+</header>
+
+<div class="container actions">
+  <button class="btn ghost" id="addTop">Add item</button>
+  <button class="btn primary" onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="container">
+  <section class="card shade-slate">
+    <input class="title-edit" id="title" value="Worker / Contractor Compliance Checklist" />
+
+    <div class="minirow">
+      <span class="pill">Tip: Click any text to edit. Use ▴/▾ to reorder, ➕ to add sub-items, 🗑 to delete.</span>
+    </div>
+
+    <ul id="list" class="checklist">
+      <!-- Main items (from your list) -->
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          NDIS Worker Screening Check – Clearance received (Reference #: <span class="req">[NDIS Check ID]</span>)
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up" aria-label="Move up">
+            <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M12 5l-7 7h14l-7-7z"/></svg>
+          </button>
+          <button class="iconbtn" data-down title="Move down" aria-label="Move down">
+            <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M12 19l7-7H5l7 7z"/></svg>
+          </button>
+          <button class="iconbtn" data-addsub title="Add sub-item" aria-label="Add sub-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button class="iconbtn" data-del title="Delete" aria-label="Delete">
+            <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg>
+          </button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          Working With Children Check – Verified (WWCC No.: <span class="req">[WWCC Number]</span>, Expiry: <span class="req">[Date]</span>)
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          National Police Check – provided (Date of issue: <span class="req">[Date]</span>)
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          First Aid Certificate – copy received (Expiry: <span class="req">[Date]</span>)
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          CPR Certificate – current (Expiry: <span class="req">[Date]</span>)
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          COVID-19 Vaccination evidence – sighted (Date of last dose: <span class="req">[Date]</span>)
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          Other required vaccinations – <span class="req">[List if any, e.g. Flu]</span>
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          NDIS Worker Orientation Module – completed (Certificate dated: <span class="req">[Date]</span>)
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          Induction policy forms signed:
+          <ul class="sub">
+            <li class="item">
+              <div class="check"><input type="checkbox"></div>
+              <div class="text" contenteditable="true">NDIS Code of Conduct</div>
+              <div class="controls">
+                <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+                <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+                <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+              </div>
+            </li>
+            <li class="item">
+              <div class="check"><input type="checkbox"></div>
+              <div class="text" contenteditable="true">Incident/Complaints</div>
+              <div class="controls">
+                <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+                <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+                <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+              </div>
+            </li>
+            <li class="item">
+              <div class="check"><input type="checkbox"></div>
+              <div class="text" contenteditable="true">Privacy/Confidentiality</div>
+              <div class="controls">
+                <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+                <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+                <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+              </div>
+            </li>
+            <li class="item">
+              <div class="check"><input type="checkbox"></div>
+              <div class="text" contenteditable="true">Safeguarding/Duty of Care</div>
+              <div class="controls">
+                <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+                <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+                <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+              </div>
+            </li>
+            <li class="item">
+              <div class="check"><input type="checkbox"></div>
+              <div class="text" contenteditable="true">WHS</div>
+              <div class="controls">
+                <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+                <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+                <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+              </div>
+            </li>
+          </ul>
+          <div class="muted">Use “➕ Add sub-item” on the parent row to include more induction items.</div>
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          Photo ID (e.g. Driver’s License or Passport) – copy taken
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          Proof of qualifications (e.g. Certificate III in Individual Support) – verified <span class="req">[Yes/No/N/A]</span>
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          Proof of right to work in Australia (Citizenship/Visa) – verified <span class="req">[Yes/No]</span>
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          Bank details and tax/super forms completed (for employees) OR ABN and bank details on file (for contractors)
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
+
+      <li class="item">
+        <div class="check"><input type="checkbox"></div>
+        <div class="text" contenteditable="true">
+          Vehicle license and insurance provided (if worker will transport participants) <span class="req">[Yes/No/N/A]</span>
+        </div>
+        <div class="controls">
+          <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+          <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+          <button class="iconbtn" data-addsub title="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+        </div>
+      </li>
     </ul>
-  </li>
-  <li><input type="checkbox"> Photo ID (e.g. Driver’s License or Passport) – copy taken</li>
-  <li><input type="checkbox"> Proof of qualifications (e.g. Certificate III in Individual Support) – verified <span style="color:red;">[Yes/No/N/A]</span></li>
-  <li><input type="checkbox"> Proof of right to work in Australia (Citizenship/Visa) – verified <span style="color:red;">[Yes/No]</span></li>
-  <li><input type="checkbox"> Bank details and tax/super forms completed (for employees) OR ABN and bank details on file (for contractors)</li>
-  <li><input type="checkbox"> Vehicle license and insurance provided (if worker will transport participants) <span style="color:red;">[Yes/No/N/A]</span></li>
-</ul>
+
+    <div class="actions">
+      <button class="btn ghost" id="addBottom">Add item</button>
+      <button class="btn primary" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Utility: create a checklist item
+  function createItem(text="New checklist item"){
+    const li=document.createElement('li'); li.className='item';
+    li.innerHTML=`
+      <div class="check"><input type="checkbox"></div>
+      <div class="text" contenteditable="true">${text}</div>
+      <div class="controls">
+        <button class="iconbtn" data-up title="Move up" aria-label="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+        <button class="iconbtn" data-down title="Move down" aria-label="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+        <button class="iconbtn" data-addsub title="Add sub-item" aria-label="Add sub-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button class="iconbtn" data-del title="Delete" aria-label="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+      </div>`;
+    return li;
+  }
+  function createSubItem(text="New sub-item"){
+    const li=document.createElement('li'); li.className='item';
+    li.innerHTML=`
+      <div class="check"><input type="checkbox"></div>
+      <div class="text" contenteditable="true">${text}</div>
+      <div class="controls">
+        <button class="iconbtn" data-up title="Move up"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg></button>
+        <button class="iconbtn" data-down title="Move down"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l7-7H5l7 7z"/></svg></button>
+        <button class="iconbtn" data-del title="Delete"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6v12m8-12v12M10 6l1-2h2l1 2"/></svg></button>
+      </div>`;
+    return li;
+  }
+
+  // Event delegation for controls
+  const list=document.getElementById('list');
+
+  function findItem(btn){ return btn.closest('li.item'); }
+
+  list.addEventListener('click',(e)=>{
+    const btn=e.target.closest('button.iconbtn'); if(!btn) return;
+    const li=findItem(btn); if(!li) return;
+
+    // Move up
+    if(btn.hasAttribute('data-up')){
+      const prev=li.previousElementSibling;
+      if(prev) li.parentNode.insertBefore(li, prev);
+    }
+
+    // Move down
+    if(btn.hasAttribute('data-down')){
+      const next=li.nextElementSibling;
+      if(next) li.parentNode.insertBefore(next, li);
+    }
+
+    // Delete
+    if(btn.hasAttribute('data-del')){
+      li.parentNode.removeChild(li);
+    }
+
+    // Add sub-item
+    if(btn.hasAttribute('data-addsub')){
+      // find or create sublist right after editable text within this LI
+      let sub=li.querySelector('ul.sub');
+      if(!sub){
+        sub=document.createElement('ul'); sub.className='sub';
+        const textDiv=li.querySelector('.text');
+        textDiv.insertAdjacentElement('afterend', sub);
+      }
+      sub.appendChild(createSubItem('New sub-item'));
+    }
+  });
+
+  // Add item buttons
+  document.getElementById('addTop').addEventListener('click',()=>{
+    const first=list.firstElementChild;
+    const li=createItem('New checklist item');
+    list.insertBefore(li, first);
+  });
+  document.getElementById('addBottom').addEventListener('click',()=>{
+    list.appendChild(createItem('New checklist item'));
+  });
+
+  // Placeholder color logic: turn red spans black when edited
+  function refreshReqSpans(root=document){
+    root.querySelectorAll('.req').forEach(span=>{
+      span.contentEditable = "true";
+      span.addEventListener('input',()=>{
+        if(span.textContent.trim()!==''){
+          span.classList.remove('req'); span.classList.add('oktext');
+        }else{
+          span.classList.add('req'); span.classList.remove('oktext');
+        }
+      });
+    });
+  }
+  refreshReqSpans();
+
+  // Also trigger on new items/sub-items
+  const observer=new MutationObserver((muts)=>{
+    muts.forEach(m=>{
+      m.addedNodes.forEach(n=>{
+        if(n.nodeType===1){ refreshReqSpans(n); }
+      });
+    });
+  });
+  observer.observe(list,{childList:true,subtree:true});
+
+  // Keyboard helpers: Enter = new item, Shift+Enter = line break
+  list.addEventListener('keydown',(e)=>{
+    const editable=e.target.closest('.text[contenteditable="true"]');
+    if(!editable) return;
+    if(e.key==='Enter' && !e.shiftKey){
+      e.preventDefault();
+      // New sibling item
+      const parentItem=editable.closest('li.item');
+      const parentUL=parentItem.parentElement;
+      const newNode=(parentUL.classList.contains('sub'))? createSubItem('New sub-item') : createItem('New checklist item');
+      parentUL.insertBefore(newNode, parentItem.nextElementSibling);
+      // Focus new
+      const nt=newNode.querySelector('.text');
+      nt.focus();
+      document.execCommand && document.execCommand('selectAll', false, null); // legacy selection
+    }
+  });
+
+  // Ensure logo loads before print
+  window.addEventListener('beforeprint', ()=>{
+    const img=document.querySelector('header.hero img');
+    if(img && img.decode){ try{img.decode();}catch(e){} }
+  });
+</script>
+</body>
+</html>
