@@ -7,154 +7,163 @@
   <meta name="color-scheme" content="light only" />
   <style>
     :root{
-      --brand:#6a1b9a;           /* HD HeeD purple */
-      --accent:#9c27b0;          /* Accent purple */
-      --ink:#111;
-      --muted:#555;
-      --bg:#faf8fc;
-      --border:#e5d8f2;
-      --chip:#ede7f6;
+      --purple:#6a1b9a;
+      --ink:#111111;
+      --muted:#4a4a4a;
+      --rule:#d9d9d9;
+      --paper:#ffffff;
     }
     *{box-sizing:border-box}
+    html, body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+      background:var(--paper);
       color:var(--ink);
-      background:var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      line-height:1.45;
+      font-size:14.5px;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
-    .wrap{
-      max-width: 900px;
-      margin: 24px auto;
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:18px;
-      box-shadow: 0 10px 28px rgba(0,0,0,.06);
-      overflow:hidden;
+    .page{max-width: 900px; margin: 28px auto; padding: 0 16px 28px;}
+    /* Header */
+    .mast{
+      position: relative;
+      margin: 0 0 18px;
+      padding-top: 14px;
     }
-    header{
-      background:linear-gradient(135deg, var(--brand), var(--accent));
-      color:#fff;
-      padding:16px 20px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      flex-wrap:wrap;
+    .strip{
+      height: 60px;
+      background: var(--purple);
+      border-radius: 10px;
+    }
+    .brandbar{
+      position: relative;
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 0 14px;
+      margin-top: -40px;
     }
     .brand{
       display:flex; align-items:center; gap:14px;
     }
     .brand img{
-      width:56px; height:56px; object-fit:contain; background:#fff; border-radius:12px; padding:6px;
-      box-shadow: 0 4px 10px rgba(0,0,0,.12);
+      width:64px; height:64px; object-fit:cover; border-radius:12px;
+      background:#fff; box-shadow: 0 6px 18px rgba(0,0,0,.2);
     }
-    .title{
-      font-size:20px; font-weight:800; letter-spacing:.2px;
+    .brandname{
+      color:#fff; font-weight:900; letter-spacing:.3px; font-size:22px;
+      text-shadow: 0 1px 0 rgba(0,0,0,.12);
     }
-    .meta{
-      font-size:13px; line-height:1.35; text-align:right;
+    .contact{
+      color:#fff; font-size:13px; line-height:1.35; text-align:right;
     }
-    .chip{
-      display:inline-block; padding:6px 10px; border-radius:999px; background:var(--chip); color:#4a148c;
-      font-weight:700; font-size:12px; letter-spacing:.2px; margin-top:6px;
-    }
-    main{ padding:20px; }
+    /* Headings & labels (agreement-like hierarchy) */
     h2{
-      font-size:16px; margin:20px 0 8px; color:var(--brand);
+      font-size: 13.75px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase;
+      margin: 18px 0 8px;
     }
-    .grid{
-      display:grid; grid-template-columns: 1fr 1fr; gap:12px 16px;
+    label{
+      font-size: 12px; letter-spacing: .35px; color: var(--muted); display:block; margin: 0 0 6px;
+      text-transform: uppercase;
     }
-    label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
-    input[type="text"], input[type="tel"], input[type="email"], textarea, select{
-      width:100%; border:1px solid #ddd; border-radius:10px; padding:10px 12px; font-size:14px; outline:none;
+    .grid{display:grid; grid-template-columns: 1fr 1fr; gap:12px 18px}
+    input[type="text"], input[type="tel"], input[type="email"], textarea{
+      width:100%;
+      border:0;
+      border-bottom: 1.4px solid var(--rule);
+      padding:8px 2px 6px;
+      font-size: 15px;
+      font-weight: 500;
+      outline:none;
+      background:transparent;
     }
-    textarea{min-height:110px; resize:vertical}
-    .row{margin:12px 0}
-    .checks{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px 16px}
-    .check{display:flex; align-items:center; gap:10px; font-size:14px}
-    .check input{width:16px; height:16px}
-    .bar{height:1px;background:var(--border);margin:16px 0}
-    .actions{display:flex; gap:12px; justify-content:flex-end; margin-top:8px}
+    textarea{min-height:120px; resize:vertical}
+    .checks{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px 18px; margin-top: 6px; font-size: 14.25px;}
+    .check{display:flex; align-items:flex-start; gap:10px}
+    .check input{margin-top:2px}
+    .rule{height:1px; background:var(--rule); margin: 16px 0}
+    .consent{margin-top: 6px; font-size: 14px}
+    .note{font-size: 12.5px; color: var(--muted); margin: 8px 0 2px}
+    .actions{display:flex; gap:10px; justify-content:flex-end; margin-top:18px}
     .btn{
-      appearance:none; border:0; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer;
-      background:var(--brand); color:#fff; box-shadow: 0 4px 10px rgba(106,27,154,.25);
+      appearance:none; border:1px solid var(--ink); background:transparent; color:var(--ink);
+      border-radius:8px; padding:9px 14px; font-weight:800; cursor:pointer;
     }
-    .btn.alt{background:#eee;color:#333;box-shadow:none}
-    footer{padding:12px 20px; color:#333; font-size:12px; background:#f6effa; border-top:1px solid var(--border)}
-    .note{font-size:12px; color:var(--muted); margin-top:6px}
-    .disclaimer{font-size:11px; color:#777; margin-top:10px}
+    .btn:hover{background:#f6f6f6}
+    footer{margin-top: 18px; padding-top: 10px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--muted);}
     @media print{
-      body{background:#fff}
-      .wrap{border:none; box-shadow:none}
+      .page{margin: 10mm auto; padding: 0 6mm 6mm}
       .actions{display:none}
-      header{background:#fff; color:#000; border-bottom:2px solid var(--brand)}
-      .title{color:var(--brand)}
+      a[href]:after{content:" (" attr(href) ")"; font-size:10px; color:#777}
       .brand img{box-shadow:none}
-      footer{background:#fff; border-top:1px solid #ccc}
-      a[href]:after{content:" (" attr(href) ")"; font-size:10px; color:#555}
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <img src="hdheed_logo.png" alt="HD HeeD logo" onerror="this.style.visibility='hidden'">
-        <div>
-          <div class="title">HD HeeD — Referral Form</div>
-          <div class="chip">Proudly based in Blacktown</div>
+  <div class="page">
+    <header class="mast">
+      <div class="strip"></div>
+      <div class="brandbar">
+        <div class="brand">
+          <img src="hd heed.jpg" alt="HD HeeD logo" onerror="this.style.visibility='hidden'">
+          <div class="brandname">HD HeeD — Referral Form</div>
         </div>
-      </div>
-      <div class="meta">
-        <div><strong>HD HeeD Pty Ltd</strong></div>
-        <div>Phone: 02 8630 5500 &nbsp;•&nbsp; Email: info@hdheed.com.au</div>
-        <div>Website: www.hdheed.com.au</div>
+        <div class="contact">
+          <div><strong>HD HeeD Pty Ltd</strong></div>
+          <div>Phone: 02 8630 5500 &nbsp;•&nbsp; Email: info@hdheed.com.au</div>
+          <div>Web: www.hdheed.com.au</div>
+        </div>
       </div>
     </header>
-    <main>
-      <p class="note">Keep it simple — this form captures just the essentials so you can refer quickly. You can leave any non‑essential fields blank. We’ll follow up for more details if needed.</p>
-      
+
+    <section>
+      <div class="note">This page captures the essentials for a fast referral. Leave anything blank if unknown—we’ll follow up for details.</div>
+    </section>
+
+    <section>
       <h2>Referrer Details</h2>
       <div class="grid">
-        <div class="row">
+        <div>
           <label>Referrer Name</label>
-          <input type="text" name="referrer_name" value="">
+          <input type="text" name="referrer_name">
         </div>
-        <div class="row">
+        <div>
           <label>Organisation</label>
-          <input type="text" name="referrer_org" value="">
+          <input type="text" name="referrer_org">
         </div>
-        <div class="row">
+        <div>
           <label>Phone</label>
-          <input type="tel" name="referrer_phone" value="">
+          <input type="tel" name="referrer_phone">
         </div>
-        <div class="row">
+        <div>
           <label>Email</label>
-          <input type="email" name="referrer_email" value="">
+          <input type="email" name="referrer_email">
         </div>
       </div>
+    </section>
 
+    <section>
       <h2>Participant Details</h2>
       <div class="grid">
-        <div class="row">
+        <div>
           <label>Participant Name</label>
-          <input type="text" name="participant_name" value="">
+          <input type="text" name="participant_name">
         </div>
-        <div class="row">
+        <div>
           <label>NDIS Number (if known)</label>
-          <input type="text" name="ndis_number" value="">
+          <input type="text" name="ndis_number">
         </div>
-        <div class="row">
+        <div>
           <label>Suburb</label>
-          <input type="text" name="suburb" value="">
+          <input type="text" name="suburb">
         </div>
-        <div class="row">
+        <div>
           <label>Preferred Contact (phone/email)</label>
-          <input type="text" name="preferred_contact" value="">
+          <input type="text" name="preferred_contact">
         </div>
       </div>
+    </section>
 
+    <section>
       <h2>Support Requested (tick any)</h2>
       <div class="checks">
         <label class="check"><input type="checkbox" name="support_0104" /> 0104 — High-Intensity daily supports (catheter, stoma, wounds, injections, enteral)</label>
@@ -165,28 +174,27 @@
         <label class="check"><input type="checkbox" name="support_0117" /> 0117 — Development-Life Skills</label>
         <label class="check"><input type="checkbox" name="support_0136" /> 0136 — Group/Centre Activities</label>
       </div>
+    </section>
 
+    <section>
       <h2>Brief Notes</h2>
-      <div class="row">
-        <label>Tell us the basics (e.g., key supports, risks, preferred days/times)</label>
-        <textarea name="notes"></textarea>
-      </div>
+      <label>Tell us the basics (e.g., key supports, risks, preferred days/times)</label>
+      <textarea name="notes"></textarea>
+    </section>
 
-      <div class="bar"></div>
+    <div class="rule"></div>
 
-      <div class="row">
-        <label><input type="checkbox" name="consent" /> I confirm the participant (or their authorised representative) has consented to this referral.</label>
-      </div>
+    <section class="consent">
+      <label><input type="checkbox" name="consent" /> I confirm the participant (or their authorised representative) has consented to this referral.</label>
+    </section>
 
-      <div class="actions">
-        <button class="btn" onclick="window.print()">Print / Save as PDF</button>
-        <a class="btn alt" href="https://www.hdheed.com.au/referral.html" target="_blank" rel="noopener">Use full online referral form</a>
-      </div>
+    <div class="actions">
+      <button class="btn" onclick="window.print()">Print / Save as PDF</button>
+      <a class="btn" href="https://www.hdheed.com.au/referral.html" target="_blank" rel="noopener">Use full online referral form</a>
+    </div>
 
-      <p class="disclaimer">This form is intended for quick referrals only. A more detailed intake will be completed after we receive this information. All services are delivered in line with NDIS Practice Standards.</p>
-    </main>
     <footer>
-      © HD HeeD Pty Ltd — ABN 47 665 228 768 &nbsp;·&nbsp; Phone 02 8630 5500 &nbsp;·&nbsp; info@hdheed.com.au &nbsp;·&nbsp; www.hdheed.com.au
+      © HD HeeD Pty Ltd — ABN 47 665 228 768 · Phone 02 8630 5500 · info@hdheed.com.au · www.hdheed.com.au
     </footer>
   </div>
 </body>
