@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HD HeeD — Referral Form</title>
+  <meta name="color-scheme" content="light only" />
+  <style>
+    :root{
+      --brand:#6a1b9a;           /* HD HeeD purple */
+      --accent:#9c27b0;          /* Accent purple */
+      --ink:#111;
+      --muted:#555;
+      --bg:#faf8fc;
+      --border:#e5d8f2;
+      --chip:#ede7f6;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+      color:var(--ink);
+      background:var(--bg);
+    }
+    .wrap{
+      max-width: 900px;
+      margin: 24px auto;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.06);
+      overflow:hidden;
+    }
+    header{
+      background:linear-gradient(135deg, var(--brand), var(--accent));
+      color:#fff;
+      padding:16px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex; align-items:center; gap:14px;
+    }
+    .brand img{
+      width:56px; height:56px; object-fit:contain; background:#fff; border-radius:12px; padding:6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.12);
+    }
+    .title{
+      font-size:20px; font-weight:800; letter-spacing:.2px;
+    }
+    .meta{
+      font-size:13px; line-height:1.35; text-align:right;
+    }
+    .chip{
+      display:inline-block; padding:6px 10px; border-radius:999px; background:var(--chip); color:#4a148c;
+      font-weight:700; font-size:12px; letter-spacing:.2px; margin-top:6px;
+    }
+    main{ padding:20px; }
+    h2{
+      font-size:16px; margin:20px 0 8px; color:var(--brand);
+    }
+    .grid{
+      display:grid; grid-template-columns: 1fr 1fr; gap:12px 16px;
+    }
+    label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+    input[type="text"], input[type="tel"], input[type="email"], textarea, select{
+      width:100%; border:1px solid #ddd; border-radius:10px; padding:10px 12px; font-size:14px; outline:none;
+    }
+    textarea{min-height:110px; resize:vertical}
+    .row{margin:12px 0}
+    .checks{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px 16px}
+    .check{display:flex; align-items:center; gap:10px; font-size:14px}
+    .check input{width:16px; height:16px}
+    .bar{height:1px;background:var(--border);margin:16px 0}
+    .actions{display:flex; gap:12px; justify-content:flex-end; margin-top:8px}
+    .btn{
+      appearance:none; border:0; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer;
+      background:var(--brand); color:#fff; box-shadow: 0 4px 10px rgba(106,27,154,.25);
+    }
+    .btn.alt{background:#eee;color:#333;box-shadow:none}
+    footer{padding:12px 20px; color:#333; font-size:12px; background:#f6effa; border-top:1px solid var(--border)}
+    .note{font-size:12px; color:var(--muted); margin-top:6px}
+    .disclaimer{font-size:11px; color:#777; margin-top:10px}
+    @media print{
+      body{background:#fff}
+      .wrap{border:none; box-shadow:none}
+      .actions{display:none}
+      header{background:#fff; color:#000; border-bottom:2px solid var(--brand)}
+      .title{color:var(--brand)}
+      .brand img{box-shadow:none}
+      footer{background:#fff; border-top:1px solid #ccc}
+      a[href]:after{content:" (" attr(href) ")"; font-size:10px; color:#555}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <img src="hdheed_logo.png" alt="HD HeeD logo" onerror="this.style.visibility='hidden'">
+        <div>
+          <div class="title">HD HeeD — Referral Form</div>
+          <div class="chip">Proudly based in Blacktown</div>
+        </div>
+      </div>
+      <div class="meta">
+        <div><strong>HD HeeD Pty Ltd</strong></div>
+        <div>Phone: 02 8630 5500 &nbsp;•&nbsp; Email: info@hdheed.com.au</div>
+        <div>Website: www.hdheed.com.au</div>
+      </div>
+    </header>
+    <main>
+      <p class="note">Keep it simple — this form captures just the essentials so you can refer quickly. You can leave any non‑essential fields blank. We’ll follow up for more details if needed.</p>
+      
+      <h2>Referrer Details</h2>
+      <div class="grid">
+        <div class="row">
+          <label>Referrer Name</label>
+          <input type="text" name="referrer_name" value="">
+        </div>
+        <div class="row">
+          <label>Organisation</label>
+          <input type="text" name="referrer_org" value="">
+        </div>
+        <div class="row">
+          <label>Phone</label>
+          <input type="tel" name="referrer_phone" value="">
+        </div>
+        <div class="row">
+          <label>Email</label>
+          <input type="email" name="referrer_email" value="">
+        </div>
+      </div>
+
+      <h2>Participant Details</h2>
+      <div class="grid">
+        <div class="row">
+          <label>Participant Name</label>
+          <input type="text" name="participant_name" value="">
+        </div>
+        <div class="row">
+          <label>NDIS Number (if known)</label>
+          <input type="text" name="ndis_number" value="">
+        </div>
+        <div class="row">
+          <label>Suburb</label>
+          <input type="text" name="suburb" value="">
+        </div>
+        <div class="row">
+          <label>Preferred Contact (phone/email)</label>
+          <input type="text" name="preferred_contact" value="">
+        </div>
+      </div>
+
+      <h2>Support Requested (tick any)</h2>
+      <div class="checks">
+        <label class="check"><input type="checkbox" name="support_0104" /> 0104 — High-Intensity daily supports (catheter, stoma, wounds, injections, enteral)</label>
+        <label class="check"><input type="checkbox" name="support_0107" /> 0107 — Assist Personal Activities</label>
+        <label class="check"><input type="checkbox" name="support_0120" /> 0120 — Household Tasks</label>
+        <label class="check"><input type="checkbox" name="support_0108_0125" /> 0108/0125 — Transport & Community Access</label>
+        <label class="check"><input type="checkbox" name="support_0115" /> 0115 — Daily Tasks/Shared Living</label>
+        <label class="check"><input type="checkbox" name="support_0117" /> 0117 — Development-Life Skills</label>
+        <label class="check"><input type="checkbox" name="support_0136" /> 0136 — Group/Centre Activities</label>
+      </div>
+
+      <h2>Brief Notes</h2>
+      <div class="row">
+        <label>Tell us the basics (e.g., key supports, risks, preferred days/times)</label>
+        <textarea name="notes"></textarea>
+      </div>
+
+      <div class="bar"></div>
+
+      <div class="row">
+        <label><input type="checkbox" name="consent" /> I confirm the participant (or their authorised representative) has consented to this referral.</label>
+      </div>
+
+      <div class="actions">
+        <button class="btn" onclick="window.print()">Print / Save as PDF</button>
+        <a class="btn alt" href="https://www.hdheed.com.au/referral.html" target="_blank" rel="noopener">Use full online referral form</a>
+      </div>
+
+      <p class="disclaimer">This form is intended for quick referrals only. A more detailed intake will be completed after we receive this information. All services are delivered in line with NDIS Practice Standards.</p>
+    </main>
+    <footer>
+      © HD HeeD Pty Ltd — ABN 47 665 228 768 &nbsp;·&nbsp; Phone 02 8630 5500 &nbsp;·&nbsp; info@hdheed.com.au &nbsp;·&nbsp; www.hdheed.com.au
+    </footer>
+  </div>
+</body>
+</html>
