@@ -652,7 +652,7 @@
   <meta name="theme-color" content="#0b0f1a"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
 
-  <!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.4) === -->
+  <!-- === HD HeeD • ELLA (Voice Intake Assistant • v3.5) === -->
   <style>
     :root{ --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153; --al-text:#e8edff; --al-accent:#ffc107; }
     /* Greeting */
@@ -814,10 +814,10 @@
   };
 
   /* ===== State & DOM ===== */
-  const SKEY='hdheed_ella_v34';
+  const SKEY='hdheed_ella_v35';
   let S = {
     i:0,
-    participant_name: null,              // NEW required gate
+    participant_name: null,              // required gate
 
     caller:null, consent:null,
     // Referrer
@@ -827,14 +827,18 @@
     referrer_phone: null,
 
     suburb:null, postcode:null,
-    service:null, mgmt:null, dates:null, cat:null,
+
+    // Supports (multi-select) + legacy single
+    services: [],
+    service_cats: [],
+    service:null, cat:null, // legacy compatibility (first selection)
+
     // High-care
     highcare: [],
     highcare_other: null,
 
-    // Plan Manager (conditional if plan-managed)
-    pm_name: null,
-    pm_email: null,
+    // Plan management
+    mgmt:null, pm_name:null, pm_email:null, dates:null,
 
     hrs:null,
     risks:{beh:null, med:null, int:null},
@@ -938,10 +942,10 @@
         opts:[ o('A','(typed only)',()=>{}), o('B','(disabled)',()=>{}), o('C','(disabled)',()=>{}), o('D','(disabled)',()=>{}), NS() ]},
 
       {id:'service', q:"Which supports are required?",
-        opts:[ o('A','Personal care',()=>{S.service='Personal care';S.cat='Core – Assistance with Daily Life';}),
-               o('B','Community participation',()=>{S.service='Community participation';S.cat='Core – Social & Community Participation';}),
-               o('C','Nursing care',()=>{S.service='Nursing care';S.cat='Core – Community Nursing Care';}),
-               o('D','Daily living skills',()=>{S.service='Daily living skills';S.cat='Capacity – Improved Daily Living';}), NS() ]},
+        opts:[ o('A','Personal care',()=>{}),
+               o('B','Community participation',()=>{}),
+               o('C','Nursing care',()=>{}),
+               o('D','Daily living skills',()=>{}), NS() ]},
 
       {id:'highcare', q:"Any high-care needs? (Select all that apply, then ✓ Continue)",
         opts:[ o('A','Catheter care',()=>{}),
@@ -1290,6 +1294,56 @@
     optsEl.appendChild(cont);
   }
 
+  function renderServiceChips(){
+    optsEl.innerHTML = '';
+
+    const options = [
+      'Personal care',
+      'Community participation',
+      'Nursing care',
+      'Daily living skills'
+    ];
+    const catMap = {
+      'Personal care': 'Core – Assistance with Daily Life',
+      'Community participation': 'Core – Social & Community Participation',
+      'Nursing care': 'Core – Community Nursing Care',
+      'Daily living skills': 'Capacity – Improved Daily Living'
+    };
+    if (!Array.isArray(S.services)) S.services = [];
+
+    options.forEach((label, idx)=>{
+      const b = document.createElement('button');
+      b.className = 'al-chip';
+      const on = S.services.includes(label);
+      if (on) b.style.borderColor = '#ffd95c';
+      b.textContent = String.fromCharCode(65+idx) + ') ' + label;
+      b.addEventListener('click', ()=>{
+        const i = S.services.indexOf(label);
+        if (i>=0) S.services.splice(i,1); else S.services.push(label);
+        // derive cats, keep legacy first selection
+        S.service_cats = Array.from(new Set(S.services.map(s=>catMap[s]).filter(Boolean)));
+        S.service = S.services[0] || null;
+        S.cat = S.service ? catMap[S.service] : null;
+        save(); renderServiceChips();
+      });
+      optsEl.appendChild(b);
+    });
+
+    const cont = document.createElement('button');
+    cont.id='al-service-continue';
+    cont.className='al-chip';
+    cont.textContent='✓ Continue';
+    cont.addEventListener('click', ()=>{
+      if (!S.services || S.services.length===0){
+        sysEl.textContent = 'Please select at least one support.';
+        speak('Please select at least one support.');
+        return;
+      }
+      next();
+    });
+    optsEl.appendChild(cont);
+  }
+
   /* ===== Name Gate ===== */
   function injectNameGate(){
     stepEl.textContent = 'Step 1/16';
@@ -1339,10 +1393,12 @@
     sysEl.textContent = '';
     endBox.style.display = 'none';
 
-    // Typed-only steps
+    // Typed-only & custom-rendered steps
     if (step.id==='loc'){ injectLocationBox(true); speak(step.q); save(); return; }
     if (step.id==='pm_details'){ injectPlanManagerBox(); speak(step.q); save(); return; }
     if (step.id==='referrer'){ injectReferrerBox(); speak(step.q); save(); return; }
+    if (step.id==='service'){ renderServiceChips(); speak(step.q); save(); return; }
+    if (step.id==='pref'){ renderPrefChips(); speak(step.q); save(); return; }
 
     // Interpreter language typed capture when step shown
     if (step.id!=='final'){
@@ -1361,8 +1417,8 @@
       }
     }
 
-    // Chips (except for highcare which renders its own)
-    if (step.id!=='highcare'){
+    // Default chips (exclude custom-render steps)
+    if (!['highcare','pref','service'].includes(step.id)){
       step.opts.forEach(opt=>{
         const b = document.createElement('button');
         b.className='al-chip';
@@ -1379,24 +1435,30 @@
     const list = flow();
     const stepId = list[S.i].id;
 
-    // Location typed-only: keep user here until Save
+    // Guard typed-only steps
     if (stepId==='loc' && opt.k==='A'){
       sysEl.textContent='Enter suburb and postcode, then Save & continue.';
       speak('Please enter your suburb and postcode, then press Save and continue.');
       return;
     }
-    // PM details typed-only
     if (stepId==='pm_details' && opt.k==='A'){
       sysEl.textContent='Type Plan Manager details, then Save & continue.';
       speak('Please type your Plan Manager details, then press Save and continue.');
       return;
     }
-    // Referrer typed-only
     if (stepId==='referrer' && opt.k==='A'){
       sysEl.textContent='Type referrer name and contact, then Save & continue.';
       speak('Please type referrer name and contact, then press Save and continue.');
       return;
     }
+
+    // Multi-select steps advance only via ✓ Continue
+    if (stepId==='service' && ['A','B','C','D'].includes(opt.k)){
+      sysEl.textContent='You can select multiple supports, then press ✓ Continue.';
+      speak('You can select multiple supports, then press Continue.');
+      return;
+    }
+    if (stepId==='pref' && ['A','B','C'].includes(opt.k)) return;
 
     // Interpreter: if "Yes", require language box
     if (stepId==='risk_int' && opt.k==='A'){ showInterpreterBox(); return; }
@@ -1409,9 +1471,6 @@
       speak('We need your consent to continue. Please select Yes to proceed.');
       return;
     }
-
-    // Prefs multi-select handled separately
-    if (stepId==='pref' && ['A','B','C'].includes(opt.k)) return;
 
     if (typeof opt.apply==='function') opt.apply();
     save();
@@ -1463,7 +1522,8 @@
       `Consent: ${S.consent||'—'}`,
       `Referrer: ${S.referrer_name || '—'}${S.referrer_org ? ' • '+S.referrer_org : ''} • ${S.referrer_email || S.referrer_phone || '—'}`,
       `Location: ${S.suburb||'—'} ${S.postcode?('('+S.postcode+')'):''}`,
-      `Service: ${S.service||'—'}`,
+      `Services: ${(S.services && S.services.length)? S.services.join(', ') : (S.service||'—')}`,
+      `Categories: ${(S.service_cats && S.service_cats.length)? S.service_cats.join(', ') : (S.cat||'—')}`,
       `High-care: ${(S.highcare && S.highcare.length)? S.highcare.join(', ') : '—'}${S.highcare_other ? ' • Other: '+S.highcare_other : ''}`,
       `Windows (visits): ${S.rostering||'—'}`,
       `Contact window: ${S.contact_window||S.custom['contact_win']||'—'}`,
@@ -1501,7 +1561,7 @@
 
     const payload = {
       _subject:`HD HeeD Website – ${S.route||'Enquiry'} via ELLA (voice)`,
-      source:"index-ella-v33",
+      source:"index-ella-v35",
 
       participant_name: S.participant_name,
 
@@ -1511,21 +1571,31 @@
       referrer_email: S.referrer_email,
       referrer_phone: S.referrer_phone,
 
+      // Services (multi-select) + legacy
+      services: S.services,
+      service_cats: S.service_cats,
+      service:S.service,
+      category:S.cat,
+
       // High-care + PM
       highcare: S.highcare,
       highcare_other: S.highcare_other,
+      plan_mgmt:S.mgmt,
       pm_name: S.pm_name,
       pm_email: S.pm_email,
+      plan_dates:S.dates,
 
-      route:S.route, caller:S.caller, consent:S.consent,
       suburb:S.suburb, postcode:S.postcode,
-      service:S.service, category:S.cat,
       rostering:S.rostering, contact_window:S.contact_window || S.custom['contact_win'] || '',
       pref_gender:S.pref.gender, pref_transport:S.pref.transport, pref_access:S.pref.access,
-      plan_mgmt:S.mgmt, plan_dates:S.dates, approx_hours_per_week:S.hrs,
+      approx_hours_per_week:S.hrs,
       risk_behaviours:S.risks.beh, risk_medical:S.risks.med, risk_interpreter:S.risks.int,
       interpreter_language:S.interpreter.language,
+
+      // submitter contact
       name:S.name, email:S.email, phone:S.phone,
+
+      route:S.route, caller:S.caller, consent:S.consent,
       custom:S.custom, notes:(S.notes||[]).concat(fNotes.value||'').join('\n'),
       timestamp:new Date().toISOString()
     };
@@ -1567,8 +1637,8 @@
   function closePanel(){ panel.style.display='none'; try{ window.speechSynthesis.cancel(); }catch{} }
 
   // Show greet first time per session
-  if (!sessionStorage.getItem('ella_greeted_v34')){
-    setTimeout(()=>{ greet.style.display='block'; sessionStorage.setItem('ella_greeted_v34','1'); }, 900);
+  if (!sessionStorage.getItem('ella_greeted_v35')){
+    setTimeout(()=>{ greet.style.display='block'; sessionStorage.setItem('ella_greeted_v35','1'); }, 900);
   }
 
   // Hooks
@@ -1615,12 +1685,16 @@
       caller:null, consent:null,
       referrer_name:null, referrer_org:null, referrer_email:null, referrer_phone:null,
 
-      suburb:null, postcode:null, service:null, mgmt:null,
-      dates:null, cat:null, hrs:null,
+      suburb:null, postcode:null,
+
+      services: [], service_cats: [],
+      service:null, cat:null,
 
       highcare:[], highcare_other:null,
-      pm_name:null, pm_email:null,
 
+      mgmt:null, pm_name:null, pm_email:null, dates:null,
+
+      hrs:null,
       risks:{beh:null, med:null, int:null},
       interpreter:{language:null},
       pref:{worker:null, gender:null, transport:null, access:null, none:false},
@@ -1651,15 +1725,19 @@
       referrer_email: S.referrer_email,
       referrer_phone: S.referrer_phone,
 
+      // Services + legacy
+      services: S.services,
+      service_cats: S.service_cats,
+      service:S.service, category:S.cat,
+
       highcare: S.highcare,
       highcare_other: S.highcare_other,
-      pm_name: S.pm_name,
-      pm_email: S.pm_email,
 
-      route:S.route, caller:S.caller, consent:S.consent,
-      suburb:S.suburb, postcode:S.postcode, service:S.service, category:S.cat,
+      plan_mgmt:S.mgmt, pm_name:S.pm_name, pm_email:S.pm_email, plan_dates:S.dates,
+
+      suburb:S.suburb, postcode:S.postcode,
       rostering:S.rostering, contact_window:S.contact_window || S.custom['contact_win'] || '',
-      prefs:S.pref, plan_mgmt:S.mgmt, plan_dates:S.dates, approx_hours_per_week:S.hrs,
+      prefs:S.pref, approx_hours_per_week:S.hrs,
       risks:S.risks, interpreter:S.interpreter, urgency:S.urgency,
       name:fName.value||S.name, email:fEmail.value||S.email, phone:fPhone.value||S.phone,
       custom:S.custom, notes:(S.notes||[]).concat(fNotes.value||'').join('\n'),
