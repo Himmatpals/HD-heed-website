@@ -3,47 +3,91 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>HD HeeD — Super‑Simple Referral</title>
+  <title>HD HeeD — Simple Referral</title>
   <meta name="description" content="Ultra-simple HD HeeD referral. Clean email summary + downloadable summary. Auto‑CC to info@hdheed.com.au and ndis@hdheed.com.au."/>
   <style>
-    :root{--bg:#0b1220;--ink:#0b1220;--card:#fff;--muted:#6b7280;--ring:#93c5fd;--brand:#6b21a8;--brand2:#8b5cf6;--danger:#ef4444}
+    :root{
+      --bg:#0b1220;--ink:#0b1220;--card:#fff;--muted:#6b7280;--ring:#a5f3fc;
+      /* Index page vibe (teal/cyan) */
+      --brand:#0ea5a8;      /* teal */
+      --brand2:#06b6d4;     /* cyan */
+      --brand3:#14b8a6;     /* bright teal */
+      --brand4:#0891b2;     /* deep cyan */
+      --danger:#ef4444;
+    }
     *{box-sizing:border-box} html,body{height:100%}
-    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(135deg,#0b1220,#111827 60%);color:#e5e7eb;display:flex;justify-content:center;padding:24px}
+    body{
+      margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;
+      background:radial-gradient(1200px 800px at 10% -10%, #1e293b 0%, transparent 60%),
+                 radial-gradient(900px 700px at 100% 10%, #0b1220 0%, transparent 55%),
+                 linear-gradient(135deg,#0b1220,#111827 60%);
+      color:#e5e7eb;display:flex;justify-content:center;padding:24px
+    }
     .shell{width:100%;max-width:1100px}
-    .card{background:var(--card);color:var(--ink);border-radius:22px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45)}
-    header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border-bottom:1px solid #e5e7eb}
+    .card{background:var(--card);color:var(--ink);border-radius:22px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45);position:relative}
+    header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border-bottom:1px solid #e5e7eb;position:relative}
+    header:before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:linear-gradient(90deg,var(--brand),var(--brand2),var(--brand3),var(--brand4));}
     .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(160deg,var(--brand),var(--brand2));box-shadow:inset 0 0 18px rgba(255,255,255,.25)}
+    .logo{width:40px;height:40px;border-radius:10px;background:#0ea5a8 url('https://www.hdheed.com.au/images/logo.png') center/cover no-repeat;box-shadow:inset 0 0 18px rgba(255,255,255,.2)}
     .title{font-weight:800;letter-spacing:.2px}
-    .subtitle{color:#64748b;font-size:.92rem}
-    .progress{height:10px;background:#eef2f7;border-radius:999px;overflow:hidden;width:320px}
-    .progress>div{height:100%;width:0%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+    .subtitle{color:#475569;font-size:.95rem}
+    .progress{height:12px;background:#eef2f7;border-radius:999px;overflow:hidden;width:340px}
+    .progress>div{height:100%;width:0%;background:linear-gradient(90deg,var(--brand2),var(--brand3));box-shadow:0 0 12px rgba(20,184,166,.45);transition:width .35s ease}
     main{display:grid;grid-template-columns:280px 1fr;min-height:640px}
     @media (max-width:920px){main{grid-template-columns:1fr}}
-    nav{background:#f8fafc;border-right:1px solid #e5e7eb;padding:18px;display:flex;flex-direction:column;gap:8px}
-    .step-link{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;cursor:pointer;color:#111827;text-decoration:none;border:1px solid transparent}
-    .step-link.active{background:#efeaff;border-color:#e9d5ff}.step-link.done .dot{background:var(--brand2)}
-    .dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1}.badge{margin-left:auto;font-size:.75rem;color:#475569}
-    .pane{padding:24px 24px 28px}.block{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:16px}
-    h2{margin:.25rem 0 .5rem 0}.muted{color:#6b7280}
+
+    nav{background:linear-gradient(180deg,#f0fdfa,#f8fafc);border-right:1px solid #e5e7eb;padding:18px;display:flex;flex-direction:column;gap:8px}
+    .step-link{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;cursor:pointer;color:#111827;text-decoration:none;border:1px solid #e2e8f0;background:#ffffff}
+    .step-link .dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1;box-shadow:inset 0 0 0 2px #e2e8f0}
+    .step-link.active{background:linear-gradient(180deg,#e0f2fe,#fff);border-color:#99f6e4;box-shadow:0 4px 14px rgba(8,145,178,.12)}
+    .step-link.active .dot{background:var(--brand2);box-shadow:0 0 0 2px #ccfbf1 inset}
+    .step-link.done{background:linear-gradient(180deg,#ecfeff,#ffffff);border-color:#99f6e4}
+    .step-link.done .dot{background:var(--brand3)}
+    .badge{margin-left:auto;font-size:.75rem;color:#475569}
+
+    .pane{padding:24px 24px 28px}
+    .block{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 6px 22px rgba(2,6,23,.04)}
+    h2{margin:.25rem 0 .75rem 0;position:relative;padding-left:12px}
+    h2:before{content:"";position:absolute;left:0;top:.1rem;bottom:.1rem;width:6px;border-radius:999px;background:linear-gradient(180deg,var(--brand2),var(--brand3))}
+    .muted{color:#64748b}
+
     .grid{display:grid;gap:14px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
     @media (max-width:720px){.two,.three{grid-template-columns:1fr}}
+
     label{font-weight:700;font-size:.95rem;color:#111827}
-    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;outline:none;background:#fff}
-    input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px var(--ring)} textarea{min-height:110px}
-    .yn3{display:grid;grid-template-columns:1fr 1fr 1fr;background:#f1f5f9;border-radius:12px;overflow:hidden}
-    .yn3 button{appearance:none;padding:10px 12px;border:none;background:transparent;cursor:pointer;font-weight:700}
-    .yn3 button[aria-pressed="true"]{background:#eee8ff}
+    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;outline:none;background:#fff;transition:box-shadow .15s, border-color .15s}
+    input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px var(--ring); border-color:#67e8f9}
+    textarea{min-height:110px}
+
+    .yn3{display:grid;grid-template-columns:1fr 1fr 1fr;background:#f8fafc;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb}
+    .yn3 button{appearance:none;padding:12px 14px;border:none;background:transparent;cursor:pointer;font-weight:700;transition:background .15s, transform .03s}
+    .yn3 button:active{transform:scale(.99)}
+    .yn3 button[data-v="yes"][aria-pressed="true"]{background:rgba(20,184,166,.15)}
+    .yn3 button[data-v="no"][aria-pressed="true"]{background:rgba(239,68,68,.12)}
+    .yn3 button[data-v="unsure"][aria-pressed="true"]{background:rgba(6,182,212,.12)}
+
     .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
-    .btn{appearance:none;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer}
-    .primary{background:var(--brand);color:#fff}.ghost{background:#eef2f7}.danger{background:var(--danger);color:#fff}
+    .btn{appearance:none;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer;transition:filter .15s, transform .03s}
+    .btn:active{transform:translateY(1px)}
+    .primary{background:linear-gradient(90deg,var(--brand2),var(--brand3));color:#fff;box-shadow:0 8px 18px rgba(8,145,178,.25)}
+    .ghost{background:linear-gradient(180deg,#f8fafc,#ffffff);border:1px solid #e5e7eb}
+    .danger{background:linear-gradient(90deg,#ef4444,#f97316);color:#fff;box-shadow:0 8px 18px rgba(239,68,68,.25)}
+    .primary:hover,.danger:hover{filter:brightness(1.03)}
+
     .hint{font-size:.85rem;color:#64748b}
-    .review{background:#fcfcfd;border:1px dashed #cbd5e1;border-radius:14px;padding:16px}
-    pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px;max-height:280px;overflow:auto}
-    .toast{position:fixed;inset:auto 20px 20px auto;background:#111827;color:#fff;padding:12px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+    .review{background:linear-gradient(180deg,#f0fdfa,#f0f9ff);border:1px dashed #cbd5e1;border-radius:14px;padding:16px}
+    pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px;max-height:300px;overflow:auto}
+
+    .toast{position:fixed;inset:auto 20px 20px auto;background:linear-gradient(90deg,#111827,#0b1220);color:#fff;padding:12px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
     .toast.show{opacity:1}
-    .pill{display:flex;align-items:center;gap:8px;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:999px;padding:10px 12px}
-    .pill label{font-weight:600;margin:0}
+
+    .pill{display:flex;align-items:center;gap:8px;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:999px;padding:10px 12px;transition:background .15s,border-color .15s, box-shadow .15s}
+    .pill input{width:auto}
+    .pill span{font-weight:600}
+    .pill:hover{box-shadow:0 6px 16px rgba(2,6,23,.06)}
+    .pill:has(input:checked){background:linear-gradient(90deg,#ecfeff,#f0fdfa);border-color:#99f6e4}
+    .pill:has(input:checked) span{color:#0f766e}
+
     .pill-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     @media (max-width:720px){.pill-grid{grid-template-columns:1fr}}
   </style>
@@ -73,22 +117,18 @@
     <input type="hidden" name="_subject" value="">
     <input type="hidden" name="_redirect" value="https://himmatpals.github.io/hd-heed-website/thankyou.html">
     <input type="text" name="_gotcha" value="">
-    <!-- Auto-CC is always injected on submit via JS -->
   </form>
 
   <div class="toast" id="toast">Saved</div>
 
   <script>
-    // === CONFIG ===
-    const AUTOSAVE_KEY  = "hdheed_referral_simple_v2";
+    const AUTOSAVE_KEY  = "hdheed_referral_simple_teal_v1";
 
-    // === STATE / UTIL ===
     const state = JSON.parse(localStorage.getItem(AUTOSAVE_KEY) || "{}");
     const $ = (s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
     const save = ()=>{ localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state)); flash("Saved"); };
     const flash = (m)=>{ const t=$("#toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1200); };
 
-    // === WIZARD STEPS (No Goals) ===
     const Steps = [
       {id:"consent",     label:"Consent",                render:rConsent},
       {id:"referrer",    label:"Person Making Referral", render:rReferrer},
@@ -102,7 +142,6 @@
     ];
     let current = 0;
 
-    // === NAV ===
     function init(){ renderNav(); go(0); }
     function renderNav(){
       const nav=$("#steps"); nav.innerHTML="";
@@ -117,7 +156,6 @@
     function setActive(){ $$(".step-link").forEach((el,i)=>{ el.classList.toggle("active",i===current); el.classList.toggle("done",i<current); }); $("#bar").style.width = Math.round((current)/(Steps.length-1)*100)+"%"; }
     function go(i){ current=Math.max(0,Math.min(Steps.length-1,i)); setActive(); const pane=$("#pane"); pane.innerHTML=""; Steps[current].render(pane); window.scrollTo({top:0,behavior:"smooth"}); }
 
-    // === FIELD HELPERS ===
     function input(id,label,o={}){const{type="text",placeholder="",hint=""}=o; const v = state[id]??"";
       return `<div><label for="${id}">${label}</label>
       <input id="${id}" name="${id}" type="${type}" placeholder="${placeholder}" value="${v??""}"/>
@@ -131,7 +169,6 @@
     function bindModel(root){ $$("input,select,textarea",root).forEach(el=>{const k=el.id;if(!k)return; el.value=state[k]??""; el.addEventListener("input",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); el.addEventListener("change",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); }); }
     function bindYN3(root){ $$("[data-yn3]",root).forEach(btn=>btn.addEventListener("click",()=>{const k=btn.dataset.yn3; state[k]=btn.dataset.v; save(); $$("[data-yn3='"+k+"']",root).forEach(b=>b.setAttribute("aria-pressed", String(b===btn))); })); }
 
-    // === RENDERS ===
     function rConsent(p){ p.innerHTML = `<div class="block">
       <h2>Consent <span class="muted">(required)</span></h2>
       ${yn3("consent","Has the Participant or Primary Carer consented to this referral?")}
@@ -275,7 +312,6 @@
       $("#reset",p).onclick=()=>{ if(confirm("Clear all answers?")){ localStorage.removeItem(AUTOSAVE_KEY); location.reload(); } };
     }
 
-    // === SUMMARY & SUBMIT ===
     function pickSupports(){
       const labels = [
         "Personal care (shower, dressing)",
@@ -327,7 +363,7 @@
 
       return `<!doctype html><meta charset="utf-8">
       <div style="font:14px system-ui,Segoe UI,Roboto,Arial;color:#0f172a">
-        <h2 style="margin:0 0 8px 0">HD HeeD — Referral Summary</h2>
+        <h2 style="margin:0 0 8px 0;color:#0f766e">HD HeeD — Referral Summary</h2>
         <div style="color:#64748b;font:13px system-ui">Generated ${new Date().toLocaleString()}</div>
         ${sect("Consent",[
           row("Initial consent", ynu("consent")),
@@ -367,7 +403,6 @@
       </div>`;
     }
 
-    // Hidden native form post (more reliable, no branding shown)
     function submitOnline(){
       if(state.consent!=="yes"){ alert("Consent (Step 1) is required to submit."); go(0); return; }
       if(!state.referral_consent){ alert("Please tick the final consent box on the Review step before submitting."); go(7); return; }
@@ -375,31 +410,18 @@
       const form = document.getElementById('silentPost');
       if(!form){ alert("Submit form not found."); return; }
 
-      // Clean previously added dynamic inputs
-      Array.from(form.querySelectorAll('input[name]:not([type=hidden]), textarea, select'))
-           .forEach(el => el.remove());
+      Array.from(form.querySelectorAll('input[name]:not([type=hidden]), textarea, select')).forEach(el => el.remove());
 
-      // Helper to add hidden inputs
-      const add = (name, value) => {
-        const i = document.createElement('input');
-        i.type = 'hidden';
-        i.name = name;
-        i.value = value == null ? '' : String(value);
-        form.appendChild(i);
-      };
+      const add = (name, value) => { const i=document.createElement('input'); i.type='hidden'; i.name=name; i.value=(value==null?'':String(value)); form.appendChild(i); };
 
-      // Subject
       form.querySelector('input[name="_subject"]').value =
-        "HD HeeD Referral — " + (state.participant_fname||"") + " " + (state.participant_lname||"");
+        `HD HeeD Referral — ${(state.participant_fname||'').trim()} ${(state.participant_lname||'').trim()}`;
 
-      // Always auto‑CC these inboxes
       add('_cc', 'info@hdheed.com.au,ndis@hdheed.com.au');
 
-      // Plain + HTML summaries
       add('summary', buildSummaryPlain());
       add('summary_html', buildSummaryHTML());
 
-      // Lightweight raw fields
       const names=[
         'referrer_name','relationship','email','phone','mobile',
         'participant_fname','participant_lname','dob','ndis_number',
@@ -412,13 +434,11 @@
       ];
       names.forEach(n=> add(n, state[n]));
 
-      // Also include selected supports as a single field
       add('supports_selected', pickSupports());
 
       form.submit();
     }
 
-    // Download HTML report (print to PDF if needed)
     function downloadReportHTML(){
       const blob = new Blob([buildSummaryHTML()], {type:"text/html"});
       const a = document.createElement("a");
