@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Try our Extremely Interactive Referral | HD HeeD</title>
-  <meta name="description" content="Ultra-interactive NDIS referral for HD HeeD. Works on GitHub Pages. All questions optional with 'Not sure' options."/>
+  <title>HD HeeD — Super‑Simple Referral</title>
+  <meta name="description" content="Ultra-simple HD HeeD referral. Clean email summary + downloadable summary. Auto‑CC to info@hdheed.com.au and ndis@hdheed.com.au."/>
   <style>
-    :root{--bg:#0b1220;--ink:#0b1220;--card:#fff;--muted:#6b7280;--ring:#93c5fd;--brand:#2563eb;--brand2:#22c55e;--danger:#ef4444}
+    :root{--bg:#0b1220;--ink:#0b1220;--card:#fff;--muted:#6b7280;--ring:#93c5fd;--brand:#6b21a8;--brand2:#8b5cf6;--danger:#ef4444}
     *{box-sizing:border-box} html,body{height:100%}
     body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(135deg,#0b1220,#111827 60%);color:#e5e7eb;display:flex;justify-content:center;padding:24px}
     .shell{width:100%;max-width:1100px}
@@ -18,11 +18,11 @@
     .subtitle{color:#64748b;font-size:.92rem}
     .progress{height:10px;background:#eef2f7;border-radius:999px;overflow:hidden;width:320px}
     .progress>div{height:100%;width:0%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
-    main{display:grid;grid-template-columns:280px 1fr;min-height:760px}
+    main{display:grid;grid-template-columns:280px 1fr;min-height:640px}
     @media (max-width:920px){main{grid-template-columns:1fr}}
     nav{background:#f8fafc;border-right:1px solid #e5e7eb;padding:18px;display:flex;flex-direction:column;gap:8px}
     .step-link{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;cursor:pointer;color:#111827;text-decoration:none;border:1px solid transparent}
-    .step-link.active{background:#eaf2ff;border-color:#dbeafe}.step-link.done .dot{background:var(--brand2)}
+    .step-link.active{background:#efeaff;border-color:#e9d5ff}.step-link.done .dot{background:var(--brand2)}
     .dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1}.badge{margin-left:auto;font-size:.75rem;color:#475569}
     .pane{padding:24px 24px 28px}.block{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:16px}
     h2{margin:.25rem 0 .5rem 0}.muted{color:#6b7280}
@@ -33,7 +33,7 @@
     input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px var(--ring)} textarea{min-height:110px}
     .yn3{display:grid;grid-template-columns:1fr 1fr 1fr;background:#f1f5f9;border-radius:12px;overflow:hidden}
     .yn3 button{appearance:none;padding:10px 12px;border:none;background:transparent;cursor:pointer;font-weight:700}
-    .yn3 button[aria-pressed="true"]{background:#e0ecff}
+    .yn3 button[aria-pressed="true"]{background:#eee8ff}
     .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
     .btn{appearance:none;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer}
     .primary{background:var(--brand);color:#fff}.ghost{background:#eef2f7}.danger{background:var(--danger);color:#fff}
@@ -42,6 +42,10 @@
     pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px;max-height:280px;overflow:auto}
     .toast{position:fixed;inset:auto 20px 20px auto;background:#111827;color:#fff;padding:12px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
     .toast.show{opacity:1}
+    .pill{display:flex;align-items:center;gap:8px;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:999px;padding:10px 12px}
+    .pill label{font-weight:600;margin:0}
+    .pill-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    @media (max-width:720px){.pill-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -51,8 +55,8 @@
         <div class="brand">
           <div class="logo" aria-hidden="true"></div>
           <div>
-            <div id="form-title" class="title">Try our Extremely Interactive Referral</div>
-            <div class="subtitle">Everything is optional — except consent, which is required to proceed.</div>
+            <div id="form-title" class="title">HD HeeD — Super‑Simple Referral</div>
+            <div class="subtitle">Everything optional — only consent is required.</div>
           </div>
         </div>
         <div class="progress" aria-label="Progress"><div id="bar"></div></div>
@@ -69,13 +73,14 @@
     <input type="hidden" name="_subject" value="">
     <input type="hidden" name="_redirect" value="https://himmatpals.github.io/hd-heed-website/thankyou.html">
     <input type="text" name="_gotcha" value="">
+    <!-- Auto-CC is always injected on submit via JS -->
   </form>
 
   <div class="toast" id="toast">Saved</div>
 
   <script>
     // === CONFIG ===
-    const AUTOSAVE_KEY  = "hdheed_referral_final_v1";
+    const AUTOSAVE_KEY  = "hdheed_referral_simple_v2";
 
     // === STATE / UTIL ===
     const state = JSON.parse(localStorage.getItem(AUTOSAVE_KEY) || "{}");
@@ -83,7 +88,7 @@
     const save = ()=>{ localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state)); flash("Saved"); };
     const flash = (m)=>{ const t=$("#toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1200); };
 
-    // === WIZARD STEPS ===
+    // === WIZARD STEPS (No Goals) ===
     const Steps = [
       {id:"consent",     label:"Consent",                render:rConsent},
       {id:"referrer",    label:"Person Making Referral", render:rReferrer},
@@ -92,7 +97,6 @@
       {id:"safety",      label:"Safety & Risks",         render:rSafety},
       {id:"supports",    label:"Supports",               render:rSupports},
       {id:"funding",     label:"Funding & Plan",         render:rFunding},
-      {id:"goals",       label:"NDIS Goals",             render:rGoals},
       {id:"review",      label:"Review & Consent",       render:rReview},
       {id:"submit",      label:"Submit",                 render:rSubmit},
     ];
@@ -106,19 +110,11 @@
         a.className="step-link";
         a.innerHTML=`<span class="dot"></span><span>${i+1}. ${s.label}</span><span class="badge" id="b-${s.id}"></span>`;
         a.href="#";
-        a.onclick=e=>{
-          e.preventDefault();
-          // block jumping ahead without initial consent
-          if(i>0 && state.consent!=='yes'){ alert("Consent is required to proceed."); return; }
-          go(i);
-        };
+        a.onclick=e=>{ e.preventDefault(); if(i>0 && state.consent!=="yes"){ alert("Consent is required to proceed."); return; } go(i); };
         nav.appendChild(a);
       });
     }
-    function setActive(){
-      $$(".step-link").forEach((el,i)=>{ el.classList.toggle("active",i===current); el.classList.toggle("done",i<current); });
-      $("#bar").style.width = Math.round((current)/(Steps.length-1)*100)+"%";
-    }
+    function setActive(){ $$(".step-link").forEach((el,i)=>{ el.classList.toggle("active",i===current); el.classList.toggle("done",i<current); }); $("#bar").style.width = Math.round((current)/(Steps.length-1)*100)+"%"; }
     function go(i){ current=Math.max(0,Math.min(Steps.length-1,i)); setActive(); const pane=$("#pane"); pane.innerHTML=""; Steps[current].render(pane); window.scrollTo({top:0,behavior:"smooth"}); }
 
     // === FIELD HELPERS ===
@@ -133,7 +129,7 @@
       <button type="button" data-yn3="${id}" data-v="no" aria-pressed="${v==='no'}">No</button>
       <button type="button" data-yn3="${id}" data-v="unsure" aria-pressed="${v==='unsure'}">Not sure</button></div></div>`}
     function bindModel(root){ $$("input,select,textarea",root).forEach(el=>{const k=el.id;if(!k)return; el.value=state[k]??""; el.addEventListener("input",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); el.addEventListener("change",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); }); }
-    function bindYN3(root){ $$("[data-yn3]",root).forEach(btn=>btn.addEventListener("click",()=>{const k=btn.dataset.yn3; state[k]=btn.dataset.v; save(); $$(`[data-yn3='${k}']`,root).forEach(b=>b.setAttribute("aria-pressed", String(b===btn))); })); }
+    function bindYN3(root){ $$("[data-yn3]",root).forEach(btn=>btn.addEventListener("click",()=>{const k=btn.dataset.yn3; state[k]=btn.dataset.v; save(); $$("[data-yn3='"+k+"']",root).forEach(b=>b.setAttribute("aria-pressed", String(b===btn))); })); }
 
     // === RENDERS ===
     function rConsent(p){ p.innerHTML = `<div class="block">
@@ -141,11 +137,7 @@
       ${yn3("consent","Has the Participant or Primary Carer consented to this referral?")}
       <div class="hint">Consent is required to proceed.</div>
       <div class="btn-row"><button class="btn primary" id="next">Next</button></div></div>`;
-      $("#next",p).onclick=e=>{
-        e.preventDefault();
-        if(state.consent!=='yes'){ alert("Please select Yes to consent before continuing."); return; }
-        go(1);
-      };
+      $("#next",p).onclick=e=>{ e.preventDefault(); if(state.consent!=="yes"){ alert("Please select Yes to consent before continuing."); return; } go(1); };
       bindYN3(p);
     }
 
@@ -156,8 +148,7 @@
       <div class="grid two">${input("phone","Phone",{type:"tel"})}${input("mobile","Mobile",{type:"tel"})}</div>
       ${input("email","Email",{type:"email",hint:"We'll send a confirmation"})}
       <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
-      $("#back",p).onclick=e=>{e.preventDefault(); go(0)};
-      $("#next",p).onclick=e=>{e.preventDefault(); go(2)};
+      $("#back",p).onclick=e=>{e.preventDefault(); go(0)}; $("#next",p).onclick=e=>{e.preventDefault(); go(2)};
       bindModel(p);
     }
 
@@ -208,13 +199,33 @@
     }
 
     function rSupports(p){
+      const opts = [
+        "Personal care (shower, dressing)",
+        "Medication support",
+        "Nursing (wounds / catheter / stoma)",
+        "Community access / transport",
+        "Cleaning / household tasks",
+        "Meal prep / feeding",
+        "Therapy assistance (per plan)",
+        "Overnight support / respite"
+      ];
       p.innerHTML = `<div class="block"><h2>Support from HD HeeD</h2>
-        ${input("key_area","Key Area of Support Requested",{placeholder:"e.g., Community nursing; wound care; personal care; medication support"})}
+        <div class="grid two">
+          ${input("key_area","Main reason for referral (optional)",{placeholder:"e.g., personal care, wound dressings"})}
+          ${input("service_location","Service suburb / postcode (optional)")}
+        </div>
+        <label style="margin-top:10px;">Tick supports needed (choose any):</label>
+        <div class="pill-grid">
+          ${opts.map((t,i)=>`
+            <label class="pill"><input type="checkbox" id="sup_${i}" ${state["sup_"+i]?"checked":""}/> <span>${t}</span></label>
+          `).join("")}
+        </div>
         ${yn3("allergies","Any allergies?")}
         ${input("allergy_list","If yes, list allergies")}
         <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
       $("#back",p).onclick=e=>{e.preventDefault(); go(4)}; $("#next",p).onclick=e=>{e.preventDefault(); go(6)};
       bindModel(p); bindYN3(p);
+      $$(".pill input",p).forEach((el,idx)=>{ el.addEventListener("change",()=>{ state["sup_"+idx]=el.checked; save(); }); });
     }
 
     function rFunding(p){
@@ -226,101 +237,140 @@
             <button type="button" data-yn3="plan_managed" data-v="self"   aria-pressed="${state.plan_managed==='self'}">Self Managed</button>
           </div>
         </div>
-        ${input("funding_area","Funding Support Area")}
-        ${input("postcode_lookup","Postcode/Suburb for Service Location")}
+        ${input("funding_area","Funding notes (optional)")}
         <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
       $("#back",p).onclick=e=>{e.preventDefault(); go(5)}; $("#next",p).onclick=e=>{e.preventDefault(); go(7)};
       bindModel(p); bindYN3(p);
     }
 
-    function rGoals(p){
-      const cat=`<option value="">Not sure / discuss later</option><option value="core">Core</option><option value="capacity">Capacity Building</option><option value="capital">Capital</option>`;
-      p.innerHTML = `<div class="block"><h2>NDIS Goals</h2>
-        <div class="grid two">${input("goal1","Goal 1")}${input("goal1_service","Goal 1 - Service Requested")}</div>
-        <label>Support Category<select id="goal1_category">${cat}</select></label>
-        <div class="grid two">${input("goal2","Goal 2")}${input("goal2_service","Goal 2 - Service Requested")}</div>
-        <label>Support Category<select id="goal2_category">${cat}</select></label>
-        <div class="grid two">${input("goal3","Goal 3")}${input("goal3_service","Goal 3 - Service Requested")}</div>
-        <label>Support Category<select id="goal3_category">${cat}</select></label>
-        <div class="grid two">${input("goal4","Goal 4")}${input("goal4_service","Goal 4 - Service Requested")}</div>
-        <label>Support Category<select id="goal4_category">${cat}</select></label>
-        ${input("current_services","Current Services Accessed")}
-        ${input("previous_services","Previous Services Accessed")}
-        <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Next</button></div></div>`;
-      $("#back",p).onclick=e=>{e.preventDefault(); go(6)}; $("#next",p).onclick=e=>{e.preventDefault(); go(8)};
-      bindModel(p);
-    }
-
     function rReview(p){
       p.innerHTML = `<div class="block"><h2>Review & Final Consent <span class="muted">(required)</span></h2>
-        <div class="review"><h3>Summary</h3><pre>${buildSummary()}</pre></div>
+        <div class="review"><h3>Summary</h3><pre>${buildSummaryPlain()}</pre></div>
         <div><label><input id="referral_consent" type="checkbox" ${state.referral_consent?"checked":""}/> I confirm the person being referred has consented.</label></div>
+        <div class="hint" style="margin-top:8px">A polished HTML summary will also be sent and can be downloaded next.</div>
         <div class="btn-row"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">Looks good</button></div></div>`;
-      $("#back",p).onclick=e=>{e.preventDefault(); go(7)};
+      $("#back",p).onclick=e=>{e.preventDefault(); go(6)};
       $("#next",p).onclick=e=>{
         e.preventDefault();
+        if(state.consent!=="yes"){ alert("Initial consent (Step 1) must be Yes to proceed."); go(0); return; }
         const checked = $("#referral_consent").checked;
-        if(state.consent!=='yes'){ alert("Initial consent (Step 1) must be Yes to proceed."); go(0); return; }
         if(!checked){ alert("Please tick the final consent box to continue."); return; }
-        state.referral_consent = checked; save(); go(9);
+        state.referral_consent = checked; save(); go(8);
       };
       bindModel(p);
     }
 
     function rSubmit(p){
       p.innerHTML = `<div class="block"><h2>Submit Referral</h2>
-        <p class="muted">Submit online now, or download a formatted copy and email later.</p>
+        <p class="muted">Submit online now, or download a formatted copy and email later. <br/>A copy will be auto‑CC'd to <b>info@hdheed.com.au</b> and <b>ndis@hdheed.com.au</b>.</p>
         <div class="btn-row">
           <button class="btn primary" id="submitOnline">Submit online</button>
-          <button class="btn ghost" id="download">Download formatted report</button>
+          <button class="btn ghost" id="download">Download formatted summary</button>
           <button class="btn danger" id="reset">Reset form</button>
         </div>
-        <div class="hint" style="margin-top:10px">After submission, you'll be redirected to our thank-you page.</div>
-        <div class="review" style="margin-top:12px"><h3>Preview</h3><pre>${buildSummary()}</pre></div></div>`;
+        <div class="hint" style="margin-top:10px">After submission, you'll be redirected to our thank‑you page.</div>
+        <div class="review" style="margin-top:12px"><h3>Preview</h3><pre>${buildSummaryPlain()}</pre></div></div>`;
       $("#submitOnline",p).onclick=submitOnline;
       $("#download",p).onclick=downloadReportHTML;
       $("#reset",p).onclick=()=>{ if(confirm("Clear all answers?")){ localStorage.removeItem(AUTOSAVE_KEY); location.reload(); } };
     }
 
     // === SUMMARY & SUBMIT ===
+    function pickSupports(){
+      const labels = [
+        "Personal care (shower, dressing)",
+        "Medication support",
+        "Nursing (wounds / catheter / stoma)",
+        "Community access / transport",
+        "Cleaning / household tasks",
+        "Meal prep / feeding",
+        "Therapy assistance (per plan)",
+        "Overnight support / respite"
+      ];
+      return labels.filter((_,i)=>state["sup_"+i]).join(", ");
+    }
+
     function ynu(k){ return state[k]==="yes"?"Yes": state[k]==="no"?"No": state[k]==="unsure"?"Not sure": (state[k]||""); }
-    function buildSummary(){
+
+    function buildSummaryPlain(){
       const L=[];
-      L.push(`Consent: ${ynu("consent")}`,"");
+      L.push("HD HeeD — Referral Summary","");
+      L.push(`Consent: ${ynu("consent")} | Final consent: ${state.referral_consent?"Yes":"No"}`,"");
       L.push(`Referrer: ${state.referrer_name||""} (${state.relationship||""})`);
-      L.push(`Contact: ${state.email||""}  Phone: ${state.phone||""}  Mobile: ${state.mobile||""}`,"");
-      L.push(`Participant: ${state.participant_fname||""} ${state.participant_lname||""}  DOB: ${state.dob||""}  Title: ${state.title||""}`);
-      L.push(`NDIS: ${state.ndis_number||""}  Gender: ${ynu("gender")}  Marital: ${state.marital_status||""}`);
-      L.push(`Address: ${state.street||""}, ${state.suburb||""}, ${state.city||""} ${state.postcode||""}`);
-      L.push(`Phone: ${state.home_phone||""}  Mobile: ${state.participant_mobile||""}  Email: ${state.participant_email||""}`);
-      L.push(`Language: ${state.language||""}  Interpreter: ${ynu("interpreter")}  Type: ${state.interpreter_type||""}`,"");
-      L.push(`Carer: ${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""})  Carer email: ${state.carer_email||""}`);
-      L.push(`Custody/shared: ${ynu("custody")}`,"");
-      L.push(`Safety – Fall:${ynu("recent_fall")}  Wound:${ynu("wound")}  Pain:${ynu("uncontrolled_pain")}  Pressure:${ynu("pressure_risk")}  Behaviour:${ynu("behaviour_risk")}`);
-      if(state.risk_notes) L.push("Risk notes: "+state.risk_notes);
+      L.push(`Contact: ${state.email||""} | Phone: ${state.phone||""} | Mobile: ${state.mobile||""}`,"");
+      L.push(`Participant: ${state.participant_fname||""} ${state.participant_lname||""} | DOB: ${state.dob||""}`);
+      L.push(`NDIS: ${state.ndis_number||""} | Gender: ${ynu("gender")} | Marital: ${state.marital_status||""}`);
+      L.push(`Address: ${[state.street,state.suburb,state.city,state.postcode].filter(Boolean).join(", ")}`);
+      L.push(`Phone: ${state.home_phone||""} | Mobile: ${state.participant_mobile||""} | Email: ${state.participant_email||""}`);
+      L.push(`Language: ${state.language||""} | Interpreter: ${ynu("interpreter")} ${state.interpreter_type?`(${state.interpreter_type})`:""}`,"");
+      L.push(`Primary Carer: ${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""}) | ${state.carer_email||""}`);
+      L.push(`Shared care / custody: ${ynu("custody")}`,"");
+      L.push(`Safety: Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}`);
+      if(state.risk_notes) L.push(`Risk notes: ${state.risk_notes}`);
       L.push("");
-      if(state.key_area) L.push("Key area: "+state.key_area);
-      if(state.allergies) L.push("Allergies: "+ynu("allergies")+" "+(state.allergy_list||""));
+      if(state.key_area) L.push(`Main reason: ${state.key_area}`);
+      const sup = pickSupports(); if(sup) L.push(`Supports requested: ${sup}`);
+      if(state.allergies) L.push(`Allergies: ${ynu("allergies")} ${state.allergy_list?`– ${state.allergy_list}`:""}`);
+      if(state.service_location) L.push(`Service location: ${state.service_location}`);
       L.push("");
-      L.push(`Plan managed: ${ynu("plan_managed")}  Funding notes: ${state.funding_area||""}`);
-      if(state.postcode_lookup) L.push("Service location: "+state.postcode_lookup);
-      L.push("");
-      ["1","2","3","4"].forEach(n=>{
-        if(state["goal"+n] || state["goal"+n+"_service"] || state["goal"+n+"_category"]){
-          L.push(`Goal ${n}: ${state["goal"+n]||""} — ${state["goal"+n+"_service"]||""}  [${state["goal"+n+"_category"]||""}]`);
-        }
-      });
-      if(state.current_services) L.push("Current services: "+state.current_services);
-      if(state.previous_services) L.push("Previous services: "+state.previous_services);
-      L.push("",`Final consent box ticked: ${state.referral_consent? "Yes":"No"}`);
+      L.push(`Plan management: ${ynu("plan_managed")} | Funding notes: ${state.funding_area||""}`);
       return L.join("\n");
+    }
+
+    function buildSummaryHTML(){
+      const esc = s => (s||"").toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+      const row = (k,v)=>`<tr><td style="padding:8px;border-bottom:1px solid #eee;color:#334155;width:32%">${esc(k)}</td><td style="padding:8px;border-bottom:1px solid #eee;color:#0f172a">${esc(v)}</td></tr>`;
+      const sect = (t,rows)=>`
+        <h3 style="margin:16px 0 8px;border-bottom:1px solid #e5e7eb;padding-bottom:6px;color:#0f172a">${esc(t)}</h3>
+        <table style="width:100%;border-collapse:collapse;font:14px system-ui,Segoe UI,Roboto,Arial">${rows.join("")}</table>`;
+      const sup = pickSupports();
+
+      return `<!doctype html><meta charset="utf-8">
+      <div style="font:14px system-ui,Segoe UI,Roboto,Arial;color:#0f172a">
+        <h2 style="margin:0 0 8px 0">HD HeeD — Referral Summary</h2>
+        <div style="color:#64748b;font:13px system-ui">Generated ${new Date().toLocaleString()}</div>
+        ${sect("Consent",[
+          row("Initial consent", ynu("consent")),
+          row("Final consent", state.referral_consent?"Ticked":"Not ticked")
+        ])}
+        ${sect("Referrer",[
+          row("Name", `${state.referrer_name||""} (${state.relationship||""})`),
+          row("Email", state.email||""), row("Phone", `${state.phone||""}  ${state.mobile||""}`)
+        ])}
+        ${sect("Participant",[
+          row("Name / DOB", `${(state.participant_fname||"")+" "+(state.participant_lname||"")} | ${state.dob||""}`),
+          row("NDIS / Gender", `${state.ndis_number||""} | ${ynu("gender")}`),
+          row("Address", [state.street,state.suburb,state.city,state.postcode].filter(Boolean).join(", ")),
+          row("Contacts", `${state.home_phone||""}  ${state.participant_mobile||""}  ${state.participant_email||""}`),
+          row("Language / Interpreter", `${state.language||""} | ${ynu("interpreter")}${state.interpreter_type?` (${state.interpreter_type})`:""}`)
+        ])}
+        ${sect("Primary Carer (NOK)",[
+          row("Name / Relationship", `${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""})`),
+          row("Contacts", `${state.carer_home||""}  ${state.carer_mobile||""}  ${state.carer_email||""}`),
+          row("Shared care / custody", ynu("custody"))
+        ])}
+        ${sect("Safety & Risks",[
+          row("Fall / Wound / Pain / Pressure / Behaviour",
+              `Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}`),
+          row("Risk notes", state.risk_notes||"")
+        ])}
+        ${sect("Supports",[
+          row("Main reason", state.key_area||""),
+          row("Requested supports", sup||""),
+          row("Allergies", `${ynu("allergies")}${state.allergy_list?` – ${state.allergy_list}`:""}`),
+          row("Service location", state.service_location||"")
+        ])}
+        ${sect("Funding & Plan",[
+          row("Plan management", ynu("plan_managed")),
+          row("Funding notes", state.funding_area||"")
+        ])}
+      </div>`;
     }
 
     // Hidden native form post (more reliable, no branding shown)
     function submitOnline(){
-      // Final gate: both consents must be present
-      if(state.consent!=='yes'){ alert("Consent (Step 1) is required to submit."); go(0); return; }
-      if(!state.referral_consent){ alert("Please tick the final consent box on the Review step before submitting."); go(8); return; }
+      if(state.consent!=="yes"){ alert("Consent (Step 1) is required to submit."); go(0); return; }
+      if(!state.referral_consent){ alert("Please tick the final consent box on the Review step before submitting."); go(7); return; }
 
       const form = document.getElementById('silentPost');
       if(!form){ alert("Submit form not found."); return; }
@@ -338,130 +388,42 @@
         form.appendChild(i);
       };
 
+      // Subject
       form.querySelector('input[name="_subject"]').value =
-        "New NDIS Referral – " + (state.participant_fname||"") + " " + (state.participant_lname||"");
+        "HD HeeD Referral — " + (state.participant_fname||"") + " " + (state.participant_lname||"");
 
-      // Preserve your original field names
+      // Always auto‑CC these inboxes
+      add('_cc', 'info@hdheed.com.au,ndis@hdheed.com.au');
+
+      // Plain + HTML summaries
+      add('summary', buildSummaryPlain());
+      add('summary_html', buildSummaryHTML());
+
+      // Lightweight raw fields
       const names=[
-        "consent","referrer_name","relationship","phone","mobile","email",
-        "participant_fname","participant_lname","title","dob","ndis_number","gender","marital_status",
-        "street","suburb","city","postcode","home_phone","participant_mobile","participant_email",
-        "language","interpreter","interpreter_type",
-        "carer_fname","carer_lname","carer_relationship","carer_street","carer_suburb","carer_city","carer_postcode","carer_home","carer_mobile","carer_email","custody",
-        "key_area",
-        "goal1","goal1_service","goal1_category",
-        "goal2","goal2_service","goal2_category",
-        "goal3","goal3_service","goal3_category",
-        "goal4","goal4_service","goal4_category",
-        "current_services","previous_services","funding_area",
-        "plan_managed","postcode_lookup","referral_consent"
+        'referrer_name','relationship','email','phone','mobile',
+        'participant_fname','participant_lname','dob','ndis_number',
+        'street','suburb','city','postcode','participant_mobile','participant_email',
+        'language','interpreter','interpreter_type',
+        'carer_fname','carer_lname','carer_relationship','carer_mobile','carer_email',
+        'recent_fall','wound','uncontrolled_pain','pressure_risk','behaviour_risk','risk_notes',
+        'key_area','service_location','allergies','allergy_list',
+        'plan_managed','funding_area','referral_consent'
       ];
       names.forEach(n=> add(n, state[n]));
 
-      // Add readable summary
-      add("summary", buildSummary());
+      // Also include selected supports as a single field
+      add('supports_selected', pickSupports());
 
       form.submit();
     }
 
     // Download HTML report (print to PDF if needed)
     function downloadReportHTML(){
-      const esc = s => (s||"").toString().replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-      const ynuText = k => state[k]==="yes"?"Yes": state[k]==="no"?"No": state[k]==="unsure"?"Not sure": (state[k]||"");
-      const sect = (title, rows) => `
-        <section style="margin:18px 0;">
-          <h2 style="margin:0 0 8px 0;border-bottom:1px solid #e5e7eb;padding-bottom:6px;color:#0f172a;">${esc(title)}</h2>
-          <table style="width:100%;border-collapse:collapse;font:14px system-ui,Segoe UI,Roboto,Arial;">
-            ${rows.map(([k,v])=>`
-              <tr>
-                <td style="padding:8px;border-bottom:1px solid #eee;color:#334155;width:32%">${esc(k)}</td>
-                <td style="padding:8px;border-bottom:1px solid #eee;color:#0f172a">${esc(v)}</td>
-              </tr>`).join('')}
-          </table>
-        </section>`;
-
-      const html = `<!doctype html>
-      <html><head><meta charset="utf-8"><title>HD HeeD Referral – ${esc(state.participant_fname||"")} ${esc(state.participant_lname||"")}</title></head>
-      <body style="margin:0;background:#f6f7fb;padding:24px;">
-      <div style="max-width:900px;margin:auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;">
-        <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <h1 style="margin:0;color:#0f172a;font:600 20px system-ui,Segoe UI,Roboto,Arial;">HD HeeD – Referral Summary</h1>
-          <div style="color:#64748b;font:13px system-ui;">Generated ${new Date().toLocaleString()}</div>
-        </header>
-
-        ${sect("Consent", [
-          ["Consent status", ynuText("consent")],
-          ["Final consent box", state.referral_consent ? "Ticked" : "Not ticked"]
-        ])}
-
-        ${sect("Person Making Referral", [
-          ["Full name", state.referrer_name||""],
-          ["Relationship", state.relationship||""],
-          ["Email", state.email||""],
-          ["Phone", state.phone||""],
-          ["Mobile", state.mobile||""]
-        ])}
-
-        ${sect("Participant Details", [
-          ["Name", (state.participant_fname||"")+" "+(state.participant_lname||"")],
-          ["Title", state.title||""],
-          ["DOB", state.dob||""],
-          ["NDIS number", state.ndis_number||""],
-          ["Gender", ynuText("gender")],
-          ["Marital status", state.marital_status||""],
-          ["Address", [state.street, state.suburb, state.city, state.postcode].filter(Boolean).join(", ")],
-          ["Home phone", state.home_phone||""],
-          ["Mobile", state.participant_mobile||""],
-          ["Email", state.participant_email||""],
-          ["Language", state.language||""],
-          ["Interpreter required", ynuText("interpreter")],
-          ["Interpreter type", state.interpreter_type||""]
-        ])}
-
-        ${sect("Primary Carer (NOK)", [
-          ["Name", (state.carer_fname||"")+" "+(state.carer_lname||"")],
-          ["Relationship", state.carer_relationship||""],
-          ["Address", [state.carer_street, state.carer_suburb, state.carer_city, state.carer_postcode].filter(Boolean).join(", ")],
-          ["Home phone", state.carer_home||""],
-          ["Mobile", state.carer_mobile||""],
-          ["Email", state.carer_email||""],
-          ["Shared care / custody", ynuText("custody")]
-        ])}
-
-        ${sect("Safety & Risks", [
-          ["Recent fall", ynuText("recent_fall")],
-          ["Wound / post-op", ynuText("wound")],
-          ["Uncontrolled pain", ynuText("uncontrolled_pain")],
-          ["Pressure injury risk", ynuText("pressure_risk")],
-          ["Behaviours of concern", ynuText("behaviour_risk")],
-          ["Risk notes", state.risk_notes||""]
-        ])}
-
-        ${sect("Supports", [
-          ["Key area of support", state.key_area||""],
-          ["Allergies", ynuText("allergies") + (state.allergy_list? " – " + state.allergy_list : "")]
-        ])}
-
-        ${sect("Funding & Plan", [
-          ["Plan management", ynuText("plan_managed")],
-          ["Funding support area", state.funding_area||""],
-          ["Service location", state.postcode_lookup||""]
-        ])}
-
-        ${sect("NDIS Goals", [
-          ["Goal 1", (state.goal1||"") + (state.goal1_service? " — " + state.goal1_service : "") + (state.goal1_category? " ["+state.goal1_category+"]" : "")],
-          ["Goal 2", (state.goal2||"") + (state.goal2_service? " — " + state.goal2_service : "") + (state.goal2_category? " ["+state.goal2_category+"]" : "")],
-          ["Goal 3", (state.goal3||"") + (state.goal3_service? " — " + state.goal3_service : "") + (state.goal3_category? " ["+state.goal3_category+"]" : "")],
-          ["Goal 4", (state.goal4||"") + (state.goal4_service? " — " + state.goal4_service : "") + (state.goal4_category? " ["+state.goal4_category+"]" : "")]
-        ])}
-
-        <footer style="margin-top:16px;color:#64748b;font:13px system-ui;">© HD HeeD</footer>
-      </div></body></html>`;
-
-      const blob = new Blob([html], {type:"text/html"});
+      const blob = new Blob([buildSummaryHTML()], {type:"text/html"});
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `HDHeeD_Referral_${Date.now()}.html`;
+      a.download = `HDHeeD_Referral_${(state.participant_fname||'')}_${(state.participant_lname||'')}.html`.replace(/\s+/g,'');
       a.click();
     }
 
