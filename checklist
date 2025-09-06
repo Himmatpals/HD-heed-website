@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>HD HeeD — Contractor Onboarding (Checklist)</title>
+<style>
+  body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;background:#f1f5f9;color:#111827;display:flex;justify-content:center;padding:24px}
+  .shell{width:100%;max-width:800px}
+  .card{background:#fff;color:#111827;border-radius:16px;box-shadow:0 6px 22px rgba(0,0,0,.1);padding:24px}
+  h1{margin:0 0 12px 0;font-size:1.5rem}
+  h2{margin:20px 0 8px 0;font-size:1.2rem;color:#334155;border-bottom:2px solid #e2e8f0;padding-bottom:4px}
+  ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  li{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;display:flex;align-items:center;gap:10px}
+  li input{width:auto}
+  .section{margin-bottom:24px}
+  .btn-row{display:flex;gap:10px;margin-top:20px}
+  button{appearance:none;border:none;padding:10px 16px;border-radius:8px;font-weight:600;cursor:pointer}
+  .primary{background:#2563eb;color:#fff}
+  .ghost{background:#e2e8f0}
+  pre{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;white-space:pre-wrap;max-height:240px;overflow:auto}
+</style>
+</head>
+<body>
+  <div class="shell">
+    <div class="card">
+      <h1>HD HeeD — Contractor Onboarding (Simple)</h1>
+      <p class="muted">Tick items as you collect them. Progress saves automatically to your device.</p>
+
+      <div class="section">
+        <h2>Pre‑start (must have before first shift)</h2>
+        <ul id="pre"></ul>
+      </div>
+
+      <div class="section">
+        <h2>After Start (first month)</h2>
+        <ul id="after"></ul>
+      </div>
+
+      <div class="section">
+        <h2>Ongoing</h2>
+        <ul id="ongoing"></ul>
+      </div>
+
+      <div class="section">
+        <h2>Summary</h2>
+        <div class="btn-row">
+          <button class="primary" id="copy">Copy Summary</button>
+          <button class="ghost" id="reset">Reset</button>
+        </div>
+        <pre id="preview"></pre>
+      </div>
+    </div>
+  </div>
+
+<script>
+const KEY = "hdheed_simple_onboarding";
+const state = JSON.parse(localStorage.getItem(KEY) || '{}');
+
+const pre = [
+  'NDIS Code of Conduct acknowledgement',
+  'NDIS Worker Orientation module',
+  'NDIS Worker Screening clearance',
+  'Right to work check (citizen/VEVO)',
+  'ABN provided',
+  'Insurance (Public Liability, PI if required)',
+  'First Aid & CPR certificates',
+  'Manual Handling & Infection Control',
+  'Working With Children Check (if applicable)',
+  'AHPRA Registration (if nurse/allied health)',
+  'Signed Contractor Agreement',
+  'Signed Privacy/Confidentiality Agreement'
+];
+
+const after = [
+  'HD HeeD Induction (policies & incident reporting)',
+  'Reportable Incidents training',
+  'Medication competency (if applicable)',
+  'Behaviour support awareness (if applicable)',
+  'Risk & safety briefing',
+  'Check superannuation obligations'
+];
+
+const ongoing = [
+  'Renew screening/WWCC before expiry',
+  'Refresh CPR annually',
+  'Refresh First Aid, Manual Handling, IPC as required',
+  'Collect updated insurance certificates each year'
+];
+
+function render(list, id){
+  const ul = document.getElementById(id);
+  list.forEach(item=>{
+    const li = document.createElement('li');
+    const cb = document.createElement('input'); cb.type='checkbox'; cb.checked=state[item]||false;
+    cb.onchange=()=>{ state[item]=cb.checked; save(); buildSummary(); };
+    const span=document.createElement('span'); span.textContent=item;
+    li.appendChild(cb); li.appendChild(span);
+    ul.appendChild(li);
+  });
+}
+
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+function buildSummary(){
+  const lines=['HD HeeD — Contractor Onboarding Summary', new Date().toLocaleString(),''];
+  [...pre,...after,...ongoing].forEach(i=>{
+    lines.push(`${state[i]?'[x]':'[ ]'} ${i}`);
+  });
+  document.getElementById('preview').textContent=lines.join('\n');
+  return lines.join('\n');
+}
+
+render(pre,'pre');
+render(after,'after');
+render(ongoing,'ongoing');
+buildSummary();
+
+// Buttons
+ document.getElementById('copy').onclick=()=>{ navigator.clipboard.writeText(buildSummary()); alert('Summary copied'); };
+ document.getElementById('reset').onclick=()=>{ if(confirm('Clear all progress?')){ localStorage.removeItem(KEY); location.reload(); } };
+</script>
+</body>
+</html>
