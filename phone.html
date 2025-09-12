@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HD HeeD — New Client Call Guide & Phone Script</title>
+  <style>
+    :root{
+      --bg:#0f1220;
+      --panel:#14182a;
+      --ink:#e8eaf6;
+      --muted:#b7c0d8;
+      --accent:#7c4dff; /* HD HeeD vibe: purple */
+      --accent-2:#9a7bff;
+      --ok:#00c389;
+      --warn:#ffb020;
+      --danger:#ff6b6b;
+      --card:#11162a;
+      --chip:#1a2140;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,Helvetica,Arial,sans-serif;
+      background:linear-gradient(180deg,var(--bg),#070a14 60%); color:var(--ink);
+    }
+    a{color:var(--accent)}
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(8px);
+      background:color-mix(in oklab, var(--bg) 85%, transparent);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .wrap{max-width:1180px; margin:auto; padding:18px 20px}
+    .brand{display:flex; align-items:center; gap:14px}
+    .logo{width:40px; height:40px; border-radius:12px; background: radial-gradient(120% 120% at 20% 20%, var(--accent), var(--accent-2)); box-shadow:0 6px 24px rgba(124,77,255,.35)}
+    h1{font-size: clamp(20px, 2.6vw, 36px); margin:0}
+
+    main{display:grid; grid-template-columns: 300px 1fr; gap:22px; padding:22px}
+    @media (max-width: 920px){ main{grid-template-columns:1fr} nav{position:static !important} }
+
+    nav{
+      position:sticky; top:76px; align-self:start; padding:16px; border:1px solid rgba(255,255,255,.08);
+      border-radius:16px; background:linear-gradient(180deg,var(--panel),#0f1330);
+    }
+    nav h3{margin:0 0 10px; font-size:14px; letter-spacing:.2px; color:var(--muted)}
+    nav a{display:block; padding:8px 10px; border-radius:10px; text-decoration:none; color:var(--ink); font-size:14px}
+    nav a:hover{background:var(--chip)}
+
+    section{background: linear-gradient(180deg,var(--panel),#0d1330 60%); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:22px}
+    section h2{margin:0 0 12px}
+    .muted{color:var(--muted)}
+    .grid{display:grid; gap:14px}
+    .cols-2{grid-template-columns:1fr 1fr}
+    .cols-3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width: 920px){ .cols-2,.cols-3{grid-template-columns:1fr} }
+
+    .chip{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:var(--chip); border:1px solid rgba(255,255,255,.06); font-size:12px; color:var(--muted)}
+    .tag{font-size:12px; color:var(--muted); padding:2px 8px; border:1px dashed rgba(255,255,255,.2); border-radius:999px}
+
+    .callout{padding:12px 14px; border-left:3px solid var(--accent); background:#13183a; border-radius:12px}
+    .ok{border-left-color:var(--ok)}
+    .warn{border-left-color:var(--warn)}
+    .danger{border-left-color:var(--danger)}
+
+    details{border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:12px 14px; background: #0f1633}
+    details summary{cursor:pointer; font-weight:600; margin:-12px -14px 10px; padding:12px 14px}
+
+    .btn{appearance:none; border:0; background:linear-gradient(180deg,var(--accent),var(--accent-2)); color:white; padding:10px 14px; border-radius:12px; cursor:pointer; box-shadow:0 10px 24px rgba(124,77,255,.35); font-weight:600}
+    .btn.ghost{background:transparent; border:1px solid rgba(255,255,255,.16); box-shadow:none}
+
+    .flex{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .row{display:flex; gap:14px}
+
+    .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px; background: #0c1026; border:1px solid rgba(255,255,255,.08); border-radius:6px; padding:2px 6px; color:var(--muted)}
+
+    .script{background:#0c1026; border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:14px}
+    .script p{margin:0 0 12px; line-height:1.5}
+    .script .label{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.2px}
+    .script .copy{float:right; margin-left:8px}
+
+    .form{display:grid; gap:12px}
+    .form label{font-size:12px; color:var(--muted)}
+    .form input,.form select,.form textarea{width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.1); background:#0c1026; color:var(--ink)}
+    .form textarea{min-height:88px}
+
+    .kpis{display:grid; grid-template-columns: repeat(4, 1fr); gap:12px}
+    .kpis > div{background:#0c1026; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:14px}
+    .kpis h4{margin:0 0 6px}
+
+    footer{padding:28px 22px; color:var(--muted)}
+
+    /* Print */
+    @media print{
+      header, nav, .no-print{display:none !important}
+      body{background:white; color:#111}
+      section{border-color:#ddd; background:white}
+      a{color:#333}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>HD HeeD — New Client Call Guide & Phone Script</h1>
+          <div class="muted">RN‑led NDIS Provider | Blacktown & Greater Sydney • <span class="tag">02 8630 5500</span> • <span class="tag">info@hdheed.com.au</span> • <span class="tag">hdheed.com.au/referral</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <nav>
+      <h3>Quick Nav</h3>
+      <a href="#precall">0. Pre‑call checks</a>
+      <a href="#flow">Step‑by‑Step Flow</a>
+      <a href="#core-script">Core Phone Script</a>
+      <a href="#variants">Variants (Participant / NOK / SC)</a>
+      <a href="#capture">Capture Form (Call Notes)</a>
+      <a href="#objections">Objection Handling</a>
+      <a href="#followups">Follow‑up SMS & Email</a>
+      <a href="#aftercall">After‑call Admin</a>
+      <a href="#tips">Do / Don’t</a>
+    </nav>
+
+    <div class="grid" style="gap:22px">
+
+      <section id="precall">
+        <h2>0) Pre‑call checklist</h2>
+        <div class="grid cols-2">
+          <div>
+            <ul>
+              <li>Open the <b>Referral form</b>: <a href="https://www.hdheed.com.au/referral.html" target="_blank" rel="noopener">hdheed.com.au/referral</a></li>
+              <li>Have the <b>NDIS price limits</b> and <b>service list</b> handy.</li>
+              <li>Prepare the <b>Consent & Privacy</b> statement (below) to read verbatim.</li>
+              <li>Keep <b>calendar</b> open for assessment/meet‑and‑greet booking.</li>
+              <li>Check <b>service area</b> (Blacktown → Greater Sydney).</li>
+            </ul>
+          </div>
+          <div class="callout ok">
+            <b>Goal of the call:</b> Confirm eligibility & fit, collect key info, secure referral submission or book an assessment.
+          </div>
+        </div>
+        <div class="flex no-print">
+          <button class="btn" onclick="window.print()">Print / Save PDF</button>
+          <button class="btn ghost" onclick="expandAll()">Expand all sections</button>
+        </div>
+      </section>
+
+      <section id="flow">
+        <h2>Step‑by‑Step Call Flow</h2>
+        <ol>
+          <li><b>Warm greeting & orientation</b> — who you are, RN‑led provider, quick outline of the call (2–3 mins).</li>
+          <li><b>Identify caller role</b> — Participant, family/NOK, or Support Coordinator (SC)/referrer.</li>
+          <li><b>Consent & Privacy</b> — read the consent script before collecting personal/health info.</li>
+          <li><b>High‑level need</b> — what supports are needed and why now?</li>
+          <li><b>Eligibility & funding</b> — NDIS status, plan dates, management (self/plan/NDIA), budgets available.</li>
+          <li><b>Safeguarding snapshot</b> — risks, behaviours of concern, clinical alerts, equipment, environment.</li>
+          <li><b>Preferences & logistics</b> — days/times, location(s), language/interpreter, gender preference, start date.</li>
+          <li><b>Fit check & pricing</b> — confirm we can support; outline pricing at NDIS limits; transparency on travel/cancellations.</li>
+          <li><b>Close with action</b> — send the referral link or complete it on the call; book assessment/meet‑and‑greet.</li>
+          <li><b>Wrap‑up</b> — recap next steps; provide contact details and response time.</li>
+          <li><b>After‑call admin</b> — document notes, create tasks, send summary email/SMS.</li>
+        </ol>
+      </section>
+
+      <section id="core-script">
+        <h2>Core Phone Script (read‑ready)</h2>
+
+        <div class="script">
+          <div class="label">1) Greeting & orientation</div>
+          <button class="btn copy" data-copy="#s1">Copy</button>
+          <p id="s1">Hi, you’re speaking with <b>[Your name]</b> from <b>HD HeeD</b>, an RN‑led NDIS provider based in Blacktown supporting the Greater Sydney area. Is now a good time to talk for about five minutes? I’ll ask a few questions to understand your needs and funding setup, then we can book a next step or I can send you our quick referral link.</p>
+        </div>
+
+        <div class="script">
+          <div class="label">2) Caller role</div>
+          <button class="btn copy" data-copy="#s2">Copy</button>
+          <p id="s2">Just so I tailor this properly — are you the NDIS participant, a family member or next of kin, or a Support Coordinator/referrer?</p>
+        </div>
+
+        <div class="script">
+          <div class="label">3) Consent & privacy (read verbatim)</div>
+          <button class="btn copy" data-copy="#s3">Copy</button>
+          <p id="s3">Before we continue, I’ll read a quick consent message. We’ll collect only the information needed to discuss services, check eligibility, and arrange next steps. We store information securely and handle it according to the NDIS Code of Conduct and privacy laws. You can ask us to correct or delete your information at any time. Do you consent to proceed?</p>
+        </div>
+
+        <div class="script">
+          <div class="label">4) High‑level need & goals</div>
+          <button class="btn copy" data-copy="#s4">Copy</button>
+          <p id="s4">Could you share what support you’re looking for and what a good outcome would look like? For example: personal care, community access, skill‑building, nursing support, or something else?</p>
+        </div>
+
+        <div class="script">
+          <div class="label">5) Eligibility & funding</div>
+          <button class="btn copy" data-copy="#s5">Copy</button>
+          <p id="s5">Are you currently an NDIS participant? If yes: what are your plan dates, and is your plan <b>self‑managed</b>, <b>plan‑managed</b> (by which provider?), or <b>NDIA‑managed</b>? Do you know which budgets you want to use for these supports?</p>
+        </div>
+
+        <div class="script">
+          <div class="label">6) Safeguarding snapshot</div>
+          <button class="btn copy" data-copy="#s6">Copy</button>
+          <p id="s6">To make sure we keep everyone safe, are there any <b>risks or behaviours of concern</b> we should know about? Any <b>medical alerts</b> like allergies, diabetes, epilepsy; equipment such as hoist, wheelchair, or oxygen; or environmental considerations at home?</p>
+        </div>
+
+        <div class="script">
+          <div class="label">7) Preferences & logistics</div>
+          <button class="btn copy" data-copy="#s7">Copy</button>
+          <p id="s7">Which suburb will services be delivered in? What days and times suit you best? Do you have a preference for a male or female worker, language or interpreter needs, or specific cultural preferences?</p>
+        </div>
+
+        <div class="script">
+          <div class="label">8) Fit check & pricing</div>
+          <button class="btn copy" data-copy="#s8">Copy</button>
+          <p id="s8">Thanks — based on what you’ve shared, it sounds like we can help. We charge at the current NDIS price limits for the relevant support item, and we’re transparent about travel and cancellation rules. Would you like us to proceed with a referral and book a meet‑and‑greet or assessment?</p>
+        </div>
+
+        <div class="script">
+          <div class="label">9) Close with action</div>
+          <button class="btn copy" data-copy="#s9">Copy</button>
+          <p id="s9">I can text or email you our quick referral link now — <b>hdheed.com.au/referral</b> — or I can complete it with you on this call. What do you prefer?</p>
+        </div>
+
+        <div class="script">
+          <div class="label">10) Wrap‑up</div>
+          <button class="btn copy" data-copy="#s10">Copy</button>
+          <p id="s10">Great — I’ll summarise today’s notes and next steps. If you need anything in the meantime, call <b>02 8630 5500</b> or email <b>info@hdheed.com.au</b>. Thanks for your time today.</p>
+        </div>
+      </section>
+
+      <section id="variants">
+        <h2>Caller Variants</h2>
+        <div class="grid cols-3">
+          <details open>
+            <summary><b>Participant</b> variant</summary>
+            <div class="script">
+              <p><b>Softening questions:</b> What matters most to you in a support worker? Have you had supports before — what worked, what didn’t?</p>
+              <p><b>Enablement:</b> Would you like us to show you how to view budgets or read item numbers so you always feel in control?</p>
+            </div>
+          </details>
+          <details>
+            <summary><b>Family / NOK</b> variant</summary>
+            <div class="script">
+              <p><b>Capacity & consent:</b> Does the participant consent to you speaking on their behalf today? If not, do you have formal authority (e.g., guardian)?</p>
+              <p><b>Relief & safety:</b> What are the immediate concerns you want us to stabilise first?</p>
+            </div>
+          </details>
+          <details>
+            <summary><b>Support Coordinator (SC) / Referrer</b> variant</summary>
+            <div class="script">
+              <p><b>Scope & urgency:</b> Which registration groups and ratios are required? Any behaviour / nursing flags? Target start date?</p>
+              <p><b>Docs requested:</b> Plan summary pages, risk/behaviour plans, OT/physio reports, consent to share, SC contact details for coordination.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="capture">
+        <h2>Call Notes — Capture Form</h2>
+        <div class="form">
+          <div class="grid cols-3">
+            <div>
+              <label>Caller name & role</label>
+              <input placeholder="e.g., Jane Singh (Participant)" />
+            </div>
+            <div>
+              <label>Phone & Email</label>
+              <input placeholder="0400 000 000 • jane@example.com" />
+            </div>
+            <div>
+              <label>Date & Time</label>
+              <input placeholder="12/09/2025 13:00" />
+            </div>
+          </div>
+
+          <div class="grid cols-2">
+            <div>
+              <label>Participant details</label>
+              <textarea placeholder="Name, DOB, address/suburb, language/interpreter, cultural preferences"></textarea>
+            </div>
+            <div>
+              <label>NDIS details</label>
+              <textarea placeholder="NDIS number, plan dates, management type, plan manager contact (if any)"></textarea>
+            </div>
+          </div>
+
+          <div class="grid cols-2">
+            <div>
+              <label>Supports sought & goals</label>
+              <textarea placeholder="0104 nursing, 0107 personal care, community access, skill‑building, etc."></textarea>
+            </div>
+            <div>
+              <label>Safeguarding snapshot</label>
+              <textarea placeholder="Risks/behaviours, medical alerts, equipment, home access"></textarea>
+            </div>
+          </div>
+
+          <div class="grid cols-3">
+            <div>
+              <label>Preferences & logistics</label>
+              <textarea placeholder="Days/times, gender preference, worker attributes"></textarea>
+            </div>
+            <div>
+              <label>Locations</label>
+              <textarea placeholder="Primary suburb + any travel requirements"></textarea>
+            </div>
+            <div>
+              <label>Start date & urgency</label>
+              <textarea placeholder="Ready now / within 1–2 weeks / future date"></textarea>
+            </div>
+          </div>
+
+          <div class="grid cols-2">
+            <div>
+              <label>Documents requested</label>
+              <textarea placeholder="Plan summary, BSP, risk assessments, OT/PT reports, consent"></textarea>
+            </div>
+            <div>
+              <label>Next steps</label>
+              <textarea placeholder="Send referral link • Book assessment • Draft service agreement"></textarea>
+            </div>
+          </div>
+
+          <div class="flex no-print">
+            <button class="btn" onclick="copyBlock('nextsteps')">Copy next steps template</button>
+            <span id="nextsteps" class="kbd">Next: Send hdheed.com.au/referral • Book meet‑and‑greet • Prepare onboarding checklist</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="objections">
+        <h2>Objection Handling (quick replies)</h2>
+        <div class="grid cols-2">
+          <details>
+            <summary>“We already have a provider.”</summary>
+            <div class="callout">
+              That’s great — our aim is to fit where needed. If there are gaps (e.g., after‑hours, nursing, or short‑notice), we can complement your current provider. Would it help if I emailed a simple overview and our referral link for when a gap pops up?
+            </div>
+          </details>
+          <details>
+            <summary>“What do you charge?”</summary>
+            <div class="callout">
+              We bill at the <b>current NDIS price limits</b> for the relevant support item. We’re transparent about travel and cancellations up‑front so there are no surprises. If you like, I can include the exact item numbers we’d use for your supports.
+            </div>
+          </details>
+          <details>
+            <summary>“We need someone urgently.”</summary>
+            <div class="callout warn">
+              Understood. Let’s confirm safety and minimum details now; I’ll escalate to scheduling right after this call and aim to offer earliest slots. If today isn’t possible, I’ll give you the first available option and keep you updated.
+            </div>
+          </details>
+          <details>
+            <summary>“Can you handle complex nursing tasks?”</summary>
+            <div class="callout ok">
+              Yes — we’re RN‑led and confident with catheter care, stoma care, wound care, diabetes support, and medication administration. We’ll review clinical documents and complete a nursing assessment before commencing.
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="followups">
+        <h2>Follow‑up SMS & Email (copy & send)</h2>
+        <div class="grid cols-2">
+          <div class="script">
+            <div class="label">SMS — Referral link</div>
+            <button class="btn copy" data-copy="#sms1">Copy</button>
+            <p id="sms1">Hi, it’s HD HeeD. As discussed, here’s our quick referral link: hdheed.com.au/referral — once submitted, we’ll get in touch to book your assessment. Thanks!</p>
+          </div>
+          <div class="script">
+            <div class="label">Email — Call summary</div>
+            <button class="btn copy" data-copy="#email1">Copy</button>
+            <p id="email1">Subject: Thanks for your time today — HD HeeD next steps<br><br>Hi [Name],<br>Thanks for speaking with us today. Based on our chat, we can support with [supports]. Please complete the referral here: hdheed.com.au/referral. Once received, we’ll book a meet‑and‑greet/assessment and outline pricing (NDIS limits) and scheduling options. If you need anything, call 02 8630 5500 or reply to this email.<br><br>Kind regards,<br>HD HeeD Team</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="aftercall">
+        <h2>After‑call Admin (internal)</h2>
+        <ul>
+          <li>Write progress note / CRM entry with date, caller, key info, and agreed next steps.</li>
+          <li>Send SMS or email with referral link and summary.</li>
+          <li>Set task to follow up in 24–48 hours if referral not received.</li>
+          <li>If urgent, notify scheduling and clinical lead immediately.</li>
+          <li>When referral arrives: start onboarding checklist and service agreement draft.</li>
+        </ul>
+      </section>
+
+      <section id="tips">
+        <h2>Do / Don’t</h2>
+        <div class="grid cols-2">
+          <div>
+            <h3>Do</h3>
+            <ul>
+              <li>Use plain language; check understanding frequently.</li>
+              <li>Read the consent statement verbatim before collecting health info.</li>
+              <li>Confirm management type and budgets early.</li>
+              <li>Document risks and clinical alerts clearly.</li>
+              <li>Close the call with a concrete next action.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Don’t</h3>
+            <ul>
+              <li>Promise start dates before scheduling confirms capacity.</li>
+              <li>Collect unnecessary health information you don’t need yet.</li>
+              <li>Skip recap; always restate who will do what by when.</li>
+              <li>Forget to send the referral link or book the assessment.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="wrap">
+    © <span id="year"></span> HD HeeD Pty Ltd • ABN 47 665 228 768 • RN‑led NDIS Provider • Phone 02 8630 5500 • info@hdheed.com.au
+  </footer>
+
+  <script>
+    const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+    function copyTextFrom(selector){
+      const el = document.querySelector(selector);
+      if(!el) return;
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      try{ document.execCommand('copy'); }catch(e){}
+      sel.removeAllRanges();
+    }
+    function copyBlock(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      navigator.clipboard?.writeText(el.innerText || el.textContent) || copyTextFrom('#'+id);
+      flash(el);
+    }
+    function flash(el){
+      const old = el.style.outline; el.style.outline = '2px solid var(--accent)';
+      setTimeout(()=> el.style.outline = old, 600);
+    }
+    document.querySelectorAll('.btn.copy').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        const sel = btn.getAttribute('data-copy');
+        const el = document.querySelector(sel);
+        if(!el) return;
+        navigator.clipboard?.writeText(el.innerText || el.textContent) || copyTextFrom(sel);
+        flash(el);
+      })
+    })
+    function expandAll(){
+      document.querySelectorAll('details').forEach(d=> d.open = true);
+    }
+  </script>
+</body>
+</html>
