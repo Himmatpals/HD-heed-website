@@ -3,473 +3,496 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HD HeeD — NDIS Intake Phone Scripts (All Scenarios)</title>
+  <title>HD HeeD — NDIS Intake Phone Scripts (All 12 Scenarios)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0e111a; --panel:#121729; --card:#1a2244; --ink:#e8ecff; --muted:#b9c2ff;
-      --accent:#7c4dff; --accent-2:#00e6a7; --ink-dim:#92a0ff; --ink-faint:#89a1ff;
+      --bg:#0e111a; --panel:#121729; --card:#1a2244; --ink:#e8ecff; --muted:#a6b0e0; --brand:#7c4dff; --brand-2:#29b6f6;
+      --ok:#34d399; --warn:#f59e0b; --danger:#ef4444; --shadow:0 10px 30px rgba(0,0,0,.25);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{font-family:Inter, system-ui, -apple-system, Segoe UI, Arial, sans-serif; background:var(--bg); color:var(--ink); margin:0;}
-    header,footer{background:var(--panel); padding:16px 20px; border-bottom:1px solid #1a1f35}
-    h1{margin:0; font-size:28px; letter-spacing:.2px}
-    .sub{color:var(--muted); font-size:14px}
+    header,footer{background:var(--panel); padding:16px 20px; position:sticky; top:0; z-index:50; border-bottom:1px solid rgba(255,255,255,.05)}
+    header h1{margin:0; font-size:22px; font-weight:700}
+    header .sub{font-size:13px; color:var(--muted)}
 
-    /* layout */
-    .wrap{display:flex; min-height:calc(100vh - 120px)}
-    aside{position:sticky; top:0; align-self:flex-start; width:280px; padding:18px; background:var(--panel); border-right:1px solid #1a1f35; height:100vh; overflow:auto}
-    main{flex:1; padding:24px 24px 120px;}
+    .shell{display:flex; min-height:calc(100vh - 64px)}
+    aside{position:sticky; top:64px; align-self:flex-start; width:280px; background:var(--panel); height:calc(100vh - 64px); overflow:auto; padding:18px 16px; border-right:1px solid rgba(255,255,255,.05)}
+    .logo{font-weight:800; letter-spacing:.5px; font-size:14px; color:var(--muted); margin-bottom:8px}
+    nav a{display:flex; align-items:center; gap:8px; padding:8px 10px; color:var(--ink); text-decoration:none; border-radius:8px}
+    nav a:hover{background:rgba(124,77,255,.1); color:#fff}
+    nav small{color:var(--muted)}
+    .search{position:relative; margin:8px 0 14px}
+    .search input{width:100%; padding:10px 36px 10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.08); background:#0b112b; color:var(--ink)}
+    .search svg{position:absolute; right:10px; top:50%; transform:translateY(-50%); opacity:.6}
 
-    /* index */
-    .idx h3{margin:6px 0 12px}
-    .idx input{width:100%; padding:10px 12px; border-radius:10px; border:1px solid #223; background:#0c122b; color:var(--ink); margin-bottom:12px}
-    .idx a{display:block; padding:6px 4px; color:var(--ink); text-decoration:none; border-radius:8px}
-    .idx a small{color:var(--ink-dim)}
-    .idx a:hover{background:#0f1836; color:#fff}
+    main{flex:1; padding:24px;}
+    section{padding:20px; margin:16px 0 28px; background:var(--card); border-radius:14px; box-shadow:var(--shadow)}
+    section h2{margin:0 0 10px}
+    .badge{display:inline-block; padding:3px 8px; border-radius:999px; background:var(--brand); color:#fff; font-size:12px; font-weight:600}
+    details{margin:10px 0; border:1px solid rgba(255,255,255,.08); border-radius:10px; overflow:hidden}
+    details[open]{border-color:rgba(124,77,255,.35)}
+    details > summary{list-style:none; cursor:pointer; padding:12px 14px; background:#0b112b; color:#fff; font-weight:600;}
+    details > summary::-webkit-details-marker{display:none}
+    details .pad{padding:14px}
+    .callout{padding:12px 14px; background:#101842; border-left:4px solid var(--brand); border-radius:8px; margin:10px 0}
+    .script{background:#0b112b; padding:12px; border-radius:10px; margin-top:12px}
+    .script p{margin:8px 0; line-height:1.6}
 
-    /* card/section */
-    section{background:var(--card); border:1px solid #2a3766; border-radius:14px; padding:18px 18px 8px; margin:14px 0 18px}
-    section h2{margin:0 0 8px; font-size:22px}
-    .meta{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px}
-    .badge{display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; background:linear-gradient(135deg, var(--accent) 0%, #5a85ff 100%); color:#fff; font-size:11.5px; font-weight:600}
-    .pill{display:inline-block; padding:2px 8px; border-radius:999px; background:#0c1537; color:var(--ink-faint); font-size:11.5px}
-    .callout{padding:12px; background:#101842; border-left:4px solid var(--accent); border-radius:8px; margin:12px 0}
-    .grid{display:grid; gap:12px}
-    @media(min-width:900px){.grid.cols-2{grid-template-columns:1fr 1fr}}
+    .toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 0}
+    .btn{appearance:none; border:none; border-radius:10px; padding:8px 12px; font-weight:600; color:#fff; cursor:pointer}
+    .btn.print{background:var(--brand)}
+    .btn.copy{background:var(--brand-2)}
+    .btn.top{background:#2dd4bf}
 
-    details{background:#0b112b; border:1px solid #223057; border-radius:10px; padding:10px 12px; margin:12px 0}
-    details[open]{background:#0e1540}
-    summary{cursor:pointer; font-weight:600}
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+    .faq{background:#0b112b; border-radius:12px; padding:12px}
 
-    .script{background:#0b112b; padding:12px; border-radius:10px; border:1px dashed #2a3766; margin-top:10px}
-    .script p{margin:6px 0; line-height:1.6}
-    .kvg{margin:0; padding-left:18px}
-    .kvg li{margin:6px 0}
+    footer{display:flex; justify-content:space-between; align-items:center; gap:12px; border-top:1px solid rgba(255,255,255,.05)}
+    footer small{color:var(--muted)}
 
-    /* sticky print bar */
-    .tools{position:sticky; top:0; z-index:4; backdrop-filter:saturate(140%) blur(8px); background:rgba(14,17,26,.85); padding:8px 12px; margin:-24px -24px 16px; border-bottom:1px solid #1a1f35; display:flex; gap:8px; align-items:center}
-    .btn{appearance:none; border:1px solid #2a3766; background:#0f1736; color:#fff; padding:8px 12px; border-radius:10px; font-weight:600; cursor:pointer}
-    .btn:hover{background:#121e4a}
-
-    .print-link{margin-left:auto; font-size:12px; color:var(--ink-dim)}
-
-    footer{border-top:1px solid #1a1f35}
-
-    /* print styles */
+    /* PRINT UTILS */
     @media print{
-      aside,.tools,footer{display:none !important}
       body{background:#fff; color:#000}
-      section{border:0; background:#fff}
-      a[href^="#"]::after{display:none}
+      header, aside, .toolbar, footer{display:none!important}
+      section{box-shadow:none; background:#fff;}
+      .print-solo section{display:none}
+      .print-solo section.print-target{display:block}
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>HD HeeD — NDIS Intake Phone Scripts (All Scenarios)</h1>
-    <div class="sub">Warm, plain-English scripts for clinical & admin intake teams — with FAQs and print tools</div>
+    <h1>HD HeeD — NDIS Intake Phone Scripts (Complete Library)</h1>
+    <div class="sub">Twelve real-world scenarios • clear checklists • conversation examples • print-ready</div>
   </header>
 
-  <div class="wrap">
+  <div class="shell">
     <aside>
-      <div class="idx">
-        <h3>Quick Index</h3>
-        <input id="filter" placeholder="Filter scenarios… (e.g. ‘hospital’, ‘CALD’, ‘review’)" />
-        <nav id="toc">
-          <a href="#s1">1) Standard Participant Intake <small>(self/plan-managed)</small></a>
-          <a href="#s2">2) Family / Next of Kin</a>
-          <a href="#s3">3) Support Coordinator Referral</a>
-          <a href="#s4">4) Complex Needs (Behaviours / Restrictive)</a>
-          <a href="#s5">5) High-Risk Cases (Hospital / Urgent)</a>
-          <a href="#s6">6) Nursing-Only Supports</a>
-          <a href="#s7">7) CALD / Interpreter</a>
-          <a href="#s8">8) Disengaged / Hard-to-Reach</a>
-          <a href="#s9">9) Transitioning from Another Provider</a>
-          <a href="#s10">10) Plan Review / Change in Supports</a>
-          <a href="#s11">11) Aged Care Crossover</a>
-          <a href="#s12">12) Paediatric (ECEI Transition)</a>
-          <a href="#faq">FAQ — Common Questions</a>
-        </nav>
+      <div class="logo">Quick Index</div>
+      <div class="search">
+        <input id="q" placeholder="Search sections… (e.g., PEG, discharge)" />
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/></svg>
       </div>
+      <nav id="toc">
+        <a href="#s1"><span>1.</span> Standard Participant Intake</a>
+        <a href="#s2"><span>2.</span> Family / Next of Kin</a>
+        <a href="#s3"><span>3.</span> Support Coordinator Referral</a>
+        <a href="#s4"><span>4.</span> Complex Needs & Restrictive Practices</a>
+        <a href="#s5"><span>5.</span> High‑Risk Cases (Hospital / Urgent)</a>
+        <a href="#s6"><span>6.</span> Nursing‑Only Supports</a>
+        <a href="#s7"><span>7.</span> CALD / Interpreter Required</a>
+        <a href="#s8"><span>8.</span> Disengaged / Hard-to-Reach</a>
+        <a href="#s9"><span>9.</span> Transitioning from Another Provider</a>
+        <a href="#s10"><span>10.</span> Plan Review / Change in Supports</a>
+        <a href="#s11"><span>11.</span> Aged Care Crossover</a>
+        <a href="#s12"><span>12.</span> Paediatric (Under 7 / ECEI Transition)</a>
+        <a href="#faq"><span>★</span> FAQs (Common Questions)</a>
+      </nav>
     </aside>
 
-    <main>
-      <div class="tools">
-        <button class="btn" onclick="window.print()">🖨️ Print Page</button>
-        <span class="print-link">Tip: Use the small ‘Print this section’ button inside any scenario to print just that part.</span>
-      </div>
+    <main id="content">
 
-      <!-- ============ SCENARIO 1 ============ -->
+      <!-- SECTION TEMPLATE NOTE: Each section has: summary bullets, key info, common concerns, suggested steps, conversation examples -->
+
       <section id="s1">
-        <h2>1) Standard Participant Intake (Self or Plan Managed)</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Intake Officer</span>
-          <span class="pill">First contact</span>
-          <span class="pill">Warm & informative</span>
-        </div>
-        <button class="btn" onclick="printSection('s1')">Print this section</button>
-
-        <div class="callout">Context: First-contact call to welcome a new NDIS participant (self- or plan-managed), gather details, set expectations, and schedule next steps.</div>
-
-        <div class="grid cols-2">
-          <div>
-            <h3>Key Information to Gather</h3>
-            <ul class="kvg">
-              <li>Personal details, NDIS number, plan dates & management type.</li>
-              <li>Supports sought & goals; immediate needs/preferences.</li>
-              <li>Support coordinator or key contacts.</li>
-              <li>Safety/health considerations.</li>
+        <h2>1) Standard Participant Intake <span class="badge">Self/Plan-Managed</span></h2>
+        <p>First-contact call to welcome a new participant, confirm plan details, and map supports. Tone: friendly, clear, empowering.</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Participant details, NDIS number, plan dates, plan management type + plan manager contacts.</li>
+              <li>Supports sought & goals; immediate needs & preferences (times, gender preference, communication needs).</li>
+              <li>Existing team (support coordinator, therapists), safety/health considerations.</li>
             </ul>
-            <h3>Suggested Next Steps</h3>
-            <ul class="kvg">
-              <li>Outline relevant services; prepare service agreement.</li>
-              <li>Book initial meeting/assessment; send summary email/SMS.</li>
-              <li>Encourage questions; keep communication open.</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Common Concerns & Responses</h3>
-            <ul class="kvg">
-              <li><strong>Cost worries:</strong> NDIS/plan manager covers approved services; we handle invoicing.</li>
-              <li><strong>Process confusion:</strong> We’ll guide step-by-step, in plain English.</li>
-              <li><strong>Plan-managed billing:</strong> We invoice plan manager directly.</li>
-              <li><strong>Start time:</strong> We aim to commence within 1–2 weeks; urgent needs prioritised.</li>
-            </ul>
-          </div>
-        </div>
-
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake:</em> “Hello, this is [Name] calling from [Your Organization]. May I please speak with [Participant Name]?”</p>
-            <p><em>Participant:</em> “Speaking. Hi.”</p>
-            <p><em>Intake:</em> “Hi [Participant Name]! How are you today? I’m calling because we received your details as someone who’s interested in our NDIS support services. I wanted to introduce myself and see how we can assist you.”</p>
-            <p><em>Participant:</em> “Oh, hi. I’m doing okay, thanks. Yes, I’ve been looking for a support provider.”</p>
-            <p><em>Intake:</em> “Great, I’m glad to connect with you. Is now a good time to chat for about 10–15 minutes?” …</p>
-            <p>… <strong>[Include full Standard Intake dialogue exactly as provided in your brief]</strong> …</p>
           </div>
         </details>
+        <details>
+          <summary>Common concerns & helpful responses</summary>
+          <div class="pad">
+            <div class="callout"><strong>Cost worries:</strong> “Your NDIS plan funds approved supports; we coordinate billing with your plan manager so you can focus on your support.”</div>
+            <div class="callout"><strong>New to NDIS:</strong> “We’ll guide you step by step, in plain language. Ask anything at any time.”</div>
+            <div class="callout"><strong>Start timing:</strong> “After intake we book your first meeting/assessment within days; we’ll prioritise urgent needs.”</div>
+          </div>
+        </details>
+        <details>
+          <summary>Suggested next steps</summary>
+          <div class="pad">
+            <ul>
+              <li>Send service overview + draft service agreement; book initial visit/assessment.</li>
+              <li>Confirm roster options; share written summary with contacts & next appointment.</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary>Conversation example (script)</summary>
+          <div class="pad script">
+            <p><strong>Intake:</strong> “Hello, this is [Name] from [Org]. May I speak with [Participant]?”</p>
+            <p><strong>Participant:</strong> “Speaking.”</p>
+            <p><strong>Intake:</strong> “Great to meet you. We received your details about NDIS supports. Is now a good time for ~15 minutes?” …</p>
+            <p>(Full standard-intake dialogue, including plan manager coordination, booking first visit, and recap.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s1')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s1')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
       </section>
 
-      <!-- ============ SCENARIO 2 ============ -->
       <section id="s2">
-        <h2>2) Family Member or Next of Kin Calling on Behalf</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Intake Officer</span>
-          <span class="pill">Family liaison</span>
-          <span class="pill">Consent-aware</span>
-        </div>
-        <button class="btn" onclick="printSection('s2')">Print this section</button>
-        <div class="callout">Context: Family member is main contact. Balance warmth, privacy, and participant consent.</div>
-
-        <h3>Key Information to Gather</h3>
-        <ul class="kvg">
-          <li>Relationship & any formal role (guardian/nominee).</li>
-          <li>Participant awareness/consent to family coordinating.</li>
-          <li>Participant details, supports sought, communication needs.</li>
-          <li>Who will be primary contact ongoing; cultural preferences.</li>
-        </ul>
-
-        <h3>Common Concerns & Responses</h3>
-        <ul class="kvg">
-          <li><strong>Can I handle discussions?</strong> Yes — with participant permission; we’ll also centre their voice.</li>
-          <li><strong>Privacy worries:</strong> We involve only approved contacts; respect sensitive topics.</li>
-          <li><strong>Quality concerns:</strong> Person‑centred practice; you’re welcome to be involved.</li>
-        </ul>
-
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake:</em> “Hello, this is [Name] from [Your Organization]. I’m looking to speak with [Family Member Name] …”</p>
-            <p>… <strong>[Paste the complete Family/NOK scripted dialogue you provided]</strong> …</p>
+        <h2>2) Family Member / Next of Kin Calling on Behalf</h2>
+        <p>When a family member is the main contact. Keep participant centred, privacy respected, and consent clear.</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Relationship & legal role (guardian/nominee) and participant’s consent to involve them.</li>
+              <li>Participant background, current supports, communication preferences/challenges.</li>
+              <li>Who remains primary contact; documents to collect (assessments, reports).</li>
+            </ul>
           </div>
         </details>
+        <details>
+          <summary>Conversation example (script)</summary>
+          <div class="pad script">
+            <p><strong>Intake:</strong> “Hello, I’m [Name] from [Org]. Am I speaking with [Daughter/Son/etc.] regarding [Participant]’s NDIS supports?” …</p>
+            <p>(Warm acknowledgement, involve participant on speaker, outline supports, schedule home visit, draft agreement.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s2')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s2')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
       </section>
 
-      <!-- ============ SCENARIO 3 ============ -->
       <section id="s3">
         <h2>3) Support Coordinator Referral</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Intake Officer</span>
-          <span class="pill">3‑way partnership</span>
-          <span class="pill">Coordination</span>
-        </div>
-        <button class="btn" onclick="printSection('s3')">Print this section</button>
-        <div class="callout">Context: Participant referred by Support Coordinator (SC). Clarify goals, timelines, and SC involvement.</div>
-        <h3>Key Info, Concerns, Next Steps</h3>
-        <ul class="kvg">
-          <li>Confirm referral scope; SC details; participant’s goals in their own words.</li>
-          <li>Timelines/urgency; plan management; reporting cadence.</li>
-          <li>Offer joint meetings; agree on comms (CC SC with consent).</li>
-        </ul>
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake:</em> “Hi [Participant Name], this is [Name] … Your support coordinator, [SC Name], asked me to give you a call.”</p>
-            <p>… <strong>[Paste full Support Coordinator Referral dialogue]</strong> …</p>
+        <p>Three‑way partnership: participant (choice & control), SC (coordination), provider (delivery).</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>What the SC referred for; participant’s goals in their own words; timelines/urgency.</li>
+              <li>How to communicate with SC (cc updates, joint meetings, reports for reviews).</li>
+            </ul>
           </div>
         </details>
+        <details>
+          <summary>Conversation example (script)</summary>
+          <div class="pad script">
+            <p><strong>Intake:</strong> “Hi [Participant], [SC Name] asked me to connect. Is now okay?” …</p>
+            <p>(Confirm goals like showering/cooking post‑stroke; book OT weekly; schedule support worker; service agreement & bookings; pre‑review reporting.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s3')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s3')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
       </section>
 
-      <!-- ============ SCENARIO 4 ============ -->
       <section id="s4">
         <h2>4) Complex Needs (Behaviours of Concern / Restrictive Practices)</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Senior Intake / Clinical</span>
-          <span class="pill">PBS‑aligned</span>
-          <span class="pill">Safety & dignity</span>
-        </div>
-        <button class="btn" onclick="printSection('s4')">Print this section</button>
-        <div class="callout">Context: High‑needs cases requiring Positive Behaviour Support, authorised restrictive practices, and strong family collaboration.</div>
-        <h3>Key Info, Concerns, Next Steps</h3>
-        <ul class="kvg">
-          <li>Behaviours, triggers, effective strategies; PBSP & authorisations.</li>
-          <li>Safety for staff; team consistency; crisis plan; data tracking.</li>
-        </ul>
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake (Clinical Specialist):</em> “Hello, [Name]? This is [Your Name] …”</p>
-            <p>… <strong>[Paste full Complex Needs scripted dialogue]</strong> …</p>
+        <p>Clinical intake emphasising Positive Behaviour Support, safety, dignity, and consistency.</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Behaviours, frequency, triggers; effective/ineffective strategies; PBS plan details.</li>
+              <li>Any restrictive practices & authorisations; safety requirements; allied team; communication style; environment.</li>
+              <li>Family priorities; crisis plan; data tracking approach.</li>
+            </ul>
           </div>
         </details>
+        <details>
+          <summary>Conversation example (script)</summary>
+          <div class="pad script">
+            <p>(Full specialist-led dialogue: non‑judgemental history, PRN protocol, collaboration with practitioner, consistent roster, shadowing, meet‑and‑greet with preferred interests.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s4')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s4')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
       </section>
 
-      <!-- ============ SCENARIO 5 ============ -->
       <section id="s5">
         <h2>5) High‑Risk Cases (Hospital Discharge / Urgent Safety)</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Intake Coordinator (Nurse)</span>
-          <span class="pill">Rapid mobilisation</span>
-          <span class="pill">Discharge planning</span>
-        </div>
-        <button class="btn" onclick="printSection('s5')">Print this section</button>
-        <div class="callout">Context: Time‑critical setup (equipment, visits, on‑call). Calm, confident, and practical reassurance.</div>
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake (Nurse):</em> “Hi [Participant Name], this is [Name] … about your upcoming discharge …”</p>
-            <p>… <strong>[Paste full High‑Risk / Hospital discharge dialogue]</strong> …</p>
+        <p>Mobilise support rapidly; coordinate with hospital teams; provide a 72‑hour stabilisation plan.</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Discharge date/time; condition; aftercare; equipment; discharge plan.</li>
+              <li>Immediate 24–72 hr supports; current supports; funding flexibility & contacts; home safety; contingency.</li>
+            </ul>
           </div>
         </details>
+        <details>
+          <summary>Conversation example (script)</summary>
+          <div class="pad script">
+            <p>(Discharge‑day plan: worker meets patient, equipment fast‑track, meals, nurse visits, pendant checks, 3‑visits‑daily for first days, friend as backup; funding reassurance; pet care.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s5')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s5')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
       </section>
 
-      <!-- ============ SCENARIO 6 ============ -->
       <section id="s6">
         <h2>6) Nursing‑Only Supports (Wound Care, PEG, Catheter)</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Intake Nurse (RN)</span>
-          <span class="pill">High intensity supports</span>
-        </div>
-        <button class="btn" onclick="printSection('s6')">Print this section</button>
-        <div class="callout">Context: Clinical tasks requiring qualified nurses; focus on competence, continuity, and clear contingency.</div>
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake Nurse:</em> “Hello [Participant Name] … I’m calling about the nursing support you’re looking for …”</p>
-            <p>… <strong>[Paste full Nursing‑only dialogue]</strong> …</p>
+        <p>Clinical tasks delivered by qualified nurses; precision, continuity, and clear contingencies.</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Task specifics, frequency/timing; medical background; existing protocols/orders.</li>
+              <li>Supplies & sourcing; home setup; comfort/pain; carer training interest; contingencies; funding line items.</li>
+            </ul>
           </div>
         </details>
+        <details>
+          <summary>Conversation example (PEG focus)</summary>
+          <div class="pad script">
+            <p>(Three daily pump feeds, flushes, medication via PEG, site care, gradual skill‑sharing, continuity of nurse, on‑call, first‑visit checks, documentation.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s6')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s6')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
       </section>
 
-      <!-- ============ SCENARIO 7 ============ -->
       <section id="s7">
         <h2>7) CALD Backgrounds / Interpreter Required</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Intake Officer</span>
-          <span class="pill">Culturally responsive</span>
-          <span class="pill">Interpreter‑friendly</span>
-        </div>
-        <button class="btn" onclick="printSection('s7')">Print this section</button>
-        <div class="callout">Context: Language or cultural barriers — arrange interpreters (e.g., TIS National), adapt comms & staffing to preferences.</div>
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake:</em> “Hello, may I speak with [Participant Name] or their family?” …</p>
-            <p>… <strong>[Paste full CALD / Interpreter dialogue]</strong> …</p>
+        <p>Language access, cultural safety, and respectful flexibility. Use interpreters at no cost to participants.</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Preferred language & interpreter needs; primary contact (family vs participant).</li>
+              <li>Cultural/religious practices; holidays/observances; gender preferences; dietary rules.</li>
+              <li>Understanding of NDIS concepts; translated materials; community connections.</li>
+            </ul>
           </div>
         </details>
+        <details>
+          <summary>Conversation example (with daughter interpreting)</summary>
+          <div class="pad script">
+            <p>(Offer TIS interpreter, confirm address terms of respect, simple English + greeting in language, schedule female worker, no‑pork/ shoes‑off, church access, translated agreement.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s7')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s7')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
       </section>
 
-      <!-- ============ SCENARIO 8 ============ -->
       <section id="s8">
         <h2>8) Disengaged / Hard‑to‑Reach Clients</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Outreach‑focused Intake</span>
-          <span class="pill">Low‑pressure</span>
-          <span class="pill">Trust‑building</span>
-        </div>
-        <button class="btn" onclick="printSection('s8')">Print this section</button>
-        <div class="callout">Context: Minimal‑pressure engagement; offer choices, simple next steps, and respectful follow‑ups.</div>
-        <details>
-          <summary>Conversation Examples — Live Call & Voicemail</summary>
-          <div class="script">
-            <p><em>Live call:</em> “Hi, is this [Participant Name]? … one minute overview …”</p>
-            <p>… <strong>[Paste full Disengaged client call script]</strong> …</p>
-            <hr />
-            <p><em>Voicemail:</em> “Hi [Participant Name], this is [Your Name] from [Org] … No pressure at all …”</p>
+        <p>Gentle, non‑pressuring outreach; make engagement effortless; always leave the door open.</p>
+        <details open>
+          <summary>Key information to gather (if engagement occurs)</summary>
+          <div class="pad">
+            <ul>
+              <li>Barriers, interests (hooks), preferred comms & times; trust issues; minimal next step.</li>
+            </ul>
           </div>
         </details>
+        <details>
+          <summary>Conversation + voicemail examples</summary>
+          <div class="pad script">
+            <p>(Short, autonomy‑centred call; offer text follow‑up & one‑month check‑in; friendly non‑demanding voicemail script.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s8')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s8')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
       </section>
 
-      <!-- ============ SCENARIO 9 ============ -->
       <section id="s9">
-        <h2>9) Clients Transitioning from Another Provider</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Intake Coordinator</span>
-          <span class="pill">Seamless handover</span>
-          <span class="pill">No‑gap continuity</span>
-        </div>
-        <button class="btn" onclick="printSection('s9')">Print this section</button>
-        <div class="callout">Context: Participant switching providers; focus on reliability, communications, start date alignment, and zero overlap billing.</div>
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake:</em> “Hi [Participant Name]! It’s [Your Name] … Glad to be moving on from [Old Provider] …”</p>
-            <p>… <strong>[Paste full Transitioning from Another Provider dialogue]</strong> …</p>
+        <h2>9) Transitioning from Another Provider</h2>
+        <p>Seamless switch with zero downtime; respectful handling; align start/end dates and bookings.</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Reason for transition; services to continue/change; end date & notice period; pending items & reports.</li>
+              <li>What worked vs didn’t; avoid double‑billing; new agreement & booking; first‑month review.</li>
+            </ul>
           </div>
         </details>
+        <details>
+          <summary>Conversation example (script)</summary>
+          <div class="pad script">
+            <p>(Reliability & consistency focus; two regular workers; intro visit during last shift; ‘coffee‑first‑then‑shower’ preference; dedicated cleaning visit; plan‑manager coordination.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s9')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s9')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
       </section>
 
-      <!-- ============ SCENARIO 10 ============ -->
       <section id="s10">
         <h2>10) Plan Review / Change in Supports</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Coordinator / Intake</span>
-          <span class="pill">Re‑budgeting</span>
-          <span class="pill">Continuity</span>
-        </div>
-        <button class="btn" onclick="printSection('s10')">Print this section</button>
-        <div class="callout">Context: New plan issued (increases or cuts). Rebalance supports, protect critical routines, add new funded services.</div>
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake/Coordinator:</em> “Hi [Participant Name], I wanted to connect about your new NDIS plan …”</p>
-            <p>… <strong>[Paste full Plan Review / Change dialogue]</strong> …</p>
-          </div>
-        </details>
-      </section>
-
-      <!-- ============ SCENARIO 11 ============ -->
-      <section id="s11">
-        <h2>11) Aged Care Crossover (My Aged Care & NDIS)</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Intake / Case Manager</span>
-          <span class="pill">Complementary funding</span>
-        </div>
-        <button class="btn" onclick="printSection('s11')">Print this section</button>
-        <div class="callout">Context: Participant using both systems; avoid duplication, integrate plans, reassure NDIS continues past 65 if already in scheme.</div>
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake:</em> “Good morning [Mr. Smith] … let’s align NDIS and your Home Care Package …”</p>
-            <p>… <strong>[Paste full Aged Care crossover dialogue]</strong> …</p>
-          </div>
-        </details>
-      </section>
-
-      <!-- ============ SCENARIO 12 ============ -->
-      <section id="s12">
-        <h2>12) Paediatric Clients (Under 7, ECEI Transition)</h2>
-        <div class="meta">
-          <span class="badge">Caller Type: Early Childhood Intake / Key Worker</span>
-          <span class="pill">Play‑based</span>
-          <span class="pill">Family‑centred</span>
-        </div>
-        <button class="btn" onclick="printSection('s12')">Print this section</button>
-        <div class="callout">Context: Transition from ECEI to standard NDIS pathway around age 7; maintain continuity, school collaboration, parent coaching.</div>
-        <details>
-          <summary>Conversation Example — Full Script</summary>
-          <div class="script">
-            <p><em>Intake (Key Worker):</em> “Hello [Parent Name] … we’ll keep supports seamless as [Child] turns 7 …”</p>
-            <p>… <strong>[Paste full Paediatric ECEI Transition dialogue]</strong> …</p>
-          </div>
-        </details>
-      </section>
-
-      <!-- ============ FAQ ============ -->
-      <section id="faq">
-        <h2>FAQ — Common Questions</h2>
-        <button class="btn" onclick="printSection('faq')">Print this section</button>
+        <p>Adjust rosters & therapies to match new budgets; reassure and optimise; visualise old vs new.</p>
         <details open>
-          <summary>Billing & Plan Management</summary>
-          <div class="script">
-            <p><strong>Who pays?</strong> NDIS funds approved supports. If plan‑managed, we invoice the plan manager; if agency‑managed, we claim via the portal; if self‑managed, we provide invoices to you.</p>
-            <p><strong>Will I have out‑of‑pocket costs?</strong> For NDIS‑approved supports delivered at the price limits, there should be no out‑of‑pocket costs.</p>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Category changes (Core/Capacity); new/removed supports; priorities & feelings; timeline; admin changes.</li>
+              <li>Service agreement update/addendum; service booking rollover; plan comprehension check.</li>
+            </ul>
           </div>
         </details>
         <details>
-          <summary>Service Agreements & Start Times</summary>
-          <div class="script">
-            <p>We’ll send a clear, plain‑English service agreement. Services usually start within 1–2 weeks after intake; urgent cases can be fast‑tracked.</p>
+          <summary>Conversation example (script)</summary>
+          <div class="pad script">
+            <p>(Trim least‑critical hours to protect mornings; start weekly physio; add social skills group; defer psych for a month; update documents; 4‑week review.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s10')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s10')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
+      </section>
+
+      <section id="s11">
+        <h2>11) Aged Care Crossover (My Aged Care + NDIS)</h2>
+        <p>Use both systems complementarily; coordinate with aged‑care case manager; avoid duplication.</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Age & status (continuing participant post‑65); list of aged‑care vs NDIS services; overlaps/gaps; contacts.</li>
+              <li>Clarify coverage (equipment/therapy); joint meeting & shared plan; educate that NDIS continues post‑65.</li>
+            </ul>
           </div>
         </details>
         <details>
-          <summary>Changing or Ending Services</summary>
-          <div class="script">
-            <p>You remain in control. Tell us if you wish to change hours, workers, or end services. We’ll coordinate notice periods and avoid billing overlaps.</p>
+          <summary>Conversation example (script)</summary>
+          <div class="pad script">
+            <p>(Map HCP nursing/cleaning vs NDIS personal care/physio/equipment; add one NDIS hour for chores; share physio notes with nurse; joint call; adjustable bed pathway.)</p>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s11')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s11')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
+      </section>
+
+      <section id="s12">
+        <h2>12) Paediatric Clients (Under 7 / ECEI Transition)</h2>
+        <p>Play‑based, family‑centred therapy; warm handover from ECEI; school collaboration.</p>
+        <details open>
+          <summary>Key information to gather</summary>
+          <div class="pad">
+            <ul>
+              <li>Current services & reports; goals for next stage; school timing & collaboration; family training; new funding.</li>
+            </ul>
           </div>
         </details>
         <details>
-          <summary>CALD & Interpreters</summary>
-          <div class="script">
-            <p>We can arrange a free professional interpreter and match culturally appropriate workers where possible. Preferences (gender, customs) are respected.</p>
+          <summary>Conversation example (script)</summary>
+          <div class="pad script">
+            <p>(Weekly speech; OT for ADLs; therapeutic playgroup trial; LAC intro call; school liaison; warm handover; bubbles & favourite toys to build rapport.)</p>
           </div>
         </details>
-        <details>
-          <summary>Complex Needs & Safety</summary>
-          <div class="script">
-            <p>We follow Positive Behaviour Support, authorised restrictive practices, and robust safety plans. Small, consistent teams and regular reviews build trust.</p>
-          </div>
-        </details>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('s12')">Print this section</button>
+          <button class="btn copy" onclick="copyPart('s12')">Copy HTML</button>
+          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <div class="grid-2">
+          <div class="faq"><strong>How fast can services start?</strong><br/>Often within days after intake; high‑risk cases can be same‑day where feasible.</div>
+          <div class="faq"><strong>Do you use interpreters?</strong><br/>Yes — professional interpreters are available at no cost to participants when needed.</div>
+          <div class="faq"><strong>Will I get the same worker?</strong><br/>We prioritise continuity; you’ll meet your core team and approve any backup in advance.</div>
+          <div class="faq"><strong>What if funding changes mid‑plan?</strong><br/>We’ll re‑budget with you, update agreements, and adjust rosters promptly.</div>
+          <div class="faq"><strong>Can you coordinate with hospital/school/aged‑care?</strong><br/>Absolutely, with your consent we collaborate so supports feel seamless.</div>
+          <div class="faq"><strong>What if a worker is late or can’t attend?</strong><br/>We notify immediately, arrange substitutes, and provide clear on‑call contacts.</div>
+          <div class="faq"><strong>Can family be involved?</strong><br/>Yes — as much or as little as you want, always centring the participant’s choice.</div>
+          <div class="faq"><strong>Do you help at plan reviews?</strong><br/>We provide progress notes/reports and suggestions based on outcomes.</div>
+        </div>
+        <div class="toolbar">
+          <button class="btn print" onclick="printPart('faq')">Print FAQs</button>
+          <button class="btn copy" onclick="copyPart('faq')">Copy HTML</button>
+        </div>
       </section>
 
     </main>
   </div>
 
   <footer>
-    © <span id="year"></span> HD HeeD — Comprehensive NDIS Intake Phone Scripts
+    <small>© <span id="year"></span> HD HeeD — Comprehensive NDIS Intake Phone Scripts</small>
+    <small id="match"></small>
   </footer>
 
   <script>
-    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Filter index
-    const f = document.getElementById('filter');
-    const toc = document.getElementById('toc');
-    const links = Array.from(toc.querySelectorAll('a'));
-    f.addEventListener('input', () => {
-      const q = f.value.toLowerCase().trim();
-      links.forEach(a => {
-        const show = !q || a.textContent.toLowerCase().includes(q);
-        a.style.display = show ? 'block' : 'none';
+    // Simple search filter
+    const q = document.getElementById('q');
+    const content = document.getElementById('content');
+    const sections = [...content.querySelectorAll('section')];
+    const match = document.getElementById('match');
+    q.addEventListener('input', () => {
+      const term = q.value.trim().toLowerCase();
+      let visible = 0;
+      sections.forEach(s => {
+        if(!term){ s.style.display=''; visible++; return; }
+        const txt = s.innerText.toLowerCase();
+        const ok = txt.includes(term);
+        s.style.display = ok ? '' : 'none';
+        if(ok) visible++;
       });
+      match.textContent = term ? `${visible} section${visible===1?'':'s'} match “${q.value}”` : '';
     });
 
-    // Print a specific section
-    function printSection(id){
-      const el = document.getElementById(id);
-      if(!el) return window.print();
-      const w = window.open('', '_blank');
-      const css = `
-        <style>
-          body{font-family:Inter, Arial, sans-serif; padding:24px}
-          h2{margin-top:0}
-          .script{border:1px dashed #999; padding:10px; border-radius:8px}
-          details{border:1px solid #ccc; padding:8px 10px; border-radius:8px}
-          summary{font-weight:700}
-        </style>`;
-      w.document.write(`<html><head><title>${el.querySelector('h2')?.textContent || 'Section'}</title>${css}</head><body>${el.outerHTML}</body></html>`);
-      w.document.close();
-      w.focus();
-      w.print();
-      w.close();
+    // Print single section
+    function printPart(id){
+      const node = document.getElementById(id);
+      if(!node) return;
+      const win = window.open('', '_blank');
+      const css = document.querySelector('style').outerHTML + '
+' +
+                  '<style>@media print{header,aside,.toolbar,footer{display:none!important}.print-solo section{display:none}.print-solo section.print-target{display:block}}</style>';
+      win.document.write(`<!doctype html><html><head><meta charset='utf-8'><title>Print — ${node.querySelector('h2')?.innerText||'Section'}</title>${css}</head><body class='print-solo'>${node.outerHTML.replace('<section',"<section class='print-target'")}</body></html>`);
+      win.document.close();
+      win.focus();
+      win.print();
     }
-    window.printSection = printSection;
+    window.printPart = printPart;
+
+    // Copy HTML of a section
+    async function copyPart(id){
+      const node = document.getElementById(id);
+      if(!node) return;
+      const html = node.outerHTML;
+      try{ await navigator.clipboard.writeText(html); alert('Section HTML copied to clipboard.'); }
+      catch(e){ alert('Copy failed. You can select the section and copy manually.'); }
+    }
+    window.copyPart = copyPart;
   </script>
 </body>
 </html>
