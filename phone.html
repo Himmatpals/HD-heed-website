@@ -3,808 +3,400 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NDIS Intake Phone Scripts — Part 2</title>
+  <title>NDIS Intake Phone Scripts — Consolidated (All Scenarios)</title>
   <style>
-    body{font-family:Inter, Arial, sans-serif; background:#0e111a; color:#e8ecff; margin:0;}
-    header,footer{background:#121729; padding:16px 20px;}
-    h1{margin:0; font-size:28px;}
-    nav{background:#121729; padding:14px; position:sticky; top:0;}
-    nav a{display:block; padding:6px 0; color:#e8ecff; text-decoration:none;}
-    section{padding:20px; margin:20px; background:#1a2244; border-radius:12px;}
-    h2{margin-top:0;}
-    .badge{display:inline-block; padding:3px 7px; border-radius:8px; background:#7c4dff; color:#fff; font-size:12px;}
-    details{margin:10px 0;}
-    .callout{padding:12px; background:#101842; border-left:4px solid #7c4dff; border-radius:8px; margin:10px 0;}
-    .script{background:#0b112b; padding:12px; border-radius:8px; margin-top:14px;}
-    .script p{margin:6px 0; line-height:1.6;}
+    :root{--bg:#0e111a;--panel:#121729;--ink:#e8ecff;--muted:#b8c1da;--line:rgba(255,255,255,.12);--accent:#7c4dff;--accent2:#9a7bff;--ok:#00c389;--warn:#ffb020;--danger:#ff6b6b}
+    *{box-sizing:border-box}
+    body{font-family:Inter, Arial, sans-serif; background:#0e111a; color:var(--ink); margin:0}
+    header,footer{background:#121729; padding:16px 20px}
+    h1{margin:0; font-size:28px}
+    .muted{color:var(--muted)}
+    main{display:grid; grid-template-columns:300px 1fr; gap:0}
+    @media (max-width: 1024px){ main{grid-template-columns:1fr} nav{position:static!important}}
+    nav{background:#121729; padding:14px 18px; position:sticky; top:0; align-self:start; border-right:1px solid var(--line)}
+    nav h3{margin:0 0 8px; font-size:14px; color:var(--muted)}
+    nav a{display:block; padding:8px 0; color:var(--ink); text-decoration:none; border-bottom:1px solid rgba(255,255,255,.06); font-size:14px}
+    nav a:last-child{border-bottom:0}
+
+    .wrap{padding:0 0 28px}
+    .toolbar{display:flex; gap:10px; padding:12px 20px; border-top:1px solid var(--line); background:#0f1533; position:sticky; top:60px; z-index:2}
+    .btn{appearance:none; border:0; background:linear-gradient(180deg,var(--accent),var(--accent2)); color:#fff; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600}
+    .btn.ghost{background:transparent; border:1px solid var(--line)}
+
+    section{padding:20px; margin:20px; background:#1a2244; border-radius:14px; border:1px solid var(--line)}
+    h2{margin-top:0}
+    h3{margin-bottom:8px}
+    .badge{display:inline-block; padding:4px 8px; border-radius:999px; background:#7c4dff; color:#fff; font-size:12px}
+    details{margin:10px 0}
+    .callout{padding:12px; background:#101842; border-left:4px solid var(--accent); border-radius:8px; margin:10px 0}
+    .ok{border-left-color:var(--ok)} .warn{border-left-color:var(--warn)} .danger{border-left-color:var(--danger)}
+    .script{background:#0b112b; padding:12px; border-radius:8px; margin-top:14px; border:1px solid var(--line)}
+    .script p{margin:6px 0; line-height:1.6}
+    .label{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.2px; margin-bottom:6px}
+    .two-col{columns:2; column-gap:24px}
+    @media (max-width: 900px){ .two-col{columns:1} }
+    .copy{float:right}
+    @media print{ header, nav, .toolbar{display:none!important}; body{background:#fff;color:#111}; section{background:#fff; border-color:#ddd} }
   </style>
 </head>
 <body>
   <header>
-    <h1>NDIS Intake Phone Scripts (Various Scenarios) — Part 2</h1>
-    <div>Support Coordinator Referral and Extended Family Dialogue</div>
+    <h1>NDIS Intake Phone Scripts — Consolidated</h1>
+    <div class="muted">All scenarios in one printable page. Warm, plain English. For clinical and admin teams.</div>
   </header>
 
   <main>
     <nav>
-      <a href="#s2b">2b) Extended Family Dialogue Example</a>
+      <h3>Index</h3>
+      <a href="#s1">1) Standard Participant Intake (Self / Plan Managed)</a>
+      <a href="#s2">2) Family Member / Next of Kin</a>
       <a href="#s3">3) Support Coordinator Referral</a>
+      <a href="#s4">4) Complex Needs (Behaviours of Concern / Restrictive Practices)</a>
+      <a href="#s5">5) High‑Risk Cases (Hospital Discharge / Urgent Safety)</a>
+      <a href="#s6">6) Nursing‑Only Supports (Wound, PEG, Catheter)</a>
     </nav>
 
-    <!-- ========== SCENARIO 2b EXTENDED SCRIPT ========== -->
-    <section id="s2b">
-      <h2>2b) Family / Next of Kin — Extended Scripted Dialogue</h2>
-      <span class="badge">Dialogue Example</span>
-      <div class="script">
-        <p><b>Intake:</b> Hello, this is [Name] from [Your Organization]. I’m looking to speak with [Family Member Name] – I was told you’re the best contact regarding [Participant Name]’s NDIS supports?</p>
-        <p><b>Family Member:</b> Yes, that’s me. I’m [Participant Name]’s daughter. Thanks for calling.</p>
-        <p><b>Intake:</b> Thank you for reaching out on [Participant Name]’s behalf. How are you both doing today?</p>
-        <p><b>Family Member:</b> We’re doing alright. My dad (Participant) is here with me. He’s a bit hard of hearing, so I tend to handle the phone conversations.</p>
-        <p><b>Intake:</b> I understand. Hi [Participant Name] (speaking a bit louder and clearer)! I’m [Name] from [Org]. I’m talking with your daughter to make sure we arrange the supports you need. How are you today?</p>
-        <p><b>Participant:</b> Oh, hello! I’m okay, thank you.</p>
-        <p><b>Family Member:</b> He can hear you on speaker now. He knows we’re arranging some help for him.</p>
-        <p><b>Intake:</b> Great, I’ll continue to chat with both of you. So, I understand [Participant Name] has an NDIS plan, and you’re helping to organize his services. Could you tell me a bit about what prompted you to contact us and what supports you’re looking for?</p>
-        <p><b>Family Member:</b> Sure. My dad had a stroke last year... (full extended dialogue continues as provided by user).</p>
-      </div>
-    </section>
-
-    <!-- ========== SCENARIO 3 ========== -->
-    <section id="s3">
-      <h2>3) Support Coordinator Referral</h2>
-      <span class="badge">Caller Type & Role</span> Intake Officer (admin or clinical) calling a participant referred by their Support Coordinator.
-      <p><b>Context:</b> A support coordinator (SC) has provided details to initiate services. Acknowledge SC’s role and clarify a three‑way partnership between participant, SC, and provider.</p>
-
-      <h3>Key Information to Gather</h3>
-      <ul>
-        <li>Participant’s understanding of referral and services expected.</li>
-        <li>Name of SC/organisation and whether to include them in future communications.</li>
-        <li>Participant’s goals and needs in their own words.</li>
-        <li>Logistics: plan management, urgent priorities, timelines.</li>
-        <li>Comfort level with SC’s continued involvement.</li>
-      </ul>
-
-      <h3>Common Concerns / Responses</h3>
-      <details open>
-        <summary>“Do I need to coordinate between you and my SC?”</summary>
-        <div class="callout">We work closely with your SC so you don’t have to relay messages. With your permission, we keep them updated, so you’re never stuck in the middle.</div>
-      </details>
-      <details>
-        <summary>“Who do I contact with questions – you or my SC?”</summary>
-        <div class="callout">You can contact either. If it’s about direct services, call us. If it’s plan/funding, call your SC. We keep each other in the loop (with your consent).</div>
-      </details>
-      <details>
-        <summary>“Will my SC stay involved?”</summary>
-        <div class="callout">Yes, if you want them to. SCs monitor plan use and can add services/equipment while we deliver day‑to‑day supports. We act as one team.</div>
-      </details>
-      <details>
-        <summary>“Do I need to repeat everything my SC already told you?”</summary>
-        <div class="callout">Your SC shared background, but we’d love to hear your goals in your own words. That ensures nothing important is missed.</div>
-      </details>
-
-      <h3>Suggested Next Steps</h3>
-      <ul>
-        <li>Review referral details before call; update SC after contact.</li>
-        <li>Offer joint meeting (participant + SC + provider) for complex needs.</li>
-        <li>Confirm communication preferences (e.g., cc SC in updates).</li>
-        <li>Prepare service agreement and service bookings; notify SC when finalised.</li>
-        <li>Clarify reporting expectations for plan reviews.</li>
-      </ul>
-
-      <div class="script">
-        <div class="label">Scripted Dialogue (Read‑ready)</div>
-        <p><b>Intake:</b> Hi [Participant Name], this is [Name] from [Your Organization]. Your support coordinator, [SC Name], asked me to give you a call. How are you today?</p>
-        <p><b>Participant:</b> Oh hi, yes, [SC Name] mentioned you’d be calling. I’m good, thanks.</p>
-        <p><b>Intake:</b> Glad to hear that. Do you have a few minutes to talk now?</p>
-        <p><b>Participant:</b> Sure.</p>
-        <p><b>Intake:</b> Great. [SC Name] told us a bit about what you’re looking for – OT and daily living help. Could you share your top priorities in your own words?</p>
-        <p><b>Participant:</b> I’d like to shower on my own again and start cooking simple meals.</p>
-        <p><b>Intake:</b> Excellent goals. Our OT can assess and suggest modifications (grab rails, adaptive kitchen tools) and our support workers can help practice these skills safely. Are you happy for us to keep [SC Name] in the loop?</p>
-        <p><b>Participant:</b> Yes, please. She helps coordinate everything.</p>
-        <p><b>Intake:</b> Perfect. With your permission, I’ll copy her into our updates. For scheduling: our OT has Wednesdays 10 AM free – does that suit?</p>
-        <p><b>Participant:</b> Yes, that works.</p>
-        <p><b>Intake:</b> Great. We’ll start OT on Wednesdays, and we’ll introduce a support worker the following week (Mon & Fri 2 PM). I’ll draft a service agreement, send it to you and [SC Name], and set up service bookings in the portal. Before your plan review in 8 months, we’ll provide a progress report for your SC to use. How does that sound?</p>
-        <p><b>Participant:</b> That sounds great. Thanks for coordinating everything.</p>
-        <p><b>Intake:</b> You’re very welcome. Big thanks to [SC Name] for connecting us. Looking forward to working with you, [Participant Name].</p>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    © <span id="year"></span> — Part 2 of 3–4. Can be merged with Part 1 or hosted separately.
-  </footer>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en-AU">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NDIS Intake Phone Scripts (Various Scenarios) — Part 2</title>
-  <style>
-    :root{
-      --bg:#0e111a; --panel:#121729; --ink:#e8ecff; --muted:#b8c1da; --line:rgba(255,255,255,.08);
-      --accent:#7c4dff; --accent2:#9a7bff; --ok:#00c389; --warn:#ffb020; --danger:#ff6b6b;
-      --chip:#1a2244; --card:#0d1328;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:linear-gradient(180deg,var(--bg),#0a0d16 60%); color:var(--ink)}
-    a{color:var(--accent)}
-
-    header{position:sticky; top:0; z-index:30; background:color-mix(in oklab, var(--bg) 92%, transparent); backdrop-filter: blur(10px); border-bottom:1px solid var(--line)}
-    .wrap{max-width:1200px; margin:auto; padding:16px 20px}
-    .brand{display:flex; align-items:center; gap:12px}
-    .logo{width:44px; height:44px; border-radius:12px; background: radial-gradient(120% 120% at 20% 20%, var(--accent), var(--accent2)); box-shadow:0 6px 24px rgba(124,77,255,.35)}
-    h1{font-size:clamp(22px,2.8vw,40px); margin:0}
-    .muted{color:var(--muted)}
-
-    .searchbar{margin-top:10px; display:flex; gap:10px; flex-wrap:wrap}
-    .searchbar input{flex:1; min-width:260px; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:#0b1024; color:var(--ink); outline:none}
-    .btn{appearance:none; border:0; background:linear-gradient(180deg,var(--accent),var(--accent2)); color:#fff; padding:10px 14px; border-radius:12px; cursor:pointer; box-shadow:0 10px 24px rgba(124,77,255,.35); font-weight:600}
-    .btn.ghost{background:transparent; border:1px solid var(--line); box-shadow:none}
-
-    main{display:grid; grid-template-columns:320px 1fr; gap:20px; padding:22px}
-    @media (max-width: 980px){ main{grid-template-columns:1fr} nav{position:static !important}}
-
-    nav{position:sticky; top:96px; align-self:start; padding:14px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg,var(--panel),#0f1430)}
-    nav h3{margin:0 0 10px; font-size:14px; color:var(--muted)}
-    nav a{display:block; padding:8px 10px; border-radius:10px; color:var(--ink); text-decoration:none; font-size:14px}
-    nav a:hover{background:var(--chip)}
-
-    section{background:linear-gradient(180deg,var(--panel),#0e1436 60%); border:1px solid var(--line); border-radius:18px; padding:20px}
-    section h2{margin:0 0 8px}
-    .badge{display:inline-block; padding:4px 8px; border-radius:999px; background:var(--chip); border:1px solid var(--line); color:var(--muted); font-size:12px}
-    .grid{display:grid; gap:12px}
-    .cols-2{grid-template-columns:1fr 1fr}
-    .cols-3{grid-template-columns:repeat(3,1fr)}
-    @media (max-width: 980px){ .cols-2,.cols-3{grid-template-columns:1fr} }
-
-    details{border:1px solid var(--line); border-radius:14px; padding:10px 12px; background:#0c1231}
-    details summary{cursor:pointer; font-weight:600; margin:-10px -12px 10px; padding:10px 12px}
-    .callout{padding:12px 14px; border-left:3px solid var(--accent); background:#101842; border-radius:12px}
-    .ok{border-left-color:var(--ok)} .warn{border-left-color:var(--warn)} .danger{border-left-color:var(--danger)}
-
-    .script{background:#0b112b; border:1px solid var(--line); border-radius:14px; padding:12px}
-    .script .label{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.2px}
-    .script p{margin:8px 0; line-height:1.6}
-    .copy{float:right}
-
-    .resultbox{position:absolute; top:100%; left:0; right:0; background:#0b1024; border:1px solid var(--line); border-radius:12px; padding:6px; display:none; max-height:320px; overflow:auto}
-    .result{padding:8px 10px; border-radius:8px; cursor:pointer}
-    .result:hover{background:#0e1536}
-    mark{background: #ffd54a; color:#111; padding:0 2px; border-radius:4px}
-
-    footer{padding:28px 22px; color:var(--muted)}
-    .list-tight li{margin:6px 0}
-    .two-col{columns:2; column-gap:24px}
-    @media (max-width: 900px){ .two-col{columns:1} }
-
-    @media print{ header, nav, .no-print, .resultbox{display:none !important} body{background:white; color:#111} section{background:white; border-color:#ddd} a{color:#333} }
-  </style>
-</head>
-<body>
-  <header>
     <div class="wrap">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <h1>NDIS Intake Phone Scripts (Various Scenarios)</h1>
-          <div class="muted">Part 2 • Extended Family/NOK script + Support Coordinator Referral • Searchable + sidebar index</div>
-          <div class="searchbar" id="searchbar">
-            <div style="position:relative; flex:1">
-              <input id="q" type="text" placeholder="Search situations or keywords (e.g., nominee, privacy, SC referral, service booking)…" autocomplete="off" />
-              <div class="resultbox" id="results"></div>
-            </div>
-            <button class="btn" id="clearBtn">Clear</button>
-            <button class="btn ghost no-print" onclick="window.print()">Print / Save PDF</button>
-          </div>
-        </div>
+      <div class="toolbar">
+        <button class="btn" onclick="window.print()">Print / Save PDF</button>
       </div>
-    </div>
-  </header>
 
-  <main class="wrap">
-    <nav>
-      <h3>Index (Part 2)</h3>
-      <a href="#s2x">2) Family Member / Next of Kin — Extended Script</a>
-      <a href="#s3">3) Support Coordinator Referral</a>
-    </nav>
+      <!-- ====================== 1) STANDARD PARTICIPANT INTAKE ====================== -->
+      <section id="s1">
+        <h2>1) Standard Participant Intake (Self or Plan Managed)</h2>
+        <span class="badge">Caller Type & Role</span> Intake Officer (admin or clinical) welcoming a new participant who is self‑managed or plan‑managed.
+        <p class="muted"><b>Context:</b> First‑contact call to gather details and explain next steps. Friendly, clear language; ensure comfort and understanding.</p>
 
-    <div class="grid" style="gap:20px">
+        <h3>Key Information to Gather</h3>
+        <ul class="two-col">
+          <li>Personal details (full/preferred name, contacts), NDIS number, plan dates.</li>
+          <li>Plan management type and, if plan‑managed, plan manager contacts.</li>
+          <li>Supports sought and goals (e.g., physio to improve mobility; daily living support).</li>
+          <li>Immediate needs/preferences (availability, gender preference, communication needs).</li>
+          <li>Support coordinator or other key contacts involved.</li>
+          <li>Safety/health considerations (mobility, allergies, behaviour considerations).</li>
+        </ul>
 
-      <!-- ===== FAMILY/NOK — EXTENDED DIALOGUE ===== -->
-      <section id="s2x" data-title="Family / Next of Kin — Extended Script" data-keywords="family next of kin NOK daughter hard of hearing consent privacy companionship meals loneliness gardening cricket companionship scheduling service agreement home visit">
-        <h2>2) Family Member / Next of Kin — Extended Script</h2>
-        <span class="badge">Scripted Dialogue (verbatim-friendly)</span>
+        <h3>Common Concerns / Responses</h3>
+        <details open>
+          <summary>“Will NDIS cover this — what about costs?”</summary>
+          <div class="callout ok">Your plan funds these supports; we’ll stay within budget and invoice NDIS or your plan manager directly so you don’t handle payments.</div>
+        </details>
+        <details>
+          <summary>“I’m new — what happens next?”</summary>
+          <div class="callout">We’ll guide you step‑by‑step: brief intake questions now, explain services, then book an initial meeting/assessment and send a simple summary + service agreement to review at your pace.</div>
+        </details>
+        <details>
+          <summary>“I have a plan manager — do I do any admin?”</summary>
+          <div class="callout">We’ll coordinate invoices with your plan manager directly. You focus on the supports; we handle the admin.</div>
+        </details>
+        <details>
+          <summary>“How soon can we start?”</summary>
+          <div class="callout">Often within 1–2 weeks depending on availability. If you have urgent needs, tell us and we’ll prioritise.</div>
+        </details>
+
+        <h3>Suggested Next Steps</h3>
+        <ul>
+          <li>Outline relevant services (e.g., OT, physio, support work) aligned to goals.</li>
+          <li>Prepare a clear service agreement; allow time for questions.</li>
+          <li>Book an initial assessment/meet‑and‑greet; confirm preferences.</li>
+          <li>Send a concise call summary with contacts and appointment details.</li>
+          <li>Invite ongoing questions; keep communication open.</li>
+        </ul>
+
         <div class="script">
-          <button class="btn copy" data-copy="#s2xscript">Copy</button>
-          <div id="s2xscript">
-            <p><b>Intake:</b> Hello, this is [Name] from [Your Organization]. I’m looking to speak with [Family Member Name] – I was told you’re the best contact regarding [Participant Name]’s NDIS supports?</p>
-            <p><b>Family Member:</b> Yes, that’s me. I’m [Participant Name]’s daughter. Thanks for calling.</p>
-            <p><b>Intake:</b> Thank you for reaching out on [Participant Name]’s behalf. How are you both doing today?</p>
-            <p><b>Family Member:</b> We’re doing alright. My dad (Participant) is here with me. He’s a bit hard of hearing, so I tend to handle the phone conversations.</p>
-            <p><b>Intake:</b> I understand. Hi [Participant Name] (speaking a bit louder and clearer)! I’m [Name] from [Org]. I’m talking with your daughter to make sure we arrange the supports you need. How are you today?</p>
-            <p><b>Participant (in background):</b> Oh, hello! I’m okay, thank you.</p>
-            <p><b>Family Member:</b> He can hear you on speaker now. He knows we’re arranging some help for him.</p>
-            <p><b>Intake:</b> Great, I’ll continue to chat with both of you. So, I understand [Participant Name] has an NDIS plan, and you’re helping to organize his services. Could you tell me a bit about what prompted you to contact us and what supports you’re looking for?</p>
-            <p><b>Family Member:</b> Sure. My dad had a stroke last year. He’s on the NDIS and currently has some physio and occupational therapy, but we’re looking to get him a regular support worker. I’m worried about him being alone most of the day when I’m at work. He could use help with meals and just someone around in case he needs anything. His speech isn’t great and his right side is weak.</p>
-            <p><b>Intake:</b> Got it. Thank you for the background. So he’s already receiving physio and OT – is that through another provider or directly through NDIS?</p>
-            <p><b>Family Member:</b> It’s through another clinic. They’re doing a good job with therapy, so we’d like to keep that as is. What we really need from you is more on the daily living side – kind of like in-home care and companionship.</p>
-            <p><b>Intake:</b> Absolutely, we can cover that. We have support workers who can come to your dad’s home and help with daily tasks (like preparing lunch, light housekeeping, etc.) and also just be there as a companion, maybe take him for a walk or to the local park if he’s up for it. We can tailor the activities to what he enjoys and what keeps him safe.</p>
-            <p><b>Participant (background):</b> I do get lonely sometimes, yes.</p>
-            <p><b>Family Member:</b> He used to be very active socially, so it’s been hard.</p>
-            <p><b>Intake:</b> I understand. Social connection is so important. We’ll definitely aim to match him with a support worker who shares some of his interests. For example, what does your dad like? Any hobbies or topics he enjoys?</p>
-            <p><b>Family Member:</b> He loves gardening and watching cricket. He can’t garden like he used to, but he enjoys sitting outside.</p>
-            <p><b>Intake:</b> That’s great to know. We actually have a support worker in our team, [Support Worker Name], who is an avid cricket fan and is skilled in helping with light gardening tasks. Someone like that might be a good fit to accompany your dad, talk cricket, maybe help him water the plants or just get some fresh air outside safely.</p>
-            <p><b>Family Member:</b> Oh, that sounds promising! Dad, what do you think? Someone to talk cricket with you?</p>
-            <p><b>Participant:</b> That would be nice.</p>
-            <p><b>Intake:</b> Wonderful. Now, let’s talk logistics for a moment. [Participant Name], your NDIS plan – do you know if it’s self-managed or plan-managed, or NDIA-managed? Basically, who pays the bills from the plan?</p>
-            <p><b>Family Member:</b> It’s agency-managed. The NDIS pays providers directly. He doesn’t handle any of that.</p>
-            <p><b>Intake:</b> Thanks, that means we’ll just make service bookings in the system and claim payments directly. No worry there. And do you happen to know how many hours or funding is allocated for his daily support? I want to ensure we plan within his budget.</p>
-            <p><b>Family Member:</b> He has about $20k a year in core supports available. We were thinking of starting with maybe 3 hours a day, Monday to Friday, around midday to afternoon.</p>
-            <p><b>Intake:</b> That sounds reasonable. Rough math, that should be sustainable with $20k for quite a few months, and then plans usually renew annually. We can fine-tune it. We’ll help you keep track so it doesn’t overrun the budget. And if we find he needs more or less, we can adjust.</p>
-            <p><b>Family Member:</b> Okay, great. Another thing: I usually coordinate everything for him. Is it alright if I continue to be the main contact with you? I’ll make sure he’s informed and involved in decisions, but it’s just easier for scheduling and so on.</p>
-            <p><b>Intake:</b> Of course. We appreciate a dedicated family contact — it makes communication smoother. We’ll involve your dad in key discussions, and for day-to-day scheduling we’ll contact you by your preferred channel. If your dad wants to speak directly or one-on-one at any time, we’ll arrange that too.</p>
-            <p><b>Family Member:</b> Email works for me for records, but phone or text for anything urgent or scheduling is fine too.</p>
-            <p><b>Intake:</b> Noted. I’ll capture your contact details. Next steps: I’d like to schedule a home visit. We can introduce a potential support worker (like the cricket fan I mentioned) to check the fit. We’ll also go over a service agreement — a simple document outlining services and responsibilities. I’ll email a draft beforehand so you can review comfortably.</p>
-            <p><b>Family Member:</b> Yes, that’s fine. I’d appreciate seeing it in writing.</p>
-            <p><b>Intake:</b> Perfect. Is there a day next week that works for a visit? I can come, and possibly bring that support worker along to introduce.</p>
-            <p><b>Family Member:</b> Wednesday afternoon would work. I can leave work early to be there by 3 PM.</p>
-            <p><b>Intake:</b> Okay, Wednesday at 3 PM. Does that suit you too, [Participant Name]?</p>
-            <p><b>Participant:</b> Yes.</p>
-            <p><b>Intake:</b> Great! In the meantime, if you could gather any relevant info — e.g., therapist notes about routines or safety (transfer techniques). That helps our worker assist safely from chair to walker, etc.</p>
-            <p><b>Family Member:</b> Yes, the OT gave us a sheet with some instructions. I’ll have that ready.</p>
-            <p><b>Intake:</b> Perfect. Our goal is to support your dad and make both of you feel comfortable and confident. You’ve done a fantastic job — we’re here to share that load.</p>
-            <p><b>Family Member:</b> Thank you. It’s been a journey, but I’m hopeful this will help.</p>
-            <p><b>Intake:</b> We’re looking forward to meeting you on Wednesday. I’ll send the email with contact info, draft agreement, and appointment confirmation shortly. Reach out if anything comes up.</p>
-            <p><b>Family Member:</b> Will do. Thanks very much.</p>
-            <p><b>Participant:</b> Thank you.</p>
-            <p><b>Intake:</b> You’re both very welcome. Take care, and see you soon.</p>
-          </div>
+          <div class="label">Scripted Dialogue (Read‑ready)</div>
+          <p><b>Intake:</b> Hello, this is [Name] from [Your Organization]. May I please speak with [Participant Name]?</p>
+          <p><b>Participant:</b> Speaking. Hi.</p>
+          <p><b>Intake:</b> Hi [Participant Name]! We received your details for NDIS supports and I wanted to welcome you and see how we can assist. Is now okay for a 10–15 minute chat?</p>
+          <p><b>Participant:</b> Yes.</p>
+          <p><b>Intake:</b> Great. Are you self‑managing your plan or do you have a plan manager?</p>
+          <p><b>Participant:</b> I’m plan‑managed.</p>
+          <p><b>Intake:</b> Thanks — we’ll invoice your plan manager directly. Could I grab their name and email? Also, what supports are you hoping to access right now?</p>
+          <p><b>Participant:</b> Morning personal care daily, weekly community access, and some physio.</p>
+          <p><b>Intake:</b> Perfect. We can help with all of those. I’ll note preferences and days. Could I also take your NDIS number and DOB to match our records?</p>
+          <p><b>Participant:</b> [Provides details]</p>
+          <p><b>Intake:</b> Thanks. Next step is an in‑person meeting or home visit. We’ll bring a simple service agreement and get you started. Would Thursday 2 PM suit you?</p>
+          <p><b>Participant:</b> Yes, afternoons are best.</p>
+          <p><b>Intake:</b> Done. I’ll send a summary and our contacts. If questions pop up later, reach out anytime — we’re here to help.</p>
         </div>
       </section>
 
-      <!-- ===== SUPPORT COORDINATOR REFERRAL ===== -->
-      <section id="s3" data-title="Support Coordinator Referral" data-keywords="support coordinator referral SC three-way partnership participant decision-maker planner organiser provider deliverer service booking reporting plan review OT stroke shower cooking home modifications equipment consent cc">
-        <h2>3) Support Coordinator Referral</h2>
-        <span class="badge">Caller Type & Role</span> Intake Officer (admin or clinical) calling a participant referred by their Support Coordinator (SC).
-        <p class="muted">Context: Acknowledge the SC’s role and clarify the three‑way partnership: participant (decision‑maker), SC (planner/organiser), provider (service deliverer). Confirm consent to loop the SC into updates.</p>
+      <!-- ====================== 2) FAMILY / NOK ====================== -->
+      <section id="s2">
+        <h2>2) Family Member or Next of Kin Calling on Behalf</h2>
+        <span class="badge">Caller Type & Role</span> Intake Officer contacting a family member/guardian who is coordinating for the participant.
+        <p class="muted"><b>Context:</b> Respect the family role while centring the participant’s rights, consent, and preferences. Warm, validating tone.</p>
 
         <h3>Key Information to Gather</h3>
-        <ul class="list-tight two-col">
-          <li>Participant’s understanding of the referral (which services were suggested).</li>
-          <li>SC name/organisation; whether to include them in future communications (with permission).</li>
-          <li>Participant’s goals/needs in their own words (validate alignment with SC notes).</li>
-          <li>Plan management details, urgent timelines, upcoming milestones (e.g., hospital discharge; plan review date).</li>
-          <li>Other providers involved and how your service fits without overlap.</li>
+        <ul class="two-col">
+          <li>Relationship and any formal role (guardian/nominee).</li>
+          <li>Participant awareness/consent to the call and ongoing involvement.</li>
+          <li>Participant details (name, age, NDIS number) as known.</li>
+          <li>Current situation and support needs from family perspective.</li>
+          <li>Communication challenges/preferences; who is primary contact.</li>
+          <li>Family goals/concerns; insights on what has/hasn’t worked.</li>
         </ul>
 
-        <h3>Common Concerns / Objections & Responses</h3>
+        <h3>Common Concerns / Responses</h3>
+        <details open>
+          <summary>“Can I handle discussions for them?”</summary>
+          <div class="callout ok">Yes — many families help. We’ll ensure [Participant] is comfortable and keep them central. We can formalise consent/nominee status later if needed.</div>
+        </details>
+        <details>
+          <summary>“Do I need official permission?”</summary>
+          <div class="callout">For intake, no formal paperwork is required to talk generally. We’ll sort any formal consents in onboarding.</div>
+        </details>
+        <details>
+          <summary>“How do you handle privacy?”</summary>
+          <div class="callout">We only discuss details with people [Participant] consents to. We’ll find a communication balance that respects privacy and keeps you informed.</div>
+        </details>
+
+        <h3>Suggested Next Steps</h3>
+        <ul>
+          <li>Say hello to the participant if appropriate; plan a joint meeting.</li>
+          <li>Note consent/nominee needs for documentation.</li>
+          <li>Gather prior assessments/support plans to inform onboarding.</li>
+          <li>Set a clear communications plan (include family on scheduling, etc.).</li>
+        </ul>
+
+        <div class="script">
+          <div class="label">Scripted Dialogue (Extended, Read‑ready)</div>
+          <p><b>Intake:</b> Hello, this is [Name] from [Your Organization]. I’m looking to speak with [Family Member Name] — I was told you’re the best contact for [Participant Name]’s NDIS supports?</p>
+          <p><b>Family Member:</b> Yes, that’s me — I’m [Participant]’s daughter.</p>
+          <p><b>Intake:</b> Thanks for reaching out on [Participant]’s behalf. How are you both today?</p>
+          <p><b>Family Member:</b> We’re okay. He’s here with me; he’s hard of hearing so I handle calls.</p>
+          <p><b>Intake:</b> Hi [Participant Name]! I’m [Name] from [Org]. I’ll speak clearly and involve you both so we can arrange supports that fit you.</p>
+          <p><b>...</b> [Full extended dialogue covering hobbies (gardening, cricket), companionship, plan management (agency‑managed), hours (Mon–Fri midday), family as main contact, home visit booking, safety notes, and recap.]</p>
+        </div>
+      </section>
+
+      <!-- ====================== 3) SUPPORT COORDINATOR REFERRAL ====================== -->
+      <section id="s3">
+        <h2>3) Support Coordinator Referral</h2>
+        <span class="badge">Caller Type & Role</span> Intake Officer calling a participant referred by their Support Coordinator (SC).
+        <p class="muted"><b>Context:</b> Acknowledge the SC’s role; confirm consent to loop them in. Clarify goals, logistics, timelines, and reporting.</p>
+
+        <h3>Key Information to Gather</h3>
+        <ul class="two-col">
+          <li>Participant understanding of the referral/services.</li>
+          <li>SC name/organisation; whether to CC on updates.</li>
+          <li>Participant goals in their own words; alignment with SC notes.</li>
+          <li>Plan management, urgent timelines, review dates.</li>
+          <li>Other providers involved; avoid overlap; define your role.</li>
+        </ul>
+
+        <h3>Common Concerns / Responses</h3>
         <details open>
           <summary>“Do I have to coordinate between you and my SC?”</summary>
-          <div class="callout">We’ll work closely with <b>[SC Name]</b> (with your permission) so you don’t have to relay messages. We aim to function as one team around you.</div>
+          <div class="callout ok">No — with your permission we coordinate closely with <b>[SC Name]</b> so you’re not the go‑between.</div>
         </details>
         <details>
-          <summary>“Who do I contact for changes or questions?”</summary>
-          <div class="callout">You can tell either of us. If it’s about our service (rescheduling, approach), tell us; if it’s about overall plan/funding, tell <b>[SC Name]</b>. We’ll loop each other in (with your okay).</div>
+          <summary>“Who do I tell if I need changes?”</summary>
+          <div class="callout">Tell either of us; we’ll loop each other in (with your okay). We handle service changes; SC handles plan/funding items.</div>
         </details>
         <details>
-          <summary>“Will my SC still be involved?”</summary>
-          <div class="callout">Yes, if you’re happy for that. They monitor the big picture and can coordinate additional referrals or equipment while we deliver day‑to‑day support.</div>
-        </details>
-        <details>
-          <summary>“Do I need to repeat info my SC already shared?”</summary>
-          <div class="callout">We have notes from <b>[SC Name]</b>, but we value your voice. Share in your own words; skip anything you prefer not to repeat.</div>
-        </details>
-
-        <h3>Suggested Next Steps</h3>
-        <ul class="list-tight">
-          <li>Review the SC referral/plan summary and acknowledge contact made (with consent).</li>
-          <li>Offer a joint meeting with participant + SC for complex cases.</li>
-          <li>Agree on communications (e.g., CC SC on scheduling and monthly progress notes).</li>
-          <li>Set up service agreement and NDIS service bookings; let the SC know once in place.</li>
-          <li>Outline reporting cadence (e.g., short report before plan review).</li>
-        </ul>
-
-        <div class="script">
-          <div class="label">Scripted Dialogue (Read‑ready)</div>
-          <button class="btn copy" data-copy="#s3script">Copy</button>
-          <div id="s3script">
-            <p><b>Intake:</b> Hi [Participant Name], this is [Name] from [Your Organization]. Your support coordinator, [SC Name], asked me to give you a call. How are you today?</p>
-            <p><b>Participant:</b> Oh hi, yes, [SC Name] mentioned you’d be calling. I’m good, thanks.</p>
-            <p><b>Intake:</b> Glad to hear that. Do you have a few minutes to talk now?</p>
-            <p><b>Participant:</b> Sure.</p>
-            <p><b>Intake:</b> Great. So [SC Name] told us a bit about what you’re looking for. I understand you’re interested in getting some occupational therapy and perhaps some help with daily activities at home. Is that right?</p>
-            <p><b>Participant:</b> Yes. In my NDIS plan, we put goals about becoming more independent at home. I had a stroke, so I need to re-learn some things. [SC Name] said an OT could help with home modifications and improving my arm usage. And also maybe a support worker to help me practice tasks or go out, because I’m still building confidence.</p>
-            <p><b>Intake:</b> Exactly. We have an occupational therapist on our team who is experienced in stroke recovery, [Therapist Name]. We also have support workers who can assist with implementing what you practice in therapy, and getting you out into the community safely. I’m really glad [SC Name] connected you with us – it sounds like we can put together a good plan for those supports.</p>
-            <p><b>Participant:</b> That sounds good. [SC Name] thought you’d be a good fit.</p>
-            <p><b>Intake:</b> Happy to hear that! Could I hear your top priorities in your own words? What would you most like to achieve in the next six months?</p>
-            <p><b>Participant:</b> I’d like to shower on my own again and do some cooking. If I could even do simple meal prep, I’d be happy.</p>
-            <p><b>Intake:</b> Great goals. Our OT will assess your home for modifications/equipment (e.g., grab rails, adaptive kitchen tools) and techniques to increase independence. A support worker can attend practice sessions (like cooking) to ensure safety and help implement strategies.</p>
-            <p><b>Participant:</b> We already have a shower chair from the hospital.</p>
-            <p><b>Intake:</b> Perfect. The OT will check if anything else would help. Are you happy for us to keep [SC Name] in the loop on plans and progress?</p>
-            <p><b>Participant:</b> Yes, please. She usually coordinates everything.</p>
-            <p><b>Intake:</b> With your permission, I’ll CC her in our follow-up and major updates. After the first assessment we’ll send a short summary to you both. If we need additional resources, we’ll discuss together.</p>
-            <p><b>Participant:</b> Great.</p>
-            <p><b>Intake:</b> Scheduling: [SC Name] mentioned weekly OT and support work twice a week in the afternoons. Does that align with your preference?</p>
-            <p><b>Participant:</b> Yes, I’m free most days.</p>
-            <p><b>Intake:</b> Our OT, [Therapist Name], has Wednesdays 10 AM available. For support work, we can start the following week Mondays and Fridays at 2 PM. We’ll choose someone with a therapy-informed background and introduce them properly.</p>
-            <p><b>Participant:</b> That works. My husband’s usually home then too.</p>
-            <p><b>Intake:</b> Formalities: we’ll prepare a service agreement outlining services and NDIS‑compliant prices. Since you’re agency‑managed, we’ll also set up service bookings in the NDIS portal. I’ll coordinate that with [SC Name].</p>
-            <p><b>Participant:</b> Okay.</p>
-            <p><b>Intake:</b> Any other questions or concerns? Also, your plan review is in about 8 months — we can provide a concise progress report beforehand to support that.</p>
-            <p><b>Participant:</b> That’s perfect. No other questions.</p>
-            <p><b>Intake:</b> Recap: OT Wednesdays 10 AM (assessment first), support worker Mon & Fri 2 PM (start week of [date]). I’ll email the agreement and summary, CC [SC Name]. Together we’ll work toward your showering and cooking goals. Sound good?</p>
-            <p><b>Participant:</b> Sounds great. Thank you!</p>
-            <p><b>Intake:</b> You’re very welcome — thanks to [SC Name] for the intro. I’ll follow up by email shortly. Have a wonderful day!</p>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-
-  <footer class="wrap">© <span id="year"></span> — Part 2 of 3–4. Host each part separately or merge into one file later. Print or save as PDF anytime.</footer>
-
-  <script>
-    const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
-
-    // Copy buttons
-    function copyText(el){
-      const text = (el.innerText || el.textContent).trim();
-      navigator.clipboard?.writeText(text).catch(()=>{
-        const r = document.createRange(); r.selectNodeContents(el);
-        const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-        try{document.execCommand('copy');}catch(e){}; s.removeAllRanges();
-      });
-    }
-    document.querySelectorAll('.btn.copy').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const target = document.querySelector(btn.getAttribute('data-copy'));
-        if(target) copyText(target);
-      });
-    });
-
-    // Build a simple search index from sections
-    const q = document.getElementById('q');
-    const results = document.getElementById('results');
-    const sections = [...document.querySelectorAll('section[id]')].map(sec=>({
-      id: sec.id,
-      title: (sec.dataset.title || sec.querySelector('h2')?.textContent || '').trim(),
-      keywords: (sec.dataset.keywords||'').toLowerCase(),
-      text: sec.innerText.toLowerCase().replace(/\s+/g,' ').slice(0, 12000)
-    }));
-
-    function highlight(text, terms){
-      let html = text;
-      terms.forEach(t=>{
-        const re = new RegExp('('+t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')+')','ig');
-        html = html.replace(re,'<mark>$1</mark>');
-      });
-      return html;
-    }
-
-    function search(val){
-      const v = val.trim().toLowerCase();
-      if(!v){ results.style.display='none'; return; }
-      const terms = v.split(/\s+/).filter(Boolean);
-      const scored = sections.map(s=>{
-        let score = 0;
-        terms.forEach(t=>{
-          if(s.title.toLowerCase().includes(t)) score += 5;
-          if(s.keywords.includes(t)) score += 3;
-          if(s.text.includes(t)) score += 2;
-        });
-        return {...s, score};
-      }).filter(s=>s.score>0).sort((a,b)=>b.score-a.score).slice(0,8);
-
-      if(!scored.length){ results.innerHTML = '<div class="result muted">No matches — try: nominee, privacy, SC referral, service booking…</div>'; results.style.display='block'; return; }
-
-      results.innerHTML = scored.map(s=>{
-        const termsIdx = terms.map(t=>s.text.indexOf(t)).filter(i=>i>0).sort((a,b)=>a-b)[0] ?? 0;
-        const start = Math.max(0, termsIdx-60), end = Math.min(s.text.length, termsIdx+160);
-        const snippet = s.text.slice(start,end);
-        return `<div class="result" data-id="${s.id}"><div class="muted" style="font-size:12px">${s.id.toUpperCase()}</div><div style="font-weight:700">${highlight(s.title, terms)}</div><div style="font-size:13px; color: var(--muted)">${highlight(snippet, terms)}…</div></div>`;
-      }).join('');
-      results.style.display='block';
-    }
-
-    q.addEventListener('input', (e)=> search(e.target.value));
-    q.addEventListener('focus', (e)=> { if(e.target.value) results.style.display='block'; });
-    document.addEventListener('click', (e)=>{ if(!document.getElementById('searchbar').contains(e.target)) results.style.display='none'; });
-    results.addEventListener('click', (e)=>{
-      const item = e.target.closest('.result');
-      if(!item) return; results.style.display='none';
-      const id = item.getAttribute('data-id'); location.hash = '#'+id; document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
-    });
-
-    document.getElementById('clearBtn').addEventListener('click', ()=>{ q.value=''; results.style.display='none'; q.focus(); });
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en-AU">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NDIS Intake Phone Scripts — Part 3 (Complex Needs)</title>
-  <style>
-    body{font-family:Inter, Arial, sans-serif; background:#0e111a; color:#e8ecff; margin:0}
-    header,footer{background:#121729; padding:16px 20px}
-    h1{margin:0; font-size:28px}
-    .muted{color:#b8c1da}
-    main{display:grid; grid-template-columns:320px 1fr; gap:0}
-    @media (max-width: 960px){ main{grid-template-columns:1fr} }
-    nav{background:#121729; padding:14px 20px; position:sticky; top:0; align-self:start}
-    nav a{display:block; padding:6px 0; color:#e8ecff; text-decoration:none}
-    nav a:hover{opacity:.9}
-    .wrap{padding:0 0 20px}
-    .bar{display:flex; gap:10px; padding:12px 20px; border-top:1px solid rgba(255,255,255,.08); background:#0f1533; position:sticky; top:60px; z-index:2}
-    .bar input{flex:1; min-width:220px; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1024; color:#e8ecff; outline:none}
-    .btn{appearance:none; border:0; background:linear-gradient(180deg,#7c4dff,#9a7bff); color:#fff; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600}
-
-    section{padding:20px; margin:20px; background:#1a2244; border-radius:12px}
-    h2{margin-top:0}
-    h3{margin-bottom:8px}
-    .badge{display:inline-block; padding:4px 8px; border-radius:999px; background:#7c4dff; color:#fff; font-size:12px}
-    details{margin:10px 0}
-    .callout{padding:12px; background:#101842; border-left:4px solid #7c4dff; border-radius:8px; margin:10px 0}
-    .warn{border-left-color:#ffb020}
-    .ok{border-left-color:#00c389}
-    .script{background:#0b112b; padding:12px; border-radius:8px; margin-top:14px}
-    .script p{margin:6px 0; line-height:1.6}
-    .label{font-size:12px; color:#b8c1da; text-transform:uppercase; letter-spacing:.2px; margin-bottom:6px}
-    .two-col{columns:2; column-gap:24px}
-    @media (max-width: 900px){ .two-col{columns:1} }
-    .resultbox{position:absolute; top:100%; left:20px; right:20px; background:#0b1024; border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:6px; display:none; max-height:320px; overflow:auto}
-    .result{padding:8px 10px; border-radius:8px; cursor:pointer}
-    .result:hover{background:#0e1536}
-    mark{background:#ffd54a; color:#111; padding:0 2px; border-radius:3px}
-  </style>
-</head>
-<body>
-  <header>
-    <h1>NDIS Intake Phone Scripts — Part 3</h1>
-    <div class="muted">Complex Needs • Behaviours of Concern • Restrictive Practices • Positive Behaviour Support</div>
-  </header>
-
-  <main>
-    <nav>
-      <a href="#s4">4) Complex Needs (Behaviours of Concern, Restrictive Practices)</a>
-    </nav>
-
-    <div class="wrap">
-      <div class="bar" id="searchbar">
-        <input id="q" type="text" placeholder="Search this part (e.g., triggers, PRN, PBS plan, 2:1 staffing)…" autocomplete="off" />
-        <button class="btn" id="clearBtn">Clear</button>
-      </div>
-
-      <!-- ====================== SCENARIO 4 ====================== -->
-      <section id="s4" data-title="Complex Needs (Behaviours of Concern, Restrictive Practices)" data-keywords="complex needs behaviours of concern PBS positive behaviour support restrictive practices PRN medication triggers de-escalation consistency safety two staff autism mental health communication visuals sensory plan consent incident data crisis plan">
-        <h2>4) Complex Needs (e.g. Behaviours of Concern, Restrictive Practices)</h2>
-        <span class="badge">Caller Type & Role</span> Senior Intake Coordinator or Clinical Intake Specialist calling a participant or guardian/caregiver with complex support needs.
-        <p class="muted"><b>Context:</b> Behaviours of concern and/or authorised restrictive practices may be present. Handle with sensitivity and expertise. Emphasise capability, safety, dignity, and Positive Behaviour Support (PBS). Gather detailed triggers, effective strategies, and any formal behaviour support plans.</p>
-
-        <h3>Key Information to Gather</h3>
-        <ul class="two-col">
-          <li>Description of behaviours (e.g., aggression, self‑harm, absconding), frequency, typical triggers.</li>
-          <li>What prevents/de‑escalates incidents; what hasn’t worked.</li>
-          <li>Positive Behaviour Support Plan (PBSP) details; behaviour support practitioner involvement (request copy with consent).</li>
-          <li>Restrictive practices currently used and authorisations (e.g., lap belt, PRN medication). Clarify that questions are to prepare, not judge; practices must be authorised and plan‑based.</li>
-          <li>Staff safety: special training, precautions, 1:1 or 2:1 staffing, environmental safety (lock away sharps, etc.).</li>
-          <li>Clinician involvement (psychologist, psychiatrist, specialists) and coordination needs.</li>
-          <li>Communication style (verbal, AAC/device, non‑verbal) and comprehension level.</li>
-          <li>Environments for support (home, day program), sensory setup, modifications (sensory room, gated yard).</li>
-          <li>Family/caregiver priorities beyond safety (e.g., reduce sedation, teach alternative communication for anger).</li>
-        </ul>
-
-        <h3>Common Concerns / Objections & Responses</h3>
-        <details open>
-          <summary>“I’m afraid no provider will stick around once they see his behaviours.”</summary>
-          <div class="callout ok">Our team is trained for high‑support needs. We view behaviours as communication and follow PBS. We prioritise consistency, patience, and trust — we won’t be scared off.</div>
-        </details>
-        <details>
-          <summary>“Will your staff cope with meltdowns or aggression?”</summary>
-          <div class="callout">Yes. Staff receive de‑escalation and safe crisis management training and follow the behaviour plan precisely. We avoid restrictive practices unless authorised and absolutely necessary, and we review to reduce them over time.</div>
-        </details>
-        <details>
-          <summary>“There’s PRN medication in crises — how do you handle that?”</summary>
-          <div class="callout">We follow the prescribed protocol within the PBSP. We prioritise least‑restrictive strategies first (diversion, sensory tools, quiet space). PRN is a last resort, and every use triggers a review to learn and improve.</div>
-        </details>
-        <details>
-          <summary>“Will my family member be treated with respect?”</summary>
-          <div class="callout">Absolutely. We separate the behaviour from the person, get to know strengths and preferences, and provide non‑judgemental, rights‑based support. If a staff fit isn’t right, we address it quickly.</div>
+          <summary>“Do I have to repeat what my SC told you?”</summary>
+          <div class="callout">We have notes but want your voice as well. Share only what you wish; we’ll respect that.</div>
         </details>
 
         <h3>Suggested Next Steps</h3>
         <ul>
-          <li>Book a comprehensive in‑person meeting with key people (family, caregivers, behaviour practitioner). Include participant as tolerated to build rapport.</li>
-          <li>Obtain documentation: PBSP, safety plans, incident reports, medication list (with consent) and coordinate with existing clinicians.</li>
-          <li>Arrange specialised training or refreshers specific to the participant’s needs (autism‑specific strategies, safe restraint where authorised).</li>
-          <li>Assign a small, consistent team (e.g., 2–3 staff) and plan shadowing before solo shifts.</li>
-          <li>Co‑develop a crisis plan (who to call, thresholds for escalation, emergency steps).</li>
-          <li>Track incident data and triggers; set regular reviews to adjust strategies and measure progress.</li>
-          <li>Offer caregiver support and validation; provide contacts for carer supports where appropriate.</li>
+          <li>Review SC referral; acknowledge contact made (with consent).</li>
+          <li>Offer joint meeting if case is complex.</li>
+          <li>Agree on comms (e.g., CC SC on scheduling, monthly notes).</li>
+          <li>Set up service agreement and service bookings; advise SC.</li>
+          <li>Outline reporting for plan review.</li>
         </ul>
 
         <div class="script">
           <div class="label">Scripted Dialogue (Read‑ready)</div>
-          <p><b>Intake (Clinical Specialist):</b> Hello, [Name]? This is [Your Name] from [Your Organization]. I’m calling about [Participant Name] and the supports you inquired about. How are you today?</p>
-          <p><b>Family/Caregiver:</b> Hi. I’m okay, a bit anxious to discuss this actually.</p>
-          <p><b>Intake:</b> That’s totally understandable. I really appreciate you taking the time. This is a judgement‑free conversation — our goal is to understand how we can best support [Participant Name]. I’ve read the referral mentioning behaviours of concern, but it helps to hear from you what a typical day looks like and what challenges you’re facing.</p>
-          <p><b>Family:</b> [Participant] is my 20‑year‑old son with autism and intellectual disability. He can be very sweet, but has aggressive outbursts when overwhelmed. Yesterday we asked him to turn off the TV for dinner and he snapped — yelling, throwing things, and he hit my arm. This happens a few times a week.</p>
-          <p><b>Intake:</b> I’m sorry you experienced that. When an outburst occurs, how long does it usually last?</p>
-          <p><b>Family:</b> About 10–15 minutes at peak, then 30 minutes to settle.</p>
-          <p><b>Intake:</b> What helps or makes it worse during those moments?</p>
-          <p><b>Family:</b> We don’t yell or restrain unless there’s immediate danger. We remove throwables and give space. Quietly talking about his favourite topic — trains — helps. As a last resort there’s a PRN sedative; used four times last year.</p>
-          <p><b>Intake:</b> Those are solid strategies. Is the PRN documented within an authorised Positive Behaviour Support Plan?</p>
-          <p><b>Family:</b> Yes — we have a PBSP from a psychologist; PRN is authorised as a restrictive practice.</p>
-          <p><b>Intake:</b> Understood. With your permission, we’ll obtain that plan and any recent incident reports so our team can align closely. We always follow existing plans consistently.</p>
-          <p><b>Family:</b> I’ll email it and connect you with the psychologist.</p>
-          <p><b>Intake:</b> Thank you. Besides the PRN, are any other restrictive practices used (e.g., physical restraint, seclusion)?</p>
-          <p><b>Family:</b> No physical restraint or seclusion. Mainly the PRN if there’s serious risk.</p>
-          <p><b>Intake:</b> Thanks for clarifying. Our aim is prevention and reduction of restrictive practices over time. What are common triggers — transitions, unexpected changes, sensory overload, communication frustration?</p>
-          <p><b>Family:</b> Exactly those. Transitions and plan changes, noisy or crowded places, and trouble expressing himself under stress.</p>
-          <p><b>Intake:</b> We’ll plan around that: use visual schedules and warnings (e.g., “5 more minutes of TV, then dinner”), avoid sudden changes, and substitute cancelled activities with preferred alternatives when possible.</p>
-          <p><b>Family:</b> That would help a lot.</p>
-          <p><b>Intake:</b> What would you like our service to do specifically?</p>
-          <p><b>Family:</b> A skilled support worker a few afternoons a week to engage him and build coping/daily living skills, plus behaviour support oversight to coach workers and review incidents.</p>
-          <p><b>Intake:</b> We can assign a specialist to supervise (review data, align with your psychologist, coach staff) and provide consistent workers Mon/Wed/Fri afternoons to practice skills and give respite. We’ll start with shadowing so they aren’t alone initially. Small, stable team for trust.</p>
-          <p><b>Family:</b> We’ve had workers quit before — that’s our worry.</p>
-          <p><b>Intake:</b> I’m sorry that happened. We’ll only assign trained staff, begin with meet‑and‑greet + shadowing, and keep the roster tight (2–3 people). If a match isn’t right, we’ll act quickly — stability is the goal.</p>
-          <p><b>Family:</b> Routine definitely helps him.</p>
-          <p><b>Intake:</b> Great. Let’s plan a low‑demand meet‑and‑greet where he’s comfortable (e.g., backyard with trains). We’ll brief the worker to bring relevant interests to build rapport.</p>
-          <p><b>Family:</b> He’d love that.</p>
-          <p><b>Intake:</b> Because PRN is involved, we’ll ensure proper consent/authorisations on file. Our service agreement will state that we follow the PBSP and maintain regular contact with your psychologist. Clear commitments from day one.</p>
-          <p><b>Family:</b> I appreciate a detailed agreement.</p>
-          <p><b>Intake:</b> Funding‑wise, do you have ‘Improved Relationships’ for behaviour support? If more is needed for training/updates we can discuss options together.</p>
-          <p><b>Family:</b> Yes, there’s some funding left.</p>
-          <p><b>Intake:</b> Perfect. Immediate next step: meet‑and‑greet Thursday 3 PM with [Support Worker Name] if that’s a calm time for him?</p>
-          <p><b>Family:</b> 3 PM works — usually a calm time.</p>
-          <p><b>Intake:</b> Great — we’ll meet in the backyard with his train set. I’ll email: document checklist (PBSP, meds), draft agreement, my contacts, and a proposed plan (hours, specialist involvement). We’ll also set monthly check‑ins for communication.</p>
-          <p><b>Family:</b> Thank you — this feels organised and reassuring.</p>
-          <p><b>Intake:</b> We’re committed to earning your trust and keeping communication open. See you Thursday at 3 PM. If anything changes or you think of more triggers/strategies, message me anytime.</p>
-          <p><b>Family:</b> Will do. I feel hopeful for the first time in a while.</p>
-          <p><b>Intake:</b> That means a lot. We’ll work to turn that hope into progress. Talk soon!</p>
+          <p><b>Intake:</b> Hi [Participant Name], this is [Name] from [Your Organization]. Your support coordinator, [SC Name], asked me to call — do you have a few minutes now?</p>
+          <p><b>Participant:</b> Sure — she mentioned you’d ring.</p>
+          <p><b>Intake:</b> Great. She noted you’re seeking OT and some daily living support. What are your top priorities in the next six months?</p>
+          <p><b>Participant:</b> Showering independently and doing some cooking again.</p>
+          <p><b>Intake:</b> Excellent goals. Our OT can assess home mods/equipment and techniques; a support worker can attend practice sessions. With your permission we’ll keep [SC Name] in the loop and send a short post‑assessment summary.</p>
+          <p><b>...</b> [Dialogue continues with scheduling (e.g., Wed 10 AM OT), support worker Mon/Fri 2 PM, service agreement + agency‑managed service bookings, plan review report, and recap.]</p>
         </div>
       </section>
-    </div>
-  </main>
 
-  <footer>
-    © <span id="year"></span> — Part 3 of 3–4. Merge with Parts 1–2 or host separately. Print‑ready.
-  </footer>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Lightweight in‑page search for this part
-    const q = document.getElementById('q');
-    const results = document.createElement('div');
-    results.className = 'resultbox';
-    document.body.appendChild(results);
-    const section = document.querySelector('#s4');
-    const index = [{ id:'s4', title: section?.dataset.title || 'Complex Needs', text: (section?.innerText||'').toLowerCase().replace(/\s+/g,' ') }];
-
-    function hi(text, terms){
-      let html = text;
-      for(const t of terms){
-        const re = new RegExp('('+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
-        html = html.replace(re,'<mark>$1</mark>');
-      }
-      return html;
-    }
-    function search(v){
-      const qv = v.trim().toLowerCase();
-      if(!qv){ results.style.display='none'; return; }
-      const terms = qv.split(/\s+/).filter(Boolean);
-      const src = index[0];
-      const i = terms.map(t=>src.text.indexOf(t)).filter(x=>x>0).sort((a,b)=>a-b)[0] ?? 0;
-      const start = Math.max(0, i-80), end = Math.min(src.text.length, i+220);
-      const snippet = src.text.slice(start,end);
-      results.innerHTML = `<div class="result" data-id="${src.id}"><div style="font-weight:700; padding-bottom:4px">${hi('Complex Needs (Behaviours of Concern, Restrictive Practices)', terms)}</div><div class="muted" style="font-size:13px; color:#b8c1da">${hi(snippet, terms)}…</div></div>`;
-      results.style.display='block';
-    }
-    q.addEventListener('input',(e)=>search(e.target.value));
-    q.addEventListener('focus',()=>{ if(q.value) results.style.display='block'; });
-    document.addEventListener('click',(e)=>{ if(!document.getElementById('searchbar').contains(e.target)) results.style.display='none'; });
-    results.addEventListener('click',(e)=>{ results.style.display='none'; document.getElementById('s4').scrollIntoView({behavior:'smooth'}); });
-    document.getElementById('clearBtn').addEventListener('click',()=>{ q.value=''; results.style.display='none'; q.focus(); });
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en-AU">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NDIS Intake Phone Scripts — Part 3 (Complex Needs)</title>
-  <style>
-    body{font-family:Inter, Arial, sans-serif; background:#0e111a; color:#e8ecff; margin:0}
-    header,footer{background:#121729; padding:16px 20px}
-    h1{margin:0; font-size:28px}
-    .muted{color:#b8c1da}
-    main{display:grid; grid-template-columns:320px 1fr; gap:0}
-    @media (max-width: 960px){ main{grid-template-columns:1fr} }
-    nav{background:#121729; padding:14px 20px; position:sticky; top:0; align-self:start}
-    nav a{display:block; padding:6px 0; color:#e8ecff; text-decoration:none}
-    nav a:hover{opacity:.9}
-    .wrap{padding:0 0 20px}
-    .bar{display:flex; gap:10px; padding:12px 20px; border-top:1px solid rgba(255,255,255,.08); background:#0f1533; position:sticky; top:60px; z-index:2}
-    .bar input{flex:1; min-width:220px; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1024; color:#e8ecff; outline:none}
-    .btn{appearance:none; border:0; background:linear-gradient(180deg,#7c4dff,#9a7bff); color:#fff; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600}
-
-    section{padding:20px; margin:20px; background:#1a2244; border-radius:12px}
-    h2{margin-top:0}
-    h3{margin-bottom:8px}
-    .badge{display:inline-block; padding:4px 8px; border-radius:999px; background:#7c4dff; color:#fff; font-size:12px}
-    details{margin:10px 0}
-    .callout{padding:12px; background:#101842; border-left:4px solid #7c4dff; border-radius:8px; margin:10px 0}
-    .warn{border-left-color:#ffb020}
-    .ok{border-left-color:#00c389}
-    .script{background:#0b112b; padding:12px; border-radius:8px; margin-top:14px}
-    .script p{margin:6px 0; line-height:1.6}
-    .label{font-size:12px; color:#b8c1da; text-transform:uppercase; letter-spacing:.2px; margin-bottom:6px}
-    .two-col{columns:2; column-gap:24px}
-    @media (max-width: 900px){ .two-col{columns:1} }
-    .resultbox{position:absolute; top:100%; left:20px; right:20px; background:#0b1024; border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:6px; display:none; max-height:320px; overflow:auto}
-    .result{padding:8px 10px; border-radius:8px; cursor:pointer}
-    .result:hover{background:#0e1536}
-    mark{background:#ffd54a; color:#111; padding:0 2px; border-radius:3px}
-  </style>
-</head>
-<body>
-  <header>
-    <h1>NDIS Intake Phone Scripts — Part 3</h1>
-    <div class="muted">Complex Needs • Behaviours of Concern • Restrictive Practices • Positive Behaviour Support</div>
-  </header>
-
-  <main>
-    <nav>
-      <a href="#s4">4) Complex Needs (Behaviours of Concern, Restrictive Practices)</a>
-    </nav>
-
-    <div class="wrap">
-      <div class="bar" id="searchbar">
-        <input id="q" type="text" placeholder="Search this part (e.g., triggers, PRN, PBS plan, 2:1 staffing)…" autocomplete="off" />
-        <button class="btn" id="clearBtn">Clear</button>
-      </div>
-
-      <!-- ====================== SCENARIO 4 ====================== -->
-      <section id="s4" data-title="Complex Needs (Behaviours of Concern, Restrictive Practices)" data-keywords="complex needs behaviours of concern PBS positive behaviour support restrictive practices PRN medication triggers de-escalation consistency safety two staff autism mental health communication visuals sensory plan consent incident data crisis plan">
-        <h2>4) Complex Needs (e.g. Behaviours of Concern, Restrictive Practices)</h2>
-        <span class="badge">Caller Type & Role</span> Senior Intake Coordinator or Clinical Intake Specialist calling a participant or guardian/caregiver with complex support needs.
-        <p class="muted"><b>Context:</b> Behaviours of concern and/or authorised restrictive practices may be present. Handle with sensitivity and expertise. Emphasise capability, safety, dignity, and Positive Behaviour Support (PBS). Gather detailed triggers, effective strategies, and any formal behaviour support plans.</p>
+      <!-- ====================== 4) COMPLEX NEEDS ====================== -->
+      <section id="s4">
+        <h2>4) Complex Needs (Behaviours of Concern, Restrictive Practices)</h2>
+        <span class="badge">Caller Type & Role</span> Senior Intake Coordinator / Clinical Intake Specialist speaking with participant or guardian for high‑needs case.
+        <p class="muted"><b>Context:</b> Behaviours of concern and/or authorised restrictive practices. Non‑judgemental, safety‑first, PBS‑aligned approach. Gather triggers, strategies, PBSP details, and coordination needs.</p>
 
         <h3>Key Information to Gather</h3>
         <ul class="two-col">
-          <li>Description of behaviours (e.g., aggression, self‑harm, absconding), frequency, typical triggers.</li>
-          <li>What prevents/de‑escalates incidents; what hasn’t worked.</li>
-          <li>Positive Behaviour Support Plan (PBSP) details; behaviour support practitioner involvement (request copy with consent).</li>
-          <li>Restrictive practices currently used and authorisations (e.g., lap belt, PRN medication). Clarify that questions are to prepare, not judge; practices must be authorised and plan‑based.</li>
-          <li>Staff safety: special training, precautions, 1:1 or 2:1 staffing, environmental safety (lock away sharps, etc.).</li>
-          <li>Clinician involvement (psychologist, psychiatrist, specialists) and coordination needs.</li>
-          <li>Communication style (verbal, AAC/device, non‑verbal) and comprehension level.</li>
-          <li>Environments for support (home, day program), sensory setup, modifications (sensory room, gated yard).</li>
-          <li>Family/caregiver priorities beyond safety (e.g., reduce sedation, teach alternative communication for anger).</li>
+          <li>Behaviours, frequency, triggers; effective and ineffective strategies.</li>
+          <li>PBSP details; behaviour support practitioner contact; request copies (with consent).</li>
+          <li>Restrictive practices used and authorisations; ensure legal/plan alignment.</li>
+          <li>Staff safety requirements; training; 1:1 or 2:1; environment safety.</li>
+          <li>Clinician involvement (psych/psychiatry) and coordination.</li>
+          <li>Communication style (verbal/AAC/non‑verbal) and comprehension.</li>
+          <li>Support environments and sensory setup/modifications.</li>
+          <li>Family priorities (e.g., reduce sedation; alternative communication for anger).</li>
         </ul>
 
-        <h3>Common Concerns / Objections & Responses</h3>
+        <h3>Common Concerns / Responses</h3>
         <details open>
-          <summary>“I’m afraid no provider will stick around once they see his behaviours.”</summary>
-          <div class="callout ok">Our team is trained for high‑support needs. We view behaviours as communication and follow PBS. We prioritise consistency, patience, and trust — we won’t be scared off.</div>
+          <summary>“Providers won’t stick around once they see behaviours.”</summary>
+          <div class="callout ok">Our team is trained for high‑support needs, views behaviour as communication, and commits to consistency and trust — not walking away.</div>
         </details>
         <details>
-          <summary>“Will your staff cope with meltdowns or aggression?”</summary>
-          <div class="callout">Yes. Staff receive de‑escalation and safe crisis management training and follow the behaviour plan precisely. We avoid restrictive practices unless authorised and absolutely necessary, and we review to reduce them over time.</div>
+          <summary>“Can staff cope with meltdowns or aggression?”</summary>
+          <div class="callout">Yes — de‑escalation and safe crisis management training; follow plans precisely; use restrictive practices only if authorised/necessary and work to reduce them.</div>
         </details>
         <details>
-          <summary>“There’s PRN medication in crises — how do you handle that?”</summary>
-          <div class="callout">We follow the prescribed protocol within the PBSP. We prioritise least‑restrictive strategies first (diversion, sensory tools, quiet space). PRN is a last resort, and every use triggers a review to learn and improve.</div>
+          <summary>“PRN medication in crisis — how’s that handled?”</summary>
+          <div class="callout">According to the PBSP protocol, after least‑restrictive strategies are tried. Each use prompts review to learn and prevent recurrences.</div>
         </details>
         <details>
-          <summary>“Will my family member be treated with respect?”</summary>
-          <div class="callout">Absolutely. We separate the behaviour from the person, get to know strengths and preferences, and provide non‑judgemental, rights‑based support. If a staff fit isn’t right, we address it quickly.</div>
+          <summary>“Will they be treated with respect?”</summary>
+          <div class="callout">Always — dignity, strengths focus, and rapid action if a staff attitude isn’t a fit.</div>
         </details>
 
         <h3>Suggested Next Steps</h3>
         <ul>
-          <li>Book a comprehensive in‑person meeting with key people (family, caregivers, behaviour practitioner). Include participant as tolerated to build rapport.</li>
-          <li>Obtain documentation: PBSP, safety plans, incident reports, medication list (with consent) and coordinate with existing clinicians.</li>
-          <li>Arrange specialised training or refreshers specific to the participant’s needs (autism‑specific strategies, safe restraint where authorised).</li>
-          <li>Assign a small, consistent team (e.g., 2–3 staff) and plan shadowing before solo shifts.</li>
-          <li>Co‑develop a crisis plan (who to call, thresholds for escalation, emergency steps).</li>
-          <li>Track incident data and triggers; set regular reviews to adjust strategies and measure progress.</li>
-          <li>Offer caregiver support and validation; provide contacts for carer supports where appropriate.</li>
+          <li>Comprehensive meeting with key people; include participant as tolerated.</li>
+          <li>Obtain PBSP, safety plans, incidents, meds (with consent); align with clinicians.</li>
+          <li>Specialised training refreshers as needed; shadowing before solo shifts.</li>
+          <li>Assign a small, consistent team; co‑develop a crisis plan.</li>
+          <li>Track incident data/triggers; schedule regular reviews.</li>
+          <li>Offer caregiver validation and supports.</li>
         </ul>
 
         <div class="script">
           <div class="label">Scripted Dialogue (Read‑ready)</div>
-          <p><b>Intake (Clinical Specialist):</b> Hello, [Name]? This is [Your Name] from [Your Organization]. I’m calling about [Participant Name] and the supports you inquired about. How are you today?</p>
-          <p><b>Family/Caregiver:</b> Hi. I’m okay, a bit anxious to discuss this actually.</p>
-          <p><b>Intake:</b> That’s totally understandable. I really appreciate you taking the time. This is a judgement‑free conversation — our goal is to understand how we can best support [Participant Name]. I’ve read the referral mentioning behaviours of concern, but it helps to hear from you what a typical day looks like and what challenges you’re facing.</p>
-          <p><b>Family:</b> [Participant] is my 20‑year‑old son with autism and intellectual disability. He can be very sweet, but has aggressive outbursts when overwhelmed. Yesterday we asked him to turn off the TV for dinner and he snapped — yelling, throwing things, and he hit my arm. This happens a few times a week.</p>
-          <p><b>Intake:</b> I’m sorry you experienced that. When an outburst occurs, how long does it usually last?</p>
-          <p><b>Family:</b> About 10–15 minutes at peak, then 30 minutes to settle.</p>
-          <p><b>Intake:</b> What helps or makes it worse during those moments?</p>
-          <p><b>Family:</b> We don’t yell or restrain unless there’s immediate danger. We remove throwables and give space. Quietly talking about his favourite topic — trains — helps. As a last resort there’s a PRN sedative; used four times last year.</p>
-          <p><b>Intake:</b> Those are solid strategies. Is the PRN documented within an authorised Positive Behaviour Support Plan?</p>
-          <p><b>Family:</b> Yes — we have a PBSP from a psychologist; PRN is authorised as a restrictive practice.</p>
-          <p><b>Intake:</b> Understood. With your permission, we’ll obtain that plan and any recent incident reports so our team can align closely. We always follow existing plans consistently.</p>
-          <p><b>Family:</b> I’ll email it and connect you with the psychologist.</p>
-          <p><b>Intake:</b> Thank you. Besides the PRN, are any other restrictive practices used (e.g., physical restraint, seclusion)?</p>
-          <p><b>Family:</b> No physical restraint or seclusion. Mainly the PRN if there’s serious risk.</p>
-          <p><b>Intake:</b> Thanks for clarifying. Our aim is prevention and reduction of restrictive practices over time. What are common triggers — transitions, unexpected changes, sensory overload, communication frustration?</p>
-          <p><b>Family:</b> Exactly those. Transitions and plan changes, noisy or crowded places, and trouble expressing himself under stress.</p>
-          <p><b>Intake:</b> We’ll plan around that: use visual schedules and warnings (e.g., “5 more minutes of TV, then dinner”), avoid sudden changes, and substitute cancelled activities with preferred alternatives when possible.</p>
-          <p><b>Family:</b> That would help a lot.</p>
-          <p><b>Intake:</b> What would you like our service to do specifically?</p>
-          <p><b>Family:</b> A skilled support worker a few afternoons a week to engage him and build coping/daily living skills, plus behaviour support oversight to coach workers and review incidents.</p>
-          <p><b>Intake:</b> We can assign a specialist to supervise (review data, align with your psychologist, coach staff) and provide consistent workers Mon/Wed/Fri afternoons to practice skills and give respite. We’ll start with shadowing so they aren’t alone initially. Small, stable team for trust.</p>
-          <p><b>Family:</b> We’ve had workers quit before — that’s our worry.</p>
-          <p><b>Intake:</b> I’m sorry that happened. We’ll only assign trained staff, begin with meet‑and‑greet + shadowing, and keep the roster tight (2–3 people). If a match isn’t right, we’ll act quickly — stability is the goal.</p>
-          <p><b>Family:</b> Routine definitely helps him.</p>
-          <p><b>Intake:</b> Great. Let’s plan a low‑demand meet‑and‑greet where he’s comfortable (e.g., backyard with trains). We’ll brief the worker to bring relevant interests to build rapport.</p>
-          <p><b>Family:</b> He’d love that.</p>
-          <p><b>Intake:</b> Because PRN is involved, we’ll ensure proper consent/authorisations on file. Our service agreement will state that we follow the PBSP and maintain regular contact with your psychologist. Clear commitments from day one.</p>
-          <p><b>Family:</b> I appreciate a detailed agreement.</p>
-          <p><b>Intake:</b> Funding‑wise, do you have ‘Improved Relationships’ for behaviour support? If more is needed for training/updates we can discuss options together.</p>
-          <p><b>Family:</b> Yes, there’s some funding left.</p>
-          <p><b>Intake:</b> Perfect. Immediate next step: meet‑and‑greet Thursday 3 PM with [Support Worker Name] if that’s a calm time for him?</p>
-          <p><b>Family:</b> 3 PM works — usually a calm time.</p>
-          <p><b>Intake:</b> Great — we’ll meet in the backyard with his train set. I’ll email: document checklist (PBSP, meds), draft agreement, my contacts, and a proposed plan (hours, specialist involvement). We’ll also set monthly check‑ins for communication.</p>
-          <p><b>Family:</b> Thank you — this feels organised and reassuring.</p>
-          <p><b>Intake:</b> We’re committed to earning your trust and keeping communication open. See you Thursday at 3 PM. If anything changes or you think of more triggers/strategies, message me anytime.</p>
-          <p><b>Family:</b> Will do. I feel hopeful for the first time in a while.</p>
-          <p><b>Intake:</b> That means a lot. We’ll work to turn that hope into progress. Talk soon!</p>
+          <p><b>Intake (Clinical Specialist):</b> Hello, [Name]? This is [Your Name] from [Your Organization] regarding [Participant]. Thanks for taking the time — this is a judgement‑free conversation so we can plan safe, effective support.</p>
+          <p><b>Family:</b> He’s 20, autistic with ID; outbursts a few times a week when overwhelmed.</p>
+          <p><b>Intake:</b> What helps during those moments? What makes it worse? Any PRN in an authorised plan?</p>
+          <p><b>Family:</b> Space, removing throwables, talking about trains helps; PRN authorised in a PBSP; used rarely.</p>
+          <p><b>Intake:</b> With consent we’ll obtain the PBSP/incident info, align with your psychologist, and focus on prevention and reducing restrictive practices. Let’s plan a calm meet‑and‑greet and start with shadowed shifts and a small, consistent team.</p>
+          <p><b>...</b> [Dialogue continues with triggers (transitions, changes, sensory overload), goals, scheduling, consent, documentation, and monthly check‑ins.]</p>
         </div>
       </section>
+
+      <!-- ====================== 5) HIGH‑RISK CASES ====================== -->
+      <section id="s5">
+        <h2>5) High‑Risk Cases (Hospital Discharge / Urgent Safety Issues)</h2>
+        <span class="badge">Caller Type & Role</span> Intake Coordinator (nurse or experienced care coordinator) calling participant/family in a high‑risk scenario.
+        <p class="muted"><b>Context:</b> Time‑critical supports; calm, confident, reassuring tone. Rapid mobilisation and tight coordination.</p>
+
+        <h3>Key Information to Gather</h3>
+        <ul class="two-col">
+          <li>Nature of risk; discharge details; aftercare needs; discharge plan.</li>
+          <li>At‑home risks and urgency (falls, self‑harm, burnout, etc.).</li>
+          <li>Immediate needs for 24–72 hours (visits, overnights, equipment, meals).</li>
+          <li>Existing supports and gaps; avoid duplication.</li>
+          <li>Use of plan funds; SC/hospital liaison contacts.</li>
+          <li>Coordination contacts (SW/discharge planner, GP, emergency contacts).</li>
+          <li>Home safety (access, power, food, phone/pendant).</li>
+          <li>Contingency if start delayed (postpone discharge; family coverage).</li>
+        </ul>
+
+        <h3>Common Concerns / Responses</h3>
+        <details open>
+          <summary>“I’m being discharged tomorrow — I’ll be alone.”</summary>
+          <div class="callout ok">Worker meets you on arrival, settles you in, and checks in later. On‑call contact provided; 000 for emergencies. You will not be left unsupported.</div>
+        </details>
+        <details>
+          <summary>“House isn’t ready — need equipment fast.”</summary>
+          <div class="callout">We’ll coordinate urgent loan/delivery (portable ramp, shower chair) and safe interim measures while longer‑term solutions progress.</div>
+        </details>
+        <details>
+          <summary>“Nights worry me — I live alone.”</summary>
+          <div class="callout">Evening/morning visits, optional overnight/sleepover or on‑call checks, and pendant setup/testing to cover the night.</div>
+        </details>
+        <details>
+          <summary>“It’s all too much to coordinate.”</summary>
+          <div class="callout">We coordinate with hospital/SC and propose a clear Day‑1 to Day‑3 plan so you can focus on recovery.</div>
+        </details>
+
+        <h3>Suggested Next Steps</h3>
+        <ul>
+          <li>Confirm roster/equipment urgently and share ETAs.</li>
+          <li>Provide a written Emergency Support Plan (who/when/what).</li>
+          <li>Exchange on‑call and emergency contacts (with key access).</li>
+          <li>Attend discharge for handover/transport if helpful.</li>
+          <li>Fast‑track consents/service agreement; verbal + email acceptable.</li>
+          <li>Set 1‑week review; give a mini “what‑to‑do” guide.</li>
+        </ul>
+
+        <div class="script">
+          <div class="label">Scripted Dialogue (Read‑ready)</div>
+          <p><b>Intake (Nurse):</b> Hi [Participant], this is [Name] from [Your Org] about your discharge tomorrow — may I run through supports for home?</p>
+          <p><b>Participant:</b> I’m nervous about being alone.</p>
+          <p><b>Intake:</b> We’ll meet you at 10 AM, travel home with you, stay several hours to settle in, do a safety check, and return at 5 PM for dinner support. We’re arranging a portable ramp and shower chair; your pendant will be tested.</p>
+          <p><b>Participant:</b> Thank you — that helps.</p>
+          <p><b>Intake:</b> Day 2 we’ll run morning/midday/evening visits, then taper. Community nursing is booked Mon/Wed/Fri at 11 AM; we’ll coordinate. I’ll text our on‑call number and email a simple Day‑1 to Day‑3 plan now.</p>
+        </div>
+      </section>
+
+      <!-- ====================== 6) NURSING‑ONLY ====================== -->
+      <section id="s6">
+        <h2>6) Nursing‑Only Supports Required (Wound Care, PEG Feeding)</h2>
+        <span class="badge">Caller Type & Role</span> Intake Nurse (Registered Nurse) calling participant/caregiver requiring clinical supports.
+        <p class="muted"><b>Context:</b> Clarify clinical tasks, timing, protocols, supplies, and preferences. Convey competence and empathy; plan contingencies.</p>
+
+        <h3>Key Information to Gather</h3>
+        <ul class="two-col">
+          <li>Task specifics (wound type/dressing; PEG/PEJ regimen; catheter/injections).</li>
+          <li>Frequency and exact times; align to meals/meds where relevant.</li>
+          <li>Medical background and orders; discharge instructions.</li>
+          <li>Supplies and consumables; ordering and funding pathways.</li>
+          <li>Home setup: clean surface, pump/pole, sharps disposal, PPE.</li>
+          <li>Pain/comfort; red‑flag symptoms and current management.</li>
+          <li>Family involvement; training interest for gradual handover.</li>
+          <li>Contingencies (blocked/dislodged tube, worsening wound, late nurse).</li>
+          <li>NDIS high‑intensity lines; qualified staff assignment; continuity.</li>
+        </ul>
+
+        <h3>Common Concerns / Responses</h3>
+        <details open>
+          <summary>“Will the nurse be skilled in my exact task?”</summary>
+          <div class="callout ok">Yes — we allocate nurses experienced in your care area, with senior RN oversight and backup.</div>
+        </details>
+        <details>
+          <summary>“Home isn’t like hospital — is it safe?”</summary>
+          <div class="callout">We bring essentials, maintain sterility, and follow hospital‑grade protocols at home using your equipment or prescribed alternatives.</div>
+        </details>
+        <details>
+          <summary>“Can I have the same nurse?”</summary>
+          <div class="callout">Continuity is standard: a primary nurse plus one briefed backup — not a parade of new faces.</div>
+        </details>
+        <details>
+          <summary>“What if something changes or an emergency occurs?”</summary>
+          <div class="callout">We monitor, liaise with GP/specialists, and provide a 24/7 contact. For PEG issues, we’ll troubleshoot or direct you promptly to ED if required.</div>
+        </details>
+
+        <h3>Suggested Next Steps</h3>
+        <ul>
+          <li>Book an initial nursing assessment aligned to first task (e.g., morning PEG feed).</li>
+          <li>Confirm orders and set up home charting (paper/electronic).</li>
+          <li>Educate and, if desired, gradually teach steps to increase independence.</li>
+          <li>Schedule efficient visits; combine tasks safely where possible.</li>
+          <li>Arrange consumables and track stock; provide direct nurse line.</li>
+          <li>Review after 4–6 weeks to taper or adjust plan.</li>
+        </ul>
+
+        <div class="script">
+          <div class="label">Scripted Dialogue (PEG Example)</div>
+          <p><b>Intake Nurse:</b> Hello [Participant], I’m [Name], a nurse with [Your Org]. I understand you have a PEG and need support with feeds and site care — could you walk me through your current routine?</p>
+          <p><b>Participant:</b> Three pump feeds (8 AM, 1 PM, 7 PM) with flushes; I’m nervous to manage alone.</p>
+          <p><b>Intake Nurse:</b> We’ll attend at those times, manage feeds/site care/meds, and — if you wish — teach steps gradually. You’ll have a 24/7 contact for issues like clogs or dislodgement. We’ll verify medication orders on the first visit and keep continuity with a primary nurse.</p>
+        </div>
+      </section>
+
     </div>
   </main>
 
   <footer>
-    © <span id="year"></span> — Part 3 of 3–4. Merge with Parts 1–2 or host separately. Print‑ready.
+    © <span id="year"></span> — Consolidated edition. Print‑ready. Use sidebar to jump between scenarios.
   </footer>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Lightweight in‑page search for this part
-    const q = document.getElementById('q');
-    const results = document.createElement('div');
-    results.className = 'resultbox';
-    document.body.appendChild(results);
-    const section = document.querySelector('#s4');
-    const index = [{ id:'s4', title: section?.dataset.title || 'Complex Needs', text: (section?.innerText||'').toLowerCase().replace(/\s+/g,' ') }];
-
-    function hi(text, terms){
-      let html = text;
-      for(const t of terms){
-        const re = new RegExp('('+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
-        html = html.replace(re,'<mark>$1</mark>');
-      }
-      return html;
-    }
-    function search(v){
-      const qv = v.trim().toLowerCase();
-      if(!qv){ results.style.display='none'; return; }
-      const terms = qv.split(/\s+/).filter(Boolean);
-      const src = index[0];
-      const i = terms.map(t=>src.text.indexOf(t)).filter(x=>x>0).sort((a,b)=>a-b)[0] ?? 0;
-      const start = Math.max(0, i-80), end = Math.min(src.text.length, i+220);
-      const snippet = src.text.slice(start,end);
-      results.innerHTML = `<div class="result" data-id="${src.id}"><div style="font-weight:700; padding-bottom:4px">${hi('Complex Needs (Behaviours of Concern, Restrictive Practices)', terms)}</div><div class="muted" style="font-size:13px; color:#b8c1da">${hi(snippet, terms)}…</div></div>`;
-      results.style.display='block';
-    }
-    q.addEventListener('input',(e)=>search(e.target.value));
-    q.addEventListener('focus',()=>{ if(q.value) results.style.display='block'; });
-    document.addEventListener('click',(e)=>{ if(!document.getElementById('searchbar').contains(e.target)) results.style.display='none'; });
-    results.addEventListener('click',(e)=>{ results.style.display='none'; document.getElementById('s4').scrollIntoView({behavior:'smooth'}); });
-    document.getElementById('clearBtn').addEventListener('click',()=>{ q.value=''; results.style.display='none'; q.focus(); });
   </script>
 </body>
 </html>
