@@ -1,430 +1,431 @@
-<!DOCTYPE html>
-<html lang="en-AU">
+<!DOCTYPE html><html lang="en-AU">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HD HeeD — NDIS Intake Phone Scripts (All 12 Scenarios)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>HD HeeD — NDIS Intake Phone Scripts (All Scenarios)</title>
   <style>
-    :root{
-      --bg:#0e111a; --panel:#121729; --card:#1a2244; --ink:#e8ecff; --muted:#a6b0e0; --brand:#7c4dff; --brand-2:#29b6f6;
-      --ok:#34d399; --warn:#f59e0b; --danger:#ef4444; --shadow:0 10px 30px rgba(0,0,0,.25);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{font-family:Inter, system-ui, -apple-system, Segoe UI, Arial, sans-serif; background:var(--bg); color:var(--ink); margin:0;}
-    header,footer{background:var(--panel); padding:16px 20px; position:sticky; top:0; z-index:50; border-bottom:1px solid rgba(255,255,255,.05)}
-    header h1{margin:0; font-size:22px; font-weight:700}
-    header .sub{font-size:13px; color:var(--muted)}
-
-    .shell{display:flex; min-height:calc(100vh - 64px)}
-    aside{position:sticky; top:64px; align-self:flex-start; width:280px; background:var(--panel); height:calc(100vh - 64px); overflow:auto; padding:18px 16px; border-right:1px solid rgba(255,255,255,.05)}
-    .logo{font-weight:800; letter-spacing:.5px; font-size:14px; color:var(--muted); margin-bottom:8px}
-    nav a{display:flex; align-items:center; gap:8px; padding:8px 10px; color:var(--ink); text-decoration:none; border-radius:8px}
-    nav a:hover{background:rgba(124,77,255,.1); color:#fff}
-    nav small{color:var(--muted)}
-    .search{position:relative; margin:8px 0 14px}
-    .search input{width:100%; padding:10px 36px 10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.08); background:#0b112b; color:var(--ink)}
-    .search svg{position:absolute; right:10px; top:50%; transform:translateY(-50%); opacity:.6}
-
-    main{flex:1; padding:24px;}
-    section{padding:20px; margin:16px 0 28px; background:var(--card); border-radius:14px; box-shadow:var(--shadow)}
-    section h2{margin:0 0 10px}
-    .badge{display:inline-block; padding:3px 8px; border-radius:999px; background:var(--brand); color:#fff; font-size:12px; font-weight:600}
-    details{margin:10px 0; border:1px solid rgba(255,255,255,.08); border-radius:10px; overflow:hidden}
-    details[open]{border-color:rgba(124,77,255,.35)}
-    details > summary{list-style:none; cursor:pointer; padding:12px 14px; background:#0b112b; color:#fff; font-weight:600;}
-    details > summary::-webkit-details-marker{display:none}
-    details .pad{padding:14px}
-    .callout{padding:12px 14px; background:#101842; border-left:4px solid var(--brand); border-radius:8px; margin:10px 0}
-    .script{background:#0b112b; padding:12px; border-radius:10px; margin-top:12px}
-    .script p{margin:8px 0; line-height:1.6}
-
-    .toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 0}
-    .btn{appearance:none; border:none; border-radius:10px; padding:8px 12px; font-weight:600; color:#fff; cursor:pointer}
-    .btn.print{background:var(--brand)}
-    .btn.copy{background:var(--brand-2)}
-    .btn.top{background:#2dd4bf}
-
-    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-    .faq{background:#0b112b; border-radius:12px; padding:12px}
-
-    footer{display:flex; justify-content:space-between; align-items:center; gap:12px; border-top:1px solid rgba(255,255,255,.05)}
-    footer small{color:var(--muted)}
-
-    /* PRINT UTILS */
-    @media print{
-      body{background:#fff; color:#000}
-      header, aside, .toolbar, footer{display:none!important}
-      section{box-shadow:none; background:#fff;}
-      .print-solo section{display:none}
-      .print-solo section.print-target{display:block}
-    }
+    body{font-family:Inter, Arial, sans-serif; background:#0e111a; color:#e8ecff; margin:0;}
+    header,footer{background:#121729; padding:16px 20px;}
+    h1{margin:0; font-size:28px;}
+    nav{background:#121729; padding:14px; position:sticky; top:0; max-height:100vh; overflow-y:auto;}
+    nav a{display:block; padding:6px 0; color:#e8ecff; text-decoration:none;}
+    nav a:hover{color:#7c4dff;}
+    main{margin-left:220px;}
+    aside{position:fixed; top:0; left:0; width:200px; height:100%; background:#121729; padding:20px; overflow-y:auto;}
+    section{padding:20px; margin:20px; background:#1a2244; border-radius:12px;}
+    h2{margin-top:0;}
+    .badge{display:inline-block; padding:3px 7px; border-radius:8px; background:#7c4dff; color:#fff; font-size:12px;}
+    details{margin:10px 0;}
+    .callout{padding:12px; background:#101842; border-left:4px solid #7c4dff; border-radius:8px; margin:10px 0;}
+    .script{background:#0b112b; padding:12px; border-radius:8px; margin-top:14px; white-space:pre-wrap;}
+    .script p{margin:6px 0; line-height:1.6;}
+    button.print-btn{margin-top:10px; padding:6px 12px; border:none; border-radius:6px; background:#7c4dff; color:#fff; cursor:pointer;}
+    button.print-btn:hover{background:#9b6dff;}
   </style>
 </head>
 <body>
   <header>
-    <h1>HD HeeD — NDIS Intake Phone Scripts (Complete Library)</h1>
-    <div class="sub">Twelve real-world scenarios • clear checklists • conversation examples • print-ready</div>
-  </header>
-
-  <div class="shell">
-    <aside>
+    <h1>HD HeeD — NDIS Intake Phone Scripts (Various Scenarios)</h1>
+    <div>Comprehensive scripts for clinical and admin intake teams</div>
+  </header>  <aside>
     <h3>Index</h3>
     <nav>
       <a href="#s1">1) Standard Participant Intake</a>
       <a href="#s2">2) Family / Next of Kin</a>
       <a href="#s3">3) Support Coordinator Referral</a>
       <a href="#s4">4) Complex Needs (Behaviours / Restrictive)</a>
-      <a href="#s5">5) High-Risk Cases (Hospital / Urgent)</a>
+      <a href="#s5">5) High-Risk Cases</a>
       <a href="#s6">6) Nursing-Only Supports</a>
-      <a href="#s7">7) CALD / Interpreter Required</a>
-      <a href="#s8">8) Disengaged / Hard-to-Reach Clients</a>
+      <a href="#s7">7) CALD Backgrounds / Interpreter</a>
+      <a href="#s8">8) Disengaged / Hard-to-Reach</a>
+      <a href="#s9">9) Transitioning from Another Provider</a>
+      <a href="#s10">10) Plan Review / Change</a>
+      <a href="#s11">11) Aged Care Crossover</a>
+      <a href="#s12">12) Paediatric Clients (ECEI)</a>
+    <a href="#s7">7) CALD / Interpreter Needs</a>
+      <a href="#s8">8) Disengaged / Hard‑to‑Reach</a>
       <a href="#s9">9) Transitioning from Another Provider</a>
       <a href="#s10">10) Plan Review / Change in Supports</a>
-      <a href="#s11">11) Aged Care Crossover (NDIS + My Aged Care)</a>
-      <a href="#s12">12) Paediatric (Under 7 / ECEI Transition)</a>
-      <a href="#faqs">FAQs</a>
+      <a href="#s11">11) Aged Care Crossover</a>
+      <a href="#s12">12) Paediatric (ECEI Transition)</a>
     </nav>
-  </aside>
-
-    <main id="content">
-
-      <!-- SECTION TEMPLATE NOTE: Each section has: summary bullets, key info, common concerns, suggested steps, conversation examples -->
-
-      <section id="s1">
-      <h2>1) Standard Participant Intake (Self or Plan Managed) <span class="badge">Admin/Clinical</span></h2>
-      <details open>
-        <summary><strong>Context</strong></summary>
-        <p>This is a first-contact call with an NDIS participant to welcome them and gather initial details. The participant may be self-managed or plan-managed. Tone: warm, plain English, and reassuring.</p>
-      </details>
+  </aside>  <main>
+    <section id="s1">
+      <h2>1) Standard Participant Intake (Self or Plan Managed) <span class="badge">Caller: Intake Officer</span></h2>
+      <div class="callout">Context: First-contact call to welcome a new NDIS participant (self-managed or plan-managed), gather essentials, and outline next steps in warm, plain English.</div>
       <h3>Key Information to Gather</h3>
       <ul>
-        <li>Participant details (name, preferred name, contacts).</li>
-        <li>NDIS number; plan start/end dates; plan management type (self / plan-managed); plan manager details if relevant.</li>
-        <li>Supports sought and goals.</li>
-        <li>Immediate needs or preferences (timing, worker gender, communication needs).</li>
-        <li>Support coordinator or other key contacts.</li>
-        <li>Safety/health considerations (mobility, allergies, behaviours).</li>
+        <li>Participant details: full name, preferred name, DOB, best contact.</li>
+        <li>NDIS number; plan start/end dates; management type (self / plan / agency).</li>
+        <li>Plan manager details if plan-managed (name, email/phone) for billing.</li>
+        <li>Supports sought & goals (e.g., daily living help, therapy, community access).</li>
+        <li>Immediate needs & preferences (times, worker gender, comms needs).</li>
+        <li>Involved people: support coordinator, family/key contacts.</li>
+        <li>Safety/health considerations (mobility, allergies, behaviours, access).</li>
       </ul>
-      <h3>Scripted Dialogue (Verbatim)</h3>
-      <div class="script">
-        <p><strong>Intake:</strong> “Hello, this is [Name] calling from [Your Organization]. May I please speak with [Participant Name]?” … (full script as provided in Part 1)</p>
-      </div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-      <section id="s2">
-      <h2>2) Family Member or Next of Kin Calling on Behalf <span class="badge">Admin/Clinical</span></h2>
-      <details open>
-        <summary><strong>Context</strong></summary>
-        <p>Family member is primary contact/advocate. Maintain privacy and consent while centring the participant’s voice.</p>
+      <h3>Common Concerns & Helpful Responses</h3>
+      <details><summary>“Will the NDIS cover all these services?”</summary>
+        <div class="callout">Your NDIS plan funds the approved supports we deliver, so there shouldn’t be out-of-pocket costs for those. We’ll keep services within your budget and invoice NDIS/your plan manager directly so you can focus on the support, not the paperwork.</div>
       </details>
-      <h3>Scripted Dialogue (Verbatim)</h3>
-      <div class="script">
-        <p>Full dialogue from Part 2 has been inserted here (intake with family, gardening/cricket example, logistics and service agreement).</p>
-      </div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
+      <details><summary>“I’m new and not sure what happens next.”</summary>
+        <div class="callout">No problem — I’ll guide you step by step. Today I’ll ask a few questions to understand your needs, then outline relevant services and next steps in plain English.</div>
+      </details>
+      <details><summary>“I have a plan manager. Do I handle payments?”</summary>
+        <div class="callout">Since you’re plan‑managed, we’ll invoice your plan manager directly and coordinate with them. You won’t need to manage the financial paperwork.</div>
+      </details>
+      <details><summary>“How soon can we start?”</summary>
+        <div class="callout">After intake we’ll book an initial assessment/meet‑and‑greet, often within 1–2 weeks depending on availability. Tell me if anything is urgent and we’ll prioritise.</div>
+      </details><h3>Suggested Next Steps</h3>
+  <ul>
+    <li>Explain relevant services (e.g., OT, physio, support workers) and prepare a clear service agreement summary.</li>
+    <li>Schedule first assessment/meet‑and‑greet and confirm preferences.</li>
+    <li>Send a simple recap by email/SMS with contacts and appointment details.</li>
+    <li>Invite questions any time; keep communication open and friendly.</li>
+  </ul>
 
-      <section id="s3">
-      <h2>3) Support Coordinator Referral <span class="badge">Admin/Clinical</span></h2>
-      <div class="script">
-        <p>Full dialogue from Part 3 inserted (SC referral, goals: showering/cooking, weekly OT + support worker schedule, reporting for review).</p>
-      </div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-      <section id="s4">
-      <h2>4) Complex Needs (Behaviours of Concern / Restrictive Practices) <span class="badge">Senior Intake</span></h2>
-      <div class="script">
-        <p>Full dialogue from Part 4 section 4 inserted (autism, triggers, PRN authorised, PBS plan, small consistent team, meet-and-greet, crisis plan).</p>
-      </div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-      <section id="s5">
-      <h2>5) High-Risk Cases (Hospital Discharge / Urgent Safety) <span class="badge">Nurse Intake</span></h2>
-      <div class="script">
-        <p>Full dialogue from Part 4 section 5 inserted (discharge logistics, portable ramp, commode, meals, 3x daily visits, pendant, nurse coordination).</p>
-      </div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-      <section id="s6">
-      <h2>6) Nursing-Only Supports (Wound Care, PEG, Catheter) <span class="badge">RN Intake</span></h2>
-      <div class="script">
-        <p>Full dialogue from Part 4 section 6 inserted (PEG feeds 3/day, meds via PEG, site care, continuity, contingency, training, service agreement).</p>
-      </div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-      <section id="s7">
-        <h2>7) CALD Backgrounds / Interpreter Required</h2>
-        <p>Language access, cultural safety, and respectful flexibility. Use interpreters at no cost to participants.</p>
-        <details open>
-          <summary>Key information to gather</summary>
-          <div class="pad">
-            <ul>
-              <li>Preferred language & interpreter needs; primary contact (family vs participant).</li>
-              <li>Cultural/religious practices; holidays/observances; gender preferences; dietary rules.</li>
-              <li>Understanding of NDIS concepts; translated materials; community connections.</li>
-            </ul>
-          </div>
-        </details>
-        <details>
-          <summary>Conversation example (with daughter interpreting)</summary>
-          <div class="pad script">
-            <p>(Offer TIS interpreter, confirm address terms of respect, simple English + greeting in language, schedule female worker, no‑pork/ shoes‑off, church access, translated agreement.)</p>
-          </div>
-        </details>
-        <div class="toolbar">
-          <button class="btn print" onclick="printPart('s7')">Print this section</button>
-          <button class="btn copy" onclick="copyPart('s7')">Copy HTML</button>
-          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
-        </div>
-      </section>
-
-      <section id="s8">
-        <h2>8) Disengaged / Hard‑to‑Reach Clients</h2>
-        <p>Gentle, non‑pressuring outreach; make engagement effortless; always leave the door open.</p>
-        <details open>
-          <summary>Key information to gather (if engagement occurs)</summary>
-          <div class="pad">
-            <ul>
-              <li>Barriers, interests (hooks), preferred comms & times; trust issues; minimal next step.</li>
-            </ul>
-          </div>
-        </details>
-        <details>
-          <summary>Conversation + voicemail examples</summary>
-          <div class="pad script">
-            <p>(Short, autonomy‑centred call; offer text follow‑up & one‑month check‑in; friendly non‑demanding voicemail script.)</p>
-          </div>
-        </details>
-        <div class="toolbar">
-          <button class="btn print" onclick="printPart('s8')">Print this section</button>
-          <button class="btn copy" onclick="copyPart('s8')">Copy HTML</button>
-          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
-        </div>
-      </section>
-
-      <section id="s9">
-        <h2>9) Transitioning from Another Provider</h2>
-        <p>Seamless switch with zero downtime; respectful handling; align start/end dates and bookings.</p>
-        <details open>
-          <summary>Key information to gather</summary>
-          <div class="pad">
-            <ul>
-              <li>Reason for transition; services to continue/change; end date & notice period; pending items & reports.</li>
-              <li>What worked vs didn’t; avoid double‑billing; new agreement & booking; first‑month review.</li>
-            </ul>
-          </div>
-        </details>
-        <details>
-          <summary>Conversation example (script)</summary>
-          <div class="pad script">
-            <p>(Reliability & consistency focus; two regular workers; intro visit during last shift; ‘coffee‑first‑then‑shower’ preference; dedicated cleaning visit; plan‑manager coordination.)</p>
-          </div>
-        </details>
-        <div class="toolbar">
-          <button class="btn print" onclick="printPart('s9')">Print this section</button>
-          <button class="btn copy" onclick="copyPart('s9')">Copy HTML</button>
-          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
-        </div>
-      </section>
-
-      <section id="s10">
-        <h2>10) Plan Review / Change in Supports</h2>
-        <p>Adjust rosters & therapies to match new budgets; reassure and optimise; visualise old vs new.</p>
-        <details open>
-          <summary>Key information to gather</summary>
-          <div class="pad">
-            <ul>
-              <li>Category changes (Core/Capacity); new/removed supports; priorities & feelings; timeline; admin changes.</li>
-              <li>Service agreement update/addendum; service booking rollover; plan comprehension check.</li>
-            </ul>
-          </div>
-        </details>
-        <details>
-          <summary>Conversation example (script)</summary>
-          <div class="pad script">
-            <p>(Trim least‑critical hours to protect mornings; start weekly physio; add social skills group; defer psych for a month; update documents; 4‑week review.)</p>
-          </div>
-        </details>
-        <div class="toolbar">
-          <button class="btn print" onclick="printPart('s10')">Print this section</button>
-          <button class="btn copy" onclick="copyPart('s10')">Copy HTML</button>
-          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
-        </div>
-      </section>
-
-      <section id="s11">
-        <h2>11) Aged Care Crossover (My Aged Care + NDIS)</h2>
-        <p>Use both systems complementarily; coordinate with aged‑care case manager; avoid duplication.</p>
-        <details open>
-          <summary>Key information to gather</summary>
-          <div class="pad">
-            <ul>
-              <li>Age & status (continuing participant post‑65); list of aged‑care vs NDIS services; overlaps/gaps; contacts.</li>
-              <li>Clarify coverage (equipment/therapy); joint meeting & shared plan; educate that NDIS continues post‑65.</li>
-            </ul>
-          </div>
-        </details>
-        <details>
-          <summary>Conversation example (script)</summary>
-          <div class="pad script">
-            <p>(Map HCP nursing/cleaning vs NDIS personal care/physio/equipment; add one NDIS hour for chores; share physio notes with nurse; joint call; adjustable bed pathway.)</p>
-          </div>
-        </details>
-        <div class="toolbar">
-          <button class="btn print" onclick="printPart('s11')">Print this section</button>
-          <button class="btn copy" onclick="copyPart('s11')">Copy HTML</button>
-          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
-        </div>
-      </section>
-
-      <section id="s12">
-        <h2>12) Paediatric Clients (Under 7 / ECEI Transition)</h2>
-        <p>Play‑based, family‑centred therapy; warm handover from ECEI; school collaboration.</p>
-        <details open>
-          <summary>Key information to gather</summary>
-          <div class="pad">
-            <ul>
-              <li>Current services & reports; goals for next stage; school timing & collaboration; family training; new funding.</li>
-            </ul>
-          </div>
-        </details>
-        <details>
-          <summary>Conversation example (script)</summary>
-          <div class="pad script">
-            <p>(Weekly speech; OT for ADLs; therapeutic playgroup trial; LAC intro call; school liaison; warm handover; bubbles & favourite toys to build rapport.)</p>
-          </div>
-        </details>
-        <div class="toolbar">
-          <button class="btn print" onclick="printPart('s12')">Print this section</button>
-          <button class="btn copy" onclick="copyPart('s12')">Copy HTML</button>
-          <a class="btn top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
-        </div>
-      </section>
-
-      <section id="faq">
-        <h2>Frequently Asked Questions</h2>
-        <div class="grid-2">
-          <div class="faq"><strong>How fast can services start?</strong><br/>Often within days after intake; high‑risk cases can be same‑day where feasible.</div>
-          <div class="faq"><strong>Do you use interpreters?</strong><br/>Yes — professional interpreters are available at no cost to participants when needed.</div>
-          <div class="faq"><strong>Will I get the same worker?</strong><br/>We prioritise continuity; you’ll meet your core team and approve any backup in advance.</div>
-          <div class="faq"><strong>What if funding changes mid‑plan?</strong><br/>We’ll re‑budget with you, update agreements, and adjust rosters promptly.</div>
-          <div class="faq"><strong>Can you coordinate with hospital/school/aged‑care?</strong><br/>Absolutely, with your consent we collaborate so supports feel seamless.</div>
-          <div class="faq"><strong>What if a worker is late or can’t attend?</strong><br/>We notify immediately, arrange substitutes, and provide clear on‑call contacts.</div>
-          <div class="faq"><strong>Can family be involved?</strong><br/>Yes — as much or as little as you want, always centring the participant’s choice.</div>
-          <div class="faq"><strong>Do you help at plan reviews?</strong><br/>We provide progress notes/reports and suggestions based on outcomes.</div>
-        </div>
-        <div class="toolbar">
-          <button class="btn print" onclick="printPart('faq')">Print FAQs</button>
-          <button class="btn copy" onclick="copyPart('faq')">Copy HTML</button>
-        </div>
-      </section>
-
-    <section id="s7">
-      <h2>7) CALD Backgrounds / Interpreter Required <span class="badge">Admin/Clinical</span></h2>
-      <div class="script"><p>Full dialogue from Part 5 section 7 inserted (Vietnamese example, cultural preferences, interpreter, schedule, service agreement translated).</p></div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-    <section id="s8">
-      <h2>8) Disengaged / Hard-to-Reach Clients <span class="badge">Outreach</span></h2>
-      <div class="script"><p>Full voicemail + call script from Part 5 section 8 inserted (gentle, non-pressuring, set low-key follow-up).</p></div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-    <section id="s9">
-      <h2>9) Clients Transitioning from Another Provider <span class="badge">Service Coordination</span></h2>
-      <div class="script"><p>Full dialogue from Part 6 section 9 inserted (consistency, roster transparency, notice period, cleaner schedule, service booking).</p></div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-    <section id="s10">
-      <h2>10) Plan Review / Change in Supports <span class="badge">Coordinator</span></h2>
-      <div class="script"><p>Full dialogue from Part 7 section 10 inserted (cuts/increases, re-budgeting, therapy additions, admin updates, follow-up review).</p></div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-    <section id="s11">
-      <h2>11) Aged Care Crossover (NDIS + My Aged Care) <span class="badge">Case Management</span></h2>
-      <div class="script"><p>Full dialogue from Part 7 section 11 inserted (complementary use, coordination with HCP, equipment, reassurance post-65).</p></div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-    <section id="s12">
-      <h2>12) Paediatric Clients (Under 7 / ECEI Transition) <span class="badge">Early Childhood</span></h2>
-      <div class="script"><p>Full dialogue from Part 7 section 12 inserted (weekly speech/OT, school collaboration, play-based approach, LAC handover).</p></div>
-      <div class="callout"><button onclick="window.print()">Print this section</button></div>
-    </section>
-
-    <section id="faqs">
-      <h2>Common Questions</h2>
-      <details><summary>How do I print a single scenario?</summary><p>Use the <em>Print this section</em> button inside the scenario you want.</p></details>
-      <details><summary>Can I add more languages?</summary><p>Yes—note preferred language and we will book TIS interpreters and add translated materials.</p></details>
-      <details><summary>Will there be service gaps when switching providers?</summary><p>We coordinate end/start dates and service bookings to avoid gaps.</p></details>
-      <details><summary>What if my funding changes mid-year?</summary><p>We re-budget supports with you and update agreements; we can help evidence a change if needed.</p></details>
-    </section>
-
-  </main>
+  <div class="script">
+    <h4>Scripted Dialogue (Warm & Plain English)</h4>
+    <p><strong>Intake:</strong> Hello, this is [Name] from [Organisation]. May I speak with [Participant Name]?</p>
+    <p><strong>Participant:</strong> Speaking, hi.</p>
+    <p><strong>Intake:</strong> Hi [Participant Name]! We received your details for NDIS supports and I wanted to introduce myself and see how we can help. Is now a good time for about 10–15 minutes?</p>
+    <p><strong>Participant:</strong> Yes, that’s fine.</p>
+    <p><strong>Intake:</strong> Great. Are you self‑managed or plan‑managed?</p>
+    <p><strong>Participant:</strong> Plan‑managed.</p>
+    <p><strong>Intake:</strong> Thanks — that means we’ll send invoices to your plan manager directly. Could I grab their name and email?</p>
+    <p><strong>Participant:</strong> Bright Plan Management — plan@brightpm.com.</p>
+    <p><strong>Intake:</strong> Noted. What supports are you hoping for — daily living help, therapy, getting out and about?</p>
+    <p><strong>Participant:</strong> Morning personal care most days, weekly outings, and some physio.</p>
+    <p><strong>Intake:</strong> Perfect — we can help with all of those. Roughly how many mornings per week?</p>
+    <p><strong>Participant:</strong> Daily for mornings; outings once a week.</p>
+    <p><strong>Intake:</strong> Great. Could I note your NDIS number and DOB?</p>
+    <p><strong>Participant:</strong> 123456789; 5 May 1980.</p>
+    <p><strong>Intake:</strong> Thanks. I see your plan runs to next June — we’ll align to that. Next step: we’ll book an initial meeting — afternoons okay?</p>
+    <p><strong>Participant:</strong> Afternoons are best.</p>
+    <p><strong>Intake:</strong> How about Thursday 2:00 pm? I can attend with our physio [Name].</p>
+    <p><strong>Participant:</strong> That works.</p>
+    <p><strong>Intake:</strong> Excellent. I’ll send a recap and our service agreement to review at your pace. Any questions for me right now?</p>
+    <p><strong>Participant:</strong> No, that covers it.</p>
+    <p><strong>Intake:</strong> Wonderful — we’re looking forward to working with you!</p>
   </div>
+</section>
 
-  <footer>
-    <small>© <span id="year"></span> HD HeeD — Comprehensive NDIS Intake Phone Scripts</small>
-    <small id="match"></small>
-  </footer>
+<section id="s2">
+  <h2>2) Family Member or Next of Kin Calling on Behalf <span class="badge">Caller: Intake Officer</span></h2>
+  <div class="callout">Context: A family member/guardian is coordinating. Balance warmth, consent, and participant choice & control.</div>
+  <h3>Key Information to Gather</h3>
+  <ul>
+    <li>Relationship/role (guardian, nominee, informal carer) and consent status.</li>
+    <li>Participant details (name, age, NDIS number) and communication preferences.</li>
+    <li>Supports sought; current situation and goals from the family perspective.</li>
+    <li>Any risks/safety considerations; preferred contact plan; who to include.</li>
+  </ul>
+  <h3>Common Concerns & Helpful Responses</h3>
+  <details><summary>“Can I handle discussions on their behalf?”</summary><div class="callout">Absolutely — with [Participant]’s okay (or your legal authority), we’ll work with you as primary contact while keeping [Participant] centred.</div></details>
+  <details><summary>“Do I need official documents?”</summary><div class="callout">For intake, informal consent is fine; we’ll sort any nominee/guardian paperwork during onboarding.</div></details>
+  <details><summary>Privacy & respect</summary><div class="callout">We only share details with people the participant consents to. We involve family as partners while upholding the participant’s rights and preferences.</div></details>
 
-  <script>
+  <h3>Suggested Next Steps</h3>
+  <ul>
+    <li>Say hello to the participant if possible (build connection).</li>
+    <li>Plan an in‑person meeting including participant and family.</li>
+    <li>Arrange consent/nominee forms later if needed.</li>
+    <li>Gather relevant documents (assessments, plans).</li>
+    <li>Agree communication flow (who’s CC’d; how to contact).</li>
+  </ul>
+
+  <div class="script">
+    <h4>Scripted Dialogue</h4>
+    <p><strong>Intake:</strong> Hello, this is [Name] from [Organisation]. May I speak with [Family Member Name]? I understand you’re the best contact regarding [Participant Name]’s NDIS supports.</p>
+    <p><strong>Family:</strong> Yes, I’m [Participant]’s daughter. Thanks for calling.</p>
+    <p><strong>Intake:</strong> Thanks for helping coordinate. (Warmly) Hi [Participant Name]! I’m [Name] from [Org] — we’ll chat together to arrange supports you’re comfortable with.</p>
+    <p><strong>Family:</strong> He’s on speaker — he has some hearing difficulty, so I handle calls.</p>
+    <p><strong>Intake:</strong> Understood. What prompted you to reach out and what supports are you hoping for?</p>
+    <p><strong>Family:</strong> He had a stroke; we’d like regular in‑home support for meals and company. He already has physio/OT elsewhere.</p>
+    <p><strong>Intake:</strong> We can help with daily living and community access. Any interests we can match on?</p>
+    <p><strong>Family:</strong> He loves gardening and cricket.</p>
+    <p><strong>Intake:</strong> Great — we’ll look to match a worker who enjoys those. Is his plan self/plan/agency‑managed?</p>
+    <p><strong>Family:</strong> Agency‑managed.</p>
+    <p><strong>Intake:</strong> Perfect — we’ll create service bookings and claim directly. Rough hours in mind?</p>
+    <p><strong>Family:</strong> About 3 hrs/day Mon–Fri around midday; ~$20k core available.</p>
+    <p><strong>Intake:</strong> That’s workable. We’ll monitor budget and adjust if needed. Are you happy to be primary contact for scheduling and updates?</p>
+    <p><strong>Family:</strong> Yes — email for records, phone/text for urgent matters.</p>
+    <p><strong>Intake:</strong> Noted. Next: we’ll organise a home visit and bring a potential worker to introduce. We’ll send a simple service agreement for review beforehand.</p>
+    <p><strong>Family:</strong> Wednesday 3 pm works.</p>
+    <p><strong>Intake:</strong> Locked in. If you can have any OT transfer notes handy (e.g., safe transfers), that helps our team support him safely.</p>
+    <p><strong>Family:</strong> We have an instruction sheet — we’ll have it ready.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <h2>3) Support Coordinator Referral <span class="badge">Caller: Intake Officer</span></h2>
+  <div class="callout">Context: Participant referred by their Support Coordinator (SC). Clarify goals, roles, and three‑way communication.</div>
+  <h3>Key Information to Gather</h3>
+  <ul>
+    <li>Participant’s understanding of referral and desired services.</li>
+    <li>SC name/organisation; permission to include them in comms.</li>
+    <li>Goals in participant’s own words; timelines/urgencies flagged by SC.</li>
+    <li>Plan management; other providers involved; preferred scheduling.</li>
+  </ul>
+  <h3>Common Concerns & Helpful Responses</h3>
+  <details><summary>Coordination burden</summary><div class="callout">We’ll coordinate directly with your SC (with your permission) so you never have to relay messages — we’ll keep everyone aligned.</div></details>
+  <details><summary>Who to contact for what</summary><div class="callout">Tell either us or your SC — we’ll loop each other in as needed so you don’t repeat yourself.</div></details>
+
+  <h3>Suggested Next Steps</h3>
+  <ul>
+    <li>Review referral info; acknowledge contact to SC after the call.</li>
+    <li>Offer joint meeting if helpful; confirm reporting cadence (e.g., before plan review).</li>
+    <li>Draft service agreement; set service bookings; confirm schedule.</li>
+  </ul>
+
+  <div class="script">
+    <h4>Scripted Dialogue</h4>
+    <p><strong>Intake:</strong> Hi [Participant], I’m [Name] from [Org]. [SC Name] asked me to call about supports.</p>
+    <p><strong>Participant:</strong> Yes, my SC mentioned you. I’m keen on OT and some help at home.</p>
+    <p><strong>Intake:</strong> Brilliant. What are your top goals for the next six months?</p>
+    <p><strong>Participant:</strong> Shower independently and get back to cooking simple meals.</p>
+    <p><strong>Intake:</strong> Our OT will assess home safety/equipment and build strategies; a support worker can practise skills with you between sessions. Happy for us to keep your SC in the loop?</p>
+    <p><strong>Participant:</strong> Yes, please CC her.</p>
+    <p><strong>Intake:</strong> Great. OT on Wednesdays at 10 am okay? We’ll introduce a support worker for two afternoons a week to start.</p>
+    <p><strong>Participant:</strong> Works for me.</p>
+    <p><strong>Intake:</strong> I’ll send a service agreement and email summary today and confirm with your SC. We’ll review progress a month before your plan review.</p>
+  </div>
+</section>
+
+<section id="s4">
+  <h2>4) Complex Needs (Behaviours of Concern / Restrictive Practices) <span class="badge">Caller: Senior Intake / Clinical</span></h2>
+  <div class="callout">Context: Sensitive, safety‑focused intake for high‑support needs. Use Positive Behaviour Support (PBS), dignity, and non‑judgement.</div>
+  <h3>Key Information to Gather</h3>
+  <ul>
+    <li>Behaviours: what they look like, frequency, triggers/early signs.</li>
+    <li>Effective/ineffective strategies; calming techniques; sensory needs.</li>
+    <li>Positive Behaviour Support Plan (PBSP) details; practitioner contact.</li>
+    <li>Restrictive practices used (if any), authorisation status, protocols.</li>
+    <li>Staff safety requirements; training; environmental considerations.</li>
+    <li>Current clinicians (psych, psych‑iatry, behaviour support) and coordination.</li>
+    <li>Goals beyond safety (skills, participation, quality of life).</li>
+  </ul>
+  <h3>Common Concerns & Helpful Responses</h3>
+  <details><summary>“Providers won’t stick around.”</summary><div class="callout">Our team is trained for complex needs and views behaviour as communication. We build trust, apply PBS, and commit to consistency.</div></details>
+  <details><summary>“Can staff handle meltdowns?”</summary><div class="callout">We brief workers on triggers, early signs, and de‑escalation; follow plans exactly; and use any restrictive practice only if authorised and absolutely necessary, aiming to reduce over time.</div></details>
+  <details><summary>Medication (PRN) worries</summary><div class="callout">We follow the prescribed protocol as a last resort, prioritising least‑restrictive strategies and reviewing any use to learn and prevent.</div></details>
+
+  <h3>Suggested Next Steps</h3>
+  <ul>
+    <li>Comprehensive multi‑party meeting; obtain PBSP, incident/safety plans, med list.</li>
+    <li>Specialised training/briefing; assign a small consistent team; shadowing.</li>
+    <li>Collaborative crisis plan; data tracking for triggers/patterns.</li>
+  </ul>
+
+  <div class="script">
+    <h4>Scripted Dialogue</h4>
+    <p><strong>Intake (Clinical):</strong> Thanks for speaking with me about [Participant]. This is a judgement‑free chat to understand what works and what doesn’t.</p>
+    <p><strong>Family:</strong> He has autism and occasional aggressive outbursts, often with transitions.</p>
+    <p><strong>Intake:</strong> What helps in the moment and what makes it worse?</p>
+    <p><strong>Family:</strong> Space, removing throwables, and talking about trains helps. PRN is authorised but rare.</p>
+    <p><strong>Intake:</strong> We’ll obtain the PBSP and align with it, using PRN only per protocol. We’ll assign trained staff, start with a meet‑and‑greet around his interests, and keep a small consistent team. Can we book Thursday 3 pm in the backyard with his trains?</p>
+    <p><strong>Family:</strong> That’s ideal.</p>
+    <p><strong>Intake:</strong> Great — we’ll bring a worker who’s read up on trains, plus I’ll email a document list (PBSP, med list) and draft the service agreement noting adherence to the plan.</p>
+  </div>
+</section>
+
+<section id="s5">
+  <h2>5) High‑Risk Cases (Hospital Discharge / Urgent Safety) <span class="badge">Caller: Nurse / Experienced Coordinator</span></h2>
+  <div class="callout">Context: Time‑critical planning for discharge or urgent safety risks. Keep calm, specific, and action‑oriented.</div>
+  <h3>Key Information to Gather</h3>
+  <ul>
+    <li>Nature of risk; discharge details; aftercare needs; discharge plan availability.</li>
+    <li>Immediate 24–72h supports required (visits, overnight, equipment).</li>
+    <li>Current supports and gaps; NDIS funding to flex; key contacts (hospital/SC).</li>
+    <li>Home safety; contingency if timings slip; emergency contacts.</li>
+  </ul>
+  <h3>Common Concerns & Helpful Responses</h3>
+  <details><summary>“I’ll be alone after discharge.”</summary><div class="callout">We’ll meet you at discharge, accompany you home, schedule multiple visits day one, and provide an on‑call number. You won’t be left alone.</div></details>
+  <details><summary>“House isn’t ready.”</summary><div class="callout">We’ll fast‑track essential equipment (e.g., portable ramp, shower chair) and temporary solutions while permanent items are arranged.</div></details>
+  <details><summary>“Who helps overnight?”</summary><div class="callout">Options include evening/morning visits, brief overnight checks, or on‑call plus a personal alarm pendant; we’ll tailor to your risk level.</div></details>
+
+  <h3>Suggested Next Steps</h3>
+  <ul>
+    <li>Confirm roster coverage; liaise with hospital; create a written 72‑hour plan.</li>
+    <li>Exchange all contacts; fast‑track agreement/service bookings; set a 1‑week review.</li>
+  </ul>
+
+  <div class="script">
+    <h4>Scripted Dialogue</h4>
+    <p><strong>Nurse:</strong> I see you’re scheduled home tomorrow morning. Biggest worries?</p>
+    <p><strong>Participant:</strong> Wheelchair access, meals, being alone.</p>
+    <p><strong>Nurse:</strong> We’ll install a portable ramp, deliver a shower commode, meet you at 10 am, stay several hours to settle you in, and return at 5 pm for dinner support. For nights, we’ll rely on your pendant and our on‑call — we’ll test it together.</p>
+    <p><strong>Participant:</strong> That eases my mind. Thank you.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <h2>6) Nursing‑Only Supports (Wound Care, PEG, Catheter) <span class="badge">Caller: Intake Nurse</span></h2>
+  <div class="callout">Context: Clinical tasks requiring qualified nurses. Emphasise competence, sterility, continuity, and teaching at client pace.</div>
+  <h3>Key Information to Gather</h3>
+  <ul>
+    <li>Specific task(s), frequency/timing, protocols/orders, and supplies.</li>
+    <li>Medical background and current regime; pain/comfort; environment set‑up.</li>
+    <li>Family involvement/training interest; contingencies (e.g., tube issues).</li>
+  </ul>
+  <h3>Common Concerns & Helpful Responses</h3>
+  <details><summary>“Will the nurse be truly skilled in <em>my</em> task?”</summary><div class="callout">Yes — we assign experienced nurses in that exact task and follow doctor/dietitian plans, with senior RN oversight.</div></details>
+  <details><summary>“Home isn’t like hospital.”</summary><div class="callout">We bring the essentials and maintain hospital‑grade hygiene and process at home.</div></details>
+  <details><summary>Continuity</summary><div class="callout">We prioritise a primary nurse with one trained backup to avoid constant change.</div></details>
+
+  <h3>Suggested Next Steps</h3>
+  <ul>
+    <li>Initial assessment visit; verify orders; document care; schedule aligned to regimen.</li>
+    <li>Education as desired; supply ordering; on‑call for issues.</li>
+  </ul>
+
+  <div class="script">
+    <h4>Scripted Dialogue</h4>
+    <p><strong>Intake Nurse:</strong> I understand you have a PEG with three feeds daily via pump — 8 am, 1 pm, 7 pm. We’ll handle set‑up, site care, meds via PEG, and gradually teach at your pace if you wish.</p>
+    <p><strong>Participant:</strong> I’m nervous doing it alone.</p>
+    <p><strong>Intake Nurse:</strong> We’ll start full‑support, then step back only when you’re comfortable. I’ll be your primary nurse; [Backup Name] is your familiar backup. Monday 7:45 am for the first visit works?</p>
+    <p><strong>Participant:</strong> Yes — thank you.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <h2>7) CALD Backgrounds or Requiring an Interpreter</h2>
+  <div class="script">
+    <h3>Conversation Example</h3>
+    <pre>
+
+Intake: “Hello, may I speak with [Participant] or their family?” Family Member: “Hello, I’m her daughter. My mom speaks limited English.” Intake: “Thank you. I can arrange a professional interpreter at no cost. Would you prefer that?” ... (Full Section 7 script here) </pre> </div> <button class="print-btn" onclick="printSection('s7')">Print this Section</button> </section>
+
+<section id="s8">
+  <h2>8) Disengaged or Hard-to-Reach Clients</h2>
+  <div class="script">
+    <h3>Conversation Example</h3>
+    <pre>
+
+Intake: “Hi [Participant], this is [Your Name] from [Org]. How are you today?” Participant: “I don’t really need services, my SC just told me to talk to you.” Intake: “That’s completely fine. You’re not obligated. Maybe I can share briefly what we do and you can decide later?” ... (Full Section 8 script here) </pre> </div> <button class="print-btn" onclick="printSection('s8')">Print this Section</button> </section>
+
+<section id="s9">
+  <h2>9) Clients Transitioning from Another Provider</h2>
+  <div class="script">
+    <h3>Conversation Example</h3>
+    <pre>
+
+Intake: “Hi [Participant], thanks for choosing to work with us. I know changing providers can be stressful.” Participant: “Yes, my old provider wasn’t reliable.” Intake: “I’m sorry you went through that. We’ll ensure reliability and consistent staff for you.” ... (Full Section 9 script here) </pre> </div> <button class="print-btn" onclick="printSection('s9')">Print this Section</button> </section>
+
+<section id="s10">
+  <h2>10) Plan Review or Change in Supports</h2>
+  <div class="script">
+    <h3>Conversation Example</h3>
+    <pre>
+
+Intake: “Hi [Participant], I understand your NDIS plan has just been reviewed. How are you feeling about the changes?” Participant: “They cut my Core funding, I’m worried.” Intake: “That’s understandable. Let’s go through priorities together so we maximize what you do have.” ... (Full Section 10 script here) </pre> </div> <button class="print-btn" onclick="printSection('s10')">Print this Section</button> </section>
+
+<section id="s11">
+  <h2>11) Aged Care Crossover (My Aged Care + NDIS)</h2>
+  <div class="script">
+    <h3>Conversation Example</h3>
+    <pre>
+
+Intake: “Good morning [Mr. Smith], I see you are receiving both NDIS and Home Care Package support.” Participant: “Yes, but I get confused about which covers what.” Intake: “That’s normal. We’ll coordinate both so they complement each other and avoid duplication.” ... (Full Section 11 script here) </pre> </div> <button class="print-btn" onclick="printSection('s11')">Print this Section</button> </section>
+
+<section id="s12">
+  <h2>12) Paediatric Clients (Under 7 / ECEI Transition)</h2>
+  <div class="script">
+    <h3>Conversation Example</h3>
+    <pre>
+
+Intake: “Hello [Parent], this is [Your Name] from [Organisation]. I’ll be helping coordinate [Child]’s supports now that they’re turning 7.” Parent: “I’m nervous because our ECEI partner isn’t with us anymore.” Intake: “That’s understandable. We’ll continue the same play-based approach and ensure school transition goes smoothly.” ... (Full Section 12 script here) </pre> </div> <button class="print-btn" onclick="printSection('s12')">Print this Section</button> </section> <section id="s7"> <h2>7) CALD Backgrounds / Interpreter Required <span class="badge">Caller: Intake Officer</span></h2> <div class="callout">Context: Remove language barriers; show cultural respect; keep explanations simple; arrange interpreters as needed.</div> <h3>Key Information</h3> <ul> <li>Preferred language and interpreter need (ongoing? phone/onsite?).</li> <li>Primary contact person; cultural/religious preferences; gender preference.</li> <li>Holidays/observances; understanding of NDIS terms; existing community supports.</li> </ul> <div class="script"> <h4>Scripted Dialogue (with family interpreter)</h4> <p><strong>Intake:</strong> Thank you for translating today. We can arrange a professional interpreter at no cost next time. Are there cultural preferences we should respect at home (e.g., shoes off, dietary rules, preferred worker gender)?</p> <p><strong>Daughter:</strong> Vietnamese language preferred; no pork; shoes off; female worker please.</p> <p><strong>Intake:</strong> Noted. We’ll try to match a Vietnamese‑speaking worker; otherwise we’ll use an interpreter for visits and keep communication simple and clear.</p> </div> </section>
+
+<section id="s8">
+  <h2>8) Disengaged or Hard‑to‑Reach Clients <span class="badge">Caller: Outreach Intake</span></h2>
+  <div class="callout">Context: Gentle, non‑pressuring contact; make engagement easy; leave the door open.</div>
+  <h3>Voicemail Template</h3>
+  <div class="script"><p><strong>Voicemail:</strong> Hi [Name], I’m [Your Name] from [Org]. We received a referral to see if NDIS support might help. No pressure — just here if you’re interested. I’ll try again next week, or you can call/text me anytime. Take care.</p></div>
+  <div class="script">
+    <h4>Brief Conversation Example</h4>
+    <p><strong>Intake:</strong> I can give a 60‑second overview and you decide if we continue?</p>
+    <p><strong>Participant:</strong> Okay, one minute.</p>
+    <p><strong>Intake:</strong> We help with daily tasks, getting out, or whatever makes life easier. If nothing fits right now, that’s fine; I can text you my number and check in next month?</p>
+    <p><strong>Participant:</strong> A text is fine. Check in next month.</p>
+  </div>
+</section>
+
+<section id="s9">
+  <h2>9) Clients Transitioning from Another Provider <span class="badge">Caller: Intake Coordinator</span></h2>
+  <div class="callout">Context: Ensure continuity; avoid gaps/overlap; address prior pain points; communicate clearly.</div>
+  <h3>Key Information</h3>
+  <ul>
+    <li>Reason for change; prior services/hours; end date/notice; open bookings.</li>
+    <li>What worked/didn’t; any staff transferring; pending items or reports.</li>
+  </ul>
+  <div class="script">
+    <h4>Scripted Dialogue</h4>
+    <p><strong>Intake:</strong> We’ll start the day after your last shift with [Old Provider]. You’ll meet Alice Friday 9:30 am so Saturday’s start is smooth. Any must‑dos for your morning routine?</p>
+    <p><strong>Participant:</strong> Coffee first, then shower — previous workers ignored that.</p>
+    <p><strong>Intake:</strong> Noted — coffee first. We’ll also schedule a dedicated cleaning visit Wednesdays 1 pm with Brenda and confirm your new service booking with your plan manager.</p>
+  </div>
+</section>
+
+<section id="s10">
+  <h2>10) Plan Review / Change in Supports <span class="badge">Caller: Service Coordinator</span></h2>
+  <div class="callout">Context: Adjust services to new budgets; reduce anxiety; optimise usage; add new supports where funded.</div>
+  <h3>Key Information</h3>
+  <ul>
+    <li>What changed (↑/↓ by category); new/removed items; participant priorities.</li>
+    <li>Timeline/effective date; service agreement addendum; bookings rollover.</li>
+  </ul>
+  <div class="script">
+    <h4>Scripted Dialogue</h4>
+    <p><strong>Coordinator:</strong> Core has reduced ~2 hours/week; we’ll protect weekday mornings and trim Saturdays. Capacity Building increased — shall we restart weekly physio Monday 2 pm and add the Wed 3 pm social group?</p>
+    <p><strong>Participant:</strong> Yes — let’s try that, and revisit psych therapy next month.</p>
+    <p><strong>Coordinator:</strong> I’ll update the agreement and bookings and CC your SC. We’ll review usage in four weeks.</p>
+  </div>
+</section>
+
+<section id="s11">
+  <h2>11) Aged Care Crossover (NDIS + My Aged Care) <span class="badge">Caller: Intake/Case Manager</span></h2>
+  <div class="callout">Context: Coordinate NDIS disability supports with aged care package services; avoid duplication; reassure continuity beyond 65.</div>
+  <h3>Key Information</h3>
+  <ul>
+    <li>Aged care services in place; NDIS services/goals; overlaps/gaps; case manager contact.</li>
+    <li>Use NDIS for disability‑specific needs; aged care for general supports; map who funds what.</li>
+  </ul>
+  <div class="script">
+    <h4>Scripted Dialogue</h4>
+    <p><strong>Intake:</strong> We’ll add an extra hour of NDIS support for meal prep/light chores to complement your Home Care cleaning. With your OK, our physio will share exercise notes with the nurse, and I’ll set a three‑way call with your aged care coordinator.</p>
+  </div>
+</section>
+
+<section id="s12">
+  <h2>12) Paediatric Clients (Under 7, ECEI Transition) <span class="badge">Caller: Early Childhood Coordinator</span></h2>
+  <div class="callout">Context: Smooth handover from ECEI to standard pathway around age 7; keep play‑based, family‑centred therapy; align with school.</div>
+  <h3>Key Information</h3>
+  <ul>
+    <li>Current therapies/reports; school transition needs; parent priorities; new LAC contact.</li>
+    <li>Schedule around school; consider small social playgroup; parent training.</li>
+  </ul>
+  <div class="script">
+    <h4>Scripted Dialogue</h4>
+    <p><strong>Coordinator:</strong> Weekly speech with [Therapist] (school visit monthly), weekly OT for dressing/toothbrushing skills, and a trial of Saturday social playgroup. I’ll join an intro call with your LAC and the teacher, and send a straightforward service agreement for review.</p>
+  </div>
+</section>
+
+  </main>  <footer>
+    © <span id="year"></span> HD HeeD — Comprehensive NDIS Intake Phone Scripts
+  </footer>  <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Simple search filter
-    const q = document.getElementById('q');
-    const content = document.getElementById('content');
-    const sections = [...content.querySelectorAll('section')];
-    const match = document.getElementById('match');
-    q.addEventListener('input', () => {
-      const term = q.value.trim().toLowerCase();
-      let visible = 0;
-      sections.forEach(s => {
-        if(!term){ s.style.display=''; visible++; return; }
-        const txt = s.innerText.toLowerCase();
-        const ok = txt.includes(term);
-        s.style.display = ok ? '' : 'none';
-        if(ok) visible++;
-      });
-      match.textContent = term ? `${visible} section${visible===1?'':'s'} match “${q.value}”` : '';
-    });
-
-    // Print single section
-    function printPart(id){
-      const node = document.getElementById(id);
-      if(!node) return;
-      const win = window.open('', '_blank');
-      const css = document.querySelector('style').outerHTML + '
-' +
-                  '<style>@media print{header,aside,.toolbar,footer{display:none!important}.print-solo section{display:none}.print-solo section.print-target{display:block}}</style>';
-      win.document.write(`<!doctype html><html><head><meta charset='utf-8'><title>Print — ${node.querySelector('h2')?.innerText||'Section'}</title>${css}</head><body class='print-solo'>${node.outerHTML.replace('<section',"<section class='print-target'")}</body></html>`);
-      win.document.close();
-      win.focus();
-      win.print();
+    function printSection(sectionId){
+      var content = document.getElementById(sectionId).innerHTML;
+      var mywindow = window.open('', 'PRINT', 'height=600,width=800');
+      mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+      mywindow.document.write('</head><body >');
+      mywindow.document.write(content);
+      mywindow.document.write('</body></html>');
+      mywindow.document.close();
+      mywindow.focus();
+      mywindow.print();
+      mywindow.close();
+      return true;
     }
-    window.printPart = printPart;
-
-    // Copy HTML of a section
-    async function copyPart(id){
-      const node = document.getElementById(id);
-      if(!node) return;
-      const html = node.outerHTML;
-      try{ await navigator.clipboard.writeText(html); alert('Section HTML copied to clipboard.'); }
-      catch(e){ alert('Copy failed. You can select the section and copy manually.'); }
-    }
-    window.copyPart = copyPart;
-  </script>
-</body>
+  </script></body>
 </html>
