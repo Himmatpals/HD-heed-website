@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>HD HeeD — NDIS Intake Phone Scripts (Parts 1–12)</title>
 
+  <!-- Enhanced Meta Tags for Better SEO and Sharing -->
+  <meta name="description" content="Polished, field-ready NDIS intake phone scripts with FAQs, checklists, and full dialogues for various scenarios.">
+  <meta property="og:title" content="HD HeeD — NDIS Intake Phone Scripts (Parts 1–12)">
+  <meta property="og:description" content="Comprehensive NDIS intake scripts covering standard to complex cases, with family-centered approaches.">
+  <meta property="og:type" content="website">
+
   <!-- Fonts (HD HeeD style) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,6 +62,31 @@
       background: linear-gradient(180deg, #121729, #0f1430);
       border-right: 1px solid var(--hd-ring);
       padding: 18px 16px 24px;
+      transition: transform 0.3s ease; /* Enhanced: Smooth sidebar animation */
+    }
+
+    /* Enhanced: Collapsible sidebar for mobile */
+    @media (max-width: 768px) {
+      .shell { grid-template-columns: 1fr; }
+      aside.sidebar { 
+        position: fixed; 
+        width: 280px; 
+        transform: translateX(-280px); 
+        z-index: 100; 
+      }
+      aside.sidebar.open { transform: translateX(0); }
+      .sidebar-toggle {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background: var(--hd-accent);
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        z-index: 101;
+      }
     }
 
     .brand {
@@ -148,7 +179,7 @@
 
     /* Sections (shared) */
     section.ndis-part{
-      background: linear-gradient(180deg, rgba(20,26,51,.65), rgba(14,17,26,1));
+      background: linear-gradient(180deg, var(--hd-section-bg-start, rgba(20,26,51,.65)), var(--hd-section-bg-end, rgba(14,17,26,1)));
       border-radius: 16px;
       padding: 28px 28px 36px;
       margin: 26px 0 0;
@@ -295,19 +326,19 @@
       section.ndis-part { page-break-inside: avoid; }
     }
 
-    /* New: Different colors for each section */
-    #s1 { --hd-accent: #7c4dff; } /* Purple */
-    #s2 { --hd-accent: #00d7ff; } /* Cyan */
-    #s3 { --hd-accent: #1ec971; } /* Green */
-    #s4 { --hd-accent: #ffb020; } /* Orange */
-    #s5 { --hd-accent: #ff5c7a; } /* Red */
-    #s6 { --hd-accent: #7c4dff; } /* Repeat Purple */
-    #s7 { --hd-accent: #00d7ff; } /* Repeat Cyan */
-    #s8 { --hd-accent: #1ec971; } /* Repeat Green */
-    #s9 { --hd-accent: #ffb020; } /* Repeat Orange */
-    #s10 { --hd-accent: #ff5c7a; } /* Repeat Red */
-    #s11 { --hd-accent: #7c4dff; } /* Repeat Purple */
-    #s12 { --hd-accent: #00d7ff; } /* Repeat Cyan */
+    /* Enhanced: Different background colors for each section with subtle tint */
+    #s1 { --hd-accent: #7c4dff; --hd-accent-rgb: 124,77,255; --hd-section-bg-start: rgba(124,77,255,0.05); --hd-section-bg-end: rgba(124,77,255,0.02); } /* Purple tint */
+    #s2 { --hd-accent: #00d7ff; --hd-accent-rgb: 0,215,255; --hd-section-bg-start: rgba(0,215,255,0.05); --hd-section-bg-end: rgba(0,215,255,0.02); } /* Cyan tint */
+    #s3 { --hd-accent: #1ec971; --hd-accent-rgb: 30,201,113; --hd-section-bg-start: rgba(30,201,113,0.05); --hd-section-bg-end: rgba(30,201,113,0.02); } /* Green tint */
+    #s4 { --hd-accent: #ffb020; --hd-accent-rgb: 255,176,32; --hd-section-bg-start: rgba(255,176,32,0.05); --hd-section-bg-end: rgba(255,176,32,0.02); } /* Orange tint */
+    #s5 { --hd-accent: #ff5c7a; --hd-accent-rgb: 255,92,122; --hd-section-bg-start: rgba(255,92,122,0.05); --hd-section-bg-end: rgba(255,92,122,0.02); } /* Red tint */
+    #s6 { --hd-accent: #7c4dff; --hd-accent-rgb: 124,77,255; --hd-section-bg-start: rgba(124,77,255,0.05); --hd-section-bg-end: rgba(124,77,255,0.02); } /* Repeat Purple */
+    #s7 { --hd-accent: #00d7ff; --hd-accent-rgb: 0,215,255; --hd-section-bg-start: rgba(0,215,255,0.05); --hd-section-bg-end: rgba(0,215,255,0.02); } /* Repeat Cyan */
+    #s8 { --hd-accent: #1ec971; --hd-accent-rgb: 30,201,113; --hd-section-bg-start: rgba(30,201,113,0.05); --hd-section-bg-end: rgba(30,201,113,0.02); } /* Repeat Green */
+    #s9 { --hd-accent: #ffb020; --hd-accent-rgb: 255,176,32; --hd-section-bg-start: rgba(255,176,32,0.05); --hd-section-bg-end: rgba(255,176,32,0.02); } /* Repeat Orange */
+    #s10 { --hd-accent: #ff5c7a; --hd-accent-rgb: 255,92,122; --hd-section-bg-start: rgba(255,92,122,0.05); --hd-section-bg-end: rgba(255,92,122,0.02); } /* Repeat Red */
+    #s11 { --hd-accent: #7c4dff; --hd-accent-rgb: 124,77,255; --hd-section-bg-start: rgba(124,77,255,0.05); --hd-section-bg-end: rgba(124,77,255,0.02); } /* Repeat Purple */
+    #s12 { --hd-accent: #00d7ff; --hd-accent-rgb: 0,215,255; --hd-section-bg-start: rgba(0,215,255,0.05); --hd-section-bg-end: rgba(0,215,255,0.02); } /* Repeat Cyan */
 
     /* More interactive: Add hover effects to cards */
     .card:hover {
@@ -320,9 +351,56 @@
     details[open] summary {
       color: var(--hd-accent);
     }
+
+    /* Enhanced: Better accessibility - focus styles */
+    a:focus, button:focus, details summary:focus {
+      outline: 2px solid var(--hd-accent);
+      outline-offset: 2px;
+    }
+
+    /* Enhanced: Subtle animation for section entry */
+    section.ndis-part {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.5s forwards;
+    }
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Staggered animation for sections */
+    #s1 { animation-delay: 0.1s; }
+    #s2 { animation-delay: 0.2s; }
+    #s3 { animation-delay: 0.3s; }
+    #s4 { animation-delay: 0.4s; }
+    #s5 { animation-delay: 0.5s; }
+    #s6 { animation-delay: 0.6s; }
+    #s7 { animation-delay: 0.7s; }
+    #s8 { animation-delay: 0.8s; }
+    #s9 { animation-delay: 0.9s; }
+    #s10 { animation-delay: 1.0s; }
+    #s11 { animation-delay: 1.1s; }
+    #s12 { animation-delay: 1.2s; }
+
+    /* Enhanced: Search bar style */
+    #search-input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid var(--hd-ring);
+      border-radius: 8px;
+      background: var(--hd-panel);
+      color: var(--hd-ink);
+    }
+    #search-input:focus {
+      border-color: var(--hd-accent);
+    }
   </style>
 </head>
 <body>
+  <!-- Enhanced: Sidebar toggle for mobile -->
+  <button class="sidebar-toggle" onclick="document.querySelector('aside.sidebar').classList.toggle('open')">☰ Menu</button>
+
   <div class="shell">
     <!-- Sidebar Index -->
     <aside class="sidebar">
@@ -330,6 +408,8 @@
         <span class="dot"></span>
         <h1>HD HeeD — NDIS Scripts</h1>
       </div>
+      <!-- Enhanced: Search bar in sidebar -->
+      <input type="text" id="search-input" placeholder="Search sections..." oninput="searchSections()">
       <div class="nav-title">Quick Index</div>
       <nav>
         <a href="#s1" class="active">1) Standard Participant Intake</a>
@@ -1728,6 +1808,37 @@
         alert('Conversation copied to clipboard.');
       }
     }
+
+    // Enhanced: Search functionality
+    function searchSections() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      sections.forEach(section => {
+        const text = section.innerText.toLowerCase();
+        section.style.display = text.includes(query) ? 'block' : 'none';
+      });
+      links.forEach(link => {
+        const target = document.querySelector(link.getAttribute('href'));
+        link.style.display = target.style.display;
+      });
+    }
+
+    // Enhanced: Remember last section with localStorage
+    if (localStorage.getItem('lastSection')) {
+      document.querySelector(localStorage.getItem('lastSection')).scrollIntoView({ behavior: 'smooth' });
+    }
+    document.addEventListener('scroll', () => {
+      const currentSection = sections.find(sec => sec.getBoundingClientRect().top <= 120 && sec.getBoundingClientRect().bottom > 120);
+      if (currentSection) {
+        localStorage.setItem('lastSection', `#${currentSection.id}`);
+      }
+    }, { passive: true });
+
+    // Enhanced: Close sidebar on mobile when clicking outside
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768 && !e.target.closest('aside.sidebar') && !e.target.closest('.sidebar-toggle')) {
+        document.querySelector('aside.sidebar').classList.remove('open');
+      }
+    });
   </script>
 </body>
 </html>
