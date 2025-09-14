@@ -1326,3 +1326,58 @@ return fetch(GS_WEBAPP, {
     throw error;
   });
 }
+
+// Navigation and step rendering logic
+function renderStep(index) {
+  S.i = Math.max(0, Math.min(Steps.length - 1, index));
+  var step = Steps[S.i];
+  qEl.textContent = step.title;
+  subEl.innerHTML = step.sub || "";
+  optsEl.innerHTML = "";
+  step.build(optsEl);
+  stepTxt.textContent = `Step ${S.i + 1}/${Steps.length}`;
+  barEl.style.width = `${((S.i + 1) / Steps.length) * 100}%`;
+  backBtn.disabled = S.i === 0;
+  nextBtn.disabled = S.i === Steps.length - 1 && !(S.submitter.email || S.submitter.phone);
+  document.querySelectorAll(".nav-item").forEach(function(nav, i) {
+    nav.classList.toggle("active", i === S.i);
+    nav.classList.toggle("completed", i < S.i);
+  });
+  save();
+}
+
+// Navigation event listeners
+backBtn.addEventListener("click", function() {
+  if (S.i > 0) renderStep(S.i - 1);
+});
+
+nextBtn.addEventListener("click", function() {
+  if (S.i === 1 && S.caller.consent !== "Yes") {
+    alert("You must select 'Yes' to consent in order to proceed.");
+    return;
+  }
+  if (S.i < Steps.length - 1) renderStep(S.i + 1);
+});
+
+saveExitBtn.addEventListener("click", function() {
+  save();
+  alert("Your progress has been saved. You can return to continue anytime.");
+  window.location.href = "#"; // Or redirect to a specific exit page
+});
+
+document.querySelectorAll(".nav-item").forEach(function(nav) {
+  nav.addEventListener("click", function() {
+    var stepIndex = parseInt(nav.getAttribute("data-step"), 10);
+    if (stepIndex <= S.i || S.caller.consent === "Yes") {
+      renderStep(stepIndex);
+    } else {
+      alert("Please complete the consent step before jumping ahead.");
+    }
+  });
+});
+
+// Initialize the form
+renderStep(S.i);
+</script>
+</body>
+</html>
