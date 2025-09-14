@@ -48,41 +48,82 @@
   .brand .name{font-weight:900; text-shadow: 0 1px 2px rgba(0,0,0,0.6);}
   .brand .tag{font-size:12px;color:#b6c8ff}
 
-  /* Navigation Bar Styles */
-  .nav-container {
-    background: linear-gradient(90deg, #0a0e1f 0%, #1a1f3a 100%);
-    border-bottom: 1px solid var(--al-line);
-    padding: 0;
+  /* Main Layout with Vertical Navigation */
+  .main-container {
+    display: flex;
+    min-height: calc(100vh - 60px);
+  }
+  
+  /* Vertical Navigation Bar */
+  .vertical-nav {
+    width: 250px;
+    background: linear-gradient(180deg, #0a0e1f 0%, #1a1f3a 100%);
+    border-right: 1px solid var(--al-line);
+    padding: 20px 0;
+    overflow-y: auto;
     position: sticky;
     top: 60px;
-    z-index: 45;
+    height: calc(100vh - 60px);
+    z-index: 40;
   }
-  .nav-scroller {
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
-  .nav-scroller::-webkit-scrollbar { display: none; }
-  .nav-bar { display: inline-flex; gap: 2px; padding: 0; }
-  .nav-item {
-    display: inline-block;
-    padding: 12px 16px;
+  
+  .vertical-nav .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
     color: #b6c8ff;
     font-size: 14px;
     font-weight: 600;
-    border-bottom: 3px solid transparent;
+    border-left: 4px solid transparent;
     transition: all 0.3s ease;
     cursor: pointer;
   }
-  .nav-item:hover { color: #ffffff; background: rgba(255, 255, 255, 0.05); }
-  .nav-item.active {
+  
+  .vertical-nav .nav-item:hover {
     color: #ffffff;
-    border-bottom: 3px solid #ec4899;
+    background: rgba(255, 255, 255, 0.05);
+    border-left-color: rgba(236, 72, 153, 0.5);
+  }
+  
+  .vertical-nav .nav-item.active {
+    color: #ffffff;
     background: rgba(236, 72, 153, 0.1);
+    border-left-color: #ec4899;
+  }
+  
+  .vertical-nav .nav-item.completed {
+    color: #10b981;
+  }
+  
+  .vertical-nav .nav-item.incomplete {
+    color: #ef4444;
+  }
+  
+  .vertical-nav .nav-item .step-number {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin-right: 12px;
+    font-size: 12px;
+  }
+  
+  .vertical-nav .nav-item.active .step-number {
+    background: var(--al-accent);
+  }
+  
+  .vertical-nav .nav-item.completed .step-number {
+    background: #10b981;
+  }
+  
+  /* Main Content Area */
+  .main-content {
+    flex: 1;
+    padding: 0 20px;
+    max-width: calc(100% - 250px);
   }
 
   .hero{ max-width:1120px; margin:14px auto 0; padding:16px; }
@@ -106,7 +147,6 @@
     max-width:1120px; margin:12px auto 24px; padding:0 16px; display:grid; gap:16px;
     grid-template-columns: 1fr;
   }
-  @media (min-width:980px){ .wrap{grid-template-columns: 1fr;} }
 
   .stage{
     border:1px solid transparent; border-image: var(--al-accent) 1;
@@ -201,10 +241,55 @@
   .modal embed{width:100%; height:100%}
   .modal .foot{padding:12px; border-top:1px solid var(--al-line); display:flex; gap:10px; justify-content:flex-end}
 
-  /* --- doc list for Uploads step --- */
   .doc-list{ margin:10px 0 0 20px; color:#cfe0ff }
   .doc-list li{ margin:8px 0 }
   .doc-list b{ color:#ffe28f; background: var(--al-secondary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .doc-privacy{ margin-top:10px; font-size:13px; color:#9fb4ff }
+
+  /* Responsive Design */
+  @media (max-width: 980px) {
+    .main-container {
+      flex-direction: column;
+    }
+    
+    .vertical-nav {
+      width: 100%;
+      height: auto;
+      position: relative;
+      top: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--al-line);
+      padding: 10px 0;
+      overflow-x: auto;
+      display: flex;
+    }
+    
+    .vertical-nav .nav-item {
+      flex: 0 0 auto;
+      border-left: none;
+      border-bottom: 4px solid transparent;
+      white-space: nowrap;
+    }
+    
+    .vertical-nav .nav-item:hover {
+      border-left-color: transparent;
+      border-bottom-color: rgba(236, 72, 153, 0.5);
+    }
+    
+    .vertical-nav .nav-item.active {
+      border-left-color: transparent;
+      border-bottom-color: #ec4899;
+    }
+    
+    .vertical-nav .nav-item .step-number {
+      margin-right: 8px;
+    }
+    
+    .main-content {
+      max-width: 100%;
+      padding: 0 10px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -222,63 +307,96 @@
   </div>
 </header>
 
-<!-- Navigation Bar -->
-<div class="nav-container">
-  <div class="nav-scroller">
-    <div class="nav-bar" id="stepNavigation">
-      <div class="nav-item active" data-step="0">Welcome</div>
-      <div class="nav-item" data-step="1">Consent</div>
-      <div class="nav-item" data-step="2">Participant</div>
-      <div class="nav-item" data-step="3">Contacts</div>
-      <div class="nav-item" data-step="4">Communication</div>
-      <div class="nav-item" data-step="5">Living</div>
-      <div class="nav-item" data-step="6">Clinical</div>
-      <div class="nav-item" data-step="7">Medications</div>
-      <div class="nav-item" data-step="8">Risks</div>
-      <div class="nav-item" data-step="9">BSP</div>
-      <div class="nav-item" data-step="10">Supports</div>
-      <div class="nav-item" data-step="11">Schedule</div>
-      <div class="nav-item" data-step="12">Policies</div>
-      <div class="nav-item" data-step="13">Uploads</div>
-      <div class="nav-item" data-step="14">Review</div>
-      <div class="nav-item" data-step="15">Submit</div>
+<div class="main-container">
+  <!-- Vertical Navigation Bar -->
+  <div class="vertical-nav" id="stepNavigation">
+    <div class="nav-item active" data-step="0">
+      <span class="step-number">1</span>Welcome
+    </div>
+    <div class="nav-item" data-step="1">
+      <span class="step-number">2</span>Consent
+    </div>
+    <div class="nav-item" data-step="2">
+      <span class="step-number">3</span>Participant
+    </div>
+    <div class="nav-item" data-step="3">
+      <span class="step-number">4</span>Contacts
+    </div>
+    <div class="nav-item" data-step="4">
+      <span class="step-number">5</span>Communication
+    </div>
+    <div class="nav-item" data-step="5">
+      <span class="step-number">6</span>Living
+    </div>
+    <div class="nav-item" data-step="6">
+      <span class="step-number">7</span>Clinical
+    </div>
+    <div class="nav-item" data-step="7">
+      <span class="step-number">8</span>Medications
+    </div>
+    <div class="nav-item" data-step="8">
+      <span class="step-number">9</span>Risks
+    </div>
+    <div class="nav-item" data-step="9">
+      <span class="step-number">10</span>BSP
+    </div>
+    <div class="nav-item" data-step="10">
+      <span class="step-number">11</span>Supports
+    </div>
+    <div class="nav-item" data-step="11">
+      <span class="step-number">12</span>Schedule
+    </div>
+    <div class="nav-item" data-step="12">
+      <span class="step-number">13</span>Policies
+    </div>
+    <div class="nav-item" data-step="13">
+      <span class="step-number">14</span>Uploads
+    </div>
+    <div class="nav-item" data-step="14">
+      <span class="step-number">15</span>Review
+    </div>
+    <div class="nav-item" data-step="15">
+      <span class="step-number">16</span>Submit
     </div>
   </div>
-</div>
 
-<section class="hero">
-  <div class="card">
-    <h1>Let’s get you set up — thoroughly and simply</h1>
-    <p>Answer clear, step-by-step questions. Pick a card, or type your own answer. Choose <em>Not sure</em> or <em>Prefer not to say</em> whenever you like — you can finish later. We’ll only need an <strong>email or phone</strong> at the end to submit.</p>
-    <div class="meta">
-      <span class="pill">NDIS participant onboarding</span>
-      <span class="pill">Consents & risks included</span>
-    </div>
-    <p class="notice">Tip: On mobile, you'll see one focused screen at a time with large tap targets.</p>
-  </div>
-</section>
-
-<div class="wrap" id="app">
-  <main class="stage" role="region" aria-live="polite">
-    <div class="head">
-      <span id="stepTxt" class="step">Step 1/16</span>
-      <div class="meter" aria-label="Progress"><div id="bar"></div></div>
-    </div>
-
-    <div id="q" class="q">…</div>
-    <p id="sub" class="sub"></p>
-
-    <div id="opts" class="opts"></div>
-
-    <div class="foot">
-      <div class="hint" id="saveHint">Draft saved</div>
-      <div style="display:flex; gap:8px; flex-wrap:wrap">
-        <button class="btn ghost" id="backBtn" type="button">← Back</button>
-        <button class="btn warn" id="saveExitBtn" type="button">Save & Exit</button>
-        <button class="btn primary" id="nextBtn" type="button">Next →</button>
+  <!-- Main Content -->
+  <div class="main-content">
+    <section class="hero">
+      <div class="card">
+        <h1>Let's get you set up — thoroughly and simply</h1>
+        <p>Answer clear, step-by-step questions. Pick a card, or type your own answer. Choose <em>Not sure</em> or <em>Prefer not to say</em> whenever you like — you can finish later. We'll only need an <strong>email or phone</strong> at the end to submit.</p>
+        <div class="meta">
+          <span class="pill">NDIS participant onboarding</span>
+          <span class="pill">Consents & risks included</span>
+        </div>
+        <p class="notice">Tip: On mobile, you'll see one focused screen at a time with large tap targets.</p>
       </div>
+    </section>
+
+    <div class="wrap" id="app">
+      <main class="stage" role="region" aria-live="polite">
+        <div class="head">
+          <span id="stepTxt" class="step">Step 1/16</span>
+          <div class="meter" aria-label="Progress"><div id="bar"></div></div>
+        </div>
+
+        <div id="q" class="q">…</div>
+        <p id="sub" class="sub"></p>
+
+        <div id="opts" class="opts"></div>
+
+        <div class="foot">
+          <div class="hint" id="saveHint">Draft saved</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <button class="btn ghost" id="backBtn" type="button">← Back</button>
+            <button class="btn warn" id="saveExitBtn" type="button">Save & Exit</button>
+            <button class="btn primary" id="nextBtn" type="button">Next →</button>
+          </div>
+        </div>
+      </main>
     </div>
-  </main>
+  </div>
 </div>
 
 <div id="docModal" class="modal" aria-hidden="true">
@@ -293,15 +411,12 @@
     </div>
   </div>
 </div>
-
 <script>
 window.addEventListener('DOMContentLoaded', function(){
 
-  /* ====== Config (links kept EXACTLY) ====== */
   var GS_WEBAPP   = "https://script.google.com/macros/s/AKfycbyj9VvLh26csmc0bEry3cfeRzGxmZZJx5HNptkZGvcVzqTfmnO9fSsvhwF9YgCwfM5ALw/exec";
   var STORAGE_KEY = "hdheed_ailr_v16";
 
-  /* === Your 11 PDFs (links kept EXACTLY) === */
   var DOCS = [
     { id:"handbook", title:"Client Handbook", requiresConsent:false,
       fileId:"https://drive.google.com/file/d/1Du5TxEIgD9n--Gw5vkkkFXEij_SaLwLE/view?usp=sharing" },
@@ -324,7 +439,7 @@ window.addEventListener('DOMContentLoaded', function(){
     { id:"media_photos", title:"Consent for Media and Photographs", requiresConsent:true,
       fileId:"https://drive.google.com/file/d/1UuNf69LxSLTOZNhwvi-17d3SeRRjik3t/view?usp=sharing" },
 
-    { id:"emergency_med", title:"Consent for Emergency Medical Treatment", requiresConsent:true,
+    { id:"emergence_med", title:"Consent for Emergency Medical Treatment", requiresConsent:true,
       fileId:"https://drive.google.com/file/d/1mGUnc7z9gVkYw3KEC6qiEhBxOUrB_zIx/view?usp=sharing" },
 
     { id:"complaints_feedback", title:"Complaints and Feedback Form", requiresConsent:false,
@@ -342,7 +457,6 @@ window.addEventListener('DOMContentLoaded', function(){
     return "https://drive.google.com/uc?export=download&id="+encodeURIComponent(idOrUrl);
   }
 
-  /* ====== Safe helpers ====== */
   function $(s,r){ return (r||document).querySelector(s); }
   function setSaveHint(t){ var el=$("#saveHint"); if(el) el.textContent=t; }
   function cloneSafe(obj){
@@ -350,7 +464,6 @@ window.addEventListener('DOMContentLoaded', function(){
     try{ return JSON.parse(JSON.stringify(obj)); }catch(e){ return obj; }
   }
 
-  /* ====== State ====== */
   var S = {
     i: 0,
     caller: { role:null, name:null, relationship:null, consent:null },
@@ -423,7 +536,6 @@ window.addEventListener('DOMContentLoaded', function(){
     notes:[]
   };
 
-  /* Restore draft (safe) */
   try{
     var prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
     if (prev && typeof prev==="object") Object.assign(S, prev);
@@ -432,13 +544,12 @@ window.addEventListener('DOMContentLoaded', function(){
   function save(){
     try{
       var clone = cloneSafe(S);
-      if (clone.uploads) clone.uploads = { files: [] }; // keep uploads empty
+      if (clone.uploads) clone.uploads = { files: [] };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
       setSaveHint("Draft saved");
     }catch(e){}
   }
 
-  /* ====== DOM refs ====== */
   var qEl = document.getElementById("q");
   var subEl = document.getElementById("sub");
   var optsEl = document.getElementById("opts");
@@ -448,12 +559,11 @@ window.addEventListener('DOMContentLoaded', function(){
   var nextBtn = document.getElementById("nextBtn");
   var saveExitBtn = document.getElementById("saveExitBtn");
 
-  /* ====== Step builders (compliant content) ====== */
   var Steps = [
-    { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
+    { key:"intro", title:"Welcome — let's begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
       build:function(m){
         m.appendChild(radioChips("Who is completing this form?", S.caller, "role", [
-          ["I’m the participant","Participant"],
+          ["I'm the participant","Participant"],
           ["Family / Carer","Carer"],
           ["Support Coordinator","Support Coordinator"],
           ["Health Professional","Health Professional"],
@@ -469,7 +579,7 @@ window.addEventListener('DOMContentLoaded', function(){
           ["Yes, I consent","Yes"],["Not yet","Not yet"],["No","No"],["Not sure","Not sure"]
         ]));
         var warn = document.createElement('div'); warn.className="hint";
-        warn.innerHTML = "Note: If you select <b>Not yet</b> or <b>No</b>, you won’t be able to continue.";
+        warn.innerHTML = "Note: If you select <b>Not yet</b> or <b>No</b>, you won't be able to continue.";
         m.appendChild(warn);
       }
     },
@@ -528,11 +638,11 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     },
 
-    { key:"clinical", title:"Health & clinical summary", sub:"Share as much as you’re comfortable with now; we can confirm details later. <b>Allergies is required</b> (write “No known allergies” if none).",
+    { key:"clinical", title:"Health & clinical summary", sub:"Share as much as you're comfortable with now; we can confirm details later. <b>Allergies is required</b> (write 'No known allergies' if none).",
       build:function(m){
         m.appendChild(typeBox("Primary diagnoses", "e.g., Autism Spectrum Disorder, MS", function(v){ S.clinical.primary_diagnoses=v; save(); }));
         m.appendChild(typeBox("Other diagnoses (optional)", "Type here", function(v){ S.clinical.other_diagnoses=v; save(); }));
-        m.appendChild(input("Allergies (required — write “No known allergies” if none)", S.clinical, "allergies"));
+        m.appendChild(input("Allergies (required — write 'No known allergies' if none)", S.clinical, "allergies"));
         m.appendChild(row("two",[ select("Mobility", S.clinical, "mobility", ["Independent","With aid","Requires transfer","Bed-bound","Prefer not to say"]), input("Equipment / aids (optional)", S.clinical, "equipment") ]));
         m.appendChild(row("two",[ select("Continence", S.clinical, "continence", ["Independent","Needs prompting","Incontinent","Catheter / stoma","Prefer not to say"]), select("Cognition", S.clinical, "cognition", ["Clear","Mild impairment","Moderate","Severe","Prefer not to say"]) ]));
         m.appendChild(row("two",[ select("Pressure injury risk", S.clinical, "pressure_injury_risk", ["Low","Medium","High","Not sure"]), select("Falls risk", S.clinical, "falls_risk", ["Low","Medium","High","Not sure"]) ]));
@@ -552,7 +662,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     },
 
-    { key:"risks", title:"Risk assessment — quick overview", sub:"We’ll use this to plan safe, appropriate supports.",
+    { key:"risks", title:"Risk assessment — quick overview", sub:"We'll use this to plan safe, appropriate supports.",
       build:function(m){
         m.appendChild(divider("Behavioural"));
         m.appendChild(radioChips("Behaviours of concern present?", S.risks.behavioural, "present", [ ["None","None"],["Present","Present"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"] ]));
@@ -600,7 +710,6 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     },
 
-    /* ===== DETAILED SUPPORTS REQUIRED ===== */
     { key:"supports", title:"Which supports are required? (select one or more)", sub:"Pick all that apply, then press Next. You can also type specifics if helpful.",
       build:function(m){
         var options = {
@@ -615,16 +724,16 @@ window.addEventListener('DOMContentLoaded', function(){
           not_sure:"Not sure — please guide me"
         };
         m.appendChild(checks("Select supports", S.supports, options, "required"));
-        m.appendChild(typeBox("Something else — I’ll type it (optional)", "Describe any other support", function(v){ S.supports.required_other=v; save(); }));
+        m.appendChild(typeBox("Something else — I'll type it (optional)", "Describe any other support", function(v){ S.supports.required_other=v; save(); }));
         m.appendChild(typeBox("Want to type a specific support detail? (optional)", "e.g., wound dressing frequency; Webster pack; bowel care plan; shopping day", function(v){ S.supports.details_text=v; save(); }));
 
         m.appendChild(divider("<b>Goals & outcomes</b> (optional but recommended)"));
-        m.appendChild(typeBox("Goals (participant’s goals)", "Type goals or outcomes in the plan", function(v){ S.supports.goals=v; save(); }));
+        m.appendChild(typeBox("Goals (participant's goals)", "Type goals or outcomes in the plan", function(v){ S.supports.goals=v; save(); }));
         m.appendChild(typeBox("Preferred outcomes / focus areas", "What does success look like?", function(v){ S.supports.outcomes=v; save(); }));
       }
     },
 
-    { key:"schedule", title:"Schedule & urgency", sub:"Tell us the visit windows that suit, and how soon you’d like to begin.",
+    { key:"schedule", title:"Schedule & urgency", sub:"Tell us the visit windows that suit, and how soon you'd like to begin.",
       build:function(m){
         m.appendChild(checks("Time windows", S.schedule, {
           w1:"Weekday mornings (7–11am)",
@@ -638,8 +747,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     },
 
-    /* ===== POLICIES & SERVICE AGREEMENT NOTE ===== */
-    { key:"policies", title:"Client Handbook, Consents & Service Agreement", sub:"Please confirm you’ve received & read the documents below. For forms requiring consent, tick to confirm you consent and will sign the PDF and email it to info@hdheed.com.au. <br><br><b>Service Agreement:</b> Using the information you provide, we will prepare a Service Agreement that must be reviewed and signed before supports commence.",
+    { key:"policies", title:"Client Handbook, Consents & Service Agreement", sub:"Please confirm you've received & read the documents below. For forms requiring consent, tick to confirm you consent and will sign the PDF and email it to info@hdheed.com.au. <br><br><b>Service Agreement:</b> Using the information you provide, we will prepare a Service Agreement that must be reviewed and signed before supports commence.",
       build:function(m){
         DOCS.forEach(function(d){
           if(!S.acks[d.id]) S.acks[d.id] = { read:false, consent:false };
@@ -678,37 +786,33 @@ window.addEventListener('DOMContentLoaded', function(){
         var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
         DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
         sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
-        sum.id = "policySummary";
         m.appendChild(sum);
       }
     },
 
-    /* ===== DOCUMENTS (EMAIL REMINDERS) ===== */
-    {
-      key:"uploads",
-      title:"Documents — please email them",
-      sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
-            <div class="consent-box" style="margin-top:10px">\
-              <b>What to send (simple reminder)</b>\
-              <ul>\
-                <li>Photo ID (e.g., driver licence or passport)</li>\
-                <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
-                <li>NDIS plan (latest)</li>\
-                <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
-                <li>Medication chart / current medication list (if any)</li>\
-                <li>Signed consent forms — Refer to step 13.</li>\
-              </ul>\
-            </div>',
+    { key:"uploads", title:"Documents — please email them", sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
+          <div class="consent-box" style="margin-top:10px">\
+            <b>What to send (simple reminder)</b>\
+            <ul>\
+              <li>Photo ID (e.e., driver licence or passport)</li>\
+              <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
+              <li>NDIS plan (latest)</li>\
+              <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
+              <li>Medication chart / current medication list (if any)</li>\
+              <li>Signed consent forms — Refer to step 13.</li>\
+            </ul>\
+          </div>',
       build:function(m){
         S.uploads.files = [];
         save();
       }
     },
-   { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
+
+    { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
       build:function(m){ m.appendChild(renderReview()); }
     },
 
-    { key:"submit", title:"Submit your onboarding", sub:"Provide a contact. At least an email or phone is required to submit. <br><br><b>Next steps:</b> We’ll review, prepare your Service Agreement for e-signature, and contact you to schedule supports.",
+    { key:"submit", title:"Submit your onboarding", sub:"Provide a contact. At least an email or phone is required to submit. <br><br><b>Next steps:</b> We'll review, prepare your Service Agreement for e-signature, and contact you to schedule supports.",
       build:function(m){
         m.appendChild(row("two",[ input("Your name (submitter)", S.submitter, "name"), input("Email (required if no phone)", S.submitter, "email","email") ]));
         m.appendChild(input("Phone (required if no email)", S.submitter, "phone","tel"));
@@ -728,18 +832,18 @@ window.addEventListener('DOMContentLoaded', function(){
 
           sendToFormspree().then(function(j){
             var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
-            alert("All done — we’ve received your onboarding." + pdfMsg);
+            alert("All done — we've received your onboarding." + pdfMsg);
 
             try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
             var stage = document.querySelector("main.stage");
             if (stage){
               stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
                 <div class="q">Thank you for your submission</div>\
-                <p class="sub">We’ve received your referral and will be in touch soon.</p>\
+                <p class="sub">We've received your referral and will be in touch soon.</p>\
                 <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
             }
           }).catch(function(e){
-            alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e && e.message ? e.message : e));
+            alert("Couldn't send right now. Please email info@hdheed.com.au or try again.\n\n" + (e && e.message ? e.message : e));
             btnSend.disabled = false;
             btnSend.textContent = oldTxt;
           });
@@ -749,16 +853,15 @@ window.addEventListener('DOMContentLoaded', function(){
         actions.appendChild(btnSend); actions.appendChild(btnPdf);
         m.appendChild(actions);
         var hint = document.createElement('div'); hint.className="hint";
-        hint.innerHTML = "We’ll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.";
+        hint.innerHTML = "We'll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.";
         m.appendChild(hint);
       }
     }
   ];
 
-  /* ====== Controls & UI helpers ====== */
   function button(txt,variant,onClick){
     var b = document.createElement('button');
-    b.className = "btn" + (variant ? " " + variant : "");
+    b.className = "btn " + (variant||"ghost");
     b.type="button"; b.textContent = txt;
     b.addEventListener('click',onClick);
     return b;
@@ -1003,7 +1106,6 @@ window.addEventListener('DOMContentLoaded', function(){
 
     return wrap;
   }
-
   function openDoc(title, href){
     var modal = document.getElementById('docModal');
     var docTitle = document.getElementById('docTitle');
@@ -1025,9 +1127,8 @@ window.addEventListener('DOMContentLoaded', function(){
 
   function buildPayload(){ var p = cloneSafe(S); p.timestamp = new Date().toISOString(); return p; }
 
-  function openPrintableSummary(){ /* optional: stub left as-is */ }
+  function openPrintableSummary(){ /* unchanged, optional */ }
 
-  /* ===== Drive/Sheet summary helpers ===== */
   function mapRequiredForSummary(arr, other){
     var map = {
       personal_care:"Personal care",
@@ -1074,170 +1175,154 @@ window.addEventListener('DOMContentLoaded', function(){
         (S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")
       ].join("");
 
-      var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
-      var daysSummary     = mapDaysSummary(S.schedule.days);
+     var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
 
-      payload.supports.required_summary   = requiredSummary;
-      payload.supports.details_text       = S.supports.details_text || "";
-      payload.schedule.windows_summary    = windowsSummary;
-      payload.schedule.days_summary       = daysSummary;
-      payload.participant.address_summary = addr;
-      payload.contacts.contact_summary    = contactSummary;
-    }catch(e){}
+// Additional summaries for schedule
+var scheduleSummary = {
+  windows: mapWindowsSummary(S.schedule.windows),
+  days: mapDaysSummary(S.schedule.days),
+  hours_per_week: S.schedule.hours_per_week || "Not specified",
+  urgency: S.schedule.urgency || "Not sure",
+  start_preference: S.schedule.start_preference || "Not specified"
+};
 
-    return fetch(GS_WEBAPP, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    }).then(async function(r){
-      var j = await r.json().catch(()=>({}));
-      if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
-      return j;
-    }).catch(function(){
-      return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
-        .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
-    });
-  }
+// Prepare a human-readable summary for submission
+var summary = `
+  AILR Submission (v16)
+  Timestamp: ${payload.timestamp}
+  
+  Submitter:
+  - Name: ${S.submitter.name || "Not provided"}
+  - Email: ${S.submitter.email || "Not provided"}
+  - Phone: ${S.submitter.phone || "Not provided"}
+  
+  Caller:
+  - Role: ${S.caller.role || "Not specified"}
+  - Name: ${S.caller.name || "Not provided"}
+  - Relationship: ${S.caller.relationship || "Not provided"}
+  - Consent: ${S.caller.consent || "Not specified"}
+  
+  Participant:
+  - Legal Name: ${S.participant.legal_name || "Not provided"}
+  - Preferred Name: ${S.participant.preferred_name || "Not provided"}
+  - Pronouns: ${S.participant.pronouns || "Not provided"}
+  - DOB: ${S.participant.dob || "Not provided"}
+  - NDIS Number: ${S.participant.ndis_number || "Not provided"}
+  - Address: ${addr || "Not provided"}
+  - Plan Management: ${S.participant.plan_mgmt || "Not specified"}
+  - Plan Manager: ${(S.participant.plan_manager.org || S.participant.plan_manager.contact || S.participant.plan_manager.email || S.participant.plan_manager.phone) ? [S.participant.plan_manager.org, S.participant.plan_manager.contact, S.participant.plan_manager.email, S.participant.plan_manager.phone].filter(Boolean).join(" • ") : "Not provided"}
+  - Plan Dates: ${(S.participant.plan_dates.start || S.participant.plan_dates.end) ? [S.participant.plan_dates.start, S.participant.plan_dates.end].filter(Boolean).join(" → ") : "Not provided"}
+  
+  Contacts:
+  - Email: ${S.contacts.email || "Not provided"}
+  - Phone: ${S.contacts.phone || "Not provided"}
+  - Emergency Contact: ${(S.contacts.emergency.name || S.contacts.emergency.relationship || S.contacts.emergency.phone) ? [S.contacts.emergency.name, S.contacts.emergency.relationship, S.contacts.emergency.phone].filter(Boolean).join(" • ") : "Not provided"}
+  - Support Coordinator: ${(S.contacts.support_coordinator.name || S.contacts.support_coordinator.org || S.contacts.support_coordinator.email || S.contacts.support_coordinator.phone) ? [S.contacts.support_coordinator.name, S.contacts.support_coordinator.org, S.contacts.support_coordinator.email, S.contacts.support_coordinator.phone].filter(Boolean).join(" • ") : "Not provided"}
+  - GP: ${(S.contacts.gp.name || S.contacts.gp.practice || S.contacts.gp.phone || S.contacts.gp.email) ? [S.contacts.gp.name, S.contacts.gp.practice, S.contacts.gp.phone, S.contacts.gp.email].filter(Boolean).join(" • ") : "Not provided"}
+  
+  Communication & Preferences:
+  - Primary Language: ${S.comms.primary_language || "Not provided"}
+  - Interpreter: ${S.comms.interpreter || "Not specified"}
+  - Interpreter Language: ${S.comms.interpreter_language || "Not provided"}
+  - Cultural Considerations: ${S.comms.cultural_considerations || "Not provided"}
+  - Worker Gender Preference: ${S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other || "Not specified"}
+  - Transport Required: ${S.comms.preferences.transport_required || "Not specified"}
+  
+  Living Situation:
+  - Residence Type: ${S.living.residence_type || "Not specified"}
+  - Lives With: ${S.living.lives_with || "Not provided"}
+  - Entry Notes: ${S.living.entry_notes || "Not provided"}
+  - Keysafe: ${S.living.keysafe || "Not specified"}
+  - Smoking on Premises: ${S.living.smoking_on_premises || "Not specified"}
+  - Hazards: ${S.living.hazards || "Not provided"}
+  
+  Health & Clinical:
+  - Primary Diagnoses: ${S.clinical.primary_diagnoses || "Not provided"}
+  - Other Diagnoses: ${S.clinical.other_diagnoses || "Not provided"}
+  - Allergies: ${S.clinical.allergies || "Not provided"}
+  - Mobility: ${S.clinical.mobility || "Not specified"}
+  - Equipment: ${S.clinical.equipment || "Not provided"}
+  - Continence: ${S.clinical.continence || "Not specified"}
+  - Cognition: ${S.clinical.cognition || "Not specified"}
+  - Pressure Injury Risk: ${S.clinical.pressure_injury_risk || "Not specified"}
+  - Falls Risk: ${S.clinical.falls_risk || "Not specified"}
+  - Seizures: ${S.clinical.seizures.has === true ? "Yes" : S.clinical.seizures.has === false ? "No" : (S.clinical.seizures.has === null ? "Not sure" : "Not specified")}
+  - Seizure Plan: ${S.clinical.seizures.plan || "Not provided"}
+  - Seizure Frequency: ${S.clinical.seizures.frequency || "Not provided"}
+  - Stoma/Ostomy Care: ${S.clinical.stoma_care === true ? "Yes" : S.clinical.stoma_care === false ? "No" : (S.clinical.stoma_care === null ? "Not sure" : "Not specified")}
+  - Diet/Swallowing Notes: ${S.clinical.diet_notes || "Not provided"}
+  
+  Medications:
+  - Has Medications: ${S.medications.has_meds === true ? "Yes" : S.medications.has_meds === false ? "No" : (S.medications.has_meds === null ? "Not sure" : "Not specified")}
+  - Management Method: ${S.medications.method || "Not specified"}
+  - Webster Pack: ${S.medications.webster_pack === true ? "Yes" : S.medications.webster_pack === false ? "No" : (S.medications.webster_pack === null ? "Not sure" : "Not specified")}
+  - Storage: ${S.medications.storage || "Not provided"}
+  - Self-Administered: ${S.medications.self_admin === true ? "Yes" : S.medications.self_admin === false ? "No" : (S.medications.self_admin === null ? "Not sure" : "Not specified")}
+  - Staff-Administered: ${S.medications.staff_admin === true ? "Yes" : S.medications.staff_admin === false ? "No" : (S.medications.staff_admin === null ? "Not sure" : "Not specified")}
+  - Notes: ${S.medications.notes || "Not provided"}
+  
+  Risks:
+  - Behavioural: ${S.risks.behavioural.present || "Not specified"}
+  - Behaviour Notes: ${S.risks.behavioural.notes || "Not provided"}
+  - Clinical Concerns: ${listTrue(S.risks.clinical, ["wounds", "diabetes", "tracheostomy", "tube_feeding", "mental_health", "stoma_care"]) || "None"}
+  - Clinical Other: ${S.risks.clinical.other || "Not provided"}
+  - Environmental: ${listTrue(S.risks.environmental, ["animals", "hoarding", "weapons"]) || "None"}
+  - Environmental Other: ${S.risks.environmental.other || "Not provided"}
+  - Home Risks: ${listTrue(S.risks.home_checklist, ["trip_hazards", "smoke_alarms", "lighting", "bathroom_safety"]) || "None"}
+  - Home Risk Notes: ${S.risks.home_checklist.notes || "Not provided"}
+  - Other Risk Notes: ${S.risks.other_notes || "Not provided"}
+  - Overall Rating: ${S.risks.overall_rating || "Not specified"}
+  
+  Behaviour Support Plan:
+  - Has BSP: ${S.bsp.has_bsp === true ? "Yes" : S.bsp.has_bsp === false ? "No" : (S.bsp.has_bsp === null ? "Not sure" : "Not specified")}
+  - Restrictive Practices: ${S.bsp.restrictive_practices === true ? "Yes" : S.bsp.restrictive_practices === false ? "No" : (S.bsp.restrictive_practices === null ? "Not sure" : "Not specified")}
+  - BSP Provider: ${S.bsp.provider || "Not provided"}
+  - BSP Notes: ${S.bsp.notes || "Not provided"}
+  
+  Supports:
+  - Required: ${requiredSummary || "None selected"}
+  - Specific Details: ${S.supports.details_text || "Not provided"}
+  - Goals: ${S.supports.goals || "Not provided"}
+  - Outcomes: ${S.supports.outcomes || "Not provided"}
+  
+  Schedule:
+  - Windows: ${scheduleSummary.windows || "Not specified"}
+  - Days: ${scheduleSummary.days || "Not specified"}
+  - Hours/Week: ${scheduleSummary.hours_per_week}
+  - Urgency: ${scheduleSummary.urgency}
+  - Start Preference: ${scheduleSummary.start_preference}
+  
+  Policies Acknowledged:
+  - Handbook: ${policyAck.handbook ? "Yes" : "No"}
+  - Incident: ${policyAck.incident ? "Yes" : "No"}
+  - Complaints: ${policyAck.complaints ? "Yes" : "No"}
+  
+  Consents:
+  - Emergency Advocacy: ${S.emergency_advocacy === true ? "Yes" : S.emergency_advocacy === false ? "No" : (S.emergency_advocacy === null ? "Not sure" : "Not specified")}
+  
+  Notes:
+  - Additional Notes: ${(S.notes || []).join("; ") || "None"}
+`;
 
-  /* ====== Navigation functionality ====== */
-  function setupNavigation() {
-    var navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(function(item) {
-      item.addEventListener('click', function() {
-        var stepIndex = parseInt(this.getAttribute('data-step'), 10);
-        if (!isNaN(stepIndex) && stepIndex >= 0 && stepIndex < Steps.length) {
-          if (stepIndex <= S.i || canNavigateToStep(stepIndex)) {
-            S.i = stepIndex;
-            updateNavigation();
-            render();
-          } else {
-            alert("Please complete the current steps before jumping ahead.");
-          }
-        }
-      });
-    });
-  }
-
-  function canNavigateToStep(stepIndex) { return stepIndex <= S.i + 1; }
-
-  function updateNavigation() {
-    var navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(function(item, index) {
-      if (index === S.i) item.classList.add('active'); else item.classList.remove('active');
-      if (index < S.i) item.style.color = '#10b981';
-      else if (index === S.i) item.style.color = '#ffffff';
-      else item.style.color = '#b6c8ff';
-    });
-  }
-
-  /* ====== Render & nav ====== */
-  function render(){
-    var total = Steps.length;
-    if (S.i<0) S.i=0;
-    if (S.i>=total) S.i = total-1;
-
-    var step = Steps[S.i];
-    stepTxt.textContent = "Step " + (S.i+1) + "/" + total;
-    barEl.style.width = Math.round((S.i)/(total-1)*100) + "%";
-    qEl.innerHTML = step.title;
-    subEl.innerHTML = step.sub || "";
-    optsEl.innerHTML = "";
-    step.build(optsEl);
-
-    updateNavigation();
-    save();
-
-    nextBtn.style.display = (S.i === total-1) ? "none" : "inline-block";
-    try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){}
-  }
-
-  backBtn.addEventListener('click', function(){
-    if (S.i > 0) { S.i = S.i - 1; render(); }
+// Send to Google Apps Script endpoint
+return fetch(GS_WEBAPP, {
+  method: "POST",
+  body: JSON.stringify({
+    action: "submit",
+    data: payload,
+    summary: summary.trim()
+  }),
+  headers: { "Content-Type": "application/json" }
+})
+  .then(function(response) {
+    if (!response.ok) throw new Error("Network response was not ok: " + response.status);
+    return response.json();
+  })
+  .then(function(json) {
+    return json; // Return the response for further processing
+  })
+  .catch(function(error) {
+    console.error("Submission error:", error);
+    throw error;
   });
-
-  nextBtn.addEventListener('click', function(){
-    if (!canProceed(S.i)) return;
-    S.i = Math.min(Steps.length-1, S.i+1);
-    render();
-  });
-
-  saveExitBtn.addEventListener('click', function(){
-    save();
-    alert("Saved. You can close this page and return later on the same device.");
-  });
-
-  function str(v){ return (v||"").toString().trim(); }
-  function has(v){ return str(v).length>0; }
-
-  function canProceed(idx){
-    var key = Steps[idx].key;
-
-    if (key==="caller"){
-      if (S.caller.consent!=="Yes"){ alert("We’re unable to proceed without consent. Please select “Yes” to continue."); return false; }
-    }
-
-    if (key==="participant"){
-      var p=S.participant, a=p.address;
-      if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name."); return false; }
-      if (!has(p.dob)){ alert("Please add Date of birth."); return false; }
-      if (!has(a.line1)||!has(a.suburb)||!has(a.postcode)||!has(a.state)){
-        alert("Please complete Address line 1, Suburb, Postcode, and State."); return false;
-      }
-    }
-
-    if (key==="contacts"){
-      if (!has(S.contacts.email) && !has(S.contacts.phone)){
-        alert("Please provide at least one contact method: Email or Phone."); return false;
-      }
-    }
-
-    if (key==="clinical"){
-      if (!has(S.clinical.allergies)){
-        alert("Allergies is required. If none, please write “No known allergies”.");
-        return false;
-      }
-    }
-
-    if (key==="supports"){
-      var anyReq=(S.supports.required||[]).length>0 || has(S.supports.required_other) || has(S.supports.details_text);
-      if (!anyReq){
-        alert("Please select at least one required support or type a specific support detail.");
-        return false;
-      }
-    }
-
-    if (key==="schedule"){
-      var someWindow=(S.schedule.windows||[]).length>0;
-      var someDay=(S.schedule.days||[]).length>0;
-      var hours=Number(S.schedule.hours_per_week||0);
-      if (!someWindow && !someDay && !(hours>0)){
-        alert("Please select at least one time window or day, or provide Hours per week.");
-        return false;
-      }
-    }
-
-    if (key==="policies"){
-      for (var i=0;i<DOCS.length;i++){
-        var d = DOCS[i], ack = S.acks[d.id]||{};
-        if (!ack.read){ alert("Please tick that you have received & read: " + d.title); return false; }
-        if (d.requiresConsent && !ack.consent){ alert("Please tick consent for: " + d.title); return false; }
-      }
-    }
-
-    return true;
-  }
-
-  /* ====== Kick off ====== */
-  try{ setupNavigation(); render(); }
-  catch(e){
-    var stage = document.querySelector("main.stage");
-    if (stage){
-      stage.innerHTML = '<div class="q">There was an error initialising the form.</div><p class="sub">If this persists, please open the page in a modern browser (Chrome/Edge/Safari ≥ 13).</p>';
-    }
-  }
-
-}); // DOMContentLoaded
-</script>
-</body>
-</html> 
+}
