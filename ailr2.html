@@ -7,7 +7,6 @@
 <link rel="icon" href="images/favicon.ico" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
 <meta name="theme-color" content="#0b0f1a" />
-
 <style>
   :root{
     --al-ink: #0a0e1f;
@@ -49,6 +48,52 @@
   .brand .name{font-weight:900; text-shadow: 0 1px 2px rgba(0,0,0,0.6);}
   .brand .tag{font-size:12px;color:#b6c8ff}
 
+  /* Navigation Bar Styles */
+  .nav-container {
+    background: linear-gradient(90deg, #0a0e1f 0%, #1a1f3a 100%);
+    border-bottom: 1px solid var(--al-line);
+    padding: 0;
+    position: sticky;
+    top: 60px;
+    z-index: 45;
+  }
+  .nav-scroller {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  .nav-scroller::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-bar {
+    display: inline-flex;
+    gap: 2px;
+    padding: 0;
+  }
+  .nav-item {
+    display: inline-block;
+    padding: 12px 16px;
+    color: #b6c8ff;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .nav-item:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .nav-item.active {
+    color: #ffffff;
+    border-bottom: 3px solid #ec4899;
+    background: rgba(236, 72, 153, 0.1);
+  }
+
   .hero{ max-width:1120px; margin:14px auto 0; padding:16px; }
   .hero .card{
     background:linear-gradient(180deg, rgba(18,26,50,0.8), rgba(12,19,38,0.8)); /* Glassmorphism base */
@@ -70,24 +115,9 @@
     max-width:1120px; margin:12px auto 24px; padding:0 16px; display:grid; gap:16px;
     grid-template-columns: 1fr;
   }
-  @media (min-width:980px){ .wrap{grid-template-columns: 280px 1fr;} }
+  @media (min-width:980px){ .wrap{grid-template-columns: 1fr;} } /* Removed the second column for portrait */
 
-  .portrait{ position:sticky; top:88px; align-self:start; display:none; }
-  @media (min-width:980px){ .portrait{ display:block } }
-  .portrait .box{
-    border:1px solid transparent; border-image: var(--al-secondary) 1;
-    border-radius:20px; overflow:hidden;
-    background:linear-gradient(180deg, rgba(15,22,48,0.8), rgba(11,16,38,0.8));
-    backdrop-filter: blur(10px);
-    padding:14px;
-    box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 15px var(--al-glow);
-    animation: pulseGlow 2s infinite alternate ease-in-out;
-  }
-  @keyframes pulseGlow { from { box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 10px var(--al-glow); } to { box-shadow:0 20px 50px rgba(0,0,0,.55), 0 0 20px var(--al-glow); } }
-  .portrait .box img{border-radius:16px; filter: drop-shadow(0 14px 30px rgba(0,0,0,.4)); transition: transform 0.4s ease;}
-  .portrait .box img:hover { transform: scale(1.03); }
-  .legend{margin-top:12px; display:grid; gap:8px; font-size:14px; color:#b6c8ff; text-shadow: 0 1px 2px rgba(0,0,0,0.4);}
-  .legend b{color:#ffe28f; background: var(--al-secondary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+  /* Removed portrait section entirely */
 
   .stage{
     border:1px solid transparent; border-image: var(--al-accent) 1;
@@ -204,6 +234,30 @@
   </div>
 </header>
 
+<!-- Navigation Bar -->
+<div class="nav-container">
+  <div class="nav-scroller">
+    <div class="nav-bar" id="stepNavigation">
+      <div class="nav-item active" data-step="0">Welcome</div>
+      <div class="nav-item" data-step="1">Consent</div>
+      <div class="nav-item" data-step="2">Participant</div>
+      <div class="nav-item" data-step="3">Contacts</div>
+      <div class="nav-item" data-step="4">Communication</div>
+      <div class="nav-item" data-step="5">Living</div>
+      <div class="nav-item" data-step="6">Clinical</div>
+      <div class="nav-item" data-step="7">Medications</div>
+      <div class="nav-item" data-step="8">Risks</div>
+      <div class="nav-item" data-step="9">BSP</div>
+      <div class="nav-item" data-step="10">Supports</div>
+      <div class="nav-item" data-step="11">Schedule</div>
+      <div class="nav-item" data-step="12">Policies</div>
+      <div class="nav-item" data-step="13">Uploads</div>
+      <div class="nav-item" data-step="14">Review</div>
+      <div class="nav-item" data-step="15">Submit</div>
+    </div>
+  </div>
+</div>
+
 <section class="hero">
   <div class="card">
     <h1>Let’s get you set up — thoroughly and simply</h1>
@@ -212,24 +266,14 @@
       <span class="pill">NDIS participant onboarding</span>
       <span class="pill">Consents & risks included</span>
     </div>
-    <p class="notice">Tip: On mobile, you’ll see one focused screen at a time with large tap targets.</p>
+    <p class="notice">Tip: On mobile, you'll see one focused screen at a time with large tap targets.</p>
   </div>
 </section>
 
 <div class="wrap" id="app">
-  <aside class="portrait">
-    <div class="box">
-      <img id="portrait" src="images/ella/ella-default.png" alt="Assistant portrait">
-      <div class="legend">
-        <div><b>Hi, I’m Ella.</b> I’ll guide you through a complete onboarding.</div>
-        <div>Tap a card to answer, or type your own.</div>
-      </div>
-    </div>
-  </aside>
-
   <main class="stage" role="region" aria-live="polite">
     <div class="head">
-      <span id="stepTxt" class="step">Step 1/99</span>
+      <span id="stepTxt" class="step">Step 1/16</span>
       <div class="meter" aria-label="Progress"><div id="bar"></div></div>
     </div>
 
@@ -315,31 +359,6 @@ window.addEventListener('DOMContentLoaded', function(){
   function cloneSafe(obj){
     try{ if (typeof structuredClone==="function") return structuredClone(obj); }catch(e){}
     try{ return JSON.parse(JSON.stringify(obj)); }catch(e){ return obj; }
-  }
-
-  /* ====== Portrait images (links kept EXACTLY) ====== */
-  var AILR_IMAGES = {
-    intro: "images/ella/ella-default.png",
-    caller: "images/ella/ella-caller.png",
-    participant: "images/ella/ella-service.png",
-    contacts: "images/ella/ella-contact-window.png",
-    comms: "images/ella/ella-interpreter.png",
-    living: "images/ella/ella-location.png",
-    clinical: "images/ella/ella-hours.png",
-    medications: "images/ella/ella-urgency.png",
-    risks: "images/ella/ella-risk-beh.png",
-    bsp: "images/ella/ella-risk-beh.png",
-    supports: "images/ella/ella-rostering.png",
-    schedule: "images/ella/ella-rostering.png",
-    policies: "images/ella/ella-summary.png",
-    consents: "images/ella/ella-consent.png",
-    uploads: "images/ella/ella-dates.png",
-    review: "images/ella/ella-summary.png",
-    submit: "images/ella/ella-summary.png"
-  };
-  function setPortrait(key){
-    var p = $("#portrait");
-    if (p){ p.src = AILR_IMAGES[key] || AILR_IMAGES.intro; p.alt = "Assistant — " + (key||""); }
   }
 
   /* ====== State ====== */
@@ -697,9 +716,6 @@ m.appendChild(sum);
   }
 },
 
-
-
-
         
     { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
       build:function(m){ m.appendChild(renderReview()); }
@@ -755,7 +771,7 @@ m.appendChild(sum);
   /* ====== Controls & UI helpers ====== */
   function button(txt,variant,onClick){
     var b = document.createElement('button');
-    b.className = "btn " + (variant||"ghost");
+    b.className = "btn" + (variant ? " " + variant : "");
     b.type="button"; b.textContent = txt;
     b.addEventListener('click',onClick);
     return b;
@@ -1101,6 +1117,51 @@ m.appendChild(sum);
     });
   }
 
+  /* ====== Navigation functionality ====== */
+  function setupNavigation() {
+    var navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(function(item) {
+      item.addEventListener('click', function() {
+        var stepIndex = parseInt(this.getAttribute('data-step'), 10);
+        if (!isNaN(stepIndex) && stepIndex >= 0 && stepIndex < Steps.length) {
+          // Check if we can navigate to this step
+          if (stepIndex <= S.i || canNavigateToStep(stepIndex)) {
+            S.i = stepIndex;
+            updateNavigation();
+            render();
+          } else {
+            alert("Please complete the current steps before jumping ahead.");
+          }
+        }
+      });
+    });
+  }
+
+  function canNavigateToStep(stepIndex) {
+    // Allow navigation to any step that has been completed or is the next step
+    return stepIndex <= S.i + 1;
+  }
+
+  function updateNavigation() {
+    var navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(function(item, index) {
+      if (index === S.i) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+      
+      // Mark completed steps
+      if (index < S.i) {
+        item.style.color = '#10b981'; // Green for completed
+      } else if (index === S.i) {
+        item.style.color = '#ffffff'; // White for current
+      } else {
+        item.style.color = '#b6c8ff'; // Default for future steps
+      }
+    });
+  }
+
   /* ====== Render & nav ====== */
   function render(){
     var total = Steps.length;
@@ -1110,11 +1171,14 @@ m.appendChild(sum);
     var step = Steps[S.i];
     stepTxt.textContent = "Step " + (S.i+1) + "/" + total;
     barEl.style.width = Math.round((S.i)/(total-1)*100) + "%";
-    setPortrait(step.key);
     qEl.innerHTML = step.title;
     subEl.innerHTML = step.sub || "";
     optsEl.innerHTML = "";
     step.build(optsEl);
+    
+    // Update navigation
+    updateNavigation();
+    
     save();
 
     // Hide Next on the LAST page
@@ -1123,9 +1187,23 @@ m.appendChild(sum);
     try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){}
   }
 
-  backBtn.addEventListener('click', function(){ S.i = Math.max(0, S.i-1); render(); });
-  nextBtn.addEventListener('click', function(){ if (!canProceed(S.i)) return; S.i = Math.min(Steps.length-1, S.i+1); render(); });
-  saveExitBtn.addEventListener('click', function(){ save(); alert("Saved. You can close this page and return later on the same device."); });
+  backBtn.addEventListener('click', function(){ 
+    if (S.i > 0) {
+      S.i = S.i - 1; 
+      render(); 
+    }
+  });
+  
+  nextBtn.addEventListener('click', function(){ 
+    if (!canProceed(S.i)) return; 
+    S.i = Math.min(Steps.length-1, S.i+1); 
+    render(); 
+  });
+  
+  saveExitBtn.addEventListener('click', function(){ 
+    save(); 
+    alert("Saved. You can close this page and return later on the same device."); 
+  });
 
   function str(v){ return (v||"").toString().trim(); }
   function has(v){ return str(v).length>0; }
@@ -1196,7 +1274,10 @@ m.appendChild(sum);
   }
 
   /* ====== Kick off ====== */
-  try{ render(); }
+  try{ 
+    setupNavigation();
+    render(); 
+  }
   catch(e){
     var stage = document.querySelector("main.stage");
     if (stage){
