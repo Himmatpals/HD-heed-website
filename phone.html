@@ -576,57 +576,6 @@
           <button class="btn secondary" onclick="copySection('#s2-dialogue')">Copy full conversation</button>
         </div>
       </section>
-
-    </main>
-  </div>
-
-  <!-- Helpers: print & copy -->
-  <script>
-    // Highlight active link on scroll
-    const links = document.querySelectorAll('aside nav a[href^="#"]');
-    const sections = Array.from(links).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-
-    function setActive() {
-      const y = window.scrollY + 120;
-      let current = sections[0]?.id;
-      sections.forEach(sec => {
-        if (sec.offsetTop <= y) current = sec.id;
-      });
-      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
-    }
-    document.addEventListener('scroll', setActive, { passive: true });
-    window.addEventListener('load', setActive);
-
-    function printSection(id){
-      const el = document.getElementById(id);
-      if(!el) return;
-      const w = window.open('', '_blank');
-      const css = document.querySelector('style').outerHTML + document.querySelector('link[rel="stylesheet"]')?.outerHTML ?? '';
-      w.document.write(`
-        <html><head><title>Print — ${id}</title>${css}</head>
-        <body>${el.outerHTML}</body></html>
-      `);
-      w.document.close();
-      w.focus();
-      w.print();
-      // w.close(); // comment out if you want users to close manually
-    }
-
-    async function copySection(selector){
-      const el = document.querySelector(selector);
-      if(!el) return;
-      const text = el.innerText.trim();
-      try {
-        await navigator.clipboard.writeText(text);
-        alert('Conversation copied to clipboard.');
-      } catch(e){
-        // fallback
-        const ta = document.createElement('textarea');
-        ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-        alert('Conversation copied to clipboard.');
-      }
-    }
-  </script>
 <!-- =========================
      PART 3 — Support Coordinator Referral
 ========================== -->
@@ -734,5 +683,55 @@
     <button class="btn secondary" onclick="copySection('#s3-dialogue')">Copy full conversation</button>
   </div>
 </section>
+    </main>
+  </div>
+
+  <!-- Helpers: print & copy -->
+  <script>
+    // Highlight active link on scroll
+    const links = document.querySelectorAll('aside nav a[href^="#"]');
+    const sections = Array.from(links).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+    function setActive() {
+      const y = window.scrollY + 120;
+      let current = sections[0]?.id;
+      sections.forEach(sec => {
+        if (sec.offsetTop <= y) current = sec.id;
+      });
+      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    }
+    document.addEventListener('scroll', setActive, { passive: true });
+    window.addEventListener('load', setActive);
+
+    function printSection(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      const w = window.open('', '_blank');
+      const css = document.querySelector('style').outerHTML + document.querySelector('link[rel="stylesheet"]')?.outerHTML ?? '';
+      w.document.write(`
+        <html><head><title>Print — ${id}</title>${css}</head>
+        <body>${el.outerHTML}</body></html>
+      `);
+      w.document.close();
+      w.focus();
+      w.print();
+      // w.close(); // comment out if you want users to close manually
+    }
+
+    async function copySection(selector){
+      const el = document.querySelector(selector);
+      if(!el) return;
+      const text = el.innerText.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+        alert('Conversation copied to clipboard.');
+      } catch(e){
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        alert('Conversation copied to clipboard.');
+      }
+    }
+  </script>
 </body>
 </html>
