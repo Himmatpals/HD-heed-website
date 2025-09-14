@@ -156,8 +156,13 @@
       border: 1px solid rgba(124,77,255,.15);
       position: relative;
       overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    section.ndis-part h2 {
+    section.ndis-part:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(10,14,35,.55);
+    }
+    section h2 {
       font-family: Poppins, Inter, Arial, sans-serif;
       font-weight: 700;
       letter-spacing: .2px;
@@ -235,13 +240,16 @@
       border-radius: 12px;
       padding: 10px 12px;
       margin: 12px 0;
+      transition: all 0.3s ease;
     }
     details[open] { box-shadow: 0 8px 22px rgba(10,14,35,.35); }
     summary {
       cursor: pointer;
       font-weight: 600;
       font-family: Poppins, Inter, Arial, sans-serif;
+      transition: color 0.2s ease;
     }
+    summary:hover { color: var(--hd-accent); }
     summary::-webkit-details-marker { display:none; }
 
     .script {
@@ -285,6 +293,32 @@
       .mini-index { display: none; }
       header.hero { page-break-after: avoid; }
       section.ndis-part { page-break-inside: avoid; }
+    }
+
+    /* New: Different colors for each section */
+    #s1 { --hd-accent: #7c4dff; } /* Purple */
+    #s2 { --hd-accent: #00d7ff; } /* Cyan */
+    #s3 { --hd-accent: #1ec971; } /* Green */
+    #s4 { --hd-accent: #ffb020; } /* Orange */
+    #s5 { --hd-accent: #ff5c7a; } /* Red */
+    #s6 { --hd-accent: #7c4dff; } /* Repeat Purple */
+    #s7 { --hd-accent: #00d7ff; } /* Repeat Cyan */
+    #s8 { --hd-accent: #1ec971; } /* Repeat Green */
+    #s9 { --hd-accent: #ffb020; } /* Repeat Orange */
+    #s10 { --hd-accent: #ff5c7a; } /* Repeat Red */
+    #s11 { --hd-accent: #7c4dff; } /* Repeat Purple */
+    #s12 { --hd-accent: #00d7ff; } /* Repeat Cyan */
+
+    /* More interactive: Add hover effects to cards */
+    .card:hover {
+      transform: translateY(-3px);
+      transition: transform 0.2s ease;
+      border-color: var(--hd-accent);
+    }
+
+    /* More interactive: Animate details opening */
+    details[open] summary {
+      color: var(--hd-accent);
     }
   </style>
 </head>
@@ -1650,6 +1684,20 @@
     }
     document.addEventListener('scroll', setActive, { passive: true });
     window.addEventListener('load', setActive);
+
+    // Smooth scrolling for all anchors
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
 
     function printSection(id){
       const el = document.getElementById(id);
