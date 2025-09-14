@@ -18,6 +18,7 @@
       --ring: rgba(107,70,255,.35);
       --radius: 16px;
       --shadow: 0 10px 30px rgba(15,23,42,.08);
+      --alert-red: #ff3333;  /* Bright red for alerts */
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#fafaff 0%, #f6f8ff 40%, #f8fafc 100%)}
@@ -46,6 +47,52 @@
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
     @media (max-width: 920px){.grid{grid-template-columns:1fr}}
     .small{font-size:12px;color:var(--ink-2)}
+    
+    /* New styles for paper referral link */
+    .paper-referral-alert {
+      background: #fff5f5;
+      border: 2px solid var(--alert-red);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin: 0 0 26px 0;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(255, 51, 51, 0.2);
+      animation: pulse 2s infinite;
+    }
+    .paper-referral-alert h3 {
+      color: var(--alert-red);
+      margin: 0 0 8px 0;
+      font-weight: 800;
+      font-size: 18px;
+    }
+    .paper-referral-alert p {
+      margin: 0 0 12px 0;
+      color: var(--ink-2);
+    }
+    .paper-referral-link {
+      display: inline-block;
+      background: var(--alert-red);
+      color: white !important;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 4px 6px rgba(255, 51, 51, 0.3);
+      transition: all 0.2s ease;
+    }
+    .paper-referral-link:hover {
+      background: #ff1a1a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(255, 51, 51, 0.4);
+    }
+    .paper-referral-link:active {
+      transform: translateY(0);
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 51, 51, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); }
+    }
   </style>
 </head>
 <body>
@@ -65,6 +112,15 @@
       <span class="badge">Online Referrals</span>
       <span class="badge">AILR Onboarding</span>
       <span class="badge">Audit‑Ready</span>
+    </div>
+
+    <!-- PAPER REFERRAL ALERT - ADDED THIS SECTION -->
+    <div class="paper-referral-alert">
+      <h3>📄 Paper-Based Referral Form Available</h3>
+      <p>Prefer to use a paper form? Download our printable referral form and email the completed copy to info@hdheed.com.au</p>
+      <a href="https://drive.google.com/file/d/1Z3EJ2mycLwNAIDXs2fnIfD8H_wxcSdQx/view?usp=drive_link" class="paper-referral-link" target="_blank">
+        Download Paper Referral Form
+      </a>
     </div>
 
     <!-- GLOBAL COPY ALL BUTTON -->
