@@ -1,378 +1,632 @@
-<!-- ===========================================
-PART 1 — Standard Participant Intake (Self or Plan Managed)
-Drop this WHOLE <section> into your master page.
-ID: s1
-=========================================== -->
-<!-- Optional: load polished fonts (safe if repeated; browsers dedupe) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-  href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
-  rel="stylesheet"
-/>
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HD HeeD — NDIS Intake Phone Scripts (Parts 1–2)</title>
 
-<style>
-  /* ---------- Scoped Part Styles (won't leak) ---------- */
-  :root {
-    --hd-bg: #0e111a;
-    --hd-elev: #121729;
-    --hd-panel: #141a33;
-    --hd-card: #1a2244;
-    --hd-ink: #e8ecff;
-    --hd-ink-dim: #cdd5ff;
-    --hd-accent: #7c4dff;
-    --hd-accent-2: #00d7ff;
-    --hd-good: #1ec971;
-    --hd-warn: #ffb020;
-    --hd-danger: #ff5c7a;
-    --hd-ring: #2b3563;
-    --hd-muted: #0b112b;
-  }
+  <!-- Fonts (HD HeeD style) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
 
-  /* Container for this section only */
-  #s1.ndis-part {
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-    color: var(--hd-ink);
-    background: linear-gradient(180deg, rgba(20,26,51,.65), rgba(14,17,26,1));
-    border-radius: 16px;
-    padding: 28px 28px 36px;
-    margin: 24px 20px;
-    box-shadow: 0 10px 30px rgba(10,14,35,.45);
-    border: 1px solid rgba(124,77,255,.15);
-    position: relative;
-    overflow: hidden;
-  }
-
-  #s1 h2 {
-    font-family: Poppins, Inter, Arial, sans-serif;
-    font-weight: 700;
-    letter-spacing: .2px;
-    font-size: clamp(26px, 2.4vw, 32px);
-    margin: 0 0 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  #s1 .sub {
-    color: var(--hd-ink-dim);
-    margin-bottom: 20px;
-    font-size: 15px;
-  }
-
-  #s1 .badge {
-    background: linear-gradient(135deg, var(--hd-accent), #986cff);
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-    border: 1px solid rgba(255,255,255,.15);
-  }
-
-  #s1 .mini-index {
-    position: sticky;
-    top: 12px;
-    background: rgba(20,26,51,.6);
-    backdrop-filter: blur(6px);
-    border: 1px solid var(--hd-ring);
-    border-radius: 12px;
-    padding: 10px 12px;
-    margin: 8px 0 18px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  #s1 .mini-index a {
-    color: var(--hd-ink);
-    text-decoration: none;
-    font-size: 13px;
-    padding: 8px 10px;
-    border-radius: 10px;
-    border: 1px solid var(--hd-ring);
-    background: linear-gradient(180deg, #0f1533, #0b112b);
-    transition: all .18s ease;
-  }
-  #s1 .mini-index a:hover { transform: translateY(-1px); border-color: var(--hd-accent); color: #fff; }
-
-  #s1 .callout {
-    border-left: 4px solid var(--hd-accent);
-    background: linear-gradient(180deg, #101842, #0b112b);
-    padding: 14px 16px;
-    border-radius: 10px;
-    box-shadow: inset 0 1px 0 rgba(124,77,255,.15);
-    margin-bottom: 14px;
-  }
-
-  #s1 .grid-2 {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 16px;
-  }
-  @media (max-width: 980px){ #s1 .grid-2 { grid-template-columns: 1fr; } }
-
-  #s1 .card {
-    background: var(--hd-card);
-    border: 1px solid var(--hd-ring);
-    border-radius: 14px;
-    padding: 16px 16px 12px;
-    box-shadow: 0 8px 24px rgba(12,18,45,.35);
-  }
-  #s1 .card h3 {
-    font-family: Poppins, Inter, Arial, sans-serif;
-    font-size: clamp(18px, 1.6vw, 20px);
-    margin: 0 0 10px;
-    letter-spacing: .2px;
-  }
-  #s1 p, #s1 li {
-    line-height: 1.7;
-    font-size: 15.5px;
-  }
-  #s1 ul { margin: 8px 0 8px 20px; }
-
-  #s1 details {
-    border: 1px solid var(--hd-ring);
-    background: var(--hd-panel);
-    border-radius: 12px;
-    padding: 10px 12px;
-    margin: 12px 0;
-  }
-  #s1 details[open] {
-    box-shadow: 0 8px 22px rgba(10,14,35,.35);
-  }
-  #s1 summary {
-    cursor: pointer;
-    font-weight: 600;
-    font-family: Poppins, Inter, Arial, sans-serif;
-  }
-  #s1 summary::-webkit-details-marker { display:none; }
-
-  #s1 .script {
-    background: linear-gradient(180deg, #0b112b, #0c1330);
-    border: 1px solid var(--hd-ring);
-    border-radius: 12px;
-    padding: 14px;
-    margin-top: 10px;
-  }
-  #s1 .script p { margin: 10px 0; }
-  #s1 .who {
-    display: inline-block;
-    font-weight: 700;
-    color: #fff;
-    padding: 3px 8px;
-    border-radius: 8px;
-    background: #0f1533;
-    border: 1px solid var(--hd-ring);
-    font-family: Poppins, Inter, Arial, sans-serif;
-  }
-
-  #s1 .faq li strong { color: #fff; }
-
-  #s1 .toolbar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 16px;
-  }
-  #s1 .btn {
-    appearance: none;
-    border: 1px solid var(--hd-ring);
-    color: #fff;
-    background: linear-gradient(135deg, var(--hd-accent) 0%, #6a68ff 60%, #5cc8ff 120%);
-    padding: 10px 14px;
-    font-weight: 700;
-    border-radius: 12px;
-    font-family: Poppins, Inter, Arial, sans-serif;
-    letter-spacing: .2px;
-    cursor: pointer;
-    transition: transform .15s ease, box-shadow .15s ease;
-    box-shadow: 0 8px 22px rgba(124,77,255,.35);
-  }
-  #s1 .btn.secondary {
-    background: linear-gradient(180deg, #0f1533, #0b112b);
-    color: var(--hd-ink);
-    font-weight: 600;
-    box-shadow: none;
-  }
-  #s1 .btn:hover { transform: translateY(-1px); }
-  #s1 .btn:active { transform: translateY(0); }
-
-  /* Subtle divider */
-  #s1 .hr {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
-    margin: 18px 0;
-  }
-
-  /* Quote-style quick responses */
-  #s1 .qna p { margin: 8px 0; }
-  #s1 .q { color: var(--hd-ink-dim); }
-  #s1 .a { color: #fff; }
-
-  /* Nice code-safe copy area */
-  #s1 .copyable { user-select: text; }
-</style>
-
-<section id="s1" class="ndis-part">
-  <h2>1) Standard Participant Intake <span class="badge">Self / Plan-Managed</span></h2>
-  <div class="sub">Warm, plain-English first call to welcome a new NDIS participant and set up supports smoothly.</div>
-
-  <nav class="mini-index">
-    <a href="#s1-purpose">Purpose</a>
-    <a href="#s1-checklist">Quick Checklist</a>
-    <a href="#s1-concerns">Typical Concerns & Responses</a>
-    <a href="#s1-next">Suggested Next Steps</a>
-    <a href="#s1-dialogue">Full Conversation Script</a>
-    <a href="#s1-faq">FAQs</a>
-  </nav>
-
-  <div id="s1-purpose" class="callout">
-    <p><strong>Caller Type & Role:</strong> Intake Officer (admin or clinical).</p>
-    <p><strong>Context:</strong> First contact with a participant who is self-managed or plan-managed. Goal is to make them feel welcome, collect essentials, and set clear next steps.</p>
-  </div>
-
-  <div class="grid-2">
-    <div id="s1-checklist" class="card">
-      <h3>Quick Intake Checklist</h3>
-      <ul>
-        <li>Participant details: full name, preferred name, best contact.</li>
-        <li>NDIS number, plan start/end dates.</li>
-        <li>Plan management type; if plan-managed, capture plan manager contact.</li>
-        <li>Supports sought + goals (e.g., personal care, therapy, community access).</li>
-        <li>Immediate preferences (times, worker gender, communication or access needs).</li>
-        <li>Support Coordinator/other key contacts.</li>
-        <li>Safety/health considerations relevant to service delivery.</li>
-      </ul>
-    </div>
-
-    <div id="s1-concerns" class="card">
-      <h3>Typical Concerns &amp; High-Trust Responses</h3>
-      <div class="qna">
-        <p class="q"><em>“Will NDIS cover this? I’m worried about cost.”</em></p>
-        <p class="a">Your NDIS plan funds approved supports. We’ll keep within your budget and invoice NDIA/your plan manager directly—no out-of-pocket costs for approved services.</p>
-
-        <p class="q"><em>“I’m new and not sure what happens next.”</em></p>
-        <p class="a">No worries—I’ll guide you step-by-step in plain English. I’ll ask a few questions, explain what we do, and confirm next steps. Please stop me anytime.</p>
-
-        <p class="q"><em>“I have a plan manager—do I handle payments?”</em></p>
-        <p class="a">No—your plan manager handles invoices and claims. We coordinate with them so you can focus on your supports, not the paperwork.</p>
-
-        <p class="q"><em>“How soon can we start?”</em></p>
-        <p class="a">Right after this call we’ll set up your first meeting/assessment—often within 1–2 weeks depending on your availability. If anything is urgent, tell me and we’ll prioritise.</p>
-      </div>
-    </div>
-  </div>
-
-  <details id="s1-next" open>
-    <summary>Suggested Next Steps</summary>
-    <ul>
-      <li>Give a brief overview of relevant services; send a friendly summary.</li>
-      <li>Prepare and send a clear, readable Service Agreement; invite questions.</li>
-      <li>Book the initial assessment/meet-and-greet (clinician or support worker).</li>
-      <li>Share your direct contact details; encourage them to reach out anytime.</li>
-    </ul>
-  </details>
-
-  <div id="s1-dialogue" class="script copyable">
-    <h3 style="margin-top:0">Full Conversation Script (Verbatim-Ready)</h3>
-
-    <p><span class="who">Intake</span>: “Hello, this is [Name] calling from [Your Organization]. May I please speak with [Participant Name]?”</p>
-    <p><span class="who">Participant</span>: “Speaking. Hi.”</p>
-
-    <p><span class="who">Intake</span>: “Hi [Participant Name]! How are you today? I’m calling because we received your details as someone interested in our NDIS support services. I wanted to introduce myself and see how we can assist you. Is now a good time to chat for about 10–15 minutes?”</p>
-    <p><span class="who">Participant</span>: “Yes, that’s fine.”</p>
-
-    <p><span class="who">Intake</span>: “Wonderful. First, are you self-managing your plan or do you have a plan manager?”</p>
-    <p><span class="who">Participant</span>: “I have a plan manager who handles the payments.”</p>
-
-    <p><span class="who">Intake</span>: “Thanks—that means we’ll invoice your plan manager directly so you won’t need to manage payments. Could I grab their name and email to coordinate billing?”</p>
-    <p><span class="who">Participant</span>: “Bright Plan Management, plan@brightpm.com.”</p>
-
-    <p><span class="who">Intake</span>: “Perfect, noted. Next, what supports are you hoping to set up and what would you like to achieve? For example: help at home with daily tasks, community access, or therapy like physio or OT.”</p>
-    <p><span class="who">Participant</span>: “I have a spinal injury; I need morning personal care, some physio to build strength, and help getting to the shops and appointments since I can’t drive.”</p>
-
-    <p><span class="who">Intake</span>: “Got it—personal care, community access, and physiotherapy. We can help with all of those. Roughly how many days a week were you thinking of support worker help?”</p>
-    <p><span class="who">Participant</span>: “Daily in the mornings for personal care, and once a week for outings.”</p>
-
-    <p><span class="who">Intake</span>: “Great—we’ll shape a roster that fits. We’ll also involve our physio—likely an assessment first, then regular sessions. May I confirm your NDIS number and date of birth?”</p>
-    <p><span class="who">Participant</span>: “NDIS 123456789; DOB 5 May 1980.”</p>
-
-    <p><span class="who">Intake</span>: “Thanks. And your plan end date—does it run until next June?”</p>
-    <p><span class="who">Participant</span>: “Yes, June next year.”</p>
-
-    <p><span class="who">Intake</span>: “Perfect. Do you have a Support Coordinator or anyone else you’d like us to include in communications?”</p>
-    <p><span class="who">Participant</span>: “[SC Name/contact if any].”</p>
-
-    <p><span class="who">Intake</span>: “Excellent. From here, we’ll book an initial meeting—either at your home or our clinic. We’ll also send a simple Service Agreement so you can read it in your own time and ask questions—no rush.”</p>
-    <p><span class="who">Participant</span>: “Okay—that sounds good. When can we meet?”</p>
-
-    <p><span class="who">Intake</span>: “Do afternoons suit you better? How about this Thursday at 2:00 PM? I can come with our physio, [Physio Name], to your home.”</p>
-    <p><span class="who">Participant</span>: “Yes, that works.”</p>
-
-    <p><span class="who">Intake</span>: “Great—locked in for Thursday 2 PM. We’ll send a reminder the day before. We take a person-centred approach: you’re in control, and we’ll adjust as we go. If you think of any questions after we hang up, just reply to my email or give me a call.”</p>
-    <p><span class="who">Participant</span>: “Thank you, I appreciate that.”</p>
-
-    <p><span class="who">Intake</span>: “Pleasure! To recap: Thursday 2 PM at your place; we’ll email the Service Agreement and a short summary; we’ll coordinate with your plan manager. Looking forward to working with you.”</p>
-    <p><span class="who">Participant</span>: “Thanks—talk soon. Bye.”</p>
-    <p><span class="who">Intake</span>: “Bye!”</p>
-  </div>
-
-  <div class="hr"></div>
-
-  <details id="s1-faq" class="faq">
-    <summary>Frequently Asked Questions</summary>
-    <ul>
-      <li><strong>Do I pay anything out of pocket?</strong> No—approved supports are billed to your NDIS plan (or plan manager). We also track your budget for you.</li>
-      <li><strong>I’m new to NDIS—will you guide me?</strong> Absolutely. We keep it simple, explain each step, and invite questions anytime.</li>
-      <li><strong>How fast can we start?</strong> We usually schedule your first meeting within 1–2 weeks (or sooner for urgent needs).</li>
-      <li><strong>What happens after this call?</strong> You’ll receive a friendly summary, our contact details, and the Service Agreement to review; then your first appointment.</li>
-    </ul>
-  </details>
-
-  <div class="toolbar">
-    <button class="btn" onclick="printSection && printSection('s1')">Print this section</button>
-    <button class="btn secondary" onclick="copySection && copySection('#s1-dialogue')">Copy full conversation</button>
-  </div>
-</section>
-
-<!-- Helpers (safe to include once on page) -->
-<script>
-  // Print only the selected section
-  window.printSection = window.printSection || function(id){
-    const node = document.getElementById(id);
-    if(!node) return;
-    const w = window.open('', '_blank');
-    const css = `
-      <style>
-        @page { margin: 18mm; }
-        body{font-family:Inter,Arial,sans-serif;color:#111;background:#fff;line-height:1.55;}
-        h1,h2,h3{font-family:Poppins,Inter,Arial,sans-serif;margin:0 0 8px;}
-        .badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#7c4dff;color:#fff;font-size:12px}
-        .callout{padding:12px;border-left:4px solid #7c4dff;background:#f5f3ff;border-radius:8px;margin:6px 0 12px}
-        .card, details, .script{border:1px solid #e6e7ef;border-radius:12px;padding:12px;margin:10px 0;background:#fff}
-        details>summary{font-weight:700;cursor:pointer}
-        ul{margin:6px 0 6px 18px}
-        .who{display:inline-block;font-weight:700;background:#f1f3ff;border:1px solid #dfe3ff;border-radius:8px;padding:2px 8px}
-        nav, .toolbar, .mini-index{display:none !important}
-      </style>`;
-    w.document.write(`<html><head><title>${document.title} — Print</title>${css}</head><body>${node.outerHTML}</body></html>`);
-    w.document.close(); w.focus(); w.print(); w.close();
-  };
-
-  // Copy inner text of a selector (e.g., full conversation)
-  window.copySection = window.copySection || async function(selector){
-    const el = document.querySelector(selector);
-    if(!el) return;
-    const text = el.innerText.replace(/\n{3,}/g, '\n\n');
-    try {
-      await navigator.clipboard.writeText(text);
-      alert('Conversation copied to clipboard ✅');
-    } catch {
-      // Fallback: temporary textarea
-      const ta = document.createElement('textarea');
-      ta.value = text; document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta);
-      alert('Conversation copied to clipboard ✅');
+  <style>
+    :root{
+      --hd-bg: #0e111a;
+      --hd-elev: #121729;
+      --hd-panel: #141a33;
+      --hd-card: #1a2244;
+      --hd-ink: #e8ecff;
+      --hd-ink-dim: #cdd5ff;
+      --hd-accent: #7c4dff;
+      --hd-accent-2: #00d7ff;
+      --hd-good: #1ec971;
+      --hd-warn: #ffb020;
+      --hd-danger: #ff5c7a;
+      --hd-ring: #2b3563;
+      --hd-muted: #0b112b;
     }
-  };
-</script>
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      background: linear-gradient(180deg, rgba(14,17,26,1), rgba(10,14,33,1));
+      color: var(--hd-ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    }
+
+    /* Layout */
+    .shell {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+      min-height: 100dvh;
+    }
+
+    aside.sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100dvh;
+      overflow-y: auto;
+      background: linear-gradient(180deg, #121729, #0f1430);
+      border-right: 1px solid var(--hd-ring);
+      padding: 18px 16px 24px;
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom: 12px;
+    }
+    .dot {
+      width:12px; height:12px; border-radius:50%;
+      background: linear-gradient(135deg, var(--hd-accent), #9b7bff);
+      box-shadow: 0 0 0 3px rgba(124,77,255,.18);
+    }
+    .brand h1 {
+      font-family: Poppins, Inter, Arial, sans-serif;
+      font-size: 16px; margin:0;
+      letter-spacing:.3px;
+    }
+
+    .nav-title {
+      margin: 10px 0 6px;
+      color: var(--hd-ink-dim);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    nav a {
+      display:block;
+      text-decoration:none;
+      color: var(--hd-ink);
+      font-size: 14.5px;
+      padding: 10px 10px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      transition: all .16s ease;
+      margin-bottom: 6px;
+      background: transparent;
+    }
+    nav a:hover { background: #0f1533; border-color: var(--hd-ring); }
+    nav a.active { background: linear-gradient(180deg, #0f1533, #0b112b); border-color: var(--hd-accent); }
+
+    main.content {
+      padding: 24px 24px 56px;
+    }
+
+    header.hero {
+      background: linear-gradient(110deg, rgba(124,77,255,.18), transparent 40%), linear-gradient(180deg, #121729, #0f1430);
+      border: 1px solid var(--hd-ring);
+      border-radius: 16px;
+      padding: 18px 18px;
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 12px 32px rgba(10,14,35,.35);
+    }
+    .hero h2 {
+      font-family: Poppins, Inter, Arial, sans-serif;
+      font-size: clamp(20px, 2vw, 24px);
+      letter-spacing:.2px;
+      margin: 0 0 4px;
+    }
+    .hero .sub { color: var(--hd-ink-dim); font-size: 14px; }
+
+    .top-actions { display:flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--hd-ring);
+      color: #fff;
+      background: linear-gradient(135deg, var(--hd-accent) 0%, #6a68ff 60%, #5cc8ff 120%);
+      padding: 10px 14px;
+      font-weight: 700;
+      border-radius: 12px;
+      font-family: Poppins, Inter, Arial, sans-serif;
+      letter-spacing: .2px;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+      box-shadow: 0 8px 22px rgba(124,77,255,.35);
+      font-size: 14px;
+    }
+    .btn.secondary {
+      background: linear-gradient(180deg, #0f1533, #0b112b);
+      color: var(--hd-ink);
+      font-weight: 600;
+      box-shadow: none;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    /* Sections (shared) */
+    section.ndis-part{
+      background: linear-gradient(180deg, rgba(20,26,51,.65), rgba(14,17,26,1));
+      border-radius: 16px;
+      padding: 28px 28px 36px;
+      margin: 26px 0 0;
+      box-shadow: 0 10px 30px rgba(10,14,35,.45);
+      border: 1px solid rgba(124,77,255,.15);
+      position: relative;
+      overflow: hidden;
+    }
+    section.ndis-part h2 {
+      font-family: Poppins, Inter, Arial, sans-serif;
+      font-weight: 700;
+      letter-spacing: .2px;
+      font-size: clamp(26px, 2.4vw, 32px);
+      margin: 0 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    section .sub { color: var(--hd-ink-dim); margin-bottom: 20px; font-size: 15px; }
+    .badge {
+      background: linear-gradient(135deg, var(--hd-accent), #986cff);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,.15);
+    }
+
+    .mini-index {
+      position: sticky;
+      top: 12px;
+      background: rgba(20,26,51,.6);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--hd-ring);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin: 8px 0 18px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .mini-index a {
+      color: var(--hd-ink);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--hd-ring);
+      background: linear-gradient(180deg, #0f1533, #0b112b);
+      transition: all .18s ease;
+    }
+    .mini-index a:hover { transform: translateY(-1px); border-color: var(--hd-accent); color: #fff; }
+
+    .callout {
+      border-left: 4px solid var(--hd-accent);
+      background: linear-gradient(180deg, #101842, #0b112b);
+      padding: 14px 16px;
+      border-radius: 10px;
+      box-shadow: inset 0 1px 0 rgba(124,77,255,.15);
+      margin-bottom: 14px;
+    }
+
+    .grid-2 { display:grid; grid-template-columns: 1.1fr 1fr; gap:16px; }
+    @media (max-width: 980px){ .grid-2 { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--hd-card);
+      border: 1px solid var(--hd-ring);
+      border-radius: 14px;
+      padding: 16px 16px 12px;
+      box-shadow: 0 8px 24px rgba(12,18,45,.35);
+    }
+    .card h3 {
+      font-family: Poppins, Inter, Arial, sans-serif;
+      font-size: clamp(18px, 1.6vw, 20px);
+      margin: 0 0 10px;
+      letter-spacing: .2px;
+    }
+    p, li { line-height: 1.7; font-size: 15.5px; }
+    ul { margin: 8px 0 8px 20px; }
+
+    details {
+      border: 1px solid var(--hd-ring);
+      background: var(--hd-panel);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin: 12px 0;
+    }
+    details[open] { box-shadow: 0 8px 22px rgba(10,14,35,.35); }
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-family: Poppins, Inter, Arial, sans-serif;
+    }
+    summary::-webkit-details-marker { display:none; }
+
+    .script {
+      background: linear-gradient(180deg, #0b112b, #0c1330);
+      border: 1px solid var(--hd-ring);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 10px;
+    }
+    .script p { margin: 10px 0; }
+    .who {
+      display: inline-block;
+      font-weight: 700;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: #0f1533;
+      border: 1px solid var(--hd-ring);
+      font-family: Poppins, Inter, Arial, sans-serif;
+    }
+
+    .faq li strong { color: #fff; }
+
+    .toolbar {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;
+    }
+
+    .hr {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+      margin: 18px 0;
+    }
+
+    .copyable { user-select: text; }
+
+    /* Print */
+    @media print {
+      aside.sidebar { display: none; }
+      .shell { grid-template-columns: 1fr; }
+      .btn { display: none !important; }
+      .mini-index { display: none; }
+      header.hero { page-break-after: avoid; }
+      section.ndis-part { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Sidebar Index -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="dot"></span>
+        <h1>HD HeeD — NDIS Scripts</h1>
+      </div>
+      <div class="nav-title">Quick Index</div>
+      <nav>
+        <a href="#s1" class="active">1) Standard Participant Intake</a>
+        <a href="#s2">2) Family / Next of Kin</a>
+        <!-- Future parts can be added below:
+        <a href="#s3">3) Support Coordinator Referral</a>
+        <a href="#s4">4) Complex Needs</a>
+        ... -->
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="hero">
+        <div>
+          <h2>NDIS Intake Phone Scripts — Parts 1–2</h2>
+          <div class="sub">Polished, field-ready scripts with FAQs, checklists, and full dialogues. Styled to match HD HeeD.</div>
+        </div>
+        <div class="top-actions">
+          <button class="btn" onclick="window.print()">Print All</button>
+          <button class="btn secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to Top</button>
+        </div>
+      </header>
+
+      <!-- =========================
+           PART 1 — Standard Intake
+      ========================== -->
+      <section id="s1" class="ndis-part">
+        <h2>1) Standard Participant Intake <span class="badge">Self / Plan / Agency-Managed</span></h2>
+        <div class="sub">Warm, structured intake for participants contacting directly. Confirms plan details, goals, risk notes, and first steps.</div>
+
+        <nav class="mini-index">
+          <a href="#s1-purpose">Purpose</a>
+          <a href="#s1-checklist">Quick Checklist</a>
+          <a href="#s1-concerns">Common Concerns & Responses</a>
+          <a href="#s1-next">Suggested Next Steps</a>
+          <a href="#s1-dialogue">Full Conversation Script</a>
+          <a href="#s1-faq">FAQs</a>
+        </nav>
+
+        <div id="s1-purpose" class="callout">
+          <p><strong>Caller Type & Role:</strong> Intake Officer speaking directly with the participant (or plan nominee).</p>
+          <p><strong>Context:</strong> Establish needs, goals, plan management, safety notes and booking pathway—without overwhelming.</p>
+        </div>
+
+        <div class="grid-2">
+          <div id="s1-checklist" class="card">
+            <h3>Quick Intake Checklist</h3>
+            <ul>
+              <li>Confirm identity & consent; preferred name & pronouns; main contact details.</li>
+              <li>Plan management: self, plan-managed, or agency-managed; funding ballpark by category.</li>
+              <li>Goals & priorities for next 3–6 months (plain language).</li>
+              <li>Current supports & providers; avoid duplication; coordinate as needed.</li>
+              <li>Risks/safety: falls risk, allergies, behaviors, transfer notes, home access.</li>
+              <li>Preferences: worker gender, language, cultural notes, interests, comms mode.</li>
+              <li>Scheduling windows & location; transport needs; start timeline.</li>
+            </ul>
+          </div>
+
+          <div id="s1-concerns" class="card">
+            <h3>Common Concerns &amp; Responses</h3>
+            <ul>
+              <li><strong>“Is this covered by my plan?”</strong> We’ll map supports to your funding (Core/Capacity Building) and confirm before starting.</li>
+              <li><strong>“I’m overwhelmed by NDIS.”</strong> We’ll keep things simple, explain documents line-by-line, and handle the admin with your consent.</li>
+              <li><strong>“I need consistency.”</strong> We’ll prioritise a small, stable team and clear roster confirmations.</li>
+              <li><strong>“Budget anxiety.”</strong> We’ll plan safe hours, monitor spending, and adjust if needed so supports last the full plan.</li>
+            </ul>
+          </div>
+        </div>
+
+        <details id="s1-next" open>
+          <summary>Suggested Next Steps</summary>
+          <ul>
+            <li>Propose initial schedule (e.g., 2–3hr blocks, 2–5 days/week) aligned to goals and energy levels.</li>
+            <li>Draft service agreement (plain English); offer to screen-share or walk through together.</li>
+            <li>Request any relevant notes (OT transfer techniques, risk plans).</li>
+            <li>Confirm communications (SMS for rostering changes, email for records), and book first visit.</li>
+            <li>Set 2–4 week review to fine-tune hours and match fit.</li>
+          </ul>
+        </details>
+
+        <div id="s1-dialogue" class="script copyable">
+          <h3 style="margin-top:0">Full Conversation Script (Verbatim-Ready)</h3>
+
+          <p><span class="who">Intake</span>: “Hi [Participant Name], I’m [Your Name] from [Organization]. Thanks for getting in touch about NDIS supports—how are you today?”</p>
+          <p><span class="who">Participant</span>: “Hi. I’m okay, thanks. I wanted to see what help I can get at home.”</p>
+
+          <p><span class="who">Intake</span>: “Absolutely. Before we dive in, do you prefer I call you [Preferred Name]? And are you comfortable to chat now?”</p>
+          <p><span class="who">Participant</span>: “Yes, call me [Preferred Name]. I have time now.”</p>
+
+          <p><span class="who">Intake</span>: “Great. First, a couple of quick checks so we set things up correctly: is your plan self-managed, plan-managed, or NDIA-managed?”</p>
+          <p><span class="who">Participant</span>: “[Plan type].”</p>
+
+          <p><span class="who">Intake</span>: “Thanks. And what are the main things you’d like help with over the next few months?”</p>
+          <p><span class="who">Participant</span>: “Mainly personal care in the mornings, some meal prep, and getting out once or twice a week.”</p>
+
+          <p><span class="who">Intake</span>: “Perfect. Do you have any current providers (like OT, physio, or a different support worker service) that we should be aware of so we coordinate?”</p>
+          <p><span class="who">Participant</span>: “I see an OT monthly, and I used to have a worker once a week but it wasn’t consistent.”</p>
+
+          <p><span class="who">Intake</span>: “Got it. We’ll make sure not to duplicate and will ask your permission to touch base with your OT if needed. Any safety considerations at home—falls risk, allergies, or transfer notes?”</p>
+          <p><span class="who">Participant</span>: “I use a walker and I’m a bit unsteady in the bathroom.”</p>
+
+          <p><span class="who">Intake</span>: “Thanks for letting me know. We’ll brief our staff with safe techniques and, if you’re happy, ask the OT for any transfer guidance. In terms of timing, which days and times suit you best?”</p>
+          <p><span class="who">Participant</span>: “Mornings are best—say 9 to 11 AM on weekdays. Outings could be Tuesdays or Thursdays.”</p>
+
+          <p><span class="who">Intake</span>: “That works. We’ll aim for a small, consistent team so you see familiar faces. We’ll also send your roster a week ahead and text you about any changes. For admin: we’ll prepare a simple service agreement outlining hours and costs within NDIS price limits. We can go through it together—no surprises.”</p>
+
+          <p><span class="who">Participant</span>: “Sounds good. I get anxious about budgets.”</p>
+          <p><span class="who">Intake</span>: “Totally understandable. We’ll plan conservative hours initially, monitor usage, and adjust if needed so your supports stretch across the plan year. You’ll stay fully in control.”</p>
+
+          <p><span class="who">Participant</span>: “Okay. What’s next?”</p>
+          <p><span class="who">Intake</span>: “Next, I’ll propose a starter schedule (e.g., Mon–Fri mornings 2 hrs, and a 2-hr community access mid-week), email a draft agreement, and—if you agree—book your first visit. After 2–3 weeks, we’ll check in and tweak anything that’s not perfect.”</p>
+
+          <p><span class="who">Participant</span>: “Great. Let’s do that.”</p>
+          <p><span class="who">Intake</span>: “Brilliant. I’ll send everything today and we’ll get you started. Thanks for your time, [Preferred Name]!”</p>
+        </div>
+
+        <div class="hr"></div>
+
+        <details id="s1-faq" class="faq">
+          <summary>Frequently Asked Questions</summary>
+          <ul>
+            <li><strong>Can you help me understand my plan?</strong> Yes—plain-language walk-throughs, and we’ll align supports to the correct categories.</li>
+            <li><strong>How do bookings work?</strong> We create a service booking (if agency-managed) and confirm your roster weekly.</li>
+            <li><strong>What if the match isn’t right?</strong> Tell us—no hard feelings. We’ll rematch quickly.</li>
+            <li><strong>Will I run out of funding?</strong> We monitor usage and adjust hours proactively so supports last the full plan duration.</li>
+          </ul>
+        </details>
+
+        <div class="toolbar">
+          <button class="btn" onclick="printSection('s1')">Print this section</button>
+          <button class="btn secondary" onclick="copySection('#s1-dialogue')">Copy full conversation</button>
+        </div>
+      </section>
+
+      <!-- =========================
+           PART 2 — Family / NOK
+      ========================== -->
+      <section id="s2" class="ndis-part">
+        <h2>2) Family Member / Next of Kin Calling on Behalf <span class="badge">With Participant Involved</span></h2>
+        <div class="sub">Sensitive, clear intake when a family member is the main contact. Keeps the participant involved, honours consent, and sets up daily living supports smoothly.</div>
+
+        <nav class="mini-index">
+          <a href="#s2-purpose">Purpose</a>
+          <a href="#s2-checklist">Quick Checklist</a>
+          <a href="#s2-concerns">Common Concerns & Responses</a>
+          <a href="#s2-next">Suggested Next Steps</a>
+          <a href="#s2-dialogue">Full Conversation Script</a>
+          <a href="#s2-faq">FAQs</a>
+        </nav>
+
+        <div id="s2-purpose" class="callout">
+          <p><strong>Caller Type & Role:</strong> Intake Officer speaking with a family member/next of kin on behalf of the participant (participant present or nearby).</p>
+          <p><strong>Context:</strong> Confirm consent, gather needs, and design daily living/community support—while keeping the participant’s voice central.</p>
+        </div>
+
+        <div class="grid-2">
+          <div id="s2-checklist" class="card">
+            <h3>Quick Intake Checklist</h3>
+            <ul>
+              <li>Confirm relationship, consent, and best way to involve the participant (speakerphone, one-to-one later, etc.).</li>
+              <li>Plan management type and Core funding ballpark.</li>
+              <li>Current providers (e.g., existing OT/Physio) to avoid duplication and coordinate.</li>
+              <li>Goals & immediate priorities (e.g., reduce loneliness, safe transfers, meals, outings).</li>
+              <li>Risks/safety notes: hearing difficulty, mobility weakness, transfer guidance from therapists.</li>
+              <li>Preferences: worker gender, interests match (e.g., cricket, gardening), language, communication mode.</li>
+              <li>Scheduling: preferred days/times; who confirms appointments (family vs participant).</li>
+            </ul>
+          </div>
+
+          <div id="s2-concerns" class="card">
+            <h3>Common Concerns &amp; Trust-Building Responses</h3>
+            <div>
+              <p><em>“Dad is hard of hearing—will he still be included?”</em><br>
+              Yes. We’ll speak clearly, use speakerphone or captions if needed, and check in directly with him. We’ll involve him in key choices at every step.</p>
+
+              <p><em>“We don’t want to disrupt current therapy.”</em><br>
+              We’ll keep OT/Physio as-is and focus on daily living and companionship. We coordinate with therapists to follow their guidance.</p>
+
+              <p><em>“I manage the logistics—can you contact me first?”</em><br>
+              Absolutely. We’ll record you as the primary contact for scheduling/updates, while ensuring your dad’s consent and involvement.</p>
+
+              <p><em>“Will this fit the budget?”</em><br>
+              We’ll plan hours within Core funding and monitor usage. If we need to adjust, we’ll do it together to protect essentials.</p>
+            </div>
+          </div>
+        </div>
+
+        <details id="s2-next" open>
+          <summary>Suggested Next Steps</summary>
+          <ul>
+            <li>Propose a matched support worker (shared interests + skills) and arrange a meet-and-greet.</li>
+            <li>Request any OT transfer/safety notes (e.g., transfer techniques) for safe manual handling.</li>
+            <li>Send draft Service Agreement (plain English); offer to walk through line-by-line.</li>
+            <li>Book first visits (e.g., weekday midday 3h blocks) and set communication preferences (email for records, phone/text for shifts).</li>
+            <li>Track budget and adjust hours as needed; schedule a review after the first month.</li>
+          </ul>
+        </details>
+
+        <div id="s2-dialogue" class="script copyable">
+          <h3 style="margin-top:0">Full Conversation Script (Verbatim-Ready)</h3>
+
+          <p><span class="who">Intake</span>: “Hello, this is [Name] from [Your Organization]. I’m looking to speak with [Family Member Name] – I was told you’re the best contact regarding [Participant Name]’s NDIS supports?”</p>
+          <p><span class="who">Family Member</span>: “Yes, that’s me. I’m [Participant Name]’s daughter. Thanks for calling.”</p>
+
+          <p><span class="who">Intake</span>: “Thank you for reaching out on [Participant Name]’s behalf. How are you both doing today?”</p>
+          <p><span class="who">Family Member</span>: “We’re doing alright. My dad (Participant) is here with me. He’s a bit hard of hearing, so I tend to handle the phone conversations.”</p>
+
+          <p><span class="who">Intake</span>: “I understand. Hi [Participant Name] (speaking a bit louder and clearer)! I’m [Name] from [Org]. I’m talking with your daughter to make sure we arrange the supports you need. How are you today?”</p>
+          <p><span class="who">Participant</span> (in background): “Oh, hello! I’m okay, thank you.”</p>
+
+          <p><span class="who">Family Member</span>: “He can hear you on speaker now. He knows we’re arranging some help for him.”</p>
+
+          <p><span class="who">Intake</span>: “Great, I’ll continue to chat with both of you. So, I understand [Participant Name] has an NDIS plan, and you’re helping to organize his services. Could you tell me a bit about what prompted you to contact us and what supports you’re looking for?”</p>
+          <p><span class="who">Family Member</span>: “Sure. My dad had a stroke last year. He’s on the NDIS and currently has some physio and occupational therapy, but we’re looking to get him a regular support worker. I’m worried about him being alone most of the day when I’m at work. He could use help with meals and just someone around in case he needs anything. His speech isn’t great and his right side is weak.”</p>
+
+          <p><span class="who">Intake</span>: “Got it. Thank you for the background. So he’s already receiving physio and OT – is that through another provider or directly through NDIS?”</p>
+          <p><span class="who">Family Member</span>: “It’s through another clinic. They’re doing a good job with therapy, so we’d like to keep that as is. What we really need from you is more on the daily living side – kind of like in-home care and companionship.”</p>
+
+          <p><span class="who">Intake</span>: “Absolutely, we can cover that. We have support workers who can come to your dad’s home and help with daily tasks (like preparing lunch, light housekeeping, etc.) and also just be there as a companion, maybe take him for a walk or to the local park if he’s up for it. We can tailor the activities to what he enjoys and what keeps him safe.”</p>
+          <p><span class="who">Participant</span> (background): “I do get lonely sometimes, yes.”</p>
+          <p><span class="who">Family Member</span>: “He used to be very active socially, so it’s been hard.”</p>
+
+          <p><span class="who">Intake</span>: “I understand. Social connection is so important. We’ll definitely aim to match him with a support worker who shares some of his interests. For example, what does your dad like? Any hobbies or topics he enjoys?”</p>
+          <p><span class="who">Family Member</span>: “He loves gardening and watching cricket. He can’t garden like he used to, but he enjoys sitting outside.”</p>
+
+          <p><span class="who">Intake</span>: “That’s great to know. We actually have a support worker in our team, [Support Worker Name], who is an avid cricket fan and is skilled in helping with light gardening tasks. Someone like that might be a good fit to accompany your dad, talk cricket, maybe help him water the plants or just get some fresh air outside safely.”</p>
+          <p><span class="who">Family Member</span>: “Oh, that sounds promising! Dad, what do you think? Someone to talk cricket with you?”</p>
+          <p><span class="who">Participant</span>: “That would be nice.”</p>
+
+          <p><span class="who">Intake</span>: “Wonderful. Now, let’s talk logistics for a moment. [Participant Name], your NDIS plan – do you know if it’s self-managed or plan-managed, or NDIA-managed? Basically, who pays the bills from the plan?”</p>
+          <p><span class="who">Family Member</span>: “It’s agency-managed. The NDIS pays providers directly. He doesn’t handle any of that.”</p>
+
+          <p><span class="who">Intake</span>: “Thanks, that means we’ll just make service bookings in the system and claim payments directly. No worry there. And do you happen to know how many hours or funding is allocated for his daily support? I want to ensure we plan within his budget.”</p>
+          <p><span class="who">Family Member</span>: “He has about $20k a year in core supports available. We were thinking of starting with maybe 3 hours a day, Monday to Friday, around midday to afternoon.”</p>
+
+          <p><span class="who">Intake</span>: “That sounds reasonable. Rough math, that should be sustainable with $20k for quite a few months, and then plans usually renew annually. We can fine-tune it. We’ll help you keep track so it doesn’t overrun the budget. And if we find he needs more or less, we can adjust.”</p>
+
+          <p><span class="who">Family Member</span>: “Okay, great. Another thing: I usually coordinate everything for him. Is it alright if I continue to be the main contact with you? I’ll make sure he’s informed and involved in decisions, but it’s just easier for scheduling and so on.”</p>
+          <p><span class="who">Intake</span>: “Of course. We appreciate having a dedicated family contact—it often makes communication smoother. We will involve your dad in any key discussions (since it’s about him), but for day-to-day things like scheduling or updates, I’m happy to call or email you. If at any time your dad wants to speak directly with us or have a one-on-one meeting, we can do that too.”</p>
+          <p><span class="who">Family Member</span>: “Email works for me for records, but phone or text for anything urgent or scheduling is fine too.”</p>
+
+          <p><span class="who">Intake</span>: “Noted. I’ll get all your contacts. Next, I’d like to schedule a home visit to meet you both in person. During that visit, we can introduce a potential support worker (like the cricket-fan I mentioned) to see if it’s a good fit. We’ll also go over a service agreement—that’s a plain-English document listing what we’ll do and our obligations. Would you be comfortable with that?”</p>
+          <p><span class="who">Family Member</span>: “Yes, that’s fine. I’d appreciate seeing things in writing.”</p>
+
+          <p><span class="who">Intake</span>: “Perfect. I can email you a draft before the meeting. Is there a day next week that works for a visit? I can bring that support worker to introduce.”</p>
+          <p><span class="who">Family Member</span>: “Wednesday afternoon is good. I can be there by 3 PM.”</p>
+
+          <p><span class="who">Intake</span>: “Okay, Wednesday at 3 PM. Does that suit you too, [Participant Name]?”</p>
+          <p><span class="who">Participant</span>: “Yes.”</p>
+
+          <p><span class="who">Intake</span>: “Great! We’ll be there. If you could gather any relevant therapy notes—like transfer techniques from OT—it helps our worker support your dad safely.”</p>
+          <p><span class="who">Family Member</span>: “Yes, the OT gave us a sheet. I’ll have it ready.”</p>
+
+          <p><span class="who">Intake</span>: “Perfect. Feel free to think of any other questions. Our goal is to support your dad and make both of you feel confident and comfortable. You’ve done a fantastic job so far—we’re here to share the load.”</p>
+          <p><span class="who">Family Member</span>: “Thank you. I’m hopeful this will help him and me.”</p>
+
+          <p><span class="who">Intake</span>: “I’m sure it will. I’ll send an email now with my contact info, the draft service agreement, and the appointment confirmation. Don’t hesitate to reach out if anything comes up before then.”</p>
+          <p><span class="who">Family Member</span>: “Will do. Thanks for your help today.”</p>
+          <p><span class="who">Participant</span>: “Thank you.”</p>
+          <p><span class="who">Intake</span>: “You’re both very welcome. Take care, and see you soon.”</p>
+        </div>
+
+        <div class="hr"></div>
+
+        <details id="s2-faq" class="faq">
+          <summary>Frequently Asked Questions</summary>
+          <ul>
+            <li><strong>Can I be the main contact?</strong> Yes. We’ll list you as primary for scheduling/updates and always involve the participant in key decisions.</li>
+            <li><strong>How do you respect consent?</strong> We confirm the participant’s consent at intake and before key changes; we can also arrange direct check-ins with them.</li>
+            <li><strong>Will you coordinate with current therapists?</strong> Absolutely—aligned with existing OT/Physio, and we’ll request safety notes (e.g., transfers).</li>
+            <li><strong>How do we manage the budget?</strong> We propose hours within Core funding, create service bookings (if agency-managed), and monitor usage to avoid overspend.</li>
+            <li><strong>Can you match interests (e.g., cricket, gardening)?</strong> Yes—matching shared interests helps rapport and combats loneliness. We’ll try to find a great fit.</li>
+            <li><strong>Communication preferences?</strong> Email for records; phone/text for urgent rostering. Tell us what works best for you.</li>
+          </ul>
+        </details>
+
+        <div class="toolbar">
+          <button class="btn" onclick="printSection('s2')">Print this section</button>
+          <button class="btn secondary" onclick="copySection('#s2-dialogue')">Copy full conversation</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Helpers: print & copy -->
+  <script>
+    // Highlight active link on scroll
+    const links = document.querySelectorAll('aside nav a[href^="#"]');
+    const sections = Array.from(links).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+    function setActive() {
+      const y = window.scrollY + 120;
+      let current = sections[0]?.id;
+      sections.forEach(sec => {
+        if (sec.offsetTop <= y) current = sec.id;
+      });
+      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    }
+    document.addEventListener('scroll', setActive, { passive: true });
+    window.addEventListener('load', setActive);
+
+    function printSection(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      const w = window.open('', '_blank');
+      const css = document.querySelector('style').outerHTML + document.querySelector('link[rel="stylesheet"]')?.outerHTML ?? '';
+      w.document.write(`
+        <html><head><title>Print — ${id}</title>${css}</head>
+        <body>${el.outerHTML}</body></html>
+      `);
+      w.document.close();
+      w.focus();
+      w.print();
+      // w.close(); // comment out if you want users to close manually
+    }
+
+    async function copySection(selector){
+      const el = document.querySelector(selector);
+      if(!el) return;
+      const text = el.innerText.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+        alert('Conversation copied to clipboard.');
+      } catch(e){
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        alert('Conversation copied to clipboard.');
+      }
+    }
+  </script>
+</body>
+</html>
