@@ -14,20 +14,20 @@
     --al-panel: #121a32;
     --al-line: #2a3a5e;
     --al-text: #f0f4ff;
-    --al-accent: linear-gradient(135deg, #4f46e5, #ec4899); /* Indigo to pink for high-tech vibe */
-    --al-ok: #10b981; /* Emerald green */
-    --al-warn: #fbbf24; /* Softer amber */
+    --al-accent: linear-gradient(135deg, #4f46e5, #ec4899);
+    --al-ok: #10b981;
+    --al-warn: #fbbf24;
     --al-danger: #ef4444;
-    --al-secondary: linear-gradient(135deg, #06b6d4, #3b82f6); /* Cyan to blue */
-    --al-glow: rgba(236, 72, 153, 0.4); /* Pink glow */
+    --al-secondary: linear-gradient(135deg, #06b6d4, #3b82f6);
+    --al-glow: rgba(236, 72, 153, 0.4);
   }
-  *{box-sizing:border-box; transition: all 0.3s ease;} /* Smooth transitions for everything */
+  *{box-sizing:border-box; transition: all 0.3s ease;}
   html,body{height:100%}
   body{
     margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
-    background:linear-gradient(180deg, #0b0f1a 0%, #1a1f3a 50%, #2a0f3a 100%); /* Multi-color gradient: navy to purple */
+    background:linear-gradient(180deg, #0b0f1a 0%, #1a1f3a 50%, #2a0f3a 100%);
     color:var(--al-text);
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-x: hidden;
   }
   a{color:#9ec1ff; text-decoration:none; transition: color 0.3s ease;}
   a:hover { color: #d4d4ff; }
@@ -35,16 +35,16 @@
 
   header{
     position:sticky; top:0; z-index:50;
-    background:linear-gradient(135deg, #0a0e1f, #1a1f3a); /* Gradient header */
+    background:linear-gradient(135deg, #0a0e1f, #1a1f3a);
     border-bottom:1px solid var(--al-line);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5); /* Deeper shadow for depth */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
   }
   header .bar{
     display:flex; align-items:center; gap:12px; padding:10px 16px;
     max-width:1120px; margin:0 auto;
   }
   .brand{display:flex; align-items:center; gap:10px}
-  .brand img{width:40px;height:40px;border-radius:50%; object-fit:cover; box-shadow: 0 0 10px var(--al-glow);} /* Circular logo with glow */
+  .brand img{width:40px;height:40px;border-radius:50%; object-fit:cover; box-shadow: 0 0 10px var(--al-glow);}
   .brand .name{font-weight:900; text-shadow: 0 1px 2px rgba(0,0,0,0.6);}
   .brand .tag{font-size:12px;color:#b6c8ff}
 
@@ -66,14 +66,8 @@
     margin: 0 auto;
     padding: 0 16px;
   }
-  .nav-scroller::-webkit-scrollbar {
-    display: none;
-  }
-  .nav-bar {
-    display: inline-flex;
-    gap: 2px;
-    padding: 0;
-  }
+  .nav-scroller::-webkit-scrollbar { display: none; }
+  .nav-bar { display: inline-flex; gap: 2px; padding: 0; }
   .nav-item {
     display: inline-block;
     padding: 12px 16px;
@@ -84,10 +78,7 @@
     transition: all 0.3s ease;
     cursor: pointer;
   }
-  .nav-item:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
-  }
+  .nav-item:hover { color: #ffffff; background: rgba(255, 255, 255, 0.05); }
   .nav-item.active {
     color: #ffffff;
     border-bottom: 3px solid #ec4899;
@@ -96,13 +87,13 @@
 
   .hero{ max-width:1120px; margin:14px auto 0; padding:16px; }
   .hero .card{
-    background:linear-gradient(180deg, rgba(18,26,50,0.8), rgba(12,19,38,0.8)); /* Glassmorphism base */
-    backdrop-filter: blur(12px); /* Blur for high-tech glass effect */
+    background:linear-gradient(180deg, rgba(18,26,50,0.8), rgba(12,19,38,0.8));
+    backdrop-filter: blur(12px);
     border:1px solid transparent;
-    border-image: var(--al-accent) 1; /* Gradient border */
+    border-image: var(--al-accent) 1;
     border-radius:24px; padding:24px;
     display:grid; gap:12px; box-shadow:0 20px 60px rgba(0,0,0,.55), inset 0 0 20px rgba(255,255,255,0.05);
-    animation: fadeIn 0.8s ease-out; /* Smooth fade-in */
+    animation: fadeIn 0.8s ease-out;
   }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   .hero h1{margin:0; font-size:clamp(24px,4.8vw,36px); font-weight:900; background: var(--al-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
@@ -115,9 +106,7 @@
     max-width:1120px; margin:12px auto 24px; padding:0 16px; display:grid; gap:16px;
     grid-template-columns: 1fr;
   }
-  @media (min-width:980px){ .wrap{grid-template-columns: 1fr;} } /* Removed the second column for portrait */
-
-  /* Removed portrait section entirely */
+  @media (min-width:980px){ .wrap{grid-template-columns: 1fr;} }
 
   .stage{
     border:1px solid transparent; border-image: var(--al-accent) 1;
@@ -186,7 +175,7 @@
 
   .ck-list{ list-style:none; padding:0; margin:0; display:grid; gap:10px }
   .ck-row{ display:flex; align-items:center; gap:12px; }
-  .ck-row input[type="checkbox"]{ width:20px; height:20px; accent-color: #ec4899; } /* Accent color for checkboxes */
+  .ck-row input[type="checkbox"]{ width:20px; height:20px; accent-color: #ec4899; }
 
   .drop{ border:2px dashed #2a3b68; border-radius:16px; padding:14px; text-align:center; color:#cfe0ff;
     background: rgba(18,26,50,0.2); backdrop-filter: blur(5px); }
@@ -199,7 +188,7 @@
   .ok{color:var(--al-ok)} .warntext{color:var(--al-warn)} .danger{color:var(--al-danger)}
 
   .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.7); z-index:1000;
-    backdrop-filter: blur(5px); /* Blur overlay for modal */ }
+    backdrop-filter: blur(5px); }
   .modal.open{display:flex; animation: fadeIn 0.4s ease;}
   .modal .panel{
     width:min(1000px,96vw); height:min(88vh,1000px);
@@ -216,7 +205,6 @@
   .doc-list{ margin:10px 0 0 20px; color:#cfe0ff }
   .doc-list li{ margin:8px 0 }
   .doc-list b{ color:#ffe28f; background: var(--al-secondary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .doc-privacy{ margin-top:10px; font-size:13px; color:#9fb4ff }
 </style>
 </head>
 <body>
@@ -305,6 +293,7 @@
     </div>
   </div>
 </div>
+
 <script>
 window.addEventListener('DOMContentLoaded', function(){
 
@@ -685,39 +674,37 @@ window.addEventListener('DOMContentLoaded', function(){
         });
 
         var sum = document.createElement('div'); sum.className="hint";
-sum.style.marginTop="6px";
-var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
-DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
-sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
-m.appendChild(sum);
-}
-},
+        sum.style.marginTop="6px";
+        var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
+        DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
+        sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
+        sum.id = "policySummary";
+        m.appendChild(sum);
+      }
+    },
 
-/* ===== DOCUMENTS (EMAIL REMINDERS) ===== */
-{
-  key:"uploads",
-  title:"Documents — please email them",
-  sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
-        <div class="consent-box" style="margin-top:10px">\
-          <b>What to send (simple reminder)</b>\
-          <ul>\
-            <li>Photo ID (e.g., driver licence or passport)</li>\
-            <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
-            <li>NDIS plan (latest)</li>\
-            <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
-            <li>Medication chart / current medication list (if any)</li>\
-            <li>Signed consent forms — Refer to step 13.</li>\
-          </ul>\
-        </div>',
-  build:function(m){
-    // Just a reminder; no file uploads collected here.
-    S.uploads.files = [];
-    save();
-  }
-},
-
-        
-    { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
+    /* ===== DOCUMENTS (EMAIL REMINDERS) ===== */
+    {
+      key:"uploads",
+      title:"Documents — please email them",
+      sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
+            <div class="consent-box" style="margin-top:10px">\
+              <b>What to send (simple reminder)</b>\
+              <ul>\
+                <li>Photo ID (e.g., driver licence or passport)</li>\
+                <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
+                <li>NDIS plan (latest)</li>\
+                <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
+                <li>Medication chart / current medication list (if any)</li>\
+                <li>Signed consent forms — Refer to step 13.</li>\
+              </ul>\
+            </div>',
+      build:function(m){
+        S.uploads.files = [];
+        save();
+      }
+    },
+   { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
       build:function(m){ m.appendChild(renderReview()); }
     },
 
@@ -1016,6 +1003,7 @@ m.appendChild(sum);
 
     return wrap;
   }
+
   function openDoc(title, href){
     var modal = document.getElementById('docModal');
     var docTitle = document.getElementById('docTitle');
@@ -1037,9 +1025,9 @@ m.appendChild(sum);
 
   function buildPayload(){ var p = cloneSafe(S); p.timestamp = new Date().toISOString(); return p; }
 
-  function openPrintableSummary(){ /* unchanged, optional */ }
+  function openPrintableSummary(){ /* optional: stub left as-is */ }
 
-  /* ===== Drive/Sheet summary helpers (NEW) ===== */
+  /* ===== Drive/Sheet summary helpers ===== */
   function mapRequiredForSummary(arr, other){
     var map = {
       personal_care:"Personal care",
@@ -1060,14 +1048,12 @@ m.appendChild(sum);
   function mapDaysSummary(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
 
   function sendToFormspree(){
-    // 1) Derive the three policy flags from the document acks
     var policyAck = {
       handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
       incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
       complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
     };
 
-    // 2) Build base payload
     var payload = {
       caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
       living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
@@ -1078,7 +1064,6 @@ m.appendChild(sum);
       _meta:{ app:"AILR", version:"v16" }
     };
 
-    // 3) Human-readable summaries
     try{
       var addr = S.participant && S.participant.address ? [
         S.participant.address.line1, S.participant.address.line2,
@@ -1101,7 +1086,6 @@ m.appendChild(sum);
       payload.contacts.contact_summary    = contactSummary;
     }catch(e){}
 
-    // 4) Send
     return fetch(GS_WEBAPP, {
       method: "POST",
       headers: { "Content-Type":"application/json" },
@@ -1111,7 +1095,6 @@ m.appendChild(sum);
       if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
       return j;
     }).catch(function(){
-      // Fallback so user isn't blocked
       return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
         .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
     });
@@ -1124,7 +1107,6 @@ m.appendChild(sum);
       item.addEventListener('click', function() {
         var stepIndex = parseInt(this.getAttribute('data-step'), 10);
         if (!isNaN(stepIndex) && stepIndex >= 0 && stepIndex < Steps.length) {
-          // Check if we can navigate to this step
           if (stepIndex <= S.i || canNavigateToStep(stepIndex)) {
             S.i = stepIndex;
             updateNavigation();
@@ -1137,28 +1119,15 @@ m.appendChild(sum);
     });
   }
 
-  function canNavigateToStep(stepIndex) {
-    // Allow navigation to any step that has been completed or is the next step
-    return stepIndex <= S.i + 1;
-  }
+  function canNavigateToStep(stepIndex) { return stepIndex <= S.i + 1; }
 
   function updateNavigation() {
     var navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(function(item, index) {
-      if (index === S.i) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
-      
-      // Mark completed steps
-      if (index < S.i) {
-        item.style.color = '#10b981'; // Green for completed
-      } else if (index === S.i) {
-        item.style.color = '#ffffff'; // White for current
-      } else {
-        item.style.color = '#b6c8ff'; // Default for future steps
-      }
+      if (index === S.i) item.classList.add('active'); else item.classList.remove('active');
+      if (index < S.i) item.style.color = '#10b981';
+      else if (index === S.i) item.style.color = '#ffffff';
+      else item.style.color = '#b6c8ff';
     });
   }
 
@@ -1175,34 +1144,27 @@ m.appendChild(sum);
     subEl.innerHTML = step.sub || "";
     optsEl.innerHTML = "";
     step.build(optsEl);
-    
-    // Update navigation
+
     updateNavigation();
-    
     save();
 
-    // Hide Next on the LAST page
     nextBtn.style.display = (S.i === total-1) ? "none" : "inline-block";
-
     try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){}
   }
 
-  backBtn.addEventListener('click', function(){ 
-    if (S.i > 0) {
-      S.i = S.i - 1; 
-      render(); 
-    }
+  backBtn.addEventListener('click', function(){
+    if (S.i > 0) { S.i = S.i - 1; render(); }
   });
-  
-  nextBtn.addEventListener('click', function(){ 
-    if (!canProceed(S.i)) return; 
-    S.i = Math.min(Steps.length-1, S.i+1); 
-    render(); 
+
+  nextBtn.addEventListener('click', function(){
+    if (!canProceed(S.i)) return;
+    S.i = Math.min(Steps.length-1, S.i+1);
+    render();
   });
-  
-  saveExitBtn.addEventListener('click', function(){ 
-    save(); 
-    alert("Saved. You can close this page and return later on the same device."); 
+
+  saveExitBtn.addEventListener('click', function(){
+    save();
+    alert("Saved. You can close this page and return later on the same device.");
   });
 
   function str(v){ return (v||"").toString().trim(); }
@@ -1258,26 +1220,16 @@ m.appendChild(sum);
     if (key==="policies"){
       for (var i=0;i<DOCS.length;i++){
         var d = DOCS[i], ack = S.acks[d.id]||{};
-        if (!ack.read){
-          alert("Please tick that you have received & read: " + d.title);
-          return false;
-        }
-        if (d.requiresConsent && !ack.consent){
-          alert("Please tick consent for: " + d.title);
-          return false;
-        }
+        if (!ack.read){ alert("Please tick that you have received & read: " + d.title); return false; }
+        if (d.requiresConsent && !ack.consent){ alert("Please tick consent for: " + d.title); return false; }
       }
     }
 
-    /* Emergency Advocacy consent is OPTIONAL */
     return true;
   }
 
   /* ====== Kick off ====== */
-  try{ 
-    setupNavigation();
-    render(); 
-  }
+  try{ setupNavigation(); render(); }
   catch(e){
     var stage = document.querySelector("main.stage");
     if (stage){
@@ -1288,4 +1240,4 @@ m.appendChild(sum);
 }); // DOMContentLoaded
 </script>
 </body>
-</html>
+</html> 
