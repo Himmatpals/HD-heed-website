@@ -52,6 +52,9 @@
   .nav-item:hover{background:linear-gradient(135deg,#121a3a,#1a2345);border-color:var(--al-line)}
   .nav-item.current{background:var(--al-accent);color:#fff;border-color:transparent;box-shadow:0 0 10px var(--al-glow)}
   .nav-item.completed{color:var(--al-ok);border-left:3px solid var(--al-ok)}
+  /* locked items when consent not given */
+  .nav-item.locked { opacity: .45; cursor: not-allowed; pointer-events: auto; }
+  .nav-item.locked:hover { background: none; border-color: transparent; }
 
   .stage{border:1px solid transparent;border-image:var(--al-accent) 1;border-radius:24px;padding:20px;background:linear-gradient(180deg,rgba(16,23,42,.8),rgba(12,19,38,.8));backdrop-filter:blur(12px);box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 0 15px rgba(255,255,255,.05);animation:fadeIn .6s ease-out}
   .head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
@@ -274,12 +277,6 @@ window.addEventListener('DOMContentLoaded', function(){
     notes:[]
   };
 
-  /* Restore saved draft (safe) */
-  try{
-    var prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
-    if (prev && typeof prev==="object") Object.assign(S, prev);
-  }catch(e){}
-
   /* ====== DOM refs ====== */
   var qEl = document.getElementById("q");
   var subEl = document.getElementById("sub");
@@ -306,7 +303,10 @@ window.addEventListener('DOMContentLoaded', function(){
     }catch(e){}
   }
 
-  /* ====== Small UI builders ====== */
+  /* ====== Consent helper ====== */
+  function hasConsent(){ return S && S.caller && S.caller.consent === "Yes"; }
+
+  /* ====== UI builders ====== */
   function row(cols, children){
     var r = document.createElement('div'); r.className = "row " + (cols||"");
     children.forEach(function(ch){ r.appendChild(ch); });
@@ -351,6 +351,12 @@ window.addEventListener('DOMContentLoaded', function(){
         buttons.forEach(function(x){ x.removeAttribute("aria-pressed"); });
         b.setAttribute("aria-pressed","true");
         save();
+        // If we're on consent step, update Next availability immediately
+        if (Steps[S.i].key === "caller"){
+          nextBtn.disabled = !hasConsent();
+          nextBtn.title = nextBtn.disabled ? 'Please select "Yes" to continue' : '';
+          updateNavigation();
+        }
       });
       buttons.push(b); roww.appendChild(b);
     });
@@ -687,6 +693,11 @@ window.addEventListener('DOMContentLoaded', function(){
 
         var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
         var btnSend = button("Send now","primary", function(){
+          // hard block submit without consent
+          if (!hasConsent()){
+            alert('You must give consent on Step 2 before submitting.');
+            return;
+          }
           var hasEmail = S.submitter.email && S.submitter.email.trim();
           var hasPhone = S.submitter.phone && S.submitter.phone.trim();
           if (!(hasEmail || hasPhone)){
@@ -720,6 +731,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     }
   ];
+
   /* ===== Helpers for review/summary & sending ===== */
   function renderReview(){
     var wrap = document.createElement('div'); wrap.className="review";
@@ -831,15 +843,6 @@ window.addEventListener('DOMContentLoaded', function(){
       ["Other risk notes", S.risks.other_notes],
       ["Overall rating", S.risks.overall_rating]
     ]));
-    function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
-    function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
-    wrap.appendChild(sect("Supports & schedule", [
-      ["Windows", mapWindows(S.schedule.windows)],
-      ["Days", mapDays(S.schedule.days)],
-      ["Hours/week", S.schedule.hours_per_week],
-      ["Urgency", S.schedule.urgency],
-      ["Start pref.", S.schedule.start_preference]
-    ]));
     var cons = (S.emergency_advocacy===undefined||S.emergency_advocacy===null||S.emergency_advocacy==="") ? "—" : (S.emergency_advocacy==="Yes"?"Yes":S.emergency_advocacy==="No"?"No":"Not sure");
     wrap.appendChild(sect("Consents", [["Emergency advocacy consent", cons]]));
     wrap.appendChild(sect("Uploads", [["Files selected", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ") || "—"]]));
@@ -941,13 +944,33 @@ window.addEventListener('DOMContentLoaded', function(){
       li.className = 'nav-item';
       li.setAttribute('data-step', index);
       li.textContent = (index + 1) + '. ' + step.title;
+
+      // lock any step beyond Step 2 (index 1) until consent is "Yes"
+      if (!hasConsent() && index > 1){
+        li.classList.add('locked');
+        li.setAttribute('aria-disabled', 'true');
+      }
+
       li.addEventListener('click', function(){
+        // stop clicks on locked items
+        if (!hasConsent() && index > 1){
+          alert('You must give consent on Step 2 before continuing.');
+          return;
+        }
+        // allow jumping only one step ahead, and only if current step is passable
         if (index <= S.i || canNavigateToStep(index)) {
+          // validate steps in-between if jumping forward
+          if (index > S.i){
+            for (var k = S.i; k < index; k++){
+              if (!canProceed(k)) return;
+            }
+          }
           S.i = index; render(); updateNavigation();
         } else {
-          alert('Please complete the current steps before jumping ahead.');
+          alert('Please complete the current step before jumping ahead.');
         }
       });
+
       navList.appendChild(li);
     });
     updateNavigation();
@@ -955,18 +978,33 @@ window.addEventListener('DOMContentLoaded', function(){
   function updateNavigation(){
     var items = navList.querySelectorAll('.nav-item');
     items.forEach(function(item, index){
-      item.classList.remove('current','completed');
+      item.classList.remove('current','completed','locked');
+      if (!hasConsent() && index > 1){
+        item.classList.add('locked');
+        item.setAttribute('aria-disabled','true');
+      } else {
+        item.removeAttribute('aria-disabled');
+      }
       if (index === S.i) item.classList.add('current');
       else if (index < S.i) item.classList.add('completed');
     });
   }
-  function canNavigateToStep(targetIndex){ return targetIndex <= S.i + 1; }
+  function canNavigateToStep(targetIndex){
+    if (!hasConsent() && targetIndex > 1) return false; // nothing beyond Step 2 without consent
+    return targetIndex <= S.i + 1;
+  }
 
   /* ====== Validation & render ====== */
   function str(v){ return (v||"").toString().trim(); }
   function has(v){ return str(v).length>0; }
 
   function canProceed(idx){
+    // global guard: cannot proceed past Step 2 without consent
+    if (idx > 1 && !hasConsent()){
+      alert('Consent is required on Step 2 before continuing.');
+      return false;
+    }
+
     var key = Steps[idx].key;
 
     if (key==="caller"){
@@ -1031,6 +1069,15 @@ window.addEventListener('DOMContentLoaded', function(){
     step.build(optsEl);
     save();
 
+    // disable Next on consent step until "Yes"
+    if (step.key === "caller"){
+      nextBtn.disabled = !hasConsent();
+      nextBtn.title = nextBtn.disabled ? 'Please select "Yes" to continue' : '';
+    } else {
+      nextBtn.disabled = false;
+      nextBtn.title = '';
+    }
+
     updateNavigation();
     nextBtn.style.display = (S.i === total-1) ? "none" : "inline-block";
     try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){}
@@ -1038,11 +1085,25 @@ window.addEventListener('DOMContentLoaded', function(){
 
   /* ====== Controls ====== */
   backBtn.addEventListener('click', function(){ if (S.i>0){ S.i--; render(); } });
-  nextBtn.addEventListener('click', function(){ if (!canProceed(S.i)) return; if (S.i<Steps.length-1){ S.i++; render(); } });
+  nextBtn.addEventListener('click', function(){
+    if (!canProceed(S.i)) return;
+    if (S.i<Steps.length-1){
+      // also ensure the target isn't beyond consent lock
+      if (!hasConsent() && (S.i + 1) > 1){ alert('Consent is required on Step 2 before continuing.'); return; }
+      S.i++; render();
+    }
+  });
   saveExitBtn.addEventListener('click', function(){ save(); alert("Saved. You can close this page and return later on the same device."); });
 
-  /* ====== Kick off ====== */
-  try{ buildNavigation(); render(); }
+  /* ====== Restore & Kick off ====== */
+  try{
+    var prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if (prev && typeof prev==="object") Object.assign(S, prev);
+    // snap back to consent if user had navigated past without giving consent
+    if (S.i > 1 && !hasConsent()) S.i = 1;
+
+    buildNavigation(); render();
+  }
   catch(e){
     var stage = document.querySelector("main.stage");
     if (stage){
