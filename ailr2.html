@@ -52,9 +52,9 @@
   .nav-item:hover{background:linear-gradient(135deg,#121a3a,#1a2345);border-color:var(--al-line)}
   .nav-item.current{background:var(--al-accent);color:#fff;border-color:transparent;box-shadow:0 0 10px var(--al-glow)}
   .nav-item.completed{color:var(--al-ok);border-left:3px solid var(--al-ok)}
-  /* locked items when consent not given */
-  .nav-item.locked { opacity: .45; cursor: not-allowed; pointer-events: auto; }
-  .nav-item.locked:hover { background: none; border-color: transparent; }
+  /* HARD DISABLE locked items */
+  .nav-item.locked { opacity:.45; cursor:not-allowed; pointer-events:none; }
+  .nav-item.locked:hover { background:none; border-color:transparent; }
 
   .stage{border:1px solid transparent;border-image:var(--al-accent) 1;border-radius:24px;padding:20px;background:linear-gradient(180deg,rgba(16,23,42,.8),rgba(12,19,38,.8));backdrop-filter:blur(12px);box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 0 15px rgba(255,255,255,.05);animation:fadeIn .6s ease-out}
   .head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
@@ -188,9 +188,9 @@ window.addEventListener('DOMContentLoaded', function(){
 
   /* ====== Config ====== */
   var GS_WEBAPP   = "https://script.google.com/macros/s/AKfycbyj9VvLh26csmc0bEry3cfeRzGxmZZJx5HNptkZGvcVzqTfmnO9fSsvhwF9YgCwfM5ALw/exec";
-  var STORAGE_KEY = "hdheed_ailr_v17_design";
+  var STORAGE_KEY = "hdheed_ailr_v18_hardlock";
 
-  /* === Your 11 PDFs (unchanged, exact) === */
+  /* === Your 11 PDFs (exact) === */
   var DOCS = [
     { id:"handbook", title:"Client Handbook", requiresConsent:false,
       fileId:"https://drive.google.com/file/d/1Du5TxEIgD9n--Gw5vkkkFXEij_SaLwLE/view?usp=sharing" },
@@ -306,6 +306,16 @@ window.addEventListener('DOMContentLoaded', function(){
   /* ====== Consent helper ====== */
   function hasConsent(){ return S && S.caller && S.caller.consent === "Yes"; }
 
+  /* ====== HARD ROUTE GUARD (single source of truth) ====== */
+  function enforceConsentOrSnap(){
+    // If attempting to be beyond Step 2 (index > 1) without consent, snap back.
+    if (!hasConsent() && S.i > 1){
+      S.i = 1; // Consent step
+      return true; // snapped
+    }
+    return false;
+  }
+
   /* ====== UI builders ====== */
   function row(cols, children){
     var r = document.createElement('div'); r.className = "row " + (cols||"");
@@ -351,8 +361,7 @@ window.addEventListener('DOMContentLoaded', function(){
         buttons.forEach(function(x){ x.removeAttribute("aria-pressed"); });
         b.setAttribute("aria-pressed","true");
         save();
-        // If we're on consent step, update Next availability immediately
-        if (Steps[S.i].key === "caller"){
+        if (Steps[S.i].key === "caller"){ // consent step
           nextBtn.disabled = !hasConsent();
           nextBtn.title = nextBtn.disabled ? 'Please select "Yes" to continue' : '';
           updateNavigation();
@@ -416,7 +425,7 @@ window.addEventListener('DOMContentLoaded', function(){
     return b;
   }
 
-  /* ====== Steps (full content) ====== */
+  /* ====== Steps ====== */
   var Steps = [
     { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
       build:function(m){
@@ -693,9 +702,9 @@ window.addEventListener('DOMContentLoaded', function(){
 
         var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
         var btnSend = button("Send now","primary", function(){
-          // hard block submit without consent
           if (!hasConsent()){
             alert('You must give consent on Step 2 before submitting.');
+            S.i = 1; render();
             return;
           }
           var hasEmail = S.submitter.email && S.submitter.email.trim();
@@ -881,7 +890,7 @@ window.addEventListener('DOMContentLoaded', function(){
       policy_ack: policyAck,
       acks:S.acks, emergency_advocacy:S.emergency_advocacy,
       submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
-      _meta:{ app:"AILR", version:"v17-design" }
+      _meta:{ app:"AILR", version:"v18-hardlock" }
     };
     try{
       var addr = S.participant && S.participant.address ? [
@@ -945,30 +954,36 @@ window.addEventListener('DOMContentLoaded', function(){
       li.setAttribute('data-step', index);
       li.textContent = (index + 1) + '. ' + step.title;
 
-      // lock any step beyond Step 2 (index 1) until consent is "Yes"
+      // HARD LOCK: any step beyond Step 2 (index > 1) until consent is "Yes"
       if (!hasConsent() && index > 1){
         li.classList.add('locked');
         li.setAttribute('aria-disabled', 'true');
+        li.title = 'Locked until consent is given on Step 2';
+      } else {
+        li.removeAttribute('aria-disabled');
+        li.title = '';
       }
 
+      // Click handler (will still be blocked by global guard below if state changes)
       li.addEventListener('click', function(){
-        // stop clicks on locked items
-        if (!hasConsent() && index > 1){
-          alert('You must give consent on Step 2 before continuing.');
-          return;
-        }
-        // allow jumping only one step ahead, and only if current step is passable
-        if (index <= S.i || canNavigateToStep(index)) {
-          // validate steps in-between if jumping forward
-          if (index > S.i){
-            for (var k = S.i; k < index; k++){
-              if (!canProceed(k)) return;
-            }
+        // If locked, do nothing (pointer-events:none already prevents)
+        if (li.classList.contains('locked')) return;
+
+        var target = index;
+
+        // Validate sequentially when jumping forward
+        if (target > S.i){
+          for (var k = S.i; k < target; k++){
+            if (!canProceed(k)) return;
           }
-          S.i = index; render(); updateNavigation();
-        } else {
-          alert('Please complete the current step before jumping ahead.');
         }
+
+        S.i = target;
+        // Global guard: snap back to consent if needed
+        if (enforceConsentOrSnap()){
+          alert('You must give consent on Step 2 before continuing.');
+        }
+        render();
       });
 
       navList.appendChild(li);
@@ -982,16 +997,14 @@ window.addEventListener('DOMContentLoaded', function(){
       if (!hasConsent() && index > 1){
         item.classList.add('locked');
         item.setAttribute('aria-disabled','true');
+        item.title = 'Locked until consent is given on Step 2';
       } else {
         item.removeAttribute('aria-disabled');
+        item.title = '';
       }
       if (index === S.i) item.classList.add('current');
       else if (index < S.i) item.classList.add('completed');
     });
-  }
-  function canNavigateToStep(targetIndex){
-    if (!hasConsent() && targetIndex > 1) return false; // nothing beyond Step 2 without consent
-    return targetIndex <= S.i + 1;
   }
 
   /* ====== Validation & render ====== */
@@ -999,16 +1012,13 @@ window.addEventListener('DOMContentLoaded', function(){
   function has(v){ return str(v).length>0; }
 
   function canProceed(idx){
-    // global guard: cannot proceed past Step 2 without consent
-    if (idx > 1 && !hasConsent()){
-      alert('Consent is required on Step 2 before continuing.');
-      return false;
-    }
-
     var key = Steps[idx].key;
 
     if (key==="caller"){
-      if (S.caller.consent!=="Yes"){ alert("We’re unable to proceed without consent. Please select “Yes” to continue."); return false; }
+      if (S.caller.consent!=="Yes"){
+        alert("We’re unable to proceed without consent. Please select “Yes” to continue.");
+        return false;
+      }
     }
     if (key==="participant"){
       var p=S.participant, a=p.address;
@@ -1056,6 +1066,11 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 
   function render(){
+    // Global guard on render (covers *any* path into render)
+    if (enforceConsentOrSnap()){
+      // when snapped, update nav to reflect lock
+    }
+
     var total = Steps.length;
     if (S.i<0) S.i=0;
     if (S.i>=total) S.i = total-1;
@@ -1084,23 +1099,43 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 
   /* ====== Controls ====== */
-  backBtn.addEventListener('click', function(){ if (S.i>0){ S.i--; render(); } });
-  nextBtn.addEventListener('click', function(){
-    if (!canProceed(S.i)) return;
-    if (S.i<Steps.length-1){
-      // also ensure the target isn't beyond consent lock
-      if (!hasConsent() && (S.i + 1) > 1){ alert('Consent is required on Step 2 before continuing.'); return; }
-      S.i++; render();
+  backBtn.addEventListener('click', function(){
+    if (S.i>0){
+      // moving back is always OK
+      S.i--;
+      render();
     }
   });
+
+  nextBtn.addEventListener('click', function(){
+    // If we're on consent step, enforce consent
+    if (Steps[S.i].key === "caller" && !hasConsent()){
+      alert('Consent is required on Step 2 before continuing.');
+      return;
+    }
+    // validate current step
+    if (!canProceed(S.i)) return;
+
+    // attempt to advance one step
+    if (S.i<Steps.length-1){
+      S.i++;
+      // Global guard: if this would put us past Step 2 without consent, snap back
+      if (enforceConsentOrSnap()){
+        alert('Consent is required on Step 2 before continuing.');
+      }
+      render();
+    }
+  });
+
   saveExitBtn.addEventListener('click', function(){ save(); alert("Saved. You can close this page and return later on the same device."); });
 
   /* ====== Restore & Kick off ====== */
   try{
     var prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
     if (prev && typeof prev==="object") Object.assign(S, prev);
-    // snap back to consent if user had navigated past without giving consent
-    if (S.i > 1 && !hasConsent()) S.i = 1;
+
+    // On load, if state points beyond consent without consent, force back to Consent
+    if (!hasConsent() && S.i > 1) S.i = 1;
 
     buildNavigation(); render();
   }
