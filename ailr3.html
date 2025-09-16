@@ -1065,8 +1065,8 @@
 
     if (key==="participant"){
       var p=S.participant, a=p.address;
-            if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name"); return false; }
-            if (!has(a.line1) || !has(a.suburb) || !has(a.postcode) || !has(a.state)){
+      if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name"); return false; }
+      if (!has(a.line1) || !has(a.suburb) || !has(a.postcode) || !has(a.state)){
         alert("Please complete the address (Line 1, Suburb, Postcode, State).");
         return false;
       }
@@ -1195,8 +1195,25 @@
   function openPrintableSummary(){
     var win = window.open('', '_blank');
     var html = '<html><head><title>AILR Summary</title>';
-    html += '<style>body{font-family:Arial,sans-serif;padding:20px}.review div{margin-bottom:10px}.kv div{display:flex;gap:12px}.kv b{min-width:220px;color:#4f46e5;font-weight:800}</style>';
-    html += '</head><body>' + renderReview().outerHTML + '</body></html>';
+    html += '<style>';
+    html += ':root{ --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153; --al-text:#e8edff; --al-a1:#4f46e5; --al-a2:#ec4899; --al-ok:#22c55e; --al-warn:#f59e0b; --al-danger:#ef4444; --al-accent: linear-gradient(135deg, var(--al-a1), var(--al-a2)); --al-secondary: linear-gradient(135deg, #06b6d4, #3b82f6); --al-glow: rgba(236,72,153,.45); }';
+    html += 'body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif; background: var(--al-bg); color:var(--al-text); padding:40px; max-width:900px; margin:0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.5);}';
+    html += 'h1{font-size:32px; font-weight:900; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:20px;}';
+    html += '.review{display:grid; gap:16px;}';
+    html += 'details.card{background: linear-gradient(135deg,#0f1731,#1a223f); border:1px solid var(--al-line); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.4);}';
+    html += 'summary{cursor:pointer; font-size:20px; font-weight:900; background: var(--al-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:12px;}';
+    html += '.kv{display:grid; gap:8px;} .kv div{display:flex; gap:16px; align-items:flex-start; font-size:16px; color:#cedaff; line-height:1.4;}';
+    html += '.kv div b{min-width:240px; font-size:16px; font-weight:800; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}';
+    html += '.kv div span{flex:1;}';
+    html += '.print-btn{border:0; border-radius:16px; padding:14px 24px; font-weight:900; cursor:pointer; background: var(--al-accent); color:#fff; box-shadow:0 6px 20px rgba(0,0,0,.4); transition: transform .25s ease; margin:20px auto; display:block;}';
+    html += '.print-btn:hover{transform: translateY(-2px);}';
+    html += '@media print{ .print-btn{display:none;} body{padding:20px;} }';
+    html += '</style>';
+    html += '</head><body>';
+    html += '<h1>AILR Summary for ' + (S.participant.legal_name || 'Participant') + '</h1>';
+    html += renderReview().outerHTML;
+    html += '<button class="print-btn" onclick="window.print()">Print / Save as PDF</button>';
+    html += '</body></html>';
     win.document.write(html);
     win.document.close();
   }
