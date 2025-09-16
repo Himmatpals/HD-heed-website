@@ -131,7 +131,7 @@
         <div class="brand">
           <div class="logo" aria-hidden="true"></div>
           <div>
-            <div id="form-title" class="title">HD HeeD — Super-Simple Referral</div>
+            <div id="form-title" class="title-HD HeeD — Super-Simple Referral</div>
             <div class="subtitle">Everything optional — only consent is required.</div>
           </div>
         </div>
@@ -427,47 +427,98 @@
     }
 
     function buildSummaryHTML(){
-      const esc = s => (s||"").toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-      const row = (k,v)=>`<tr><td style="padding:8px;border-bottom:1px solid #eee;color:#334155;width:32%">${esc(k)}</td><td style="padding:8px;border-bottom:1px solid #eee;color:#0f172a">${esc(v)}</td></tr>`;
+      const esc = s => (s||"").toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+      const row = (k,v)=>`<tr><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;color:#1e293b;font-weight:600;width:30%;vertical-align:top">${esc(k)}</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;color:#111827">${esc(v)}</td></tr>`;
       const sect = (t,rows)=>`
-        <h3 style="margin:16px 0 8px;border-bottom:1px solid #e5e7eb;padding-bottom:6px;color:#0f172a">${esc(t)}</h3>
-        <table style="width:100%;border-collapse:collapse;font:14px system-ui,Segoe UI,Roboto,Arial">${rows.join("")}</table>`;
+        <div style="margin-bottom:24px">
+          <h3 style="font-size:16px;margin:0 0 12px 0;padding-bottom:6px;border-bottom:1px solid #e5e7eb;color:#0f766e;font-weight:700">${esc(t)}</h3>
+          <table style="width:100%;border-collapse:collapse;font-size:14px">${rows.join("")}</table>
+        </div>`;
       const sup = pickSupports();
 
-      return `<!doctype html><meta charset="utf-8">
-      <div style="font:14px system-ui,Segoe UI,Roboto,Arial;color:#0f172a">
-        <h2 style="margin:0 0 8px 0;color:#0f766e">HD HeeD — Referral Summary</h2>
-        <div style="color:#64748b;font:13px system-ui">Generated ${new Date().toLocaleString()}</div>
-        ${sect("Consent",[ row("Initial consent", ynu("consent")), row("Final consent", state.referral_consent?"Ticked":"Not ticked") ])}
-        ${sect("Referrer",[ row("Name", `${state.referrer_name||""} (${state.relationship||""})`), row("Email", state.email||""), row("Phone", `${state.phone||""}  ${state.mobile||""}`) ])}
-        ${sect("Participant",[
-          row("Name / DOB", `${(state.participant_fname||"")+" "+(state.participant_lname||"")} | ${state.dob||""}`),
-          row("NDIS / Gender", `${state.ndis_number||""} | ${ynu("gender")}`),
-          row("Address", [state.street,state.suburb,state.city,state.postcode].filter(Boolean).join(", ")),
-          row("Contacts", `${state.home_phone||""}  ${state.participant_mobile||""}  ${state.participant_email||""}`),
-          row("Language / Interpreter", `${state.language||""} | ${ynu("interpreter")}${state.interpreter_type?` (${state.interpreter_type})`:""}`)
-        ])}
-        ${sect("Primary Carer (NOK)",[
-          row("Name / Relationship", `${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""})`),
-          row("Contacts", `${state.carer_home||""}  ${state.carer_mobile||""}  ${state.carer_email||""}`),
-          row("Shared care / custody", ynu("custody"))
-        ])}
-        ${sect("Safety & Risks",[
-          row("Fall / Wound / Pain / Pressure / Behaviour",
-              `Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}`),
-          row("Risk notes", state.risk_notes||"")
-        ])}
-        ${sect("Supports",[
-          row("Main reason", state.key_area||""),
-          row("Requested supports", sup||""),
-          row("Allergies", `${ynu("allergies")}${state.allergy_list?` – ${state.allergy_list}`:""}`),
-          row("Service location", state.service_location||"")
-        ])}
-        ${sect("Funding & Plan",[
-          row("Plan management", ynu("plan_managed")),
-          row("Funding notes", state.funding_area||"")
-        ])}
-      </div>`;
+      return `<!doctype html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>HD HeeD Referral Summary</title>
+        <style>
+          body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #111827;
+            margin: 40px;
+            padding: 0;
+            background: #fff;
+            line-height: 1.5;
+          }
+          .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+          }
+          h1 {
+            font-size: 24px;
+            color: #0f766e;
+            margin: 0 0 10px 0;
+            text-align: center;
+          }
+          .timestamp {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 20px;
+          }
+          @media print {
+            body { margin: 0; }
+            .container { border: none; padding: 0; }
+            @page { margin: 2cm; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>HD HeeD — Referral Summary</h1>
+          <div class="timestamp">Generated ${new Date().toLocaleString()}</div>
+          ${sect("Consent",[
+            row("Initial Consent", ynu("consent")),
+            row("Final Consent", state.referral_consent ? "Ticked" : "Not ticked")
+          ])}
+          ${sect("Referrer",[
+            row("Name", `${state.referrer_name || ""} (${state.relationship || ""})`),
+            row("Email", state.email || ""),
+            row("Phone", `${state.phone || ""} ${state.mobile || ""}`)
+          ])}
+          ${sect("Participant",[
+            row("Name / DOB", `${(state.participant_fname || "") + " " + (state.participant_lname || "")} | ${state.dob || ""}`),
+            row("NDIS / Gender", `${state.ndis_number || ""} | ${ynu("gender")}`),
+            row("Address", [state.street, state.suburb, state.city, state.postcode].filter(Boolean).join(", ")),
+            row("Contacts", `${state.home_phone || ""} ${state.participant_mobile || ""} ${state.participant_email || ""}`),
+            row("Language / Interpreter", `${state.language || ""} | ${ynu("interpreter")}${state.interpreter_type ? ` (${state.interpreter_type})` : ""}`)
+          ])}
+          ${sect("Primary Carer (NOK)",[
+            row("Name / Relationship", `${state.carer_fname || ""} ${state.carer_lname || ""} (${state.carer_relationship || ""})`),
+            row("Contacts", `${state.carer_home || ""} ${state.carer_mobile || ""} ${state.carer_email || ""}`),
+            row("Shared Care / Custody", ynu("custody"))
+          ])}
+          ${sect("Safety & Risks",[
+            row("Fall / Wound / Pain / Pressure / Behaviour",
+                `Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}`),
+            row("Risk Notes", state.risk_notes || "")
+          ])}
+          ${sect("Supports",[
+            row("Main Reason", state.key_area || ""),
+            row("Requested Supports", sup || ""),
+            row("Allergies", `${ynu("allergies")}${state.allergy_list ? ` – ${state.allergy_list}` : ""}`),
+            row("Service Location", state.service_location || "")
+          ])}
+          ${sect("Funding & Plan",[
+            row("Plan Management", ynu("plan_managed")),
+            row("Funding Notes", state.funding_area || "")
+          ])}
+        </div>
+      </body>
+      </html>`;
     }
 
     function submitOnline(){
@@ -517,6 +568,20 @@
     }
 
     init();
+
+    /* ====== Window Resize Handler ====== */
+    window.addEventListener('resize', function(){
+      // Ensure progress bar stays aligned on resize
+      setActive();
+    });
+
+    /* ====== Form Submission Success Handler ====== */
+    window.addEventListener('load', function(){
+      if (window.location.search.includes('formspree_success')) {
+        flash("Referral submitted successfully!");
+        localStorage.removeItem(AUTOSAVE_KEY); // Clear saved state on successful submission
+      }
+    });
   </script>
 </body>
 </html>
