@@ -1065,323 +1065,197 @@
 
     if (key==="participant"){
       var p=S.participant, a=p.address;
-      if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name."); return false; }
-      if (!has(p.dob)){ alert("Please add Date of birth."); return false; }
-      if (!has(a.line1)||!has(a.suburb)||!has(a.postcode)||!has(a.state)){
-        alert("Please complete Address line 1, Suburb, Postcode, and State."); return false;
+            if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name"); return false; }
+            if (!has(a.line1) || !has(a.suburb) || !has(a.postcode) || !has(a.state)){
+        alert("Please complete the address (Line 1, Suburb, Postcode, State).");
+        return false;
       }
     }
 
     if (key==="contacts"){
       if (!has(S.contacts.email) && !has(S.contacts.phone)){
-        alert("Please provide at least one contact method: Email or Phone."); return false;
+        alert("Please provide at least an email or phone number for the participant.");
+        return false;
       }
     }
 
     if (key==="clinical"){
       if (!has(S.clinical.allergies)){
-        alert("Allergies is required. If none, please write “No known allergies”.");
-        return false;
-      }
-    }
-
-    if (key==="supports"){
-      var anyReq=(S.supports.required||[]).length>0 || has(S.supports.required_other) || has(S.supports.details_text);
-      if (!anyReq){
-        alert("Please select at least one required support or type a specific support detail.");
-        return false;
-      }
-    }
-
-    if (key==="schedule"){
-      var someWindow=(S.schedule.windows||[]).length>0;
-      var someDay=(S.schedule.days||[]).length>0;
-      var hours=Number(S.schedule.hours_per_week||0);
-      if (!someWindow && !someDay && !(hours>0)){
-        alert("Please select at least one time window or day, or provide Hours per week.");
+        alert("Please enter Allergies (write “No known allergies” if none).");
         return false;
       }
     }
 
     if (key==="policies"){
-      for (var i=0;i<DOCS.length;i++){
-        var d = DOCS[i], ack = S.acks[d.id]||{};
-        if (!ack.read){
-          alert("Please tick that you have received & read: " + d.title);
-          return false;
-        }
-        if (d.requiresConsent && !ack.consent){
-          alert("Please tick consent for: " + d.title);
-          return false;
-        }
+      var total=DOCS.length, readCt=0, needCon=DOCS.filter(function(d){return d.requiresConsent;}).length, conCt=0;
+      DOCS.forEach(function(d){
+        if (S.acks[d.id].read) readCt++;
+        if (d.requiresConsent && S.acks[d.id].consent) conCt++;
+      });
+      if (readCt < total){
+        alert("Please acknowledge that you’ve received and read all documents.");
+        return false;
+      }
+      if (conCt < needCon){
+        alert("Please provide consent for all required forms.");
+        return false;
       }
     }
+
+    if (key==="submit"){
+      if (!has(S.submitter.email) && !has(S.submitter.phone)){
+        alert("Please provide at least an email or phone number to submit.");
+        return false;
+      }
+    }
+
     return true;
   }
 
-  /* ====== Drive/Sheet summary helpers (unchanged) ====== */
-  function mapRequiredForSummary(arr, other){
-    var map = {
-      personal_care:"Personal care",
-      high_intensity:"High-intensity personal care",
-      household_tasks:"Household tasks",
-      life_skills:"Development of life skills",
-      community_participation:"Community participation",
-      group_centre:"Group/centre-based activities",
-      travel_transport:"Assist with travel & transport",
-      daily_tasks_sil:"Daily tasks & shared living",
-      not_sure:"Not sure — guide me"
-    };
-    var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
-    if (other) list.push("Other: "+other);
-    return list.length ? list.join(", ") : "";
-  }
-  function mapWindowsSummary(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
-  function mapDaysSummary(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
-
-  function sendToFormspree(){
-    // 1) Derive the three policy flags from the document acks
-    var policyAck = {
-      handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-      incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-      complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
-    };
-
-    // 2) Build base payload
-    var payload = {
-      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
-      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
-      bsp:S.bsp, supports:S.supports, schedule:S.schedule,
-      policy_ack: policyAck,
-      acks:S.acks, emergency_advocacy:S.emergency_advocacy,
-      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
-      _meta:{ app:"AILR", version:"v16" }
-    };
-
-    // 3) Human-readable summaries
-    try{
-      var addr = S.participant && S.participant.address ? [
-        S.participant.address.line1, S.participant.address.line2,
-        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
-      ].filter(Boolean).join(", ") : "";
-
-      var contactSummary = [
-        (S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")
-      ].join("");
-
-      var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
-      var daysSummary     = mapDaysSummary(S.schedule.days);
-
-      payload.supports.required_summary   = requiredSummary;
-      payload.supports.details_text       = S.supports.details_text || "";
-      payload.schedule.windows_summary    = windowsSummary;
-      payload.schedule.days_summary       = daysSummary;
-      payload.participant.address_summary = addr;
-      payload.contacts.contact_summary    = contactSummary;
-    }catch(e){}
-
-    // 4) Send
-    return fetch(GS_WEBAPP, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    }).then(async function(r){
-      var j = await r.json().catch(()=>({}));
-      if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
-      return j;
-    }).catch(function(){
-      // Fallback so user isn't blocked
-      return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
-        .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
-    });
-  }
-
-  /* ====== Slide transitions & render ====== */
-  function render(animate){
-    var total = Steps.length;
-    if (S.i<0) S.i=0;
-    if (S.i>=total) S.i = total-1;
-
+  /* ====== Render ====== */
+  function render(slide){
     var step = Steps[S.i];
-    stepTxt.textContent = "Step " + (S.i+1) + "/" + total;
-    barEl.style.width = Math.round((S.i)/(total-1)*100) + "%";
-    setPortrait(step.key);
-    qEl.innerHTML = step.title;
-    subEl.innerHTML = step.sub || "";
+    if (!step) return;
 
-    // animate options area
-    if (animate){
-      optsEl.classList.remove('slide-enter');
-      void optsEl.offsetWidth; // reflow
-      optsEl.classList.add('slide-enter');
-    }
-    optsEl.innerHTML = "";
-    try{ step.build(optsEl); }catch(e){ optsEl.innerHTML = "<div class='inlinebox'><p>There was an error rendering this step.</p></div>"; }
+    // Update DOM
+    qEl.textContent = step.title;
+    subEl.innerHTML = step.sub;
+    stepTxt.textContent = "Step " + (S.i + 1) + "/" + Steps.length;
+    barEl.style.width = ((S.i + 1) / Steps.length * 100) + "%";
+
+    // Clear and build options
+    optsEl.innerHTML = '';
+    optsEl.className = "opts" + (slide ? (S.i > S.prevI ? " slide-enter" : " slide-exit") : "");
+    S.prevI = S.i; // track for next slide direction
+    step.build(optsEl);
+
+    // Button states
+    backBtn.disabled = S.i === 0;
+    nextBtn.textContent = S.i === Steps.length - 1 ? "Submit" : "Next →";
+    setPortrait();
 
     save();
-
-    // Hide Next on the LAST page
-    nextBtn.style.display = (S.i === total-1) ? "none" : "inline-block";
-
-    try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){}
-    updateNavigation();
   }
 
+  /* ====== Navigation ====== */
   backBtn.addEventListener('click', function(){
-    if (S.i > 0){ S.i--; render(true); }
+    if (S.i > 0){
+      S.i--;
+      render(true);
+      updateNavigation();
+    }
   });
 
   nextBtn.addEventListener('click', function(){
-    if (!canProceed(S.i)) return;
-    var target = Math.min(Steps.length-1, S.i+1);
-    if (isStepLocked(target)){
-      alert('You must provide Consent "Yes" on Step 2 to continue.');
+    if (!canProceed(S.i)){
       return;
     }
-    S.i = target; render(true);
+    if (S.i < Steps.length - 1){
+      S.i++;
+      render(true);
+      updateNavigation();
+    } else {
+      // Submit handled in the step’s button
+    }
   });
 
-  saveExitBtn.addEventListener('click', function(){ save(); alert("Saved. You can close this page and return later on the same device."); });
+  saveExitBtn.addEventListener('click', function(){
+    save();
+    alert("Your progress has been saved. You can return anytime to continue.");
+    window.location.href = "https://hdheed.com.au";
+  });
 
-  function openPrintableSummary(){ /* unchanged, optional */ }
-
-  /* ===== Drive/Sheet summary helpers (NEW) ===== */
-  function mapRequiredForSummary(arr, other){
-    var map = {
-      personal_care:"Personal care",
-      high_intensity:"High-intensity personal care",
-      household_tasks:"Household tasks",
-      life_skills:"Development of life skills",
-      community_participation:"Community participation",
-      group_centre:"Group/centre-based activities",
-      travel_transport:"Assist with travel & transport",
-      daily_tasks_sil:"Daily tasks & shared living",
-      not_sure:"Not sure — guide me"
-    };
-    var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
-    if (other) list.push("Other: "+other);
-    return list.length ? list.join(", ") : "";
-  }
-  function mapWindowsSummary(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
-  function mapDaysSummary(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
-
+  /* ====== Formspree Submission ====== */
   function sendToFormspree(){
-    // 1) Derive the three policy flags from the document acks
-    var policyAck = {
-      handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-      incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-      complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
-    };
+    return new Promise(function(resolve, reject){
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', GS_WEBAPP, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
 
-    // 2) Build base payload
-    var payload = {
-      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
-      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
-      bsp:S.bsp, supports:S.supports, schedule:S.schedule,
-      policy_ack: policyAck,
-      acks:S.acks, emergency_advocacy:S.emergency_advocacy,
-      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
-      _meta:{ app:"AILR", version:"v16" }
-    };
+      var data = cloneSafe(S);
+      data._meta = {
+        timestamp: new Date().toISOString(),
+        version: STORAGE_KEY,
+        form: "ailr"
+      };
 
-    // 3) Human-readable summaries
-    try{
-      var addr = S.participant && S.participant.address ? [
-        S.participant.address.line1, S.participant.address.line2,
-        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
-      ].filter(Boolean).join(", ") : "";
-
-      var contactSummary = [
-        (S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")
-      ].join("");
-
-      var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
-      var daysSummary     = mapDaysSummary(S.schedule.days);
-
-      payload.supports.required_summary   = requiredSummary;
-      payload.supports.details_text       = S.supports.details_text || "";
-      payload.schedule.windows_summary    = windowsSummary;
-      payload.schedule.days_summary       = daysSummary;
-      payload.participant.address_summary = addr;
-      payload.contacts.contact_summary    = contactSummary;
-    }catch(e){}
-
-    // 4) Send
-    return fetch(GS_WEBAPP, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    }).then(async function(r){
-      var j = await r.json().catch(()=>({}));
-      if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
-      return j;
-    }).catch(function(){
-      // Fallback so user isn't blocked
-      return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
-        .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
+      xhr.onload = function(){
+        if (xhr.status >= 200 && xhr.status < 300){
+          try{ resolve(JSON.parse(xhr.responseText)); } catch(e){ resolve({}); }
+        } else {
+          reject(new Error("Submission failed: " + xhr.statusText));
+        }
+      };
+      xhr.onerror = function(){ reject(new Error("Network error")); };
+      xhr.send(JSON.stringify(data));
     });
   }
 
-
+  /* ====== Printable Summary ====== */
+  function openPrintableSummary(){
+    var win = window.open('', '_blank');
+    var html = '<html><head><title>AILR Summary</title>';
+    html += '<style>body{font-family:Arial,sans-serif;padding:20px}.review div{margin-bottom:10px}.kv div{display:flex;gap:12px}.kv b{min-width:220px;color:#4f46e5;font-weight:800}</style>';
+    html += '</head><body>' + renderReview().outerHTML + '</body></html>';
+    win.document.write(html);
+    win.document.close();
+  }
 
   /* ====== Confetti ====== */
-  var confettiCanvas = document.getElementById('confetti');
-  var ctx = confettiCanvas.getContext ? confettiCanvas.getContext('2d') : null;
-  function resizeConfetti(){
-    confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resizeConfetti);
+  function triggerConfetti(duration){
+    var canvas = document.getElementById('confetti');
+    canvas.classList.remove('hide');
+    var ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-  function triggerConfetti(durationMs){
-    if (!ctx) return;
-    resizeConfetti(); confettiCanvas.classList.remove('hide');
-    var pieces = []; var colors = ['#ffffff','#ffd95c','#ec4899','#4f46e5','#22c55e','#06b6d4'];
-    for (var i=0;i<220;i++){
-      pieces.push({
-        x: Math.random()*confettiCanvas.width,
-        y: -20 - Math.random()*confettiCanvas.height/2,
-        r: 4 + Math.random()*6,
-        c: colors[(Math.random()*colors.length)|0],
-        vx: -2 + Math.random()*4,
-        vy: 2 + Math.random()*3,
-        a: Math.random()*Math.PI*2,
-        va: -0.2 + Math.random()*0.4
-      });
+    var particles = [];
+    var colors = ['#4f46e5', '#ec4899', '#22c55e', '#f59e0b'];
+
+    function Particle(){
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height - canvas.height;
+      this.vx = Math.random() * 4 - 2;
+      this.vy = Math.random() * 6 + 2;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.size = Math.random() * 6 + 2;
     }
-    var start = performance.now();
-    function tick(now){
-      var t = now - start;
-      ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
-      pieces.forEach(function(p){
-        p.x += p.vx; p.y += p.vy; p.vy += 0.02; p.a += p.va;
-        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a);
-        ctx.fillStyle = p.c; ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
-        ctx.restore();
+
+    for (var i = 0; i < 100; i++) particles.push(new Particle());
+
+    function animate(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(function(p){
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.1; // gravity
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
       });
-      if (t < durationMs){
-        requestAnimationFrame(tick);
+      if (Date.now() < start + duration){
+        requestAnimationFrame(animate);
       } else {
-        confettiCanvas.classList.add('hide');
+        canvas.classList.add('hide');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
-    requestAnimationFrame(tick);
+
+    var start = Date.now();
+    animate();
   }
 
-  /* ====== Kick off ====== */
-  try{
-    buildNavigation();
-    render(false);
-  }
-  catch(e){
-    var stage = document.querySelector("main.stage");
-    if (stage){
-      stage.innerHTML = '<div class="q">There was an error initialising the form.</div><p class="sub">If this persists, please open the page in a modern browser (Chrome/Edge/Safari ≥ 13).</p>';
-    }
-  }
+  /* ====== Init ====== */
+  buildNavigation();
+  render(false);
 
-})(); // IIFE
+  window.addEventListener('resize', function(){
+    var canvas = document.getElementById('confetti');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+})();
 </script>
 </body>
 </html>
