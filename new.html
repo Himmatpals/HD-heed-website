@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>HD HeeD — Emails + Follow-ups (Zoho-ready)</title>
+<title>HD HeeD — Master Follow-Up Sequencer (Zoho)</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --ink:#0c1226; --bg:#f6f8fc; --card:#fff; --muted:#6b7280; --line:#e5e7eb;
+    --ink:#0b1226; --bg:#f7f9fc; --card:#ffffff; --muted:#6b7280; --line:#e5e7eb;
     --brand:#4f46e5; --brand2:#ec4899; --ok:#16a34a; --warn:#eab308; --danger:#ef4444;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
-  .wrap{max-width:1200px;margin:24px auto;padding:0 16px}
-  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .wrap{max-width:1280px;margin:24px auto;padding:0 16px}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
   .brand{display:flex;gap:12px;align-items:center}
-  .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+  .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--brand2))}
   .title{font-weight:800;font-size:20px}
   .sub{color:var(--muted);font-size:13px}
   .toolbar{display:flex;gap:8px;flex-wrap:wrap}
@@ -24,29 +24,33 @@
   .btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
   .btn.warn{background:var(--warn);border-color:var(--warn);color:#111}
   .btn.danger{background:var(--danger);border-color:var(--danger);color:#fff}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  @media (max-width: 1020px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 4px 14px rgba(10,20,40,.05)}
-  .card h2{margin:0 0 8px 0;font-size:16px;font-weight:800}
+  .btn.ghost{background:#fff}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 4px 16px rgba(10,20,40,.06)}
   .hr{height:1px;background:var(--line);margin:12px 0}
+  .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+  @media (max-width:1100px){.grid{grid-template-columns:1fr}}
   input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit}
   textarea{min-height:120px;resize:vertical}
   label{font-size:12px;color:var(--muted);font-weight:600}
   table{width:100%;border-collapse:separate;border-spacing:0}
   th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-  th{font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.08em}
+  th{font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;cursor:pointer}
   tr:last-child td{border-bottom:0}
-  .tag{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:#fafafa;color:#111827}
-  .tag.ok{background:#ecfdf5;border-color:#86efac;color:#065f46}
-  .tag.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
-  .muted{color:var(--muted)} .small{font-size:12px} .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+  .small{font-size:12px} .muted{color:var(--muted)} .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700}
+  .right{margin-left:auto}
   .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .row-s{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   @media (max-width:720px){.row-s{grid-template-columns:1fr}}
-  .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700}
-  .right{margin-left:auto}
-  .copy-box{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:10px}
-  .copy-box pre{margin:0;white-space:pre-wrap;word-break:break-word}
+  .tag{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:#fafafa;color:#111827}
+  .tag.ok{background:#ecfdf5;border-color:#86efac;color:#065f46}
+  .tag.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
+  .tag.danger{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+  .progress{height:8px;border-radius:6px;background:#eef2ff;overflow:hidden}
+  .progress > span{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+  .copybox{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:10px}
+  .copybox pre{margin:0;white-space:pre-wrap;word-break:break-word}
+  .sr-only{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 </style>
 </head>
 <body>
@@ -55,104 +59,112 @@
     <div class="brand">
       <div class="logo" aria-hidden="true"></div>
       <div>
-        <div class="title">HD HeeD — Emails + Follow-ups (Zoho)</div>
-        <div class="sub">Single page: templates + tracking • Next-in-sequence • Send via Zoho</div>
+        <div class="title">HD HeeD — Master Follow-Up Sequencer</div>
+        <div class="sub">7–10 step email sequences • progress tracking • Zoho one-click compose</div>
       </div>
     </div>
     <div class="toolbar">
-      <button id="export" class="btn">Export JSON</button>
-      <label class="btn" for="import">Import JSON</label>
-      <input id="import" type="file" class="sr-only" style="display:none" accept="application/json">
+      <button id="export-json" class="btn">Export JSON</button>
+      <label class="btn" for="import-json">Import JSON</label>
+      <input id="import-json" type="file" class="sr-only" accept="application/json">
+      <button id="export-csv" class="btn">Export CSV</button>
+      <label class="btn" for="import-csv">Import CSV</label>
+      <input id="import-csv" type="file" class="sr-only" accept=".csv,text/csv">
       <button id="reset" class="btn danger">Reset Local</button>
     </div>
   </header>
 
+  <!-- Settings -->
   <section class="card">
-    <h2>Sending Mode</h2>
+    <h2>Settings</h2>
     <div class="hr"></div>
     <div class="row-s">
       <div>
-        <label for="send-mode">Choose how “Email” works</label>
-        <select id="send-mode">
-          <option value="zoho-compose">Open Zoho Compose (prefilled)</option>
-          <option value="zoho-webhook">Send via Zoho (Webhook server-side)</option>
-          <option value="mailto">Open default mail app (mailto:)</option>
+        <label for="seq-len">Sequence length (7–10)</label>
+        <select id="seq-len">
+          <option>7</option><option>8</option><option>9</option><option>10</option>
         </select>
       </div>
       <div>
-        <label for="zoho-domain">Zoho domain</label>
+        <label for="default-gap">Default gap between emails (days)</label>
+        <input id="default-gap" type="number" min="1" max="14" value="3">
+      </div>
+    </div>
+    <div class="row-s" style="margin-top:8px">
+      <div>
+        <label for="zoho-domain">Zoho Domain</label>
         <select id="zoho-domain">
           <option value="mail.zoho.com">mail.zoho.com</option>
           <option value="mail.zoho.eu">mail.zoho.eu</option>
           <option value="mail.zoho.in">mail.zoho.in</option>
         </select>
       </div>
-    </div>
-    <div class="row-s" style="margin-top:8px">
       <div>
         <label for="from-name">From name (shown to recipients)</label>
         <input id="from-name" placeholder="HD HeeD">
       </div>
+    </div>
+    <div class="row-s" style="margin-top:8px">
       <div>
-        <label for="webhook-url">Zoho Flow Webhook URL (for server-side send)</label>
-        <input id="webhook-url" placeholder="https://flow.zoho.com/.../hook/xxxxxxxx">
+        <label for="initials">Your initials (for notes)</label>
+        <input id="initials" placeholder="HS">
+      </div>
+      <div>
+        <label for="business-hour">Target send time (HH:MM)</label>
+        <input id="business-hour" type="time" value="09:00">
       </div>
     </div>
     <div class="small muted" style="margin-top:6px">
-      Tip: For true “send-as <strong>info@hdheed.com.au</strong>” directly from the page, use a <strong>Zoho Flow</strong> webhook that calls Zoho Mail “Send mail” on your behalf. No credentials in the browser.
+      “Send Next” opens Zoho compose in a new tab with To/Subject/Body prefilled. You can increase/reduce the sequence length anytime — templates adjust instantly.
     </div>
   </section>
 
-  <div class="grid">
-    <!-- Templates (combines /emails.html) -->
-    <section class="card" id="templates">
+  <div class="grid" style="margin-top:16px">
+    <!-- Templates editor -->
+    <section class="card" id="templates-card">
       <div class="row">
-        <h2>Email Templates</h2>
-        <span class="pill" id="seq-pill">4 steps</span>
-        <span class="right small muted">Use {{Name}} and {{Company}}</span>
+        <h2>Templates</h2>
+        <span class="pill" id="pill-len">7 steps</span>
+        <span class="right small muted">Use {{Name}} and {{Company}} placeholders</span>
       </div>
       <div class="hr"></div>
-
-      <div class="row-s">
-        <div>
-          <label for="seq-len">Sequence length (start with 4, add more later)</label>
-          <select id="seq-len">
-            <option>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
-          </select>
-        </div>
-        <div>
-          <label for="initials">Your initials (for notes)</label>
-          <input id="initials" placeholder="HS">
-        </div>
-      </div>
-
-      <div id="tpl-box" style="margin-top:8px"></div>
-
+      <div id="tpl-box"></div>
       <div class="row" style="margin-top:8px">
         <button id="save-templates" class="btn primary">Save Templates</button>
       </div>
     </section>
 
-    <!-- Follow-up tracker (combines /followup.html) -->
-    <section class="card" id="contacts-card">
+    <!-- Contacts & pipeline -->
+    <section class="card">
       <div class="row">
-        <h2>Contacts & Sequence</h2>
+        <h2>Contacts</h2>
         <span class="right row">
           <input id="search" placeholder="Search name/email/company…">
+          <select id="filter-status">
+            <option value="">All statuses</option>
+            <option value="Active">Active</option>
+            <option value="Paused">Paused</option>
+            <option value="Completed">Completed</option>
+          </select>
           <button id="add-contact" class="btn ok">+ Add Contact</button>
         </span>
       </div>
       <div class="hr"></div>
-      <div class="small muted">Add up to 20+ contacts. “Email” auto-picks the next template in the sequence.</div>
 
-      <table style="margin-top:8px">
+      <div class="row">
+        <div class="pill">Due Today: <span id="due-count">0</span></div>
+        <button id="view-due" class="btn ghost">Show Due List</button>
+      </div>
+
+      <table id="tbl" style="margin-top:10px">
         <thead>
           <tr>
-            <th>Name / Company</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th>Last Sent</th>
-            <th>Next Email</th>
+            <th data-sort="name">Name / Company</th>
+            <th data-sort="email">Email</th>
+            <th data-sort="status">Status</th>
+            <th data-sort="last">Last Sent</th>
+            <th data-sort="next">Next (step / due)</th>
+            <th data-sort="progress">Progress</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -171,12 +183,19 @@
           </td>
           <td class="c-email mono"></td>
           <td><span class="tag c-status">Active</span></td>
-          <td><div class="c-last mono small">—</div></td>
-          <td><span class="tag warn c-next">Email 1</span></td>
+          <td class="c-last mono small">—</td>
+          <td>
+            <div class="c-next mono small">Email 1</div>
+            <div class="small muted c-due">—</div>
+          </td>
+          <td style="min-width:160px">
+            <div class="progress"><span class="c-prog" style="width:0%"></span></div>
+            <div class="small muted c-prog-label"></div>
+          </td>
           <td>
             <div class="toolbar">
               <button class="btn btn-preview">Preview</button>
-              <button class="btn primary btn-email">Email</button>
+              <button class="btn primary btn-send">Send Next</button>
               <button class="btn ok btn-mark">Mark Sent</button>
               <button class="btn danger btn-del">Delete</button>
             </div>
@@ -194,26 +213,20 @@
     </div>
     <div class="hr"></div>
     <div class="row-s">
-      <div>
-        <label>Subject</label>
-        <input id="pv-subj" readonly>
-      </div>
-      <div>
-        <label>To</label>
-        <input id="pv-to" readonly>
-      </div>
+      <div><label>Subject</label><input id="pv-subj" readonly></div>
+      <div><label>To</label><input id="pv-to" readonly></div>
     </div>
     <div style="margin-top:8px">
       <label>Body</label>
-      <div class="copy-box"><pre id="pv-body"></pre></div>
+      <div class="copybox"><pre id="pv-body"></pre></div>
     </div>
     <div class="row" style="margin-top:8px">
       <button id="pv-copy" class="btn primary">Copy Body</button>
-      <button id="pv-send" class="btn ok">Email (using current mode)</button>
+      <button id="pv-send" class="btn ok">Send Next (Zoho)</button>
     </div>
   </section>
 
-  <!-- Add contact editor -->
+  <!-- Add/Edit Contact -->
   <section class="card" id="editor" style="display:none;margin-top:16px">
     <div class="row">
       <h2 id="ed-title">Add Contact</h2>
@@ -233,7 +246,7 @@
     </div>
   </section>
 
-  <!-- Notes panel -->
+  <!-- Notes -->
   <section class="card" id="notes" style="display:none;margin-top:16px">
     <div class="row">
       <h2>Notes — <span id="notes-for">Contact</span></h2>
@@ -249,12 +262,18 @@
 </div>
 
 <script>
-/* =================== STORAGE & STATE =================== */
+/* =================== PERSISTENCE & STATE =================== */
 const LS = {
-  contacts: "hdheed_fx_contacts_v1",
-  templates: "hdheed_fx_templates_v1",
-  settings: "hdheed_fx_settings_v1",
+  contacts: "hdheed_master_contacts_v1",
+  templates: "hdheed_master_templates_v1",
+  settings: "hdheed_master_settings_v1"
 };
+const $ = (s, r=document)=>r.querySelector(s);
+const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+const rid = ()=>Math.random().toString(36).slice(2,10);
+const nowISO = ()=>new Date().toISOString();
+const fmt = d=>d? new Date(d).toLocaleString(): "—";
+const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
 
 function lsGet(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch{ return d; } }
 function lsSet(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
@@ -263,18 +282,21 @@ const state = {
   contacts: lsGet(LS.contacts, []),
   templates: lsGet(LS.templates, null),
   settings: lsGet(LS.settings, {
-    seqLen: 4,
-    sendMode: "zoho-compose",
+    seqLen: 7,
+    defaultGap: 3,
     zohoDomain: "mail.zoho.com",
-    webhookUrl: "",
     fromName: "HD HeeD",
-    initials: "HS"
+    initials: "HS",
+    businessTime: "09:00",
+    sortKey: "name",
+    sortDir: 1
   }),
-  filter: ""
+  filter: "",
+  filterStatus: ""
 };
 
-/* ===== Default 4 templates from your current emails.html (replace with your content) ===== */
-const DEFAULT_4 = [
+/* ===== Initial 4 templates (replace with your exact current 4 if you want) ===== */
+const BASE4 = [
   { step:1, subject:"Welcome to HD HeeD — getting supports started", body:
 `Hi {{Name}},
 
@@ -307,83 +329,68 @@ We can organise visits quickly (often within a week). If you’d like, send a br
 Thanks,
 Team HD HeeD` },
 ];
-
-/* Build initial templates if none saved */
 function ensureTemplates(){
   if(!state.templates){
-    state.templates = DEFAULT_4.map(t => ({ id:rid(), active:true, ...t }));
+    // start with 7 using base4 then generic
+    const out = [];
+    for(let i=1;i<=7;i++){
+      const base = BASE4.find(b=>b.step===i);
+      out.push({ id:rid(), step:i, active:true,
+        subject: base?base.subject:`Email ${i}`,
+        body: base?base.body:`Hi {{Name}},\n\n...\n\nTeam HD HeeD`
+      });
+    }
+    state.templates = out;
     lsSet(LS.templates, state.templates);
   }
 }
 
-/* =================== UTIL =================== */
-const $ = (s, r=document)=>r.querySelector(s);
-const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
-const rid = ()=>Math.random().toString(36).slice(2,10);
-const nowISO = ()=>new Date().toISOString();
-const fmt = d=>d? new Date(d).toLocaleString(): "—";
-function escapeHtml(s=""){return s.replace(/[&<>"']/g,c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));}
-
-/* =================== INIT UI =================== */
-document.addEventListener("DOMContentLoaded", () => {
-  ensureTemplates();
-  // settings
+/* =================== SETTINGS UI =================== */
+function initSettings(){
   $("#seq-len").value = String(state.settings.seqLen);
-  $("#send-mode").value = state.settings.sendMode;
+  $("#default-gap").value = String(state.settings.defaultGap);
   $("#zoho-domain").value = state.settings.zohoDomain;
-  $("#webhook-url").value = state.settings.webhookUrl;
   $("#from-name").value = state.settings.fromName;
   $("#initials").value = state.settings.initials;
-  updateSeqPill();
+  $("#business-hour").value = state.settings.businessTime;
+  $("#pill-len").textContent = `${state.settings.seqLen} steps`;
 
-  renderTemplates();
-  renderContacts();
-
-  // binds
-  $("#save-templates").addEventListener("click", saveTemplatesFromUI);
-  $("#seq-len").addEventListener("change", onSeqLenChange);
-  $("#send-mode").addEventListener("change", e=>{state.settings.sendMode=e.target.value; saveSettings();});
-  $("#zoho-domain").addEventListener("change", e=>{state.settings.zohoDomain=e.target.value; saveSettings();});
-  $("#webhook-url").addEventListener("change", e=>{state.settings.webhookUrl=e.target.value.trim(); saveSettings();});
-  $("#from-name").addEventListener("change", e=>{state.settings.fromName=e.target.value.trim(); saveSettings();});
-  $("#initials").addEventListener("change", e=>{state.settings.initials=e.target.value.trim(); saveSettings();});
-
-  $("#add-contact").addEventListener("click", ()=>openEditor());
-  $("#ed-cancel").addEventListener("click", ()=>$("#editor").style.display="none");
-  $("#ed-save").addEventListener("click", saveContactFromEditor);
-
-  $("#search").addEventListener("input", e=>{ state.filter = e.target.value.toLowerCase(); renderContacts(); });
-
-  $("#pv-close").addEventListener("click", ()=>$("#preview").style.display="none");
-  $("#pv-copy").addEventListener("click", ()=>navigator.clipboard.writeText($("#pv-body").textContent||""));
-  $("#pv-send").addEventListener("click", sendFromPreview);
-
-  $("#export").addEventListener("click", exportJSON);
-  $("#import").addEventListener("change", importJSON);
-  $("#reset").addEventListener("click", ()=>{ if(confirm("Reset all local data?")){ localStorage.removeItem(LS.contacts); localStorage.removeItem(LS.templates); localStorage.removeItem(LS.settings); location.reload(); }});
-});
-
-/* =================== SETTINGS =================== */
-function saveSettings(){ lsSet(LS.settings, state.settings); }
-function onSeqLenChange(e){
-  const n = parseInt(e.target.value,10);
-  state.settings.seqLen = n; saveSettings();
-  // grow/shrink templates
-  if(state.templates.length < n){
-    const start = state.templates.length + 1;
-    for(let step=start; step<=n; step++){
-      state.templates.push({ id:rid(), step, active:true, subject:`Email ${step}`, body:`Hi {{Name}},\n\n...\n\nTeam HD HeeD` });
+  $("#seq-len").addEventListener("change", e=>{
+    const n = clamp(parseInt(e.target.value,10),7,10);
+    state.settings.seqLen = n; lsSet(LS.settings, state.settings);
+    // grow/shrink templates
+    if(state.templates.length < n){
+      for(let s=state.templates.length+1; s<=n; s++){
+        state.templates.push({ id:rid(), step:s, active:true, subject:`Email ${s}`, body:`Hi {{Name}},\n\n...\n\nTeam HD HeeD` });
+      }
+    }else if(state.templates.length > n){
+      state.templates = state.templates.slice(0,n);
     }
-  }else if(state.templates.length > n){
-    state.templates = state.templates.slice(0, n);
-  }
-  lsSet(LS.templates, state.templates);
-  updateSeqPill();
-  renderTemplates();
+    lsSet(LS.templates, state.templates);
+    $("#pill-len").textContent = `${n} steps`;
+    renderTemplates();
+    renderContacts();
+  });
+  $("#default-gap").addEventListener("change", e=>{
+    state.settings.defaultGap = clamp(parseInt(e.target.value,10)||3,1,14);
+    lsSet(LS.settings, state.settings);
+    renderContacts();
+  });
+  $("#zoho-domain").addEventListener("change", e=>{
+    state.settings.zohoDomain = e.target.value; lsSet(LS.settings, state.settings);
+  });
+  $("#from-name").addEventListener("change", e=>{
+    state.settings.fromName = e.target.value.trim()||"HD HeeD"; lsSet(LS.settings, state.settings);
+  });
+  $("#initials").addEventListener("change", e=>{
+    state.settings.initials = e.target.value.trim()||"HS"; lsSet(LS.settings, state.settings);
+  });
+  $("#business-hour").addEventListener("change", e=>{
+    state.settings.businessTime = e.target.value || "09:00"; lsSet(LS.settings, state.settings);
+  });
 }
-function updateSeqPill(){ $("#seq-pill").textContent = `${state.settings.seqLen} steps`; }
 
-/* =================== TEMPLATES UI =================== */
+/* =================== TEMPLATE UI =================== */
 function renderTemplates(){
   const box = $("#tpl-box"); box.innerHTML = "";
   state.templates.sort((a,b)=>a.step-b.step).forEach(t=>{
@@ -410,7 +417,7 @@ function renderTemplates(){
     box.appendChild(div);
   });
 }
-function saveTemplatesFromUI(){
+function saveTemplates(){
   const map = Object.fromEntries(state.templates.map(t=>[t.id,t]));
   $$("#tpl-box [data-id]").forEach(el=>{
     const id = el.dataset.id, k = el.dataset.k;
@@ -422,72 +429,144 @@ function saveTemplatesFromUI(){
   alert("Templates saved.");
 }
 
-/* =================== CONTACTS =================== */
-function renderContacts(){
-  const tbody = $("#rows"); tbody.innerHTML = "";
-  state.contacts
-    .filter(c=>{
-      if(!state.filter) return true;
-      const k = `${c.name||""} ${c.email||""} ${c.company||""}`.toLowerCase();
-      return k.includes(state.filter);
-    })
-    .sort((a,b)=>(a.name||"").localeCompare(b.name||""))
-    .forEach(c=> tbody.appendChild(renderRow(c)));
+/* =================== CONTACTS CORE =================== */
+function nextStepFor(c){
+  if((c.status||"Active")==="Completed") return 0;
+  const last = c.lastSent||0, N = state.settings.seqLen;
+  for(let s=last+1; s<=N; s++){
+    const tpl = state.templates.find(t=>t.step===s);
+    if(tpl && tpl.active!==false) return s;
+  }
+  return 0;
 }
-function renderRow(c){
+function dueDateFor(c){
+  // If nothing sent yet: today at business time
+  const gap = state.settings.defaultGap;
+  const [hh,mm] = (state.settings.businessTime||"09:00").split(":").map(x=>parseInt(x,10)||0);
+  const d = new Date();
+  if(!c.lastSentAt){ d.setHours(hh,mm,0,0); return d; }
+  const base = new Date(c.lastSentAt);
+  base.setDate(base.getDate()+gap);
+  base.setHours(hh,mm,0,0);
+  return base;
+}
+function progressPct(c){
+  const N = state.settings.seqLen;
+  const done = Math.min(c.lastSent||0, N);
+  return Math.round((done/N)*100);
+}
+
+/* =================== CONTACTS UI =================== */
+function renderContacts(){
+  // due today count
+  const today = new Date();
+  today.setHours(23,59,59,999);
+  const due = state.contacts.filter(c=>{
+    if((c.status||"Active")!=="Active") return false;
+    const step = nextStepFor(c);
+    if(!step) return false;
+    return dueDateFor(c) <= today;
+  });
+  $("#due-count").textContent = String(due.length);
+
+  // filter + sort
+  const rows = state.contacts
+    .filter(c=>{
+      if(state.filter){
+        const k = `${c.name||""} ${c.email||""} ${c.company||""}`.toLowerCase();
+        if(!k.includes(state.filter)) return false;
+      }
+      if(state.filterStatus){
+        if((c.status||"Active")!==state.filterStatus) return false;
+      }
+      return true;
+    })
+    .sort(bySort(state.settings.sortKey, state.settings.sortDir));
+
+  const tbody = $("#rows"); tbody.innerHTML = "";
+  rows.forEach(c=> tbody.appendChild(rowFor(c)));
+
+  // sortable headers
+  $$("#tbl th[data-sort]").forEach(th=>{
+    th.onclick = ()=>{
+      const key = th.dataset.sort;
+      if(state.settings.sortKey===key){ state.settings.sortDir *= -1; } else { state.settings.sortKey = key; state.settings.sortDir = 1; }
+      lsSet(LS.settings, state.settings);
+      renderContacts();
+    };
+  });
+}
+function bySort(key, dir){
+  return (a,b)=>{
+    const v = (k,obj)=>{
+      if(k==="name") return (obj.name||"").toLowerCase();
+      if(k==="email") return (obj.email||"").toLowerCase();
+      if(k==="status") return (obj.status||"");
+      if(k==="last") return obj.lastSentAt||"";
+      if(k==="next") return nextStepFor(obj)||999;
+      if(k==="progress") return progressPct(obj);
+      return (obj.name||"");
+    };
+    const va = v(key,a), vb = v(key,b);
+    if(va<vb) return -1*dir;
+    if(va>vb) return 1*dir;
+    return 0;
+  };
+}
+function rowFor(c){
   const tpl = $("#row-tpl").content.cloneNode(true);
   const tr = tpl.querySelector("tr");
   tr.dataset.id = c.id;
   $(".c-name",tr).textContent = c.name || "—";
   $(".c-company",tr).textContent = c.company || "";
   $(".c-email",tr).textContent = c.email || "—";
-  const status = c.status || "Active";
-  const statusEl = $(".c-status",tr);
-  statusEl.textContent = status;
-  statusEl.className = "tag c-status " + (status==="Completed"?"ok":status==="Paused"?"warn":"");
+
+  const status = c.status||"Active";
+  const st = $(".c-status",tr); st.textContent = status;
+  st.className = "tag c-status " + (status==="Paused"?"warn":status==="Completed"?"ok":"");
+
   $(".c-last",tr).textContent = c.lastSent? `Email ${c.lastSent} @ ${fmt(c.lastSentAt)}` : "—";
-  const next = nextEmail(c);
+
+  const next = nextStepFor(c);
   $(".c-next",tr).textContent = next? `Email ${next}` : "Done";
-  $(".c-next",tr).className = "tag " + (next? "warn c-next":"ok c-next");
+  $(".c-due",tr).textContent = next? `Due: ${fmt(dueDateFor(c))}` : "—";
+
+  const pct = progressPct(c);
+  $(".c-prog",tr).style.width = pct+"%";
+  $(".c-prog-label",tr).textContent = `${pct}% (${c.lastSent||0}/${state.settings.seqLen})`;
+
   $(".notes-count",tr).textContent = String(c.notes?.length||0);
 
-  $(".btn-notes",tr).addEventListener("click", ()=>openNotes(c.id));
-  $(".btn-preview",tr).addEventListener("click", ()=>preview(c.id));
-  $(".btn-email",tr).addEventListener("click", ()=>sendNext(c.id));
-  $(".btn-mark",tr).addEventListener("click", ()=>markSent(c.id));
-  $(".btn-del",tr).addEventListener("click", ()=>delContact(c.id));
+  $(".btn-notes",tr).onclick = ()=>openNotes(c.id);
+  $(".btn-preview",tr).onclick = ()=>openPreview(c.id);
+  $(".btn-send",tr).onclick = ()=>sendNext(c.id);
+  $(".btn-mark",tr).onclick = ()=>markSent(c.id);
+  $(".btn-del",tr).onclick = ()=>delContact(c.id);
 
   return tr;
 }
-function nextEmail(c){
-  if((c.status||"Active")==="Completed") return 0;
-  const last = c.lastSent||0, N = state.settings.seqLen;
-  for(let s=last+1; s<=N; s++){
-    const t = state.templates.find(x=>x.step===s);
-    if(t && t.active!==false) return s;
-  }
-  return 0;
-}
+
+/* =================== EDITOR, NOTES, PREVIEW =================== */
 function openEditor(contact){
   $("#editor").style.display = "";
   $("#ed-title").textContent = contact? "Edit Contact":"Add Contact";
   $("#ed-name").value = contact?.name || "";
   $("#ed-email").value = contact?.email || "";
   $("#ed-company").value = contact?.company || "";
-  $("#ed-initials").value = state.settings.initials || "";
+  $("#ed-initials").value = state.settings.initials || "HS";
   $("#editor").dataset.id = contact?.id || "";
   $("#ed-name").focus();
 }
-function saveContactFromEditor(){
+function saveContact(){
   const id = $("#editor").dataset.id || "";
   const obj = {
     id: id || rid(),
     name: $("#ed-name").value.trim(),
     email: $("#ed-email").value.trim(),
-    company: $("#ed-company").value.trim(),
+    company: $("#ed-company").value.trim()
   };
-  const initials = $("#ed-initials").value.trim();
-  if(initials){ state.settings.initials = initials; saveSettings(); }
+  const ini = $("#ed-initials").value.trim();
+  if(ini){ state.settings.initials = ini; lsSet(LS.settings, state.settings); }
   if(id){
     const i = state.contacts.findIndex(x=>x.id===id);
     if(i>=0) state.contacts[i] = {...state.contacts[i], ...obj};
@@ -498,93 +577,7 @@ function saveContactFromEditor(){
   $("#editor").style.display="none";
   renderContacts();
 }
-function markSent(id){
-  const c = state.contacts.find(x=>x.id===id); if(!c) return;
-  const step = nextEmail(c);
-  if(!step){ alert("Sequence complete."); return; }
-  c.lastSent = step; c.lastSentAt = nowISO();
-  if(step>=state.settings.seqLen) c.status = "Completed";
-  lsSet(LS.contacts, state.contacts);
-  // auto note
-  addNoteInternal(c.id, `${state.settings.initials||"User"} marked Email ${step} as sent.`);
-  renderContacts();
-}
-function delContact(id){
-  if(!confirm("Delete this contact?")) return;
-  state.contacts = state.contacts.filter(x=>x.id!==id);
-  lsSet(LS.contacts, state.contacts);
-  renderContacts();
-}
 
-/* =================== PREVIEW / SEND =================== */
-function buildEmail(c, step){
-  const tpl = state.templates.find(t=>t.step===step);
-  const name = c.name || "there";
-  const company = c.company || "";
-  const subject = (tpl?.subject||"").replaceAll("{{Name}}", name).replaceAll("{{Company}}", company);
-  const body = (tpl?.body||"").replaceAll("{{Name}}", name).replaceAll("{{Company}}", company);
-  return { subject, body };
-}
-function preview(id){
-  const c = state.contacts.find(x=>x.id===id); if(!c) return;
-  const step = nextEmail(c); if(!step) return alert("Sequence complete.");
-  const {subject, body} = buildEmail(c, step);
-  $("#pv-subj").value = subject||"(no subject)";
-  $("#pv-to").value = c.email||"";
-  $("#pv-body").textContent = body||"";
-  $("#preview").dataset.id = id;
-  $("#preview").style.display = "";
-}
-function sendFromPreview(){
-  const id = $("#preview").dataset.id; if(!id) return;
-  sendNext(id);
-}
-function sendNext(id){
-  const c = state.contacts.find(x=>x.id===id); if(!c) return;
-  const step = nextEmail(c); if(!step) return alert("Sequence complete.");
-  const {subject, body} = buildEmail(c, step);
-  const mode = state.settings.sendMode;
-
-  if(mode==="mailto"){
-    const url = `mailto:${encodeURIComponent(c.email||"")}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = url;
-    return;
-  }
-  if(mode==="zoho-compose"){
-    // Opens Zoho webmail compose with prefilled to/subject/body
-    // Works best when user is logged into Zoho Mail in the browser.
-    const dom = state.settings.zohoDomain;
-    const url = `https://${dom}/zm/#compose?to=${encodeURIComponent(c.email||"")}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.open(url, "_blank");
-    return;
-  }
-  if(mode==="zoho-webhook"){
-    const hook = state.settings.webhookUrl;
-    if(!hook){ alert("Add Zoho Flow Webhook URL in Sending Mode section."); return; }
-    fetch(hook, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({
-        to: c.email||"",
-        subject,
-        body,
-        fromName: state.settings.fromName || "HD HeeD",
-        // EXTRA context (handy in Flow): 
-        contact: { id:c.id, name:c.name||"", company:c.company||"" },
-        step
-      })
-    }).then(r=>{
-      if(!r.ok) throw new Error("Webhook failed");
-      return r.text();
-    }).then(()=>{
-      alert("Sent via Zoho webhook.");
-    }).catch(e=>{
-      alert("Send failed: " + e.message);
-    });
-    return;
-  }
-}
-/* =================== NOTES =================== */
 let NOTES_ID = "";
 function openNotes(id){
   const c = state.contacts.find(x=>x.id===id); if(!c) return;
@@ -596,79 +589,221 @@ function openNotes(id){
     div.style.marginBottom = "8px";
     div.innerHTML = `
       <div class="small muted">${new Date(n.at).toLocaleString()} — <strong>${escapeHtml(n.by||"")}</strong></div>
-      <div>${escapeHtml(n.text||"")}</div>
-    `;
+      <div>${escapeHtml(n.text||"")}</div>`;
     box.appendChild(div);
   });
-  if(!c.notes?.length){ box.innerHTML = `<div class="small muted">No notes yet.</div>`; }
+  if(!c.notes?.length) box.innerHTML = `<div class="small muted">No notes yet.</div>`;
   $("#note-text").value = "";
   $("#notes").style.display = "";
 }
 function addNote(){
   const t = $("#note-text").value.trim(); if(!t) return;
-  addNoteInternal(NOTES_ID, t);
+  const c = state.contacts.find(x=>x.id===NOTES_ID); if(!c) return;
+  c.notes = c.notes || [];
+  c.notes.push({ at: nowISO(), by:(state.settings.initials||"User"), text: t });
+  lsSet(LS.contacts, state.contacts);
   openNotes(NOTES_ID);
 }
-function addNoteInternal(id, text){
-  const c = state.contacts.find(x=>x.id===id); if(!c) return;
-  c.notes = c.notes || [];
-  c.notes.push({ at: nowISO(), by: (state.settings.initials||"User"), text });
-  lsSet(LS.contacts, state.contacts);
-}
-$("#notes-close")?.addEventListener("click", ()=>$("#notes").style.display="none");
 
-/* =================== IMPORT / EXPORT =================== */
+function buildEmail(c, step){
+  const tpl = state.templates.find(t=>t.step===step);
+  const name = c.name || "there";
+  const company = c.company || "";
+  const subject = (tpl?.subject||"").replaceAll("{{Name}}", name).replaceAll("{{Company}}", company);
+  const body = (tpl?.body||"").replaceAll("{{Name}}", name).replaceAll("{{Company}}", company);
+  return { subject, body };
+}
+function openPreview(id){
+  const c = state.contacts.find(x=>x.id===id); if(!c) return;
+  const step = nextStepFor(c); if(!step) return alert("Sequence complete.");
+  const { subject, body } = buildEmail(c, step);
+  $("#preview").dataset.id = id;
+  $("#pv-subj").value = subject||"(no subject)";
+  $("#pv-to").value = c.email||"";
+  $("#pv-body").textContent = body||"";
+  $("#preview").style.display = "";
+}
+function sendFromPreview(){
+  const id = $("#preview").dataset.id; if(!id) return;
+  sendNext(id);
+}
+function sendNext(id){
+  const c = state.contacts.find(x=>x.id===id); if(!c) return;
+  const step = nextStepFor(c); if(!step) return alert("Sequence complete.");
+  const { subject, body } = buildEmail(c, step);
+  const dom = state.settings.zohoDomain || "mail.zoho.com";
+  // Open Zoho Mail compose in new tab:
+  const url = `https://${dom}/zm/#compose?to=${encodeURIComponent(c.email||"")}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(url, "_blank");
+}
+
+/* =================== MARK, DELETE, DUE LIST =================== */
+function markSent(id){
+  const c = state.contacts.find(x=>x.id===id); if(!c) return;
+  const step = nextStepFor(c);
+  if(!step){ alert("Sequence complete."); return; }
+  c.lastSent = step;
+  c.lastSentAt = nowISO();
+  if(step>=state.settings.seqLen) c.status = "Completed";
+  lsSet(LS.contacts, state.contacts);
+  // auto note
+  const by = state.settings.initials||"User";
+  (c.notes = c.notes||[]).push({ at: nowISO(), by, text:`Marked Email ${step} as sent.` });
+  lsSet(LS.contacts, state.contacts);
+  renderContacts();
+}
+function delContact(id){
+  if(!confirm("Delete this contact?")) return;
+  state.contacts = state.contacts.filter(x=>x.id!==id);
+  lsSet(LS.contacts, state.contacts);
+  renderContacts();
+}
+
+/* =================== IMPORT/EXPORT =================== */
 function exportJSON(){
-  const blob = new Blob([JSON.stringify({contacts:state.contacts, templates:state.templates, settings:state.settings},null,2)],{type:"application/json"});
+  const blob = new Blob([JSON.stringify({contacts:state.contacts,templates:state.templates,settings:state.settings},null,2)],{type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = `hdheed-followups-${new Date().toISOString().slice(0,10)}.json`;
   a.click();
 }
-async function importJSON(e){
-  const f = e.target.files?.[0]; if(!f) return;
-  const text = await f.text();
+async function importJSONFile(file){
+  const text = await file.text();
   const data = JSON.parse(text);
-  if(!confirm("Import will overwrite current local data. Continue?")) return;
+  if(!confirm("Import will overwrite local data. Continue?")) return;
   if(data.contacts) state.contacts = data.contacts;
   if(data.templates) state.templates = data.templates;
-  if(data.settings) state.settings = data.settings;
+  if(data.settings) state.settings = {...state.settings, ...data.settings};
   lsSet(LS.contacts, state.contacts); lsSet(LS.templates, state.templates); lsSet(LS.settings, state.settings);
   location.reload();
 }
+function exportCSV(){
+  // contacts only (for spreadsheets)
+  const headers = ["id","name","email","company","status","lastSent","lastSentAt","notesCount"];
+  const rows = state.contacts.map(c=>[
+    c.id, q(c.name), q(c.email), q(c.company), c.status||"Active", c.lastSent||0, c.lastSentAt||"", (c.notes||[]).length
+  ]);
+  const csv = [headers.join(","), ...rows.map(r=>r.join(","))].join("\n");
+  const blob = new Blob([csv],{type:"text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `hdheed-contacts-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  function q(s){ const t = (s??"").toString().replace(/"/g,'""'); return `"${t}"`; }
+}
+async function importCSVFile(file){
+  const text = await file.text();
+  const lines = text.split(/\r?\n/).filter(Boolean);
+  if(lines.length<2) return alert("CSV has no data");
+  const hdr = lines[0].split(",");
+  const rows = lines.slice(1).map(l=>parseCSVLine(l));
+  rows.forEach(r=>{
+    const obj = Object.fromEntries(hdr.map((h,i)=>[h.trim(), r[i]??""]));
+    // upsert by email (or id if provided)
+    const id = obj.id || rid();
+    const idx = obj.email? state.contacts.findIndex(x=>x.email===obj.email) : -1;
+    const c = {
+      id,
+      name: obj.name||"",
+      email: obj.email||"",
+      company: obj.company||"",
+      status: obj.status||"Active",
+      lastSent: Number(obj.lastSent||0),
+      lastSentAt: obj.lastSentAt||"",
+      notes: []
+    };
+    if(idx>=0) state.contacts[idx] = {...state.contacts[idx], ...c};
+    else state.contacts.push(c);
+  });
+  lsSet(LS.contacts, state.contacts);
+  renderContacts();
+}
+function parseCSVLine(line){
+  const out=[]; let cur="", inq=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"' && line[i+1]==='"'){ cur+='"'; i++; continue; }
+    if(ch==='"'){ inq=!inq; continue; }
+    if(ch===',' && !inq){ out.push(cur); cur=""; continue; }
+    cur+=ch;
+  }
+  out.push(cur); return out;
+}
 
-/* =================== KEYBOARD SHORTCUTS =================== */
-document.addEventListener("keydown", (e)=>{
-  if(e.key==="/"){ e.preventDefault(); $("#search").focus(); }
-  if(e.key.toLowerCase()==="n"){ openEditor(); }
-});
+/* =================== HELPERS =================== */
+function escapeHtml(s=""){return s.replace(/[&<>"']/g,c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));}
 
-/* =================== END =================== */
+/* =================== INIT =================== */
+function init(){
+  ensureTemplates();
+  initSettings();
+  renderTemplates();
+  renderContacts();
+
+  $("#save-templates").onclick = saveTemplates;
+
+  $("#search").oninput = e=>{ state.filter = e.target.value.toLowerCase(); renderContacts(); };
+  $("#filter-status").onchange = e=>{ state.filterStatus = e.target.value; renderContacts(); };
+
+  $("#add-contact").onclick = ()=>openEditor();
+  $("#ed-cancel").onclick = ()=>$("#editor").style.display="none";
+  $("#ed-save").onclick = ()=>saveContact();
+
+  $("#note-add").onclick = ()=>addNote();
+  $("#notes-close").onclick = ()=>$("#notes").style.display="none";
+
+  $("#pv-copy").onclick = ()=>navigator.clipboard.writeText($("#pv-body").textContent||"");
+  $("#pv-send").onclick = ()=>sendFromPreview();
+  $("#pv-close").onclick = ()=>$("#preview").style.display="none";
+
+  $("#export-json").onclick = exportJSON;
+  $("#import-json").onchange = e=>{ const f=e.target.files?.[0]; if(f) importJSONFile(f); };
+  $("#export-csv").onclick = exportCSV;
+  $("#import-csv").onchange = e=>{ const f=e.target.files?.[0]; if(f) importCSVFile(f); };
+  $("#reset").onclick = ()=>{ if(confirm("Reset ALL local data?")){ localStorage.removeItem(LS.contacts); localStorage.removeItem(LS.templates); localStorage.removeItem(LS.settings); location.reload(); }};
+
+  // shortcuts
+  document.addEventListener("keydown",(e)=>{
+    if(e.key==="/"){ e.preventDefault(); $("#search").focus(); }
+    if(e.key.toLowerCase()==="n"){ openEditor(); }
+  });
+
+  // Due list quick view
+  $("#view-due").onclick = ()=>{
+    const today = new Date(); today.setHours(23,59,59,999);
+    const due = state.contacts.filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
+    if(!due.length){ alert("No contacts due today."); return; }
+    const msg = due.map(c=>`• ${c.name||c.email||"Contact"} — Next: Email ${nextStepFor(c)} (Due ${fmt(dueDateFor(c))})`).join("\n");
+    alert(`Due today:\n\n${msg}`);
+  };
+}
+document.addEventListener("DOMContentLoaded", init);
+
+---
+
+# hdheed-sequencer.html — Part 2/2 (START)
+
+```html
+/***** END OF SCRIPT IN PART 1 — NOTHING TO EDIT BELOW THIS LINE *****/
 </script>
 
-<!-- Footer help -->
-<div class="wrap">
+<!-- Footer Help -->
+<div class="wrap" style="margin-bottom:40px">
   <section class="card" style="margin-top:16px">
     <h2>How to Use</h2>
     <div class="hr"></div>
     <ol class="small" style="line-height:1.6">
-      <li><strong>Templates:</strong> Your first 4 emails are preloaded. Edit them, then increase “Sequence length” to add steps 5–8. Click <em>Save Templates</em>.</li>
-      <li><strong>Contacts:</strong> Add name/email/company (optional). The table shows <em>Last Sent</em> and auto-suggests the <em>Next Email</em>.</li>
-      <li><strong>Email:</strong> Set <em>Sending Mode</em>:
-        <ul>
-          <li><em>Open Zoho Compose</em>: opens Zoho webmail with to/subject/body prefilled.</li>
-          <li><em>Zoho Webhook</em>: sends via Zoho Flow (server-side) as <strong>info@hdheed.com.au</strong>.</li>
-          <li><em>mailto:</em> opens your default mail client.</li>
-        </ul>
-      </li>
-      <li><strong>After sending</strong> click <em>Mark Sent</em> (auto-adds a note with your initials).</li>
-      <li><strong>Notes:</strong> Use <em>Notes</em> to log team comments (timestamped).</li>
-      <li><strong>Backup:</strong> Use <em>Export/Import JSON</em> to save/restore.</li>
+      <li><strong>Set sequence length:</strong> Choose 7–10 and edit subjects/bodies (use {{Name}} / {{Company}}). Click <em>Save Templates</em>.</li>
+      <li><strong>Add contacts:</strong> Name/email/company are optional. The app tracks last sent, next step, next due.</li>
+      <li><strong>Send next:</strong> Click <em>Send Next</em> — Zoho compose opens with To/Subject/Body prefilled. Press <em>Send</em> in Zoho.</li>
+      <li><strong>Mark sent:</strong> After sending, click <em>Mark Sent</em> (records timestamp, updates progress, auto-adds a note).</li>
+      <li><strong>Due list:</strong> Use <em>Due Today</em> to see who’s ready based on your default gap and target time.</li>
+      <li><strong>Import/Export:</strong> Use JSON for full backup/restore, CSV for spreadsheets. You can also paste your current 4 templates into step 1–4.</li>
     </ol>
-    <div class="small muted">Everything saves locally in your browser. If multiple staff share this page, set up Zoho Flow webhook to send from <strong>info@hdheed.com.au</strong> and (optionally) later we can add Google Sheet sync so everyone sees the same data.</div>
+    <div class="small muted">This version uses localStorage for persistence (zero backend). If you want multi-user shared data, we can wire a Google Sheet or Zoho Creator endpoint later with the same data model.</div>
   </section>
 
-  <footer class="small muted" style="text-align:center;margin:24px 0 40px">
+  <footer class="small muted" style="text-align:center;margin:24px 0 0">
     HD HeeD • “Because we care, we provide HD care.” • v1.0
   </footer>
 </div>
