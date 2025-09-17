@@ -9,7 +9,6 @@
 <meta name="theme-color" content="#0b0f1a" />
 
 <style>
-  /* Unchanged CSS */
   :root{
     --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153;
     --al-text:#e8edff; --al-accent:#ffc107; --al-ok:#22c55e; --al-warn:#f59e0b; --al-danger:#ef4444;
@@ -359,7 +358,7 @@ window.addEventListener('DOMContentLoaded', function(){
   function save(){
     try{
       var clone = cloneSafe(S);
-      if (clone.uploads) clone.uploads = { files: [] }; // keep uploads empty
+      if (clone.uploads) clone.uploads = { files: [] };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
       setSaveHint("Draft saved");
     }catch(e){}
@@ -598,17 +597,16 @@ window.addEventListener('DOMContentLoaded', function(){
         m.appendChild(row("two",[ input("Your name (submitter)", S.submitter, "name"), input("Email (required if no phone)", S.submitter, "email","email") ]));
         m.appendChild(input("Phone (required if no email)", S.submitter, "phone","tel"));
         var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
-        // Changed: Renamed btnSend to btnSubmit, removed potential duplicates
-        var btnSubmit = button("Submit","primary", function(){
+        var btnSend = button("Send Now","primary", function(){
           var hasEmail = S.submitter.email && S.submitter.email.trim();
           var hasPhone = S.submitter.phone && S.submitter.phone.trim();
           if (!(hasEmail || hasPhone)){
             alert("Please provide at least an email or a phone number to submit.");
             return;
           }
-          btnSubmit.disabled = true;
-          var oldTxt = btnSubmit.textContent;
-          btnSubmit.textContent = "Submitting…";
+          btnSend.disabled = true;
+          var oldTxt = btnSend.textContent;
+          btnSend.textContent = "Sending…";
           sendToFormspree().then(function(j){
             var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
             alert("All done — we’ve received your onboarding." + pdfMsg);
@@ -618,13 +616,14 @@ window.addEventListener('DOMContentLoaded', function(){
               stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div><div class="q">Thank you for your submission</div><p class="sub">We’ve received your referral and will be in touch soon.</p><div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
             }
           }).catch(function(e){
-            alert("Couldn’t submit right now. Please email info@hdheed.com.au or try again.\n\nError: " + (e && e.message ? e.message : e));
-            btnSubmit.disabled = false;
-            btnSubmit.textContent = oldTxt;
+            alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\nError: " + (e && e.message ? e.message : "Unknown error"));
+            btnSend.disabled = false;
+            btnSend.textContent = oldTxt;
           });
         });
+        // FIX: Removed btnSubmit to eliminate duplicate button
         var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
-        actions.appendChild(btnSubmit); // Changed: Only one submit button
+        actions.appendChild(btnSend);
         actions.appendChild(btnPdf);
         m.appendChild(actions);
         var hint = document.createElement('div'); hint.className="hint";
@@ -903,12 +902,12 @@ window.addEventListener('DOMContentLoaded', function(){
   function mapWindowsSummary(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
   function mapDaysSummary(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
 
+  // FIX: Improved sendToFormspree() with better error handling and retry logic
   function sendToFormspree(){
-    // Changed: Enhanced error logging, added retry, removed no-cors fallback
     var policyAck = {
-      handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-      incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-      complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
+      handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
+      incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
+      complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
     };
     var payload = {
       caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
@@ -928,15 +927,58 @@ window.addEventListener('DOMContentLoaded', function(){
         (S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")
       ].join("");
       var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
-      var daysSummary     = mapDaysSummary(S.schedule.days);
-      payload.supports.required_summary   = requiredSummary;
-      payload.supports.details_text       = S.supports.details_text || "";
-      payload.schedule.windows_summary    = windowsSummary;
-      payload.schedule.days_summary       = daysSummary;
+      var windowsSummary = mapWindowsSummary(S.schedule.windows);
+      var daysSummary = mapDaysSummary(S.schedule.days);
+      payload.supports.required_summary = requiredSummary;
+      payload.supports.details_text = S.supports.details_text || "";
+      payload.schedule.windows_summary = windowsSummary;
+      payload.schedule.days_summary = daysSummary;
       payload.participant.address_summary = addr;
-      payload.contacts.contact_summary    = contactSummary;
-    }catch(e){
-      console.error("Error building summaries:", e);
+      payload.contacts.contact_summary = contactSummary;
+    }catch(e){ console.error("Payload summary error:", e); }
+    
+    // FIX: Add retry logic and better error handling
+    async function trySend(attempt = 1, maxAttempts = 2) {
+      try {
+        const response = await fetch(GS_WEBAPP, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        console.log("Submission attempt", attempt, "status:", response.status); // FIX: Log status
+        if (!response.ok) {
+          const text = await response.text(); // Get raw response for debugging
+          throw new Error(`Server responded with status ${response.status}: ${text}`);
+        }
+        const json = await response.json().catch(() => { throw new Error("Invalid JSON response"); });
+        if (json.status !== 'ok') throw new Error(json.message || "Server did not confirm success");
+        console.log("Submission successful:", json); // FIX: Log success
+        return json;
+      } catch (e) {
+        console.error("Submission attempt", attempt, "failed:", e.message); // FIX: Log error
+        if (attempt < maxAttempts) {
+          console.log("Retrying submission...");
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
+          return trySend(attempt + 1, maxAttempts);
+        }
+        throw new Error("Failed to submit after retries: " + e.message);
+      }
     }
-    // Changed: Added retry
+    return trySend();
+  }
+
+  /* ====== Render & nav ====== */
+  function render(){
+    var total = Steps.length;
+    if (S.i<0) S.i=0;
+    if (S.i>=total) S.i = total-1;
+    var step = Steps[S.i];
+    stepTxt.textContent = "Step " + (S.i+1) + "/" + total;
+    barEl.style.width = Math.round((S.i)/(total-1)*100) + "%";
+    setPortrait(step.key);
+    qEl.innerHTML = step.title;
+    subEl.innerHTML = step.sub || "";
+    optsEl.innerHTML = "";
+    step.build(optsEl);
+    save();
+    nextBtn.style.display = (S.i === total-1) ? "none" :
