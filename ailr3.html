@@ -922,7 +922,6 @@
             return;
           }
           btnSend.disabled = true;
-          var oldTxt = btnSend.textContent;
           btnSend.textContent = "Sending…";
           sendToFormspree().then(function(j){
             triggerConfetti(1200);
@@ -937,9 +936,13 @@
                 <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
             }
           }).catch(function(e){
-            alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e && e.message ? e.message : e));
+            console.error("Submission error details:", {
+              message: e.message,
+              stack: e.stack
+            });
+            alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
             btnSend.disabled = false;
-            btnSend.textContent = oldTxt;
+            btnSend.textContent = "Send now";
           });
         });
         var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
@@ -1034,7 +1037,7 @@
     }
     if (key==="submit"){
       if (!has(S.submitter.email) && !has(S.submitter.phone)){
-        alert("Please provide at least an email or phone number to submit.");
+        alert("Please provide at least an email or a phone number to submit.");
         return false;
       }
     }
@@ -1106,9 +1109,16 @@
   /* ====== Formspree Submission ====== */
   function sendToFormspree(){
     return new Promise(function(resolve, reject){
+      // Validate GS_WEBAPP URL
+      if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
+        console.error("Invalid GS_WEBAPP URL:", GS_WEBAPP);
+        reject(new Error("Invalid Google Apps Script URL. Please check the GS_WEBAPP configuration."));
+        return;
+      }
       var xhr = new XMLHttpRequest();
       xhr.open('POST', GS_WEBAPP, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.timeout = 10000; // Set 10-second timeout
       var data = cloneSafe(S);
       data._meta = {
         timestamp: new Date().toISOString(),
@@ -1116,13 +1126,41 @@
         form: "ailr"
       };
       xhr.onload = function(){
+        console.log("Submission response:", {
+          status: xhr.status,
+          responseText: xhr.responseText
+        });
         if (xhr.status >= 200 && xhr.status < 300){
-          try{ resolve(JSON.parse(xhr.responseText)); } catch(e){ resolve({}); }
+          try {
+            var response = JSON.parse(xhr.responseText || "{}");
+            console.log("Parsed response:", response);
+            resolve(response);
+          } catch (e) {
+            console.error("Failed to parse response JSON:", e, "Response text:", xhr.responseText);
+            reject(new Error("Invalid response from server: " + e.message));
+          }
         } else {
-          reject(new Error("Submission failed: " + xhr.statusText));
+          console.error("Submission failed:", {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            responseText: xhr.responseText
+          });
+          reject(new Error("Submission failed with status " + xhr.status + ": " + xhr.statusText));
         }
       };
-      xhr.onerror = function(){ reject(new Error("Network error")); };
+      xhr.onerror = function(){
+        console.error("Network error during submission:", {
+          status: xhr.status,
+          statusText: xhr.statusText
+        });
+        reject(new Error("Network error: Unable to reach the server."));
+      };
+      xhr.ontimeout = function(){
+        console.error("Submission timed out after 10 seconds.");
+        reject(new Error("Request timed out. Please check your internet connection and try again."));
+      };
+      console.log("Sending data to:", GS_WEBAPP);
+      console.log("Data payload:", data);
       xhr.send(JSON.stringify(data));
     });
   }
