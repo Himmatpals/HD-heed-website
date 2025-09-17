@@ -1,253 +1,162 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HD HeeD — Follow-up Board + Outreach Emails</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HD HeeD — Outreach + Follow-Up</title>
+<meta name="description" content="HD HeeD NDIS coordinator outreach emails and weekly follow-up board." />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --ink:#0c1226; --bg:#0b0f1a; --panel:#10172a; --line:#243153; --text:#e8edff; --muted:#a8b6e8; --accent:#ffc107;
-    --good:#31d0aa; --warn:#ffd95c; --danger:#ff5d5d;
-    --brand:#6b46ff; --brand-dark:#4f27ff; --ink2:#334155; --muted2:#64748b; --bg2:#f8fafc; --card:#ffffff; --ring: rgba(107,70,255,.35);
+    /* Light theme (Emails) */
+    --brand:#6b46ff; --brand-dark:#4f27ff;
+    --ink:#0f172a; --ink-2:#334155; --muted:#64748b; --bg:#f8fafc; --card:#ffffff;
+    --ring:rgba(107,70,255,.35); --radius:16px; --shadow:0 10px 30px rgba(15,23,42,.08);
+    --alert-red:#ff3333;
+
+    /* Dark theme (Follow-up) */
+    --d-ink:#0c1226; --d-bg:#0b0f1a; --d-panel:#10172a; --d-line:#243153; --d-text:#e8edff; --d-muted:#a8b6e8; --d-accent:#ffc107;
   }
-  * { box-sizing:border-box; }
-  html,body{ height:100%; margin:0; font-family:Inter,system-ui,Arial,sans-serif; color:var(--text);
-    background:radial-gradient(1200px 1200px at 80% -200px,#122048 0%,#0b0f1a 42%,#0b0f1a 100%);
-  }
-  /* Top App Shell */
-  .app{
-    max-width:1240px; margin:24px auto; border:1px solid var(--line); border-radius:18px;
-    background:linear-gradient(180deg,#10172a,#0b0f1a); box-shadow:0 28px 110px rgba(0,0,0,.55); overflow:hidden;
-  }
-  .head{
-    display:flex; align-items:center; gap:12px; padding:16px 18px; border-bottom:1px solid var(--line);
-    background:linear-gradient(180deg,#0e162f,#0c1329); position:sticky; top:0; z-index:3;
-  }
-  .badge{
-    width:42px;height:42px;border-radius:10px;display:grid;place-items:center;font-weight:900;color:#2a2100;
-    background:linear-gradient(135deg,#ffd95c,#ffe78f); box-shadow:0 8px 24px rgba(0,0,0,.35);
-  }
-  .title{ font-weight:900; font-size:1.15rem; letter-spacing:.2px; }
-  .sub{ font-size:.88rem; color:var(--muted); }
-  .toolbar{ margin-left:auto; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-  .pill{ border:1px solid var(--line); background:#0f1937; border-radius:999px; padding:6px 10px; font-size:.78rem; color:#cfe0ff; }
-  .btn{
-    border:1px solid var(--line); background:#0f1b3b; color:var(--text);
-    border-radius:12px; padding:10px 14px; font-weight:800; cursor:pointer;
-  }
-  .btn.primary{ background:var(--accent); color:#2a2100; border-color:#e0b200; box-shadow:0 12px 34px rgba(0,0,0,.35); }
-  .btn.warn{ background:#351616; border-color:#6e1c1c; color:#ffdcdc; }
-  .btn.ghost{ background:#0f1937; }
-  .btn:disabled{ opacity:.55; cursor:not-allowed; }
-  .status{ font-size:.8rem; color:var(--muted); }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#fafaff 0%, #f6f8ff 40%, #f8fafc 100%)}
+
+  /* Shell */
+  .shell{max-width:1220px;margin:28px auto;padding:0 16px}
+  .head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .logo{width:48px;height:48px;border-radius:12px;background:radial-gradient(120% 120% at 30% 30%, #9b8cff 0%, var(--brand) 42%, var(--brand-dark) 100%);box-shadow:0 10px 25px rgba(107,70,255,.35), inset 0 0 18px rgba(255,255,255,.36)}
+  h1{margin:0;font-weight:900;letter-spacing:-.02em;font-size:clamp(22px,3.4vw,34px);color:var(--ink)}
+  .sub{margin-top:4px;color:var(--muted);font-size:.92rem}
 
   /* Tabs */
-  .tabs{ display:flex; gap:8px; padding:10px 14px; border-bottom:1px solid var(--line); background:#0e162f; }
-  .tabbtn{ border:1px solid var(--line); background:#0f1937; color:#cfe0ff; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:800; }
-  .tabbtn.active{ background:var(--accent); color:#2a2100; border-color:#e0b200; }
-  .view{ display:none; }
-  .view.active{ display:block; }
+  .tabs{display:flex;gap:8px;margin:16px 0}
+  .tabbtn{appearance:none;border:1px solid #e5e7eb;background:#fff;color:#1f2a44;padding:10px 14px;border-radius:12px;font-weight:800;cursor:pointer}
+  .tabbtn.active{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 12px 34px rgba(0,0,0,.12)}
+  .views{position:relative}
+  .view{display:none}
+  .view.active{display:block}
 
-  /* ====== FOLLOW-UP BOARD (from File 2) ====== */
-  .wrap{ padding:16px; }
-  .board{ border:1px solid var(--line); background:#0e162e; border-radius:16px; overflow:auto; }
-  table{ border-collapse:separate; border-spacing:0; width:100%; min-width:1100px; }
-  th,td{ border-bottom:1px solid var(--line); border-right:1px solid var(--line); padding:10px; vertical-align:top; }
-  th:first-child, td:first-child{ border-left:1px solid var(--line); }
-  thead th{ position:sticky; top:0; background:#0d1428; color:#fff; font-weight:900; font-size:.96rem; z-index:1; }
-  tbody th{ background:linear-gradient(180deg,#101a3c,#0e162f); text-align:left; font-weight:800; white-space:nowrap; min-width:380px; }
-  .lead{ display:flex; flex-direction:column; gap:6px; }
-  .lead .name{ font-weight:900; color:#ffe28f; }
-  .lead .meta{ display:flex; gap:12px; flex-wrap:wrap; font-size:.85rem; color:#cfe0ff; }
-  .lead .meta a{ color:#aee6ff; text-decoration:none; border-bottom:1px dotted rgba(174,230,255,.35); padding-bottom:1px; }
-  .lead .meta a:hover{ color:#fff; border-bottom-color:#fff; }
-  .cell{
-    background:#0f1b3b; border:1px solid #2a3b68; border-radius:10px; padding:8px;
-    min-height:48px; display:flex; align-items:center; justify-content:space-between; gap:8px; cursor:pointer;
-  }
-  .cell .preview{ flex:1; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#d8e2ff; opacity:.95; }
-  .cell .badge{ font-size:12px; border:1px solid #35508a; background:#0f254f; color:#cfe0ff; border-radius:999px; padding:4px 8px; }
-  .cell.empty .badge{ opacity:.6 } .cell.empty .preview{ color:#9fb0e6; opacity:.7 }
-  .cell:hover{ box-shadow:0 0 0 2px rgba(255,209,64,.25); }
-  .foot{ border-top:1px dashed var(--line); padding:12px 18px; display:flex; gap:10px; align-items:center; justify-content:space-between; }
-  .cleaner{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+  /* Light cards (Emails) */
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-bottom:20px;border:1px solid #eef2ff}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:4px}
+  .title{margin:0 0 14px 0;font-size:20px;font-weight:900;letter-spacing:-.01em;color:var(--ink)}
+  label{display:block;font-size:12px;font-weight:800;color:var(--ink-2);margin:10px 0 6px}
+  input[type="text"], textarea{width:100%;border:1.5px solid #e5e7eb;border-radius:12px;background:#fff;color:var(--ink);padding:12px 14px;font:inherit;box-shadow:inset 0 1px 0 rgba(0,0,0,.02)}
+  input[type="text"]:focus, textarea:focus{outline:0;border-color:var(--brand);box-shadow:0 0 0 4px var(--ring)}
+  textarea{min-height:220px;line-height:1.5;white-space:pre-wrap}
+  .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .btn{appearance:none;border:1px solid #e5e7eb;background:#0f172a;color:#fff;padding:10px 12px;border-radius:12px;font-weight:800;cursor:pointer}
+  .btn.brand{background:var(--brand);border-color:var(--brand)}
+  .btn.secondary{background:#eef2ff;color:#3b3b63}
+  .btn.ghost{background:#f3f4f6;color:#1f2a44}
+  .btn:active{transform:translateY(1px)}
+  .footer{margin:28px 0 36px;color:var(--muted);font-size:12px}
 
+  /* Light badges */
+  .bar{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 20px}
+  .badge{font-size:12px;color:#fff;background:var(--brand);padding:8px 12px;border-radius:999px;font-weight:800;letter-spacing:.02em}
+
+  /* Paper referral alert */
+  .paper-referral-alert{background:#fff5f5;border:2px solid var(--alert-red);border-radius:16px;padding:16px 20px;margin:0 0 20px 0;text-align:center;box-shadow:0 4px 12px rgba(255,51,51,.2);animation:pulse 2s infinite}
+  .paper-referral-alert h3{color:var(--alert-red);margin:0 0 8px;font-weight:900;font-size:18px}
+  .paper-referral-alert p{margin:0 0 12px;color:var(--ink-2)}
+  .paper-referral-link{display:inline-block;background:var(--alert-red);color:white !important;padding:12px 24px;border-radius:10px;font-weight:900;text-decoration:none;box-shadow:0 4px 6px rgba(255,51,51,.3);transition:all .2s ease}
+  .paper-referral-link:hover{background:#ff1a1a;transform:translateY(-2px);box-shadow:0 6px 12px rgba(255,51,51,.4)}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,51,51,.4)}70%{box-shadow:0 0 0 10px rgba(255,51,51,0)}100%{box-shadow:0 0 0 0 rgba(255,51,51,0)}}
+
+  /* Dark section (Follow-up) */
+  .dark{margin-top:26px;background:radial-gradient(1200px 1200px at 80% -200px,#122048 0%,#0b0f1a 42%,#0b0f1a 100%);border:1px solid var(--d-line);border-radius:18px;box-shadow:0 28px 110px rgba(0,0,0,.55);overflow:hidden}
+  .head2{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--d-line);background:linear-gradient(180deg,#0e162f,#0c1329);color:var(--d-text)}
+  .title2{font-weight:900;font-size:1.1rem;letter-spacing:.2px}
+  .sub2{font-size:.88rem;color:var(--d-muted)}
+  .toolbar{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .btn2{border:1px solid var(--d-line);background:#0f1b3b;color:var(--d-text);border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+  .btn2.primary{background:var(--d-accent);color:#2a2100;border-color:#e0b200;box-shadow:0 12px 34px rgba(0,0,0,.35)}
+  .btn2.warn{background:#351616;border-color:#6e1c1c;color:#ffdcdc}
+  .btn2.ghost{background:#0f1937}
+  .status{font-size:.8rem;color:var(--d-muted)}
+  .wrap2{padding:16px}
+  .board{border:1px solid var(--d-line);background:#0e162e;border-radius:16px;overflow:auto}
+  table{border-collapse:separate;border-spacing:0;width:100%;min-width:1100px}
+  th,td{border-bottom:1px solid var(--d-line);border-right:1px solid var(--d-line);padding:10px;vertical-align:top}
+  th:first-child,td:first-child{border-left:1px solid var(--d-line)}
+  thead th{position:sticky;top:0;background:#0d1428;color:#fff;font-weight:900;font-size:.96rem;z-index:1}
+  tbody th{background:linear-gradient(180deg,#101a3c,#0e162f);text-align:left;font-weight:800;white-space:nowrap;min-width:380px}
+  .lead{display:flex;flex-direction:column;gap:6px}
+  .lead .name{font-weight:900;color:#ffe28f}
+  .lead .meta{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem;color:#cfe0ff}
+  .lead .meta a{color:#aee6ff;text-decoration:none;border-bottom:1px dotted rgba(174,230,255,.35);padding-bottom:1px}
+  .lead .meta a:hover{color:#fff;border-bottom-color:#fff}
+  .cell{background:#0f1b3b;border:1px solid #2a3b68;border-radius:10px;padding:8px;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer}
+  .cell .preview{flex:1;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#d8e2ff;opacity:.95}
+  .cell .badge{font-size:12px;border:1px solid #35508a;background:#0f254f;color:#cfe0ff;border-radius:999px;padding:4px 8px}
+  .cell.empty .badge,.cell.empty .preview{opacity:.65}
+  .cell:hover{box-shadow:0 0 0 2px rgba(255,209,64,.25)}
   /* Modal */
-  .modal-backdrop{ position:fixed; inset:0; background:rgba(2,6,22,.58); backdrop-filter: blur(2px); display:none; align-items:center; justify-content:center; z-index:1000; }
-  .modal{
-    width:min(900px, 94vw); max-height:85vh; background:linear-gradient(180deg,#10172a,#0b0f1a);
-    border:1px solid var(--line); border-radius:16px; box-shadow:0 28px 110px rgba(0,0,0,.6); display:flex; flex-direction:column;
-  }
-  .modal-head{ display:flex; gap:10px; align-items:center; padding:12px 14px; border-bottom:1px solid var(--line); }
-  .modal-title{ font-weight:900; }
-  .modal-close{ margin-left:auto; border:1px solid var(--line); background:#0f1b3b; color:#fff; border-radius:999px; padding:6px 10px; cursor:pointer; }
-  .modal-body{ padding:12px 14px; }
-  .modal-body textarea{ width:100%; min-height:44vh; border:1px solid #2a3b68; border-radius:10px; padding:10px; background:#0f1b3b; color:#e8edff; resize:vertical; font-family:inherit; font-size:1rem; }
-  .modal-foot{ padding:12px 14px; border-top:1px dashed var(--line); display:flex; gap:8px; justify-content:flex-end; }
-
-  @media (max-width:820px){
-    .title{ font-size:1rem; }
-    tbody th{ min-width:300px; }
-  }
-  @media print{ .toolbar, .tabs, .foot, .modal-backdrop{ display:none !important; } }
-
-  /* ====== OUTREACH EMAILS (File 1) scoped ====== */
-  .emails{ color:#0f172a; background:linear-gradient(180deg,#fafaff 0%, #f6f8ff 40%, #f8fafc 100%); }
-  .emails .wrap2{ max-width:1100px; margin:0 auto; padding:22px 20px 28px; }
-  .emails .hero{ display:flex; align-items:center; gap:18px; margin-bottom:24px; }
-  .emails .logo{ width:56px;height:56px;border-radius:14px; background: radial-gradient(120% 120% at 30% 30%, #9b8cff 0%, var(--brand) 42%, var(--brand-dark) 100%); box-shadow: 0 10px 25px rgba(107,70,255,.35), inset 0 0 18px rgba(255,255,255,.36); }
-  .emails h1{ margin:0; font-weight:800; letter-spacing:-.02em; font-size:clamp(22px,3.4vw,34px); color:#0f172a; }
-  .emails .sub{ margin-top:6px; color:var(--muted2); font-size:14px; }
-  .emails .bar{ display:flex; flex-wrap:wrap; gap:10px; margin:16px 0 26px; }
-  .emails .badge{ font-size:12px;color:#fff;background:var(--brand);padding:8px 12px;border-radius:999px;font-weight:600;letter-spacing:.02em }
-  .emails .card{ background:var(--card); border-radius:16px; box-shadow:0 10px 30px rgba(15,23,42,.08); padding:22px; margin-bottom:22px; border:1px solid #eef2ff; }
-  .emails .eyebrow{ font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted2); font-weight:700; margin-bottom:4px; }
-  .emails .title{ margin:0 0 14px 0; font-size:20px; font-weight:800; letter-spacing:-.01em; color:#0f172a; }
-  .emails label{ display:block; font-size:12px; font-weight:700; color:#334155; margin:10px 0 6px; }
-  .emails input[type="text"], .emails textarea{
-    width:100%; border:1.5px solid #e5e7eb; border-radius:12px; background:#fff; color:#0f172a;
-    padding:12px 14px; font:inherit; box-shadow:inset 0 1px 0 rgba(0,0,0,.02);
-  }
-  .emails input[type="text"]:focus, .emails textarea:focus{ outline:0; border-color:var(--brand); box-shadow:0 0 0 4px var(--ring); }
-  .emails textarea{ min-height:220px; line-height:1.5; white-space:pre-wrap; }
-  .emails .actions{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-  .emails .btn{ appearance:none; border:0; background:#0f172a; color:#fff; padding:10px 12px; border-radius:12px; font-weight:700; cursor:pointer; }
-  .emails .btn.secondary{ background:#eef2ff; color:#3b3b63; }
-  .emails .btn.brand{ background:var(--brand); }
-  .emails .btn:active{ transform:translateY(1px); }
-  .emails .note{ font-size:12px; color:var(--muted2); margin-top:10px; }
-  .emails .footer{ margin:28px 0 6px; color:var(--muted2); font-size:12px; }
-  .emails .paper-referral-alert{
-    background:#fff5f5; border:2px solid #ff3333; border-radius:16px; padding:16px 20px; margin:0 0 26px 0; text-align:center;
-    box-shadow:0 4px 12px rgba(255, 51, 51, 0.2); animation: pulse 2s infinite;
-  }
-  .emails .paper-referral-alert h3{ color:#ff3333; margin:0 0 8px 0; font-weight:800; font-size:18px; }
-  .emails .paper-referral-alert p{ margin:0 0 12px 0; color:#334155; }
-  .emails .paper-referral-link{
-    display:inline-block; background:#ff3333; color:#fff !important; padding:12px 24px; border-radius:10px; font-weight:700; text-decoration:none;
-    box-shadow:0 4px 6px rgba(255, 51, 51, 0.3); transition: all 0.2s ease;
-  }
-  .emails .paper-referral-link:hover{ background:#ff1a1a; transform:translateY(-2px); box-shadow:0 6px 12px rgba(255, 51, 51, 0.4); }
-  @keyframes pulse { 0%{ box-shadow:0 0 0 0 rgba(255,51,51,0.4); } 70%{ box-shadow:0 0 0 10px rgba(255,51,51,0); } 100%{ box-shadow:0 0 0 0 rgba(255,51,51,0); } }
+  .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,22,.58);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:1000}
+  .modal{width:min(900px,94vw);max-height:85vh;background:linear-gradient(180deg,#10172a,#0b0f1a);border:1px solid var(--d-line);border-radius:16px;box-shadow:0 28px 110px rgba(0,0,0,.6);display:flex;flex-direction:column}
+  .modal-head{display:flex;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--d-line)}
+  .modal-title{font-weight:900;color:var(--d-text)}
+  .modal-close{margin-left:auto;border:1px solid var(--d-line);background:#0f1b3b;color:#fff;border-radius:999px;padding:6px 10px;cursor:pointer}
+  .modal-body{padding:12px 14px}
+  .modal-body textarea{width:100%;min-height:44vh;border:1px solid #2a3b68;border-radius:10px;padding:10px;background:#0f1b3b;color:#e8edff;resize:vertical;font-family:inherit;font-size:1rem}
+  .modal-foot{padding:12px 14px;border-top:1px dashed var(--d-line);display:flex;gap:8px;justify-content:flex-end}
+  @media print{.toolbar,.modal-backdrop{display:none !important}}
 </style>
 </head>
 <body>
-  <div class="app">
-    <!-- App Header -->
+  <div class="shell">
     <div class="head">
-      <div class="badge">HD</div>
+      <div class="logo" aria-hidden="true"></div>
       <div>
-        <div class="title">HD HeeD — NDIS Weekly Follow-up + Outreach Emails</div>
+        <h1>HD HeeD — Outreach + Follow-Up</h1>
         <div class="sub">Support Coordinators & Plan Managers • Blacktown & Western Sydney</div>
-      </div>
-      <div class="toolbar">
-        <span id="status" class="status"></span>
-        <span class="pill">Shared • Live</span>
       </div>
     </div>
 
     <!-- Tabs -->
     <div class="tabs">
-      <button class="tabbtn active" data-tab="board">Weekly Follow-up Board</button>
-      <button class="tabbtn" data-tab="emails">Outreach Emails (1–4)</button>
+      <button class="tabbtn active" data-tab="tab-emails">Emails (1–4)</button>
+      <button class="tabbtn" data-tab="tab-followup">Follow-Up Board</button>
     </div>
 
-    <!-- ===== View: FOLLOW-UP BOARD ===== -->
-    <section id="board" class="view active">
-      <div class="wrap">
-        <div class="board">
-          <table id="boardTable">
-            <thead>
-              <tr>
-                <th style="width:380px">Lead (SC/PM)</th>
-                <th>Monday</th><th>Tuesday</th><th>Wednesday</th>
-                <th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
-              </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
+    <div class="views">
+      <!-- ========== TAB: EMAILS ========== -->
+      <section id="tab-emails" class="view active">
+        <div class="bar">
+          <span class="badge">RN-Led Provider</span>
+          <span class="badge">Online Referrals</span>
+          <span class="badge">AILR Onboarding</span>
+          <span class="badge">Audit-Ready</span>
         </div>
-        <div class="hint" style="margin-top:10px">Click a day cell to open the full note. Press <span style="font-family:ui-monospace">Esc</span> or click outside to close. Click <strong>Save changes</strong> to sync with the Sheet.</div>
 
-        <div class="foot">
-          <div>
-            <button id="btnRefresh" class="btn">🔄 Refresh</button>
-            <button id="btnSave" class="btn primary">💾 Save changes</button>
-          </div>
-          <div class="cleaner">
-            <span class="status">Fresh week reset:</span>
-            <button id="btnArmClean" class="btn ghost">1) Arm</button>
-            <button id="btnDoClean" class="btn warn" disabled>2) Confirm &amp; wipe</button>
-          </div>
+        <!-- Paper referral (Drive link preserved) -->
+        <div class="paper-referral-alert">
+          <h3>📄 Paper-Based Referral Form Available</h3>
+          <p>Prefer paper? Download and email the completed copy to info@hdheed.com.au</p>
+          <a class="paper-referral-link" target="_blank"
+             href="https://drive.google.com/file/d/1Z3EJ2mycLwNAIDXs2fnIfD8H_wxcSdQx/view?usp=drive_link">
+            Download Paper Referral Form
+          </a>
         </div>
-      </div>
 
-      <!-- Modal -->
-      <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
-        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-          <div class="modal-head">
-            <div id="modalTitle" class="modal-title">Edit note</div>
-            <button id="modalClose" class="modal-close">✕ Close</button>
+        <!-- Copy all -->
+        <div class="card">
+          <div class="eyebrow">Bulk tool</div>
+          <h2 class="title">Copy All Emails</h2>
+          <div class="actions">
+            <button class="btn brand" id="btnCopyAll">Copy All (Subjects + Bodies)</button>
           </div>
-          <div class="modal-body">
-            <textarea id="modalTextarea" placeholder="Type your note…"></textarea>
-          </div>
-          <div class="modal-foot">
-            <button id="modalSave" class="btn primary">💾 Apply to cell</button>
-          </div>
+          <div class="sub" style="color:var(--muted);margin-top:10px">Copies Emails 1–4 with clear separators.</div>
         </div>
-      </div>
-    </section>
 
-    <!-- ===== View: OUTREACH EMAILS (scoped) ===== -->
-    <section id="emails" class="view">
-      <div class="emails">
-        <div class="wrap2">
-          <div class="hero">
-            <div class="logo" aria-hidden="true"></div>
-            <div>
-              <h1>HD HeeD – Outreach Emails (1–4)</h1>
-              <div class="sub">Copy-ready subjects and bodies for Support Coordinators & Plan Managers.
-                <span class="small">Use the buttons to copy Subject, Body, or Both.</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="bar">
-            <span class="badge">RN-Led Provider</span>
-            <span class="badge">Online Referrals</span>
-            <span class="badge">AILR Onboarding</span>
-            <span class="badge">Audit-Ready</span>
-          </div>
-
-          <!-- Paper referral (Drive link preserved) -->
-          <div class="paper-referral-alert">
-            <h3>📄 Paper-Based Referral Form Available</h3>
-            <p>Prefer to use a paper form? Download our printable referral form and email the completed copy to info@hdheed.com.au</p>
-            <a href="https://drive.google.com/file/d/1Z3EJ2mycLwNAIDXs2fnIfD8H_wxcSdQx/view?usp=drive_link" class="paper-referral-link" target="_blank">
-              Download Paper Referral Form
-            </a>
-          </div>
-
-          <!-- Bulk copy -->
-          <div class="card">
-            <div class="eyebrow">Bulk tool</div>
-            <h2 class="title">Copy All Emails</h2>
-            <div class="actions">
-              <button class="btn brand" onclick="copyAll()">Copy All (Subjects + Bodies)</button>
-            </div>
-            <div class="note">This will copy Emails 1–4 in order with clear separators.</div>
-          </div>
-
-          <!-- Email 1 -->
-          <section class="card" id="e1">
-            <div class="eyebrow">Email 1</div>
-            <h3 class="title">Introduction to HD HeeD</h3>
-            <label for="s1">Subject</label>
-            <input id="s1" type="text" value="Introducing HD HeeD – RN-Led NDIS Provider in Blacktown" />
-            <label for="b1">Body</label>
-            <textarea id="b1">Hi,
+        <!-- Email 1 -->
+        <section class="card" id="e1">
+          <div class="eyebrow">Email 1</div>
+          <h3 class="title">Introduction to HD HeeD</h3>
+          <label for="s1">Subject</label>
+          <input id="s1" type="text" value="Introducing HD HeeD – RN-Led NDIS Provider in Blacktown" />
+          <label for="b1">Body</label>
+          <textarea id="b1">Hi,
 
 Please let me introduce HD HeeD Pty Ltd, an NDIS-registered provider based in Blacktown. We are an RN-led team, with the skills and systems to deliver safe, professional, and person-centred supports.
 
@@ -274,21 +183,21 @@ Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
 📞 02 8630 5500 | ✉️ info@hdheed.com.au</textarea>
-            <div class="actions">
-              <button class="btn brand" onclick="copySubject('s1')">Copy Subject</button>
-              <button class="btn" onclick="copyBody('b1')">Copy Body</button>
-              <button class="btn secondary" onclick="copyBoth('s1','b1')">Copy Both</button>
-            </div>
-          </section>
+          <div class="actions">
+            <button class="btn brand" data-copy="s1">Copy Subject</button>
+            <button class="btn" data-copy="b1">Copy Body</button>
+            <button class="btn secondary" data-copy="both" data-s="s1" data-b="b1">Copy Both</button>
+          </div>
+        </section>
 
-          <!-- Email 2 -->
-          <section class="card" id="e2">
-            <div class="eyebrow">Email 2</div>
-            <h3 class="title">Our RN-Led Strength</h3>
-            <label for="s2">Subject</label>
-            <input id="s2" type="text" value="Nursing Expertise at the Core of HD HeeD" />
-            <label for="b2">Body</label>
-            <textarea id="b2">Hi,
+        <!-- Email 2 -->
+        <section class="card" id="e2">
+          <div class="eyebrow">Email 2</div>
+          <h3 class="title">Our RN-Led Strength</h3>
+          <label for="s2">Subject</label>
+          <input id="s2" type="text" value="Nursing Expertise at the Core of HD HeeD" />
+          <label for="b2">Body</label>
+          <textarea id="b2">Hi,
 
 At HD HeeD, we are proud to be a group of Registered Nurses who are extremely confident in our skills and experience. This allows us to provide participants with the highest standard of care, especially when it comes to complex health needs.
 
@@ -306,20 +215,21 @@ Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
 📞 02 8630 5500 | ✉️ info@hdheed.com.au</textarea>
-            <div class="actions">
-              <button class="btn brand" onclick="copySubject('s2')">Copy Subject</button>
-              <button class="btn" onclick="copyBody('b2')">Copy Body</button>
-              <button class="btn secondary" onclick="copyBoth('s2','b2')">Copy Both</button>
-            </div>
-          </section>
-          <!-- Email 3 -->
-          <section class="card" id="e3">
-            <div class="eyebrow">Email 3</div>
-            <h3 class="title">AILR System</h3>
-            <label for="s3">Subject</label>
-            <input id="s3" type="text" value="Meet AILR – Advanced Intake & Long-form Registration" />
-            <label for="b3">Body</label>
-            <textarea id="b3">Hi,
+          <div class="actions">
+            <button class="btn brand" data-copy="s2">Copy Subject</button>
+            <button class="btn" data-copy="b2">Copy Body</button>
+            <button class="btn secondary" data-copy="both" data-s="s2" data-b="b2">Copy Both</button>
+          </div>
+        </section>
+
+        <!-- Email 3 -->
+        <section class="card" id="e3">
+          <div class="eyebrow">Email 3</div>
+          <h3 class="title">AILR System</h3>
+          <label for="s3">Subject</label>
+          <input id="s3" type="text" value="Meet AILR – Advanced Intake & Long-form Registration" />
+          <label for="b3">Body</label>
+          <textarea id="b3">Hi,
 
 One of our key strengths at HD HeeD is our AILR system – Advanced Intake & Long-form Registration.
 
@@ -340,21 +250,20 @@ Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
 📞 02 8630 5500 | ✉️ info@hdheed.com.au</textarea>
-            <div class="actions">
-              <button class="btn brand" onclick="copySubject('s3')">Copy Subject</button>
-              <button class="btn" onclick="copyBody('b3')">Copy Body</button>
-              <button class="btn secondary" onclick="copyBoth('s3','b3')">Copy Both</button>
-            </div>
-          </section>
-
-          <!-- Email 4 -->
-          <section class="card" id="e4">
-            <div class="eyebrow">Email 4</div>
-            <h3 class="title">Easy Online Referrals</h3>
-            <label for="s4">Subject</label>
-            <input id="s4" type="text" value="Referrals Made Simple with HD HeeD" />
-            <label for="b4">Body</label>
-            <textarea id="b4">Hi,
+          <div class="actions">
+            <button class="btn brand" data-copy="s3">Copy Subject</button>
+            <button class="btn" data-copy="b3">Copy Body</button>
+            <button class="btn secondary" data-copy="both" data-s="s3" data-b="b3">Copy Both</button>
+          </div>
+        </section>
+        <!-- Email 4 -->
+        <section class="card" id="e4">
+          <div class="eyebrow">Email 4</div>
+          <h3 class="title">Easy Online Referrals</h3>
+          <label for="s4">Subject</label>
+          <input id="s4" type="text" value="Referrals Made Simple with HD HeeD" />
+          <label for="b4">Body</label>
+          <textarea id="b4">Hi,
 
 At HD HeeD, we understand how valuable your time is. That’s why we’ve created a quick and hassle-free online referral system to make things easier for you and your participants.
 
@@ -371,22 +280,73 @@ Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
 📞 02 8630 5500 | ✉️ info@hdheed.com.au</textarea>
-            <div class="actions">
-              <button class="btn brand" onclick="copySubject('s4')">Copy Subject</button>
-              <button class="btn" onclick="copyBody('b4')">Copy Body</button>
-              <button class="btn secondary" onclick="copyBoth('s4','b4')">Copy Both</button>
-            </div>
-          </section>
+          <div class="actions">
+            <button class="btn brand" data-copy="s4">Copy Subject</button>
+            <button class="btn" data-copy="b4">Copy Body</button>
+            <button class="btn secondary" data-copy="both" data-s="s4" data-b="b4">Copy Both</button>
+          </div>
+        </section>
 
-          <div class="footer">© HD HeeD Pty Ltd • ABN 47 665 228 768 • Blacktown, NSW • Phone: 02 8630 5500 • <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
+        <div class="footer">© HD HeeD Pty Ltd • ABN 47 665 228 768 • Blacktown, NSW • Phone: 02 8630 5500 •
+          <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
+      </section>
+
+      <!-- ========== TAB: FOLLOW-UP (Dark) ========== -->
+      <section id="tab-followup" class="view">
+        <div class="dark">
+          <div class="head2">
+            <div class="logo" aria-hidden="true" style="width:40px;height:40px"></div>
+            <div>
+              <div class="title2">HD HeeD — NDIS Weekly Follow-Up Board</div>
+              <div class="sub2">SCs & Plan Managers • Live from Google Sheet (Drive)</div>
+            </div>
+            <div class="toolbar">
+              <button id="btnOpenSheet" class="btn2">Open Follow-Up Sheet</button>
+              <button id="btnReloadContacts" class="btn2">↻ Reload Contacts</button>
+              <label class="btn2 ghost" style="cursor:pointer">Import Contacts (CSV/JSON)
+                <input id="importContacts" type="file" accept=".csv,application/json" style="display:none">
+              </label>
+              <button id="btnRefresh" class="btn2">🔄 Refresh</button>
+              <button id="btnSave" class="btn2 primary">💾 Save changes</button>
+              <span id="status" class="status"></span>
+            </div>
+          </div>
+
+          <div class="wrap2">
+            <div class="board">
+              <table id="board">
+                <thead>
+                  <tr>
+                    <th style="width:380px">Lead (SC/PM)</th>
+                    <th>Monday</th><th>Tuesday</th><th>Wednesday</th>
+                    <th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+              </table>
+            </div>
+            <div class="sub2" style="margin-top:8px">Click any day cell to edit. Press <strong>Save changes</strong> to sync.</div>
+          </div>
         </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div id="modalTitle" class="modal-title">Edit note</div>
+        <button id="modalClose" class="modal-close">✕ Close</button>
       </div>
-    </section>
+      <div class="modal-body"><textarea id="modalTextarea" placeholder="Type your note…"></textarea></div>
+      <div class="modal-foot"><button id="modalSave" class="btn2 primary">💾 Apply to cell</button></div>
+    </div>
   </div>
 
   <!-- ======= SCRIPTS ======= -->
   <script>
-    // Tab switcher
+    /* ---------- Tab switcher ---------- */
     document.querySelectorAll('.tabbtn').forEach(b=>{
       b.addEventListener('click', ()=>{
         document.querySelectorAll('.tabbtn').forEach(x=>x.classList.remove('active'));
@@ -396,93 +356,133 @@ Director – HD HeeD Pty Ltd
       });
     });
 
-    // ===== Follow-up Board logic (kept from File 2, Drive/App Script URL preserved) =====
-    const API = "https://script.google.com/macros/s/AKfycbzwXW3Aabus6brnuawF9QvXX4dpq3MM03jmi4e9rkpiJUs2B9Vo_Qp36ht5BZ7bgbM/exec";
-
-    const CONTACTS = {
-      "Taylor McGuiness — Interaction": { phone: "1300 668 123", email: "info@interactionservices.org", website: "https://interactionservices.org" },
-      "Assist Disability Services — SSC": { phone: "1800 955 806", email: "enquiries@assistservices.com.au", website: "https://assistservices.com.au" },
-      "Triniti Care — Support Coord": { phone: "(02) 8319 9433", website: "https://triniticare.com.au" },
-      "MD Home Care — SSC": { phone: "08 6386 9999", website: "https://mdhomecare.com.au" },
-      "Claremont Care — SC/PM": { phone: "0416 873 319", website: "https://claremontcare.com.au" },
-      "BRK Plan Management": { phone: "0414 704 279", email: "meet@brkpm.com.au", website: "http://brkpm.com.au" },
-      "Axial Plan Management": { phone: "0416 428 261", email: "hello@axialplanmanagement.com.au", website: "https://axialplanmanagement.com.au" },
-      "NADO Plan Management": { phone: "1300 738 229", website: "https://nado.org.au" },
-      "Yahweh Care — PM": { phone: "(02) 8325 1616", email: "info@yahwehcare.com.au", website: "https://yahwehcare.com.au" }
+    /* ---------- Utility: clipboard + openers ---------- */
+    async function copyText(text){
+      try{ await navigator.clipboard.writeText(text); alert('Copied to clipboard'); }
+      catch{
+        const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); ta.remove(); alert('Copied to clipboard');
+      }
+    }
+    document.getElementById('btnCopyAll').onclick = ()=>{
+      const payload = [
+        {n:'Email 1', s:s1.value, b:b1.value},
+        {n:'Email 2', s:s2.value, b:b2.value},
+        {n:'Email 3', s:s3.value, b:b3.value},
+        {n:'Email 4', s:s4.value, b:b4.value},
+      ].map(e=>`${e.n} — Subject: ${e.s}\n\n${e.b}`)
+       .join('\n\n\n------------------------------\n\n');
+      copyText(payload);
     };
+    document.querySelectorAll('[data-copy]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const kind = btn.dataset.copy;
+        if (kind==='both'){ const s=document.getElementById(btn.dataset.s).value; const b=document.getElementById(btn.dataset.b).value; copyText('Subject: '+s+'\n\n'+b); }
+        else copyText(document.getElementById(kind).value);
+      });
+    });
 
-    let ROWS = [];
-    let edits = new Map();
-    let activeCellId = null;
+    function openLink(url){
+      if (!url) return setStatus("Missing URL.", true);
+      if (url.startsWith("mailto:")) { window.location.href = url; }
+      else window.open(url, "_blank", "noopener");
+    }
 
+    /* ---------- CONFIG (set these two!) ---------- */
+    const APPS_SCRIPT_WEBAPP = "PASTE_YOUR_EXEC_URL_HERE"; // e.g. https://script.google.com/macros/s/AKfycb.../exec
+    const FOLLOWUP_SHEET_URL = "PASTE_YOUR_SHEET_URL_HERE"; // optional convenience button
+
+    /* ---------- Status helpers ---------- */
     function $(id){ return document.getElementById(id); }
     function setStatus(msg, dim=false){
-      const s = $("status");
-      if (s){ s.textContent = msg||""; s.style.opacity
-      = dim ? "0.7" : "1"; }
-      const foot = $("footStatus");
-      if (foot){ foot.textContent = msg || "Ready."; }
+      const s = $("status"); if (s){ s.textContent = msg||""; s.style.opacity = dim ? "0.7" : "1"; }
     }
 
-    // Small helpers
-    function mail(link){
-      const a=document.createElement("a");
-      a.href="mailto:"+link; a.textContent="📧 "+link;
-      return a;
-    }
-    function tel(link){
-      const a=document.createElement("a");
-      a.href="tel:"+(link||"").replace(/[^0-9+]/g,"");
-      a.textContent="☎ "+link;
-      return a;
+    /* ---------- Contacts: dynamic (Drive/Sheet) with fallbacks ---------- */
+    let CONTACTS = {};                       // will be populated from API/cache/import
+    const LS_CONTACTS = "heed.contacts.dynamic.v1";
+
+    function cacheContacts(map){ try{ localStorage.setItem(LS_CONTACTS, JSON.stringify(map)); }catch{} }
+    function readContacts(){ try{ return JSON.parse(localStorage.getItem(LS_CONTACTS)||"{}"); }catch{ return {}; } }
+
+    async function fetchContactsFromAPI(){
+      const url = APPS_SCRIPT_WEBAPP + (APPS_SCRIPT_WEBAPP.includes("?") ? "&" : "?") + "mode=contacts";
+      const r = await fetch(url); if (!r.ok) throw new Error("Contacts API not available");
+      const j = await r.json(); if (!j || !Array.isArray(j.contacts)) throw new Error("Contacts missing");
+      const map = {}; j.contacts.forEach(c=>{ if (c?.name) map[c.name] = { email:c.email||"", phone:c.phone||"", website:c.website||"" }; });
+      return map;
     }
 
-    function formatLeadCell(name){
-      const wrap = document.createElement("div"); wrap.className="lead";
-      const nm = document.createElement("div"); nm.className="name"; nm.textContent = name||"—"; wrap.appendChild(nm);
-      const info = CONTACTS[name];
-      if (info){
-        const meta = document.createElement("div"); meta.className="meta";
-        if (info.email) meta.appendChild(mail(info.email));
-        if (info.phone) meta.appendChild(tel(info.phone));
-        if (info.website){
-          const w=document.createElement("a"); w.href=info.website; w.target="_blank"; w.rel="noopener"; w.textContent="🌐 Website";
-          meta.appendChild(w);
-        }
-        wrap.appendChild(meta);
+    async function loadContactsDynamic(){
+      setStatus("Loading contacts…");
+      try{
+        const map = await fetchContactsFromAPI();
+        CONTACTS = map; cacheContacts(map);
+        setStatus("Contacts loaded from Drive.", true);
+        if (document.getElementById("tab-followup").classList.contains("active")) buildTable();
+        return;
+      }catch(e){
+        const cached = readContacts();
+        if (Object.keys(cached).length){ CONTACTS = cached; setStatus("Contacts loaded from cache.", true); if (document.getElementById("tab-followup").classList.contains("active")) buildTable(); return; }
+        setStatus("Contacts unavailable (API/cache). Import a file.", true);
       }
-      return wrap;
     }
 
-    // ===== Modal control =====
+    // Manual import (CSV/JSON)
+    $("importContacts").addEventListener("change", async (e)=>{
+      const f = e.target.files?.[0]; if (!f) return;
+      try{
+        const text = await f.text(); let map = {};
+        if (f.type.includes("json") || f.name.endsWith(".json")){
+          const j = JSON.parse(text);
+          if (Array.isArray(j)) j.forEach(c=>{ if(c?.name) map[c.name] = { email:c.email||"", phone:c.phone||"", website:c.website||"" }; });
+          else map = j || {};
+        }else{
+          // naive CSV parser: name,email,phone,website (header ok)
+          const lines = text.trim().split(/\r?\n/);
+          let start = 0; if (/name\s*,/i.test(lines[0])) start = 1;
+          for (let i=start;i<lines.length;i++){
+            const [name,email,phone,website] = lines[i].split(",").map(s=>s?.trim()?.replace(/^"|"$/g,"")||"");
+            if (name) map[name] = { email, phone, website };
+          }
+        }
+        if (!Object.keys(map).length) throw new Error("No contacts found in file.");
+        CONTACTS = map; cacheContacts(map);
+        buildTable(); setStatus("Contacts imported.", true);
+      }catch(err){ setStatus("Import failed."); alert(err.message||"Import failed."); }
+      e.target.value = "";
+    });
+    $("btnReloadContacts").addEventListener("click", loadContactsDynamic);
+    $("btnOpenSheet").addEventListener("click", ()=> openLink(FOLLOWUP_SHEET_URL));
+
+    /* ---------- Board state ---------- */
+    let ROWS = [];              // [["Lead","Mon","Tue",...], ...]
+    let edits = new Map();      // key "r_c" => value text
+    let activeCellId = null;
+
+    /* ---------- Modal control ---------- */
     const modal = $("modalBackdrop");
     const modalTA = $("modalTextarea");
     function openModal(id, title, initial){
       activeCellId = id;
-      const mt = document.getElementById("modalTitle");
-      if (mt) mt.textContent = title || "Edit note";
-      if (modalTA) modalTA.value = initial || "";
+      $("modalTitle").textContent = title || "Edit note";
+      modalTA.value = initial || "";
       modal.style.display = "flex";
       modal.setAttribute("aria-hidden","false");
-      modalTA?.focus?.();
+      setTimeout(()=>modalTA.focus(), 50);
     }
-    function closeModal(){
-      modal.style.display = "none";
-      modal.setAttribute("aria-hidden","true");
-      activeCellId = null;
-    }
-    document.getElementById("modalClose")?.addEventListener("click", closeModal);
+    function closeModal(){ modal.style.display = "none"; modal.setAttribute("aria-hidden","true"); activeCellId = null; }
+    $("modalClose").addEventListener("click", closeModal);
     modal.addEventListener("click", (e)=>{ if (e.target===modal) closeModal(); });
     document.addEventListener("keydown", (e)=>{ if (e.key==="Escape" && modal.getAttribute("aria-hidden")==="false") closeModal(); });
-    document.getElementById("modalSave")?.addEventListener("click", ()=>{
+    $("modalSave").addEventListener("click", ()=>{
       if (!activeCellId) return;
       const v = modalTA.value || "";
       const el = document.getElementById("cell-"+activeCellId);
       const ta = document.getElementById("ta-"+activeCellId);
       if (ta) ta.value = v;
       if (el){
-        const pv = el.querySelector(".preview");
-        const bd = el.querySelector(".badge");
+        const pv = el.querySelector(".preview"); const bd = el.querySelector(".badge");
         if (pv) pv.textContent = v ? v.replace(/\s+/g,' ').trim() : "Empty";
         el.classList.toggle("empty", !v);
         if (bd) bd.textContent = v ? "Filled" : "Empty";
@@ -492,168 +492,87 @@ Director – HD HeeD Pty Ltd
       closeModal();
     });
 
-    // ===== Load from Drive-backed Apps Script =====
-    let ROWS = []; // [["Lead","Mon","Tue",...], ...]
-    async function load(){
+    /* ---------- Build & Load ---------- */
+    function mail(link){ const a=document.createElement("a"); a.href="mailto:"+link; a.textContent="📧 "+link; return a; }
+    function tel(link){ const a=document.createElement("a"); a.href="tel:"+(link||"").replace(/[^0-9+]/g,""); a.textContent="☎ "+link; return a; }
+    function formatLeadCell(name){
+      const wrap = document.createElement("div"); wrap.className="lead";
+      const nm = document.createElement("div"); nm.className="name"; nm.textContent = name||"—"; wrap.appendChild(nm);
+      const info = CONTACTS[name];
+      if (info){
+        const meta = document.createElement("div"); meta.className="meta";
+        if (info.email) meta.appendChild(mail(info.email));
+        if (info.phone) meta.appendChild(tel(info.phone));
+        if (info.website){ const w=document.createElement("a"); w.href=info.website; w.target="_blank"; w.rel="noopener"; w.textContent="🌐 Website"; meta.appendChild(w); }
+        wrap.appendChild(meta);
+      }
+      return wrap;
+    }
+
+    async function loadBoard(){
       try{
-        setStatus("Loading…");
-        const r = await fetch(API, { method:"GET" });
-        if (!r.ok) throw new Error("Could not load. Check the API URL and access ('Anyone').");
+        setStatus("Loading board…");
+        const r = await fetch(APPS_SCRIPT_WEBAPP, { method:"GET" });
+        if (!r.ok) throw new Error("Could not load board. Check exec URL & access (Anyone).");
         const data = await r.json();
         ROWS = data;
         buildTable();
         setStatus("Loaded.", true);
       }catch(err){
-        console.error(err);
-        setStatus(err.message || "Load failed.");
+        console.error(err); setStatus(err.message || "Load failed.");
         alert(err.message || "Load failed. In Apps Script: Deploy → Web app → access 'Anyone'.");
       }
     }
 
     function buildTable(){
-      const tb = $("tbody");
-      if (!tb) return;
-      tb.innerHTML = "";
-      edits.clear();
+      const tb = $("tbody"); if (!tb) return;
+      tb.innerHTML = ""; edits.clear();
       for (let r=1; r<ROWS.length; r++){ // skip header
-        const row = ROWS[r];
-        const lead = row[0] || "";
+        const row = ROWS[r]; const lead = row[0] || "";
         const tr = document.createElement("tr");
 
-        const th = document.createElement("th");
-        th.appendChild(formatLeadCell(lead));
-        tr.appendChild(th);
+        const th = document.createElement("th"); th.appendChild(formatLeadCell(lead)); tr.appendChild(th);
 
         for (let c=0; c<7; c++){ // Mon..Sun
           const id = `${r-1}_${c}`;
           const td = document.createElement("td");
 
-          // Hidden store
-          const ta = document.createElement("textarea");
-          ta.id = "ta-"+id;
-          ta.style.display = "none";
-          ta.value = row[c+1] || "";
+          const ta = document.createElement("textarea"); ta.id = "ta-"+id; ta.style.display = "none"; ta.value = row[c+1] || "";
 
-          // Compact cell UI
-          const cell = document.createElement("div");
-          cell.className = "cell";
-          if (!ta.value) cell.classList.add("empty");
-          cell.id = "cell-"+id;
+          const cell = document.createElement("div"); cell.className = "cell"; if (!ta.value) cell.classList.add("empty"); cell.id = "cell-"+id;
+          const preview = document.createElement("div"); preview.className = "preview"; preview.textContent = ta.value ? ta.value.replace(/\s+/g,' ').trim() : "Empty";
+          const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = ta.value ? "Filled" : "Empty";
 
-          const preview = document.createElement("div");
-          preview.className = "preview";
-          preview.textContent = ta.value ? ta.value.replace(/\s+/g,' ').trim() : "Empty";
+          cell.appendChild(preview); cell.appendChild(badge);
+          cell.addEventListener("click", ()=>{ const day = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][c]; openModal(id, `${lead} — ${day}`, ta.value); });
 
-          const badge = document.createElement("span");
-          badge.className = "badge";
-          badge.textContent = ta.value ? "Filled" : "Empty";
-
-          cell.appendChild(preview);
-          cell.appendChild(badge);
-
-          cell.addEventListener("click", ()=>{
-            const day = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][c];
-            openModal(id, `${lead} — ${day}`, ta.value);
-          });
-
-          td.appendChild(cell);
-          td.appendChild(ta);
-          tr.appendChild(td);
+          td.appendChild(cell); td.appendChild(ta); tr.appendChild(td);
         }
-
         tb.appendChild(tr);
       }
     }
 
-    // ===== Save back to Sheet =====
-    async function save(){
-      if (edits.size===0) { setStatus("No changes to save.", true); return; }
+    async function saveBoard(){
+      if (edits.size===0){ setStatus("No changes to save.", true); return; }
       try{
         setStatus("Saving…");
         const rows = [];
-        edits.forEach((value, key)=>{
-          const [ri, ci] = key.split("_").map(Number);
-          rows.push({ rowIndex: ri, colIndex: ci, value });
-        });
-        const resp = await fetch(API, { method:"POST", headers:{"Content-Type":"text/plain"}, body: JSON.stringify({rows}) });
-        const txt = await resp.text();
-        let ok = null; try { ok = JSON.parse(txt); } catch(e) {}
+        edits.forEach((value,key)=>{ const [ri,ci] = key.split("_").map(Number); rows.push({ rowIndex: ri, colIndex: ci, value }); });
+        const resp = await fetch(APPS_SCRIPT_WEBAPP, { method:"POST", headers:{ "Content-Type":"text/plain" }, body: JSON.stringify({rows}) });
+        const txt = await resp.text(); let ok=null; try{ ok = JSON.parse(txt); }catch{}
         if (!resp.ok || !ok || !ok.ok) throw new Error(`Save failed (status ${resp.status}): ${txt.substring(0,200)}`);
-        setStatus("Saved.", true);
-        edits.clear();
-      }catch(err){
-        console.error(err);
-        setStatus("Save failed.");
-        alert(err.message || "Save failed. Ensure the Web App is deployed with access 'Anyone'.");
-      }
+        edits.clear(); setStatus("Saved.", true);
+      }catch(err){ console.error(err); setStatus("Save failed."); alert(err.message || "Save failed. Check Web App permissions."); }
     }
 
     // Buttons
-    document.getElementById("btnRefresh")?.addEventListener("click", load);
-    document.getElementById("btnSave")?.addEventListener("click", save);
+    $("btnRefresh").addEventListener("click", ()=>{ loadContactsDynamic(); loadBoard(); });
+    $("btnSave").addEventListener("click", saveBoard);
 
-    // ===== Dual-button weekly cleaner =====
-    let armTimeout = null;
-    document.getElementById("btnArmClean")?.addEventListener("click", ()=>{
-      if (armTimeout) clearTimeout(armTimeout);
-      const doBtn = document.getElementById("btnDoClean");
-      if (doBtn) doBtn.disabled = false;
-      const arm = document.getElementById("btnArmClean");
-      if (arm) arm.textContent = "Armed (8s)…";
-      setStatus("Cleanup armed — press Confirm to wipe all notes (names stay).");
-      armTimeout = setTimeout(()=>{
-        if (doBtn) doBtn.disabled = true;
-        if (arm) arm.textContent = "1) Arm";
-        setStatus("Cleanup disarmed.", true);
-      }, 8000);
+    // Boot (load contacts first so lead column shows metadata)
+    document.addEventListener("DOMContentLoaded", ()=>{
+      loadContactsDynamic().then(loadBoard);
     });
-
-    document.getElementById("btnDoClean")?.addEventListener("click", async ()=>{
-      const doBtn = document.getElementById("btnDoClean");
-      if (!doBtn || doBtn.disabled) return;
-
-      const updates = [];
-      for (let r=1; r<ROWS.length; r++){ // skip header
-        for (let c=0; c<7; c++){ // Mon..Sun
-          const id = `${r-1}_${c}`;
-          const el = document.getElementById("cell-"+id);
-          const ta = document.getElementById("ta-"+id);
-          if (ta && (ta.value!=="" || el?.classList.contains("empty")===false)) {
-            ta.value = "";
-            if (el) {
-              el.classList.add("empty");
-              const pv = el.querySelector(".preview"); if (pv) pv.textContent = "Empty";
-              const bd = el.querySelector(".badge"); if (bd) bd.textContent = "Empty";
-            }
-            edits.set(id, "");
-            updates.push({ rowIndex: r-1, colIndex: c, value: "" });
-          }
-        }
-      }
-      if (armTimeout) clearTimeout(armTimeout);
-      doBtn.disabled = true;
-      const arm = document.getElementById("btnArmClean");
-      if (arm) arm.textContent = "1) Arm";
-
-      if (updates.length===0) { setStatus("Nothing to clear.", true); return; }
-
-      try {
-        setStatus("Wiping all notes for a fresh week…");
-        const resp = await fetch(API, { method:"POST", headers:{"Content-Type":"text/plain"}, body: JSON.stringify({ rows: updates }) });
-        const txt2 = await resp.text();
-        let ok2 = null; try { ok2 = JSON.parse(txt2); } catch(e) {}
-        if (!resp.ok || !ok2 || !ok2.ok) throw new Error(`Cleanup save failed (status ${resp.status}): ${txt2.substring(0,200)}`);
-        edits.clear();
-        setStatus("All notes cleared. Fresh week ready ✅", true);
-      } catch(err) {
-        console.error(err);
-        setStatus("Cleanup failed.");
-        alert(err.message || "Cleanup failed. Check Web App permissions and try again.");
-      }
-    });
-
-    // Boot the Follow-up tab on page load (safe if tab isn't visible yet)
-    load();
   </script>
 </body>
 </html>
