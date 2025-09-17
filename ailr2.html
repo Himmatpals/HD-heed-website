@@ -1,169 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>AILR — Advanced Intake & Long-form Registration | HD HeeD</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-<meta name="theme-color" content="#0b0f1a">
+<meta name="theme-color" content="#0b0f1a" />
+
 <style>
-  :root {
-    --al-ink: #0a0e1f;
-    --al-bg: #0b0f1a;
-    --al-panel: #121a32;
-    --al-line: #2a3a5e;
-    --al-text: #f0f4ff;
-    --al-accent: linear-gradient(135deg, #4f46e5, #ec4899);
-    --al-ok: #10b981;
-    --al-warn: #fbbf24;
-    --al-danger: #ef4444;
+  :root{
+    /* Core theme */
+    --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153;
+    --al-text:#e8edff; --al-a1:#4f46e5; --al-a2:#ec4899;
+    --al-ok:#22c55e; --al-warn:#f59e0b; --al-danger:#ef4444;
+
+    /* FX */
+    --al-accent: linear-gradient(135deg, var(--al-a1), var(--al-a2));
     --al-secondary: linear-gradient(135deg, #06b6d4, #3b82f6);
-    --al-glow: rgba(236, 72, 153, 0.4);
+    --al-glow: rgba(236,72,153,.45);
   }
-  *{box-sizing:border-box;transition:all .3s ease}
-  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0b0f1a 0%,#1a1f3a 50%,#2a0f3a 100%);color:var(--al-text);overflow-x:hidden}
-  a{color:#9ec1ff;text-decoration:none;transition:color .3s ease}
-  a:hover{color:#d4d4ff}
+  *{ box-sizing:border-box }
+  html,body{ height:100% }
+  body{
+    margin:0; font-family: system-ui,Segoe UI,Roboto,Arial,sans-serif;
+    background: radial-gradient(1200px 600px at 10% -10%, rgba(79,70,229,.25), transparent 60%),
+                radial-gradient(1200px 600px at 90% 10%, rgba(236,72,153,.2), transparent 60%),
+                linear-gradient(180deg,#0b0f1a 0%, #11183a 45%, #0c1028 100%);
+    color:var(--al-text);
+    overflow-x:hidden;
+  }
+  a{ color:#9ec1ff; text-decoration:none }
+  a:hover{ color:#d4d4ff }
 
-  header{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#0a0e1f,#1a1f3a);border-bottom:1px solid var(--al-line);box-shadow:0 4px 20px rgba(0,0,0,.5)}
-  header .bar{display:flex;align-items:center;gap:12px;padding:10px 16px;max-width:1120px;margin:0 auto}
-  .brand{display:flex;align-items:center;gap:10px}
-  .brand .name{font-weight:900;text-shadow:0 1px 2px rgba(0,0,0,.6)}
-  .brand .tag{font-size:12px;color:#b6c8ff}
+  /* Header */
+  header{
+    position:sticky; top:0; z-index:50;
+    background: linear-gradient(135deg, #0a0e1f, #1a1f3a);
+    border-bottom:1px solid var(--al-line);
+    box-shadow: 0 6px 24px rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+  }
+  header .bar{
+    display:flex; align-items:center; gap:12px; padding:12px 16px;
+    max-width:1120px; margin:0 auto;
+  }
+  .brand{display:flex; align-items:center; gap:10px}
+  .brand .name{font-weight:900; letter-spacing:.2px}
+  .brand .tag{font-size:12px; color:#b6c8ff}
+  .hint{font-size:12px; color:#9fb4ff}
 
-  .hero{max-width:1120px;margin:14px auto 0;padding:16px}
-  .hero .card{background:linear-gradient(180deg,rgba(18,26,50,.8),rgba(12,19,38,.8));backdrop-filter:blur(12px);border:1px solid transparent;border-image:var(--al-accent) 1;border-radius:24px;padding:24px;display:grid;gap:12px;box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 0 20px rgba(255,255,255,.05);animation:fadeIn .8s ease-out}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-  .hero h1{margin:0;font-size:clamp(24px,4.8vw,36px);font-weight:900;background:var(--al-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .hero p{margin:0;color:#cfe0ff;opacity:.95;line-height:1.6}
-  .hero .meta{display:flex;gap:8px;flex-wrap:wrap}
-  .pill{border:1px solid var(--al-line);background:linear-gradient(135deg,#0f1937,#1a2345);border-radius:999px;padding:8px 12px;color:#cfe0ff;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-  .notice{font-size:14px;color:#99adff;font-style:italic}
+  /* Hero */
+  .hero{ max-width:1120px; margin:14px auto 0; padding:16px; }
+  .hero .card{
+    background: linear-gradient(180deg, rgba(18,26,50,.85), rgba(12,19,38,.85));
+    border: 1px solid transparent; border-image: var(--al-accent) 1;
+    border-radius: 24px; padding: 24px; display:grid; gap:12px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.55), inset 0 0 16px rgba(255,255,255,.05);
+    animation: fadeInUp .7s ease both;
+  }
+  .hero h1{
+    margin:0; font-size: clamp(24px, 4.8vw, 38px); font-weight:900;
+    background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .hero p{ margin:0; color:#cfe0ff; opacity:.95; line-height:1.6 }
+  .meta{ display:flex; gap:8px; flex-wrap:wrap }
+  .pill{
+    border:1px solid var(--al-line); background: linear-gradient(135deg,#0f1937,#1a2345);
+    border-radius:999px; padding:8px 12px; color:#cfe0ff; font-size:13px;
+    box-shadow:0 2px 8px rgba(0,0,0,.3)
+  }
+  .notice{ font-size:14px; color:#99adff; font-style:italic }
 
-  .wrap{max-width:1120px;margin:12px auto 24px;padding:0 16px;display:grid;gap:16px;grid-template-columns:1fr}
-  @media (min-width:980px){.wrap{grid-template-columns:280px 1fr}}
+  /* Layout */
+  .wrap{
+    max-width:1120px; margin:12px auto 24px; padding:0 16px; display:grid; gap:16px;
+    grid-template-columns:1fr;
+  }
+  @media (min-width:980px){ .wrap{ grid-template-columns: 280px 1fr; } }
 
-  .nav-sidebar{position:sticky;top:88px;align-self:start;display:none;background:linear-gradient(180deg,rgba(15,22,48,.8),rgba(11,16,38,.8));backdrop-filter:blur(10px);border:1px solid transparent;border-image:var(--al-secondary) 1;border-radius:20px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,.55),0 0 15px var(--al-glow);animation:pulseGlow 2s infinite alternate ease-in-out;max-height:calc(100vh - 120px);overflow-y:auto}
-  @media (min-width:980px){.nav-sidebar{display:block}}
-  @keyframes pulseGlow{from{box-shadow:0 20px 50px rgba(0,0,0,.55),0 0 10px var(--al-glow)}to{box-shadow:0 20px 50px rgba(0,0,0,.55),0 0 20px var(--al-glow)}}
-  .nav-sidebar h3{margin:0 0 12px;font-size:18px;font-weight:800;background:var(--al-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .nav-list{list-style:none;padding:0;margin:0;display:grid;gap:8px}
-  .nav-item{padding:10px 12px;border-radius:12px;cursor:pointer;font-size:14px;color:#cfe0ff;transition:all .3s ease;border:1px solid transparent}
-  .nav-item:hover{background:linear-gradient(135deg,#121a3a,#1a2345);border-color:var(--al-line)}
-  .nav-item.current{background:var(--al-accent);color:#fff;border-color:transparent;box-shadow:0 0 10px var(--al-glow)}
-  .nav-item.completed{color:var(--al-ok);border-left:3px solid var(--al-ok)}
-  /* HARD DISABLE locked items */
-  .nav-item.locked { opacity:.45; cursor:not-allowed; pointer-events:none; }
-  .nav-item.locked:hover { background:none; border-color:transparent; }
+  /* Sidebar (nav) */
+  .nav-sidebar{
+    position:sticky; top:92px; align-self:start; display:none;
+    background: linear-gradient(180deg, rgba(15,22,48,.85), rgba(11,16,38,.85));
+    border:1px solid transparent; border-image: var(--al-secondary) 1;
+    border-radius:20px; padding:16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.55), 0 0 14px var(--al-glow);
+    max-height: calc(100vh - 140px); overflow:auto;
+    animation: softPulse 3s ease-in-out infinite alternate;
+  }
+  @media (min-width:980px){ .nav-sidebar{ display:block } }
+  .nav-sidebar h3{
+    margin:0 0 12px; font-size:18px; font-weight:800;
+    background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .nav-list{ list-style:none; padding:0; margin:0; display:grid; gap:8px }
+  .nav-item{
+    position:relative; padding:10px 12px; border-radius:12px; cursor:pointer; font-size:14px; color:#cfe0ff;
+    border:1px solid transparent; transform: translateZ(0);
+  }
+  .nav-item:hover{ background: linear-gradient(135deg,#121a3a,#1a2345); border-color:var(--al-line) }
+  .nav-item.current{ background: var(--al-accent); color:#fff; border-color:transparent; box-shadow: 0 0 10px var(--al-glow) }
+  .nav-item.completed{ color:var(--al-ok); border-left:3px solid var(--al-ok) }
+  .nav-item.locked{ opacity:.55; cursor:not-allowed; filter:saturate(.5) }
+  .nav-item.locked::after{
+    content:"🔒"; position:absolute; right:8px; top:8px; font-size:12px; opacity:.8
+  }
 
-  .stage{border:1px solid transparent;border-image:var(--al-accent) 1;border-radius:24px;padding:20px;background:linear-gradient(180deg,rgba(16,23,42,.8),rgba(12,19,38,.8));backdrop-filter:blur(12px);box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 0 15px rgba(255,255,255,.05);animation:fadeIn .6s ease-out}
-  .head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-  .head .step{font-weight:900;background:var(--al-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .meter{height:10px;background:linear-gradient(90deg,#101838,#1a2345);border:1px solid var(--al-line);border-radius:999px;overflow:hidden;flex:1;box-shadow:inset 0 1px 3px rgba(0,0,0,.5)}
-  .meter>div{height:100%;width:0%;background:var(--al-accent);transition:width .5s ease;box-shadow:0 0 10px var(--al-glow)}
+  /* Stage */
+  .stage{
+    border:1px solid transparent; border-image: var(--al-accent) 1; border-radius:24px; padding:20px;
+    background: linear-gradient(180deg, rgba(16,23,42,.88), rgba(12,19,38,.88));
+    box-shadow: 0 20px 60px rgba(0,0,0,.55), inset 0 0 15px rgba(255,255,255,.05);
+    overflow:hidden;
+  }
+  .head{ display:flex; align-items:center; gap:12px; margin-bottom:8px }
+  .head .step{ font-weight:900; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
+  .meter{ height:10px; background: linear-gradient(90deg,#101838,#1a2345); border:1px solid var(--al-line); border-radius:999px; overflow:hidden; flex:1; box-shadow: inset 0 1px 3px rgba(0,0,0,.5) }
+  .meter>div{ height:100%; width:0%; background: var(--al-accent); transition: width .5s ease; box-shadow: 0 0 10px var(--al-glow) }
 
-  .q{font-size:clamp(20px,4vw,24px);font-weight:900;line-height:1.35;margin:12px 0;background:var(--al-secondary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .sub{font-size:15px;color:#cfe0ff;margin:0 0 8px;line-height:1.6}
-  .sub .consent-box{border:1px dashed var(--al-line);background:linear-gradient(135deg,#0e162e,#1a223f);border-radius:12px;padding:12px;margin-top:10px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-  .sub ul{margin:10px 0 0 20px;list-style:disc;color:#d1e7ff}
+  .q{ font-size: clamp(20px, 3.8vw, 26px); font-weight:900; line-height:1.35; margin:12px 0;
+      background: var(--al-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
+  .sub{ font-size:15px; color:#cfe0ff; margin:0 0 8px; line-height:1.6 }
+  .sub .consent-box{
+    border:1px dashed var(--al-line); background: linear-gradient(135deg,#0e162e,#1a223f);
+    border-radius:12px; padding:12px; margin-top:10px; box-shadow: 0 4px 12px rgba(0,0,0,.3)
+  }
+  .sub ul{ margin:10px 0 0 20px; color:#d1e7ff }
 
-  .opts{display:grid;gap:12px}
-  .al-chip{border:1px solid var(--al-line);background:linear-gradient(180deg,#121a3a,#0f172f);color:#e7ebff;border-radius:16px;padding:16px;text-align:left;cursor:pointer;font-size:1.05rem;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:transform .3s ease,box-shadow .3s ease}
-  .al-chip:hover{transform:scale(1.02);box-shadow:0 12px 34px rgba(0,0,0,.28),0 0 8px var(--al-glow)}
-  .al-chip[aria-pressed="true"]{box-shadow:0 0 0 4px rgba(236,72,153,.35);border-image:var(--al-accent) 1}
+  /* Options & Inputs */
+  .opts{ display:grid; gap:12px }
+  .al-chip{
+    border:1px solid var(--al-line); background: linear-gradient(180deg,#121a3a,#0f172f);
+    color:#e7ebff; border-radius:16px; padding:16px; text-align:left; cursor:pointer; font-size:1.05rem;
+    box-shadow:0 4px 12px rgba(0,0,0,.3); transition: transform .25s ease, box-shadow .25s ease;
+    transform-style: preserve-3d; perspective: 600px;
+  }
+  .al-chip:hover{
+    transform: translateY(-2px) rotateX(3deg) rotateY(-2deg);
+    box-shadow: 0 16px 34px rgba(0,0,0,.32), 0 0 12px var(--al-glow);
+  }
+  .al-chip[aria-pressed="true"]{ box-shadow: 0 0 0 4px rgba(236,72,153,.35); border-image: var(--al-accent) 1 }
 
-  .inlinebox{border:1px solid var(--al-line);background:linear-gradient(135deg,#0e162e,#1a223f);border-radius:16px;padding:14px;display:grid;gap:12px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-  .inlinebox input,.inlinebox select,.inlinebox textarea{width:100%;padding:14px;border-radius:12px;border:1px solid #2a3b68;background:linear-gradient(135deg,#0f1b3b,#1a2748);color:#e7ebff;font-size:16px;box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
-  .inlinebox input:focus,.inlinebox select:focus,.inlinebox textarea:focus{border-color:#ec4899;box-shadow:0 0 8px var(--al-glow)}
+  .inlinebox{
+    border:1px solid var(--al-line); background: linear-gradient(135deg,#0e162e,#1a223f);
+    border-radius:16px; padding:14px; display:grid; gap:12px; box-shadow:0 4px 12px rgba(0,0,0,.3)
+  }
+  .inlinebox input,.inlinebox select,.inlinebox textarea{
+    width:100%; padding:14px; border-radius:12px; border:1px solid #2a3b68;
+    background: linear-gradient(135deg,#0f1b3b,#1a2748); color:#e7ebff; font-size:16px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.4); outline:none; transition:border-color .2s ease, box-shadow .2s ease
+  }
+  .inlinebox input:focus,.inlinebox select:focus,.inlinebox textarea:focus{
+    border-color:#ec4899; box-shadow: 0 0 8px var(--al-glow)
+  }
+  .row{ display:grid; gap:12px }
+  @media (min-width:680px){
+    .row.two{ grid-template-columns:repeat(2,minmax(0,1fr)) }
+    .row.three{ grid-template-columns:repeat(3,minmax(0,1fr)) }
+  }
 
-  .row{display:grid;gap:12px}
-  @media (min-width:680px){.row.two{grid-template-columns:repeat(2,minmax(0,1fr))}.row.three{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  /* Footer buttons */
+  .foot{
+    position:sticky; bottom:0; left:0; right:0; display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    margin-top:14px; padding-top:12px; border-top:1px dashed var(--al-line); background:transparent
+  }
+  .btn{
+    border:0; border-radius:16px; padding:14px 18px; font-weight:900; cursor:pointer; min-height:48px;
+    box-shadow:0 6px 20px rgba(0,0,0,.4); transition: transform .25s ease, box-shadow .25s ease
+  }
+  .btn:hover{ transform: translateY(-2px); box-shadow:0 12px 30px rgba(0,0,0,.5) }
+  .btn.primary{ background: var(--al-accent); color:#fff }
+  .btn.ghost{ background: linear-gradient(135deg,#121a3a,#1a2345); color:#e7ebff; border:1px solid var(--al-line) }
+  .btn.warn{ background: linear-gradient(135deg,#173155,#334c85); color:#ffd95c; border:1px solid #334c85 }
 
-  .foot{position:sticky;bottom:0;left:0;right:0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px dashed var(--al-line);background:transparent}
-  .btn{border:0;border-radius:16px;padding:14px 18px;font-weight:900;cursor:pointer;min-height:48px;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:transform .3s ease,box-shadow .3s ease}
-  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.5)}
-  .btn.primary{background:var(--al-accent);color:#fff}
-  .btn.ghost{background:linear-gradient(135deg,#121a3a,#1a2345);color:#e7ebff;border:1px solid var(--al-line)}
-  .btn.warn{background:linear-gradient(135deg,#173155,#334c85);color:#ffd95c;border:1px solid #334c85}
-  .hint{font-size:13px;color:#9fb4ff;opacity:.9}
+  /* Review cards */
+  .review{ display:grid; gap:12px }
+  details.card{
+    border:1px solid var(--al-line); background: linear-gradient(135deg,#0f1731,#1a223f);
+    border-radius:16px; padding:12px; box-shadow:0 4px 12px rgba(0,0,0,.3)
+  }
+  summary{
+    cursor:pointer; font-weight:900; background: var(--al-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent
+  }
+  .kv{ display:grid; gap:6px; margin-top:10px }
+  .kv div{ display:flex; gap:12px; font-size:15px; color:#cedaff }
+  .kv div b{ min-width:220px; color:#ffe28f; font-weight:800; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
+  @media (max-width:520px){ .kv div{ flex-direction:column } .kv div b{ min-width:unset } }
 
-  .review{display:grid;gap:12px}
-  details.card{border:1px solid var(--al-line);background:linear-gradient(135deg,#0f1731,#1a223f);border-radius:16px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-  summary{cursor:pointer;font-weight:900;background:var(--al-secondary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .kv{display:grid;gap:6px;margin-top:10px}
-  .kv div{display:flex;gap:12px;font-size:15px;color:#cedaff}
-  .kv div b{min-width:220px;color:#ffe28f;font-weight:800;background:var(--al-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  @media (max-width:520px){.kv div{flex-direction:column}.kv div b{min-width:unset}}
+  /* Checklists */
+  .ck-list{ list-style:none; padding:0; margin:0; display:grid; gap:10px }
+  .ck-row{ display:flex; align-items:center; gap:12px; position:relative }
+  .ck-row input[type="checkbox"]{ position:absolute; opacity:0; pointer-events:none }
+  .ck-row label{
+    position:relative; padding-left:36px; cursor:pointer; user-select:none; line-height:1.2
+  }
+  /* Base box */
+  .ck-row label::before{
+    content:""; position:absolute; left:6px; top:50%; transform:translateY(-50%);
+    width:22px; height:22px; border:2px solid #6677a8; border-radius:6px; margin-right:10px;
+    background:#0e162e; box-shadow:inset 0 2px 4px rgba(0,0,0,.35); transition: all .25s ease;
+  }
+  /* When checked, fill box */
+  .ck-row input[type="checkbox"]:checked + label::before{
+    background: linear-gradient(135deg, var(--al-a1), var(--al-a2));
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgba(236,72,153,.25);
+  }
+  /* Proper ✓ tick mark */
+  .ck-row input[type="checkbox"]:checked + label::after{
+    content:""; position:absolute; left:12px; top:50%;
+    width:8px; height:14px; border: solid #fff; border-width:0 3px 3px 0;
+    transform: translateY(-58%) rotate(45deg); border-radius:1px; box-shadow:0 0 6px rgba(0,0,0,.25);
+  }
 
-  .ck-list{list-style:none;padding:0;margin:0;display:grid;gap:10px}
-  .ck-row{display:flex;align-items:center;gap:12px}
-  .ck-row input[type="checkbox"]{width:20px;height:20px;accent-color:#ec4899}
+  /* Drop area (kept for completeness) */
+  .drop{ border:2px dashed #2a3b68; border-radius:16px; padding:14px; text-align:center; color:#cfe0ff; background: rgba(18,26,50,.2) }
+  .drop input{ display:none }
+  .drop label{ display:inline-block; padding:12px 14px; border-radius:12px; border:1px solid var(--al-line); background: linear-gradient(135deg,#121a3a,#1a2345); cursor:pointer; font-weight:800 }
+  .drop label:hover{ background: var(--al-accent); color:#fff }
 
-  .drop{border:2px dashed #2a3b68;border-radius:16px;padding:14px;text-align:center;color:#cfe0ff;background:rgba(18,26,50,.2);backdrop-filter:blur(5px)}
-  .drop input{display:none}
-  .drop label{display:inline-block;padding:12px 14px;border-radius:12px;border:1px solid var(--al-line);background:linear-gradient(135deg,#121a3a,#1a2345);cursor:pointer;font-weight:800}
-  .drop label:hover{background:var(--al-accent);color:#fff}
-
+  .ok{color:var(--al-ok)} .warntext{color:var(--al-warn)} .danger{color:var(--al-danger)}
   .hide{display:none}
-  .ok{color:var(--al-ok)}
-  .warntext{color:var(--al-warn)}
-  .danger{color:var(--al-danger)}
 
-  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.7);z-index:1000;backdrop-filter:blur(5px)}
-  .modal.open{display:flex;animation:fadeIn .4s ease}
-  .modal .panel{width:min(1000px,96vw);height:min(88vh,1000px);background:linear-gradient(135deg,#0b1226,#1a1f3a);border:1px solid var(--al-line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 20px var(--al-glow)}
-  .modal .head{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--al-line)}
-  .modal .head .ttl{font-weight:900;background:var(--al-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .modal .body{flex:1;background:linear-gradient(135deg,#0e162e,#1a223f);backdrop-filter:blur(5px)}
-  .modal embed{width:100%;height:100%}
-  .modal .foot{padding:12px;border-top:1px solid var(--al-line);display:flex;gap:10px;justify-content:flex-end}
+  /* Modal for docs */
+  .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.7); z-index:1000; backdrop-filter: blur(5px) }
+  .modal.open{ display:flex; animation: fadeIn .4s ease }
+  .modal .panel{
+    width:min(1000px,96vw); height:min(88vh,1000px); background: linear-gradient(135deg,#0b1226,#1a1f3a);
+    border:1px solid var(--al-line); border-radius:18px; overflow:hidden; display:flex; flex-direction:column;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 20px var(--al-glow)
+  }
+  .modal .head{ display:flex; align-items:center; justify-content:space-between; padding:12px; border-bottom:1px solid var(--al-line) }
+  .modal .head .ttl{ font-weight:900; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
+  .modal .body{ flex:1; background: linear-gradient(135deg,#0e162e,#1a223f) }
+  .modal embed{ width:100%; height:100% }
+  .modal .foot{ padding:12px; border-top:1px solid var(--al-line); display:flex; gap:10px; justify-content:flex-end }
 
-  .doc-list{margin:10px 0 0 20px;color:#cfe0ff}
-  .doc-list li{margin:8px 0}
-  .doc-list b{color:#ffe28f;background:var(--al-secondary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .doc-privacy{margin-top:10px;font-size:13px;color:#9fb4ff}
+  .doc-list{ margin:10px 0 0 20px; color:#cfe0ff }
+  .doc-list li{ margin:8px 0 }
+  .doc-list b{ color:#ffe28f; background: var(--al-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
+  .doc-privacy{ margin-top:10px; font-size:13px; color:#9fb4ff }
+
+  /* Animations */
+  @keyframes fadeIn{ from{opacity:0; transform: translateY(10px)} to{opacity:1; transform:none} }
+  @keyframes fadeInUp{ from{opacity:0; transform: translateY(20px)} to{opacity:1; transform:none} }
+  @keyframes slideIn{ from{opacity:0; transform: translateX(24px)} to{opacity:1; transform:none} }
+  @keyframes slideOut{ from{opacity:1; transform:none} to{opacity:0; transform: translateX(-24px)} }
+  @keyframes softPulse{
+    from{ box-shadow: 0 20px 50px rgba(0,0,0,.55), 0 0 8px var(--al-glow) }
+    to  { box-shadow: 0 20px 50px rgba(0,0,0,.55), 0 0 20px var(--al-glow) }
+  }
+
+  /* Slide transition container */
+  .slide-enter{ animation: slideIn .35s cubic-bezier(.2,.8,.2,1) both }
+  .slide-exit{ animation: slideOut .25s cubic-bezier(.4,0,.2,1) both }
 </style>
 </head>
 <body>
+
 <header>
   <div class="bar">
     <div class="brand">
       <div class="name">HD HeeD</div>
       <div class="tag">AILR — Advanced Intake & Long-form Registration</div>
     </div>
-    <div style="margin-left:auto" class="hint">Mobile-first • Autosaves • You can pause and return anytime</div>
+    <div style="margin-left:auto" class="hint">Desktop-optimised • Mobile-friendly • Autosaves • You can pause and return anytime</div>
   </div>
 </header>
 
 <section class="hero">
   <div class="card">
-    <h1>Let's get you set up — thoroughly and simply</h1>
-    <p>Answer clear, step-by-step questions. Pick a card, or type your own answer. Choose <em>Not sure</em> or <em>Prefer not to say</em> whenever you like — you can finish later. We'll only need an <strong>email or phone</strong> at the end to submit.</p>
+    <h1>Let’s get you set up — thoroughly and simply</h1>
+    <p>Answer clear, step-by-step questions. Pick a card, or type your own answer. Choose <em>Not sure</em> or <em>Prefer not to say</em> whenever you like — you can finish later. We’ll only need an <strong>email or phone</strong> at the end to submit.</p>
     <div class="meta">
       <span class="pill">NDIS participant onboarding</span>
       <span class="pill">Consents & risks included</span>
     </div>
-    <p class="notice">Tip: On mobile, you'll see one focused screen at a time with large tap targets.</p>
+    <p class="notice">Tip: On mobile, you’ll see one focused screen at a time with large tap targets.</p>
   </div>
 </section>
 
 <div class="wrap" id="app">
+  <!-- NAVIGATION SIDEBAR -->
   <nav class="nav-sidebar" aria-label="Form navigation">
     <h3>Form Progress</h3>
     <ul id="navList" class="nav-list"></ul>
   </nav>
 
+  <!-- MAIN STAGE -->
   <main class="stage" role="region" aria-live="polite">
     <div class="head">
       <span id="stepTxt" class="step">Step 1/16</span>
       <div class="meter" aria-label="Progress"><div id="bar"></div></div>
     </div>
-    <div id="q" class="q">Welcome — let's begin</div>
+
+    <div id="q" class="q">Welcome — let’s begin</div>
     <p id="sub" class="sub">Pick a card or type. You can choose Not sure or Prefer not to say anywhere.</p>
-    <div id="opts" class="opts"></div>
+
+    <div id="opts" class="opts">
+      <!-- Initial content is replaced by JS builders -->
+    </div>
+
     <div class="foot">
       <div class="hint" id="saveHint">Draft saved</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
         <button class="btn ghost" id="backBtn" type="button">← Back</button>
         <button class="btn warn" id="saveExitBtn" type="button">Save & Exit</button>
         <button class="btn primary" id="nextBtn" type="button">Next →</button>
@@ -172,6 +311,7 @@
   </main>
 </div>
 
+<!-- DOC VIEWER MODAL -->
 <div id="docModal" class="modal" aria-hidden="true">
   <div class="panel">
     <div class="head">
@@ -179,18 +319,22 @@
       <button id="docClose" class="btn ghost">Close</button>
     </div>
     <div class="body"><embed id="docViewer" src="" type="application/pdf" /></div>
-    <div class="foot"><a id="docDownload" class="btn primary" href="#" download>Download PDF</a></div>
+    <div class="foot">
+      <a id="docDownload" class="btn primary" href="#" download>Download PDF</a>
+    </div>
   </div>
 </div>
 
+<!-- CONFETTI CANVAS -->
+<canvas id="confetti" class="hide" style="position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:1500"></canvas>
+
 <script>
-window.addEventListener('DOMContentLoaded', function(){
-
-  /* ====== Config ====== */
+(function(){
+  /* ====== Config (links kept EXACTLY) ====== */
   var GS_WEBAPP   = "https://script.google.com/macros/s/AKfycbyj9VvLh26csmc0bEry3cfeRzGxmZZJx5HNptkZGvcVzqTfmnO9fSsvhwF9YgCwfM5ALw/exec";
-  var STORAGE_KEY = "hdheed_ailr_v18_hardlock";
+  var STORAGE_KEY = "hdheed_ailr_v16";
 
-  /* === Your 11 PDFs (exact) === */
+  /* === Your 11 PDFs (links kept EXACTLY) === */
   var DOCS = [
     { id:"handbook", title:"Client Handbook", requiresConsent:false,
       fileId:"https://drive.google.com/file/d/1Du5TxEIgD9n--Gw5vkkkFXEij_SaLwLE/view?usp=sharing" },
@@ -221,39 +365,55 @@ window.addEventListener('DOMContentLoaded', function(){
     return "https://drive.google.com/uc?export=download&id="+encodeURIComponent(idOrUrl);
   }
 
+  /* ====== Safe helpers ====== */
+  function $(s,r){ return (r||document).querySelector(s); }
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+  function setSaveHint(t){ var el=$("#saveHint"); if(el) el.textContent=t; }
+  function cloneSafe(obj){
+    try{ if (typeof structuredClone==="function") return structuredClone(obj); }catch(e){}
+    try{ return JSON.parse(JSON.stringify(obj)); }catch(e){ return obj; }
+  }
+
   /* ====== State ====== */
   var S = {
     i: 0,
     caller: { role:null, name:null, relationship:null, consent:null },
+
     participant: {
       legal_name:null, preferred_name:null, pronouns:null, dob:null, ndis_number:null,
       address:{ line1:null, line2:null, suburb:null, postcode:null, state:null },
       plan_mgmt:null, plan_manager:{ org:null, contact:null, email:null, phone:null },
       plan_dates:{ start:null, end:null }
     },
+
     contacts:{
       email:null, phone:null,
       emergency:{ name:null, relationship:null, phone:null },
       support_coordinator:{ name:null, org:null, email:null, phone:null },
       gp:{ name:null, practice:null, email:null, phone:null }
     },
+
     comms:{
       primary_language:null, interpreter:null, interpreter_language:null,
       cultural_considerations:null,
       preferences:{ worker_gender:null, worker_gender_other:null, transport_required:null }
     },
+
     living:{
       residence_type:null, lives_with:null, entry_notes:null, keysafe:null, smoking_on_premises:null, hazards:null
     },
+
     clinical:{
       primary_diagnoses:null, other_diagnoses:null, allergies:"",
       mobility:null, equipment:null, continence:null, cognition:null, pressure_injury_risk:null,
       seizures:{ has:null, plan:null, frequency:null }, falls_risk:null, diet_notes:null,
       stoma_care:null
     },
+
     medications:{
       has_meds:null, method:"Not sure", storage:null, webster_pack:null, self_admin:null, staff_admin:null, notes:null
     },
+
     risks:{
       behavioural:{ present:null, notes:null },
       clinical:{ wounds:false, diabetes:false, tracheostomy:false, tube_feeding:false, mental_health:false, stoma_care:false, other:null },
@@ -262,20 +422,45 @@ window.addEventListener('DOMContentLoaded', function(){
       other_notes:null,
       overall_rating:"Not sure"
     },
+
     bsp:{ has_bsp:null, provider:null, restrictive_practices:null, notes:null },
+
     supports:{
-      required:[], required_other:null, details_text:null,
-      core:[], capacity:[], core_other:null, capacity_other:null,
+      required:[],
+      required_other:null,
+      details_text:null,
+      core:[], capacity:[],
+      core_other:null, capacity_other:null,
       goals:null, outcomes:null
     },
     schedule:{ windows:[], days:[], start_preference:null, hours_per_week:null, urgency:"Not sure" },
+
     policy_ack:{ handbook:false, incident:false, complaints:false },
     emergency_advocacy:null,
+
     uploads:{ files:[] },
+
     submitter:{ name:null, email:null, phone:null },
+
     acks:{},
+
     notes:[]
   };
+
+  /* Restore draft (safe) */
+  try{
+    var prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if (prev && typeof prev==="object") Object.assign(S, prev);
+  }catch(e){}
+
+  function save(){
+    try{
+      var clone = cloneSafe(S);
+      if (clone.uploads) clone.uploads = { files: [] }; // keep uploads empty
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
+      setSaveHint("Draft saved");
+    }catch(e){}
+  }
 
   /* ====== DOM refs ====== */
   var qEl = document.getElementById("q");
@@ -287,103 +472,67 @@ window.addEventListener('DOMContentLoaded', function(){
   var nextBtn = document.getElementById("nextBtn");
   var saveExitBtn = document.getElementById("saveExitBtn");
   var navList = document.getElementById("navList");
-  var saveHint = document.getElementById("saveHint");
 
-  function setSaveHint(t){ if(saveHint){ saveHint.textContent=t; setTimeout(()=>{ saveHint.textContent=""; }, 2500); } }
-  function cloneSafe(obj){
-    try{ if (typeof structuredClone==="function") return structuredClone(obj); }catch(e){}
-    try{ return JSON.parse(JSON.stringify(obj)); }catch(e){ return obj; }
-  }
-  function save(){
-    try{
-      var clone = cloneSafe(S);
-      if (clone.uploads) clone.uploads = { files: [] }; // do not persist heavy blobs
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
-      setSaveHint("Draft saved");
-    }catch(e){}
-  }
-
-  /* ====== Consent helper ====== */
-  function hasConsent(){ return S && S.caller && S.caller.consent === "Yes"; }
-
-  /* ====== HARD ROUTE GUARD (single source of truth) ====== */
-  function enforceConsentOrSnap(){
-    // If attempting to be beyond Step 2 (index > 1) without consent, snap back.
-    if (!hasConsent() && S.i > 1){
-      S.i = 1; // Consent step
-      return true; // snapped
-    }
-    return false;
-  }
+  /* ====== Portrait images (kept stubs for alt text only) ====== */
+  var AILR_IMAGES = {
+    intro: "", caller: "", participant: "", contacts: "", comms: "", living: "", clinical: "",
+    medications: "", risks: "", bsp: "", supports: "", schedule: "", policies: "", consents: "", uploads: "", review: "", submit: ""
+  };
+  function setPortrait(){ /* (no external images to keep file standalone) */ }
 
   /* ====== UI builders ====== */
-  function row(cols, children){
-    var r = document.createElement('div'); r.className = "row " + (cols||"");
-    children.forEach(function(ch){ r.appendChild(ch); });
-    return r;
+  function button(txt,variant,onClick){
+    var b = el('button','btn '+(variant||'ghost')); b.type="button"; b.textContent=txt; b.addEventListener('click',onClick); return b;
   }
-  function divider(txt){
-    var d = document.createElement('div'); d.className="hint"; d.style.margin="8px 0 4px"; d.innerHTML = txt;
-    return d;
-  }
+  function divider(txt){ return el('div','hint',txt); }
+  function row(cols, children){ var r = el('div','row '+(cols||'')); children.forEach(function(ch){ r.appendChild(ch); }); return r; }
   function input(label, obj, key, type){
-    var box = document.createElement('div'); box.className="inlinebox";
-    var id = "in_"+key+"_"+Math.random().toString(36).slice(2,7);
+    var box = el('div','inlinebox'); var id = "in_"+key+"_"+Math.random().toString(36).slice(2,7);
     box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var i = document.createElement('input');
-    i.id=id; i.type = type||"text"; i.value = obj[key]||""; i.placeholder = "";
+    var i = el('input'); i.id=id; i.type=type||"text"; i.value = obj[key]||""; i.placeholder = "";
     i.addEventListener('input', function(){ obj[key] = i.value || null; save(); });
     box.appendChild(i); return box;
   }
   function select(label, obj, key, options){
-    var box = document.createElement('div'); box.className="inlinebox";
-    var id = "sel_"+key+"_"+Math.random().toString(36).slice(2,7);
+    var box = el('div','inlinebox'); var id = "sel_"+key+"_"+Math.random().toString(36).slice(2,7);
     box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var s = document.createElement('select'); s.id=id;
-    var html = '<option value="">Select…</option>';
-    options.forEach(function(o){ html += '<option value="'+o+'">'+o+'</option>'; });
-    s.innerHTML = html;
-    if (obj[key]!==null && obj[key]!==undefined) s.value = obj[key];
+    var s = el('select'); s.id=id;
+    var html = '<option value="">Select…</option>'; options.forEach(function(o){ html += '<option value="'+o+'">'+o+'</option>'; });
+    s.innerHTML = html; if (obj[key]!==null && obj[key]!==undefined) s.value = obj[key];
     s.addEventListener('change', function(){ obj[key] = s.value || null; save(); });
     box.appendChild(s); return box;
   }
   function radioChips(label, obj, key, items){
-    var wrap = document.createElement('div'); wrap.className="inlinebox";
-    wrap.innerHTML = '<label style="font-weight:800">'+label+'</label>';
-    var roww = document.createElement('div'); roww.style="display:flex; gap:8px; flex-wrap:wrap";
+    var wrap = el('div','inlinebox'); wrap.innerHTML = '<label style="font-weight:800">'+label+'</label>';
+    var roww = el('div'); roww.style="display:flex; gap:8px; flex-wrap:wrap";
     var buttons = [];
     items.forEach(function(pair){
       var txt = pair[0], val = pair[1];
-      var b = document.createElement('button'); b.type="button"; b.className="al-chip"; b.textContent = txt;
-      if (obj[key]===val) b.setAttribute("aria-pressed","true");
-      b.addEventListener('click', function(){
+      var b = button(txt,'ghost',function(){
         obj[key] = val;
         buttons.forEach(function(x){ x.removeAttribute("aria-pressed"); });
         b.setAttribute("aria-pressed","true");
         save();
-        if (Steps[S.i].key === "caller"){ // consent step
-          nextBtn.disabled = !hasConsent();
-          nextBtn.title = nextBtn.disabled ? 'Please select "Yes" to continue' : '';
-          updateNavigation();
-        }
+        updateNavigation(); // reflect locks (e.g., consent)
       });
+      b.className = "al-chip";
+      if (obj[key]===val) b.setAttribute("aria-pressed","true");
       buttons.push(b); roww.appendChild(b);
     });
     wrap.appendChild(roww); return wrap;
   }
   function radioChipsInline(label, obj, key, items){ return radioChips(label, obj, key, items); }
   function checks(label, targetObj, map, arrayKey){
-    var box = document.createElement('div'); box.className="inlinebox";
-    box.innerHTML = '<label style="font-weight:800">'+label+'</label>';
-    var list = document.createElement('ul'); list.className="ck-list";
+    var box = el('div','inlinebox'); box.innerHTML = '<label style="font-weight:800">'+label+'</label>';
+    var list = el('ul','ck-list');
     if (arrayKey){
       if (!Array.isArray(targetObj[arrayKey])) targetObj[arrayKey] = [];
       Object.keys(map).forEach(function(k){
         var txt = map[k];
         var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
-        var li = document.createElement('li'); li.className="ck-row";
-        var c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = targetObj[arrayKey].indexOf(k)!==-1;
-        var lab = document.createElement('label'); lab.htmlFor=id; lab.textContent = txt;
+        var li = el('li','ck-row');
+        var c = el('input'); c.type="checkbox"; c.id=id; c.checked = targetObj[arrayKey].indexOf(k)!==-1;
+        var lab = el('label',null,txt); lab.htmlFor=id;
         c.addEventListener('change', function(){
           var arr = targetObj[arrayKey];
           if (c.checked){ if (arr.indexOf(k)===-1) arr.push(k); }
@@ -396,9 +545,9 @@ window.addEventListener('DOMContentLoaded', function(){
       Object.keys(map).forEach(function(k){
         var txt = map[k];
         var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
-        var li = document.createElement('li'); li.className="ck-row";
-        var c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = !!targetObj[k];
-        var lab = document.createElement('label'); lab.htmlFor=id; lab.textContent = txt;
+        var li = el('li','ck-row');
+        var c = el('input'); c.type="checkbox"; c.id=id; c.checked = !!targetObj[k];
+        var lab = el('label',null,txt); lab.htmlFor=id;
         c.addEventListener('change', function(){ targetObj[k] = c.checked; save(); });
         li.appendChild(c); li.appendChild(lab); list.appendChild(li);
       });
@@ -406,23 +555,152 @@ window.addEventListener('DOMContentLoaded', function(){
     box.appendChild(list); return box;
   }
   function typeBox(label, placeholder, onSave){
-    var box = document.createElement('div'); box.className="inlinebox";
-    var id = "tb_"+Math.random().toString(36).slice(2,7);
+    var box = el('div','inlinebox'); var id = "tb_"+Math.random().toString(36).slice(2,7);
     box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var i = document.createElement('input');
-    i.id=id; i.placeholder = placeholder||"Type here";
-    i.addEventListener('input', function(){
-      var v = (i.value||"");
-      try{ if (typeof onSave === "function") onSave(v); } finally { setSaveHint("Draft saved"); }
-    });
+    var i = el('input'); i.id=id; i.placeholder = placeholder||"Type here";
+    i.addEventListener('input', function(){ try{ if (typeof onSave === "function") onSave(i.value||""); } finally { setSaveHint("Draft saved"); } });
     box.appendChild(i); return box;
   }
-  function button(txt,variant,onClick){
-    var b = document.createElement('button');
-    b.className = "btn " + (variant||"ghost");
-    b.type="button"; b.textContent = txt;
-    b.addEventListener('click',onClick);
-    return b;
+
+  function renderReview(){
+    var wrap = el('div','review');
+    function sect(title, pairs){
+      var d = el('details','card'); d.open = true;
+      var s = el('summary',null,title); d.appendChild(s);
+      var kv = el('div','kv');
+      pairs.forEach(function(pair){
+        var k=pair[0], v=pair[1];
+        var row = el('div'); var b = el('b',null,k);
+        var span = el('span',null,(v===null||v===undefined||v==="")?"—":v);
+        row.appendChild(b); row.appendChild(span); kv.appendChild(row);
+      });
+      d.appendChild(kv); return d;
+    }
+
+    wrap.appendChild(sect("Who is completing", [
+      ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
+    ]));
+
+    wrap.appendChild(sect("Participant", [
+      ["Legal name", S.participant.legal_name],
+      ["Preferred name", S.participant.preferred_name],
+      ["Pronouns", S.participant.pronouns],
+      ["DOB", S.participant.dob],
+      ["NDIS number", S.participant.ndis_number],
+      ["Address", [S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
+      ["Plan management", S.participant.plan_mgmt],
+      ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
+      ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
+    ]));
+
+    function mapRequired(arr, other){
+      var map = {
+        personal_care:"Personal care",
+        high_intensity:"High-intensity personal care",
+        household_tasks:"Household tasks",
+        life_skills:"Development of life skills",
+        community_participation:"Community participation",
+        group_centre:"Group/centre-based activities",
+        travel_transport:"Assist with travel & transport",
+        daily_tasks_sil:"Daily tasks & shared living",
+        not_sure:"Not sure — guide me"
+      };
+      var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
+      if (other) list.push("Other: "+other);
+      return list.length ? list.join(", ") : "—";
+    }
+
+    wrap.appendChild(sect("Supports (required)", [
+      ["Selected", mapRequired(S.supports.required, S.supports.required_other)],
+      ["Specific support details", S.supports.details_text],
+      ["Goals", S.supports.goals],
+      ["Preferred outcomes", S.supports.outcomes]
+    ]));
+
+    wrap.appendChild(sect("Communication & preferences", [
+      ["Language", S.comms.primary_language],
+      ["Interpreter", S.comms.interpreter],
+      ["Interpreter language", S.comms.interpreter_language],
+      ["Cultural considerations", S.comms.cultural_considerations],
+      ["Worker gender pref.", S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other || "—"],
+      ["Transport required", S.comms.preferences.transport_required||"—"]
+    ]));
+
+    wrap.appendChild(sect("Contacts", [
+      ["Email", S.contacts.email],
+      ["Phone", S.contacts.phone],
+      ["Emergency contact", [S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(" • ")||"—"],
+      ["Support Coordinator", [S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(" • ")||"—"],
+      ["GP", [S.contacts.gp.name,S.contacts.gp.practice,S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • ")||"—"]
+    ]));
+
+    wrap.appendChild(sect("Living & access", [
+      ["Residence type", S.living.residence_type],
+      ["Lives with", S.living.lives_with],
+      ["Entry notes", S.living.entry_notes],
+      ["Keysafe", S.living.keysafe],
+      ["Smoking", S.living.smoking_on_premises],
+      ["Hazards", S.living.hazards]
+    ]));
+
+    wrap.appendChild(sect("Health & clinical", [
+      ["Primary diagnoses", S.clinical.primary_diagnoses],
+      ["Other diagnoses", S.clinical.other_diagnoses],
+      ["Allergies", S.clinical.allergies],
+      ["Mobility", S.clinical.mobility],
+      ["Equipment", S.clinical.equipment],
+      ["Continence", S.clinical.continence],
+      ["Cognition", S.clinical.cognition],
+      ["Pressure injury risk", S.clinical.pressure_injury_risk],
+      ["Falls risk", S.clinical.falls_risk],
+      ["Seizures", S.clinical.seizures.has===true?"Yes":S.clinical.seizures.has===false?"No":(S.clinical.seizures.has===null?"Not sure":"—")],
+      ["Seizure plan", S.clinical.seizures.plan],
+      ["Seizure frequency", S.clinical.seizures.frequency],
+      ["Stoma/ostomy care", (S.clinical.stoma_care===true?"Yes":S.clinical.stoma_care===false?"No":(S.clinical.stoma_care||"—"))],
+      ["Diet / swallowing", S.clinical.diet_notes]
+    ]));
+
+    function listTrue(obj, keys){
+      var map = {wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
+                 animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"};
+      var list = keys.filter(function(k){ return obj[k]===true; }).map(function(k){ return map[k]||k; });
+      return list.length? list.join(", ") : "—";
+    }
+
+    wrap.appendChild(sect("Risks", [
+      ["Behavioural", S.risks.behavioural.present],
+      ["Behaviour notes", S.risks.behavioural.notes],
+      ["Clinical concerns", listTrue(S.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])],
+      ["Clinical other", S.risks.clinical.other],
+      ["Environmental", listTrue(S.risks.environmental, ["animals","hoarding","weapons"])],
+      ["Environmental other", S.risks.environmental.other],
+      ["Home risks", listTrue(S.risks.home_checklist, ["trip_hazards","smoke_alarms","lighting","bathroom_safety"])],
+      ["Home notes", S.risks.home_checklist.notes],
+      ["Other risk notes", S.risks.other_notes],
+      ["Overall rating", S.risks.overall_rating]
+    ]));
+
+    function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
+    function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
+
+    wrap.appendChild(sect("Supports & schedule", [
+      ["Windows", mapWindows(S.schedule.windows)],
+      ["Days", mapDays(S.schedule.days)],
+      ["Hours/week", S.schedule.hours_per_week],
+      ["Urgency", S.schedule.urgency],
+      ["Start pref.", S.schedule.start_preference]
+    ]));
+
+    var cons = (S.emergency_advocacy===undefined||S.emergency_advocacy===null||S.emergency_advocacy==="") ? "—" : (S.emergency_advocacy==="Yes"?"Yes":S.emergency_advocacy==="No"?"No":"Not sure");
+    wrap.appendChild(sect("Consents", [
+      ["Emergency advocacy consent", cons]
+    ]));
+
+    wrap.appendChild(sect("Uploads", [
+      ["Files selected", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ") || "—"]
+    ]));
+
+    return wrap;
   }
 
   /* ====== Steps ====== */
@@ -436,10 +714,7 @@ window.addEventListener('DOMContentLoaded', function(){
           ["Health Professional","Health Professional"],
           ["Prefer not to say","Prefer not to say"]
         ]));
-        m.appendChild(row("two",[
-          input("Your name (optional)", S.caller, "name"),
-          input("Relationship (if any)", S.caller, "relationship")
-        ]));
+        m.appendChild(row("two",[ input("Your name (optional)", S.caller, "name"), input("Relationship (if any)", S.caller, "relationship") ]));
       }
     },
 
@@ -448,9 +723,7 @@ window.addEventListener('DOMContentLoaded', function(){
         m.appendChild(radioChips("Do you give consent to collect your details and, if needed, liaise with your Support Coordinator/Plan Manager?", S.caller, "consent", [
           ["Yes, I consent","Yes"],["Not yet","Not yet"],["No","No"],["Not sure","Not sure"]
         ]));
-        var warn = document.createElement('div'); warn.className="hint";
-        warn.innerHTML = "Note: If you select <b>Not yet</b> or <b>No</b>, you won’t be able to continue.";
-        m.appendChild(warn);
+        var warn = el('div','hint','Note: If you select Not yet or No, you won’t be able to continue.'); m.appendChild(warn);
       }
     },
 
@@ -492,10 +765,7 @@ window.addEventListener('DOMContentLoaded', function(){
           ["Interpreter required","Yes"],["Interpreter not required","No"],["Not sure","Not sure"],["Prefer not to say","Prefer not to say"]
         ]));
         m.appendChild(typeBox("Cultural / religious considerations (optional)", "Anything to respect (optional)", function(v){ S.comms.cultural_considerations=v; save(); }));
-        m.appendChild(row("two",[
-          select("Worker gender preference", S.comms.preferences, "worker_gender", ["No preference","Female","Male","Other / type below"]),
-          input("Other preference (type if selected)", S.comms.preferences, "worker_gender_other")
-        ]));
+        m.appendChild(row("two",[ select("Worker gender preference", S.comms.preferences, "worker_gender", ["No preference","Female","Male","Other / type below"]), input("Other preference (type if selected)", S.comms.preferences, "worker_gender_other") ]));
         m.appendChild(radioChips("Transport required?", S.comms.preferences, "transport_required", [ ["Yes","Yes"],["No","No"],["Not sure","Not sure"] ]));
       }
     },
@@ -519,11 +789,7 @@ window.addEventListener('DOMContentLoaded', function(){
         m.appendChild(row("two",[ select("Mobility", S.clinical, "mobility", ["Independent","With aid","Requires transfer","Bed-bound","Prefer not to say"]), input("Equipment / aids (optional)", S.clinical, "equipment") ]));
         m.appendChild(row("two",[ select("Continence", S.clinical, "continence", ["Independent","Needs prompting","Incontinent","Catheter / stoma","Prefer not to say"]), select("Cognition", S.clinical, "cognition", ["Clear","Mild impairment","Moderate","Severe","Prefer not to say"]) ]));
         m.appendChild(row("two",[ select("Pressure injury risk", S.clinical, "pressure_injury_risk", ["Low","Medium","High","Not sure"]), select("Falls risk", S.clinical, "falls_risk", ["Low","Medium","High","Not sure"]) ]));
-        m.appendChild(row("three",[
-          radioChipsInline("Seizures?", S.clinical.seizures, "has", [ ["No",false],["Yes",true],["Not sure",null] ]),
-          input("Seizure plan (if any)", S.clinical.seizures, "plan"),
-          input("Frequency (if applicable)", S.clinical.seizures, "frequency")
-        ]));
+        m.appendChild(row("three",[ radioChipsInline("Seizures?", S.clinical.seizures, "has", [ ["No",false],["Yes",true],["Not sure",null] ]), input("Seizure plan (if any)", S.clinical.seizures, "plan"), input("Frequency (if applicable)", S.clinical.seizures, "frequency") ]));
         m.appendChild(radioChipsInline("Stoma/ostomy care required?", S.clinical, "stoma_care", [ ["Yes",true],["No",false],["Not sure",null] ]));
         m.appendChild(input("Diet / swallowing notes (optional)", S.clinical, "diet_notes"));
       }
@@ -533,14 +799,8 @@ window.addEventListener('DOMContentLoaded', function(){
       build:function(m){
         m.appendChild(radioChips("Participant has medications?", S.medications, "has_meds", [ ["Yes",true],["No",false],["Not sure",null] ]));
         m.appendChild(select("How are meds managed?", S.medications, "method", ["Self-administered","Prompting only","Staff administer","Family administers","Not sure"]));
-        m.appendChild(row("two",[
-          radioChipsInline("Webster pack?", S.medications, "webster_pack", [["Yes",true],["No",false],["Not sure",null]]),
-          input("Storage location (optional)", S.medications, "storage")
-        ]));
-        m.appendChild(row("two",[
-          radioChipsInline("Self-admin?", S.medications, "self_admin", [["Yes",true],["No",false],["Not sure",null]]),
-          radioChipsInline("Staff admin?", S.medications, "staff_admin", [["Yes",true],["No",false],["Not sure",null]])
-        ]));
+        m.appendChild(row("two",[ radioChipsInline("Webster pack?", S.medications, "webster_pack", [["Yes",true],["No",false],["Not sure",null]]), input("Storage location (optional)", S.medications, "storage") ]));
+        m.appendChild(row("two",[ radioChipsInline("Self-admin?", S.medications, "self_admin", [["Yes",true],["No",false],["Not sure",null]]), radioChipsInline("Staff admin?", S.medications, "staff_admin", [["Yes",true],["No",false],["Not sure",null]]) ]));
         m.appendChild(typeBox("Medication notes (optional)", "List regular and PRN meds if you like", function(v){ S.medications.notes=v; save(); }));
       }
     },
@@ -593,6 +853,7 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     },
 
+    /* ===== DETAILED SUPPORTS REQUIRED ===== */
     { key:"supports", title:"Which supports are required? (select one or more)", sub:"Pick all that apply, then press Next. You can also type specifics if helpful.",
       build:function(m){
         var options = {
@@ -625,70 +886,67 @@ window.addEventListener('DOMContentLoaded', function(){
           w4:"Weekends"
         }, "windows"));
         m.appendChild(checks("Days", S.schedule, { d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun" }, "days"));
-        m.appendChild(row("two",[
-          input("Approx. hours per week", S.schedule, "hours_per_week","number"),
-          select("Urgency", S.schedule, "urgency", ["Urgent (24–72h)","Soon (1–2 weeks)","Exploring options","Not sure"])
-        ]));
+        m.appendChild(row("two",[ input("Approx. hours per week", S.schedule, "hours_per_week","number"), select("Urgency", S.schedule, "urgency", ["Urgent (24–72h)","Soon (1–2 weeks)","Exploring options","Not sure"]) ]));
         m.appendChild(input("Start preference / date (optional)", S.schedule, "start_preference"));
       }
     },
 
+    /* ===== POLICIES & SERVICE AGREEMENT NOTE ===== */
     { key:"policies", title:"Client Handbook, Consents & Service Agreement", sub:"Please confirm you’ve received & read the documents below. For forms requiring consent, tick to confirm you consent and will sign the PDF and email it to info@hdheed.com.au. <br><br><b>Service Agreement:</b> Using the information you provide, we will prepare a Service Agreement that must be reviewed and signed before supports commence.",
       build:function(m){
-        DOCS.forEach(function(d){ if(!S.acks[d.id]) S.acks[d.id] = { read:false, consent:false }; });
+        DOCS.forEach(function(d){
+          if(!S.acks[d.id]) S.acks[d.id] = { read:false, consent:false };
+        });
 
         DOCS.forEach(function(d){
-          var card = document.createElement('div'); card.className="inlinebox";
+          var card = el('div','inlinebox');
           card.innerHTML = '<div style="font-weight:800">'+d.title+'</div>';
-          var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; align-items:center";
-          var a = document.createElement('a'); a.className="btn primary"; a.textContent="Download PDF"; a.href=driveUrl(d.fileId); a.download="";
+          var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; align-items:center";
+          var a = el('a','btn primary','Download PDF'); a.href=driveUrl(d.fileId); a.download="";
           actions.appendChild(a);
-          var hint = document.createElement('div'); hint.className="hint";
-          hint.textContent = d.requiresConsent ? "Please sign the PDF and email it to info@hdheed.com.au."
-                                               : "Please read this document before proceeding.";
-          actions.appendChild(hint);
-          card.appendChild(actions);
+          var hint = el('div','hint', d.requiresConsent ? "Please sign the PDF and email it to info@hdheed.com.au." : "Please read this document before proceeding.");
+          actions.appendChild(hint); card.appendChild(actions);
 
-          var row1 = document.createElement('div'); row1.className="ck-row";
-          var c1 = document.createElement('input'); c1.type="checkbox"; c1.id="ack_read_"+d.id; c1.checked = !!S.acks[d.id].read;
-          var l1 = document.createElement('label'); l1.htmlFor=c1.id; l1.textContent = "I have received & read this document.";
+          var row1 = el('div','ck-row');
+          var c1 = el('input'); c1.type="checkbox"; c1.id="ack_read_"+d.id; c1.checked = !!S.acks[d.id].read;
+          var l1 = el('label',null,"I have received & read this document."); l1.htmlFor=c1.id;
           c1.addEventListener('change', function(){ S.acks[d.id].read = c1.checked; save(); });
           row1.appendChild(c1); row1.appendChild(l1); card.appendChild(row1);
 
           if (d.requiresConsent){
-            var row2 = document.createElement('div'); row2.className="ck-row";
-            var c2 = document.createElement('input'); c2.type="checkbox"; c2.id="ack_con_"+d.id; c2.checked = !!S.acks[d.id].consent;
-            var l2 = document.createElement('label'); l2.htmlFor=c2.id; l2.textContent = "I consent to the terms in this form.";
+            var row2 = el('div','ck-row');
+            var c2 = el('input'); c2.type="checkbox"; c2.id="ack_con_"+d.id; c2.checked = !!S.acks[d.id].consent;
+            var l2 = el('label',null,"I consent to the terms in this form."); l2.htmlFor=c2.id;
             c2.addEventListener('change', function(){ S.acks[d.id].consent = c2.checked; save(); });
             row2.appendChild(c2); row2.appendChild(l2); card.appendChild(row2);
           }
           m.appendChild(card);
         });
 
-        var sum = document.createElement('div'); sum.className="hint"; sum.style.marginTop="6px";
-        var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
-        DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
-        sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
-        m.appendChild(sum);
+        var sum = el('div','hint'); sum.style.marginTop="6px";
+        function updateSum(){
+          var total=DOCS.length, readCt=0, needCon=DOCS.filter(function(d){return d.requiresConsent;}).length, conCt=0;
+          DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
+          sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
+        }
+        updateSum(); m.appendChild(sum);
       }
     },
 
+    /* ===== DOCUMENTS (EMAIL REMINDERS) ===== */
     { key:"uploads", title:"Documents — please email them", sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
-      <div class="consent-box" style="margin-top:10px">\
-        <b>What to send (simple reminder)</b>\
-        <ul>\
-          <li>Photo ID (e.g., driver licence or passport)</li>\
-          <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
-          <li>NDIS plan (latest)</li>\
-          <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
-          <li>Medication chart / current medication list (if any)</li>\
-          <li>Signed consent forms — Refer to step 13.</li>\
-        </ul>\
-      </div>',
-      build:function(m){
-        S.uploads.files = [];
-        save();
-      }
+          <div class="consent-box" style="margin-top:10px">\
+            <b>What to send (simple reminder)</b>\
+            <ul>\
+              <li>Photo ID (e.g., driver licence or passport)</li>\
+              <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
+              <li>NDIS plan (latest)</li>\
+              <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
+              <li>Medication chart / current medication list (if any)</li>\
+              <li>Signed consent forms — Refer to step 13.</li>\
+            </ul>\
+          </div>',
+      build:function(m){ S.uploads.files = []; save(); }
     },
 
     { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
@@ -700,11 +958,14 @@ window.addEventListener('DOMContentLoaded', function(){
         m.appendChild(row("two",[ input("Your name (submitter)", S.submitter, "name"), input("Email (required if no phone)", S.submitter, "email","email") ]));
         m.appendChild(input("Phone (required if no email)", S.submitter, "phone","tel"));
 
-        var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
+        var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
         var btnSend = button("Send now","primary", function(){
-          if (!hasConsent()){
-            alert('You must give consent on Step 2 before submitting.');
-            S.i = 1; render();
+          // EXTRA HARD-GATE: consent must be Yes even here.
+          if (S.caller.consent!=="Yes"){
+            alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
+            return;
+          }
+          if (!canProceed(Steps.length-2)){ // validate the policies step if needed, etc.
             return;
           }
           var hasEmail = S.submitter.email && S.submitter.email.trim();
@@ -713,10 +974,16 @@ window.addEventListener('DOMContentLoaded', function(){
             alert("Please provide at least an email or a phone number to submit.");
             return;
           }
-          btnSend.disabled = true; var oldTxt = btnSend.textContent; btnSend.textContent = "Sending…";
+
+          btnSend.disabled = true;
+          var oldTxt = btnSend.textContent;
+          btnSend.textContent = "Sending…";
+
           sendToFormspree().then(function(j){
+            triggerConfetti(1200);
             var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
             alert("All done — we’ve received your onboarding." + pdfMsg);
+
             try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
             var stage = document.querySelector("main.stage");
             if (stage){
@@ -727,287 +994,65 @@ window.addEventListener('DOMContentLoaded', function(){
             }
           }).catch(function(e){
             alert("Couldn’t send right now. Please email info@hdheed.com.au or try again.\n\n" + (e && e.message ? e.message : e));
-            btnSend.disabled = false; btnSend.textContent = oldTxt;
+            btnSend.disabled = false;
+            btnSend.textContent = oldTxt;
           });
         });
 
         var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
         actions.appendChild(btnSend); actions.appendChild(btnPdf);
         m.appendChild(actions);
-        var hint = document.createElement('div'); hint.className="hint";
-        hint.innerHTML = "We’ll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.";
+        var hint = el('div','hint','We’ll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.');
         m.appendChild(hint);
       }
     }
   ];
 
-  /* ===== Helpers for review/summary & sending ===== */
-  function renderReview(){
-    var wrap = document.createElement('div'); wrap.className="review";
-    function sect(title, pairs){
-      var d = document.createElement('details'); d.className="card"; d.open = true;
-      var s = document.createElement('summary'); s.textContent = title; d.appendChild(s);
-      var kv = document.createElement('div'); kv.className="kv";
-      pairs.forEach(function(pair){
-        var k=pair[0], v=pair[1];
-        var row = document.createElement('div'); var b = document.createElement('b'); b.textContent = k;
-        var span = document.createElement('span'); span.textContent = (v===null||v===undefined||v==="")?"—":v;
-        row.appendChild(b); row.appendChild(span); kv.appendChild(row);
-      });
-      d.appendChild(kv); return d;
-    }
-    function listTrue(obj, keys){
-      var map = {wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
-                 animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"};
-      var list = keys.filter(function(k){ return obj[k]===true; }).map(function(k){ return map[k]||k; });
-      return list.length? list.join(", ") : "—";
-    }
-    function mapRequired(arr, other){
-      var map = {
-        personal_care:"Personal care",
-        high_intensity:"High-intensity personal care",
-        household_tasks:"Household tasks",
-        life_skills:"Development of life skills",
-        community_participation:"Community participation",
-        group_centre:"Group/centre-based activities",
-        travel_transport:"Assist with travel & transport",
-        daily_tasks_sil:"Daily tasks & shared living",
-        not_sure:"Not sure — guide me"
-      };
-      var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
-      if (other) list.push("Other: "+other);
-      return list.length ? list.join(", ") : "—";
-    }
-    function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
-    function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
-
-    wrap.appendChild(sect("Who is completing", [
-      ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
-    ]));
-    wrap.appendChild(sect("Participant", [
-      ["Legal name", S.participant.legal_name],
-      ["Preferred name", S.participant.preferred_name],
-      ["Pronouns", S.participant.pronouns],
-      ["DOB", S.participant.dob],
-      ["NDIS number", S.participant.ndis_number],
-      ["Address", [S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
-      ["Plan management", S.participant.plan_mgmt],
-      ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
-      ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
-    ]));
-    wrap.appendChild(sect("Supports (required)", [
-      ["Selected", mapRequired(S.supports.required, S.supports.required_other)],
-      ["Specific support details", S.supports.details_text],
-      ["Goals", S.supports.goals],
-      ["Preferred outcomes", S.supports.outcomes]
-    ]));
-    wrap.appendChild(sect("Communication & preferences", [
-      ["Language", S.comms.primary_language],
-      ["Interpreter", S.comms.interpreter],
-      ["Interpreter language", S.comms.interpreter_language],
-      ["Cultural considerations", S.comms.cultural_considerations],
-      ["Worker gender pref.", S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other || "—"],
-      ["Transport required", S.comms.preferences.transport_required||"—"]
-    ]));
-    wrap.appendChild(sect("Contacts", [
-      ["Email", S.contacts.email],
-      ["Phone", S.contacts.phone],
-      ["Emergency contact", [S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(" • ")||"—"],
-      ["Support Coordinator", [S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(" • ")||"—"],
-      ["GP", [S.contacts.gp.name,S.contacts.gp.practice,S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • ")||"—"]
-    ]));
-    wrap.appendChild(sect("Living & access", [
-      ["Residence type", S.living.residence_type],
-      ["Lives with", S.living.lives_with],
-      ["Entry notes", S.living.entry_notes],
-      ["Keysafe", S.living.keysafe],
-      ["Smoking", S.living.smoking_on_premises],
-      ["Hazards", S.living.hazards]
-    ]));
-    wrap.appendChild(sect("Health & clinical", [
-      ["Primary diagnoses", S.clinical.primary_diagnoses],
-      ["Other diagnoses", S.clinical.other_diagnoses],
-      ["Allergies", S.clinical.allergies],
-      ["Mobility", S.clinical.mobility],
-      ["Equipment", S.clinical.equipment],
-      ["Continence", S.clinical.continence],
-      ["Cognition", S.clinical.cognition],
-      ["Pressure injury risk", S.clinical.pressure_injury_risk],
-      ["Falls risk", S.clinical.falls_risk],
-      ["Seizures", S.clinical.seizures.has===true?"Yes":S.clinical.seizures.has===false?"No":(S.clinical.seizures.has===null?"Not sure":"—")],
-      ["Seizure plan", S.clinical.seizures.plan],
-      ["Seizure frequency", S.clinical.seizures.frequency],
-      ["Stoma/ostomy care", (S.clinical.stoma_care===true?"Yes":S.clinical.stoma_care===false?"No":(S.clinical.stoma_care||"—"))],
-      ["Diet / swallowing", S.clinical.diet_notes]
-    ]));
-    wrap.appendChild(sect("Risks", [
-      ["Behavioural", S.risks.behavioural.present],
-      ["Behaviour notes", S.risks.behavioural.notes],
-      ["Clinical concerns", listTrue(S.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])],
-      ["Clinical other", S.risks.clinical.other],
-      ["Environmental", listTrue(S.risks.environmental, ["animals","hoarding","weapons"])],
-      ["Environmental other", S.risks.environmental.other],
-      ["Home risks", listTrue(S.risks.home_checklist, ["trip_hazards","smoke_alarms","lighting","bathroom_safety"])],
-      ["Home notes", S.risks.home_checklist.notes],
-      ["Other risk notes", S.risks.other_notes],
-      ["Overall rating", S.risks.overall_rating]
-    ]));
-    var cons = (S.emergency_advocacy===undefined||S.emergency_advocacy===null||S.emergency_advocacy==="") ? "—" : (S.emergency_advocacy==="Yes"?"Yes":S.emergency_advocacy==="No"?"No":"Not sure");
-    wrap.appendChild(sect("Consents", [["Emergency advocacy consent", cons]]));
-    wrap.appendChild(sect("Uploads", [["Files selected", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ") || "—"]]));
-    return wrap;
-  }
-
-  function mapRequiredForSummary(arr, other){
-    var map = {
-      personal_care:"Personal care",
-      high_intensity:"High-intensity personal care",
-      household_tasks:"Household tasks",
-      life_skills:"Development of life skills",
-      community_participation:"Community participation",
-      group_centre:"Group/centre-based activities",
-      travel_transport:"Assist with travel & transport",
-      daily_tasks_sil:"Daily tasks & shared living",
-      not_sure:"Not sure — guide me"
-    };
-    var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
-    if (other) list.push("Other: "+other);
-    return list.length ? list.join(", ") : "";
-  }
-  function mapWindowsSummary(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
-  function mapDaysSummary(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
-
-  function sendToFormspree(){
-    var policyAck = {
-      handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-      incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-      complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
-    };
-    var payload = {
-      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
-      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
-      bsp:S.bsp, supports:S.supports, schedule:S.schedule,
-      policy_ack: policyAck,
-      acks:S.acks, emergency_advocacy:S.emergency_advocacy,
-      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
-      _meta:{ app:"AILR", version:"v18-hardlock" }
-    };
-    try{
-      var addr = S.participant && S.participant.address ? [
-        S.participant.address.line1, S.participant.address.line2,
-        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
-      ].filter(Boolean).join(", ") : "";
-      var contactSummary = [(S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")].join("");
-      var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
-      var daysSummary     = mapDaysSummary(S.schedule.days);
-
-      payload.supports.required_summary   = requiredSummary;
-      payload.supports.details_text       = S.supports.details_text || "";
-      payload.schedule.windows_summary    = windowsSummary;
-      payload.schedule.days_summary       = daysSummary;
-      payload.participant.address_summary = addr;
-      payload.contacts.contact_summary    = contactSummary;
-    }catch(e){}
-
-    return fetch(GS_WEBAPP, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    }).then(async function(r){
-      var j = await r.json().catch(()=>({}));
-      if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
-      return j;
-    }).catch(function(){
-      return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
-        .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
-    });
-  }
-
-  function openDoc(title, href){
-    var modal = document.getElementById('docModal');
-    var docTitle = document.getElementById('docTitle');
-    var docViewer = document.getElementById('docViewer');
-    var docDownload = document.getElementById('docDownload');
-    docTitle.textContent = title;
-    docViewer.src = href;
-    docDownload.href = href;
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden','false');
-    document.getElementById('docClose').addEventListener('click', closeDoc);
-    modal.addEventListener('click', function(e){ if (e.target===modal) closeDoc(); });
-    function closeDoc(){
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-      docViewer.src = "";
-    }
-  }
-
-  function openPrintableSummary(){ /* optional hook for future print/PDF */ }
-
-  /* ====== Navigation (left sidebar) ====== */
+  /* ====== NAVIGATION (with consent lock) ====== */
   function buildNavigation(){
     navList.innerHTML = '';
     Steps.forEach(function(step, index){
-      var li = document.createElement('li');
-      li.className = 'nav-item';
+      var li = el('li','nav-item');
       li.setAttribute('data-step', index);
       li.textContent = (index + 1) + '. ' + step.title;
 
-      // HARD LOCK: any step beyond Step 2 (index > 1) until consent is "Yes"
-      if (!hasConsent() && index > 1){
-        li.classList.add('locked');
-        li.setAttribute('aria-disabled', 'true');
-        li.title = 'Locked until consent is given on Step 2';
-      } else {
-        li.removeAttribute('aria-disabled');
-        li.title = '';
-      }
-
-      // Click handler (will still be blocked by global guard below if state changes)
       li.addEventListener('click', function(){
-        // If locked, do nothing (pointer-events:none already prevents)
-        if (li.classList.contains('locked')) return;
-
-        var target = index;
-
-        // Validate sequentially when jumping forward
-        if (target > S.i){
-          for (var k = S.i; k < target; k++){
-            if (!canProceed(k)) return;
-          }
+        if (isStepLocked(index)){
+          alert('Please complete required steps first. You must provide Consent "Yes" on Step 2 to continue.');
+          return;
         }
-
-        S.i = target;
-        // Global guard: snap back to consent if needed
-        if (enforceConsentOrSnap()){
-          alert('You must give consent on Step 2 before continuing.');
+        // If jumping forward, ensure current step passes validation
+        if (index > S.i){
+          if (!canProceed(S.i)) return; // this will alert with precise reason
         }
-        render();
+        S.i = index;
+        render(true);
+        updateNavigation();
       });
 
       navList.appendChild(li);
     });
     updateNavigation();
   }
+
   function updateNavigation(){
     var items = navList.querySelectorAll('.nav-item');
     items.forEach(function(item, index){
       item.classList.remove('current','completed','locked');
-      if (!hasConsent() && index > 1){
-        item.classList.add('locked');
-        item.setAttribute('aria-disabled','true');
-        item.title = 'Locked until consent is given on Step 2';
-      } else {
-        item.removeAttribute('aria-disabled');
-        item.title = '';
-      }
       if (index === S.i) item.classList.add('current');
       else if (index < S.i) item.classList.add('completed');
+      if (isStepLocked(index)) item.classList.add('locked');
     });
   }
 
-  /* ====== Validation & render ====== */
+  function isStepLocked(targetIndex){
+    // Hard rule: cannot access step >= 2 (Participant and beyond) unless consent is Yes.
+    if (targetIndex >= 2 && S.caller.consent !== "Yes") return true;
+    // Otherwise allow previous-or-next step (but forward jumps still validate current step)
+    return false;
+  }
+
+  /* ====== Validations (hard gates) ====== */
   function str(v){ return (v||"").toString().trim(); }
   function has(v){ return str(v).length>0; }
 
@@ -1015,138 +1060,219 @@ window.addEventListener('DOMContentLoaded', function(){
     var key = Steps[idx].key;
 
     if (key==="caller"){
-      if (S.caller.consent!=="Yes"){
-        alert("We’re unable to proceed without consent. Please select “Yes” to continue.");
-        return false;
-      }
+      if (S.caller.consent!=="Yes"){ alert("We’re unable to proceed without consent. Please select “Yes” to continue."); return false; }
     }
+
     if (key==="participant"){
       var p=S.participant, a=p.address;
-      if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name."); return false; }
-      if (!has(p.dob)){ alert("Please add Date of birth."); return false; }
-      if (!has(a.line1)||!has(a.suburb)||!has(a.postcode)||!has(a.state)){
-        alert("Please complete Address line 1, Suburb, Postcode, and State."); return false;
+      if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name"); return false; }
+      if (!has(a.line1) || !has(a.suburb) || !has(a.postcode) || !has(a.state)){
+        alert("Please complete the address (Line 1, Suburb, Postcode, State).");
+        return false;
       }
     }
+
     if (key==="contacts"){
       if (!has(S.contacts.email) && !has(S.contacts.phone)){
-        alert("Please provide at least one contact method: Email or Phone."); return false;
+        alert("Please provide at least an email or phone number for the participant.");
+        return false;
       }
     }
+
     if (key==="clinical"){
       if (!has(S.clinical.allergies)){
-        alert("Allergies is required. If none, please write “No known allergies”.");
+        alert("Please enter Allergies (write “No known allergies” if none).");
         return false;
       }
     }
-    if (key==="supports"){
-      var anyReq=(S.supports.required||[]).length>0 || has(S.supports.required_other) || has(S.supports.details_text);
-      if (!anyReq){
-        alert("Please select at least one required support or type a specific support detail.");
-        return false;
-      }
-    }
-    if (key==="schedule"){
-      var someWindow=(S.schedule.windows||[]).length>0;
-      var someDay=(S.schedule.days||[]).length>0;
-      var hours=Number(S.schedule.hours_per_week||0);
-      if (!someWindow && !someDay && !(hours>0)){
-        alert("Please select at least one time window or day, or provide Hours per week.");
-        return false;
-      }
-    }
+
     if (key==="policies"){
-      for (var i=0;i<DOCS.length;i++){
-        var d = DOCS[i], ack = S.acks[d.id]||{};
-        if (!ack.read){ alert("Please tick that you have received & read: " + d.title); return false; }
-        if (d.requiresConsent && !ack.consent){ alert("Please tick consent for: " + d.title); return false; }
+      var total=DOCS.length, readCt=0, needCon=DOCS.filter(function(d){return d.requiresConsent;}).length, conCt=0;
+      DOCS.forEach(function(d){
+        if (S.acks[d.id].read) readCt++;
+        if (d.requiresConsent && S.acks[d.id].consent) conCt++;
+      });
+      if (readCt < total){
+        alert("Please acknowledge that you’ve received and read all documents.");
+        return false;
+      }
+      if (conCt < needCon){
+        alert("Please provide consent for all required forms.");
+        return false;
       }
     }
+
+    if (key==="submit"){
+      if (!has(S.submitter.email) && !has(S.submitter.phone)){
+        alert("Please provide at least an email or phone number to submit.");
+        return false;
+      }
+    }
+
     return true;
   }
 
-  function render(){
-    // Global guard on render (covers *any* path into render)
-    if (enforceConsentOrSnap()){
-      // when snapped, update nav to reflect lock
-    }
-
-    var total = Steps.length;
-    if (S.i<0) S.i=0;
-    if (S.i>=total) S.i = total-1;
-
+  /* ====== Render ====== */
+  function render(slide){
     var step = Steps[S.i];
-    stepTxt.textContent = "Step " + (S.i+1) + "/" + total;
-    barEl.style.width = Math.round((S.i)/(total-1)*100) + "%";
-    qEl.innerHTML = step.title;
-    subEl.innerHTML = step.sub || "";
-    optsEl.innerHTML = "";
+    if (!step) return;
+
+    // Update DOM
+    qEl.textContent = step.title;
+    subEl.innerHTML = step.sub;
+    stepTxt.textContent = "Step " + (S.i + 1) + "/" + Steps.length;
+    barEl.style.width = ((S.i + 1) / Steps.length * 100) + "%";
+
+    // Clear and build options
+    optsEl.innerHTML = '';
+    optsEl.className = "opts" + (slide ? (S.i > S.prevI ? " slide-enter" : " slide-exit") : "");
+    S.prevI = S.i; // track for next slide direction
     step.build(optsEl);
+
+    // Button states
+    backBtn.disabled = S.i === 0;
+    nextBtn.textContent = S.i === Steps.length - 1 ? "Submit" : "Next →";
+    setPortrait();
+
     save();
-
-    // disable Next on consent step until "Yes"
-    if (step.key === "caller"){
-      nextBtn.disabled = !hasConsent();
-      nextBtn.title = nextBtn.disabled ? 'Please select "Yes" to continue' : '';
-    } else {
-      nextBtn.disabled = false;
-      nextBtn.title = '';
-    }
-
-    updateNavigation();
-    nextBtn.style.display = (S.i === total-1) ? "none" : "inline-block";
-    try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){}
   }
 
-  /* ====== Controls ====== */
+  /* ====== Navigation ====== */
   backBtn.addEventListener('click', function(){
-    if (S.i>0){
-      // moving back is always OK
+    if (S.i > 0){
       S.i--;
-      render();
+      render(true);
+      updateNavigation();
     }
   });
 
   nextBtn.addEventListener('click', function(){
-    // If we're on consent step, enforce consent
-    if (Steps[S.i].key === "caller" && !hasConsent()){
-      alert('Consent is required on Step 2 before continuing.');
+    if (!canProceed(S.i)){
       return;
     }
-    // validate current step
-    if (!canProceed(S.i)) return;
-
-    // attempt to advance one step
-    if (S.i<Steps.length-1){
+    if (S.i < Steps.length - 1){
       S.i++;
-      // Global guard: if this would put us past Step 2 without consent, snap back
-      if (enforceConsentOrSnap()){
-        alert('Consent is required on Step 2 before continuing.');
-      }
-      render();
+      render(true);
+      updateNavigation();
+    } else {
+      // Submit handled in the step’s button
     }
   });
 
-  saveExitBtn.addEventListener('click', function(){ save(); alert("Saved. You can close this page and return later on the same device."); });
+  saveExitBtn.addEventListener('click', function(){
+    save();
+    alert("Your progress has been saved. You can return anytime to continue.");
+    window.location.href = "https://hdheed.com.au";
+  });
 
-  /* ====== Restore & Kick off ====== */
-  try{
-    var prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
-    if (prev && typeof prev==="object") Object.assign(S, prev);
+  /* ====== Formspree Submission ====== */
+  function sendToFormspree(){
+    return new Promise(function(resolve, reject){
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', GS_WEBAPP, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
 
-    // On load, if state points beyond consent without consent, force back to Consent
-    if (!hasConsent() && S.i > 1) S.i = 1;
+      var data = cloneSafe(S);
+      data._meta = {
+        timestamp: new Date().toISOString(),
+        version: STORAGE_KEY,
+        form: "ailr"
+      };
 
-    buildNavigation(); render();
+      xhr.onload = function(){
+        if (xhr.status >= 200 && xhr.status < 300){
+          try{ resolve(JSON.parse(xhr.responseText)); } catch(e){ resolve({}); }
+        } else {
+          reject(new Error("Submission failed: " + xhr.statusText));
+        }
+      };
+      xhr.onerror = function(){ reject(new Error("Network error")); };
+      xhr.send(JSON.stringify(data));
+    });
   }
-  catch(e){
-    var stage = document.querySelector("main.stage");
-    if (stage){
-      stage.innerHTML = '<div class="q">There was an error initializing the form.</div><p class="sub">If this persists, please open the page in a modern browser (Chrome/Edge/Safari ≥ 13).</p>';
+
+  /* ====== Printable Summary ====== */
+  function openPrintableSummary(){
+    var win = window.open('', '_blank');
+    var html = '<html><head><title>AILR Summary</title>';
+    html += '<style>';
+    html += ':root{ --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153; --al-text:#e8edff; --al-a1:#4f46e5; --al-a2:#ec4899; --al-ok:#22c55e; --al-warn:#f59e0b; --al-danger:#ef4444; --al-accent: linear-gradient(135deg, var(--al-a1), var(--al-a2)); --al-secondary: linear-gradient(135deg, #06b6d4, #3b82f6); --al-glow: rgba(236,72,153,.45); }';
+    html += 'body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif; background: var(--al-bg); color:var(--al-text); padding:40px; max-width:900px; margin:0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.5);}';
+    html += 'h1{font-size:32px; font-weight:900; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:20px;}';
+    html += '.review{display:grid; gap:16px;}';
+    html += 'details.card{background: linear-gradient(135deg,#0f1731,#1a223f); border:1px solid var(--al-line); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.4);}';
+    html += 'summary{cursor:pointer; font-size:20px; font-weight:900; background: var(--al-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:12px;}';
+    html += '.kv{display:grid; gap:8px;} .kv div{display:flex; gap:16px; align-items:flex-start; font-size:16px; color:#cedaff; line-height:1.4;}';
+    html += '.kv div b{min-width:240px; font-size:16px; font-weight:800; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}';
+    html += '.kv div span{flex:1;}';
+    html += '.print-btn{border:0; border-radius:16px; padding:14px 24px; font-weight:900; cursor:pointer; background: var(--al-accent); color:#fff; box-shadow:0 6px 20px rgba(0,0,0,.4); transition: transform .25s ease; margin:20px auto; display:block;}';
+    html += '.print-btn:hover{transform: translateY(-2px);}';
+    html += '@media print{ .print-btn{display:none;} body{padding:20px;} }';
+    html += '</style>';
+    html += '</head><body>';
+    html += '<h1>AILR Summary for ' + (S.participant.legal_name || 'Participant') + '</h1>';
+    html += renderReview().outerHTML;
+    html += '<button class="print-btn" onclick="window.print()">Print / Save as PDF</button>';
+    html += '</body></html>';
+    win.document.write(html);
+    win.document.close();
+  }
+
+  /* ====== Confetti ====== */
+  function triggerConfetti(duration){
+    var canvas = document.getElementById('confetti');
+    canvas.classList.remove('hide');
+    var ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    var particles = [];
+    var colors = ['#4f46e5', '#ec4899', '#22c55e', '#f59e0b'];
+
+    function Particle(){
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height - canvas.height;
+      this.vx = Math.random() * 4 - 2;
+      this.vy = Math.random() * 6 + 2;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.size = Math.random() * 6 + 2;
     }
+
+    for (var i = 0; i < 100; i++) particles.push(new Particle());
+
+    function animate(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(function(p){
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.1; // gravity
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      if (Date.now() < start + duration){
+        requestAnimationFrame(animate);
+      } else {
+        canvas.classList.add('hide');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    var start = Date.now();
+    animate();
   }
 
-}); // DOMContentLoaded
+  /* ====== Init ====== */
+  buildNavigation();
+  render(false);
+
+  window.addEventListener('resize', function(){
+    var canvas = document.getElementById('confetti');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+})();
 </script>
 </body>
 </html>
