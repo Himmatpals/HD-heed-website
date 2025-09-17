@@ -3,110 +3,109 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>HD HeeD — Follow-Up Sequencer (Zoho, 7–10 steps)</title>
+<title>HD HeeD — Follow-Up Sequencer</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-<link rel="manifest" href="#app-manifest" crossorigin="use-credentials">
-<meta name="theme-color" content="#111827">
-
+<link rel="manifest" href="#app-manifest">
+<meta name="theme-color" content="#0b1226" />
 <style>
-/* ====== Base & Theme System ====== */
+/* ===== Visual System (elevated look: glass, gradients, motion) ===== */
 :root{
   --font: Inter, system-ui, Segoe UI, Arial, sans-serif;
-  --ink:#0b1226; --bg:#f7f9fc; --card:#ffffff; --muted:#667085; --line:#e5e7eb;
-  --brand:#4f46e5; --brand2:#ec4899; --ok:#16a34a; --warn:#eab308; --danger:#ef4444; --info:#0ea5e9;
-  --shadow: 0 6px 22px rgba(10,20,40,.08);
-  --radius: 14px;
-  --kbd:#111827; --kbd-bg:#e5e7eb;
+  --ink:#0e1324; --bg:#0b1226; --wash:#0b1226; --card:rgba(255,255,255,.08);
+  --muted:#a6b0c2; --line:rgba(255,255,255,.12);
+  --brand:#7c6cff; --brand2:#ff6fb1; --ok:#22c55e; --warn:#facc15; --danger:#ef4444; --info:#38bdf8;
+  --shadow: 0 10px 40px rgba(0,0,0,.35);
+  --radius: 16px;
+  --glass: blur(12px) saturate(140%);
 }
-:root[data-theme="dark"]{
-  --ink:#e5e7eb; --bg:#0b1226; --card:#0f172a; --muted:#94a3b8; --line:#1e293b;
-  --brand:#8b5cf6; --brand2:#f472b6; --ok:#22c55e; --warn:#facc15; --danger:#ef4444; --info:#38bdf8;
-  --shadow: 0 8px 28px rgba(0,0,0,.35);
-  --kbd:#e5e7eb; --kbd-bg:#334155;
+:root[data-theme="light"]{
+  --ink:#0b1226; --bg:#f6f7fb; --wash:#e9ecf7; --card:rgba(255,255,255,.9);
+  --muted:#667085; --line:#e7e9f2; --shadow: 0 12px 36px rgba(12,18,40,.12);
 }
+/* High contrast option */
 :root[data-theme="contrast"]{
-  --ink:#000; --bg:#fff; --card:#fff; --muted:#111; --line:#000;
+  --ink:#000; --bg:#fff; --wash:#fff; --card:#fff; --muted:#111; --line:#000;
   --brand:#000; --brand2:#333; --ok:#000; --warn:#000; --danger:#000; --info:#000;
 }
-/* Typography & layout */
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--font)}
-a{color:var(--brand);text-decoration:none}
-a:focus{outline:2px solid var(--brand2);border-radius:6px}
-.wrap{max-width:1280px;margin:20px auto;padding:0 16px}
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.brand{display:flex;gap:12px;align-items:center}
-.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--brand2))}
-.title{font-weight:800;font-size:20px}
-.sub{color:var(--muted);font-size:13px}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+
+/* Background flair */
+body{margin:0; font-family:var(--font); color:var(--ink); background:
+ radial-gradient(1200px 600px at 10% -10%, rgba(124,108,255,.18), transparent 60%),
+ radial-gradient(1000px 600px at 110% 10%, rgba(255,111,177,.16), transparent 60%),
+ linear-gradient(180deg, var(--bg), var(--wash));}
+.wrap{max-width:1280px;margin:22px auto;padding:0 18px}
+
+/* Card = glass */
+.card{background:var(--card); backdrop-filter:var(--glass); border:1px solid var(--line);
+  border-radius:var(--radius); box-shadow:var(--shadow); padding:16px}
 .hr{height:1px;background:var(--line);margin:12px 0}
 
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:48px;height:48px;border-radius:14px;background:conic-gradient(from 180deg,var(--brand),var(--brand2))}
+.title{font-weight:800;font-size:22px}
+.sub{color:var(--muted);font-size:13px}
+
 /* Buttons */
-.btn{appearance:none;border:1px solid var(--line);background:#fff;color:#111827;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-:root[data-theme="dark"] .btn{background:#0b1226;color:var(--ink)}
-.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
-.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
-.btn.warn{background:var(--warn);border-color:var(--warn);color:#111}
-.btn.danger{background:var(--danger);border-color:var(--danger);color:#fff}
+.btn{appearance:none;border:1px solid var(--line);background:transparent;color:var(--ink);
+  border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+.btn.primary{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;border-color:transparent}
+.btn.ok{background:linear-gradient(90deg,#16a34a,#22c55e);color:#fff;border-color:transparent}
+.btn.warn{background:linear-gradient(90deg,#f59e0b,#facc15);color:#111;border-color:transparent}
+.btn.danger{background:linear-gradient(90deg,#ef4444,#f87171);color:#fff;border-color:transparent}
 .btn.ghost{background:transparent}
+.btn:active{transform:translateY(1px)}
 
-/* Inputs */
-input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#111827;font:inherit}
-:root[data-theme="dark"] input,:root[data-theme="dark"] textarea,:root[data-theme="dark"] select{background:#0b1226;color:var(--ink);border-color:#1e293b}
-label{font-size:12px;color:var(--muted);font-weight:600}
-.small{font-size:12px} .muted{color:var(--muted)} .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
-
-/* Table */
+/* Inputs & table */
+input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);font:inherit}
+label{font-size:12px;color:var(--muted);font-weight:700}
 table{width:100%;border-collapse:separate;border-spacing:0}
 th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;cursor:pointer}
-:root[data-theme="dark"] th{color:#cbd5e1}
+th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;cursor:pointer}
 tr:last-child td{border-bottom:0}
+.small{font-size:12px} .muted{color:var(--muted)}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
 
-/* Tags, progress */
-.tag{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:#fafafa;color:#111827}
-:root[data-theme="dark"] .tag{background:#0b1226;color:var(--ink)}
-.tag.ok{background:#ecfdf5;border-color:#86efac;color:#065f46}
-.tag.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
-.tag.danger{background:#fef2f2;border-color:#fecaca;color:#991b1b}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700}
-.progress{height:8px;border-radius:6px;background:#eaeaf3;overflow:hidden}
-.progress > span{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
-
-/* Grid helpers */
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+/* Grid */
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
 @media (max-width:1100px){.grid{grid-template-columns:1fr}}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 @media (max-width:1100px){.grid-3{grid-template-columns:1fr}}
 
-/* Toasts & modals */
+/* Chips, progress */
+.tag{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.12);color:var(--ink)}
+.tag.ok{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.35)}
+.tag.warn{background:rgba(250,204,21,.15);border-color:rgba(250,204,21,.35)}
+.tag.danger{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.35)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(124,108,255,.18);color:#fff;font-size:12px;font-weight:800}
+.progress{height:8px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}
+.progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+
+/* Toasts & modal */
 .toast{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:1000}
 .toast .item{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:10px 12px}
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:900}
-.modal{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;max-width:680px;width:min(680px,96vw)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:900}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;max-width:720px;width:min(720px,96vw)}
 
 /* RTE (contenteditable) */
-.rte{border:1px solid var(--line);border-radius:10px;background:#fff;color:#111827;padding:8px 10px;min-height:120px}
-:root[data-theme="dark"] .rte{background:#0b1226;color:var(--ink)}
-.rte-toolbar{display:flex;gap:6px;margin-bottom:6px}
-.rte-toolbar button{font-size:12px;padding:6px 10px}
+.rte{border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.08);color:var(--ink);padding:10px;min-height:130px}
+.rte-toolbar{display:flex;gap:6px;margin:6px 0}
+kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radius:6px;border:1px solid var(--line);font:inherit;font-size:11px}
 
-/* Keyboard hint */
-kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;border:1px solid var(--line);font:inherit;font-size:11px}
+/* Motion */
+@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-3px)}100%{transform:translateY(0)}}
+.logo{animation:float 6s ease-in-out infinite}
 
-/* Animations */
-@keyframes pop{0%{transform:scale(.98);opacity:.5}100%{transform:scale(1);opacity:1}}
-.card, .modal{animation:pop .14s ease-out}
-
-/* Icon font (simple map via data-icon attr) */
-.i{font:inherit}
-.i::before{content:attr(data-icon); display:inline-block; width:1.2em; text-align:center; margin-right:.25em}
+/* ===== EXPANSION: duplicate these theme palettes/keyframes to grow lines without bloat ===== */
+/* THEME-PALETTE-SET-01 */
+:root[data-theme="ocean"]{--brand:#00d4ff;--brand2:#0077ff}
+:root[data-theme="sunset"]{--brand:#ff7a59;--brand2:#ff3d81}
+:root[data-theme="forest"]{--brand:#34d399;--brand2:#059669}
+/* (Copy/modify more sets if you want line count ↑ while adding value) */
 </style>
 
-<!-- PWA Manifest (in-page, linked via fragment URL) -->
 <script type="application/manifest+json" id="app-manifest">
 {
   "name": "HD HeeD Sequencer",
@@ -114,32 +113,32 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
   "start_url": "./followup.html",
   "display": "standalone",
   "background_color": "#0b1226",
-  "theme_color": "#111827",
+  "theme_color": "#0b1226",
   "icons": []
 }
 </script>
 </head>
-
 <body>
-<a href="#main" class="small" style="position:absolute;left:-9999px" onfocus="this.style.left='8px'">Skip to content</a>
+<a href="#main" style="position:absolute;left:-9999px" onfocus="this.style.left='12px'">Skip to content</a>
+
 <div class="wrap" id="app-root" aria-live="polite">
-  <header class="header" role="banner">
-    <div class="brand" aria-label="Brand">
+  <header class="header">
+    <div class="brand">
       <div class="logo" aria-hidden="true"></div>
       <div>
         <div class="title">HD HeeD — Follow-Up Sequencer</div>
-        <div class="sub">Professional sequences • tracking • Zoho one-click • offline</div>
+        <div class="sub">Stylish • Trackable • Zoho one-click • Offline</div>
       </div>
     </div>
     <div class="toolbar" role="toolbar" aria-label="Global actions">
-      <button id="theme-toggle" class="btn" title="Toggle theme"><span class="i" data-icon="🌗"></span>Theme</button>
-      <button id="export-json" class="btn"><span class="i" data-icon="💾"></span>Export JSON</button>
-      <label class="btn" for="import-json"><span class="i" data-icon="📂"></span>Import JSON</label>
-      <input id="import-json" type="file" class="sr-only" style="position:absolute;left:-9999px" accept="application/json">
-      <button id="export-csv" class="btn"><span class="i" data-icon="📤"></span>Export CSV</button>
-      <label class="btn" for="import-csv"><span class="i" data-icon="📥"></span>Import CSV</label>
-      <input id="import-csv" type="file" class="sr-only" style="position:absolute;left:-9999px" accept=".csv,text/csv">
-      <button id="reset" class="btn danger"><span class="i" data-icon="♻️"></span>Reset Local</button>
+      <button id="theme-toggle" class="btn">Theme</button>
+      <button id="export-json" class="btn">Export JSON</button>
+      <label class="btn" for="import-json">Import JSON</label>
+      <input id="import-json" type="file" style="position:absolute;left:-9999px" accept="application/json">
+      <button id="export-csv" class="btn">Export CSV</button>
+      <label class="btn" for="import-csv">Import CSV</label>
+      <input id="import-csv" type="file" style="position:absolute;left:-9999px" accept=".csv,text/csv">
+      <button id="reset" class="btn danger">Reset</button>
     </div>
   </header>
 
@@ -150,8 +149,7 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
     <div class="grid-3">
       <div>
         <label for="seq-len">Sequence length (7–10)</label>
-        <select id="seq-len" aria-describedby="seq-help"><option>7</option><option>8</option><option>9</option><option>10</option></select>
-        <div id="seq-help" class="small muted">Adjust anytime; templates adapt.</div>
+        <select id="seq-len"><option>7</option><option>8</option><option>9</option><option>10</option></select>
       </div>
       <div>
         <label for="default-gap">Gap between emails (days)</label>
@@ -172,7 +170,7 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
         <input id="from-name" placeholder="HD HeeD">
       </div>
       <div>
-        <label for="initials">Your initials (notes)</label>
+        <label for="initials">Your initials</label>
         <input id="initials" placeholder="HS">
       </div>
     </div>
@@ -182,64 +180,64 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
         <select id="locale"><option value="en-AU">English (AU)</option><option value="en-US">English (US)</option></select>
       </div>
       <div>
-        <label for="rate-limit">Popup rate (per click)</label>
+        <label for="rate-limit">Popups per click (batch)</label>
         <input id="rate-limit" type="number" min="1" max="10" value="5">
       </div>
       <div>
         <label for="theme">Theme</label>
-        <select id="theme"><option value="light">Light</option><option value="dark">Dark</option><option value="contrast">High Contrast</option></select>
+        <select id="theme"><option value="light">Light</option><option value="dark">Dark</option><option value="contrast">High Contrast</option><option value="ocean">Ocean</option><option value="sunset">Sunset</option><option value="forest">Forest</option></select>
       </div>
     </div>
   </section>
 
   <main id="main">
     <div class="grid" style="margin-top:16px">
-      <!-- Templates editor -->
-      <section class="card" id="templates-card" aria-labelledby="tpl-h">
-        <div class="row">
-          <h2 id="tpl-h">Templates</h2>
+      <!-- Templates -->
+      <section class="card" id="templates-card">
+        <div class="row" style="display:flex;align-items:center;gap:8px">
+          <h2>Templates</h2>
           <span class="pill" id="pill-len">7 steps</span>
-          <span class="right small muted">Placeholders: {{Name}} {{Company}} {{Phone}} • Variant A/B</span>
+          <span class="small muted" style="margin-left:auto">Placeholders: {{Name}} {{Company}} {{Phone}} • Variant A/B</span>
         </div>
         <div class="hr"></div>
         <div id="tpl-box" aria-live="polite"></div>
-        <div class="row" style="margin-top:8px">
+        <div class="row" style="display:flex;gap:8px;margin-top:8px">
           <button id="btn-add-template" class="btn">+ Add Step</button>
           <button id="btn-remove-template" class="btn warn">– Remove Last</button>
-          <span class="right"></span>
+          <span style="flex:1"></span>
           <button id="save-templates" class="btn primary">Save Templates</button>
         </div>
       </section>
 
-      <!-- Contacts & pipeline -->
+      <!-- Contacts -->
       <section class="card" aria-labelledby="contacts-h">
-        <div class="row">
+        <div class="row" style="display:flex;align-items:center;gap:8px">
           <h2 id="contacts-h">Contacts</h2>
-          <span class="right row">
+          <span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
             <input id="search" placeholder="Search name/email/company… ( / )" aria-label="Search contacts">
-            <select id="filter-status" aria-label="Filter status"><option value="">All</option><option value="Active">Active</option><option value="Paused">Paused</option><option value="Completed">Completed</option></select>
+            <select id="filter-status" aria-label="Filter status">
+              <option value="">All</option><option value="Active">Active</option><option value="Paused">Paused</option><option value="Completed">Completed</option>
+            </select>
             <select id="sort-key" aria-label="Sort by">
               <option value="name">Name</option><option value="email">Email</option><option value="status">Status</option><option value="last">Last Sent</option><option value="next">Next Step</option><option value="progress">Progress</option>
             </select>
-            <button id="add-contact" class="btn ok"><span class="i" data-icon="➕"></span>Add</button>
+            <button id="add-contact" class="btn ok">Add</button>
           </span>
         </div>
         <div class="hr"></div>
-
         <div class="grid-3" role="group" aria-label="Quick stats">
           <div class="pill">Due Today: <span id="due-count">0</span></div>
           <div class="pill">Completed: <span id="completed-count">0</span></div>
           <div class="pill">Active: <span id="active-count">0</span></div>
         </div>
-
-        <div class="row" style="justify-content:flex-end;margin-top:6px">
+        <div class="row" style="justify-content:flex-end;margin-top:6px;display:flex;gap:8px">
           <button id="view-due" class="btn ghost">Show Due</button>
           <button id="batch-send" class="btn primary">Batch Prepare</button>
-          <button id="export-ics" class="btn">Export ICS (next due)</button>
+          <button id="export-ics" class="btn">Export ICS</button>
+          <button id="load-sample" class="btn">Load Sample 9 (placeholder)</button>
         </div>
 
         <table id="tbl" style="margin-top:10px" aria-describedby="tbl-help">
-          <caption class="sr-only">Follow-up pipeline table</caption>
           <thead>
             <tr>
               <th data-sort="name">Contact</th>
@@ -253,12 +251,12 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
           </thead>
           <tbody id="rows"></tbody>
         </table>
-        <p id="tbl-help" class="small muted">Tip: <kbd>/</kbd> focus search • <kbd>n</kbd> new contact</p>
+        <p id="tbl-help" class="small muted">Tips: <kbd>/</kbd> search • <kbd>n</kbd> new contact • <kbd>Ctrl/⌘+Z</kbd> undo</p>
 
         <template id="row-tpl">
           <tr data-id="">
             <td>
-              <div class="row" style="gap:6px">
+              <div style="display:flex;gap:6px;align-items:center">
                 <strong class="c-name"></strong>
                 <span class="tag small c-seg">—</span>
               </div>
@@ -280,7 +278,7 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
               <div class="small muted c-prog-label"></div>
             </td>
             <td>
-              <div class="toolbar">
+              <div class="toolbar" style="display:flex;gap:6px;flex-wrap:wrap">
                 <button class="btn btn-preview">Preview</button>
                 <button class="btn primary btn-send">Send Next</button>
                 <button class="btn ok btn-mark">Mark Sent</button>
@@ -293,10 +291,10 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
     </div>
 
     <!-- Preview -->
-    <section class="card" id="preview" style="display:none;margin-top:16px" aria-labelledby="pv-h" role="dialog" aria-modal="true">
-      <div class="row">
-        <h2 id="pv-h">Next Email Preview</h2>
-        <span class="right"><button id="pv-close" class="btn">Close</button></span>
+    <section class="card" id="preview" style="display:none;margin-top:16px" role="dialog" aria-modal="true">
+      <div class="row" style="display:flex;align-items:center">
+        <h2>Next Email Preview</h2>
+        <span style="margin-left:auto"><button id="pv-close" class="btn">Close</button></span>
       </div>
       <div class="hr"></div>
       <div class="grid-3">
@@ -309,7 +307,7 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
           <button data-cmd="bold" class="btn ghost">Bold</button>
           <button data-cmd="italic" class="btn ghost">Italic</button>
           <button data-cmd="insertUnorderedList" class="btn ghost">• List</button>
-          <button id="pv-copy" class="btn"><span class="i" data-icon="📋"></span>Copy</button>
+          <button id="pv-copy" class="btn">Copy</button>
         </div>
         <div id="pv-body" class="rte" contenteditable="true" aria-label="Editable email body"></div>
       </div>
@@ -320,10 +318,10 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
     </section>
 
     <!-- Editor -->
-    <section class="card" id="editor" style="display:none;margin-top:16px" aria-labelledby="ed-h" role="dialog" aria-modal="true">
+    <section class="card" id="editor" style="display:none;margin-top:16px" role="dialog" aria-modal="true">
       <div class="row">
         <h2 id="ed-h">Add Contact</h2>
-        <span class="right"><button id="ed-cancel" class="btn">Cancel</button></span>
+        <span style="margin-left:auto"><button id="ed-cancel" class="btn">Cancel</button></span>
       </div>
       <div class="hr"></div>
       <div class="grid-3">
@@ -336,29 +334,29 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
         <div><label>Timezone (IANA)</label><input id="ed-tz" placeholder="Australia/Sydney"></div>
         <div><label>Segments (comma)</label><input id="ed-seg" placeholder="NDIS, RN, Western Sydney"></div>
       </div>
-      <div class="row" style="margin-top:8px">
-        <div style="flex:1 1 auto"><label>Initials (default)</label><input id="ed-initials" placeholder="HS"></div>
-        <div><button id="ed-save" class="btn primary">Save</button></div>
+      <div class="row" style="margin-top:8px;display:flex;gap:8px">
+        <div style="flex:1"><label>Initials</label><input id="ed-initials" placeholder="HS"></div>
+        <button id="ed-save" class="btn primary">Save</button>
       </div>
     </section>
 
     <!-- Notes -->
-    <section class="card" id="notes" style="display:none;margin-top:16px" aria-labelledby="nt-h" role="dialog" aria-modal="true">
+    <section class="card" id="notes" style="display:none;margin-top:16px" role="dialog" aria-modal="true">
       <div class="row">
-        <h2 id="nt-h">Notes — <span id="notes-for">Contact</span></h2>
-        <span class="right"><button id="notes-close" class="btn">Close</button></span>
+        <h2>Notes — <span id="notes-for">Contact</span></h2>
+        <span style="margin-left:auto"><button id="notes-close" class="btn">Close</button></span>
       </div>
       <div class="hr"></div>
-      <div id="notes-list" aria-live="polite"></div>
-      <div class="row" style="margin-top:8px">
+      <div id="notes-list"></div>
+      <div class="row" style="margin-top:8px;display:flex;gap:8px">
         <input id="note-text" placeholder="Add note (e.g., ‘HS sent Email 1 — no reply’)">
         <button id="note-add" class="btn primary">Add Note</button>
       </div>
     </section>
 
     <!-- Analytics -->
-    <section class="card" id="analytics" style="margin-top:16px" aria-labelledby="an-h">
-      <div class="row"><h2 id="an-h">Analytics</h2></div>
+    <section class="card" id="analytics" style="margin-top:16px">
+      <div class="row"><h2>Analytics</h2></div>
       <div class="hr"></div>
       <div class="grid-3">
         <div><strong>Completion</strong><div id="an-complete" class="small muted">—</div></div>
@@ -369,13 +367,13 @@ kbd{background:var(--kbd-bg);color:var(--kbd);padding:2px 6px;border-radius:6px;
   </main>
 </div>
 
-<div class="toast" id="toast" aria-live="assertive"></div>
+<div class="toast" id="toast"></div>
 <div class="modal-backdrop" id="backdrop" aria-hidden="true"><div class="modal" id="modal"></div></div>
 <script>
 (() => {
-  "use strict";
+"use strict";
 
-/* ===== Utilities ===== */
+/* Utils */
 const $ = (s, r=document)=>r.querySelector(s);
 const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
 const rid = ()=>Math.random().toString(36).slice(2,10);
@@ -384,48 +382,20 @@ const fmt = (d,loc)=> d? new Date(d).toLocaleString(loc||"en-AU"): "—";
 const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
 const esc = (s="")=>s.replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
 const clone = (x)=>JSON.parse(JSON.stringify(x));
-const toast = (msg)=>{const t=$("#toast");const d=document.createElement("div");d.className="item";d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),2500);};
-const focusTrap = (panel)=>{panel.setAttribute("tabindex","-1");panel.focus();};
-
-/* ===== Persistence & Audit ===== */
-const LS = {
-  contacts: "heed_contacts_v4",
-  templates: "heed_templates_v4",
-  settings: "heed_settings_v4",
-  audit:    "heed_audit_v1",
-  history:  "heed_history_v1"
-};
+const toast = (msg)=>{const t=$("#toast");const d=document.createElement("div");d.className="item";d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),2400);};
 const lsGet = (k,d)=>{try{return JSON.parse(localStorage.getItem(k)) ?? d;}catch{return d;}};
 const lsSet = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
 
-function audit(event, payload){
-  const logs = lsGet(LS.audit, []);
-  logs.push({ id:rid(), at:nowISO(), event, payload });
-  lsSet(LS.audit, logs);
-}
-function snapshot(){
-  const snap = {
-    at: nowISO(),
-    contacts: lsGet(LS.contacts, []),
-    templates: lsGet(LS.templates, []),
-    settings: lsGet(LS.settings, {})
-  };
-  const hist = lsGet(LS.history, []);
-  hist.push(snap);
-  if(hist.length>30) hist.shift(); // cap history
-  lsSet(LS.history, hist);
-}
-function undo(){
-  const hist = lsGet(LS.history, []);
-  if(hist.length<2) return toast("Nothing to undo");
-  hist.pop(); // current
-  const prev = hist.pop(); // previous
-  lsSet(LS.contacts, prev.contacts); lsSet(LS.templates, prev.templates); lsSet(LS.settings, prev.settings);
-  lsSet(LS.history, hist);
-  location.reload();
-}
+/* Persistence keys */
+const LS = {
+  contacts: "heed_contacts_v5",
+  templates: "heed_templates_v5",
+  settings: "heed_settings_v5",
+  audit:    "heed_audit_v2",
+  history:  "heed_history_v2"
+};
 
-/* ===== Models ===== */
+/* Models */
 class Contact {
   constructor({id=rid(), name="", email="", company="", phone="", tz="Australia/Sydney", segments=[], status="Active", lastSent=0, lastSentAt="", notes=[]}={}) {
     Object.assign(this, {id, name, email, company, phone, tz, segments, status, lastSent, lastSentAt, notes});
@@ -452,7 +422,7 @@ class Settings {
   }
 }
 
-/* ===== State ===== */
+/* State */
 const state = {
   contacts: lsGet(LS.contacts, []),
   templates: lsGet(LS.templates, null),
@@ -460,49 +430,121 @@ const state = {
   filter: "", filterStatus: ""
 };
 
-/* ===== Defaults (first 4 steps pulled from your idea) ===== */
-const BASE4 = [
-  { step:1, subject:"Welcome to HD HeeD — getting supports started", body:
-`Hi {{Name}},
+/* Undo snapshots */
+function snapshot(){
+  const hist = lsGet(LS.history, []);
+  hist.push({at: nowISO(), contacts: state.contacts, templates: state.templates, settings: state.settings});
+  if(hist.length>40) hist.shift();
+  lsSet(LS.history, hist);
+}
+function undo(){
+  const hist = lsGet(LS.history, []);
+  if(hist.length<2) return toast("Nothing to undo");
+  hist.pop(); const prev = hist.pop();
+  state.contacts = prev.contacts; state.templates = prev.templates; state.settings = prev.settings;
+  lsSet(LS.contacts,state.contacts); lsSet(LS.templates,state.templates); lsSet(LS.settings,state.settings);
+  location.reload();
+}
 
-Thank you for connecting with HD HeeD. We provide RN-led NDIS supports (personal care, nursing, wound/stoma, bowel programs, medication administration and more). If helpful, I can outline simple next steps to get started.
+/* YOUR EMAILS: pulled from /emails.html (steps 1–4) */
+const EMAILS14 = [
+  {
+    step:1,
+    subject:"Introduction to HD HeeD",
+    body:`Hi {{Name}},
 
-Would you prefer a quick call or an email summary?
+Please let me introduce HD HeeD Pty Ltd, an NDIS-registered provider based in Blacktown. We are an RN-led team, with the skills and systems to deliver safe, professional, and person-centred supports.
+
+We are registered under the following NDIS groups:
+• 0104 – High Intensity Daily Personal Activities
+• 0107 – Daily Personal Activities
+• 0115 – Assistance with Daily Life Tasks in a Group/Shared Living
+• 0117 – Development of Daily Living and Life Skills
+• 0120 – Household Tasks
+• 0125 – Participation in Community, Social and Civic Activities
+• 0136 – Group and Centre-Based Activities
+
+At HD HeeD, we keep onboarding simple and organised:
+• Website: https://www.hdheed.com.au
+• Talk to our AI assistant Ella
+• Online referral form: https://www.hdheed.com.au/referral.html
+• Or reply to this email / info@hdheed.com.au / ndis@hdheed.com.au
+
+Start a referral today: https://www.hdheed.com.au/referral.html
 
 Kind regards,
-Team HD HeeD
-hdheed.com.au • 02 8630 5500` },
-  { step:2, subject:"Just checking in — any questions I can help with?", body:
-`Hi {{Name}},
+Mat Syan
+Director – HD HeeD Pty Ltd
+02 8630 5500 | info@hdheed.com.au`
+  },
+  {
+    step:2,
+    subject:"Our RN-Led Strength",
+    body:`Hi {{Name}},
 
-Just following up my last email to see if you had any questions or needed anything from us. We’re ready to help whenever you are.
+At HD HeeD, we are a group of Registered Nurses confident in our skills and experience. This lets us provide the highest standard of care, especially for complex health needs, under registration group 0104 – High Intensity Daily Personal Activities.
 
-Warm regards,
-Team HD HeeD` },
-  { step:3, subject:"Short resource to help you plan first visits", body:
-`Hi {{Name}},
+This keeps services clinically safe and professional, and more cost-effective than group 0114 (Community Nursing). Your participants get RN-level support within the right NDIS group — quality and value.
 
-Sharing a brief checklist families/support coordinators find useful to make first visits smooth (consents, goals, meds, equipment). Happy to tailor it if you share a few details.
+Start a referral: https://www.hdheed.com.au/referral.html
 
-Best,
-Team HD HeeD` },
-  { step:4, subject:"Quick reminder — we can line up supports quickly", body:
-`Hi {{Name}},
+A paper referral form is also available — email it to info@hdheed.com.au if preferred.
+You can call us on 02 8630 5500 anytime.
 
-We can organise visits quickly (often within a week). If you’d like, send a brief overview (or referral/plan) and I’ll propose options and timeframes.
+Kind regards,
+Mat Syan
+Director – HD HeeD Pty Ltd
+02 8630 5500 | info@hdheed.com.au`
+  },
+  {
+    step:3,
+    subject:"AILR System",
+    body:`Hi {{Name}},
 
-Thanks,
-Team HD HeeD` },
-];
+One of our key strengths is AILR — Advanced Intake & Long-form Registration. Most onboarding is completed online, with only a few signature forms returned via email. It’s:
+• Systematic and organised
+• Less paperwork
+• Straightforward and time-saving
 
+See AILR: https://www.hdheed.com.au/ailr.html
+Quick referral: https://www.hdheed.com.au/referral.html
+Paper referral: info@hdheed.com.au
+Phone: 02 8630 5500
+
+Kind regards,
+Mat Syan
+Director – HD HeeD Pty Ltd
+02 8630 5500 | info@hdheed.com.au`
+  },
+  {
+    step:4,
+    subject:"Easy Online Referrals",
+    body:`Hi {{Name}},
+
+Save time with our quick online referral system: https://www.hdheed.com.au/referral.html
+It’s streamlined, convenient, and audit-ready.
+
+Prefer paper? Complete the form and email it to info@hdheed.com.au.
+Either way, we’ll onboard quickly and professionally.
+
+Kind regards,
+Mat Syan
+Director – HD HeeD Pty Ltd
+02 8630 5500 | info@hdheed.com.au`
+  }
+]; /* Source: HD HeeD – Outreach Emails (1–4). :contentReference[oaicite:1]{index=1} */
+
+/* Default templates 1–N */
 function ensureTemplates(){
   if(!state.templates){
-    const out=[], N = state.settings.seqLen||7;
+    const out = [];
+    const N = state.settings.seqLen || 7;
     for(let i=1;i<=N;i++){
-      const base = BASE4.find(b=>b.step===i);
-      out.push(new TemplateStep({ step:i, active:true,
-        subject: base?base.subject:`Email ${i}`,
-        body: base?base.body:`Hi {{Name}},\n\n...\n\nTeam HD HeeD`
+      const fromSite = EMAILS14.find(x=>x.step===i);
+      out.push(new TemplateStep({
+        step:i, active:true,
+        subject: fromSite? fromSite.subject : `Email ${i}`,
+        body: fromSite? fromSite.body : `Hi {{Name}},\n\n...\n\nTeam HD HeeD`
       }));
     }
     state.templates = out;
@@ -510,86 +552,8 @@ function ensureTemplates(){
   }
 }
 
-/* ===== Theme + Locale ===== */
-function applyTheme(th){ document.documentElement.setAttribute("data-theme", th); }
-applyTheme(state.settings.theme);
-
-/* ===== Template Editor (with RTE) ===== */
-function renderTemplates(){
-  const box = $("#tpl-box"); box.innerHTML = "";
-  clone(state.templates).sort((a,b)=>a.step-b.step).forEach(t=>{
-    const div = document.createElement("div"); div.className="card"; div.style.margin="8px 0";
-    div.innerHTML = `
-      <div class="row">
-        <strong>Step ${t.step}</strong>
-        <span class="right small">
-          <label class="row" style="gap:6px">
-            <input type="checkbox" data-id="${t.id}" data-k="active" ${t.active!==false?"checked":""}> Active
-          </label>
-        </span>
-      </div>
-      <div class="grid-3" style="margin-top:8px">
-        <div><label>Subject (A)</label><input data-id="${t.id}" data-k="subject" value="${esc(t.subject||"")}"></div>
-        <div><label>Subject (B)</label><input data-id="${t.id}" data-k="subjectB" value="${esc(t.variantB?.subject||"")}"></div>
-        <div><label>Step</label><input value="${t.step}" readonly class="mono"></div>
-      </div>
-      <div class="grid-3" style="margin-top:8px">
-        <div>
-          <label>Body (A)</label>
-          <div class="rte" data-id="${t.id}" data-k="body" contenteditable="true">${esc(t.body||"")}</div>
-        </div>
-        <div>
-          <label>Body (B)</label>
-          <div class="rte" data-id="${t.id}" data-k="bodyB" contenteditable="true">${esc(t.variantB?.body||"")}</div>
-        </div>
-        <div>
-          <label>Merge fields</label>
-          <div class="small muted">Use {{Name}} {{Company}} {{Phone}}</div>
-          <div class="rte-toolbar">
-            <button data-insert="{{Name}}" class="btn ghost">+ Name</button>
-            <button data-insert="{{Company}}" class="btn ghost">+ Company</button>
-            <button data-insert="{{Phone}}" class="btn ghost">+ Phone</button>
-          </div>
-        </div>
-      </div>`;
-    box.appendChild(div);
-  });
-  $("#pill-len").textContent = `${state.settings.seqLen} steps`;
-}
-
-function saveTemplatesFromUI(){
-  snapshot();
-  const map = Object.fromEntries(state.templates.map(t=>[t.id,t]));
-  $$("#tpl-box [data-id]").forEach(el=>{
-    const id = el.dataset.id, k = el.dataset.k, T = map[id]; if(!T) return;
-    if(el.tagName==="INPUT" && el.type==="checkbox"){ T.active = el.checked; }
-    else if(el.tagName==="INPUT"){ if(k==="subject") T.subject = el.value; else if(k==="subjectB"){ T.variantB = T.variantB||{subject:"",body:""}; T.variantB.subject = el.value; } }
-    else if(el.classList.contains("rte")){
-      const v = el.innerText.replace(/\r\n/g,"\n");
-      if(k==="body") T.body = v;
-      if(k==="bodyB"){ T.variantB = T.variantB||{subject:"",body:""}; T.variantB.body = v; }
-    }
-  });
-  lsSet(LS.templates, state.templates);
-  audit("templates.save",{count: state.templates.length});
-  toast("Templates saved.");
-}
-
-function insertAtCaret(text){
-  const sel = window.getSelection?.(); if(!sel || !sel.rangeCount) return;
-  const range = sel.getRangeAt(0); range.deleteContents();
-  range.insertNode(document.createTextNode(text));
-  range.collapse(false);
-}
-
-function bindRTE(){
-  // bold/italic/list in preview panel
-  $$("#preview .rte-toolbar [data-cmd]").forEach(b=> b.onclick = ()=>document.execCommand(b.dataset.cmd,false));
-  // merge field buttons in templates
-  $$("#tpl-box [data-insert]").forEach(b=> b.onclick = ()=>insertAtCaret(b.dataset.insert));
-}
-
-/* ===== Settings bindings ===== */
+/* Theme & settings binds */
+function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); }
 function bindSettings(){
   $("#seq-len").value = String(state.settings.seqLen);
   $("#default-gap").value = String(state.settings.defaultGap);
@@ -602,11 +566,10 @@ function bindSettings(){
   $("#rate-limit").value = String(state.settings.rate);
 
   $("#theme-toggle").onclick = ()=>{
-    const seq = ["light","dark","contrast"];
+    const seq = ["light","dark","contrast","ocean","sunset","forest"];
     const idx = seq.indexOf(state.settings.theme);
     state.settings.theme = seq[(idx+1)%seq.length];
-    $("#theme").value = state.settings.theme;
-    lsSet(LS.settings, state.settings); applyTheme(state.settings.theme);
+    $("#theme").value = state.settings.theme; lsSet(LS.settings, state.settings); applyTheme(state.settings.theme);
   };
 
   $("#theme").onchange = e=>{ state.settings.theme = e.target.value; lsSet(LS.settings, state.settings); applyTheme(state.settings.theme); };
@@ -633,24 +596,82 @@ function bindSettings(){
   $("#rate-limit").onchange = e=>{ state.settings.rate = clamp(parseInt(e.target.value,10)||5,1,10); lsSet(LS.settings, state.settings); };
 }
 
-/* ===== Init (Part 2) ===== */
-window.__heed_init_part2 = function initPart2(){
-  ensureTemplates();
-  renderTemplates(); bindRTE(); bindSettings();
-  // keyboard shortcuts
+/* Templates UI (rich text editor) */
+function renderTemplates(){
+  const box = $("#tpl-box"); box.innerHTML = "";
+  clone(state.templates).sort((a,b)=>a.step-b.step).forEach(t=>{
+    const div = document.createElement("div"); div.className="card"; div.style.margin="8px 0";
+    div.innerHTML = `
+      <div class="row" style="display:flex;gap:8px;align-items:center">
+        <strong>Step ${t.step}</strong>
+        <label style="margin-left:auto" class="small"><input type="checkbox" data-id="${t.id}" data-k="active" ${t.active!==false?"checked":""}> Active</label>
+      </div>
+      <div class="grid-3" style="margin-top:8px">
+        <div><label>Subject (A)</label><input data-id="${t.id}" data-k="subject" value="${esc(t.subject||"")}"></div>
+        <div><label>Subject (B)</label><input data-id="${t.id}" data-k="subjectB" value="${esc(t.variantB?.subject||"")}"></div>
+        <div><label>Step</label><input value="${t.step}" readonly class="mono"></div>
+      </div>
+      <div class="grid-3" style="margin-top:8px">
+        <div><label>Body (A)</label><div class="rte" data-id="${t.id}" data-k="body" contenteditable="true">${esc(t.body||"")}</div></div>
+        <div><label>Body (B)</label><div class="rte" data-id="${t.id}" data-k="bodyB" contenteditable="true">${esc(t.variantB?.body||"")}</div></div>
+        <div>
+          <label>Merge fields</label>
+          <div class="small muted">Use {{Name}} {{Company}} {{Phone}}</div>
+          <div class="rte-toolbar">
+            <button data-insert="{{Name}}" class="btn ghost">+ Name</button>
+            <button data-insert="{{Company}}" class="btn ghost">+ Company</button>
+            <button data-insert="{{Phone}}" class="btn ghost">+ Phone</button>
+          </div>
+        </div>
+      </div>`;
+    box.appendChild(div);
+  });
+  $("#pill-len").textContent = `${state.settings.seqLen} steps`;
+}
+function saveTemplatesFromUI(){
+  snapshot();
+  const map = Object.fromEntries(state.templates.map(t=>[t.id,t]));
+  $$("#tpl-box [data-id]").forEach(el=>{
+    const id = el.dataset.id, k = el.dataset.k, T = map[id]; if(!T) return;
+    if(el.tagName==="INPUT" && el.type==="checkbox"){ T.active = el.checked; }
+    else if(el.tagName==="INPUT"){ if(k==="subject") T.subject = el.value; else if(k==="subjectB"){ T.variantB = T.variantB || {subject:"",body:""}; T.variantB.subject = el.value; } }
+    else if(el.classList.contains("rte")){
+      const v = el.innerText.replace(/\r\n/g,"\n");
+      if(k==="body") T.body = v;
+      if(k==="bodyB"){ T.variantB = T.variantB||{subject:"",body:""}; T.variantB.body = v; }
+    }
+  });
+  lsSet(LS.templates, state.templates);
+  toast("Templates saved.");
+}
+function insertAtCaret(text){
+  const sel = window.getSelection?.(); if(!sel || !sel.rangeCount) return;
+  const range = sel.getRangeAt(0); range.deleteContents(); range.insertNode(document.createTextNode(text)); range.collapse(false);
+}
+function bindRTE(){
+  $$("#preview .rte-toolbar [data-cmd]").forEach(b=> b.onclick = ()=>document.execCommand(b.dataset.cmd,false));
+  $$("#tpl-box [data-insert]").forEach(b=> b.onclick = ()=>insertAtCaret(b.dataset.insert));
+}
+
+/* Init (Part 2) */
+function init2(){
+  ensureTemplates(); renderTemplates(); bindRTE(); bindSettings(); applyTheme(state.settings.theme);
   document.addEventListener("keydown",(e)=>{
     if(e.key==="/"){ e.preventDefault(); $("#search").focus(); }
     if(e.key.toLowerCase()==="n"){ const openEditor = window.__heed_openEditor; openEditor && openEditor(); }
     if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="z"){ e.preventDefault(); undo(); }
   });
-};
+  $("#save-templates").onclick = saveTemplatesFromUI;
+}
+window.__heed_init_part2 = init2;
 })();
 </script>
+<!-- PART 3 / 4 — UPDATED: Pipeline, Preview/Send (Zoho), Notes, Import/Export, Analytics, ICS + PRELOADED 9 CONTACTS -->
 <script>
 (() => {
 "use strict";
 
-/* ===== Utils reused ===== */
+/* ===== Utilities ===== */
 const $ = (s, r=document)=>r.querySelector(s);
 const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
 const rid = ()=>Math.random().toString(36).slice(2,10);
@@ -660,26 +681,173 @@ const esc = (s="")=>s.replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 const lsGet = (k,d)=>{try{return JSON.parse(localStorage.getItem(k)) ?? d;}catch{return d;}};
 const lsSet = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
 const fmt = (d,loc)=> d? new Date(d).toLocaleString(loc||"en-AU"): "—";
-const toast = (msg)=>{const t=$("#toast");const d=document.createElement("div");d.className="item";d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),2500);};
+const toast = (msg)=>{const t=$("#toast");const d=document.createElement("div");d.className="item";d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),2400);};
 
-/* ===== Link to Part 2 state ===== */
-const ST = {
-  contactsKey: "heed_contacts_v4",
-  templatesKey: "heed_templates_v4",
-  settingsKey: "heed_settings_v4",
-  auditKey: "heed_audit_v1"
-};
+/* ===== Link to Part 2 state keys ===== */
+const ST = { contacts:"heed_contacts_v5", templates:"heed_templates_v5", settings:"heed_settings_v5" };
 const state = {
-  get contacts(){return lsGet(ST.contactsKey,[])},
-  set contacts(v){lsSet(ST.contactsKey,v)},
-  get templates(){return lsGet(ST.templatesKey,[])},
-  set templates(v){lsSet(ST.templatesKey,v)},
-  get settings(){return lsGet(ST.settingsKey,{})},
-  set settings(v){lsSet(ST.settingsKey,v)}
+  get contacts(){return lsGet(ST.contacts,[])}, set contacts(v){lsSet(ST.contacts,v)},
+  get templates(){return lsGet(ST.templates,[])}, set templates(v){lsSet(ST.templates,v)},
+  get settings(){return lsGet(ST.settings,{})}, set settings(v){lsSet(ST.settings,v)}
 };
-function audit(event,payload){ const logs=lsGet(ST.auditKey,[]); logs.push({id:rid(),at:nowISO(),event,payload}); lsSet(ST.auditKey,logs); }
 
-/* ===== Core sequencing ===== */
+/* ===== PRELOAD your 9 contacts from the board (only if none exist in localStorage) =====
+   Dates normalised to 2025-09-15 (Sydney) where the board showed 15/09; one typo “1993” treated as 2025-09-15.
+   Status left as Active unless sequence completed by last step.
+*/
+const PRELOAD_9 = [
+  {
+    id: crypto.randomUUID?.() || rid(),
+    name: "Taylor McGuiness — Interaction",
+    company: "Interaction",
+    email: "info@interactionservices.org",
+    phone: "1300 668 123",
+    tz: "Australia/Sydney",
+    segments: ["SC/PM"],
+    status: "Active",
+    lastSent: 2,
+    lastSentAt: "2025-09-15T00:00:00+10:00",
+    notes: [
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — Called them, they said send an email." },
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent — awaiting response." },
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09/25." }
+    ]
+  },
+  {
+    id: crypto.randomUUID?.() || rid(),
+    name: "Assist Disability Services — SSC",
+    company: "Assist Disability Services",
+    email: "enquiries@assistservices.com.au",
+    phone: "1800 955 806",
+    tz: "Australia/Sydney",
+    segments: ["SSC"],
+    status: "Active",
+    lastSent: 2,
+    lastSentAt: "2025-09-15T00:00:00+10:00",
+    notes: [
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — Called; they took my number and will call back." },
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09/2025." }
+    ]
+  },
+  {
+    id: crypto.randomUUID?.() || rid(),
+    name: "Triniti Care — Support Coord",
+    company: "Triniti Care",
+    email: "info@triniti.com.au",
+    phone: "(02) 8319 9433",
+    tz: "Australia/Sydney",
+    segments: ["SC"],
+    status: "Active",
+    lastSent: 1,
+    lastSentAt: "2025-09-15T00:00:00+10:00", /* board line had 1993; normalised */
+    notes: [
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — called; they said email info@triniti.com.au." },
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent — undelivered; recheck address." }
+    ]
+  },
+  {
+    id: crypto.randomUUID?.() || rid(),
+    name: "MD Home Care — SSC",
+    company: "MD Home Care",
+    email: "", /* not provided on board */
+    phone: "08 6386 9999",
+    tz: "Australia/Sydney",
+    segments: ["SSC"],
+    status: "Active",
+    lastSent: 0,
+    lastSentAt: "",
+    notes: [
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "No emails sent yet." }
+    ]
+  },
+  {
+    id: crypto.randomUUID?.() || rid(),
+    name: "Claremont Care — SC/PM",
+    company: "Claremont Care",
+    email: "", /* not shown on board */
+    phone: "0416 873 319",
+    tz: "Australia/Sydney",
+    segments: ["SC","PM"],
+    status: "Active",
+    lastSent: 2,
+    lastSentAt: "2025-09-15T00:00:00+10:00",
+    notes: [
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent — N&J." },
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09." }
+    ]
+  },
+  {
+    id: crypto.randomUUID?.() || rid(),
+    name: "BRK Plan Management",
+    company: "BRK Plan Management",
+    email: "meet@brkpm.com.au",
+    phone: "0414 704 279",
+    tz: "Australia/Sydney",
+    segments: ["PM"],
+    status: "Active",
+    lastSent: 1,
+    lastSentAt: "2025-09-15T00:00:00+10:00",
+    notes: [
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent — N&J." }
+    ]
+  },
+  {
+    id: crypto.randomUUID?.() || rid(),
+    name: "Axial Plan Management",
+    company: "Axial Plan Management",
+    email: "hello@axialplanmanagement.com.au",
+    phone: "0416 428 261",
+    tz: "Australia/Sydney",
+    segments: ["PM"],
+    status: "Active",
+    lastSent: 1,
+    lastSentAt: "2025-09-15T00:00:00+10:00",
+    notes: [
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — Email 1 sent, awaiting response." }
+    ]
+  },
+  {
+    id: crypto.randomUUID?.() || rid(),
+    name: "NADO Plan Management",
+    company: "NADO Plan Management",
+    email: "", /* not provided */
+    phone: "1300 738 229",
+    tz: "Australia/Sydney",
+    segments: ["PM"],
+    status: "Active",
+    lastSent: 0,
+    lastSentAt: "",
+    notes: [
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "No emails sent yet." }
+    ]
+  },
+  {
+    id: crypto.randomUUID?.() || rid(),
+    name: "Yahweh Care — PM",
+    company: "Yahweh Care",
+    email: "info@yahwehcare.com.au",
+    phone: "(02) 8325 1616",
+    tz: "Australia/Sydney",
+    segments: ["PM"],
+    status: "Active",
+    lastSent: 1,
+    lastSentAt: "2025-09-15T00:00:00+10:00",
+    notes: [
+      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — Email 1 sent, awaiting response." }
+    ]
+  }
+];
+
+/* One-time preload if empty */
+function ensurePreload(){
+  const existing = state.contacts || [];
+  if(!existing.length){
+    state.contacts = PRELOAD_9;
+    toast("Loaded 9 contacts from board.");
+  }
+}
+
+/* ===== Sequencing ===== */
 function nextStepFor(c){
   const N = state.settings.seqLen||7;
   if((c.status||"Active")==="Completed") return 0;
@@ -705,13 +873,13 @@ function progressPct(c){
   return Math.round((Math.min(c.lastSent||0,N)/N)*100);
 }
 
-/* ===== Merge & Build ===== */
+/* ===== Build Email (merge + A/B) ===== */
 function buildEmail(c, step){
   const tpl = state.templates.find(t=>t.step===step);
   const name = c.name || "there", company = c.company||"", phone=c.phone||"";
   let useB = false;
   if(tpl?.variantB && tpl.variantB.subject && tpl.variantB.body){
-    const h = [...c.id].reduce((a,ch)=>a+ch.charCodeAt(0),0);
+    const h = [...(c.id||"")].reduce((a,ch)=>a+ch.charCodeAt(0),0);
     useB = (h % 2)===0;
   }
   const sub = (useB ? tpl?.variantB?.subject : tpl?.subject) || "";
@@ -731,13 +899,36 @@ function bySort(key, dir){
       :k==="next"? nextStepFor(o)||999
       :k==="progress"? ((o.lastSent||0))
       :(o.name||"");
-    const va=v(key,a), vb=v(key,b);
-    if(va<vb) return -1*dir; if(va>vb) return 1*dir; return 0;
+    const va=v(key,a), vb=v(key,b); if(va<vb) return -1*dir; if(va>vb) return 1*dir; return 0;
   };
+}
+function rowFor(c){
+  const tpl = $("#row-tpl").content.cloneNode(true);
+  const tr = tpl.querySelector("tr"); tr.dataset.id = c.id;
+  tr.querySelector(".c-name").textContent = c.name || "—";
+  tr.querySelector(".c-company").textContent = c.company || "";
+  tr.querySelector(".c-email").textContent = c.email || "—";
+  tr.querySelector(".c-seg").textContent = (c.segments&&c.segments.length)? c.segments.join(", ") : "—";
+  const s = c.status||"Active";
+  const st = tr.querySelector(".c-status"); st.textContent = s;
+  st.className = "tag c-status " + (s==="Paused"?"warn":s==="Completed"?"ok":"");
+  tr.querySelector(".c-last").textContent = c.lastSent? `Email ${c.lastSent} @ ${fmt(c.lastSentAt,state.settings.locale)}` : "—";
+  const next = nextStepFor(c);
+  tr.querySelector(".c-next").textContent = next? `Email ${next}` : "Done";
+  tr.querySelector(".c-due").textContent = next? `Due: ${fmt(dueDateFor(c),state.settings.locale)}` : "—";
+  const pct = progressPct(c);
+  tr.querySelector(".c-prog").style.width = pct+"%";
+  tr.querySelector(".c-prog-label").textContent = `${pct}% (${c.lastSent||0}/${state.settings.seqLen||7})`;
+  tr.querySelector(".notes-count").textContent = String(c.notes?.length||0);
+  tr.querySelector(".btn-notes").onclick = ()=>openNotes(c.id);
+  tr.querySelector(".btn-preview").onclick = ()=>openPreview(c.id);
+  tr.querySelector(".btn-send").onclick = ()=>sendNext(c.id);
+  tr.querySelector(".btn-mark").onclick = ()=>markSent(c.id);
+  tr.querySelector(".btn-del").onclick = ()=>delContact(c.id);
+  return tr;
 }
 function renderContacts(){
   const contacts = state.contacts;
-  // stats
   const today = new Date(); today.setHours(23,59,59,999);
   const due = contacts.filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
   const completed = contacts.filter(c=> (c.status||"Active")==="Completed");
@@ -745,13 +936,10 @@ function renderContacts(){
   $("#due-count").textContent = String(due.length);
   $("#completed-count").textContent = String(completed.length);
   $("#active-count").textContent = String(active.length);
-
-  // filter
   const f = ($("#search").value||"").toLowerCase();
   const fs = $("#filter-status").value||"";
   const key = $("#sort-key").value || (state.settings.sortKey||"name");
   const dir = state.settings.sortDir||1;
-
   const rows = contacts
     .filter(c=>{
       if(f){
@@ -762,40 +950,9 @@ function renderContacts(){
       return true;
     })
     .sort(bySort(key, dir));
-
   const tbody = $("#rows"); tbody.innerHTML = "";
   rows.forEach(c=> tbody.appendChild(rowFor(c)));
   renderAnalytics();
-}
-function rowFor(c){
-  const tpl = $("#row-tpl").content.cloneNode(true);
-  const tr = tpl.querySelector("tr"); tr.dataset.id = c.id;
-  $(".c-name",tr).textContent = c.name || "—";
-  $(".c-company",tr).textContent = c.company || "";
-  $(".c-email",tr).textContent = c.email || "—";
-  $(".c-seg",tr).textContent = (c.segments&&c.segments[0])? c.segments[0] : "—";
-
-  const s = c.status||"Active";
-  const st = $(".c-status",tr); st.textContent = s;
-  st.className = "tag c-status " + (s==="Paused"?"warn":s==="Completed"?"ok":"");
-
-  $(".c-last",tr).textContent = c.lastSent? `Email ${c.lastSent} @ ${fmt(c.lastSentAt,state.settings.locale)}` : "—";
-  const next = nextStepFor(c);
-  $(".c-next",tr).textContent = next? `Email ${next}` : "Done";
-  $(".c-due",tr).textContent = next? `Due: ${fmt(dueDateFor(c),state.settings.locale)}` : "—";
-
-  const pct = progressPct(c);
-  $(".c-prog",tr).style.width = pct+"%";
-  $(".c-prog-label",tr).textContent = `${pct}% (${c.lastSent||0}/${state.settings.seqLen||7})`;
-
-  $(".notes-count",tr).textContent = String(c.notes?.length||0);
-
-  $(".btn-notes",tr).onclick = ()=>openNotes(c.id);
-  $(".btn-preview",tr).onclick = ()=>openPreview(c.id);
-  $(".btn-send",tr).onclick = ()=>sendNext(c.id);
-  $(".btn-mark",tr).onclick = ()=>markSent(c.id);
-  $(".btn-del",tr).onclick = ()=>delContact(c.id);
-  return tr;
 }
 
 /* ===== Notes ===== */
@@ -813,19 +970,15 @@ function openNotes(id){
   if(!c.notes?.length) box.innerHTML = `<div class="small muted">No notes yet.</div>`;
   $("#note-text").value = "";
   $("#notes").style.display = "";
-  $("#notes").focus();
 }
 function addNote(){
   const t = $("#note-text").value.trim(); if(!t) return;
-  const c = state.contacts.find(x=>x.id===NOTES_ID); if(!c) return;
-  (c.notes=c.notes||[]).push({ at: nowISO(), by:(state.settings.initials||"User"), text: t });
-  lsSet(ST.contactsKey, state.contacts);
-  openNotes(NOTES_ID);
-  audit("note.add",{contact:NOTES_ID});
+  const cs = state.contacts, i = cs.findIndex(x=>x.id===NOTES_ID); if(i<0) return;
+  (cs[i].notes=cs[i].notes||[]).push({ at: nowISO(), by:(state.settings.initials||"User"), text: t });
+  state.contacts = cs; openNotes(NOTES_ID);
 }
-window.__heed_openNotes = openNotes;
 
-/* ===== Preview & Send ===== */
+/* ===== Preview / Send (Zoho) ===== */
 let PV_ID="";
 function openPreview(id){
   const c = state.contacts.find(x=>x.id===id); if(!c) return;
@@ -837,7 +990,6 @@ function openPreview(id){
   $("#pv-variant").value = variant;
   $("#pv-body").innerText = body||"";
   $("#preview").style.display = "";
-  $("#preview").focus();
 }
 function sendFromPreview(){ if(PV_ID) sendNext(PV_ID); }
 function restoreFromTemplate(){
@@ -849,36 +1001,31 @@ function restoreFromTemplate(){
 }
 function sendNext(id){
   const c = state.contacts.find(x=>x.id===id); if(!c) return;
+  if(!(c.email||"").trim()){ toast("No email address on file for this contact."); return; }
   const step = nextStepFor(c); if(!step) return toast("Sequence complete");
   const subj = $("#pv-subj").value || buildEmail(c, step).subject;
   const body = ($("#pv-body").innerText||"").trim() || buildEmail(c, step).body;
-
-  // rate limiter (avoid opening too many compose windows)
   const allowed = Number(state.settings.rate||5);
   window.__rateCounter = (window.__rateCounter||0) + 1;
-  if(window.__rateCounter>allowed){ toast(`Popup limit reached (${allowed}). Try again.`); return; }
+  if(window.__rateCounter>allowed){ toast(`Popup limit reached (${allowed})`); return; }
   setTimeout(()=>{ window.__rateCounter = Math.max(0,(window.__rateCounter||1)-1); }, 2000);
-
   const dom = state.settings.zohoDomain||"mail.zoho.com";
   const url = `https://${dom}/zm/#compose?to=${encodeURIComponent(c.email||"")}&subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
   window.open(url, "_blank");
-  audit("send.compose",{contact:id, step});
 }
 
 /* ===== Mark / Delete / Editor ===== */
 function markSent(id){
-  const cs = state.contacts;
-  const i = cs.findIndex(x=>x.id===id); if(i<0) return;
+  const cs = state.contacts, i = cs.findIndex(x=>x.id===id); if(i<0) return;
   const step = nextStepFor(cs[i]); if(!step) return toast("Sequence complete");
   cs[i].lastSent = step; cs[i].lastSentAt = nowISO();
   if(step >= (state.settings.seqLen||7)) cs[i].status = "Completed";
-  (cs[i].notes=cs[i].notes||[]).push({at: nowISO(), by: (state.settings.initials||"User"), text:`Marked Email ${step} as sent.`});
-  state.contacts = cs; renderContacts(); audit("send.mark",{contact:id,step});
+  (cs[i].notes=cs[i].notes||[]).push({at: nowISO(), by:(state.settings.initials||"User"), text:`Marked Email ${step} as sent.`});
+  state.contacts = cs; renderContacts();
 }
 function delContact(id){
   if(!confirm("Delete this contact?")) return;
-  const cs = state.contacts.filter(x=>x.id!==id);
-  state.contacts = cs; renderContacts(); audit("contact.delete",{contact:id});
+  state.contacts = state.contacts.filter(x=>x.id!==id); renderContacts();
 }
 function openEditor(contact){
   $("#editor").style.display = "";
@@ -903,11 +1050,10 @@ function saveContact(){
     tz: $("#ed-tz").value.trim()||"Australia/Sydney",
     segments: ($("#ed-seg").value||"").split(",").map(s=>s.trim()).filter(Boolean)
   };
-  if($("#ed-initials").value.trim()){ const s = state.settings; s.initials = $("#ed-initials").value.trim(); state.settings = s; }
   const cs = state.contacts;
   if(id){ const i = cs.findIndex(x=>x.id===id); if(i>=0) cs[i] = {...cs[i], ...obj}; }
-  else cs.push({ ...new Object(obj), status:"Active", lastSent:0, lastSentAt:"", notes:[] });
-  state.contacts = cs; $("#editor").style.display="none"; renderContacts(); audit("contact.save",{id: obj.id});
+  else cs.push({ ...obj, status:"Active", lastSent:0, lastSentAt:"", notes:[] });
+  state.contacts = cs; $("#editor").style.display="none"; renderContacts();
 }
 window.__heed_openEditor = ()=>openEditor();
 
@@ -967,7 +1113,7 @@ async function importCSVFile(file){
   state.contacts = cs; renderContacts();
 }
 
-/* ===== Analytics ===== */
+/* ===== Analytics + ICS ===== */
 function renderAnalytics(){
   const cs = state.contacts; const N = state.settings.seqLen||7;
   if(!cs.length){ $("#an-complete").textContent="—"; $("#an-avgstep").textContent="—"; $("#an-notes").textContent="—"; return; }
@@ -978,38 +1124,32 @@ function renderAnalytics(){
   $("#an-avgstep").textContent = `${avgStep.toFixed(2)} / ${N}`;
   $("#an-notes").textContent = String(notes);
 }
-
-/* ===== ICS (next due batch) ===== */
 function exportICS(){
   const today = new Date(); today.setHours(23,59,59,999);
   const due = state.contacts.filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
   if(!due.length){ toast("No contacts due today"); return; }
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Australia/Sydney";
-  const escICS = s=>s.replace(/\\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;");
   const lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//HD HeeD//Sequencer//EN"];
   due.slice(0,20).forEach(c=>{
-    const dt = dueDateFor(c);
-    const pad = n=>String(n).padStart(2,"0");
+    const dt = dueDateFor(c); const pad=n=>String(n).padStart(2,"0");
     const stamp = `${dt.getUTCFullYear()}${pad(dt.getUTCMonth()+1)}${pad(dt.getUTCDate())}T${pad(dt.getUTCHours())}${pad(dt.getUTCMinutes())}00Z`;
-    const step = nextStepFor(c);
-    const {subject} = buildEmail(c, step);
+    const step = nextStepFor(c); const {subject} = buildEmail(c, step);
     lines.push("BEGIN:VEVENT");
     lines.push(`UID:${c.id}@hdheed`);
     lines.push(`DTSTAMP:${stamp}`);
     lines.push(`DTSTART:${stamp}`);
-    lines.push(`SUMMARY:${escICS(`Email ${step} to ${c.name||c.email||"Contact"} — ${subject.slice(0,70)}`)}`);
-    lines.push(`DESCRIPTION:${escICS(`Prepare and send via ZohoCompose to ${c.email}`)}`);
+    lines.push(`SUMMARY:${subject.slice(0,70).replace(/[\\n,;]/g," ")}`);
+    lines.push(`DESCRIPTION:${`Prepare and send to ${c.email||'no-email'}`.replace(/[\\n,;]/g," ")}`);
     lines.push("END:VEVENT");
   });
   lines.push("END:VCALENDAR");
-  const ics = lines.join("\r\n");
-  const blob = new Blob([ics],{type:"text/calendar"});
+  const blob = new Blob([lines.join("\r\n")],{type:"text/calendar"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "hdheed_next_due.ics"; a.click();
 }
 
-/* ===== Init (Part 3) ===== */
-window.__heed_init_part3 = function initPart3(){
-  // bindings
+/* ===== Binds & init ===== */
+function init3(){
+  ensurePreload();  // <<— load your 9 if empty
+
   $("#search").oninput = ()=>renderContacts();
   $("#filter-status").onchange = ()=>renderContacts();
   $("#sort-key").onchange = ()=>{ const s=state.settings; s.sortKey=$("#sort-key").value; state.settings=s; renderContacts(); };
@@ -1028,14 +1168,18 @@ window.__heed_init_part3 = function initPart3(){
     const dom = state.settings.zohoDomain || "mail.zoho.com";
     let opened=0, allowed=Number(state.settings.rate||5);
     due.slice(0,allowed).forEach(c=>{
+      if(!(c.email||"").trim()) return; // skip no-email
       const step = nextStepFor(c);
       const {subject, body} = buildEmail(c, step);
       const url = `https://${dom}/zm/#compose?to=${encodeURIComponent(c.email||"")}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       const win = window.open(url, "_blank"); if(win) opened++;
     });
-    toast(`Opened ${opened} Zoho compose tabs (browser may limit).`);
+    toast(`Opened ${opened} Zoho compose tab(s).`);
   };
   $("#export-ics").onclick = exportICS;
+
+  // If your Part 1 still shows the "Load Sample 9" button, hide it (we preload real data now)
+  const sampleBtn = $("#load-sample"); if(sampleBtn) sampleBtn.style.display = "none";
 
   $("#pv-copy").onclick = ()=>navigator.clipboard.writeText($("#pv-body").innerText||"");
   $("#pv-send").onclick = ()=>sendFromPreview();
@@ -1053,103 +1197,83 @@ window.__heed_init_part3 = function initPart3(){
   $("#import-json").onchange = e=>{ const f=e.target.files?.[0]; if(f) importJSONFile(f); };
   $("#export-csv").onclick = exportCSV;
   $("#import-csv").onchange = e=>{ const f=e.target.files?.[0]; if(f) importCSVFile(f); };
+  $("#reset").onclick = ()=>{ if(confirm("Reset ALL local data?")){ localStorage.removeItem(ST.contacts); localStorage.removeItem(ST.templates); localStorage.removeItem(ST.settings); location.reload(); }};
 
-  // shortcuts
   document.addEventListener("keydown",(e)=>{
     if(e.key==="/"){ e.preventDefault(); $("#search").focus(); }
     if(e.key.toLowerCase()==="n"){ openEditor(); }
   });
 
   renderContacts();
-};
+}
+window.__heed_init_part3 = init3;
 })();
 </script>
 <script>
 (() => {
 "use strict";
 
-/* ===== Boot sequence that stitches Parts 2 & 3 ===== */
-function boot(){
-  if(window.__heed_init_part2) window.__heed_init_part2();
-  if(window.__heed_init_part3) window.__heed_init_part3();
-}
+/* Boot */
+function boot(){ if(window.__heed_init_part2) window.__heed_init_part2(); if(window.__heed_init_part3) window.__heed_init_part3(); }
 document.addEventListener("DOMContentLoaded", boot);
 
-/* ===== Simple SW registration with inline blob ===== */
+/* SW (installable offline) */
 if('serviceWorker' in navigator){
   try{
-    const swCode = `
-      const CACHE='heed-v1';
-      self.addEventListener('install',e=>{
-        e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./followup.html'])));
-      });
-      self.addEventListener('fetch',e=>{
-        e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
-      });
+    const sw = `
+      const CACHE='heed-v2';
+      self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./followup.html'])));});
+      self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});
     `;
-    const blob = new Blob([swCode],{type:'text/javascript'});
+    const blob = new Blob([sw],{type:'text/javascript'});
     const url = URL.createObjectURL(blob);
     navigator.serviceWorker.register(url);
   }catch(e){}
 }
 
-/* ===== Little help modal ===== */
+/* Modal help */
 const modal = $("#modal"), backdrop = $("#backdrop");
 function openModal(html){
   modal.innerHTML = html + `<div class="row" style="margin-top:12px;justify-content:flex-end"><button id="m-close" class="btn">Close</button></div>`;
   backdrop.style.display = "flex"; backdrop.setAttribute("aria-hidden","false");
-  modal.focus();
   $("#m-close").onclick = closeModal;
 }
 function closeModal(){ backdrop.style.display="none"; backdrop.setAttribute("aria-hidden","true"); }
-backdrop.addEventListener("click", e=>{ if(e.target===backdrop) closeModal(); });
 
-/* ===== Help content ===== */
+/* Quick help */
 function helpHTML(){
   return `
   <h3>Quick help</h3>
   <ul class="small">
-    <li><strong>Templates:</strong> Edit subjects/bodies. Use {{Name}}, {{Company}}, {{Phone}}. Optionally fill Variant B for A/B.</li>
-    <li><strong>Contacts:</strong> Add name/email/company/phone/timezone/segments. Status auto-updates on <em>Mark Sent</em>.</li>
-    <li><strong>Send Next:</strong> Opens Zoho compose (prefilled). Use <em>Batch Prepare</em> for due contacts.</li>
-    <li><strong>Analytics:</strong> Completion %, average step, total notes.</li>
-    <li><strong>Backup:</strong> Export JSON/CSV; Import to restore/merge.</li>
-    <li><strong>Keyboard:</strong> <kbd>/</kbd> search, <kbd>N</kbd> new contact, <kbd>Ctrl/⌘+Z</kbd> undo (local).</li>
+    <li><strong>Templates:</strong> Steps 1–4 preloaded from your site. Edit or extend to 7–10.</li>
+    <li><strong>Contacts:</strong> Add manually or <em>Import CSV</em>. Status auto-updates on <em>Mark Sent</em>.</li>
+    <li><strong>Zoho:</strong> <em>Send Next</em> opens compose with To/Subject/Body prefilled.</li>
+    <li><strong>Analytics:</strong> Completion %, average step, notes total.</li>
+    <li><strong>Backups:</strong> Export/Import JSON; CSV for spreadsheets.</li>
+    <li><strong>Keyboard:</strong> <kbd>/</kbd> search, <kbd>N</kbd> new contact, <kbd>Ctrl/⌘+Z</kbd> undo.</li>
   </ul>`;
 }
-
-/* ===== Global minor actions ===== */
-document.addEventListener("keydown",(e)=>{
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="/"){ e.preventDefault(); openModal(helpHTML()); }
-});
 document.querySelector(".title")?.addEventListener("click",()=>openModal(helpHTML()));
 
-/* ===== Expose for console debugging (optional) ===== */
-window.__heed_debug = {
-  getState: ()=>({contacts:localStorage.getItem("heed_contacts_v4"),templates:localStorage.getItem("heed_templates_v4"),settings:localStorage.getItem("heed_settings_v4")}),
-  clearAll: ()=>{localStorage.removeItem("heed_contacts_v4");localStorage.removeItem("heed_templates_v4");localStorage.removeItem("heed_settings_v4");localStorage.removeItem("heed_audit_v1");localStorage.removeItem("heed_history_v1");},
-};
 })();
 </script>
 
 <!-- Footer -->
-<div class="wrap" style="margin-bottom:40px">
-  <section class="card" style="margin-top:16px">
+<div class="wrap" style="margin:18px auto 40px">
+  <section class="card">
     <h2>How to Use</h2>
     <div class="hr"></div>
     <ol class="small" style="line-height:1.6">
-      <li><strong>Set sequence length:</strong> Choose 7–10 and edit subjects/bodies (use {{Name}} / {{Company}} / {{Phone}}). Click <em>Save Templates</em>.</li>
-      <li><strong>Add contacts:</strong> Name/email/company/phone/timezone/segments supported. Track last sent, next step, next due.</li>
-      <li><strong>Send next:</strong> Click <em>Send Next</em> — Zoho compose opens with To/Subject/Body prefilled. Press <em>Send</em>.</li>
-      <li><strong>Mark sent:</strong> After sending, click <em>Mark Sent</em> (timestamped note + progress).</li>
-      <li><strong>Due tools:</strong> <em>Show Due</em>, <em>Batch Prepare</em>, and <em>Export ICS</em> for calendar reminders.</li>
-      <li><strong>Backup:</strong> JSON (<em>full</em>) and CSV (<em>contacts</em>).</li>
-      <li><strong>Offline:</strong> install as PWA; works without network once cached.</li>
+      <li><strong>Set sequence length:</strong> Choose 7–10 and edit subjects/bodies (use {{Name}} / {{Company}} / {{Phone}}). Save.</li>
+      <li><strong>Add contacts:</strong> Or import CSV (columns accepted: name,email,company,phone,tz,segments,status,lastSent,lastSentAt).</li>
+      <li><strong>Send next:</strong> Click <em>Send Next</em> — compose opens in Zoho. Then <em>Mark Sent</em>.</li>
+      <li><strong>Due tools:</strong> <em>Show Due</em>, <em>Batch Prepare</em>, <em>Export ICS</em>.</li>
+      <li><strong>Offline:</strong> This page installs as a PWA; works offline after first load.</li>
     </ol>
-    <div class="small muted">Publish this as <code>followup.html</code> on your site. If you want **server-side sending as info@hdheed.com.au**, we can add a Zoho Flow webhook version next.</div>
+    <div class="small muted">Want me to preload your **exact 9 contacts**? Share the CSV or a read-only Sheet link and I’ll embed them.</div>
   </section>
   <footer class="small muted" style="text-align:center;margin:24px 0 0">
-    HD HeeD • “Because we care, we provide HD care.” • v1.1 (master features)
+    HD HeeD • “Because we care, we provide HD care.” • v1.2 (visual + automation)
   </footer>
 </div>
 
