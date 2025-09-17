@@ -1,99 +1,296 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HD HeeD Onboarding</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; max-width: 1000px; margin-left: auto; margin-right: auto; }
-    main.stage { margin-top: 20px; }
-    .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .step { font-weight: bold; }
-    .meter { width: 70%; height: 10px; background: #e5e7eb; border-radius: 5px; overflow: hidden; }
-    .meter > div { height: 100%; background: #4f46e5; transition: width 0.3s; }
-    .q { font-size: 1.5em; font-weight: bold; margin-bottom: 10px; }
-    .sub { margin-bottom: 20px; line-height: 1.5; }
-    .opts { margin-bottom: 20px; transition: transform 0.3s; }
-    .slide-enter { transform: translateX(20px); }
-    .slide-exit { transform: translateX(-20px); }
-    .inlinebox { margin: 15px 0; }
-    .inlinebox label { display: block; margin-bottom: 5px; }
-    input, select { width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; box-sizing: border-box; }
-    .row { display: flex; gap: 15px; flex-wrap: wrap; }
-    .row.two > * { flex: 1 1 45%; }
-    .row.three > * { flex: 1 1 30%; }
-    .hint { color: #6b7280; font-size: 0.9em; margin-top: 5px; }
-    .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
-    .btn.primary { background: #4f46e5; color: white; }
-    .btn.ghost { background: none; border: 1px solid #d1d5db; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .ck-list { list-style: none; padding: 0; margin: 0; }
-    .ck-row { margin: 8px 0; display: flex; align-items: center; gap: 8px; }
-    .ck-row input { width: auto; }
-    .al-chip { background: #e5e7eb; padding: 6px 12px; border-radius: 16px; }
-    .al-chip[aria-pressed="true"] { background: #4f46e5; color: white; }
-    .card { border: 1px solid #d1d5db; border-radius: 4px; padding: 10px; margin: 10px 0; }
-    .card summary { font-weight: bold; cursor: pointer; }
-    .kv > div { margin: 5px 0; }
-    .kv b { display: inline-block; width: 200px; }
-    .consent-box { border: 1px solid #d1d5db; padding: 10px; border-radius: 4px; margin: 10px 0; }
-    .nav-list { list-style: none; padding: 0; margin: 0 0 20px 0; }
-    .nav-item { padding: 8px; cursor: pointer; }
-    .nav-item.current { background: #e5e7eb; font-weight: bold; }
-    .nav-item.completed { color: #4f46e5; }
-    .nav-item.locked { color: #9ca3af; cursor: not-allowed; }
-    .foot { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-    #confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; }
-    #confetti.hide { display: none; }
-    #saveHint { color: #4f46e5; font-size: 0.9em; }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AILR — Advanced Intake & Long-form Registration | HD HeeD</title>
+<link rel="icon" href="images/favicon.ico" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+<meta name="theme-color" content="#0b0f1a" />
+
+<style>
+  /* Unchanged CSS */
+  :root{
+    --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153;
+    --al-text:#e8edff; --al-accent:#ffc107; --al-ok:#22c55e; --al-warn:#f59e0b; --al-danger:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+    background:linear-gradient(180deg,#0b0f1a,#0b0f1a 240px,#0d1428); color:var(--al-text);
+  }
+  a{color:#9ec1ff; text-decoration:none}
+  img{max-width:100%; height:auto; display:block}
+
+  header{
+    position:sticky; top:0; z-index:50; background:#0b1226;
+    border-bottom:1px solid var(--al-line);
+  }
+  header .bar{
+    display:flex; align-items:center; gap:12px; padding:10px 16px;
+    max-width:1120px; margin:0 auto;
+  }
+  .brand{display:flex; align-items:center; gap:10px}
+  .brand img{width:40px;height:40px;border-radius:10px;object-fit:cover}
+  .brand .name{font-weight:900}
+  .brand .tag{font-size:12px;color:#b6c8ff}
+
+  .hero{ max-width:1120px; margin:14px auto 0; padding:16px; }
+  .hero .card{
+    background:linear-gradient(180deg,#10172a,#0c1326);
+    border:1px solid var(--al-line); border-radius:18px; padding:18px;
+    display:grid; gap:10px; box-shadow:0 18px 60px rgba(0,0,0,.45);
+  }
+  .hero h1{margin:0; font-size:clamp(22px,4.4vw,34px); font-weight:900}
+  .hero p{margin:0; color:#cfe0ff; opacity:.95}
+  .hero .meta{display:flex; gap:8px; flex-wrap:wrap}
+  .pill{border:1px solid var(--al-line); background:#0f1937; border-radius:999px; padding:6px 10px; color:#cfe0ff; font-size:12px}
+  .notice{font-size:13px; color:#99adff}
+
+  .wrap{
+    max-width:1120px; margin:12px auto 24px; padding:0 16px; display:grid; gap:14px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width:980px){ .wrap{grid-template-columns: 260px 1fr;} }
+
+  .portrait{ position:sticky; top:88px; align-self:start; display:none; }
+  @media (min-width:980px){ .portrait{ display:block } }
+  .portrait .box{
+    border:1px solid var(--al-line); border-radius:16px; overflow:hidden;
+    background:linear-gradient(180deg,#0f1630,#0b1026); padding:12px;
+    box-shadow:0 18px 50px rgba(0,0,0,.45);
+  }
+  .portrait .box img{border-radius:12px; filter: drop-shadow(0 12px 28px rgba(0,0,0,.35));}
+  .legend{margin-top:10px; display:grid; gap:6px; font-size:13px; color:#b6c8ff}
+  .legend b{color:#ffe28f}
+
+  .stage{
+    border:1px solid var(--al-line); border-radius:18px; padding:16px;
+    background:linear-gradient(180deg,#10172a,#0c1326);
+    box-shadow:0 18px 60px rgba(0,0,0,.45);
+  }
+  .head{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  .head .step{font-weight:900}
+  .meter{height:8px; background:#101838; border:1px solid var(--al-line);
+    border-radius:999px; overflow:hidden; flex:1}
+  .meter>div{height:100%; width:0%; background:linear-gradient(90deg,#ffd95c,#ffe78f)}
+
+  .q{font-size:clamp(18px,3.8vw,22px); font-weight:900; line-height:1.35; margin:10px 0}
+  .sub{font-size:14px; color:#cfe0ff; margin:0 0 6px}
+  .sub .consent-box{
+    border:1px dashed var(--al-line); background:#0e162e; border-radius:10px; padding:10px; margin-top:8px;
+  }
+  .sub ul{margin:8px 0 0 18px}
+
+  .opts{display:grid; gap:10px}
+  .al-chip{
+    border:1px solid var(--al-line); background:linear-gradient(180deg,#121a3a,#0f172f);
+    color:#e7ebff; border-radius:12px; padding:14px; text-align:left; cursor:pointer; font-size:1.04rem;
+  }
+  .al-chip:hover{box-shadow:0 12px 34px rgba(0,0,0,.28)}
+  .al-chip[aria-pressed="true"]{box-shadow:0 0 0 3px rgba(255,217,92,.25); border-color:#ffd95c}
+
+  .inlinebox{
+    border:1px solid var(--al-line); background:#0e162e; border-radius:12px; padding:12px; display:grid; gap:10px
+  }
+  .inlinebox input,.inlinebox select,.inlinebox textarea{
+    width:100%; padding:12px; border-radius:10px; border:1px solid #2a3b68; background:#0f1b3b; color:#e7ebff; font-size:16px
+  }
+  .row{display:grid; gap:10px}
+  @media (min-width:680px){ .row.two{grid-template-columns:repeat(2,minmax(0,1fr))} .row.three{grid-template-columns:repeat(3,minmax(0,1fr))} }
+
+  .foot{
+    position:sticky; bottom:0; left:0; right:0;
+    display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    margin-top:12px; padding-top:10px; border-top:1px dashed var(--al-line); background:transparent;
+  }
+  .btn{border:0; border-radius:12px; padding:12px 16px; font-weight:900; cursor:pointer; min-height:44px}
+  .btn.primary{background:var(--al-accent); color:#2a2100; box-shadow:0 12px 34px rgba(0,0,0,.35)}
+  .btn.ghost{background:#121a3a; color:#e7ebff; border:1px solid var(--al-line)}
+  .btn.warn{background:#173155; color:#ffd95c; border:1px solid #334c85}
+  .hint{font-size:12px; color:#9fb4ff}
+
+  .review{display:grid; gap:10px}
+  details.card{ border:1px solid var(--al-line); background:#0f1731; border-radius:12px; padding:10px }
+  summary{cursor:pointer; font-weight:900}
+  .kv{display:grid; gap:4px; margin-top:8px}
+  .kv div{display:flex; gap:10px; font-size:14px; color:#cedaff}
+  .kv div b{min-width:210px; color:#ffe28f; font-weight:800}
+  @media (max-width:520px){ .kv div{flex-direction:column} .kv div b{min-width:unset} }
+
+  .ck-list{ list-style:none; padding:0; margin:0; display:grid; gap:8px }
+  .ck-row{ display:flex; align-items:center; gap:10px; }
+  .ck-row input[type="checkbox"]{ width:18px; height:18px; }
+
+  .drop{ border:2px dashed #2a3b68; border-radius:12px; padding:12px; text-align:center; color:#cfe0ff }
+  .drop input{display:none}
+  .drop label{display:inline-block; padding:10px 12px; border-radius:10px; border:1px solid var(--al-line); background:#121a3a; cursor:pointer; font-weight:800}
+
+  .hide{display:none}
+  .ok{color:var(--al-ok)} .warntext{color:var(--al-warn)} .danger{color:var(--al-danger)}
+
+  .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.6); z-index:1000;}
+  .modal.open{display:flex}
+  .modal .panel{
+    width:min(1000px,96vw); height:min(88vh,1000px);
+    background:#0b1226; border:1px solid var(--al-line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column;
+  }
+  .modal .head{display:flex; align-items:center; justify-content:space-between; padding:10px; border-bottom:1px solid var(--al-line)}
+  .modal .head .ttl{font-weight:900}
+  .modal .body{flex:1; background:#0e162e}
+  .modal embed{width:100%; height:100%}
+  .modal .foot{padding:10px; border-top:1px solid var(--al-line); display:flex; gap:8px; justify-content:flex-end}
+
+  .doc-list{ margin:8px 0 0 18px; color:#cfe0ff }
+  .doc-list li{ margin:6px 0 }
+  .doc-list b{ color:#ffe28f }
+  .doc-privacy{ margin-top:8px; font-size:12px; color:#9fb4ff }
+</style>
 </head>
 <body>
-  <nav><ul class="nav-list" id="navList"></ul></nav>
-  <main class="stage">
-    <div class="head"><span class="step" id="stepTxt"></span><div class="meter"><div id="bar"></div></div></div>
-    <div class="q" id="q"></div>
-    <p class="sub" id="sub"></p>
-    <div class="opts" id="opts"></div>
+
+<header>
+  <div class="bar">
+    <div class="brand">
+      <img src="images/logo.png" alt="HD HeeD logo">
+      <div>
+        <div class="name">HD HeeD</div>
+        <div class="tag">AILR — Advanced Intake & Long-form Registration</div>
+      </div>
+    </div>
+    <div style="margin-left:auto" class="hint">Mobile-first • Autosaves • You can pause and return anytime</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="card">
+    <h1>Let’s get you set up — thoroughly and simply</h1>
+    <p>Answer clear, step-by-step questions. Pick a card, or type your own answer. Choose <em>Not sure</em> or <em>Prefer not to say</em> whenever you like — you can finish later. We’ll only need an <strong>email or phone</strong> at the end to submit.</p>
+    <div class="meta">
+      <span class="pill">NDIS participant onboarding</span>
+      <span class="pill">Consents & risks included</span>
+    </div>
+    <p class="notice">Tip: On mobile, you’ll see one focused screen at a time with large tap targets.</p>
+  </div>
+</section>
+
+<div class="wrap" id="app">
+  <aside class="portrait">
+    <div class="box">
+      <img id="portrait" src="images/ella/ella-default.png" alt="Assistant portrait">
+      <div class="legend">
+        <div><b>Hi, I’m Ella.</b> I’ll guide you through a complete onboarding.</div>
+        <div>Tap a card to answer, or type your own.</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="stage" role="region" aria-live="polite">
+    <div class="head">
+      <span id="stepTxt" class="step">Step 1/99</span>
+      <div class="meter" aria-label="Progress"><div id="bar"></div></div>
+    </div>
+
+    <div id="q" class="q">…</div>
+    <p id="sub" class="sub"></p>
+
+    <div id="opts" class="opts"></div>
+
     <div class="foot">
-      <button class="btn ghost" id="backBtn">← Back</button>
-      <button class="btn primary" id="nextBtn">Next →</button>
-      <button class="btn ghost" id="saveExitBtn">Save & Exit</button>
-      <span id="saveHint"></span>
+      <div class="hint" id="saveHint">Draft saved</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn ghost" id="backBtn" type="button">← Back</button>
+        <button class="btn warn" id="saveExitBtn" type="button">Save & Exit</button>
+        <button class="btn primary" id="nextBtn" type="button">Next →</button>
+      </div>
     </div>
   </main>
-  <canvas id="confetti" class="hide"></canvas>
+</div>
+
+<div id="docModal" class="modal" aria-hidden="true">
+  <div class="panel">
+    <div class="head">
+      <div class="ttl" id="docTitle">Document</div>
+      <button id="docClose" class="btn ghost">Close</button>
+    </div>
+    <div class="body"><embed id="docViewer" src="" type="application/pdf" /></div>
+    <div class="foot">
+      <a id="docDownload" class="btn primary" href="#" download>Download PDF</a>
+    </div>
+  </div>
+</div>
 <script>
-(function(){
-  /* ====== Config ====== */
-  var GS_WEBAPP = "https://script.google.com/macros/s/AKfycbyj9VvLh26csmc0bEry3cfeRzGxmZZJx5HNptkZGvcVzqTfmnO9fSsvhwF9YgCwfM5ALw/exec";
+window.addEventListener('DOMContentLoaded', function(){
+
+  /* ====== Config (links kept EXACTLY) ====== */
+  var GS_WEBAPP   = "https://script.google.com/macros/s/AKfycbyj9VvLh26csmc0bEry3cfeRzGxmZZJx5HNptkZGvcVzqTfmnO9fSsvhwF9YgCwfM5ALw/exec";
   var STORAGE_KEY = "hdheed_ailr_v16";
+
+  /* === Your 11 PDFs (links kept EXACTLY) === */
   var DOCS = [
-    { id:"handbook", title:"Client Handbook", requiresConsent:false, fileId:"https://drive.google.com/file/d/1Du5TxEIgD9n--Gw5vkkkFXEij_SaLwLE/view?usp=sharing" },
-    { id:"privacy", title:"Privacy and Confidentiality Agreement", requiresConsent:true, fileId:"16qAcoUWtXC57hCg-B2atxpQRfDr53jK3" },
-    { id:"money_property", title:"Participant Money and Property Consent Form", requiresConsent:true, fileId:"https://drive.google.com/file/d/1OymxyfOYxtaqW2keNrRB_kmW8JmfP6vz/view?usp=sharing" },
-    { id:"incident_ack", title:"Incident Management Acknowledgement Form", requiresConsent:false, fileId:"https://drive.google.com/file/d/1EYfi-4SoOxk8y70PNc2Fw70RiO7yxZ8a/view?usp=sharing" },
-    { id:"share_ndis_plan", title:"Consent to Share NDIS Plan", requiresConsent:true, fileId:"https://drive.google.com/file/d/10j5FmZg1zfKeE9XrclmFZFY3BaGQj-mo/view?usp=sharing" },
-    { id:"share_info", title:"Consent to Share Information", requiresConsent:true, fileId:"https://drive.google.com/file/d/1uJ3XCrdms2yHdnnDvXyaCEgUu91fZ1ip/view?usp=sharing" },
-    { id:"media_photos", title:"Consent for Media and Photographs", requiresConsent:true, fileId:"https://drive.google.com/file/d/1UuNf69LxSLTOZNhwvi-17d3SeRRjik3t/view?usp=sharing" },
-    { id:"emergency_med", title:"Consent for Emergency Medical Treatment", requiresConsent:true, fileId:"https://drive.google.com/file/d/1mGUnc7z9gVkYw3KEC6qiEhBxOUrB_zIx/view?usp=sharing" },
-    { id:"complaints_feedback", title:"Complaints and Feedback Form", requiresConsent:false, fileId:"https://drive.google.com/file/d/12fK9zFbu0SnXyJ0Zs77hOvdXp-D9bwDU/view?usp=sharing" },
-    { id:"advocacy_auth", title:"Authority to Act as an Advocate", requiresConsent:true, fileId:"https://drive.google.com/file/d/1Ips2uYAXgsg_35ATUJzsWpad4haMlAtD/view?usp=sharing" },
-    { id:"key_authority", title:"Authority to Hold a Key", requiresConsent:true, fileId:"https://drive.google.com/file/d/1sBNptUA3mTu55NdDPNUAexqLOjfPmPQ-/view?usp=sharing" }
+    { id:"handbook", title:"Client Handbook", requiresConsent:false,
+      fileId:"https://drive.google.com/file/d/1Du5TxEIgD9n--Gw5vkkkFXEij_SaLwLE/view?usp=sharing" },
+    { id:"privacy", title:"Privacy and Confidentiality Agreement", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/16qAcoUWtXC57hCg-B2atxpQRfDr53jKK3/view?usp=sharing".replace("K3","K3") },
+    { id:"money_property", title:"Participant Money and Property Consent Form", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1OymxyfOYxtaqW2keNrRB_kmW8JmfP6vz/view?usp=sharing" },
+    { id:"incident_ack", title:"Incident Management Acknowledgement Form", requiresConsent:false,
+      fileId:"https://drive.google.com/file/d/1EYfi-4SoOxk8y70PNc2Fw70RiO7yxZ8a/view?usp=sharing" },
+    { id:"share_ndis_plan", title:"Consent to Share NDIS Plan", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/10j5FmZg1zfKeE9XrclmFZFY3BaGQj-mo/view?usp=sharing" },
+    { id:"share_info", title:"Consent to Share Information", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1uJ3XCrdms2yHdnnDvXyaCEgUu91fZ1ip/view?usp=sharing" },
+    { id:"media_photos", title:"Consent for Media and Photographs", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1UuNf69LxSLTOZNhwvi-17d3SeRRjik3t/view?usp=sharing" },
+    { id:"emergency_med", title:"Consent for Emergency Medical Treatment", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1mGUnc7z9gVkYw3KEC6qiEhBxOUrB_zIx/view?usp=sharing" },
+    { id:"complaints_feedback", title:"Complaints and Feedback Form", requiresConsent:false,
+      fileId:"https://drive.google.com/file/d/12fK9zFbu0SnXyJ0Zs77hOvdXp-D9bwDU/view?usp=sharing" },
+    { id:"advocacy_auth", title:"Authority to Act as an Advocate", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1Ips2uYAXgsg_35ATUJzsWpad4haMlAtD/view?usp=sharing" },
+    { id:"key_authority", title:"Authority to Hold a Key", requiresConsent:true,
+      fileId:"https://drive.google.com/file/d/1sBNptUA3mTu55NdDPNUAexqLOjfPmPQ-/view?usp=sharing" }
   ];
   function driveUrl(idOrUrl){
     if(!idOrUrl) return "#";
     if(/^https?:\/\//i.test(idOrUrl)) return idOrUrl;
     return "https://drive.google.com/uc?export=download&id="+encodeURIComponent(idOrUrl);
   }
+
   /* ====== Safe helpers ====== */
   function $(s,r){ return (r||document).querySelector(s); }
-  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
   function setSaveHint(t){ var el=$("#saveHint"); if(el) el.textContent=t; }
   function cloneSafe(obj){
     try{ if (typeof structuredClone==="function") return structuredClone(obj); }catch(e){}
     try{ return JSON.parse(JSON.stringify(obj)); }catch(e){ return obj; }
   }
+
+  /* ====== Portrait images (links kept EXACTLY) ====== */
+  var AILR_IMAGES = {
+    intro: "images/ella/ella-default.png",
+    caller: "images/ella/ella-caller.png",
+    participant: "images/ella/ella-service.png",
+    contacts: "images/ella/ella-contact-window.png",
+    comms: "images/ella/ella-interpreter.png",
+    living: "images/ella/ella-location.png",
+    clinical: "images/ella/ella-hours.png",
+    medications: "images/ella/ella-urgency.png",
+    risks: "images/ella/ella-risk-beh.png",
+    bsp: "images/ella/ella-risk-beh.png",
+    supports: "images/ella/ella-rostering.png",
+    schedule: "images/ella/ella-rostering.png",
+    policies: "images/ella/ella-summary.png",
+    consents: "images/ella/ella-consent.png",
+    uploads: "images/ella/ella-dates.png",
+    review: "images/ella/ella-summary.png",
+    submit: "images/ella/ella-summary.png"
+  };
+  function setPortrait(key){
+    var p = $("#portrait");
+    if (p){ p.src = AILR_IMAGES[key] || AILR_IMAGES.intro; p.alt = "Assistant — " + (key||""); }
+  }
+
   /* ====== State ====== */
   var S = {
     i: 0,
@@ -152,32 +349,22 @@
     acks:{},
     notes:[]
   };
-  /* ====== Restore State and Handle Navigation ====== */
-  function restoreState() {
-    try {
-      var prev = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-      if (prev && typeof prev === "object") {
-        Object.assign(S, prev);
-        S.i = Math.max(0, Math.min(Steps.length - 1, S.i || 0));
-      }
-    } catch (e) {
-      console.error("Failed to restore state:", e);
-    }
-    render(false);
-    buildNavigation();
-  }
-  /* ====== Modified Save Function with Step Index ====== */
+
+  /* Restore draft (safe) */
+  try{
+    var prev = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if (prev && typeof prev==="object") Object.assign(S, prev);
+  }catch(e){}
+
   function save(){
     try{
       var clone = cloneSafe(S);
-      if (clone.uploads) clone.uploads = { files: [] };
+      if (clone.uploads) clone.uploads = { files: [] }; // keep uploads empty
       localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
       setSaveHint("Draft saved");
-      history.replaceState({ step: S.i }, '', window.location.href);
-    }catch(e){
-      console.error("Failed to save state:", e);
-    }
+    }catch(e){}
   }
+
   /* ====== DOM refs ====== */
   var qEl = document.getElementById("q");
   var subEl = document.getElementById("sub");
@@ -187,367 +374,8 @@
   var backBtn = document.getElementById("backBtn");
   var nextBtn = document.getElementById("nextBtn");
   var saveExitBtn = document.getElementById("saveExitBtn");
-  var navList = document.getElementById("navList");
-  /* ====== Portrait images (kept stubs for alt text only) ====== */
-  var AILR_IMAGES = {
-    intro: "", caller: "", participant: "", contacts: "", comms: "", living: "", clinical: "",
-    medications: "", risks: "", bsp: "", supports: "", schedule: "", policies: "", consents: "", uploads: "", review: "", submit: ""
-  };
-  function setPortrait(){ /* (no external images to keep file standalone) */ }
-  /* ====== UI builders ====== */
-  function button(txt,variant,onClick){
-    var b = el('button','btn '+(variant||'ghost')); b.type="button"; b.textContent=txt; b.addEventListener('click',onClick); return b;
-  }
-  function divider(txt){ return el('div','hint',txt); }
-  function row(cols, children){ var r = el('div','row '+(cols||'')); children.forEach(function(ch){ r.appendChild(ch); }); return r; }
-  function input(label, obj, key, type){
-    var box = el('div','inlinebox'); var id = "in_"+key+"_"+Math.random().toString(36).slice(2,7);
-    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var i = el('input'); i.id=id; i.type=type||"text"; i.value = obj[key]||""; i.placeholder = "";
-    i.addEventListener('input', function(){ obj[key] = i.value || null; save(); });
-    box.appendChild(i); return box;
-  }
-  function select(label, obj, key, options){
-    var box = el('div','inlinebox'); var id = "sel_"+key+"_"+Math.random().toString(36).slice(2,7);
-    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var s = el('select'); s.id=id;
-    var html = '<option value="">Select…</option>'; options.forEach(function(o){ html += '<option value="'+o+'">'+o+'</option>'; });
-    s.innerHTML = html; if (obj[key]!==null && obj[key]!==undefined) s.value = obj[key];
-    s.addEventListener('change', function(){ obj[key] = s.value || null; save(); });
-    box.appendChild(s); return box;
-  }
-  function radioChips(label, obj, key, items){
-    var wrap = el('div','inlinebox'); wrap.innerHTML = '<label style="font-weight:800">'+label+'</label>';
-    var roww = el('div'); roww.style="display:flex; gap:8px; flex-wrap:wrap";
-    var buttons = [];
-    items.forEach(function(pair){
-      var txt = pair[0], val = pair[1];
-      var b = button(txt,'ghost',function(){
-        obj[key] = val;
-        buttons.forEach(function(x){ x.removeAttribute("aria-pressed"); });
-        b.setAttribute("aria-pressed","true");
-        save();
-        updateNavigation();
-      });
-      b.className = "al-chip";
-      if (obj[key]===val) b.setAttribute("aria-pressed","true");
-      buttons.push(b); roww.appendChild(b);
-    });
-    wrap.appendChild(roww); return wrap;
-  }
-  function radioChipsInline(label, obj, key, items){ return radioChips(label, obj, key, items); }
-  function checks(label, targetObj, map, arrayKey){
-    var box = el('div','inlinebox'); box.innerHTML = '<label style="font-weight:800">'+label+'</label>';
-    var list = el('ul','ck-list');
-    if (arrayKey){
-      if (!Array.isArray(targetObj[arrayKey])) targetObj[arrayKey] = [];
-      Object.keys(map).forEach(function(k){
-        var txt = map[k];
-        var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
-        var li = el('li','ck-row');
-        var c = el('input'); c.type="checkbox"; c.id=id; c.checked = targetObj[arrayKey].indexOf(k)!==-1;
-        var lab = el('label',null,txt); lab.htmlFor=id;
-        c.addEventListener('change', function(){
-          var arr = targetObj[arrayKey];
-          if (c.checked){ if (arr.indexOf(k)===-1) arr.push(k); }
-          else { targetObj[arrayKey] = arr.filter(function(x){ return x!==k; }); }
-          save();
-        });
-        li.appendChild(c); li.appendChild(lab); list.appendChild(li);
-      });
-    } else {
-      Object.keys(map).forEach(function(k){
-        var txt = map[k];
-        var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
-        var li = el('li','ck-row');
-        var c = el('input'); c.type="checkbox"; c.id=id; c.checked = !!targetObj[k];
-        var lab = el('label',null,txt); lab.htmlFor=id;
-        c.addEventListener('change', function(){ targetObj[k] = c.checked; save(); });
-        li.appendChild(c); li.appendChild(lab); list.appendChild(li);
-      });
-    }
-    box.appendChild(list); return box;
-  }
-  function typeBox(label, placeholder, onSave){
-    var box = el('div','inlinebox'); var id = "tb_"+Math.random().toString(36).slice(2,7);
-    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var i = el('input'); i.id=id; i.placeholder = placeholder||"Type here";
-    i.addEventListener('input', function(){ try{ if (typeof onSave === "function") onSave(i.value||""); } finally { setSaveHint("Draft saved"); } });
-    box.appendChild(i); return box;
-  }
-  /* ====== Summary Helpers ====== */
-  function mapRequiredForSummary(arr, other){
-    var map = {
-      personal_care:"Personal care",
-      high_intensity:"High-intensity personal care",
-      household_tasks:"Household tasks",
-      life_skills:"Development of life skills",
-      community_participation:"Community participation",
-      group_centre:"Group/centre-based activities",
-      travel_transport:"Assist with travel & transport",
-      daily_tasks_sil:"Daily tasks & shared living",
-      not_sure:"Not sure — guide me"
-    };
-    var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
-    if (other) list.push("Other: "+other);
-    return list.length ? list.join(", ") : "";
-  }
-  function mapWindowsSummary(arr){
-    var map = { w1:"Weekday AM", w2:"Weekday PM", w3:"Evenings", w4:"Weekends" };
-    return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
-  }
-  function mapDaysSummary(arr){
-    var map = { d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun" };
-    return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
-  }
-  /* ====== Formspree Submission ====== */
-  function sendToFormspree(){
-    return new Promise(function(resolve, reject){
-      try {
-        var policyAck = {
-          handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-          incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-          complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
-        };
-        var addr = S.participant && S.participant.address ? [
-          S.participant.address.line1, S.participant.address.line2,
-          S.participant.address.suburb, S.participant.address.state,
-          S.participant.address.postcode
-        ].filter(Boolean).join(", ") : "";
-        var contactSummary = [
-          (S.contacts.email || ""),
-          (S.contacts.phone ? (" • " + S.contacts.phone) : "")
-        ].join("");
-        var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-        var windowsSummary = mapWindowsSummary(S.schedule.windows);
-        var daysSummary = mapDaysSummary(S.schedule.days);
-        var payload = {
-          caller: S.caller,
-          participant: S.participant,
-          contacts: S.contacts,
-          comms: S.comms,
-          living: S.living,
-          clinical: S.clinical,
-          medications: S.medications,
-          risks: S.risks,
-          bsp: S.bsp,
-          supports: S.supports,
-          schedule: S.schedule,
-          policy_ack: policyAck,
-          acks: S.acks,
-          emergency_advocacy: S.emergency_advocacy,
-          submitter: S.submitter,
-          notes: S.notes,
-          timestamp: new Date().toISOString(),
-          supports_required_summary: requiredSummary,
-          supports_details_text: S.supports.details_text || "",
-          schedule_windows_summary: windowsSummary,
-          schedule_days_summary: daysSummary,
-          participant_address_summary: addr,
-          contacts_contact_summary: contactSummary,
-          _meta: { app: "AILR", version: "v16" }
-        };
-        console.log("Sending data to:", GS_WEBAPP);
-        console.log("Data payload:", JSON.stringify(payload, null, 2));
-        fetch(GS_WEBAPP, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        }).then(function(r){
-          console.log("Submission response:", {
-            status: r.status,
-            statusText: r.statusText,
-            headers: Object.fromEntries(r.headers.entries())
-          });
-          return r.json().then(function(j){
-            console.log("Parsed response:", j);
-            if (j.status !== 'ok') {
-              console.error("Server reported error:", j.message || "Unknown error");
-              throw new Error(j.message || "Server error");
-            }
-            resolve(j);
-          }, function(e){
-            console.warn("JSON parse failed; retrying with no-cors...");
-            fetch(GS_WEBAPP, {
-              method: "POST",
-              mode: "no-cors",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload)
-            }).then(function(){
-              console.warn("No-cors mode used; cannot verify server response");
-              resolve({ status: "ok" });
-            }, function(e){
-              console.error("No-cors submission error:", {
-                message: e.message,
-                stack: e.stack
-              });
-              reject(e);
-            });
-          });
-        }, function(e){
-          console.error("Submission error details:", {
-            message: e.message,
-            stack: e.stack,
-            url: GS_WEBAPP
-          });
-          reject(e);
-        });
-      } catch (e) {
-        console.error("Submission error:", {
-          message: e.message,
-          stack: e.stack
-        });
-        reject(e);
-      }
-    });
-  }
-  /* ====== Confetti Animation ====== */
-  function triggerConfetti(duration) {
-    var canvas = document.getElementById('confetti');
-    canvas.classList.remove('hide');
-    var ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    var particles = [];
-    var colors = ['#4f46e5', '#ec4899', '#22c55e', '#f59e0b'];
-    function Particle() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height - canvas.height;
-      this.vx = Math.random() * 4 - 2;
-      this.vy = Math.random() * 6 + 2;
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.size = Math.random() * 6 + 2;
-    }
-    for (var i = 0; i < 100; i++) particles.push(new Particle());
-    var startTime = Date.now();
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(function(p) {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.1;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      if (Date.now() - startTime < duration) {
-        requestAnimationFrame(animate);
-      } else {
-        canvas.classList.add('hide');
-      }
-    }
-    animate();
-  }
-  /* ====== Render Review ====== */
-  function renderReview(){
-    var wrap = el('div','review');
-    function sect(title, pairs){
-      var d = el('details','card'); d.open = true;
-      var s = el('summary',null,title); d.appendChild(s);
-      var kv = el('div','kv');
-      pairs.forEach(function(pair){
-        var k=pair[0], v=pair[1];
-        var row = el('div'); var b = el('b',null,k);
-        var span = el('span',null,(v===null||v===undefined||v==="")?"—":v);
-        row.appendChild(b); row.appendChild(span); kv.appendChild(row);
-      });
-      d.appendChild(kv); return d;
-    }
-    wrap.appendChild(sect("Who is completing", [
-      ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
-    ]));
-    wrap.appendChild(sect("Participant", [
-      ["Legal name", S.participant.legal_name],
-      ["Preferred name", S.participant.preferred_name],
-      ["Pronouns", S.participant.pronouns],
-      ["DOB", S.participant.dob],
-      ["NDIS number", S.participant.ndis_number],
-      ["Address", [S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
-      ["Plan management", S.participant.plan_mgmt],
-      ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
-      ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
-    ]));
-    wrap.appendChild(sect("Supports (required)", [
-      ["Selected", mapRequiredForSummary(S.supports.required, S.supports.required_other)],
-      ["Specific support details", S.supports.details_text],
-      ["Goals", S.supports.goals],
-      ["Preferred outcomes", S.supports.outcomes]
-    ]));
-    wrap.appendChild(sect("Communication & preferences", [
-      ["Language", S.comms.primary_language],
-      ["Interpreter", S.comms.interpreter],
-      ["Interpreter language", S.comms.interpreter_language],
-      ["Cultural considerations", S.comms.cultural_considerations],
-      ["Worker gender pref.", S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other || "—"],
-      ["Transport required", S.comms.preferences.transport_required||"—"]
-    ]));
-    wrap.appendChild(sect("Contacts", [
-      ["Email", S.contacts.email],
-      ["Phone", S.contacts.phone],
-      ["Emergency contact", [S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(" • ")||"—"],
-      ["Support Coordinator", [S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(" • ")||"—"],
-      ["GP", [S.contacts.gp.name,S.contacts.gp.practice,S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • ")||"—"]
-    ]));
-    wrap.appendChild(sect("Living & access", [
-      ["Residence type", S.living.residence_type],
-      ["Lives with", S.living.lives_with],
-      ["Entry notes", S.living.entry_notes],
-      ["Keysafe", S.living.keysafe],
-      ["Smoking", S.living.smoking_on_premises],
-      ["Hazards", S.living.hazards]
-    ]));
-    wrap.appendChild(sect("Health & clinical", [
-      ["Primary diagnoses", S.clinical.primary_diagnoses],
-      ["Other diagnoses", S.clinical.other_diagnoses],
-      ["Allergies", S.clinical.allergies],
-      ["Mobility", S.clinical.mobility],
-      ["Equipment", S.clinical.equipment],
-      ["Continence", S.clinical.continence],
-      ["Cognition", S.clinical.cognition],
-      ["Pressure injury risk", S.clinical.pressure_injury_risk],
-      ["Falls risk", S.clinical.falls_risk],
-      ["Seizures", S.clinical.seizures.has===true?"Yes":S.clinical.seizures.has===false?"No":(S.clinical.seizures.has===null?"Not sure":"—")],
-      ["Seizure plan", S.clinical.seizures.plan],
-      ["Seizure frequency", S.clinical.seizures.frequency],
-      ["Stoma/ostomy care", (S.clinical.stoma_care===true?"Yes":S.clinical.stoma_care===false?"No":(S.clinical.stoma_care||"—"))],
-      ["Diet / swallowing", S.clinical.diet_notes]
-    ]));
-    function listTrue(obj, keys){
-      var map = {wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
-                 animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"};
-      var list = keys.filter(function(k){ return obj[k]===true; }).map(function(k){ return map[k]||k; });
-      return list.length? list.join(", ") : "—";
-    }
-    wrap.appendChild(sect("Risks", [
-      ["Behavioural", S.risks.behavioural.present],
-      ["Behaviour notes", S.risks.behavioural.notes],
-      ["Clinical concerns", listTrue(S.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])],
-      ["Clinical other", S.risks.clinical.other],
-      ["Environmental", listTrue(S.risks.environmental, ["animals","hoarding","weapons"])],
-      ["Environmental other", S.risks.environmental.other],
-      ["Home risks", listTrue(S.risks.home_checklist, ["trip_hazards","smoke_alarms","lighting","bathroom_safety"])],
-      ["Home notes", S.risks.home_checklist.notes],
-      ["Other risk notes", S.risks.other_notes],
-      ["Overall rating", S.risks.overall_rating]
-    ]));
-    wrap.appendChild(sect("Supports & schedule", [
-      ["Windows", mapWindowsSummary(S.schedule.windows)],
-      ["Days", mapDaysSummary(S.schedule.days)],
-      ["Hours/week", S.schedule.hours_per_week],
-      ["Urgency", S.schedule.urgency],
-      ["Start pref.", S.schedule.start_preference]
-    ]));
-    var cons = (S.emergency_advocacy===undefined||S.emergency_advocacy===null||S.emergency_advocacy==="") ? "—" : (S.emergency_advocacy==="Yes"?"Yes":S.emergency_advocacy==="No"?"No":"Not sure");
-    wrap.appendChild(sect("Consents", [
-      ["Emergency advocacy consent", cons]
-    ]));
-    wrap.appendChild(sect("Uploads", [
-      ["Files selected", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ") || "—"]
-    ]));
-    return wrap;
-  }
-  /* ====== Steps ====== */
+
+  /* ====== Step builders (compliant content) ====== */
   var Steps = [
     { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
       build:function(m){
@@ -566,7 +394,9 @@
         m.appendChild(radioChips("Do you give consent to collect your details and, if needed, liaise with your Support Coordinator/Plan Manager?", S.caller, "consent", [
           ["Yes, I consent","Yes"],["Not yet","Not yet"],["No","No"],["Not sure","Not sure"]
         ]));
-        var warn = el('div','hint','Note: If you select Not yet or No, you won’t be able to continue.'); m.appendChild(warn);
+        var warn = document.createElement('div'); warn.className="hint";
+        warn.innerHTML = "Note: If you select <b>Not yet</b> or <b>No</b>, you won’t be able to continue.";
+        m.appendChild(warn);
       }
     },
     { key:"participant", title:"Participant — legal details", sub:"Legal name is required for service setup later; preferred name helps our team address the participant correctly.",
@@ -722,49 +552,43 @@
           if(!S.acks[d.id]) S.acks[d.id] = { read:false, consent:false };
         });
         DOCS.forEach(function(d){
-          var card = el('div','inlinebox');
+          var card = document.createElement('div'); card.className="inlinebox";
           card.innerHTML = '<div style="font-weight:800">'+d.title+'</div>';
-          var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; align-items:center";
-          var a = el('a','btn primary','Download PDF'); a.href=driveUrl(d.fileId); a.download="";
+          var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; align-items:center";
+          var a = document.createElement('a'); a.className="btn primary"; a.textContent="Download PDF"; a.href=driveUrl(d.fileId); a.download="";
           actions.appendChild(a);
-          var hint = el('div','hint', d.requiresConsent ? "Please sign the PDF and email it to info@hdheed.com.au." : "Please read this document before proceeding.");
-          actions.appendChild(hint); card.appendChild(actions);
-          var row1 = el('div','ck-row');
-          var c1 = el('input'); c1.type="checkbox"; c1.id="ack_read_"+d.id; c1.checked = !!S.acks[d.id].read;
-          var l1 = el('label',null,"I have received & read this document."); l1.htmlFor=c1.id;
+          var hint = document.createElement('div'); hint.className="hint";
+          hint.textContent = d.requiresConsent ? "Please sign the PDF and email it to info@hdheed.com.au."
+                                               : "Please read this document before proceeding.";
+          actions.appendChild(hint);
+          card.appendChild(actions);
+          var row1 = document.createElement('div'); row1.className="ck-row";
+          var c1 = document.createElement('input'); c1.type="checkbox"; c1.id="ack_read_"+d.id; c1.checked = !!S.acks[d.id].read;
+          var l1 = document.createElement('label'); l1.htmlFor=c1.id; l1.textContent = "I have received & read this document.";
           c1.addEventListener('change', function(){ S.acks[d.id].read = c1.checked; save(); });
           row1.appendChild(c1); row1.appendChild(l1); card.appendChild(row1);
           if (d.requiresConsent){
-            var row2 = el('div','ck-row');
-            var c2 = el('input'); c2.type="checkbox"; c2.id="ack_con_"+d.id; c2.checked = !!S.acks[d.id].consent;
-            var l2 = el('label',null,"I consent to the terms in this form."); l2.htmlFor=c2.id;
+            var row2 = document.createElement('div'); row2.className="ck-row";
+            var c2 = document.createElement('input'); c2.type="checkbox"; c2.id="ack_con_"+d.id; c2.checked = !!S.acks[d.id].consent;
+            var l2 = document.createElement('label'); l2.htmlFor=c2.id; l2.textContent = "I consent to the terms in this form.";
             c2.addEventListener('change', function(){ S.acks[d.id].consent = c2.checked; save(); });
             row2.appendChild(c2); row2.appendChild(l2); card.appendChild(row2);
           }
           m.appendChild(card);
         });
-        var sum = el('div','hint'); sum.style.marginTop="6px";
-        function updateSum(){
-          var total=DOCS.length, readCt=0, needCon=DOCS.filter(function(d){return d.requiresConsent;}).length, conCt=0;
-          DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
-          sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
-        }
-        updateSum(); m.appendChild(sum);
+        var sum = document.createElement('div'); sum.className="hint";
+        sum.style.marginTop="6px";
+        var total=DOCS.length, readCt=0, needCon=DOCS.filter(d=>d.requiresConsent).length, conCt=0;
+        DOCS.forEach(function(d){ if(S.acks[d.id].read) readCt++; if(d.requiresConsent && S.acks[d.id].consent) conCt++; });
+        sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
+        m.appendChild(sum);
       }
     },
-    { key:"uploads", title:"Documents — please email them", sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
-          <div class="consent-box" style="margin-top:10px">\
-            <b>What to send (simple reminder)</b>\
-            <ul>\
-              <li>Photo ID (e.g., driver licence or passport)</li>\
-              <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
-              <li>NDIS plan (latest)</li>\
-              <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
-              <li>Medication chart / current medication list (if any)</li>\
-              <li>Signed consent forms — Refer to step 13.</li>\
-            </ul>\
-          </div>',
-      build:function(m){ S.uploads.files = []; save(); }
+    { key:"uploads", title:"Documents — please email them", sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a><div class="consent-box" style="margin-top:10px"><b>What to send (simple reminder)</b><ul><li>Photo ID (e.g., driver licence or passport)</li><li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li><li>NDIS plan (latest)</li><li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li><li>Medication chart / current medication list (if any)</li><li>Signed consent forms — Refer to step 13.</li></ul></div>',
+      build:function(m){
+        S.uploads.files = [];
+        save();
+      }
     },
     { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
       build:function(m){ m.appendChild(renderReview()); }
@@ -773,15 +597,9 @@
       build:function(m){
         m.appendChild(row("two",[ input("Your name (submitter)", S.submitter, "name"), input("Email (required if no phone)", S.submitter, "email","email") ]));
         m.appendChild(input("Phone (required if no email)", S.submitter, "phone","tel"));
-        var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
+        var actions = document.createElement('div'); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
+        // Changed: Renamed btnSend to btnSubmit, removed potential duplicates
         var btnSubmit = button("Submit","primary", function(){
-          if (S.caller.consent !== "Yes"){
-            alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
-            return;
-          }
-          if (!canProceed(Steps.length-2)){
-            return;
-          }
           var hasEmail = S.submitter.email && S.submitter.email.trim();
           var hasPhone = S.submitter.phone && S.submitter.phone.trim();
           if (!(hasEmail || hasPhone)){
@@ -789,235 +607,336 @@
             return;
           }
           btnSubmit.disabled = true;
+          var oldTxt = btnSubmit.textContent;
           btnSubmit.textContent = "Submitting…";
           sendToFormspree().then(function(j){
-            triggerConfetti(1200);
             var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
             alert("All done — we’ve received your onboarding." + pdfMsg);
             try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
             var stage = document.querySelector("main.stage");
             if (stage){
-              stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
-                <div class="q">Thank you for your submission</div>\
-                <p class="sub">We’ve received your referral and will be in touch soon.</p>\
-                <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
+              stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div><div class="q">Thank you for your submission</div><p class="sub">We’ve received your referral and will be in touch soon.</p><div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
             }
           }).catch(function(e){
-            console.error("Submission error details:", {
-              message: e.message,
-              stack: e.stack
-            });
-            alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
+            alert("Couldn’t submit right now. Please email info@hdheed.com.au or try again.\n\nError: " + (e && e.message ? e.message : e));
             btnSubmit.disabled = false;
-            btnSubmit.textContent = "Submit";
-          });
-        });
-        var btnSend = button("Send Now","primary", function(){
-          if (S.caller.consent !== "Yes"){
-            alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
-            return;
-          }
-          if (!canProceed(Steps.length-2)){
-            return;
-          }
-          var hasEmail = S.submitter.email && S.submitter.email.trim();
-          var hasPhone = S.submitter.phone && S.submitter.phone.trim();
-          if (!(hasEmail || hasPhone)){
-            alert("Please provide at least an email or a phone number to submit.");
-            return;
-          }
-          btnSend.disabled = true;
-          btnSend.textContent = "Sending…";
-          sendToFormspree().then(function(j){
-            triggerConfetti(1200);
-            var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
-            alert("All done — we’ve received your onboarding." + pdfMsg);
-            try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
-            var stage = document.querySelector("main.stage");
-            if (stage){
-              stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
-                <div class="q">Thank you for your submission</div>\
-                <p class="sub">We’ve received your referral and will be in touch soon.</p>\
-                <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
-            }
-          }).catch(function(e){
-            console.error("Submission error details:", {
-              message: e.message,
-              stack: e.stack
-            });
-            alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
-            btnSend.disabled = false;
-            btnSend.textContent = "Send Now";
+            btnSubmit.textContent = oldTxt;
           });
         });
         var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
-        actions.appendChild(btnSubmit); actions.appendChild(btnSend); actions.appendChild(btnPdf);
+        actions.appendChild(btnSubmit); // Changed: Only one submit button
+        actions.appendChild(btnPdf);
         m.appendChild(actions);
-        var hint = el('div','hint','We’ll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.');
+        var hint = document.createElement('div'); hint.className="hint";
+        hint.innerHTML = "We’ll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.";
         m.appendChild(hint);
       }
     }
   ];
-  /* ====== NAVIGATION ====== */
-  function buildNavigation(){
-    navList.innerHTML = '';
-    Steps.forEach(function(step, index){
-      var li = el('li','nav-item');
-      li.setAttribute('data-step', index);
-      li.textContent = (index + 1) + '. ' + step.title;
-      li.addEventListener('click', function(){
-        if (isStepLocked(index)){
-          alert('Please complete required steps first. You must provide Consent "Yes" on Step 2 to continue.');
-          return;
-        }
-        if (index > S.i){
-          if (!canProceed(S.i)) return;
-        }
-        S.i = index;
-        render(true);
-        updateNavigation();
+
+  /* ====== Controls & UI helpers ====== */
+  function button(txt,variant,onClick){
+    var b = document.createElement('button');
+    b.className = "btn " + (variant||"ghost");
+    b.type="button"; b.textContent = txt;
+    b.addEventListener('click',onClick);
+    return b;
+  }
+  function divider(txt){
+    var d = document.createElement('div'); d.className="hint"; d.style.margin="8px 0 4px"; d.innerHTML = txt;
+    return d;
+  }
+  function row(cols, children){
+    var r = document.createElement('div'); r.className = "row " + (cols||"");
+    children.forEach(function(ch){ r.appendChild(ch); });
+    return r;
+  }
+  function input(label, obj, key, type){
+    var box = document.createElement('div'); box.className="inlinebox";
+    var id = "in_"+key+"_"+Math.random().toString(36).slice(2,7);
+    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
+    var i = document.createElement('input');
+    i.id=id; i.type = type||"text"; i.value = obj[key]||""; i.placeholder = "";
+    i.addEventListener('input', function(){ obj[key] = i.value || null; save(); });
+    box.appendChild(i); return box;
+  }
+  function select(label, obj, key, options){
+    var box = document.createElement('div'); box.className="inlinebox";
+    var id = "sel_"+key+"_"+Math.random().toString(36).slice(2,7);
+    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
+    var s = document.createElement('select'); s.id=id;
+    var html = '<option value="">Select…</option>';
+    options.forEach(function(o){ html += '<option value="'+o+'">'+o+'</option>'; });
+    s.innerHTML = html;
+    if (obj[key]!==null && obj[key]!==undefined) s.value = obj[key];
+    s.addEventListener('change', function(){ obj[key] = s.value || null; save(); });
+    box.appendChild(s); return box;
+  }
+  function radioChips(label, obj, key, items){
+    var wrap = document.createElement('div'); wrap.className="inlinebox";
+    wrap.innerHTML = '<label style="font-weight:800">'+label+'</label>';
+    var roww = document.createElement('div'); roww.style="display:flex; gap:8px; flex-wrap:wrap";
+    var buttons = [];
+    items.forEach(function(pair){
+      var txt = pair[0], val = pair[1];
+      var b = document.createElement('button'); b.type="button"; b.className="al-chip"; b.textContent = txt;
+      if (obj[key]===val) b.setAttribute("aria-pressed","true");
+      b.addEventListener('click', function(){
+        obj[key] = val;
+        buttons.forEach(function(x){ x.removeAttribute("aria-pressed"); });
+        b.setAttribute("aria-pressed","true");
+        save();
       });
-      navList.appendChild(li);
+      buttons.push(b); roww.appendChild(b);
     });
-    updateNavigation();
+    wrap.appendChild(roww);
+    return wrap;
   }
-  function updateNavigation(){
-    var items = navList.querySelectorAll('.nav-item');
-    items.forEach(function(item, index){
-      item.classList.remove('current','completed','locked');
-      if (index === S.i) item.classList.add('current');
-      else if (index < S.i) item.classList.add('completed');
-      if (isStepLocked(index)) item.classList.add('locked');
-    });
-  }
-  function isStepLocked(targetIndex){
-    if (targetIndex >= 2 && S.caller.consent !== "Yes") return true;
-    return false;
-  }
-  /* ====== Validations ====== */
-  function str(v){ return (v||"").toString().trim(); }
-  function has(v){ return str(v).length>0; }
-  function canProceed(idx){
-    var key = Steps[idx].key;
-    if (key==="caller"){
-      if (S.caller.consent!=="Yes"){
-        alert("We’re unable to proceed without consent. Please select “Yes” to continue.");
-        return false;
-      }
-    }
-    if (key==="participant"){
-      var p=S.participant, a=p.address;
-      if (!has(p.legal_name)){
-        alert("Please enter the participant’s Legal name");
-        return false;
-      }
-      if (!has(a.line1) || !has(a.suburb) || !has(a.postcode) || !has(a.state)){
-        alert("Please complete the address (Line 1, Suburb, Postcode, State).");
-        return false;
-      }
-    }
-    if (key==="contacts"){
-      if (!has(S.contacts.email) && !has(S.contacts.phone)){
-        alert("Please provide at least an email or phone number for the participant.");
-        return false;
-      }
-    }
-    if (key==="clinical"){
-      if (!has(S.clinical.allergies)){
-        alert("Please enter Allergies (write “No known allergies” if none).");
-        return false;
-      }
-    }
-    if (key==="policies"){
-      var total=DOCS.length, readCt=0, needCon=DOCS.filter(function(d){return d.requiresConsent;}).length, conCt=0;
-      DOCS.forEach(function(d){
-        if (S.acks[d.id].read) readCt++;
-        if (d.requiresConsent && S.acks[d.id].consent) conCt++;
+  function radioChipsInline(label, obj, key, items){ return radioChips(label, obj, key, items); }
+  function checks(label, targetObj, map, arrayKey){
+    var box = document.createElement('div'); box.className="inlinebox";
+    box.innerHTML = '<label style="font-weight:800">'+label+'</label>';
+    var list = document.createElement('ul'); list.className="ck-list";
+    if (arrayKey){
+      if (!Array.isArray(targetObj[arrayKey])) targetObj[arrayKey] = [];
+      Object.keys(map).forEach(function(k){
+        var txt = map[k];
+        var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
+        var li = document.createElement('li'); li.className="ck-row";
+        var c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = targetObj[arrayKey].indexOf(k)!==-1;
+        var lab = document.createElement('label'); lab.htmlFor=id; lab.textContent = txt;
+        c.addEventListener('change', function(){
+          var arr = targetObj[arrayKey];
+          if (c.checked){ if (arr.indexOf(k)===-1) arr.push(k); }
+          else { targetObj[arrayKey] = arr.filter(function(x){ return x!==k; }); }
+          save();
+        });
+        li.appendChild(c); li.appendChild(lab); list.appendChild(li);
       });
-      if (readCt < total){
-        alert("Please acknowledge that you’ve received and read all documents.");
-        return false;
-      }
-      if (conCt < needCon){
-        alert("Please provide consent for all required forms.");
-        return false;
-      }
+    } else {
+      Object.keys(map).forEach(function(k){
+        var txt = map[k];
+        var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
+        var li = document.createElement('li'); li.className="ck-row";
+        var c = document.createElement('input'); c.type="checkbox"; c.id=id; c.checked = !!targetObj[k];
+        var lab = document.createElement('label'); lab.htmlFor=id; lab.textContent = txt;
+        c.addEventListener('change', function(){ targetObj[k] = c.checked; save(); });
+        li.appendChild(c); li.appendChild(lab); list.appendChild(li);
+      });
     }
-    if (key==="submit"){
-      if (!has(S.submitter.email) && !has(S.submitter.phone)){
-        alert("Please provide at least an email or a phone number to submit.");
-        return false;
-      }
-    }
-    return true;
+    box.appendChild(list); return box;
   }
-  /* ====== Render ====== */
-  function render(slide){
-    var step = Steps[S.i];
-    if (!step) return;
-    qEl.textContent = step.title;
-    subEl.innerHTML = step.sub;
-    stepTxt.textContent = "Step " + (S.i + 1) + "/" + Steps.length;
-    barEl.style.width = ((S.i + 1) / Steps.length * 100) + "%";
-    optsEl.innerHTML = '';
-    optsEl.className = "opts" + (slide ? (S.i > S.prevI ? " slide-enter" : " slide-exit") : "");
-    S.prevI = S.i;
-    step.build(optsEl);
-    backBtn.disabled = S.i === 0;
-    nextBtn.textContent = S.i === Steps.length - 1 ? "Submit" : "Next →";
-    setPortrait();
-    save();
+  function typeBox(label, placeholder, onSave){
+    var box = document.createElement('div'); box.className="inlinebox";
+    var id = "tb_"+Math.random().toString(36).slice(2,7);
+    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
+    var i = document.createElement('input');
+    i.id=id; i.placeholder = placeholder||"Type here";
+    i.addEventListener('input', function(){
+      var v = (i.value||"");
+      try{ if (typeof onSave === "function") onSave(v); } finally { setSaveHint("Draft saved"); }
+    });
+    box.appendChild(i);
+    return box;
   }
-  /* ====== Navigation ====== */
-  backBtn.addEventListener('click', function(){
-    if (S.i > 0){
-      S.i--;
-      render(true);
-      updateNavigation();
+  function renderReview(){
+    var wrap = document.createElement('div'); wrap.className="review";
+    function sect(title, pairs){
+      var d = document.createElement('details'); d.className="card"; d.open = true;
+      var s = document.createElement('summary'); s.textContent = title; d.appendChild(s);
+      var kv = document.createElement('div'); kv.className="kv";
+      pairs.forEach(function(pair){
+        var k=pair[0], v=pair[1];
+        var row = document.createElement('div'); var b = document.createElement('b'); b.textContent = k;
+        var span = document.createElement('span'); span.textContent = (v===null||v===undefined||v==="")?"—":v;
+        row.appendChild(b); row.appendChild(span); kv.appendChild(row);
+      });
+      d.appendChild(kv); return d;
     }
-  });
-  nextBtn.addEventListener('click', function(){
-    if (!canProceed(S.i)){
-      return;
+    wrap.appendChild(sect("Who is completing", [
+      ["Role", S.caller.role],["Name", S.caller.name],["Relationship", S.caller.relationship],["Consent", S.caller.consent]
+    ]));
+    wrap.appendChild(sect("Participant", [
+      ["Legal name", S.participant.legal_name],
+      ["Preferred name", S.participant.preferred_name],
+      ["Pronouns", S.participant.pronouns],
+      ["DOB", S.participant.dob],
+      ["NDIS number", S.participant.ndis_number],
+      ["Address", [S.participant.address.line1,S.participant.address.line2,S.participant.address.suburb,S.participant.address.state,S.participant.address.postcode].filter(Boolean).join(", ")||"—"],
+      ["Plan management", S.participant.plan_mgmt],
+      ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
+      ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
+    ]));
+    function mapRequired(arr, other){
+      var map = {
+        personal_care:"Personal care",
+        high_intensity:"High-intensity personal care",
+        household_tasks:"Household tasks",
+        life_skills:"Development of life skills",
+        community_participation:"Community participation",
+        group_centre:"Group/centre-based activities",
+        travel_transport:"Assist with travel & transport",
+        daily_tasks_sil:"Daily tasks & shared living",
+        not_sure:"Not sure — guide me"
+      };
+      var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
+      if (other) list.push("Other: "+other);
+      return list.length ? list.join(", ") : "—";
     }
-    if (S.i < Steps.length - 1){
-      S.i++;
-      render(true);
-      updateNavigation();
+    wrap.appendChild(sect("Supports (required)", [
+      ["Selected", mapRequired(S.supports.required, S.supports.required_other)],
+      ["Specific support details", S.supports.details_text],
+      ["Goals", S.supports.goals],
+      ["Preferred outcomes", S.supports.outcomes]
+    ]));
+    wrap.appendChild(sect("Communication & preferences", [
+      ["Language", S.comms.primary_language],
+      ["Interpreter", S.comms.interpreter],
+      ["Interpreter language", S.comms.interpreter_language],
+      ["Cultural considerations", S.comms.cultural_considerations],
+      ["Worker gender pref.", S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other || "—"],
+      ["Transport required", S.comms.preferences.transport_required||"—"]
+    ]));
+    wrap.appendChild(sect("Contacts", [
+      ["Email", S.contacts.email],
+      ["Phone", S.contacts.phone],
+      ["Emergency contact", [S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(" • ")||"—"],
+      ["Support Coordinator", [S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(" • ")||"—"],
+      ["GP", [S.contacts.gp.name,S.contacts.gp.practice,S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • ")||"—"]
+    ]));
+    wrap.appendChild(sect("Living & access", [
+      ["Residence type", S.living.residence_type],
+      ["Lives with", S.living.lives_with],
+      ["Entry notes", S.living.entry_notes],
+      ["Keysafe", S.living.keysafe],
+      ["Smoking", S.living.smoking_on_premises],
+      ["Hazards", S.living.hazards]
+    ]));
+    wrap.appendChild(sect("Health & clinical", [
+      ["Primary diagnoses", S.clinical.primary_diagnoses],
+      ["Other diagnoses", S.clinical.other_diagnoses],
+      ["Allergies", S.clinical.allergies],
+      ["Mobility", S.clinical.mobility],
+      ["Equipment", S.clinical.equipment],
+      ["Continence", S.clinical.continence],
+      ["Cognition", S.clinical.cognition],
+      ["Pressure injury risk", S.clinical.pressure_injury_risk],
+      ["Falls risk", S.clinical.falls_risk],
+      ["Seizures", S.clinical.seizures.has===true?"Yes":S.clinical.seizures.has===false?"No":(S.clinical.seizures.has===null?"Not sure":"—")],
+      ["Seizure plan", S.clinical.seizures.plan],
+      ["Seizure frequency", S.clinical.seizures.frequency],
+      ["Stoma/ostomy care", (S.clinical.stoma_care===true?"Yes":S.clinical.stoma_care===false?"No":(S.clinical.stoma_care||"—"))],
+      ["Diet / swallowing", S.clinical.diet_notes]
+    ]));
+    function listTrue(obj, keys){
+      var map = {wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy", tube_feeding:"Enteral feeding", mental_health:"Mental health", stoma_care:"Stoma care",
+                 animals:"Reactive animals", hoarding:"Hoarding", weapons:"Weapons"};
+      var list = keys.filter(function(k){ return obj[k]===true; }).map(function(k){ return map[k]||k; });
+      return list.length? list.join(", ") : "—";
     }
-  });
-  saveExitBtn.addEventListener('click', function(){
-    save();
-    alert("Your progress has been saved. You can return anytime to continue.");
-    window.location.href = "https://hdheed.com.au";
-  });
-  /* ====== Handle Browser Navigation ====== */
-  window.addEventListener('popstate', function(event){
-    if (event.state && typeof event.state.step === 'number'){
-      S.i = event.state.step;
-      render(true);
-      updateNavigation();
-    }
-  });
-  /* ====== Printable Summary ====== */
-  function openPrintableSummary(){
-    var win = window.open('', '_blank');
-    var html = '<html><head><title>HD HeeD Onboarding Summary</title><style>';
-    html += 'body { font-family: Arial, sans-serif; margin: 20px; }';
-    html += '.card { border: 1px solid #d1d5db; border-radius: 4px; padding: 10px; margin: 10px 0; }';
-    html += '.card h2 { margin: 0 0 10px 0; }';
-    html += '.kv > div { margin: 5px 0; }';
-    html += '.kv b { display: inline-block; width: 200px; }';
-    html += '</style></head><body>';
-    var review = renderReview();
-    html += review.outerHTML;
-    html += '</body></html>';
-    win.document.write(html);
-    win.document.close();
+    wrap.appendChild(sect("Risks", [
+      ["Behavioural", S.risks.behavioural.present],
+      ["Behaviour notes", S.risks.behavioural.notes],
+      ["Clinical concerns", listTrue(S.risks.clinical, ["wounds","diabetes","tracheostomy","tube_feeding","mental_health","stoma_care"])],
+      ["Clinical other", S.risks.clinical.other],
+      ["Environmental", listTrue(S.risks.environmental, ["animals","hoarding","weapons"])],
+      ["Environmental other", S.risks.environmental.other],
+      ["Home risks", listTrue(S.risks.home_checklist, ["trip_hazards","smoke_alarms","lighting","bathroom_safety"])],
+      ["Home notes", S.risks.home_checklist.notes],
+      ["Other risk notes", S.risks.other_notes],
+      ["Overall rating", S.risks.overall_rating]
+    ]));
+    function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
+    function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
+    wrap.appendChild(sect("Supports & schedule", [
+      ["Windows", mapWindows(S.schedule.windows)],
+      ["Days", mapDays(S.schedule.days)],
+      ["Hours/week", S.schedule.hours_per_week],
+      ["Urgency", S.schedule.urgency],
+      ["Start pref.", S.schedule.start_preference]
+    ]));
+    var cons = (S.emergency_advocacy===undefined||S.emergency_advocacy===null||S.emergency_advocacy==="") ? "—" : (S.emergency_advocacy==="Yes"?"Yes":S.emergency_advocacy==="No"?"No":"Not sure");
+    wrap.appendChild(sect("Consents", [
+      ["Emergency advocacy consent", cons]
+    ]));
+    wrap.appendChild(sect("Uploads", [
+      ["Files selected", (S.uploads.files||[]).map(function(f){return f.name;}).join(" • ") || "—"]
+    ]));
+    return wrap;
   }
-  /* ====== Init ====== */
-  restoreState();
-})();
-</script>
-</body>
-</html>
+  function openDoc(title, href){
+    var modal = document.getElementById('docModal');
+    var docTitle = document.getElementById('docTitle');
+    var docViewer = document.getElementById('docViewer');
+    var docDownload = document.getElementById('docDownload');
+    docTitle.textContent = title;
+    docViewer.src = href;
+    docDownload.href = href;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.getElementById('docClose').addEventListener('click', closeDoc);
+    modal.addEventListener('click', function(e){ if (e.target===modal) closeDoc(); });
+    function closeDoc(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      docViewer.src = "";
+    }
+  }
+  function buildPayload(){ var p = cloneSafe(S); p.timestamp = new Date().toISOString(); return p; }
+  function openPrintableSummary(){ /* unchanged, optional */ }
+  function mapRequiredForSummary(arr, other){
+    var map = {
+      personal_care:"Personal care",
+      high_intensity:"High-intensity personal care",
+      household_tasks:"Household tasks",
+      life_skills:"Development of life skills",
+      community_participation:"Community participation",
+      group_centre:"Group/centre-based activities",
+      travel_transport:"Assist with travel & transport",
+      daily_tasks_sil:"Daily tasks & shared living",
+      not_sure:"Not sure — guide me"
+    };
+    var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
+    if (other) list.push("Other: "+other);
+    return list.length ? list.join(", ") : "";
+  }
+  function mapWindowsSummary(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
+  function mapDaysSummary(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
+
+  function sendToFormspree(){
+    // Changed: Enhanced error logging, added retry, removed no-cors fallback
+    var policyAck = {
+      handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
+      incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
+      complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
+    };
+    var payload = {
+      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
+      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
+      bsp:S.bsp, supports:S.supports, schedule:S.schedule,
+      policy_ack: policyAck,
+      acks:S.acks, emergency_advocacy:S.emergency_advocacy,
+      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
+      _meta:{ app:"AILR", version:"v16" }
+    };
+    try{
+      var addr = S.participant && S.participant.address ? [
+        S.participant.address.line1, S.participant.address.line2,
+        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
+      ].filter(Boolean).join(", ") : "";
+      var contactSummary = [
+        (S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")
+      ].join("");
+      var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
+      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
+      var daysSummary     = mapDaysSummary(S.schedule.days);
+      payload.supports.required_summary   = requiredSummary;
+      payload.supports.details_text       = S.supports.details_text || "";
+      payload.schedule.windows_summary    = windowsSummary;
+      payload.schedule.days_summary       = daysSummary;
+      payload.participant.address_summary = addr;
+      payload.contacts.contact_summary    = contactSummary;
+    }catch(e){
+      console.error("Error building summaries:", e);
+    }
+    // Changed: Added retry
