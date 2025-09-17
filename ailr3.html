@@ -435,23 +435,21 @@
       var prev = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
       if (prev && typeof prev === "object") {
         Object.assign(S, prev);
-        // Ensure S.i is within valid bounds
         S.i = Math.max(0, Math.min(Steps.length - 1, S.i || 0));
       }
     } catch (e) {
       console.error("Failed to restore state:", e);
     }
     render(false);
-    buildNavigation(); // Rebuild navigation to reflect restored state
+    buildNavigation();
   }
   /* ====== Modified Save Function with Step Index ====== */
   function save(){
     try{
       var clone = cloneSafe(S);
-      if (clone.uploads) clone.uploads = { files: [] }; // keep uploads empty
+      if (clone.uploads) clone.uploads = { files: [] };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
       setSaveHint("Draft saved");
-      // Update history state to include current step
       history.replaceState({ step: S.i }, '', window.location.href);
     }catch(e){
       console.error("Failed to save state:", e);
@@ -506,7 +504,7 @@
         buttons.forEach(function(x){ x.removeAttribute("aria-pressed"); });
         b.setAttribute("aria-pressed","true");
         save();
-        updateNavigation(); // reflect locks (e.g., consent)
+        updateNavigation();
       });
       b.className = "al-chip";
       if (obj[key]===val) b.setAttribute("aria-pressed","true");
@@ -554,6 +552,128 @@
     i.addEventListener('input', function(){ try{ if (typeof onSave === "function") onSave(i.value||""); } finally { setSaveHint("Draft saved"); } });
     box.appendChild(i); return box;
   }
+  /* ====== Summary Helpers (from old code) ====== */
+  function mapRequiredForSummary(arr, other){
+    var map = {
+      personal_care:"Personal care",
+      high_intensity:"High-intensity personal care",
+      household_tasks:"Household tasks",
+      life_skills:"Development of life skills",
+      community_participation:"Community participation",
+      group_centre:"Group/centre-based activities",
+      travel_transport:"Assist with travel & transport",
+      daily_tasks_sil:"Daily tasks & shared living",
+      not_sure:"Not sure — guide me"
+    };
+    var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
+    if (other) list.push("Other: "+other);
+    return list.length ? list.join(", ") : "";
+  }
+  function mapWindowsSummary(arr){
+    var map = { w1:"Weekday AM", w2:"Weekday PM", w3:"Evenings", w4:"Weekends" };
+    return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
+  }
+  function mapDaysSummary(arr){
+    var map = { d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun" };
+    return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
+  }
+  /* ====== Formspree Submission (fixed from old code) ====== */
+  function sendToFormspree(){
+    return new Promise(function(resolve, reject){
+      // Validate GS_WEBAPP URL
+      if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
+        console.error("Invalid GS_WEBAPP URL:", GS_WEBAPP);
+        reject(new Error("Invalid Google Apps Script URL. Please check the GS_WEBAPP configuration."));
+        return;
+      }
+      // Build policy flags
+      var policyAck = {
+        handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
+        incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
+        complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
+      };
+      // Build base payload
+      var payload = {
+        caller: S.caller,
+        participant: S.participant,
+        contacts: S.contacts,
+        comms: S.comms,
+        living: S.living,
+        clinical: S.clinical,
+        medications: S.medications,
+        risks: S.risks,
+        bsp: S.bsp,
+        supports: S.supports,
+        schedule: S.schedule,
+        policy_ack: policyAck,
+        acks: S.acks,
+        emergency_advocacy: S.emergency_advocacy,
+        submitter: S.submitter,
+        notes: S.notes,
+        timestamp: new Date().toISOString(),
+        _meta: { app: "AILR", version: "v16" }
+      };
+      // Add human-readable summaries
+      try {
+        var addr = S.participant && S.participant.address ? [
+          S.participant.address.line1, S.participant.address.line2,
+          S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
+        ].filter(Boolean).join(", ") : "";
+        var contactSummary = [
+          (S.contacts.email || ""), (S.contacts.phone ? (" • " + S.contacts.phone) : "")
+        ].join("");
+        var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
+        var windowsSummary = mapWindowsSummary(S.schedule.windows);
+        var daysSummary = mapDaysSummary(S.schedule.days);
+        payload.supports.required_summary = requiredSummary;
+        payload.supports.details_text = S.supports.details_text || "";
+        payload.schedule.windows_summary = windowsSummary;
+        payload.schedule.days_summary = daysSummary;
+        payload.participant.address_summary = addr;
+        payload.contacts.contact_summary = contactSummary;
+      } catch (e) {
+        console.error("Error generating summaries:", e);
+      }
+      // Send request
+      console.log("Sending data to:", GS_WEBAPP);
+      console.log("Data payload:", payload);
+      fetch(GS_WEBAPP, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(async function(r){
+        console.log("Submission response:", {
+          status: r.status,
+          statusText: r.statusText
+        });
+        if (!r.ok) {
+          console.error("Submission failed:", {
+            status: r.status,
+            statusText: r.statusText,
+            response: await r.text()
+          });
+          throw new Error("Submission failed with status " + r.status + ": " + r.statusText);
+        }
+        var j = await r.json().catch(function(e){
+          console.error("Failed to parse response JSON:", e);
+          return {};
+        });
+        console.log("Parsed response:", j);
+        if (j.status !== 'ok') {
+          console.error("Server reported error:", j.message || "Unknown error");
+          throw new Error(j && j.message ? j.message : "Server error");
+        }
+        resolve(j);
+      }).catch(function(e){
+        console.error("Submission error details:", {
+          message: e.message,
+          stack: e.stack
+        });
+        reject(e);
+      });
+    });
+  }
+  /* ====== Render Review ====== */
   function renderReview(){
     var wrap = el('div','review');
     function sect(title, pairs){
@@ -582,24 +702,8 @@
       ["Plan manager", [S.participant.plan_manager.org,S.participant.plan_manager.contact,S.participant.plan_manager.email,S.participant.plan_manager.phone].filter(Boolean).join(" • ")||"—"],
       ["Plan dates", [S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → ")||"—"]
     ]));
-    function mapRequired(arr, other){
-      var map = {
-        personal_care:"Personal care",
-        high_intensity:"High-intensity personal care",
-        household_tasks:"Household tasks",
-        life_skills:"Development of life skills",
-        community_participation:"Community participation",
-        group_centre:"Group/centre-based activities",
-        travel_transport:"Assist with travel & transport",
-        daily_tasks_sil:"Daily tasks & shared living",
-        not_sure:"Not sure — guide me"
-      };
-      var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
-      if (other) list.push("Other: "+other);
-      return list.length ? list.join(", ") : "—";
-    }
     wrap.appendChild(sect("Supports (required)", [
-      ["Selected", mapRequired(S.supports.required, S.supports.required_other)],
+      ["Selected", mapRequiredForSummary(S.supports.required, S.supports.required_other)],
       ["Specific support details", S.supports.details_text],
       ["Goals", S.supports.goals],
       ["Preferred outcomes", S.supports.outcomes]
@@ -661,11 +765,9 @@
       ["Other risk notes", S.risks.other_notes],
       ["Overall rating", S.risks.overall_rating]
     ]));
-    function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
-    function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", ")||"—"; }
     wrap.appendChild(sect("Supports & schedule", [
-      ["Windows", mapWindows(S.schedule.windows)],
-      ["Days", mapDays(S.schedule.days)],
+      ["Windows", mapWindowsSummary(S.schedule.windows)],
+      ["Days", mapDaysSummary(S.schedule.days)],
       ["Hours/week", S.schedule.hours_per_week],
       ["Urgency", S.schedule.urgency],
       ["Start pref.", S.schedule.start_preference]
@@ -906,13 +1008,50 @@
         m.appendChild(row("two",[ input("Your name (submitter)", S.submitter, "name"), input("Email (required if no phone)", S.submitter, "email","email") ]));
         m.appendChild(input("Phone (required if no email)", S.submitter, "phone","tel"));
         var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
-        var btnSend = button("Send now","primary", function(){
-          // EXTRA HARD-GATE: consent must be Yes even here.
-          if (S.caller.consent!=="Yes"){
+        var btnSubmit = button("Submit","primary", function(){
+          if (S.caller.consent !== "Yes"){
             alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
             return;
           }
-          if (!canProceed(Steps.length-2)){ // validate the policies step if needed, etc.
+          if (!canProceed(Steps.length-2)){
+            return;
+          }
+          var hasEmail = S.submitter.email && S.submitter.email.trim();
+          var hasPhone = S.submitter.phone && S.submitter.phone.trim();
+          if (!(hasEmail || hasPhone)){
+            alert("Please provide at least an email or a phone number to submit.");
+            return;
+          }
+          btnSubmit.disabled = true;
+          btnSubmit.textContent = "Submitting…";
+          sendToFormspree().then(function(j){
+            triggerConfetti(1200);
+            var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
+            alert("All done — we’ve received your onboarding." + pdfMsg);
+            try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+            var stage = document.querySelector("main.stage");
+            if (stage){
+              stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
+                <div class="q">Thank you for your submission</div>\
+                <p class="sub">We’ve received your referral and will be in touch soon.</p>\
+                <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
+            }
+          }).catch(function(e){
+            console.error("Submission error details:", {
+              message: e.message,
+              stack: e.stack
+            });
+            alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = "Submit";
+          });
+        });
+        var btnSend = button("Send Now","primary", function(){
+          if (S.caller.consent !== "Yes"){
+            alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
+            return;
+          }
+          if (!canProceed(Steps.length-2)){
             return;
           }
           var hasEmail = S.submitter.email && S.submitter.email.trim();
@@ -942,11 +1081,11 @@
             });
             alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
             btnSend.disabled = false;
-            btnSend.textContent = "Send now";
+            btnSend.textContent = "Send Now";
           });
         });
         var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
-        actions.appendChild(btnSend); actions.appendChild(btnPdf);
+        actions.appendChild(btnSubmit); actions.appendChild(btnSend); actions.appendChild(btnPdf);
         m.appendChild(actions);
         var hint = el('div','hint','We’ll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.');
         m.appendChild(hint);
@@ -965,9 +1104,8 @@
           alert('Please complete required steps first. You must provide Consent "Yes" on Step 2 to continue.');
           return;
         }
-        // If jumping forward, ensure current step passes validation
         if (index > S.i){
-          if (!canProceed(S.i)) return; // this will alert with precise reason
+          if (!canProceed(S.i)) return;
         }
         S.i = index;
         render(true);
@@ -987,9 +1125,7 @@
     });
   }
   function isStepLocked(targetIndex){
-    // Hard rule: cannot access step >= 2 (Participant and beyond) unless consent is Yes.
     if (targetIndex >= 2 && S.caller.consent !== "Yes") return true;
-    // Otherwise allow previous-or-next step (but forward jumps still validate current step)
     return false;
   }
   /* ====== Validations (hard gates) ====== */
@@ -1047,17 +1183,14 @@
   function render(slide){
     var step = Steps[S.i];
     if (!step) return;
-    // Update DOM
     qEl.textContent = step.title;
     subEl.innerHTML = step.sub;
     stepTxt.textContent = "Step " + (S.i + 1) + "/" + Steps.length;
     barEl.style.width = ((S.i + 1) / Steps.length * 100) + "%";
-    // Clear and build options
     optsEl.innerHTML = '';
     optsEl.className = "opts" + (slide ? (S.i > S.prevI ? " slide-enter" : " slide-exit") : "");
-    S.prevI = S.i; // track for next slide direction
+    S.prevI = S.i;
     step.build(optsEl);
-    // Button states
     backBtn.disabled = S.i === 0;
     nextBtn.textContent = S.i === Steps.length - 1 ? "Submit" : "Next →";
     setPortrait();
@@ -1095,75 +1228,15 @@
       render(true);
       updateNavigation();
     } else {
-      // Fallback: restore from localStorage
       restoreState();
     }
   });
   /* ====== Handle BFCache Restore ====== */
   window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
-      // Page was restored from BFCache
       restoreState();
     }
   });
-  /* ====== Formspree Submission ====== */
-  function sendToFormspree(){
-    return new Promise(function(resolve, reject){
-      // Validate GS_WEBAPP URL
-      if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
-        console.error("Invalid GS_WEBAPP URL:", GS_WEBAPP);
-        reject(new Error("Invalid Google Apps Script URL. Please check the GS_WEBAPP configuration."));
-        return;
-      }
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', GS_WEBAPP, true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.timeout = 10000; // Set 10-second timeout
-      var data = cloneSafe(S);
-      data._meta = {
-        timestamp: new Date().toISOString(),
-        version: STORAGE_KEY,
-        form: "ailr"
-      };
-      xhr.onload = function(){
-        console.log("Submission response:", {
-          status: xhr.status,
-          responseText: xhr.responseText
-        });
-        if (xhr.status >= 200 && xhr.status < 300){
-          try {
-            var response = JSON.parse(xhr.responseText || "{}");
-            console.log("Parsed response:", response);
-            resolve(response);
-          } catch (e) {
-            console.error("Failed to parse response JSON:", e, "Response text:", xhr.responseText);
-            reject(new Error("Invalid response from server: " + e.message));
-          }
-        } else {
-          console.error("Submission failed:", {
-            status: xhr.status,
-            statusText: xhr.statusText,
-            responseText: xhr.responseText
-          });
-          reject(new Error("Submission failed with status " + xhr.status + ": " + xhr.statusText));
-        }
-      };
-      xhr.onerror = function(){
-        console.error("Network error during submission:", {
-          status: xhr.status,
-          statusText: xhr.statusText
-        });
-        reject(new Error("Network error: Unable to reach the server."));
-      };
-      xhr.ontimeout = function(){
-        console.error("Submission timed out after 10 seconds.");
-        reject(new Error("Request timed out. Please check your internet connection and try again."));
-      };
-      console.log("Sending data to:", GS_WEBAPP);
-      console.log("Data payload:", data);
-      xhr.send(JSON.stringify(data));
-    });
-  }
   /* ====== Printable Summary ====== */
   function openPrintableSummary(){
     var win = window.open('', '_blank');
@@ -1231,7 +1304,7 @@
       particles.forEach(function(p){
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.1; // gravity
+        p.vy += 0.1;
         ctx.fillStyle = p.color;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
