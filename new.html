@@ -1,122 +1,76 @@
 <!doctype html>
 <html lang="en" data-theme="light">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>HD HeeD — Follow-Up Sequencer</title>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-<link rel="manifest" href="#app-manifest">
-<meta name="theme-color" content="#0b1226" />
-<style>
-/* ===== Visual System (elevated look: glass, gradients, motion) ===== */
-:root{
-  --font: Inter, system-ui, Segoe UI, Arial, sans-serif;
-  --ink:#0e1324; --bg:#0b1226; --wash:#0b1226; --card:rgba(255,255,255,.08);
-  --muted:#a6b0c2; --line:rgba(255,255,255,.12);
-  --brand:#7c6cff; --brand2:#ff6fb1; --ok:#22c55e; --warn:#facc15; --danger:#ef4444; --info:#38bdf8;
-  --shadow: 0 10px 40px rgba(0,0,0,.35);
-  --radius: 16px;
-  --glass: blur(12px) saturate(140%);
-}
-:root[data-theme="light"]{
-  --ink:#0b1226; --bg:#f6f7fb; --wash:#e9ecf7; --card:rgba(255,255,255,.9);
-  --muted:#667085; --line:#e7e9f2; --shadow: 0 12px 36px rgba(12,18,40,.12);
-}
-/* High contrast option */
-:root[data-theme="contrast"]{
-  --ink:#000; --bg:#fff; --wash:#fff; --card:#fff; --muted:#111; --line:#000;
-  --brand:#000; --brand2:#333; --ok:#000; --warn:#000; --danger:#000; --info:#000;
-}
-
-/* Background flair */
-body{margin:0; font-family:var(--font); color:var(--ink); background:
- radial-gradient(1200px 600px at 10% -10%, rgba(124,108,255,.18), transparent 60%),
- radial-gradient(1000px 600px at 110% 10%, rgba(255,111,177,.16), transparent 60%),
- linear-gradient(180deg, var(--bg), var(--wash));}
-.wrap{max-width:1280px;margin:22px auto;padding:0 18px}
-
-/* Card = glass */
-.card{background:var(--card); backdrop-filter:var(--glass); border:1px solid var(--line);
-  border-radius:var(--radius); box-shadow:var(--shadow); padding:16px}
-.hr{height:1px;background:var(--line);margin:12px 0}
-
-/* Header */
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.brand{display:flex;gap:12px;align-items:center}
-.logo{width:48px;height:48px;border-radius:14px;background:conic-gradient(from 180deg,var(--brand),var(--brand2))}
-.title{font-weight:800;font-size:22px}
-.sub{color:var(--muted);font-size:13px}
-
-/* Buttons */
-.btn{appearance:none;border:1px solid var(--line);background:transparent;color:var(--ink);
-  border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
-.btn.primary{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;border-color:transparent}
-.btn.ok{background:linear-gradient(90deg,#16a34a,#22c55e);color:#fff;border-color:transparent}
-.btn.warn{background:linear-gradient(90deg,#f59e0b,#facc15);color:#111;border-color:transparent}
-.btn.danger{background:linear-gradient(90deg,#ef4444,#f87171);color:#fff;border-color:transparent}
-.btn.ghost{background:transparent}
-.btn:active{transform:translateY(1px)}
-
-/* Inputs & table */
-input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);font:inherit}
-label{font-size:12px;color:var(--muted);font-weight:700}
-table{width:100%;border-collapse:separate;border-spacing:0}
-th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;cursor:pointer}
-tr:last-child td{border-bottom:0}
-.small{font-size:12px} .muted{color:var(--muted)}
-.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
-
-/* Grid */
-.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
-@media (max-width:1100px){.grid{grid-template-columns:1fr}}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-@media (max-width:1100px){.grid-3{grid-template-columns:1fr}}
-
-/* Chips, progress */
-.tag{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.12);color:var(--ink)}
-.tag.ok{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.35)}
-.tag.warn{background:rgba(250,204,21,.15);border-color:rgba(250,204,21,.35)}
-.tag.danger{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.35)}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(124,108,255,.18);color:#fff;font-size:12px;font-weight:800}
-.progress{height:8px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}
-.progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
-
-/* Toasts & modal */
-.toast{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:1000}
-.toast .item{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:10px 12px}
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:900}
-.modal{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;max-width:720px;width:min(720px,96vw)}
-
-/* RTE (contenteditable) */
-.rte{border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.08);color:var(--ink);padding:10px;min-height:130px}
-.rte-toolbar{display:flex;gap:6px;margin:6px 0}
-kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radius:6px;border:1px solid var(--line);font:inherit;font-size:11px}
-
-/* Motion */
-@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-3px)}100%{transform:translateY(0)}}
-.logo{animation:float 6s ease-in-out infinite}
-
-/* ===== EXPANSION: duplicate these theme palettes/keyframes to grow lines without bloat ===== */
-/* THEME-PALETTE-SET-01 */
-:root[data-theme="ocean"]{--brand:#00d4ff;--brand2:#0077ff}
-:root[data-theme="sunset"]{--brand:#ff7a59;--brand2:#ff3d81}
-:root[data-theme="forest"]{--brand:#34d399;--brand2:#059669}
-/* (Copy/modify more sets if you want line count ↑ while adding value) */
-</style>
-
-<script type="application/manifest+json" id="app-manifest">
-{
-  "name": "HD HeeD Sequencer",
-  "short_name": "HeeD Sequencer",
-  "start_url": "./followup.html",
-  "display": "standalone",
-  "background_color": "#0b1226",
-  "theme_color": "#0b1226",
-  "icons": []
-}
-</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HD HeeD — Follow-Up Sequencer</title>
+  <meta name="theme-color" content="#0b1226" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --font: Inter, system-ui, Segoe UI, Arial, sans-serif;
+      --ink:#0f1224; --bg:#080c1a; --wash:#0d1330; --card:rgba(255,255,255,.08);
+      --muted:#a7b0c7; --line:rgba(255,255,255,.14);
+      --brand:#7b6dff; --brand2:#ff6fb1; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --info:#38bdf8;
+      --radius:16px; --shadow:0 14px 44px rgba(0,0,0,.35); --glass: blur(12px) saturate(140%);
+    }
+    :root[data-theme="light"]{
+      --ink:#0b1226; --bg:#f6f7fb; --wash:#e9ecf7; --card:rgba(255,255,255,.9);
+      --muted:#667085; --line:#e7e9f2; --shadow: 0 12px 36px rgba(12,18,40,.12);
+    }
+    body{
+      margin:0; font-family:var(--font); color:var(--ink);
+      background:
+        radial-gradient(1100px 600px at -10% -10%, rgba(124,108,255,.18), transparent 60%),
+        radial-gradient(1000px 600px at 110% 10%, rgba(255,111,177,.16), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--wash));
+    }
+    .wrap{max-width:1288px;margin:22px auto;padding:0 18px}
+    .card{background:var(--card); backdrop-filter:var(--glass); border:1px solid var(--line);
+      border-radius:var(--radius); box-shadow:var(--shadow); padding:16px}
+    .hr{height:1px;background:var(--line);margin:12px 0}
+    .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:48px;height:48px;border-radius:14px;
+      background:conic-gradient(from 180deg,var(--brand),var(--brand2)); animation:float 6s ease-in-out infinite}
+    .title{font-weight:800;font-size:22px}
+    .sub{color:var(--muted);font-size:13px}
+    .btn{appearance:none;border:1px solid var(--line);background:transparent;color:var(--ink);
+      border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;transition:.15s transform, .15s box-shadow}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.primary{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;border-color:transparent}
+    .btn.ok{background:linear-gradient(90deg,#16a34a,#22c55e);color:#fff;border-color:transparent}
+    .btn.warn{background:linear-gradient(90deg,#f59e0b,#facc15);color:#111;border-color:transparent}
+    .btn.danger{background:linear-gradient(90deg,#ef4444,#f87171);color:#fff;border-color:transparent}
+    .btn.ghost{background:transparent}
+    input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);font:inherit}
+    label{font-size:12px;color:var(--muted);font-weight:700}
+    table{width:100%;border-collapse:separate;border-spacing:0}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;cursor:pointer}
+    tr:last-child td{border-bottom:0}
+    .small{font-size:12px} .muted{color:var(--muted)}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+    .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+    @media (max-width:1100px){.grid{grid-template-columns:1fr}}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    @media (max-width:1100px){.grid-3{grid-template-columns:1fr}}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(124,108,255,.18);color:#fff;font-size:12px;font-weight:800}
+    .tag{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.12);color:var(--ink)}
+    .tag.ok{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.35)}
+    .tag.warn{background:rgba(250,204,21,.15);border-color:rgba(250,204,21,.35)}
+    .progress{height:8px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}
+    .progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+    .rte{border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.08);color:var(--ink);padding:10px;min-height:130px}
+    .rte-toolbar{display:flex;gap:6px;margin:6px 0}
+    .toast{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:1000}
+    .toast .item{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:10px 12px}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:900}
+    .modal{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;max-width:720px;width:min(720px,96vw)}
+    @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-3px)}100%{transform:translateY(0)}}
+  </style>
 </head>
 <body>
 <a href="#main" style="position:absolute;left:-9999px" onfocus="this.style.left='12px'">Skip to content</a>
@@ -127,7 +81,7 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
       <div class="logo" aria-hidden="true"></div>
       <div>
         <div class="title">HD HeeD — Follow-Up Sequencer</div>
-        <div class="sub">Stylish • Trackable • Zoho one-click • Offline</div>
+        <div class="sub">Superfast daily follow-ups • Zoho 1-click • Offline</div>
       </div>
     </div>
     <div class="toolbar" role="toolbar" aria-label="Global actions">
@@ -162,10 +116,6 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
     </div>
     <div class="grid-3" style="margin-top:8px">
       <div>
-        <label for="zoho-domain">Zoho Domain</label>
-        <select id="zoho-domain"><option value="mail.zoho.com">mail.zoho.com</option><option value="mail.zoho.eu">mail.zoho.eu</option><option value="mail.zoho.in">mail.zoho.in</option></select>
-      </div>
-      <div>
         <label for="from-name">From name</label>
         <input id="from-name" placeholder="HD HeeD">
       </div>
@@ -173,19 +123,12 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
         <label for="initials">Your initials</label>
         <input id="initials" placeholder="HS">
       </div>
-    </div>
-    <div class="grid-3" style="margin-top:8px">
-      <div>
-        <label for="locale">Locale</label>
-        <select id="locale"><option value="en-AU">English (AU)</option><option value="en-US">English (US)</option></select>
-      </div>
-      <div>
-        <label for="rate-limit">Popups per click (batch)</label>
-        <input id="rate-limit" type="number" min="1" max="10" value="5">
-      </div>
       <div>
         <label for="theme">Theme</label>
-        <select id="theme"><option value="light">Light</option><option value="dark">Dark</option><option value="contrast">High Contrast</option><option value="ocean">Ocean</option><option value="sunset">Sunset</option><option value="forest">Forest</option></select>
+        <select id="theme">
+          <option value="light">Light</option><option value="dark">Dark</option>
+          <option value="contrast">High Contrast</option>
+        </select>
       </div>
     </div>
   </section>
@@ -211,8 +154,8 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
 
       <!-- Contacts -->
       <section class="card" aria-labelledby="contacts-h">
-        <div class="row" style="display:flex;align-items:center;gap:8px">
-          <h2 id="contacts-h">Contacts</h2>
+        <div class="row" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <h2 id="contacts-h" style="margin:0">Contacts</h2>
           <span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
             <input id="search" placeholder="Search name/email/company… ( / )" aria-label="Search contacts">
             <select id="filter-status" aria-label="Filter status">
@@ -234,7 +177,6 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
           <button id="view-due" class="btn ghost">Show Due</button>
           <button id="batch-send" class="btn primary">Batch Prepare</button>
           <button id="export-ics" class="btn">Export ICS</button>
-          <button id="load-sample" class="btn">Load Sample 9 (placeholder)</button>
         </div>
 
         <table id="tbl" style="margin-top:10px" aria-describedby="tbl-help">
@@ -290,7 +232,7 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
       </section>
     </div>
 
-    <!-- Preview -->
+    <!-- PREVIEW -->
     <section class="card" id="preview" style="display:none;margin-top:16px" role="dialog" aria-modal="true">
       <div class="row" style="display:flex;align-items:center">
         <h2>Next Email Preview</h2>
@@ -317,7 +259,7 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
       </div>
     </section>
 
-    <!-- Editor -->
+    <!-- EDITOR -->
     <section class="card" id="editor" style="display:none;margin-top:16px" role="dialog" aria-modal="true">
       <div class="row">
         <h2 id="ed-h">Add Contact</h2>
@@ -340,7 +282,7 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
       </div>
     </section>
 
-    <!-- Notes -->
+    <!-- NOTES -->
     <section class="card" id="notes" style="display:none;margin-top:16px" role="dialog" aria-modal="true">
       <div class="row">
         <h2>Notes — <span id="notes-for">Contact</span></h2>
@@ -354,7 +296,7 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
       </div>
     </section>
 
-    <!-- Analytics -->
+    <!-- ANALYTICS -->
     <section class="card" id="analytics" style="margin-top:16px">
       <div class="row"><h2>Analytics</h2></div>
       <div class="hr"></div>
@@ -363,6 +305,24 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
         <div><strong>Avg Step</strong><div id="an-avgstep" class="small muted">—</div></div>
         <div><strong>Notes (total)</strong><div id="an-notes" class="small muted">—</div></div>
       </div>
+    </section>
+
+    <!-- TODAY DOCK (sticky) -->
+    <section id="today-dock" class="card" style="position:sticky;bottom:12px;margin-top:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <h2 style="margin:0">Today’s Queue</h2>
+        <span class="pill">Due: <span id="dock-due">0</span></span>
+        <button id="dock-send-all" class="btn primary" style="margin-left:auto">Send All</button>
+      </div>
+      <div class="hr"></div>
+      <div id="dock-list" class="small"></div>
+    </section>
+
+    <!-- NEXT 7 DAYS -->
+    <section class="card" id="calendar" style="margin-top:12px">
+      <h2 style="margin:0">Next 7 Days</h2>
+      <div class="hr"></div>
+      <div id="week" class="small"></div>
     </section>
   </main>
 </div>
@@ -373,7 +333,7 @@ kbd{background:rgba(255,255,255,.2);color:var(--ink);padding:2px 6px;border-radi
 (() => {
 "use strict";
 
-/* Utils */
+/* ===== Utils ===== */
 const $ = (s, r=document)=>r.querySelector(s);
 const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
 const rid = ()=>Math.random().toString(36).slice(2,10);
@@ -386,16 +346,10 @@ const toast = (msg)=>{const t=$("#toast");const d=document.createElement("div");
 const lsGet = (k,d)=>{try{return JSON.parse(localStorage.getItem(k)) ?? d;}catch{return d;}};
 const lsSet = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
 
-/* Persistence keys */
-const LS = {
-  contacts: "heed_contacts_v5",
-  templates: "heed_templates_v5",
-  settings: "heed_settings_v5",
-  audit:    "heed_audit_v2",
-  history:  "heed_history_v2"
-};
+/* ===== Persistence keys ===== */
+const LS = { contacts:"heed_contacts_v6", templates:"heed_templates_v6", settings:"heed_settings_v6", history:"heed_history_v3" };
 
-/* Models */
+/* ===== Models ===== */
 class Contact {
   constructor({id=rid(), name="", email="", company="", phone="", tz="Australia/Sydney", segments=[], status="Active", lastSent=0, lastSentAt="", notes=[]}={}) {
     Object.assign(this, {id, name, email, company, phone, tz, segments, status, lastSent, lastSentAt, notes});
@@ -410,47 +364,35 @@ class Settings {
   constructor(o={}) {
     this.seqLen = o.seqLen ?? 7;
     this.defaultGap = o.defaultGap ?? 3;
-    this.zohoDomain = o.zohoDomain ?? "mail.zoho.com";
     this.fromName = o.fromName ?? "HD HeeD";
     this.initials = o.initials ?? "HS";
     this.businessTime = o.businessTime ?? "09:00";
     this.sortKey = o.sortKey ?? "name";
     this.sortDir = o.sortDir ?? 1;
     this.locale = o.locale ?? "en-AU";
-    this.rate = o.rate ?? 5;
     this.theme = o.theme ?? "light";
+    this.rate = o.rate ?? 5;
   }
 }
 
-/* State */
+/* ===== State ===== */
 const state = {
   contacts: lsGet(LS.contacts, []),
   templates: lsGet(LS.templates, null),
-  settings: new Settings(lsGet(LS.settings, {})),
-  filter: "", filterStatus: ""
+  settings: new Settings(lsGet(LS.settings, {}))
 };
 
-/* Undo snapshots */
+/* ===== Undo (light) ===== */
 function snapshot(){
   const hist = lsGet(LS.history, []);
   hist.push({at: nowISO(), contacts: state.contacts, templates: state.templates, settings: state.settings});
   if(hist.length>40) hist.shift();
   lsSet(LS.history, hist);
 }
-function undo(){
-  const hist = lsGet(LS.history, []);
-  if(hist.length<2) return toast("Nothing to undo");
-  hist.pop(); const prev = hist.pop();
-  state.contacts = prev.contacts; state.templates = prev.templates; state.settings = prev.settings;
-  lsSet(LS.contacts,state.contacts); lsSet(LS.templates,state.templates); lsSet(LS.settings,state.settings);
-  location.reload();
-}
 
-/* YOUR EMAILS: pulled from /emails.html (steps 1–4) */
+/* ===== Your first 4 emails (from your site) ===== */
 const EMAILS14 = [
-  {
-    step:1,
-    subject:"Introduction to HD HeeD",
+  { step:1, subject:"Introduction to HD HeeD",
     body:`Hi {{Name}},
 
 Please let me introduce HD HeeD Pty Ltd, an NDIS-registered provider based in Blacktown. We are an RN-led team, with the skills and systems to deliver safe, professional, and person-centred supports.
@@ -475,11 +417,8 @@ Start a referral today: https://www.hdheed.com.au/referral.html
 Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
-02 8630 5500 | info@hdheed.com.au`
-  },
-  {
-    step:2,
-    subject:"Our RN-Led Strength",
+02 8630 5500 | info@hdheed.com.au`},
+  { step:2, subject:"Our RN-Led Strength",
     body:`Hi {{Name}},
 
 At HD HeeD, we are a group of Registered Nurses confident in our skills and experience. This lets us provide the highest standard of care, especially for complex health needs, under registration group 0104 – High Intensity Daily Personal Activities.
@@ -494,11 +433,8 @@ You can call us on 02 8630 5500 anytime.
 Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
-02 8630 5500 | info@hdheed.com.au`
-  },
-  {
-    step:3,
-    subject:"AILR System",
+02 8630 5500 | info@hdheed.com.au`},
+  { step:3, subject:"AILR System",
     body:`Hi {{Name}},
 
 One of our key strengths is AILR — Advanced Intake & Long-form Registration. Most onboarding is completed online, with only a few signature forms returned via email. It’s:
@@ -514,11 +450,8 @@ Phone: 02 8630 5500
 Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
-02 8630 5500 | info@hdheed.com.au`
-  },
-  {
-    step:4,
-    subject:"Easy Online Referrals",
+02 8630 5500 | info@hdheed.com.au`},
+  { step:4, subject:"Easy Online Referrals",
     body:`Hi {{Name}},
 
 Save time with our quick online referral system: https://www.hdheed.com.au/referral.html
@@ -530,11 +463,10 @@ Either way, we’ll onboard quickly and professionally.
 Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
-02 8630 5500 | info@hdheed.com.au`
-  }
-]; /* Source: HD HeeD – Outreach Emails (1–4). :contentReference[oaicite:1]{index=1} */
+02 8630 5500 | info@hdheed.com.au`}
+];
 
-/* Default templates 1–N */
+/* ===== Ensure templates 1–N exist ===== */
 function ensureTemplates(){
   if(!state.templates){
     const out = [];
@@ -552,21 +484,62 @@ function ensureTemplates(){
   }
 }
 
-/* Theme & settings binds */
+/* ===== Preload 9 contacts (board) if storage is empty ===== */
+const PRELOAD_9 = [
+  { name:"Taylor McGuiness — Interaction", company:"Interaction", email:"info@interactionservices.org", phone:"1300 668 123", segments:["SC/PM"], status:"Active", lastSent:2, lastSentAt:"2025-09-15T00:00:00+10:00", notes:[
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Himmat — Called them, they said send an email."},
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Email 1 sent — awaiting response."},
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Email 2 sent 15/09/25."}
+  ]},
+  { name:"Assist Disability Services — SSC", company:"Assist Disability Services", email:"enquiries@assistservices.com.au", phone:"1800 955 806", segments:["SSC"], status:"Active", lastSent:2, lastSentAt:"2025-09-15T00:00:00+10:00", notes:[
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Himmat — Called; they took my number and will call back."},
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Email 2 sent 15/09/2025."}
+  ]},
+  { name:"Triniti Care — Support Coord", company:"Triniti Care", email:"info@triniti.com.au", phone:"(02) 8319 9433", segments:["SC"], status:"Active", lastSent:1, lastSentAt:"2025-09-15T00:00:00+10:00", notes:[
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Himmat — called; they said email info@triniti.com.au."},
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Email 1 sent — undelivered; recheck address."}
+  ]},
+  { name:"MD Home Care — SSC", company:"MD Home Care", email:"", phone:"08 6386 9999", segments:["SSC"], status:"Active", lastSent:0, lastSentAt:"", notes:[
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"No emails sent yet."}
+  ]},
+  { name:"Claremont Care — SC/PM", company:"Claremont Care", email:"", phone:"0416 873 319", segments:["SC","PM"], status:"Active", lastSent:2, lastSentAt:"2025-09-15T00:00:00+10:00", notes:[
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Email 1 sent — N&J."},
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Email 2 sent 15/09."}
+  ]},
+  { name:"BRK Plan Management", company:"BRK Plan Management", email:"meet@brkpm.com.au", phone:"0414 704 279", segments:["PM"], status:"Active", lastSent:1, lastSentAt:"2025-09-15T00:00:00+10:00", notes:[
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Email 1 sent — N&J."}
+  ]},
+  { name:"Axial Plan Management", company:"Axial Plan Management", email:"hello@axialplanmanagement.com.au", phone:"0416 428 261", segments:["PM"], status:"Active", lastSent:1, lastSentAt:"2025-09-15T00:00:00+10:00", notes:[
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Himmat — Email 1 sent, awaiting response."}
+  ]},
+  { name:"NADO Plan Management", company:"NADO Plan Management", email:"", phone:"1300 738 229", segments:["PM"], status:"Active", lastSent:0, lastSentAt:"", notes:[
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"No emails sent yet."}
+  ]},
+  { name:"Yahweh Care — PM", company:"Yahweh Care", email:"info@yahwehcare.com.au", phone:"(02) 8325 1616", segments:["PM"], status:"Active", lastSent:1, lastSentAt:"2025-09-15T00:00:00+10:00", notes:[
+    {at:"2025-09-15T00:00:00+10:00",by:"HS",text:"Himmat — Email 1 sent, awaiting response."}
+  ]}
+];
+
+function preloadIfEmpty(){
+  if(!(state.contacts||[]).length){
+    state.contacts = PRELOAD_9.map(c => new Contact({ id: rid(), ...c }));
+    lsSet(LS.contacts, state.contacts);
+    toast("Loaded 9 contacts from board.");
+  }
+}
+
+/* ===== Theme & setting bindings ===== */
 function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); }
 function bindSettings(){
   $("#seq-len").value = String(state.settings.seqLen);
   $("#default-gap").value = String(state.settings.defaultGap);
   $("#target-time").value = state.settings.businessTime;
-  $("#zoho-domain").value = state.settings.zohoDomain;
   $("#from-name").value = state.settings.fromName;
   $("#initials").value = state.settings.initials;
   $("#theme").value = state.settings.theme;
-  $("#locale").value = state.settings.locale;
-  $("#rate-limit").value = String(state.settings.rate);
 
   $("#theme-toggle").onclick = ()=>{
-    const seq = ["light","dark","contrast","ocean","sunset","forest"];
+    const seq = ["light","dark","contrast"];
     const idx = seq.indexOf(state.settings.theme);
     state.settings.theme = seq[(idx+1)%seq.length];
     $("#theme").value = state.settings.theme; lsSet(LS.settings, state.settings); applyTheme(state.settings.theme);
@@ -589,14 +562,11 @@ function bindSettings(){
   };
   $("#default-gap").onchange = e=>{ state.settings.defaultGap = clamp(parseInt(e.target.value,10)||3,1,30); lsSet(LS.settings, state.settings); };
   $("#target-time").onchange = e=>{ state.settings.businessTime = e.target.value||"09:00"; lsSet(LS.settings, state.settings); };
-  $("#zoho-domain").onchange = e=>{ state.settings.zohoDomain = e.target.value; lsSet(LS.settings, state.settings); };
   $("#from-name").onchange = e=>{ state.settings.fromName = e.target.value.trim()||"HD HeeD"; lsSet(LS.settings, state.settings); };
   $("#initials").onchange = e=>{ state.settings.initials = e.target.value.trim()||"HS"; lsSet(LS.settings, state.settings); };
-  $("#locale").onchange = e=>{ state.settings.locale = e.target.value; lsSet(LS.settings, state.settings); renderContacts(); };
-  $("#rate-limit").onchange = e=>{ state.settings.rate = clamp(parseInt(e.target.value,10)||5,1,10); lsSet(LS.settings, state.settings); };
 }
 
-/* Templates UI (rich text editor) */
+/* ===== Templates UI (rich) ===== */
 function renderTemplates(){
   const box = $("#tpl-box"); box.innerHTML = "";
   clone(state.templates).sort((a,b)=>a.step-b.step).forEach(t=>{
@@ -653,429 +623,69 @@ function bindRTE(){
   $$("#tpl-box [data-insert]").forEach(b=> b.onclick = ()=>insertAtCaret(b.dataset.insert));
 }
 
-/* Init (Part 2) */
+/* ===== Init part ===== */
 function init2(){
   ensureTemplates(); renderTemplates(); bindRTE(); bindSettings(); applyTheme(state.settings.theme);
   document.addEventListener("keydown",(e)=>{
     if(e.key==="/"){ e.preventDefault(); $("#search").focus(); }
     if(e.key.toLowerCase()==="n"){ const openEditor = window.__heed_openEditor; openEditor && openEditor(); }
-    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="z"){ e.preventDefault(); undo(); }
   });
   $("#save-templates").onclick = saveTemplatesFromUI;
+  $("#btn-add-template").onclick = ()=>{
+    const next = (state.templates[state.templates.length-1]?.step||0)+1;
+    if(next>10) return toast("Max 10 steps");
+    state.templates.push(new TemplateStep({step:next,active:true,subject:`Email ${next}`,body:`Hi {{Name}},\n\n...\n\nTeam HD HeeD`}));
+    lsSet(LS.templates,state.templates); renderTemplates(); bindRTE();
+  };
+  $("#btn-remove-template").onclick = ()=>{
+    if(state.templates.length<=7) return toast("Min 7 steps");
+    state.templates.pop(); lsSet(LS.templates,state.templates); renderTemplates(); bindRTE();
+  };
 }
 window.__heed_init_part2 = init2;
+
+/* expose state (read-only) for other parts */
+window.__heed_state = state;
+window.__heed_keys = LS;
 })();
 </script>
-<!-- PART 3 / 4 — UPDATED: Pipeline, Preview/Send (Zoho), Notes, Import/Export, Analytics, ICS + PRELOADED 9 CONTACTS -->
 <script>
 (() => {
 "use strict";
 
-/* ===== Utilities ===== */
 const $ = (s, r=document)=>r.querySelector(s);
 const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
-const rid = ()=>Math.random().toString(36).slice(2,10);
-const nowISO = ()=>new Date().toISOString();
-const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
-const esc = (s="")=>s.replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
-const lsGet = (k,d)=>{try{return JSON.parse(localStorage.getItem(k)) ?? d;}catch{return d;}};
+const state = window.__heed_state;
+const LS = window.__heed_keys;
 const lsSet = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+const nowISO = ()=>new Date().toISOString();
 const fmt = (d,loc)=> d? new Date(d).toLocaleString(loc||"en-AU"): "—";
+const esc = (s="")=>s.replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;","&gt;":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
 const toast = (msg)=>{const t=$("#toast");const d=document.createElement("div");d.className="item";d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),2400);};
+const rid = ()=>Math.random().toString(36).slice(2,10);
 
-/* ===== Link to Part 2 state keys ===== */
-const ST = { contacts:"heed_contacts_v5", templates:"heed_templates_v5", settings:"heed_settings_v5" };
-const state = {
-  get contacts(){return lsGet(ST.contacts,[])}, set contacts(v){lsSet(ST.contacts,v)},
-  get templates(){return lsGet(ST.templates,[])}, set templates(v){lsSet(ST.templates,v)},
-  get settings(){return lsGet(ST.settings,{})}, set settings(v){lsSet(ST.settings,v)}
-};
+/* === (All functions defined above this cut remain as you pasted) === */
 
-/* ===== PRELOAD your 9 contacts from the board (only if none exist in localStorage) =====
-   Dates normalised to 2025-09-15 (Sydney) where the board showed 15/09; one typo “1993” treated as 2025-09-15.
-   Status left as Active unless sequence completed by last step.
-*/
-const PRELOAD_9 = [
-  {
-    id: crypto.randomUUID?.() || rid(),
-    name: "Taylor McGuiness — Interaction",
-    company: "Interaction",
-    email: "info@interactionservices.org",
-    phone: "1300 668 123",
-    tz: "Australia/Sydney",
-    segments: ["SC/PM"],
-    status: "Active",
-    lastSent: 2,
-    lastSentAt: "2025-09-15T00:00:00+10:00",
-    notes: [
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — Called them, they said send an email." },
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent — awaiting response." },
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09/25." }
-    ]
-  },
-  {
-    id: crypto.randomUUID?.() || rid(),
-    name: "Assist Disability Services — SSC",
-    company: "Assist Disability Services",
-    email: "enquiries@assistservices.com.au",
-    phone: "1800 955 806",
-    tz: "Australia/Sydney",
-    segments: ["SSC"],
-    status: "Active",
-    lastSent: 2,
-    lastSentAt: "2025-09-15T00:00:00+10:00",
-    notes: [
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — Called; they took my number and will call back." },
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09/2025." }
-    ]
-  },
-  {
-    id: crypto.randomUUID?.() || rid(),
-    name: "Triniti Care — Support Coord",
-    company: "Triniti Care",
-    email: "info@triniti.com.au",
-    phone: "(02) 8319 9433",
-    tz: "Australia/Sydney",
-    segments: ["SC"],
-    status: "Active",
-    lastSent: 1,
-    lastSentAt: "2025-09-15T00:00:00+10:00", /* board line had 1993; normalised */
-    notes: [
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — called; they said email info@triniti.com.au." },
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent — undelivered; recheck address." }
-    ]
-  },
-  {
-    id: crypto.randomUUID?.() || rid(),
-    name: "MD Home Care — SSC",
-    company: "MD Home Care",
-    email: "", /* not provided on board */
-    phone: "08 6386 9999",
-    tz: "Australia/Sydney",
-    segments: ["SSC"],
-    status: "Active",
-    lastSent: 0,
-    lastSentAt: "",
-    notes: [
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "No emails sent yet." }
-    ]
-  },
-  {
-    id: crypto.randomUUID?.() || rid(),
-    name: "Claremont Care — SC/PM",
-    company: "Claremont Care",
-    email: "", /* not shown on board */
-    phone: "0416 873 319",
-    tz: "Australia/Sydney",
-    segments: ["SC","PM"],
-    status: "Active",
-    lastSent: 2,
-    lastSentAt: "2025-09-15T00:00:00+10:00",
-    notes: [
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent — N&J." },
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09." }
-    ]
-  },
-  {
-    id: crypto.randomUUID?.() || rid(),
-    name: "BRK Plan Management",
-    company: "BRK Plan Management",
-    email: "meet@brkpm.com.au",
-    phone: "0414 704 279",
-    tz: "Australia/Sydney",
-    segments: ["PM"],
-    status: "Active",
-    lastSent: 1,
-    lastSentAt: "2025-09-15T00:00:00+10:00",
-    notes: [
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent — N&J." }
-    ]
-  },
-  {
-    id: crypto.randomUUID?.() || rid(),
-    name: "Axial Plan Management",
-    company: "Axial Plan Management",
-    email: "hello@axialplanmanagement.com.au",
-    phone: "0416 428 261",
-    tz: "Australia/Sydney",
-    segments: ["PM"],
-    status: "Active",
-    lastSent: 1,
-    lastSentAt: "2025-09-15T00:00:00+10:00",
-    notes: [
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — Email 1 sent, awaiting response." }
-    ]
-  },
-  {
-    id: crypto.randomUUID?.() || rid(),
-    name: "NADO Plan Management",
-    company: "NADO Plan Management",
-    email: "", /* not provided */
-    phone: "1300 738 229",
-    tz: "Australia/Sydney",
-    segments: ["PM"],
-    status: "Active",
-    lastSent: 0,
-    lastSentAt: "",
-    notes: [
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "No emails sent yet." }
-    ]
-  },
-  {
-    id: crypto.randomUUID?.() || rid(),
-    name: "Yahweh Care — PM",
-    company: "Yahweh Care",
-    email: "info@yahwehcare.com.au",
-    phone: "(02) 8325 1616",
-    tz: "Australia/Sydney",
-    segments: ["PM"],
-    status: "Active",
-    lastSent: 1,
-    lastSentAt: "2025-09-15T00:00:00+10:00",
-    notes: [
-      { at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Himmat — Email 1 sent, awaiting response." }
-    ]
-  }
-];
-
-/* One-time preload if empty */
-function ensurePreload(){
-  const existing = state.contacts || [];
-  if(!existing.length){
-    state.contacts = PRELOAD_9;
-    toast("Loaded 9 contacts from board.");
-  }
-}
-
-/* ===== Sequencing ===== */
-function nextStepFor(c){
-  const N = state.settings.seqLen||7;
-  if((c.status||"Active")==="Completed") return 0;
-  const last = c.lastSent||0;
-  for(let s=last+1; s<=N; s++){
-    const t = state.templates.find(x=>x.step===s);
-    if(t && t.active!==false) return s;
-  }
-  return 0;
-}
-function dueDateFor(c){
-  const gap = state.settings.defaultGap||3;
-  const [hh,mm] = (state.settings.businessTime||"09:00").split(":").map(x=>parseInt(x,10)||0);
-  const d = new Date();
-  if(!c.lastSentAt){ d.setHours(hh,mm,0,0); return d; }
-  const base = new Date(c.lastSentAt);
-  base.setDate(base.getDate()+gap);
-  base.setHours(hh,mm,0,0);
-  return base;
-}
-function progressPct(c){
-  const N = state.settings.seqLen||7;
-  return Math.round((Math.min(c.lastSent||0,N)/N)*100);
-}
-
-/* ===== Build Email (merge + A/B) ===== */
-function buildEmail(c, step){
-  const tpl = state.templates.find(t=>t.step===step);
-  const name = c.name || "there", company = c.company||"", phone=c.phone||"";
-  let useB = false;
-  if(tpl?.variantB && tpl.variantB.subject && tpl.variantB.body){
-    const h = [...(c.id||"")].reduce((a,ch)=>a+ch.charCodeAt(0),0);
-    useB = (h % 2)===0;
-  }
-  const sub = (useB ? tpl?.variantB?.subject : tpl?.subject) || "";
-  const bod = (useB ? tpl?.variantB?.body : tpl?.body) || "";
-  const subject = sub.replaceAll("{{Name}}",name).replaceAll("{{Company}}",company).replaceAll("{{Phone}}",phone);
-  const body = bod.replaceAll("{{Name}}",name).replaceAll("{{Company}}",company).replaceAll("{{Phone}}",phone);
-  return { subject, body, variant: useB?"B":"A" };
-}
-
-/* ===== Render table ===== */
-function bySort(key, dir){
-  return (a,b)=>{
-    const v = (k,o)=>k==="name"?(o.name||"").toLowerCase()
-      :k==="email"?(o.email||"").toLowerCase()
-      :k==="status"?(o.status||"")
-      :k==="last"?(o.lastSentAt||"")
-      :k==="next"? nextStepFor(o)||999
-      :k==="progress"? ((o.lastSent||0))
-      :(o.name||"");
-    const va=v(key,a), vb=v(key,b); if(va<vb) return -1*dir; if(va>vb) return 1*dir; return 0;
-  };
-}
-function rowFor(c){
-  const tpl = $("#row-tpl").content.cloneNode(true);
-  const tr = tpl.querySelector("tr"); tr.dataset.id = c.id;
-  tr.querySelector(".c-name").textContent = c.name || "—";
-  tr.querySelector(".c-company").textContent = c.company || "";
-  tr.querySelector(".c-email").textContent = c.email || "—";
-  tr.querySelector(".c-seg").textContent = (c.segments&&c.segments.length)? c.segments.join(", ") : "—";
-  const s = c.status||"Active";
-  const st = tr.querySelector(".c-status"); st.textContent = s;
-  st.className = "tag c-status " + (s==="Paused"?"warn":s==="Completed"?"ok":"");
-  tr.querySelector(".c-last").textContent = c.lastSent? `Email ${c.lastSent} @ ${fmt(c.lastSentAt,state.settings.locale)}` : "—";
-  const next = nextStepFor(c);
-  tr.querySelector(".c-next").textContent = next? `Email ${next}` : "Done";
-  tr.querySelector(".c-due").textContent = next? `Due: ${fmt(dueDateFor(c),state.settings.locale)}` : "—";
-  const pct = progressPct(c);
-  tr.querySelector(".c-prog").style.width = pct+"%";
-  tr.querySelector(".c-prog-label").textContent = `${pct}% (${c.lastSent||0}/${state.settings.seqLen||7})`;
-  tr.querySelector(".notes-count").textContent = String(c.notes?.length||0);
-  tr.querySelector(".btn-notes").onclick = ()=>openNotes(c.id);
-  tr.querySelector(".btn-preview").onclick = ()=>openPreview(c.id);
-  tr.querySelector(".btn-send").onclick = ()=>sendNext(c.id);
-  tr.querySelector(".btn-mark").onclick = ()=>markSent(c.id);
-  tr.querySelector(".btn-del").onclick = ()=>delContact(c.id);
-  return tr;
-}
-function renderContacts(){
-  const contacts = state.contacts;
-  const today = new Date(); today.setHours(23,59,59,999);
-  const due = contacts.filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
-  const completed = contacts.filter(c=> (c.status||"Active")==="Completed");
-  const active = contacts.filter(c=> (c.status||"Active")==="Active");
-  $("#due-count").textContent = String(due.length);
-  $("#completed-count").textContent = String(completed.length);
-  $("#active-count").textContent = String(active.length);
-  const f = ($("#search").value||"").toLowerCase();
-  const fs = $("#filter-status").value||"";
-  const key = $("#sort-key").value || (state.settings.sortKey||"name");
-  const dir = state.settings.sortDir||1;
-  const rows = contacts
-    .filter(c=>{
-      if(f){
-        const k = `${c.name||""} ${c.email||""} ${c.company||""} ${c.phone||""}`.toLowerCase();
-        if(!k.includes(f)) return false;
-      }
-      if(fs && (c.status||"Active")!==fs) return false;
-      return true;
-    })
-    .sort(bySort(key, dir));
-  const tbody = $("#rows"); tbody.innerHTML = "";
-  rows.forEach(c=> tbody.appendChild(rowFor(c)));
-  renderAnalytics();
-}
-
-/* ===== Notes ===== */
-let NOTES_ID = "";
-function openNotes(id){
-  const c = state.contacts.find(x=>x.id===id); if(!c) return;
-  NOTES_ID = id;
-  $("#notes-for").textContent = c.name || c.email || "Contact";
-  const box = $("#notes-list"); box.innerHTML = "";
-  (c.notes||[]).forEach(n=>{
-    const div = document.createElement("div"); div.style.marginBottom="8px";
-    div.innerHTML = `<div class="small muted">${fmt(n.at,state.settings.locale)} — <strong>${esc(n.by||"")}</strong></div><div>${esc(n.text||"")}</div>`;
-    box.appendChild(div);
-  });
-  if(!c.notes?.length) box.innerHTML = `<div class="small muted">No notes yet.</div>`;
-  $("#note-text").value = "";
-  $("#notes").style.display = "";
-}
-function addNote(){
-  const t = $("#note-text").value.trim(); if(!t) return;
-  const cs = state.contacts, i = cs.findIndex(x=>x.id===NOTES_ID); if(i<0) return;
-  (cs[i].notes=cs[i].notes||[]).push({ at: nowISO(), by:(state.settings.initials||"User"), text: t });
-  state.contacts = cs; openNotes(NOTES_ID);
-}
-
-/* ===== Preview / Send (Zoho) ===== */
-let PV_ID="";
-function openPreview(id){
-  const c = state.contacts.find(x=>x.id===id); if(!c) return;
-  const step = nextStepFor(c); if(!step) return toast("Sequence complete");
-  const {subject, body, variant} = buildEmail(c, step);
-  PV_ID = id;
-  $("#pv-subj").value = subject||"(no subject)";
-  $("#pv-to").value = c.email||"";
-  $("#pv-variant").value = variant;
-  $("#pv-body").innerText = body||"";
-  $("#preview").style.display = "";
-}
-function sendFromPreview(){ if(PV_ID) sendNext(PV_ID); }
-function restoreFromTemplate(){
-  if(!PV_ID) return;
-  const c = state.contacts.find(x=>x.id===PV_ID); if(!c) return;
-  const step = nextStepFor(c); if(!step) return;
-  const {body} = buildEmail(c, step);
-  $("#pv-body").innerText = body||"";
-}
-function sendNext(id){
-  const c = state.contacts.find(x=>x.id===id); if(!c) return;
-  if(!(c.email||"").trim()){ toast("No email address on file for this contact."); return; }
-  const step = nextStepFor(c); if(!step) return toast("Sequence complete");
-  const subj = $("#pv-subj").value || buildEmail(c, step).subject;
-  const body = ($("#pv-body").innerText||"").trim() || buildEmail(c, step).body;
-  const allowed = Number(state.settings.rate||5);
-  window.__rateCounter = (window.__rateCounter||0) + 1;
-  if(window.__rateCounter>allowed){ toast(`Popup limit reached (${allowed})`); return; }
-  setTimeout(()=>{ window.__rateCounter = Math.max(0,(window.__rateCounter||1)-1); }, 2000);
-  const dom = state.settings.zohoDomain||"mail.zoho.com";
-  const url = `https://${dom}/zm/#compose?to=${encodeURIComponent(c.email||"")}&subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
-  window.open(url, "_blank");
-}
-
-/* ===== Mark / Delete / Editor ===== */
-function markSent(id){
-  const cs = state.contacts, i = cs.findIndex(x=>x.id===id); if(i<0) return;
-  const step = nextStepFor(cs[i]); if(!step) return toast("Sequence complete");
-  cs[i].lastSent = step; cs[i].lastSentAt = nowISO();
-  if(step >= (state.settings.seqLen||7)) cs[i].status = "Completed";
-  (cs[i].notes=cs[i].notes||[]).push({at: nowISO(), by:(state.settings.initials||"User"), text:`Marked Email ${step} as sent.`});
-  state.contacts = cs; renderContacts();
-}
-function delContact(id){
-  if(!confirm("Delete this contact?")) return;
-  state.contacts = state.contacts.filter(x=>x.id!==id); renderContacts();
-}
-function openEditor(contact){
-  $("#editor").style.display = "";
-  $("#ed-h").textContent = contact? "Edit Contact":"Add Contact";
-  $("#ed-name").value = contact?.name || "";
-  $("#ed-email").value = contact?.email || "";
-  $("#ed-company").value = contact?.company || "";
-  $("#ed-phone").value = contact?.phone || "";
-  $("#ed-tz").value = contact?.tz || "Australia/Sydney";
-  $("#ed-seg").value = (contact?.segments||[]).join(", ");
-  $("#ed-initials").value = state.settings.initials || "HS";
-  $("#editor").dataset.id = contact?.id || "";
-}
-function saveContact(){
-  const id = $("#editor").dataset.id || "";
-  const obj = {
-    id: id || rid(),
-    name: $("#ed-name").value.trim(),
-    email: $("#ed-email").value.trim(),
-    company: $("#ed-company").value.trim(),
-    phone: $("#ed-phone").value.trim(),
-    tz: $("#ed-tz").value.trim()||"Australia/Sydney",
-    segments: ($("#ed-seg").value||"").split(",").map(s=>s.trim()).filter(Boolean)
-  };
-  const cs = state.contacts;
-  if(id){ const i = cs.findIndex(x=>x.id===id); if(i>=0) cs[i] = {...cs[i], ...obj}; }
-  else cs.push({ ...obj, status:"Active", lastSent:0, lastSentAt:"", notes:[] });
-  state.contacts = cs; $("#editor").style.display="none"; renderContacts();
-}
-window.__heed_openEditor = ()=>openEditor();
-
-/* ===== Import/Export ===== */
-function exportJSON(){
-  const blob = new Blob([JSON.stringify({contacts:state.contacts,templates:state.templates,settings:state.settings},null,2)],{type:"application/json"});
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = `heed-followups-${new Date().toISOString().slice(0,10)}.json`; a.click();
-}
+/* === Import/Export (continued) === */
 async function importJSONFile(file){
   const text = await file.text(); const data = JSON.parse(text);
   if(!confirm("Import will overwrite local data. Continue?")) return;
   if(data.contacts) state.contacts = data.contacts;
   if(data.templates) state.templates = data.templates;
   if(data.settings) state.settings = {...state.settings, ...data.settings};
+  lsSet(LS.contacts,state.contacts); lsSet(LS.templates,state.templates); lsSet(LS.settings,state.settings);
   location.reload();
+}
+function exportJSON(){
+  const blob = new Blob([JSON.stringify({contacts:state.contacts,templates:state.templates,settings:state.settings},null,2)],{type:"application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = `heed-followups-${new Date().toISOString().slice(0,10)}.json`; a.click();
 }
 function exportCSV(){
   const headers = ["id","name","email","company","phone","tz","segments","status","lastSent","lastSentAt","notesCount"];
-  const rows = state.contacts.map(c=>[
-    c.id, q(c.name), q(c.email), q(c.company), q(c.phone), q(c.tz), q((c.segments||[]).join("|")),
-    c.status||"Active", c.lastSent||0, c.lastSentAt||"", (c.notes||[]).length
+  const rows = (state.contacts||[]).map(c=>[
+    q(c.id), q(c.name), q(c.email), q(c.company), q(c.phone), q(c.tz), q((c.segments||[]).join("|")),
+    q(c.status||"Active"), q(c.lastSent||0), q(c.lastSentAt||""), q((c.notes||[]).length)
   ]);
   const csv = [headers.join(","), ...rows.map(r=>r.join(","))].join("\n");
   const blob = new Blob([csv],{type:"text/csv"});
@@ -1098,24 +708,26 @@ async function importCSVFile(file){
       cur+=ch;
     } out.push(cur); return out;
   });
-  const cs = state.contacts;
+  const cs = state.contacts||[];
   rows.forEach(r=>{
     const obj = Object.fromEntries(hdr.map((h,i)=>[h, r[i]??""]));
     const id = obj.id || rid();
     const idx = obj.email? cs.findIndex(x=>x.email===obj.email) : -1;
-    const c = { id,
+    const c = {
+      id,
       name: obj.name||"", email: obj.email||"", company: obj.company||"", phone: obj.phone||"",
       tz: obj.tz||"Australia/Sydney", segments: (obj.segments||"").split("|").filter(Boolean),
-      status: obj.status||"Active", lastSent: Number(obj.lastSent||0), lastSentAt: obj.lastSentAt||"", notes: []
+      status: obj.status||"Active", lastSent: Number(obj.lastSent||0), lastSentAt: obj.lastSentAt||"",
+      notes: (obj.notesCount? []:[])
     };
     if(idx>=0) cs[idx] = {...cs[idx], ...c}; else cs.push(c);
   });
-  state.contacts = cs; renderContacts();
+  state.contacts = cs; lsSet(LS.contacts, cs); renderContacts();
 }
 
-/* ===== Analytics + ICS ===== */
+/* === Analytics === */
 function renderAnalytics(){
-  const cs = state.contacts; const N = state.settings.seqLen||7;
+  const cs = state.contacts||[]; const N = state.settings.seqLen||7;
   if(!cs.length){ $("#an-complete").textContent="—"; $("#an-avgstep").textContent="—"; $("#an-notes").textContent="—"; return; }
   const completed = cs.filter(c=>c.status==="Completed").length;
   const avgStep = cs.reduce((a,c)=>a+(c.lastSent||0),0)/cs.length;
@@ -1124,12 +736,48 @@ function renderAnalytics(){
   $("#an-avgstep").textContent = `${avgStep.toFixed(2)} / ${N}`;
   $("#an-notes").textContent = String(notes);
 }
+
+/* === Today Dock === */
+function renderTodayDock(){
+  const box = $("#dock-list"); if(!box) return;
+  const today = new Date(); today.setHours(23,59,59,999);
+  const due = (state.contacts||[]).filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
+  $("#dock-due").textContent = String(due.length);
+  box.innerHTML = "";
+  due.slice(0,30).forEach(c=>{
+    const step = nextStepFor(c);
+    const row = document.createElement("div");
+    row.style.display="grid"; row.style.gridTemplateColumns="1fr auto auto"; row.style.gap="6px"; row.style.margin="6px 0";
+    row.innerHTML = `
+      <div><strong>${esc(c.name||c.email||"Contact")}</strong>
+        <div class="muted small">Next: Email ${step} • Due ${fmt(dueDateFor(c),state.settings.locale)}</div></div>
+      <button class="btn btn-preview">Preview</button>
+      <button class="btn primary btn-send">Send</button>`;
+    row.querySelector(".btn-preview").onclick = ()=>openPreview(c.id);
+    row.querySelector(".btn-send").onclick = ()=>sendNext(c.id);
+    box.appendChild(row);
+  });
+}
+
+/* === Next 7 Days === */
+function renderWeek(){
+  const box=$("#week"); if(!box) return; box.innerHTML="";
+  for(let i=0;i<7;i++){
+    const d=new Date(); d.setDate(d.getDate()+i); d.setHours(23,59,59,999);
+    const list=(state.contacts||[]).filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c).toDateString()===d.toDateString());
+    const div=document.createElement("div"); div.style.margin="6px 0";
+    div.innerHTML = `<strong>${d.toLocaleDateString(state.settings.locale||"en-AU",{weekday:"short",month:"short",day:"numeric"})}</strong> — ${list.length} due`;
+    box.appendChild(div);
+  }
+}
+
+/* === ICS Export === */
 function exportICS(){
   const today = new Date(); today.setHours(23,59,59,999);
   const due = state.contacts.filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
   if(!due.length){ toast("No contacts due today"); return; }
   const lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//HD HeeD//Sequencer//EN"];
-  due.slice(0,20).forEach(c=>{
+  due.slice(0,50).forEach(c=>{
     const dt = dueDateFor(c); const pad=n=>String(n).padStart(2,"0");
     const stamp = `${dt.getUTCFullYear()}${pad(dt.getUTCMonth()+1)}${pad(dt.getUTCDate())}T${pad(dt.getUTCHours())}${pad(dt.getUTCMinutes())}00Z`;
     const step = nextStepFor(c); const {subject} = buildEmail(c, step);
@@ -1145,48 +793,50 @@ function exportICS(){
   const blob = new Blob([lines.join("\r\n")],{type:"text/calendar"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "hdheed_next_due.ics"; a.click();
 }
+/* === Batch Prepare (open mailto: one-by-one) === */
+function batchPrepare(){
+  const today = new Date(); today.setHours(23,59,59,999);
+  const due = (state.contacts||[]).filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
+  if(!due.length){ toast("No contacts due today."); return; }
 
-/* ===== Binds & init ===== */
-function init3(){
-  ensurePreload();  // <<— load your 9 if empty
+  let opened = 0;
+  // open max N sequentially (browsers may block too many tabs)
+  const maxOpen = Math.min(10, due.length);
+  (function openNext(i){
+    if(i>=maxOpen) return toast(`Opened ${opened} compose window(s).`);
+    const c = due[i]; if(!c || !(c.email||"").trim()) return openNext(i+1);
+    const step = nextStepFor(c);
+    const {subject, body} = buildEmail(c, step);
+    const ml = `mailto:${encodeURIComponent(c.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    // Use _self to let handler take over quickly
+    window.open(ml, "_self");
+    opened++;
+    setTimeout(()=>openNext(i+1), 350); // small delay to avoid handler spam
+  })(0);
+}
 
+/* === Event bindings & init === */
+function bindUI(){
   $("#search").oninput = ()=>renderContacts();
   $("#filter-status").onchange = ()=>renderContacts();
-  $("#sort-key").onchange = ()=>{ const s=state.settings; s.sortKey=$("#sort-key").value; state.settings=s; renderContacts(); };
+  $("#sort-key").onchange = ()=>{ const s=state.settings; s.sortKey=$("#sort-key").value; lsSet(LS.settings,s); renderContacts(); };
 
   $("#view-due").onclick = ()=>{
     const today = new Date(); today.setHours(23,59,59,999);
-    const due = state.contacts.filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
+    const due = (state.contacts||[]).filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
     if(!due.length){ alert("No contacts due today."); return; }
     const msg = due.map(c=>`• ${c.name||c.email||"Contact"} — Next: Email ${nextStepFor(c)} (Due ${fmt(dueDateFor(c),state.settings.locale)})`).join("\n");
     alert(`Due today:\n\n${msg}`);
   };
-  $("#batch-send").onclick = ()=>{
-    const today = new Date(); today.setHours(23,59,59,999);
-    const due = state.contacts.filter(c=> (c.status||"Active")==="Active" && nextStepFor(c) && dueDateFor(c)<=today );
-    if(!due.length){ toast("No contacts due today."); return; }
-    const dom = state.settings.zohoDomain || "mail.zoho.com";
-    let opened=0, allowed=Number(state.settings.rate||5);
-    due.slice(0,allowed).forEach(c=>{
-      if(!(c.email||"").trim()) return; // skip no-email
-      const step = nextStepFor(c);
-      const {subject, body} = buildEmail(c, step);
-      const url = `https://${dom}/zm/#compose?to=${encodeURIComponent(c.email||"")}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      const win = window.open(url, "_blank"); if(win) opened++;
-    });
-    toast(`Opened ${opened} Zoho compose tab(s).`);
-  };
+  $("#batch-send").onclick = batchPrepare;
   $("#export-ics").onclick = exportICS;
-
-  // If your Part 1 still shows the "Load Sample 9" button, hide it (we preload real data now)
-  const sampleBtn = $("#load-sample"); if(sampleBtn) sampleBtn.style.display = "none";
 
   $("#pv-copy").onclick = ()=>navigator.clipboard.writeText($("#pv-body").innerText||"");
   $("#pv-send").onclick = ()=>sendFromPreview();
   $("#pv-restore").onclick = ()=>restoreFromTemplate();
   $("#pv-close").onclick = ()=>{ $("#preview").style.display="none"; };
 
-  $("#add-contact").onclick = ()=>openEditor();
+  $("#add-contact").onclick = ()=>window.__heed_openEditor && window.__heed_openEditor();
   $("#ed-cancel").onclick = ()=>$("#editor").style.display="none";
   $("#ed-save").onclick = ()=>saveContact();
 
@@ -1197,85 +847,41 @@ function init3(){
   $("#import-json").onchange = e=>{ const f=e.target.files?.[0]; if(f) importJSONFile(f); };
   $("#export-csv").onclick = exportCSV;
   $("#import-csv").onchange = e=>{ const f=e.target.files?.[0]; if(f) importCSVFile(f); };
-  $("#reset").onclick = ()=>{ if(confirm("Reset ALL local data?")){ localStorage.removeItem(ST.contacts); localStorage.removeItem(ST.templates); localStorage.removeItem(ST.settings); location.reload(); }};
+  $("#reset").onclick = ()=>{ if(confirm("Reset ALL local data?")){ localStorage.removeItem(LS.contacts); localStorage.removeItem(LS.templates); localStorage.removeItem(LS.settings); localStorage.removeItem(LS.history); location.reload(); }};
+
+  $("#dock-send-all").onclick = batchPrepare;
 
   document.addEventListener("keydown",(e)=>{
     if(e.key==="/"){ e.preventDefault(); $("#search").focus(); }
-    if(e.key.toLowerCase()==="n"){ openEditor(); }
+    if(e.key.toLowerCase()==="n"){ const openEditor = window.__heed_openEditor; openEditor && openEditor(); }
   });
+}
 
+function init4(){
+  // ensure settings exist (from earlier parts)
+  if(!state.settings) state.settings = { seqLen:7, defaultGap:3, businessTime:"09:00", sortKey:"name", sortDir:1, locale:"en-AU", theme:"light", initials:"HS", rate:5 };
+  bindUI();
   renderContacts();
 }
-window.__heed_init_part3 = init3;
-})();
-</script>
-<script>
-(() => {
-"use strict";
 
-/* Boot */
-function boot(){ if(window.__heed_init_part2) window.__heed_init_part2(); if(window.__heed_init_part3) window.__heed_init_part3(); }
-document.addEventListener("DOMContentLoaded", boot);
-
-/* SW (installable offline) */
-if('serviceWorker' in navigator){
-  try{
-    const sw = `
-      const CACHE='heed-v2';
-      self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./followup.html'])));});
-      self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});
-    `;
-    const blob = new Blob([sw],{type:'text/javascript'});
-    const url = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(url);
-  }catch(e){}
+/* === PWA-lite (optional, no external files) === */
+if("serviceWorker" in navigator){
+  // Very tiny inline SW for offline caching of this single HTML
+  const swBlob = new Blob([`
+self.addEventListener('install', e=>{
+  e.waitUntil(caches.open('heed-v1').then(c=>c.addAll(['./'])));
+});
+self.addEventListener('fetch', e=>{
+  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
+});`], {type:"text/javascript"});
+  const swURL = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL).catch(()=>{});
 }
 
-/* Modal help */
-const modal = $("#modal"), backdrop = $("#backdrop");
-function openModal(html){
-  modal.innerHTML = html + `<div class="row" style="margin-top:12px;justify-content:flex-end"><button id="m-close" class="btn">Close</button></div>`;
-  backdrop.style.display = "flex"; backdrop.setAttribute("aria-hidden","false");
-  $("#m-close").onclick = closeModal;
-}
-function closeModal(){ backdrop.style.display="none"; backdrop.setAttribute("aria-hidden","true"); }
-
-/* Quick help */
-function helpHTML(){
-  return `
-  <h3>Quick help</h3>
-  <ul class="small">
-    <li><strong>Templates:</strong> Steps 1–4 preloaded from your site. Edit or extend to 7–10.</li>
-    <li><strong>Contacts:</strong> Add manually or <em>Import CSV</em>. Status auto-updates on <em>Mark Sent</em>.</li>
-    <li><strong>Zoho:</strong> <em>Send Next</em> opens compose with To/Subject/Body prefilled.</li>
-    <li><strong>Analytics:</strong> Completion %, average step, notes total.</li>
-    <li><strong>Backups:</strong> Export/Import JSON; CSV for spreadsheets.</li>
-    <li><strong>Keyboard:</strong> <kbd>/</kbd> search, <kbd>N</kbd> new contact, <kbd>Ctrl/⌘+Z</kbd> undo.</li>
-  </ul>`;
-}
-document.querySelector(".title")?.addEventListener("click",()=>openModal(helpHTML()));
+/* === Boot === */
+document.addEventListener("DOMContentLoaded", init4);
 
 })();
 </script>
-
-<!-- Footer -->
-<div class="wrap" style="margin:18px auto 40px">
-  <section class="card">
-    <h2>How to Use</h2>
-    <div class="hr"></div>
-    <ol class="small" style="line-height:1.6">
-      <li><strong>Set sequence length:</strong> Choose 7–10 and edit subjects/bodies (use {{Name}} / {{Company}} / {{Phone}}). Save.</li>
-      <li><strong>Add contacts:</strong> Or import CSV (columns accepted: name,email,company,phone,tz,segments,status,lastSent,lastSentAt).</li>
-      <li><strong>Send next:</strong> Click <em>Send Next</em> — compose opens in Zoho. Then <em>Mark Sent</em>.</li>
-      <li><strong>Due tools:</strong> <em>Show Due</em>, <em>Batch Prepare</em>, <em>Export ICS</em>.</li>
-      <li><strong>Offline:</strong> This page installs as a PWA; works offline after first load.</li>
-    </ol>
-    <div class="small muted">Want me to preload your **exact 9 contacts**? Share the CSV or a read-only Sheet link and I’ll embed them.</div>
-  </section>
-  <footer class="small muted" style="text-align:center;margin:24px 0 0">
-    HD HeeD • “Because we care, we provide HD care.” • v1.2 (visual + automation)
-  </footer>
-</div>
-
 </body>
 </html>
