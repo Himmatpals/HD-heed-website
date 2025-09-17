@@ -552,7 +552,7 @@
     i.addEventListener('input', function(){ try{ if (typeof onSave === "function") onSave(i.value||""); } finally { setSaveHint("Draft saved"); } });
     box.appendChild(i); return box;
   }
-  /* ====== Summary Helpers (from old code) ====== */
+  /* ====== Summary Helpers ====== */
   function mapRequiredForSummary(arr, other){
     var map = {
       personal_care:"Personal care",
@@ -577,171 +577,128 @@
     var map = { d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun" };
     return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
   }
-  /* ====== Formspree Submission (fixed from old code) ====== */
+  /* ====== Submission with timeout + fallback ====== */
   function sendToFormspree(){
-    // 1) Derive the three policy flags from the document acks
-    var policyAck = {
-      handbook:  !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-      incident:  !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-      complaints:!!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
-    };
+    return new Promise(function(resolve, reject){
+      // Validate GS_WEBAPP URL
+      if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
+        console.error("Invalid GS_WEBAPP URL:", GS_WEBAPP);
+        reject(new Error("Invalid Google Apps Script URL. Please check the GS_WEBAPP configuration."));
+        return;
+      }
+      // Build policy flags
+      var policyAck = {
+        handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
+        incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
+        complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
+      };
+      // Base payload
+      var payload = {
+        caller: S.caller,
+        participant: S.participant,
+        contacts: S.contacts,
+        comms: S.comms,
+        living: S.living,
+        clinical: S.clinical,
+        medications: S.medications,
+        risks: S.risks,
+        bsp: S.bsp,
+        supports: S.supports,
+        schedule: S.schedule,
+        policy_ack: policyAck,
+        acks: S.acks,
+        emergency_advocacy: S.emergency_advocacy,
+        submitter: S.submitter,
+        notes: S.notes,
+        timestamp: new Date().toISOString(),
+        _meta: { app: "AILR", version: "v16" }
+      };
+      // Human-readable summaries
+      try {
+        var addr = S.participant && S.participant.address ? [
+          S.participant.address.line1, S.participant.address.line2,
+          S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
+        ].filter(Boolean).join(", ") : "";
+        var contactSummary = [
+          (S.contacts.email || ""), (S.contacts.phone ? (" • " + S.contacts.phone) : "")
+        ].join("");
+        var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
+        var windowsSummary = mapWindowsSummary(S.schedule.windows);
+        var daysSummary = mapDaysSummary(S.schedule.days);
+        payload.supports.required_summary = requiredSummary;
+        payload.supports.details_text = S.supports.details_text || "";
+        payload.schedule.windows_summary = windowsSummary;
+        payload.schedule.days_summary = daysSummary;
+        payload.participant.address_summary = addr;
+        payload.contacts.contact_summary = contactSummary;
+      } catch (e) {
+        console.error("Error generating summaries:", e);
+      }
 
-    // 2) Build base payload
-    var payload = {
-      caller:S.caller, participant:S.participant, contacts:S.contacts, comms:S.comms,
-      living:S.living, clinical:S.clinical, medications:S.medications, risks:S.risks,
-      bsp:S.bsp, supports:S.supports, schedule:S.schedule,
-      policy_ack: policyAck,
-      acks:S.acks, emergency_advocacy:S.emergency_advocacy,
-      submitter:S.submitter, notes:S.notes, timestamp:new Date().toISOString(),
-      _meta:{ app:"AILR", version:"v16" }
-    };
+      console.log("Sending data to:", GS_WEBAPP);
+      // Helper: timeout-able fetch
+      function timedFetch(resource, options, ms){
+        var controller = new AbortController();
+        var id = setTimeout(function(){ controller.abort(); }, ms);
+        return fetch(resource, Object.assign({}, options, { signal: controller.signal }))
+          .finally(function(){ clearTimeout(id); });
+      }
 
-    // 3) Human-readable summaries
-    try{
-      var addr = S.participant && S.participant.address ? [
-        S.participant.address.line1, S.participant.address.line2,
-        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
-      ].filter(Boolean).join(", ") : "";
-
-      var contactSummary = [
-        (S.contacts.email||""), (S.contacts.phone?(" • "+S.contacts.phone):"")
-      ].join("");
-
-      var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-      var windowsSummary  = mapWindowsSummary(S.schedule.windows);
-      var daysSummary     = mapDaysSummary(S.schedule.days);
-
-      payload.supports.required_summary   = requiredSummary;
-      payload.supports.details_text       = S.supports.details_text || "";
-      payload.schedule.windows_summary    = windowsSummary;
-      payload.schedule.days_summary       = daysSummary;
-      payload.participant.address_summary = addr;
-      payload.contacts.contact_summary    = contactSummary;
-    }catch(e){}
-
-    // 4) Send
-    return fetch(GS_WEBAPP, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    }).then(async function(r){
-      var j = await r.json().catch(()=>({}));
-      if (!r.ok || j.status!=='ok') throw new Error(j && j.message ? j.message : "Server error");
-      return j;
-    }).catch(function(){
-      // Fallback so user isn't blocked
-      return fetch(GS_WEBAPP, { method:"POST", mode:"no-cors", body: JSON.stringify(payload) })
-        .then(function(){ return { status:'ok', fileUrl:null, _opaque:true }; });
+      // First attempt: JSON
+      timedFetch(GS_WEBAPP, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        referrerPolicy: "no-referrer",
+        redirect: "follow",
+        body: JSON.stringify(payload)
+      }, 12000).then(async function(r){
+        if (!r.ok) {
+          const text = await r.text().catch(()=>"(no body)");
+          throw new Error("Submission failed ("+r.status+" "+r.statusText+"): "+text.slice(0,300));
+        }
+        // GAS might return JSON or HTML; try JSON first, then tolerant parse
+        let j = {};
+        try { j = await r.clone().json(); }
+        catch{
+          const t = await r.text();
+          // best-effort detect success token in HTML
+          if (/\bok\b/i.test(t)) j = { status:"ok", html:true };
+          else throw new Error("Unexpected response. Not JSON and no 'ok' token.");
+        }
+        if (j.status !== 'ok') throw new Error(j.message || "Server error");
+        resolve(j);
+      }).catch(function(firstErr){
+        console.warn("JSON submit failed, retrying with URL-encoded…", firstErr);
+        // Fallback: URL-encoded form (many GAS examples expect this)
+        var data = new URLSearchParams();
+        data.set("data", JSON.stringify(payload));
+        timedFetch(GS_WEBAPP, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          referrerPolicy: "no-referrer",
+          redirect: "follow",
+          body: data.toString()
+        }, 12000).then(async function(r2){
+          if (!r2.ok) {
+            const text = await r2.text().catch(()=>"(no body)");
+            throw new Error("Fallback failed ("+r2.status+" "+r2.statusText+"): "+text.slice(0,300));
+          }
+          let j = {};
+          try { j = await r2.clone().json(); }
+          catch{
+            const t = await r2.text();
+            if (/\bok\b/i.test(t)) j = { status:"ok", html:true };
+            else throw new Error("Fallback response unexpected. Not JSON and no 'ok' token.");
+          }
+          if (j.status !== 'ok') throw new Error(j.message || "Server error (fallback)");
+          resolve(j);
+        }).catch(function(fallbackErr){
+          console.error("Submission error details:", { firstErr, fallbackErr });
+          reject(fallbackErr);
+        });
+      });
     });
   }
-
-  /* ====== Render & nav ====== */
-  function render(){
-    var total = Steps.length;
-    if (S.i<0) S.i=0;
-    if (S.i>=total) S.i = total-1;
-
-    var step = Steps[S.i];
-    stepTxt.textContent = "Step " + (S.i+1) + "/" + total;
-    barEl.style.width = Math.round((S.i)/(total-1)*100) + "%";
-    setPortrait(step.key);
-    qEl.innerHTML = step.title;
-    subEl.innerHTML = step.sub || "";
-    optsEl.innerHTML = "";
-    step.build(optsEl);
-    save();
-
-    // Hide Next on the LAST page
-    nextBtn.style.display = (S.i === total-1) ? "none" : "inline-block";
-
-    try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){}
-  }
-
-  backBtn.addEventListener('click', function(){ S.i = Math.max(0, S.i-1); render(); });
-  nextBtn.addEventListener('click', function(){ if (!canProceed(S.i)) return; S.i = Math.min(Steps.length-1, S.i+1); render(); });
-  saveExitBtn.addEventListener('click', function(){ save(); alert("Saved. You can close this page and return later on the same device."); });
-
-  function str(v){ return (v||"").toString().trim(); }
-  function has(v){ return str(v).length>0; }
-
-  function canProceed(idx){
-    var key = Steps[idx].key;
-
-    if (key==="caller"){
-      if (S.caller.consent!=="Yes"){ alert("We’re unable to proceed without consent. Please select “Yes” to continue."); return false; }
-    }
-
-    if (key==="participant"){
-      var p=S.participant, a=p.address;
-      if (!has(p.legal_name)){ alert("Please enter the participant’s Legal name."); return false; }
-      if (!has(p.dob)){ alert("Please add Date of birth."); return false; }
-      if (!has(a.line1)||!has(a.suburb)||!has(a.postcode)||!has(a.state)){
-        alert("Please complete Address line 1, Suburb, Postcode, and State."); return false;
-      }
-    }
-
-    if (key==="contacts"){
-      if (!has(S.contacts.email) && !has(S.contacts.phone)){
-        alert("Please provide at least one contact method: Email or Phone."); return false;
-      }
-    }
-
-    if (key==="clinical"){
-      if (!has(S.clinical.allergies)){
-        alert("Allergies is required. If none, please write “No known allergies”.");
-        return false;
-      }
-    }
-
-    if (key==="supports"){
-      var anyReq=(S.supports.required||[]).length>0 || has(S.supports.required_other) || has(S.supports.details_text);
-      if (!anyReq){
-        alert("Please select at least one required support or type a specific support detail.");
-        return false;
-      }
-    }
-
-    if (key==="schedule"){
-      var someWindow=(S.schedule.windows||[]).length>0;
-      var someDay=(S.schedule.days||[]).length>0;
-      var hours=Number(S.schedule.hours_per_week||0);
-      if (!someWindow && !someDay && !(hours>0)){
-        alert("Please select at least one time window or day, or provide Hours per week.");
-        return false;
-      }
-    }
-
-    if (key==="policies"){
-      for (var i=0;i<DOCS.length;i++){
-        var d = DOCS[i], ack = S.acks[d.id]||{};
-        if (!ack.read){
-          alert("Please tick that you have received & read: " + d.title);
-          return false;
-        }
-        if (d.requiresConsent && !ack.consent){
-          alert("Please tick consent for: " + d.title);
-          return false;
-        }
-      }
-    }
-
-    /* Emergency Advocacy consent is OPTIONAL */
-    return true;
-  }
-
-  /* ====== Kick off ====== */
-  try{ render(); }
-  catch(e){
-    var stage = document.querySelector("main.stage");
-    if (stage){
-      stage.innerHTML = '<div class="q">There was an error initialising the form.</div><p class="sub">If this persists, please open the page in a modern browser (Chrome/Edge/Safari ≥ 13).</p>';
-    }
-  }
-
-}); // DOMContentLoaded
-</script>
-
   /* ====== Render Review ====== */
   function renderReview(){
     var wrap = el('div','review');
@@ -1076,53 +1033,14 @@
       build:function(m){
         m.appendChild(row("two",[ input("Your name (submitter)", S.submitter, "name"), input("Email (required if no phone)", S.submitter, "email","email") ]));
         m.appendChild(input("Phone (required if no email)", S.submitter, "phone","tel"));
-        var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
-        var btnSubmit = button("Submit","primary", function(){
+        // LEFT-aligned single Send button (Submit removed)
+        var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; justify-content:flex-start";
+        var btnSend = button("Send","primary", function(){
           if (S.caller.consent !== "Yes"){
             alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
             return;
           }
-          if (!canProceed(Steps.length-2)){
-            return;
-          }
-          var hasEmail = S.submitter.email && S.submitter.email.trim();
-          var hasPhone = S.submitter.phone && S.submitter.phone.trim();
-          if (!(hasEmail || hasPhone)){
-            alert("Please provide at least an email or a phone number to submit.");
-            return;
-          }
-          btnSubmit.disabled = true;
-          btnSubmit.textContent = "Submitting…";
-          sendToFormspree().then(function(j){
-            triggerConfetti(1200);
-            var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
-            alert("All done — we’ve received your onboarding." + pdfMsg);
-            try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
-            var stage = document.querySelector("main.stage");
-            if (stage){
-              stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
-                <div class="q">Thank you for your submission</div>\
-                <p class="sub">We’ve received your referral and will be in touch soon.</p>\
-                <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
-            }
-          }).catch(function(e){
-            console.error("Submission error details:", {
-              message: e.message,
-              stack: e.stack
-            });
-            alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
-            btnSubmit.disabled = false;
-            btnSubmit.textContent = "Submit";
-          });
-        });
-        var btnSend = button("Send Now","primary", function(){
-          if (S.caller.consent !== "Yes"){
-            alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
-            return;
-          }
-          if (!canProceed(Steps.length-2)){
-            return;
-          }
+          if (!canProceed(Steps.length-2)){ return; }
           var hasEmail = S.submitter.email && S.submitter.email.trim();
           var hasPhone = S.submitter.phone && S.submitter.phone.trim();
           if (!(hasEmail || hasPhone)){
@@ -1137,11 +1055,11 @@
             alert("All done — we’ve received your onboarding." + pdfMsg);
             try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
             var stage = document.querySelector("main.stage");
-            if (stage){
+                        if (stage){
               stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
                 <div class="q">Thank you for your submission</div>\
                 <p class="sub">We’ve received your referral and will be in touch soon.</p>\
-                <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
+                <div class="foot" style="justify-content:flex-start"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
             }
           }).catch(function(e){
             console.error("Submission error details:", {
@@ -1150,16 +1068,17 @@
             });
             alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
             btnSend.disabled = false;
-            btnSend.textContent = "Send Now";
+            btnSend.textContent = "Send";
           });
         });
-        var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
-        actions.appendChild(btnSubmit); actions.appendChild(btnSend); actions.appendChild(btnPdf);
+        actions.appendChild(btnSend);
         m.appendChild(actions);
+
         var hint = el('div','hint','We’ll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.');
         m.appendChild(hint);
       }
     }
+  ];
   ];
   /* ====== NAVIGATION (with consent lock) ====== */
   function buildNavigation(){
@@ -1197,6 +1116,7 @@
     if (targetIndex >= 2 && S.caller.consent !== "Yes") return true;
     return false;
   }
+
   /* ====== Validations (hard gates) ====== */
   function str(v){ return (v||"").toString().trim(); }
   function has(v){ return str(v).length>0; }
@@ -1248,6 +1168,7 @@
     }
     return true;
   }
+
   /* ====== Render ====== */
   function render(slide){
     var step = Steps[S.i];
@@ -1261,11 +1182,15 @@
     S.prevI = S.i;
     step.build(optsEl);
     backBtn.disabled = S.i === 0;
-    nextBtn.textContent = S.i === Steps.length - 1 ? "Submit" : "Next →";
+
+    // Keep Next button label consistent (no misleading "Submit" text on last step)
+    nextBtn.textContent = S.i === Steps.length - 1 ? "Next →" : "Next →";
+
     setPortrait();
     save();
   }
-  /* ====== Navigation ====== */
+
+  /* ====== Navigation buttons ====== */
   backBtn.addEventListener('click', function(){
     if (S.i > 0){
       S.i--;
@@ -1282,7 +1207,10 @@
       render(true);
       updateNavigation();
     } else {
-      // Submit handled in the step’s button
+      // Final step: primary Send button in the step handles submission.
+      // Optionally focus the Send button if present.
+      var sendBtn = optsEl.querySelector('.btn.primary');
+      if (sendBtn) sendBtn.focus();
     }
   });
   saveExitBtn.addEventListener('click', function(){
@@ -1290,7 +1218,8 @@
     alert("Your progress has been saved. You can return anytime to continue.");
     window.location.href = "https://hdheed.com.au";
   });
-  /* ====== Handle Browser Navigation ====== */
+
+  /* ====== History & lifecycle ====== */
   window.addEventListener('popstate', function(event) {
     if (event.state && typeof event.state.step === 'number') {
       S.i = event.state.step;
@@ -1300,13 +1229,13 @@
       restoreState();
     }
   });
-  /* ====== Handle BFCache Restore ====== */
   window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
       restoreState();
     }
   });
-  /* ====== Printable Summary ====== */
+
+  /* ====== Printable Summary (already used by "Print / Save summary") ====== */
   function openPrintableSummary(){
     var win = window.open('', '_blank');
     var submissionDate = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -1350,6 +1279,7 @@
     win.document.write(html);
     win.document.close();
   }
+
   /* ====== Confetti ====== */
   function triggerConfetti(duration){
     var canvas = document.getElementById('confetti');
@@ -1368,7 +1298,8 @@
       this.size = Math.random() * 6 + 2;
     }
     for (var i = 0; i < 100; i++) particles.push(new Particle());
-    function animate(){
+    var start = Date.now();
+    (function animate(){
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(function(p){
         p.x += p.vx;
@@ -1385,10 +1316,9 @@
         canvas.classList.add('hide');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
-    }
-    var start = Date.now();
-    animate();
+    })();
   }
+
   /* ====== Init ====== */
   restoreState();
   window.addEventListener('resize', function(){
@@ -1400,3 +1330,4 @@
 </script>
 </body>
 </html>
+
