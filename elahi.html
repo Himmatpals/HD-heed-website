@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elahi's 1st Birthday Invitation Card Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #card-preview {
+            width: 400px;
+            height: 600px;
+            margin: 20px auto;
+            border: 2px solid #ff69b4;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #fff0f5;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        #card-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            display: block;
+            border: 4px solid #ffc0cb;
+        }
+        h1 {
+            color: #ff1493;
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        p {
+            color: #333;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .balloon {
+            position: absolute;
+            font-size: 30px;
+        }
+        .balloon-left {
+            left: 10px;
+            top: 50px;
+        }
+        .balloon-right {
+            right: 10px;
+            top: 50px;
+        }
+        button {
+            background-color: #ff69b4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #ff1493;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #card-preview, #card-preview * {
+                visibility: visible;
+            }
+            #card-preview {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+    <!-- Include html2canvas and jsPDF via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <h2>Create Elahi's 1st Birthday Invitation Card</h2>
+    <p>Upload a picture of Elahi below, and it will appear in the card preview. Then, click "Generate PDF" to download the card as a PDF file.</p>
+    
+    <input type="file" id="image-upload" accept="image/*">
+    
+    <div id="card-preview">
+        <img id="card-image" src="" alt="Elahi's Picture">
+        <h1>Happy 1st Birthday, Elahi!</h1>
+        <p>Our little princess is turning 1!</p>
+        <p>Please join us to share in this joyful celebration.</p>
+        <p>Date: [Insert Date]</p>
+        <p>Time: [Insert Time]</p>
+        <p>Location: [Insert Location]</p>
+        <p>RSVP: [Insert Contact Info]</p>
+        <div class="balloon balloon-left">🎈</div>
+        <div class="balloon balloon-right">🎈</div>
+    </div>
+    
+    <button id="generate-pdf">Generate PDF</button>
+    <button id="print-card">Print Card</button>
+
+    <script>
+        const imageUpload = document.getElementById('image-upload');
+        const cardImage = document.getElementById('card-image');
+        const generatePdfBtn = document.getElementById('generate-pdf');
+        const printBtn = document.getElementById('print-card');
+
+        // Handle image upload
+        imageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    cardImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Generate PDF
+        generatePdfBtn.addEventListener('click', function() {
+            const card = document.getElementById('card-preview');
+            html2canvas(card, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'px',
+                    format: [canvas.width / 2, canvas.height / 2] // Adjust scale
+                });
+                pdf.addImage(imgData, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+                pdf.save('Elahis_1st_Birthday_Invitation.pdf');
+            });
+        });
+
+        // Print the card
+        printBtn.addEventListener('click', function() {
+            window.print();
+        });
+    </script>
+</body>
+</html>
