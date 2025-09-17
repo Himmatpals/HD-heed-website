@@ -992,13 +992,23 @@
           var row1 = el('div','ck-row');
           var c1 = el('input'); c1.type="checkbox"; c1.id="ack_read_"+d.id; c1.checked = !!S.acks[d.id].read;
           var l1 = el('label',null,"I have received & read this document."); l1.htmlFor=c1.id;
-          c1.addEventListener('change', function(){ S.acks[d.id].read = c1.checked; save(); });
+          c1.addEventListener('change', function(){
+  S.acks[d.id].read = c1.checked;
+  save();
+  updateSum();
+});
+
           row1.appendChild(c1); row1.appendChild(l1); card.appendChild(row1);
           if (d.requiresConsent){
             var row2 = el('div','ck-row');
             var c2 = el('input'); c2.type="checkbox"; c2.id="ack_con_"+d.id; c2.checked = !!S.acks[d.id].consent;
             var l2 = el('label',null,"I consent to the terms in this form."); l2.htmlFor=c2.id;
-            c2.addEventListener('change', function(){ S.acks[d.id].consent = c2.checked; save(); });
+            c2.addEventListener('change', function(){
+  S.acks[d.id].consent = c2.checked;
+  save();
+  updateSum();
+});
+
             row2.appendChild(c2); row2.appendChild(l2); card.appendChild(row2);
           }
           m.appendChild(card);
