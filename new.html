@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HD HeeD — Follow-Up Sequencer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0c1226; --bg:#f7f9fc; --card:#ffffff; --muted:#6b7280; --line:#e5e7eb;
+    --primary:#4f46e5; --primary-ink:#ffffff; --ok:#16a34a; --warn:#eab308; --danger:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
+  h1,h2,h3{margin:0 0 .25rem 0}
+  .wrap{max-width:1200px;margin:24px auto;padding:0 16px}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#ec4899)}
+  .title{font-weight:800;font-size:20px;letter-spacing:.2px}
+  .sub{color:var(--muted);font-size:13px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width: 1020px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 4px 14px rgba(10,20,40,.05)}
+  .card h2{font-size:16px;font-weight:800;margin-bottom:8px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit}
+  textarea{min-height:120px;resize:vertical}
+  label{font-size:12px;color:var(--muted);font-weight:600}
+  .btn{appearance:none;border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--primary);color:var(--primary-ink)}
+  .btn.light{background:#eef2ff;color:#3730a3}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:#111827}
+  .btn.warn{background:var(--warn);color:#111827}
+  .btn.danger{background:var(--danger);color:#fff}
+  .btn.ok{background:var(--ok);color:#fff}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+  .section-title{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700}
+  .hr{height:1px;background:var(--line);margin:12px 0}
+  table{width:100%;border-collapse:separate;border-spacing:0}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;color:#475569;text-transform:uppercase;letter-spacing:.08em}
+  tr:last-child td{border-bottom:0}
+  .tag{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:#fafafa;color:#111827}
+  .tag.ok{background:#ecfdf5;border-color:#86efac;color:#065f46}
+  .tag.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
+  .tag.danger{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+  .kbd{font:inherit;background:#111827;color:#fff;padding:2px 6px;border-radius:6px;font-size:11px}
+  .right{margin-left:auto}
+  .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;font-size:12px}
+  .sticky-footer{position:sticky;bottom:0;background:var(--card);border:1px solid var(--line);padding:10px;border-radius:12px;margin-top:12px;display:flex;gap:8px;align-items:center;box-shadow:0 -8px 16px rgba(10,20,40,.04)}
+  .muted{color:var(--muted)}
+  .small{font-size:12px}
+  .hide{display:none}
+  .row-s{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media (max-width:720px){.row-s{grid-template-columns:1fr}}
+  .flex{display:flex;gap:8px;align-items:center}
+  .grow{flex:1}
+  .copy-area{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:10px}
+  .copy-area pre{margin:0;white-space:pre-wrap;word-break:break-word}
+  .mt8{margin-top:8px}
+  .mt16{margin-top:16px}
+  .mb8{margin-bottom:8px}
+  .sr{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <div class="title">HD HeeD — Follow-Up Sequencer</div>
+        <div class="sub">Track contacts • Edit templates • Auto-suggest next email • Team comments</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button id="btn-export" class="btn ghost">Export JSON</button>
+      <label class="btn ghost" for="import-file">Import JSON</label>
+      <input id="import-file" class="sr" type="file" accept="application/json" />
+      <button id="btn-reset" class="btn danger">Reset (Local)</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Templates Editor -->
+    <section class="card" id="templates-card">
+      <div class="section-title">
+        <h2>Email Sequence Templates</h2>
+        <span class="pill" id="seq-count">7 steps</span>
+        <span class="muted small">Editable. Use {{Name}} and {{Company}}.</span>
+        <span class="right muted small">Storage: <span id="storage-mode">Local</span></span>
+      </div>
+      <div class="row-s mb8">
+        <div>
+          <label for="sequence-length">Sequence length (7–8)</label>
+          <select id="sequence-length">
+            <option>7</option>
+            <option>8</option>
+          </select>
+        </div>
+        <div>
+          <label for="gas-url">Google Apps Script Web App URL (optional)</label>
+          <input id="gas-url" placeholder="https://script.google.com/macros/s/AKfycbx.../exec" />
+        </div>
+      </div>
+
+      <div id="templates-list"></div>
+
+      <div class="sticky-footer">
+        <div class="muted small">Changes auto-saved.</div>
+        <div class="right toolbar">
+          <button id="btn-save-templates" class="btn primary">Save Templates</button>
+          <button id="btn-push-remote" class="btn light">Sync → Google</button>
+          <button id="btn-pull-remote" class="btn ghost">Sync ← Google</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacts Manager -->
+    <section class="card" id="contacts-card">
+      <div class="section-title">
+        <h2>Contacts</h2>
+        <span class="pill">Active</span>
+        <span class="right toolbar">
+          <input id="search" placeholder="Search name/email/company…" />
+          <button id="btn-add" class="btn ok">+ Add Contact</button>
+        </span>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="row mb8">
+        <span class="muted small">Tip: Use <span class="kbd">/</span> to focus search • <span class="kbd">N</span> to add contact</span>
+      </div>
+
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th>Name / Company</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Last Sent</th>
+            <th>Next Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+
+      <template id="row-tpl">
+        <tr data-id="">
+          <td>
+            <div><strong class="c-name"></strong></div>
+            <div class="small muted c-company"></div>
+            <div class="small">
+              <button class="btn ghost btn-notes">Notes</button>
+              <span class="small muted">(<span class="notes-count">0</span>)</span>
+            </div>
+          </td>
+          <td class="c-email mono"></td>
+          <td>
+            <span class="tag c-status">Active</span>
+          </td>
+          <td>
+            <div class="c-last mono small">—</div>
+          </td>
+          <td>
+            <div class="c-next"><span class="tag warn">Email 1</span></div>
+          </td>
+          <td>
+            <div class="toolbar">
+              <button class="btn light btn-preview">Preview</button>
+              <button class="btn primary btn-copy">Copy</button>
+              <button class="btn ok btn-mailto">Open Gmail</button>
+              <button class="btn ghost btn-mark-sent">Mark Sent</button>
+              <button class="btn danger btn-delete">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </template>
+    </section>
+  </div>
+
+  <!-- Preview Drawer -->
+  <section class="card mt16" id="preview-card" style="display:none">
+    <div class="section-title">
+      <h2>Next Email Preview</h2>
+      <span class="right toolbar">
+        <button id="btn-close-preview" class="btn ghost">Close</button>
+      </span>
+    </div>
+    <div class="hr"></div>
+    <div class="row-s">
+      <div>
+        <label>Subject</label>
+        <input id="pv-subj" readonly />
+      </div>
+      <div>
+        <label>To</label>
+        <input id="pv-to" readonly />
+      </div>
+    </div>
+    <div class="mt8">
+      <label>Body</label>
+      <div class="copy-area"><pre id="pv-body"></pre></div>
+    </div>
+    <div class="toolbar mt8">
+      <button id="pv-copy" class="btn primary">Copy Body</button>
+      <button id="pv-mailto" class="btn ok">Open in Gmail</button>
+    </div>
+  </section>
+
+  <!-- Add/Edit Contact Modal (inline simple) -->
+  <section class="card mt16" id="editor" style="display:none">
+    <div class="section-title">
+      <h2 id="ed-title">Add Contact</h2>
+      <span class="right toolbar">
+        <button id="ed-cancel" class="btn ghost">Cancel</button>
+      </span>
+    </div>
+    <div class="hr"></div>
+    <div class="row-s">
+      <div>
+        <label for="ed-name">Name</label>
+        <input id="ed-name" />
+      </div>
+      <div>
+        <label for="ed-email">Email</label>
+        <input id="ed-email" />
+      </div>
+    </div>
+    <div class="row-s mt8">
+      <div>
+        <label for="ed-company">Company</label>
+        <input id="ed-company" />
+      </div>
+      <div>
+        <label for="ed-initials">Your initials (for notes)</label>
+        <input id="ed-initials" placeholder="e.g., HS" />
+      </div>
+    </div>
+    <div class="toolbar mt8">
+      <button id="ed-save" class="btn primary">Save Contact</button>
+    </div>
+  </section>
+
+  <!-- Notes Panel -->
+  <section class="card mt16" id="notes" style="display:none">
+    <div class="section-title">
+      <h2>Notes — <span id="notes-for">Contact</span></h2>
+      <span class="right toolbar">
+        <button id="notes-close" class="btn ghost">Close</button>
+      </span>
+    </div>
+    <div class="hr"></div>
+    <div id="notes-list"></div>
+    <div class="row mt8">
+      <input id="note-text" placeholder="Add a note (e.g., ‘HS sent Email 1 — no reply’)" />
+      <button id="note-add" class="btn primary">Add Note</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ========= CONFIG ========= */
+const DEFAULT_SEQUENCE_LEN = 7; // you can change to 8 from UI
+// If you deploy a GAS web app, paste its URL below or in the UI field:
+let GAS_WEBAPP_URL = ""; // e.g. "https://script.google.com/macros/s/AKfycbx.../exec"
+
+/* ========= STORAGE LAYER =========
+   Local first. If GAS_WEBAPP_URL present, you can use Sync →/← Google buttons.
+*/
+const LS_KEYS = {
+  contacts: "hdheed_contacts_v1",
+  templates: "hdheed_templates_v1",
+  meta: "hdheed_meta_v1"
+};
+
+function nowISO(){ return new Date().toISOString(); }
+function fmtDate(d){ try{ return new Date(d).toLocaleString(); }catch(_){ return d || "—"; } }
+function uid(){ return Math.random().toString(36).slice(2,10); }
+
+function loadLocal(){
+  return {
+    contacts: JSON.parse(localStorage.getItem(LS_KEYS.contacts) || "[]"),
+    templates: JSON.parse(localStorage.getItem(LS_KEYS.templates) || "[]"),
+    meta: JSON.parse(localStorage.getItem(LS_KEYS.meta) || "{}"),
+  };
+}
+function saveLocal(data){
+  if(data.contacts) localStorage.setItem(LS_KEYS.contacts, JSON.stringify(data.contacts));
+  if(data.templates) localStorage.setItem(LS_KEYS.templates, JSON.stringify(data.templates));
+  if(data.meta) localStorage.setItem(LS_KEYS.meta, JSON.stringify(data.meta));
+}
+
+async function pullFromGoogle(){
+  if(!GAS_WEBAPP_URL) throw new Error("No GAS URL");
+  const res = await fetch(GAS_WEBAPP_URL + "?mode=read", {method:"GET"});
+  if(!res.ok) throw new Error("GAS read failed");
+  const data = await res.json();
+  // Expect { contacts:[], templates:[], meta:{} }
+  saveLocal(data);
+  return data;
+}
+async function pushToGoogle(){
+  if(!GAS_WEBAPP_URL) throw new Error("No GAS URL");
+  const payload = loadLocal();
+  const res = await fetch(GAS_WEBAPP_URL + "?mode=write", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(payload)
+  });
+  if(!res.ok) throw new Error("GAS write failed");
+  return await res.json();
+}
+
+/* ========= DEFAULT TEMPLATES (inspired by your direction) ========= */
+function defaultTemplates(seqLen){
+  const arr = [];
+  const subjects = [
+    "Welcome to HD HeeD — how we can support you",
+    "Just checking in — any questions I can help with?",
+    "A quick resource that might help",
+    "Here if you need a hand getting started",
+    "Others like you found this useful — quick note",
+    "A quick reminder — happy to help anytime",
+    "Final follow-up — we’ll be here when you’re ready",
+    "Optional extra touch — should I close the loop?"
+  ];
+  const bodies = [
+`Hi {{Name}},
+
+Thanks for connecting with HD HeeD. We provide RN-led NDIS supports (personal care, nursing, wound/stoma, bowel programs, med admin and more). If helpful, I can outline a simple next step to get you started.
+
+Would you prefer a quick call or email with details?
+
+Kind regards,
+Team HD HeeD
+hdheed.com.au • 02 8630 5500`,
+`Hi {{Name}},
+
+Just following up my last note to see if you had any questions or needed anything from us. We’re ready to help whenever you are.
+
+Warm regards,
+Team HD HeeD`,
+`Hi {{Name}},
+
+Sharing a quick resource we’ve found helpful for families and coordinators getting supports started. If you like, I can tailor it to your situation and outline timeframes/availability.
+
+Best,
+Team HD HeeD`,
+`Hi {{Name}},
+
+We can line up supports quickly (often within a week) and keep things simple. If you share a brief overview (or a recent plan/referral), I’ll propose next steps and options.
+
+Thanks,
+Team HD HeeD`,
+`Hi {{Name}},
+
+Many clients appreciated a small checklist to make first visits smooth (consents, key goals, meds, equipment). Happy to send that and book a time if useful.
+
+Cheers,
+Team HD HeeD`,
+`Hi {{Name}},
+
+Totally understand if timing is tricky. If you’re still exploring options, we can hold a slot and confirm later. Would that be useful?
+
+Kind regards,
+Team HD HeeD`,
+`Hi {{Name}},
+
+Since I haven’t heard back, I’ll close the loop after this note. Please know you can reach out any time — we’ll be ready to help when you are.
+
+All the best,
+Team HD HeeD`,
+`Hi {{Name}},
+
+Quick one-liner to check if I should keep this open for you or close it out for now. Either way is fine — just reply “keep” or “close”.
+
+Thanks,
+Team HD HeeD`
+  ];
+  for(let i=0;i<seqLen;i++){
+    arr.push({ id: uid(), step:i+1, subject: subjects[i] || `Email ${i+1}`, body: bodies[i] || `Hi {{Name}},\n\n…\n\nTeam HD HeeD`, active:true });
+  }
+  return arr;
+}
+
+/* ========= APP STATE ========= */
+const state = {
+  contacts: [],
+  templates: [],
+  meta: { sequenceLen: DEFAULT_SEQUENCE_LEN, gasUrl:"" },
+  filter: ""
+};
+
+/* ========= INIT ========= */
+function init(){
+  const data = loadLocal();
+  state.contacts = data.contacts?.length ? data.contacts : [];
+  state.meta = Object.assign({sequenceLen: DEFAULT_SEQUENCE_LEN, gasUrl:""}, data.meta || {});
+  GAS_WEBAPP_URL = state.meta.gasUrl || "";
+
+  // Templates
+  if(data.templates?.length){
+    state.templates = data.templates;
+  }else{
+    state.templates = defaultTemplates(state.meta.sequenceLen);
+    saveLocal({templates: state.templates});
+  }
+
+  // UI bind
+  qs("#sequence-length").value = String(state.meta.sequenceLen || DEFAULT_SEQUENCE_LEN);
+  qs("#gas-url").value = GAS_WEBAPP_URL;
+  qs("#storage-mode").textContent = GAS_WEBAPP_URL ? "Google" : "Local";
+
+  renderTemplates();
+  renderContacts();
+
+  // Buttons
+  on("#btn-save-templates","click",saveTemplatesFromUI);
+  on("#btn-push-remote","click",async()=>{
+    try{
+      await pushToGoogle();
+      toast("Synced to Google.");
+      qs("#storage-mode").textContent = "Google";
+    }catch(e){ alert("Sync → Google failed: "+e.message); }
+  });
+  on("#btn-pull-remote","click",async()=>{
+    try{
+      await pullFromGoogle();
+      const latest = loadLocal();
+      state.contacts = latest.contacts || [];
+      state.templates = latest.templates || state.templates;
+      state.meta = Object.assign(state.meta, latest.meta || {});
+      qs("#sequence-length").value = String(state.meta.sequenceLen);
+      qs("#gas-url").value = state.meta.gasUrl || "";
+      GAS_WEBAPP_URL = state.meta.gasUrl || "";
+      renderTemplates(); renderContacts();
+      toast("Pulled from Google.");
+      qs("#storage-mode").textContent = "Google";
+    }catch(e){ alert("Sync ← Google failed: "+e.message); }
+  });
+  on("#btn-export","click",exportJSON);
+  on("#import-file","change",importJSON);
+  on("#btn-reset","click",()=>{ if(confirm("Reset local data?")){ localStorage.removeItem(LS_KEYS.contacts); localStorage.removeItem(LS_KEYS.templates); localStorage.removeItem(LS_KEYS.meta); location.reload(); }});
+
+  on("#btn-add","click",()=>openEditor());
+  on("#ed-cancel","click",()=>hide("#editor"));
+  on("#ed-save","click",saveContactFromEditor);
+
+  on("#pv-copy","click",()=>copyText(qs("#pv-body").textContent));
+  on("#pv-mailto","click",()=>openMailto(qs("#pv-to").value, qs("#pv-subj").value, qs("#pv-body").textContent));
+  on("#btn-close-preview","click",()=>hide("#preview-card"));
+
+  on("#notes-close","click",()=>hide("#notes"));
+  on("#note-add","click",addNote);
+
+  on("#sequence-length","change",onSeqLenChange);
+  on("#gas-url","change",(e)=>{ GAS_WEBAPP_URL = e.target.value.trim(); state.meta.gasUrl = GAS_WEBAPP_URL; saveLocal({meta: state.meta}); qs("#storage-mode").textContent = GAS_WEBAPP_URL ? "Google" : "Local"; });
+
+  on("#search","input",(e)=>{ state.filter = e.target.value.toLowerCase(); renderContacts(); });
+
+  // Keyboard helpers
+  document.addEventListener("keydown",(e)=>{
+    if(e.key==="/"){ e.preventDefault(); qs("#search").focus(); }
+    if(e.key.toLowerCase()==="n"){ openEditor(); }
+  });
+
+  updateSeqCount();
+}
+
+/* ========= UTIL ========= */
+function qs(sel,root=document){ return root.querySelector(sel); }
+function qsa(sel,root=document){ return Array.from(root.querySelectorAll(sel)); }
+function on(sel,ev,fn){ const el = typeof sel==="string" ? qs(sel) : sel; if(el) el.addEventListener(ev,fn); }
+function toast(msg){ console.log(msg); }
+
+/* ========= TEMPLATES UI ========= */
+function renderTemplates(){
+  const box = qs("#templates-list");
+  box.innerHTML = "";
+  state.templates.sort((a,b)=>a.step-b.step).forEach(t=>{
+    const item = document.createElement("div");
+    item.className = "card";
+    item.style.marginBottom = "8px";
+    item.innerHTML = `
+      <div class="row">
+        <div class="grow"><strong>Email ${t.step}</strong></div>
+        <label class="row"><input type="checkbox" ${t.active?"checked":""} data-k="active" data-id="${t.id}" /> <span class="small muted">Active</span></label>
+      </div>
+      <div class="mt8">
+        <label>Subject</label>
+        <input data-k="subject" data-id="${t.id}" value="${escapeHtml(t.subject)}" />
+      </div>
+      <div class="mt8">
+        <label>Body</label>
+        <textarea data-k="body" data-id="${t.id}">${escapeHtml(t.body)}</textarea>
+      </div>
+    `;
+    box.appendChild(item);
+  });
+}
+function saveTemplatesFromUI(){
+  const subs = qsa('input[data-k="subject"]');
+  const bods = qsa('textarea[data-k="body"]');
+  const acts = qsa('input[data-k="active"][type="checkbox"]');
+  const byId = Object.fromEntries(state.templates.map(t=>[t.id,t]));
+  subs.forEach(i=>{ byId[i.dataset.id].subject = i.value; });
+  bods.forEach(t=>{ byId[t.dataset.id].body = t.value; });
+  acts.forEach(c=>{ byId[c.dataset.id].active = c.checked; });
+  saveLocal({templates: state.templates});
+  toast("Templates saved.");
+}
+function onSeqLenChange(e){
+  const n = parseInt(e.target.value,10);
+  state.meta.sequenceLen = n;
+  saveLocal({meta: state.meta});
+  // Grow or shrink template array
+  if(state.templates.length < n){
+    const more = defaultTemplates(n).slice(state.templates.length);
+    state.templates = state.templates.concat(more);
+  }else if(state.templates.length > n){
+    state.templates = state.templates.slice(0,n);
+  }
+  saveLocal({templates: state.templates});
+  renderTemplates();
+  updateSeqCount();
+}
+function updateSeqCount(){ qs("#seq-count").textContent = `${state.meta.sequenceLen} steps`; }
+
+/* ========= CONTACTS ========= */
+function renderContacts(){
+  const tbody = qs("#rows");
+  tbody.innerHTML = "";
+  const rows = state.contacts
+    .filter(c=>{
+      if(!state.filter) return true;
+      const k = (c.name||"")+" "+(c.email||"")+" "+(c.company||"");
+      return k.toLowerCase().includes(state.filter);
+    })
+    .sort((a,b)=> (a.name||"").localeCompare(b.name||""));
+  rows.forEach(c=>tbody.appendChild(renderRow(c)));
+  qs("#tbl").classList.toggle("hide", rows.length===0);
+}
+
+function renderRow(c){
+  const tpl = qs("#row-tpl").content.cloneNode(true);
+  const tr = tpl.querySelector("tr");
+  tr.dataset.id = c.id;
+  qs(".c-name",tr).textContent = c.name || "—";
+  qs(".c-company",tr).textContent = c.company || "";
+  qs(".c-email",tr).textContent = c.email || "—";
+
+  const statusEl = qs(".c-status",tr);
+  statusEl.textContent = c.status || "Active";
+  statusEl.className = "tag c-status " + (c.status==="Paused"?"warn":c.status==="Completed"?"ok":"");
+
+  qs(".c-last",tr).textContent = c.lastSent ? `Email ${c.lastSent} @ ${fmtDate(c.lastSentAt)}` : "—";
+
+  const next = nextEmailNumber(c);
+  qs(".c-next",tr).innerHTML = next ? `<span class="tag warn">Email ${next}</span>` : `<span class="tag ok">Done</span>`;
+
+  qs(".notes-count",tr).textContent = String(c.notes?.length || 0);
+
+  // Bind actions
+  on(qs(".btn-notes",tr),"click",()=>openNotes(c.id));
+  on(qs(".btn-preview",tr),"click",()=>previewNext(c.id));
+  on(qs(".btn-copy",tr),"click",()=>copyNext(c.id));
+  on(qs(".btn-mailto",tr),"click",()=>mailtoNext(c.id));
+  on(qs(".btn-mark-sent",tr),"click",()=>markSent(c.id));
+  on(qs(".btn-delete",tr),"click",()=>delContact(c.id));
+  return tr;
+}
+
+function nextEmailNumber(contact){
+  const n = state.meta.sequenceLen;
+  if(contact.status==="Completed") return 0;
+  const last = contact.lastSent || 0;
+  // find next active template
+  for(let step=last+1; step<=n; step++){
+    const tpl = state.templates.find(t=>t.step===step);
+    if(!tpl) continue;
+    if(tpl.active!==false) return step;
+  }
+  return 0;
+}
+
+function openEditor(contact){
+  qs("#editor").style.display = "";
+  qs("#ed-title").textContent = contact?"Edit Contact":"Add Contact";
+  qs("#ed-name").value = contact?.name || "";
+  qs("#ed-email").value = contact?.email || "";
+  qs("#ed-company").value = contact?.company || "";
+  qs("#ed-initials").value = (loadLocal().meta?.initials)||"";
+  qs("#editor").dataset.id = contact?.id || "";
+  qs("#ed-name").focus();
+}
+
+function saveContactFromEditor(){
+  const id = qs("#editor").dataset.id || "";
+  const c = {
+    id: id || uid(),
+    name: qs("#ed-name").value.trim(),
+    email: qs("#ed-email").value.trim(),
+    company: qs("#ed-company").value.trim(),
+  };
+  state.meta.initials = qs("#ed-initials").value.trim() || (state.meta.initials||"");
+  saveLocal({meta: state.meta});
+
+  if(id){
+    const i = state.contacts.findIndex(x=>x.id===id);
+    if(i>=0) state.contacts[i] = Object.assign({}, state.contacts[i], c);
+  }else{
+    state.contacts.push(Object.assign({lastSent:0,lastSentAt:"",status:"Active",notes:[]}, c));
+  }
+  saveLocal({contacts: state.contacts});
+  hide("#editor");
+  renderContacts();
+}
+
+function delContact(id){
+  if(!confirm("Delete this contact?")) return;
+  state.contacts = state.contacts.filter(c=>c.id!==id);
+  saveLocal({contacts: state.contacts});
+  renderContacts();
+}
+
+/* ========= PREVIEW / COPY / MAIL ========= */
+function buildForContact(contact, step){
+  const tpl = state.templates.find(t=>t.step===step);
+  if(!tpl) return {subject:"",body:""};
+  const name = contact.name || "there";
+  const company = contact.company || "";
+  const sub = tpl.subject.replaceAll("{{Name}}", name).replaceAll("{{Company}}", company);
+  const bod = tpl.body.replaceAll("{{Name}}", name).replaceAll("{{Company}}", company);
+  return {subject: sub, body: bod};
+}
+
+function previewNext(id){
+  const c = state.contacts.find(x=>x.id===id);
+  if(!c) return;
+  const step = nextEmailNumber(c);
+  const {subject,body} = buildForContact(c, step);
+  qs("#pv-subj").value = subject || "(no subject)";
+  qs("#pv-to").value = c.email || "";
+  qs("#pv-body").textContent = body || "";
+  qs("#preview-card").style.display = "";
+}
+function copyNext(id){
+  const c = state.contacts.find(x=>x.id===id);
+  if(!c) return;
+  const step = nextEmailNumber(c);
+  const {body} = buildForContact(c, step);
+  copyText(body||"");
+  toast("Copied body.");
+}
+function mailtoNext(id){
+  const c = state.contacts.find(x=>x.id===id);
+  if(!c) return;
+  const step = nextEmailNumber(c);
+  const {subject,body} = buildForContact(c, step);
+  openMailto(c.email||"", subject||"", body||"");
+}
+
+function openMailto(to, subject, body){
+  const url = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = url;
+}
+
+function markSent(id){
+  const c = state.contacts.find(x=>x.id===id);
+  if(!c) return;
+  const step = nextEmailNumber(c);
+  if(!step){ alert("Sequence complete."); return; }
+  c.lastSent = step;
+  c.lastSentAt = nowISO();
+  if(step>=state.meta.sequenceLen) c.status = "Completed";
+  saveLocal({contacts: state.contacts});
+  renderContacts();
+  // Auto note
+  const by = (state.meta.initials||"You");
+  const text = `${by} marked Email ${step} as sent.`;
+  addNoteInternal(c.id, text);
+}
+
+/* ========= NOTES ========= */
+let NOTES_OPEN_FOR = "";
+function openNotes(id){
+  const c = state.contacts.find(x=>x.id===id);
+  if(!c) return;
+  NOTES_OPEN_FOR = id;
+  qs("#notes-for").textContent = c.name || c.email || "Contact";
+  qs("#notes-list").innerHTML = (c.notes||[]).map(n=>`
+    <div class="mb8">
+      <div class="small muted">${fmtDate(n.at)} — <strong>${escapeHtml(n.by||"")}</strong></div>
+      <div>${escapeHtml(n.text||"")}</div>
+    </div>
+  `).join("") || `<div class="muted small">No notes yet.</div>`;
+  qs("#note-text").value = "";
+  qs("#notes").style.display = "";
+}
+function addNote(){
+  const t = qs("#note-text").value.trim();
+  if(!t) return;
+  addNoteInternal(NOTES_OPEN_FOR, t);
+  openNotes(NOTES_OPEN_FOR);
+}
+function addNoteInternal(id, text){
+  const c = state.contacts.find(x=>x.id===id);
+  if(!c) return;
+  c.notes = c.notes || [];
+  c.notes.push({ at: nowISO(), by:(state.meta.initials||"User"), text });
+  saveLocal({contacts: state.contacts});
+}
+
+/* ========= EXPORT / IMPORT ========= */
+function exportJSON(){
+  const data = loadLocal();
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `hdheed-followups-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+async function importJSON(e){
+  const file = e.target.files?.[0];
+  if(!file) return;
+  const text = await file.text();
+  const data = JSON.parse(text);
+  if(!confirm("Import will overwrite local data. Continue?")) return;
+  saveLocal(data);
+  location.reload();
+}
+
+/* ========= HELPERS ========= */
+function copyText(s){
+  navigator.clipboard?.writeText(s).then(()=>toast("Copied")).catch(()=>{ /* fallback */ });
+}
+function hide(sel){ qs(sel).style.display="none"; }
+function escapeHtml(s=""){ return s.replace(/[&<>"']/g,(c)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+
+/* ========= BOOT ========= */
+document.addEventListener("DOMContentLoaded", init);
+</script>
+<!-- Keep this as the same file; this is just the continuation of Part 1/2 -->
+<!-- ================= Additional helpers / footer (optional) ================= -->
+<div class="wrap">
+  <section class="card mt16">
+    <div class="section-title">
+      <h2>How to Use</h2>
+    </div>
+    <div class="hr"></div>
+    <ol class="small" style="line-height:1.6">
+      <li><strong>Set templates:</strong> Edit subjects/bodies above (use {{Name}} / {{Company}}). Click <em>Save Templates</em>.</li>
+      <li><strong>Add contacts:</strong> Click <em>+ Add Contact</em>. Only name or email is fine.</li>
+      <li><strong>Send:</strong> For each contact: <em>Preview</em> → <em>Copy</em> or <em>Open Gmail</em>. After sending, click <em>Mark Sent</em>.</li>
+      <li><strong>Notes:</strong> Use <em>Notes</em> to add team comments (e.g., “HS sent Email 1 — no reply”).</li>
+      <li><strong>Persist:</strong> Everything is saved locally by default. To sync with Google, add your <em>GAS URL</em>, then use <em>Sync →/← Google</em>.</li>
+    </ol>
+  </section>
+
+  <footer class="muted small" style="text-align:center;margin:24px 0 40px">
+    HD HeeD • “Because we care, we provide HD care.” • v1.0
+  </footer>
+</div>
+
+</body>
+</html>
