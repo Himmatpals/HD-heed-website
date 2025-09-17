@@ -4,22 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elahi's 1st Birthday Invitation Card Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Patrick Hand', cursive;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             text-align: center;
             padding: 20px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: #ff69b4;
+            font-family: 'Comic Neue', cursive;
+            font-size: 32px;
+            text-shadow: 2px 2px #ffe4e1;
+        }
+        #event-form {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        #event-form input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ff69b4;
+            border-radius: 5px;
+            font-family: 'Patrick Hand', cursive;
         }
         #card-preview {
-            width: 400px;
-            height: 600px;
+            width: 450px;
+            height: 650px;
             margin: 20px auto;
-            border: 2px solid #ff69b4;
-            border-radius: 10px;
+            border: 4px solid #ff1493;
+            border-radius: 20px;
             padding: 20px;
-            background-color: #fff0f5;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle fill="%23ff69b4" cx="20" cy="20" r="5"/%3E%3Ccircle fill="%23ffd700" cx="80" cy="30" r="4"/%3E%3Ccircle fill="%2346b8da" cx="30" cy="80" r="6"/%3E%3Ccircle fill="%239b59b6" cx="70" cy="70" r="5"/%3E%3C/svg%3E'), #fff0f5;
+            background-size: 100px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             position: relative;
+            overflow: hidden;
         }
         #card-image {
             width: 200px;
@@ -28,21 +62,26 @@
             object-fit: cover;
             margin: 20px auto;
             display: block;
-            border: 4px solid #ffc0cb;
+            border: 6px solid #ffd700;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         h1 {
             color: #ff1493;
-            font-size: 24px;
-            margin: 10px 0;
+            font-family: 'Comic Neue', cursive;
+            font-size: 36px;
+            margin: 15px 0;
+            text-shadow: 2px 2px #ffe4e1;
         }
         p {
             color: #333;
-            font-size: 16px;
+            font-size: 20px;
             margin: 10px 0;
+            line-height: 1.4;
         }
         .balloon {
             position: absolute;
-            font-size: 30px;
+            font-size: 40px;
+            animation: float 4s ease-in-out infinite;
         }
         .balloon-left {
             left: 10px;
@@ -52,17 +91,33 @@
             right: 10px;
             top: 50px;
         }
+        .balloon-bottom-left {
+            left: 10px;
+            bottom: 50px;
+        }
+        .balloon-bottom-right {
+            right: 10px;
+            bottom: 50px;
+        }
         button {
             background-color: #ff69b4;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            margin-top: 20px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 18px;
+            margin: 10px;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #ff1493;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
         }
         @media print {
             body * {
@@ -76,43 +131,77 @@
                 left: 0;
                 top: 0;
                 width: 100%;
-                height: 100%;
+                height: auto;
                 border: none;
                 box-shadow: none;
             }
+            .balloon {
+                animation: none; /* Disable animation for print */
+            }
         }
     </style>
-    <!-- Include html2canvas and jsPDF via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <h2>Create Elahi's 1st Birthday Invitation Card</h2>
-    <p>Upload a picture of Elahi below, and it will appear in the card preview. Then, click "Generate PDF" to download the card as a PDF file.</p>
-    
-    <input type="file" id="image-upload" accept="image/*">
-    
-    <div id="card-preview">
-        <img id="card-image" src="" alt="Elahi's Picture">
-        <h1>Happy 1st Birthday, Elahi!</h1>
-        <p>Our little princess is turning 1!</p>
-        <p>Please join us to share in this joyful celebration.</p>
-        <p>Date: [Insert Date]</p>
-        <p>Time: [Insert Time]</p>
-        <p>Location: [Insert Location]</p>
-        <p>RSVP: [Insert Contact Info]</p>
-        <div class="balloon balloon-left">🎈</div>
-        <div class="balloon balloon-right">🎈</div>
+    <div class="container">
+        <h2>Elahi's 1st Birthday Invitation Card</h2>
+        <p>Fill in the event details, upload Elahi's picture, and create a beautiful invitation card!</p>
+        
+        <div id="event-form">
+            <input type="text" id="event-date" placeholder="Event Date (e.g., October 10, 2025)">
+            <input type="text" id="event-time" placeholder="Event Time (e.g., 3:00 PM)">
+            <input type="text" id="event-location" placeholder="Location (e.g., 123 Happy Lane)">
+            <input type="text" id="event-rsvp" placeholder="RSVP (e.g., 123-456-7890)">
+            <input type="file" id="image-upload" accept="image/*">
+        </div>
+        
+        <div id="card-preview">
+            <img id="card-image" src="" alt="Elahi's Picture">
+            <h1>Happy 1st Birthday, Elahi!</h1>
+            <p>Our little princess is turning 1!</p>
+            <p>Please join us to share in this joyful celebration.</p>
+            <p id="card-date">Date: [Enter Date]</p>
+            <p id="card-time">Time: [Enter Time]</p>
+            <p id="card-location">Location: [Enter Location]</p>
+            <p id="card-rsvp">RSVP: [Enter Contact Info]</p>
+            <div class="balloon balloon-left">🎈</div>
+            <div class="balloon balloon-right">🎈</div>
+            <div class="balloon balloon-bottom-left">🎉</div>
+            <div class="balloon balloon-bottom-right">🎉</div>
+        </div>
+        
+        <button id="generate-pdf">Generate PDF</button>
+        <button id="print-card">Print Card</button>
     </div>
-    
-    <button id="generate-pdf">Generate PDF</button>
-    <button id="print-card">Print Card</button>
 
     <script>
         const imageUpload = document.getElementById('image-upload');
         const cardImage = document.getElementById('card-image');
         const generatePdfBtn = document.getElementById('generate-pdf');
         const printBtn = document.getElementById('print-card');
+        const dateInput = document.getElementById('event-date');
+        const timeInput = document.getElementById('event-time');
+        const locationInput = document.getElementById('event-location');
+        const rsvpInput = document.getElementById('event-rsvp');
+        const cardDate = document.getElementById('card-date');
+        const cardTime = document.getElementById('card-time');
+        const cardLocation = document.getElementById('card-location');
+        const cardRsvp = document.getElementById('card-rsvp');
+
+        // Update card with form inputs
+        dateInput.addEventListener('input', () => {
+            cardDate.textContent = `Date: ${dateInput.value || '[Enter Date]'}`;
+        });
+        timeInput.addEventListener('input', () => {
+            cardTime.textContent = `Time: ${timeInput.value || '[Enter Time]'}`;
+        });
+        locationInput.addEventListener('input', () => {
+            cardLocation.textContent = `Location: ${locationInput.value || '[Enter Location]'}`;
+        });
+        rsvpInput.addEventListener('input', () => {
+            cardRsvp.textContent = `RSVP: ${rsvpInput.value || '[Enter Contact Info]'}`;
+        });
 
         // Handle image upload
         imageUpload.addEventListener('change', function(event) {
@@ -135,7 +224,7 @@
                 const pdf = new jsPDF({
                     orientation: 'portrait',
                     unit: 'px',
-                    format: [canvas.width / 2, canvas.height / 2] // Adjust scale
+                    format: [canvas.width / 2, canvas.height / 2]
                 });
                 pdf.addImage(imgData, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
                 pdf.save('Elahis_1st_Birthday_Invitation.pdf');
