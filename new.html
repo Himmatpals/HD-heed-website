@@ -88,306 +88,58 @@
         <p>Prefer paper? Download our form and email it to info@hdheed.com.au</p>
         <a href="https://drive.google.com/file/d/1Z3EJ2mycLwNAIDXs2fnIfD8H_wxcSdQx/view?usp=drive_link" class="paper-referral-link" target="_blank">Download Paper Referral Form</a>
       </div>
-
       <!-- Settings -->
-      <div class="card" style="margin-bottom:16px">
-        <h2>Settings</h2>
-        <div style="border-top:1px solid var(--line);margin:12px 0"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-          <div><label for="seq-len">Sequence Length (7–10)</label><select id="seq-len"><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
-          <div><label for="default-gap">Gap (days)</label><input id="default-gap" type="number" min="1" max="30" value="3"></div>
-          <div><label for="target-time">Send Time</label><input id="target-time" type="time" value="09:00"></div>
-        </div>
-      </div>
-
-      <!-- Main Board -->
-      <div class="board">
-        <table id="board">
-          <thead>
-            <tr>
-              <th style="width:380px">Contact</th>
-              <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
-              <th>Next Email</th><th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</body>
-</html>
-<!-- Add to <head> style block from Part 1 -->
-<style>
-  .card { background: #0e162e; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
-  .rte { border: 1px solid var(--line); border-radius: 10px; background: #0f1b3b; padding: 10px; min-height: 130px; color: var(--ink); }
-  .rte-toolbar { display: flex; gap: 6px; margin: 6px 0; }
-  label { font-size: 12px; color: var(--muted); font-weight: 700; display: block; margin-bottom: 4px; }
-</style>
-
-<!-- Add to <body> before the main board -->
-<div class="wrap">
-  <div class="card" id="templates-card">
-    <div style="display:flex;align-items:center;gap:8px">
-      <h2>Templates</h2>
-      <span class="pill" id="pill-len">7 steps</span>
-      <button id="btn-add-template" class="btn">+ Add Step</button>
-      <button id="btn-remove-template" class="btn warn">– Remove Last</button>
-    </div>
-    <div style="border-top:1px solid var(--line);margin:12px 0"></div>
-    <div id="tpl-box"></div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button id="save-templates" class="btn primary">Save Templates</button>
-    </div>
+<div class="card" style="margin-bottom:16px">
+  <h2>Settings</h2>
+  <div style="border-top:1px solid var(--line);margin:12px 0"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+    <div><label for="seq-len">Sequence Length (7–10)</label><select id="seq-len"><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
+    <div><label for="default-gap">Gap (days)</label><input id="default-gap" type="number" min="1" max="30" value="3"></div>
+    <div><label for="target-time">Send Time</label><input id="target-time" type="time" value="09:00"></div>
   </div>
 </div>
 
-<!-- Add to <body> after </html> -->
-<script>
-  // Utility functions
-  const $ = (s, r=document) => r.querySelector(s);
-  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
-  const rid = () => Math.random().toString(36).slice(2, 10);
-  const esc = (s="") => s.replace(/[&<>\"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
-  const lsGet = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
-  const lsSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-  const toast = (msg) => {
-    const t = $("#toast") || document.createElement("div"); t.id = "toast"; t.className = "toast";
-    const d = document.createElement("div"); d.className = "item"; d.textContent = msg; t.appendChild(d);
-    document.body.appendChild(t); setTimeout(() => d.remove(), 2400);
-  };
+<!-- Templates Section -->
+<div class="card" id="templates-card">
+  <div style="display:flex;align-items:center;gap:8px">
+    <h2>Templates</h2>
+    <span class="pill" id="pill-len">7 steps</span>
+    <button id="btn-add-template" class="btn">+ Add Step</button>
+    <button id="btn-remove-template" class="btn warn">– Remove Last</button>
+  </div>
+  <div style="border-top:1px solid var(--line);margin:12px 0"></div>
+  <div id="tpl-box"></div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button id="save-templates" class="btn primary">Save Templates</button>
+  </div>
+</div>
+    <!-- Analytics -->
+    <div class="card" id="analytics">
+      <h2>Analytics</h2>
+      <div style="border-top:1px solid var(--line);margin:12px 0"></div>
+      <div class="analytics">
+        <div><strong>Completion</strong><div id="an-complete" class="status">—</div></div>
+        <div><strong>Avg Step</strong><div id="an-avgstep" class="status">—</div></div>
+        <div><strong>Notes (total)</strong><div id="an-notes" class="status">—</div></div>
+      </div>
+    </div>
 
-  // Persistence keys
-  const LS = { contacts: "heed_contacts_v7", templates: "heed_templates_v7", settings: "heed_settings_v7", lastSent: "heed_lastSent_v7" };
-
-  // Models
-  class TemplateStep {
-    constructor({ id=rid(), step=1, active=true, subject="", body="" }={}) {
-      Object.assign(this, { id, step, active, subject, body });
-    }
-  }
-  class Settings {
-    constructor(o={}) {
-      this.seqLen = o.seqLen ?? 7;
-      this.defaultGap = o.defaultGap ?? 3;
-      this.targetTime = o.targetTime ?? "09:00";
-    }
-  }
-
-  // State
-  const state = {
-    contacts: lsGet(LS.contacts, []),
-    templates: lsGet(LS.templates, []),
-    settings: new Settings(lsGet(LS.settings, {})),
-    lastSentEmail: lsGet(LS.lastSent, null)
-  };
-
-  // Default email templates (from emails page)
-  const DEFAULT_TEMPLATES = [
-    { step: 1, subject: "Introducing HD HeeD – RN-Led NDIS Provider in Blacktown", body: `Hi {{Name}},\n\nPlease let me introduce HD HeeD Pty Ltd, an NDIS-registered provider based in Blacktown. We are an RN-led team, with the skills and systems to deliver safe, professional, and person-centred supports.\n\nWe are registered under the following NDIS groups:\n• 0104 – High Intensity Daily Personal Activities\n• 0107 – Daily Personal Activities\n• 0115 – Assistance with Daily Life Tasks in a Group/Shared Living\n• 0117 – Development of Daily Living and Life Skills\n• 0120 – Household Tasks\n• 0125 – Participation in Community, Social and Civic Activities\n• 0136 – Group and Centre-Based Activities\n\nAt HD HeeD, we keep onboarding simple and organised:\n• Visit our website: https://www.hdheed.com.au\n• Talk directly to our AI assistant Ella\n• Submit a referral using our online referral form or quick referral link: https://www.hdheed.com.au/referral.html\n• Or simply reply to this email / email us at info@hdheed.com.au or ndis@hdheed.com.au\n\nWe are here to support you and your participants with a streamlined process, strong clinical expertise, and a person-centred approach.\n\n👉 Start a referral today: https://www.hdheed.com.au/referral.html\n\nKind regards,\nMat Syan\nDirector – HD HeeD Pty Ltd\n📞 02 8630 5500 | ✉️ info@hdheed.com.au` },
-    { step: 2, subject: "Nursing Expertise at the Core of HD HeeD", body: `Hi {{Name}},\n\nAt HD HeeD, we are proud to be a group of Registered Nurses who are extremely confident in our skills and experience. This allows us to provide participants with the highest standard of care, especially when it comes to complex health needs.\n\nWe deliver this care under registration group 0104 – High Intensity Daily Personal Activities. This makes our services not only clinically safe and professional, but also a practical and cost-effective option compared to group 0114 (Community Nursing), which is charged at a much higher rate.\n\nBy choosing HD HeeD, your participants receive the benefits of RN-level support within the right NDIS registration group, ensuring both quality and value.\n\n👉 Start a referral today: https://www.hdheed.com.au/referral.html\n\nPlease also find a paper-based referral form attached that you can complete manually and email back to us at info@hdheed.com.au, if that is your preferred method.\n\nYou are always welcome to call us directly on 02 8630 5500 to discuss referrals or participant needs further.\n\nKind regards,\nMat Syan\nDirector – HD HeeD Pty Ltd\n📞 02 8630 5500 | ✉️ info@hdheed.com.au` },
-    { step: 3, subject: "Meet AILR – Advanced Intake & Long-form Registration", body: `Hi {{Name}},\n\nOne of our key strengths at HD HeeD is our AILR system – Advanced Intake & Long-form Registration.\n\nAILR ensures that most of the participant’s onboarding is completed online, with only a few signature forms returned manually or via email. This makes the process:\n• Systematic and organised\n• Less paperwork for you and your clients\n• Straightforward, convenient, and time-saving\n\nIf a participant needs help, we are more than happy to sit with them and complete the AILR together.\n\n👉 You can visit and view our online AILR system here: https://www.hdheed.com.au/ailr.html\n\nWhen you’re ready to make a referral, you can use our quick online referral form here: https://www.hdheed.com.au/referral.html\n\nFor those who prefer, a paper-based referral form can also be emailed back to info@hdheed.com.au. And of course, you’re always welcome to call us directly on 02 8630 5500.\n\nKind regards,\nMat Syan\nDirector – HD HeeD Pty Ltd\n📞 02 8630 5500 | ✉️ info@hdheed.com.au` },
-    { step: 4, subject: "Referrals Made Simple with HD HeeD", body: `Hi {{Name}},\n\nAt HD HeeD, we understand how valuable your time is. That’s why we’ve created a quick and hassle-free online referral system to make things easier for you and your participants.\n\nYou can submit a referral in just a few minutes using our secure portal:\n👉 https://www.hdheed.com.au/referral.html\n\nThe system is streamlined, convenient, and fully audit-ready, ensuring participants are onboarded faster and without unnecessary delays.\n\nAlternatively, we are also attaching a paper-based referral form. You can complete it, scan it, and email it back to us at info@hdheed.com.au if that is your preferred way of making a referral.\n\nWhether you choose online or paper, we’ll make sure the onboarding is handled quickly, professionally, and with minimal hassle.\n\nKind regards,\nMat Syan\nDirector – HD HeeD Pty Ltd\n📞 02 8630 5500 | ✉️ info@hdheed.com.au` }
-  ];
-
-  // Ensure templates
-  function ensureTemplates() {
-    if (!state.templates.length) {
-      state.templates = DEFAULT_TEMPLATES.map(t => new TemplateStep(t));
-      lsSet(LS.templates, state.templates);
-    }
-  }
-
-  // Render templates
-  function renderTemplates() {
-    const box = $("#tpl-box"); box.innerHTML = "";
-    state.templates.sort((a, b) => a.step - b.step).forEach(t => {
-      const div = document.createElement("div"); div.className = "card"; div.style.margin = "8px 0";
-      div.innerHTML = `
-        <div style="display:flex;gap:8px;align-items:center">
-          <strong>Step ${t.step}</strong>
-          <label style="margin-left:auto" class="small"><input type="checkbox" data-id="${t.id}" data-k="active" ${t.active ? "checked" : ""}> Active</label>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-          <div><label>Subject</label><input data-id="${t.id}" data-k="subject" value="${esc(t.subject)}"></div>
-          <div><label>Body</label><div class="rte" data-id="${t.id}" data-k="body" contenteditable="true">${esc(t.body)}</div></div>
-        </div>
-        <div class="rte-toolbar">
-          <button data-insert="{{Name}}" class="btn">+ Name</button>
-          <button data-insert="{{Company}}" class="btn">+ Company</button>
-          <button data-insert="{{Phone}}" class="btn">+ Phone</button>
-        </div>`;
-      box.appendChild(div);
-    });
-    $("#pill-len").textContent = `${state.settings.seqLen} steps`;
-  }
-
-  // Save templates
-  function saveTemplates() {
-    const map = Object.fromEntries(state.templates.map(t => [t.id, t]));
-    $$("#tpl-box [data-id]").forEach(el => {
-      const id = el.dataset.id, k = el.dataset.k, T = map[id];
-      if (!T) return;
-      if (el.tagName === "INPUT" && el.type === "checkbox") T.active = el.checked;
-      else if (el.tagName === "INPUT") T.subject = el.value;
-      else if (el.classList.contains("rte")) T.body = el.innerText.replace(/\r\n/g, "\n");
-    });
-    lsSet(LS.templates, state.templates);
-    toast("Templates saved.");
-  }
-
-  // Bind RTE
-  function bindRTE() {
-    $$("#tpl-box [data-insert]").forEach(b => {
-      b.onclick = () => {
-        const sel = window.getSelection(); if (!sel || !sel.rangeCount) return;
-        const range = sel.getRangeAt(0); range.deleteContents();
-        range.insertNode(document.createTextNode(b.dataset.insert)); range.collapse(false);
-      });
-    });
-  }
-
-  // Initialize templates
-  ensureTemplates();
-  renderTemplates();
-  bindRTE();
-  $("#save-templates").onclick = saveTemplates;
-  $("#btn-add-template").onclick = () => {
-    const next = (state.templates[state.templates.length - 1]?.step || 0) + 1;
-    if (next > 10) return toast("Max 10 steps");
-    state.templates.push(new TemplateStep({ step: next, active: true, subject: `Email ${next}`, body: `Hi {{Name}},\n\n...\n\nTeam HD HeeD` }));
-    lsSet(LS.templates, state.templates); renderTemplates(); bindRTE();
-  };
-  $("#btn-remove-template").onclick = () => {
-    if (state.templates.length <= 7) return toast("Min 7 steps");
-    state.templates.pop(); lsSet(LS.templates, state.templates); renderTemplates(); bindRTE();
-  };
-</script>
-<!-- Add to <style> in Part 1 -->
-<style>
-  .cell { background: #0f1b3b; border: 1px solid #2a3b68; border-radius: 10px; padding: 8px; min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; }
-  .cell .preview { flex: 1; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #d8e2ff; opacity: .95; }
-  .cell .badge { font-size: 12px; border: 1px solid #35508a; background: #0f254f; color: #cfe0ff; border-radius: 999px; padding: 4px 8px; }
-  .cell.empty .badge, .cell.empty .preview { opacity: .6; }
-  .cell:hover { box-shadow: 0 0 0 2px rgba(255,209,64,.25); }
-  .action-cell { display: flex; gap: 8px; flex-wrap: wrap; }
-</style>
-
-<!-- Add to <script> from Part 2 -->
-<script>
-  class Contact {
-    constructor({ id=rid(), name="", email="", company="", phone="", tz="Australia/Sydney", segments=[], status="Active", lastSent=0, lastSentAt="", sentHistory=[], notes=[] }={}) {
-      Object.assign(this, { id, name, email, company, phone, tz, segments, status, lastSent, lastSentAt, sentHistory, notes });
-    }
-  }
-
-  // Preload contacts (from Sequencer)
-  const PRELOAD_CONTACTS = [
-    { name: "Taylor McGuiness — Interaction", company: "Interaction", email: "info@interactionservices.org", phone: "1300 668 123", segments: ["SC/PM"], status: "Active", lastSent: 2, lastSentAt: "2025-09-15T00:00:00+10:00", notes: [{ at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09/25." }] },
-    { name: "Assist Disability Services — SSC", company: "Assist Disability Services", email: "enquiries@assistservices.com.au", phone: "1800 955 806", segments: ["SSC"], status: "Active", lastSent: 2, lastSentAt: "2025-09-15T00:00:00+10:00", notes: [{ at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09/25." }] },
-    // Add other contacts as needed (truncated for brevity)
-  ];
-
-  function preloadContacts() {
-    if (!state.contacts.length) {
-      state.contacts = PRELOAD_CONTACTS.map(c => new Contact(c));
-      lsSet(LS.contacts, state.contacts);
-      toast("Loaded sample contacts.");
-    }
-  }
-
-  // Build email
-  function buildEmail(contact, step) {
-    const t = state.templates.find(t => t.step === step && t.active);
-    if (!t) return { subject: "", body: "" };
-    const replace = s => s.replace("{{Name}}", contact.name || "there")
-                         .replace("{{Company}}", contact.company || "your organization")
-                         .replace("{{Phone}}", contact.phone || "02 8630 5500");
-    return { subject: replace(t.subject), body: replace(t.body) };
-  }
-
-  // Update completed email box
-  function updateCompletedEmail(contact, step, sentAt) {
-    const { subject, body } = buildEmail(contact, step);
-    state.lastSentEmail = { contact: contact.name, email: contact.email, step, subject, body, sentAt };
-    lsSet(LS.lastSent, state.lastSentEmail);
-    const box = $("#completed-email");
-    $("#completed-meta").textContent = `To: ${contact.name} (${contact.email}) • Sent: ${new Date(sentAt).toLocaleString("en-AU")}`;
-    $("#completed-subject").textContent = subject;
-    $("#completed-body").textContent = body;
-    box.style.display = "block";
-  }
-
-  // Render contacts table
-  function renderContacts() {
-    const tb = $("#tbody"); tb.innerHTML = "";
-    state.contacts.forEach(c => {
-      const tr = document.createElement("tr");
-      const th = document.createElement("th");
-      th.innerHTML = `<div class="lead"><div class="name">${esc(c.name)}</div><div class="meta">${c.email ? `<a href="mailto:${c.email}">📧 ${esc(c.email)}</a>` : ""}${c.phone ? `<a href="tel:${c.phone.replace(/[^0-9+]/g,"")}">☎ ${esc(c.phone)}</a>` : ""}</div></div>`;
-      tr.appendChild(th);
-
-      // Daily cells (Monday to Sunday)
-      for (let d = 0; d < 7; d++) {
-        const td = document.createElement("td");
-        const sent = c.sentHistory?.find(h => h.day === d && h.date === new Date().toISOString().slice(0, 10)) || { step: 0, note: "" };
-        const cell = document.createElement("div"); cell.className = `cell ${sent.step ? "" : "empty"}`; cell.id = `cell-${c.id}-${d}`;
-        cell.innerHTML = `<div class="preview">${sent.step ? `Email ${sent.step}` : "Empty"}</div><span class="badge">${sent.step ? "Sent" : "Empty"}</span>`;
-        cell.onclick = () => openNoteModal(c.id, d, sent.note);
-        td.appendChild(cell);
-        tr.appendChild(td);
-      }
-
-      // Next Email Dropdown
-      const tdNext = document.createElement("td");
-      const nextStep = c.lastSent + 1 <= state.settings.seqLen ? c.lastSent + 1 : 0;
-      tdNext.innerHTML = `<select data-id="${c.id}" class="next-email"><option value="0">None</option>${state.templates.filter(t => t.active).map(t => `<option value="${t.step}" ${t.step === nextStep ? "selected" : ""}>Email ${t.step}</option>`).join("")}</select>`;
-      tr.appendChild(tdNext);
-
-      // Actions
-      const tdActions = document.createElement("td"); tdActions.className = "action-cell";
-      tdActions.innerHTML = `
-        <button class="btn primary btn-send" data-id="${c.id}">Send</button>
-        <button class="btn btn-mark" data-id="${c.id}">Mark Sent</button>
-        <button class="btn btn-notes" data-id="${c.id}">Notes (${c.notes?.length || 0})</button>
-        <button class="btn danger btn-del" data-id="${c.id}">Delete</button>`;
-      tr.appendChild(tdActions);
-
-      tb.appendChild(tr);
-    });
-  }
-
-  // Initialize
-  preloadContacts();
-  renderContacts();
-</script>
-<!-- Add to <style> in Part 1 -->
-<style>
-  .modal-backdrop { position: fixed; inset: 0; background: rgba(2,6,22,.58); backdrop-filter: blur(2px); display: none; align-items: center; justify-content: center; z-index: 1000; }
-  .modal { width: min(900px, 94vw); max-height: 85vh; background: linear-gradient(180deg, #10172a, #0b0f1a); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); display: flex; flex-direction: column; }
-  .modal-head { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--line); }
-  .modal-title { font-weight: 900; }
-  .modal-close { margin-left: auto; border: 1px solid var(--line); background: #0f1b3b; color: #fff; border-radius: 999px; padding: 6px 10px; cursor: pointer; }
-  .modal-body { padding: 12px 14px; }
-  .modal-body textarea, .modal-body input { width: 100%; min-height: 100px; border: 1px solid #2a3b68; border-radius: 10px; padding: 10px; background: #0f1b3b; color: var(--ink); font-family: inherit; }
-  .modal-foot { padding: 12px 14px; border-top: 1px dashed var(--line); display: flex; gap: 8px; justify-content: flex-end; }
-  .analytics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-</style>
-
-<!-- Add to <body> before </div.shell> -->
-<div class="wrap">
-  <div class="card" id="analytics">
-    <h2>Analytics</h2>
-    <div style="border-top:1px solid var(--line);margin:12px 0"></div>
-    <div class="analytics">
-      <div><strong>Completion</strong><div id="an-complete" class="status">—</div></div>
-      <div><strong>Avg Step</strong><div id="an-avgstep" class="status">—</div></div>
-      <div><strong>Notes (total)</strong><div id="an-notes" class="status">—</div></div>
+    <!-- Main Board -->
+    <div class="board">
+      <table id="board">
+        <thead>
+          <tr>
+            <th style="width:380px">Contact</th>
+            <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
+            <th>Next Email</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
     </div>
   </div>
 </div>
-
-<!-- Add to <body> after </div.shell> -->
+<!-- Modal -->
 <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal-head">
@@ -398,208 +150,443 @@
     <div class="modal-foot" id="modalFoot"></div>
   </div>
 </div>
-
-<!-- Add to <script> from Part 3 -->
-<script>
-  // Modal control
-  function openModal(title, content, buttons) {
-    $("#modalTitle").textContent = title;
-    $("#modalBody").innerHTML = content;
-    $("#modalFoot").innerHTML = buttons;
-    $("#modalBackdrop").style.display = "flex";
-    $("#modalBackdrop").setAttribute("aria-hidden", "false");
-    $("#modalBody").querySelector("input,textarea")?.focus();
-  }
-  function closeModal() {
-    $("#modalBackdrop").style.display = "none";
-    $("#modalBackdrop").setAttribute("aria-hidden", "true");
-  }
-  $("#modalClose").onclick = closeModal;
-  $("#modalBackdrop").onclick = e => { if (e.target === $("#modalBackdrop")) closeModal(); };
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#modalBackdrop").getAttribute("aria-hidden") === "false") closeModal(); });
-
-  // Note modal
-  function openNoteModal(contactId, day, initial) {
-    const c = state.contacts.find(c => c.id === contactId);
-    openModal(
-      `${c.name} — ${["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][day]}`,
-      `<textarea id="note-text">${esc(initial || "")}</textarea>`,
-      `<button class="btn primary" onclick="saveNote('${contactId}',${day})">Save Note</button>`
-    );
-  }
-  window.saveNote = (contactId, day) => {
-    const c = state.contacts.find(c => c.id === contactId);
-    const note = $("#note-text").value;
-    if (!c.sentHistory) c.sentHistory = [];
-    const idx = c.sentHistory.findIndex(h => h.day === day && h.date === new Date().toISOString().slice(0, 10));
-    if (idx >= 0) c.sentHistory[idx].note = note;
-    else c.sentHistory.push({ day, date: new Date().toISOString().slice(0, 10), note });
-    lsSet(LS.contacts, state.contacts);
-    renderContacts();
-    closeModal();
-  };
-
-  // Contact editor modal
-  function openContactEditor(id) {
-    const c = id ? state.contacts.find(c => c.id === id) : new Contact();
-    openModal(
-      id ? "Edit Contact" : "Add Contact",
-      `
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div><label>Name</label><input id="ed-name" value="${esc(c.name)}"></div>
-          <div><label>Email</label><input id="ed-email" value="${esc(c.email)}"></div>
-          <div><label>Company</label><input id="ed-company" value="${esc(c.company)}"></div>
-          <div><label>Phone</label><input id="ed-phone" value="${esc(c.phone)}"></div>
-        </div>`,
-      `<button class="btn primary" onclick="saveContact('${c.id}')">Save</button>`
-    );
-  }
-  window.saveContact = id => {
-    const c = id ? state.contacts.find(c => c.id === id) : new Contact();
-    c.name = $("#ed-name").value;
-    c.email = $("#ed-email").value;
-    c.company = $("#ed-company").value;
-    c.phone = $("#ed-phone").value;
-    if (!id) state.contacts.push(c);
-    lsSet(LS.contacts, state.contacts);
-    renderContacts();
-    closeModal();
-  };
-
-  // Analytics
-  function renderAnalytics() {
-    const cs = state.contacts;
-    const N = state.settings.seqLen;
-    const completed = cs.filter(c => c.status === "Completed").length;
-    const avgStep = cs.reduce((a, c) => a + (c.lastSent || 0), 0) / (cs.length || 1);
-    const notes = cs.reduce((a, c) => a + (c.notes?.length || 0), 0);
-    $("#an-complete").textContent = cs.length ? `${Math.round((completed / cs.length) * 100)}% (${completed}/${cs.length})` : "—";
-    $("#an-avgstep").textContent = cs.length ? `${avgStep.toFixed(2)} / ${N}` : "—";
-    $("#an-notes").textContent = String(notes);
-  }
-</script>
-<!-- Add to <style> in Part 1 -->
-<style>
-  .toast { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 8px; z-index: 1000; }
-  .toast .item { background: #0e162e; border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); padding: 10px 12px; }
-</style>
-
-<!-- Add to <script> from Part 4 -->
-<script>
-  // Email sending
-  function sendEmail(contactId) {
-    const c = state.contacts.find(c => c.id === contactId);
-    const sel = $(`select[data-id="${contactId}"]`).value;
-    const step = parseInt(sel);
-    if (!step) return toast("Select an email to send.");
-    const { subject, body } = buildEmail(c, step);
-    window.open(`mailto:${encodeURIComponent(c.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, "_blank");
-  }
-
-  function markSent(contactId) {
-    const c = state.contacts.find(c => c.id === contactId);
-    const sel = $(`select[data-id="${contactId}"]`).value;
-    const step = parseInt(sel);
-    if (!step) return toast("Select an email to mark sent.");
-    c.lastSent = step;
-    c.lastSentAt = new Date().toISOString();
-    if (!c.sentHistory) c.sentHistory = [];
-    const today = new Date().toISOString().slice(0, 10);
-    const day = new Date().getDay() - 1; // 0=Monday
-    c.sentHistory.push({ step, date: today, day, note: `Email ${step} sent` });
-    c.status = step >= state.settings.seqLen ? "Completed" : "Active";
-    lsSet(LS.contacts, state.contacts);
-    updateCompletedEmail(c, step, c.lastSentAt);
-    renderContacts();
-    renderAnalytics();
-    toast(`Marked Email ${step} sent to ${c.name}`);
-  }
-
-  // Bind settings
-  function bindSettings() {
-    $("#seq-len").value = state.settings.seqLen;
-    $("#default-gap").value = state.settings.defaultGap;
-    $("#target-time").value = state.settings.targetTime;
-    $("#seq-len").onchange = e => {
-      state.settings.seqLen = clamp(parseInt(e.target.value) || 7, 7, 10);
-      if (state.templates.length < state.settings.seqLen) {
-        for (let s = state.templates.length + 1; s <= state.settings.seqLen; s++) {
-          state.templates.push(new TemplateStep({ step: s, active: true, subject: `Email ${s}`, body: `Hi {{Name}},\n\n...\n\nTeam HD HeeD` }));
-        }
-      } else if (state.templates.length > state.settings.seqLen) {
-        state.templates = state.templates.slice(0, state.settings.seqLen);
-      }
-      lsSet(LS.templates, state.templates); lsSet(LS.settings, state.settings);
-      renderTemplates(); renderContacts();
+  <script>
+    // Utility functions
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+    const rid = () => Math.random().toString(36).slice(2, 10);
+    const esc = (s="") => s.replace(/[&<>\"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+    const lsGet = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
+    const lsSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+    const toast = (msg) => {
+      const t = $("#toast") || document.createElement("div"); t.id = "toast"; t.className = "toast";
+      const d = document.createElement("div"); d.className = "item"; d.textContent = msg; t.appendChild(d);
+      document.body.appendChild(t); setTimeout(() => d.remove(), 2400);
     };
-    $("#default-gap").onchange = e => { state.settings.defaultGap = clamp(parseInt(e.target.value) || 3, 1, 30); lsSet(LS.settings, state.settings); };
-    $("#target-time").onchange = e => { state.settings.targetTime = e.target.value || "09:00"; lsSet(LS.settings, state.settings); };
-  }
 
-  // Bind table actions
-  function bindTableActions() {
-    $$(".btn-send").forEach(b => b.onclick = () => sendEmail(b.dataset.id));
-    $$(".btn-mark").forEach(b => b.onclick = () => markSent(b.dataset.id));
-    $$(".btn-notes").forEach(b => b.onclick = () => {
-      const c = state.contacts.find(c => c.id === b.dataset.id);
-      openModal(
-        `Notes — ${c.name}`,
-        `<div id="notes-list">${(c.notes || []).map(n => `<div class="status">${n.by}: ${esc(n.text)} (${new Date(n.at).toLocaleString("en-AU")})</div>`).join("")}</div><input id="note-text" placeholder="Add note">`,
-        `<button class="btn primary" onclick="addNote('${b.dataset.id}')">Add Note</button>`
-      );
-    });
-    $$(".btn-del").forEach(b => b.onclick = () => {
-      if (confirm("Delete contact?")) {
-        state.contacts = state.contacts.filter(c => c.id !== b.dataset.id);
-        lsSet(LS.contacts, state.contacts);
-        renderContacts();
-        renderAnalytics();
+    // Persistence keys
+    const LS = { contacts: "heed_contacts_v7", templates: "heed_templates_v7", settings: "heed_settings_v7", lastSent: "heed_lastSent_v7" };
+
+    // Models
+    class TemplateStep {
+      constructor({ id=rid(), step=1, active=true, subject="", body="" }={}) {
+        Object.assign(this, { id, step, active, subject, body });
       }
-    });
-  }
-  window.addNote = id => {
-    const c = state.contacts.find(c => c.id === id);
-    const text = $("#note-text").value;
-    if (text) {
-      if (!c.notes) c.notes = [];
-      c.notes.push({ at: new Date().toISOString(), by: state.settings.initials || "HS", text });
+    }
+    
+    class Contact {
+      constructor({ id=rid(), name="", email="", company="", phone="", tz="Australia/Sydney", segments=[], status="Active", lastSent=0, lastSentAt="", sentHistory=[], notes=[] }={}) {
+        Object.assign(this, { id, name, email, company, phone, tz, segments, status, lastSent, lastSentAt, sentHistory, notes });
+      }
+    }
+    
+    class Settings {
+      constructor(o={}) {
+        this.seqLen = o.seqLen ?? 7;
+        this.defaultGap = o.defaultGap ?? 3;
+        this.targetTime = o.targetTime ?? "09:00";
+      }
+    }
+
+    // State
+    const state = {
+      contacts: lsGet(LS.contacts, []),
+      templates: lsGet(LS.templates, []),
+      settings: new Settings(lsGet(LS.settings, {})),
+      lastSentEmail: lsGet(LS.lastSent, null)
+    };
+
+    // Default email templates
+    const DEFAULT_TEMPLATES = [
+      { step: 1, subject: "Introducing HD HeeD – RN-Led NDIS Provider in Blacktown", body: `Hi {{Name}},\n\nPlease let me introduce HD HeeD Pty Ltd, an NDIS-registered provider based in Blacktown. We are an RN-led team, with the skills and systems to deliver safe, professional, and person-centred supports.\n\nWe are registered under the following NDIS groups:\n• 0104 – High Intensity Daily Personal Activities\n• 0107 – Daily Personal Activities\n• 0115 – Assistance with Daily Life Tasks in a Group/Shared Living\n• 0117 – Development of Daily Living and Life Skills\n• 0120 – Household Tasks\n• 0125 – Participation in Community, Social and Civic Activities\n• 0136 – Group and Centre-Based Activities\n\nAt HD HeeD, we keep onboarding simple and organised:\n• Visit our website: https://www.hdheed.com.au\n• Talk directly to our AI assistant Ella\n• Submit a referral using our online referral form or quick referral link: https://www.hdheed.com.au/referral.html\n• Or simply reply to this email / email us at info@hdheed.com.au or ndis@hdheed.com.au\n\nWe are here to support you and your participants with a streamlined process, strong clinical expertise, and a person-centred approach.\n\n👉 Start a referral today: https://www.hdheed.com.au/referral.html\n\nKind regards,\nMat Syan\nDirector – HD HeeD Pty Ltd\n📞 02 8630 5500 | ✉️ info@hdheed.com.au` },
+      { step: 2, subject: "Nursing Expertise at the Core of HD HeeD", body: `Hi {{Name}},\n\nAt HD HeeD, we are proud to be a group of Registered Nurses who are extremely confident in our skills and experience. This allows us to provide participants with the highest standard of care, especially when it comes to complex health needs.\n\nWe deliver this care under registration group 0104 – High Intensity Daily Personal Activities. This makes our services not only clinically safe and professional, but also a practical and cost-effective option compared to group 0114 (Community Nursing), which is charged at a much higher rate.\n\nBy choosing HD HeeD, your participants receive the benefits of RN-level support within the right NDIS registration group, ensuring both quality and value.\n\n👉 Start a referral today: https://www.hdheed.com.au/referral.html\n\nPlease also find a paper-based referral form attached that you can complete manually and email back to us at info@hdheed.com.au, if that is your preferred method.\n\nYou are always welcome to call us directly on 02 8630 5500 to discuss referrals or participant needs further.\n\nKind regards,\nMat Syan\nDirector – HD HeeD Pty Ltd\n📞 02 8630 5500 | ✉️ info@hdheed.com.au` },
+      { step: 3, subject: "Meet AILR – Advanced Intake & Long-form Registration", body: `Hi {{Name}},\n\nOne of our key strengths at HD HeeD is our AILR system – Advanced Intake & Long-form Registration.\n\nAILR ensures that most of the participant’s onboarding is completed online, with only a few signature forms returned manually or via email. This makes the process:\n• Systematic and organised\n• Less paperwork for you and your clients\n• Straightforward, convenient, and time-saving\n\nIf a participant needs help, we are more than happy to sit with them and complete the AILR together.\n\n👉 You can visit and view our online AILR system here: https://www.hdheed.com.au/ailr.html\n\nWhen you’re ready to make a referral, you can use our quick online referral form here: https://www.hdheed.com.au/referral.html\n\nFor those who prefer, a paper-based referral form can also be emailed back to info@hdheed.com.au. And of course, you’re always welcome to call us directly on 02 8630 5500.\n\nKind regards,\nMat Syan\nDirector – HD HeeD Pty Ltd\n📞 02 8630 5500 | ✉️ info@hdheed.com.au` },
+      { step: 4, subject: "Referrals Made Simple with HD HeeD", body: `Hi {{Name}},\n\nAt HD HeeD, we understand how valuable your time is. That’s why we’ve created a quick and hassle-free online referral system to make things easier for you and your participants.\n\nYou can submit a referral in just a few minutes using our secure portal:\n👉 https://www.hdheed.com.au/referral.html\n\nThe system is streamlined, convenient, and fully audit-ready, ensuring participants are onboarded faster and without unnecessary delays.\n\nAlternatively, we are also attaching a paper-based referral form. You can complete it, scan it, and email it back to us at info@hdheed.com.au if that is your preferred way of making a referral.\n\nWhether you choose online or paper, we’ll make sure the onboarding is handled quickly, professionally, and with minimal hassle.\n\nKind regards,\nMat Syan\nDirector – HD HeeD Pty Ltd\n📞 02 8630 5500 | ✉️ info@hdheed.com.au` }
+    ];
+
+    // Preload contacts
+    const PRELOAD_CONTACTS = [
+      { name: "Taylor McGuiness — Interaction", company: "Interaction", email: "info@interactionservices.org", phone: "1300 668 123", segments: ["SC/PM"], status: "Active", lastSent: 2, lastSentAt: "2025-09-15T00:00:00+10:00", notes: [{ at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09/25." }] },
+      { name: "Assist Disability Services — SSC", company: "Assist Disability Services", email: "enquiries@assistservices.com.au", phone: "1800 955 806", segments: ["SSC"], status: "Active", lastSent: 2, lastSentAt: "2025-09-15T00:00:00+10:00", notes: [{ at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09/25." }] },
+      { name: "Triniti Care — Support Coord", company: "Triniti Care", phone: "(02) 8319 9433", segments: ["SC"], status: "Active", lastSent: 1, lastSentAt: "2025-09-15T00:00:00+10:00", notes: [{ at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent- 15/09/1993- email undelivered" }] },
+      { name: "MD Home Care — SSC", company: "MD Home Care", phone: "08 6386 9999", segments: ["SSC"], status: "Active", lastSent: 0 },
+      { name: "Claremont Care — SC/PM", company: "Claremont Care", phone: "0416 873 319", segments: ["SC/PM"], status: "Active", lastSent: 2, lastSentAt: "2025-09-15T00:00:00+10:00", notes: [{ at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 2 sent 15/09" }] },
+      { name: "BRK Plan Management", company: "BRK Plan Management", email: "meet@brkpm.com.au", phone: "0414 704 279", segments: ["PM"], status: "Active", lastSent: 1, lastSentAt: "2025-09-15T00:00:00+10:00", notes: [{ at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent- N&J" }] },
+      { name: "Axial Plan Management", company: "Axial Plan Management", email: "hello@axialplanmanagement.com.au", phone: "0416 428 261", segments: ["PM"], status: "Active", lastSent: 1, lastSentAt: "2025-09-15T00:00:00+10:00", notes: [{ at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent, awaiting response." }] },
+      { name: "NADO Plan Management", company: "NADO Plan Management", phone: "1300 738 229", segments: ["PM"], status: "Active", lastSent: 0 },
+      { name: "Yahweh Care — PM", company: "Yahweh Care", email: "info@yahwehcare.com.au", phone: "(02) 8325 1616", segments: ["PM"], status: "Active", lastSent: 1, lastSentAt: "2025-09-15T00:00:00+10:00", notes: [{ at: "2025-09-15T00:00:00+10:00", by: "HS", text: "Email 1 sent- awaiting response" }] }
+    ];
+
+    // Ensure templates
+    function ensureTemplates() {
+      if (!state.templates.length) {
+        state.templates = DEFAULT_TEMPLATES.map(t => new TemplateStep(t));
+        lsSet(LS.templates, state.templates);
+      }
+    }
+
+    // Preload contacts
+    function preloadContacts() {
+      if (!state.contacts.length) {
+        state.contacts = PRELOAD_CONTACTS.map(c => new Contact(c));
+        lsSet(LS.contacts, state.contacts);
+        toast("Loaded sample contacts.");
+      }
+    }
+
+    // Build email
+    function buildEmail(contact, step) {
+      const t = state.templates.find(t => t.step === step && t.active);
+      if (!t) return { subject: "", body: "" };
+      const replace = s => s.replace("{{Name}}", contact.name || "there")
+                           .replace("{{Company}}", contact.company || "your organization")
+                           .replace("{{Phone}}", contact.phone || "02 8630 5500");
+      return { subject: replace(t.subject), body: replace(t.body) };
+    }
+
+    // Update completed email box
+    function updateCompletedEmail(contact, step, sentAt) {
+      const { subject, body } = buildEmail(contact, step);
+      state.lastSentEmail = { contact: contact.name, email: contact.email, step, subject, body, sentAt };
+      lsSet(LS.lastSent, state.lastSentEmail);
+      const box = $("#completed-email");
+      $("#completed-meta").textContent = `To: ${contact.name} (${contact.email}) • Sent: ${new Date(sentAt).toLocaleString("en-AU")}`;
+      $("#completed-subject").textContent = subject;
+      $("#completed-body").textContent = body;
+      box.style.display = "block";
+    }
+
+    // Render templates
+    function renderTemplates() {
+      const box = $("#tpl-box"); box.innerHTML = "";
+      state.templates.sort((a, b) => a.step - b.step).forEach(t => {
+        const div = document.createElement("div"); div.className = "card"; div.style.margin = "8px 0";
+        div.innerHTML = `
+          <div style="display:flex;gap:8px;align-items:center">
+            <strong>Step ${t.step}</strong>
+            <label style="margin-left:auto" class="small"><input type="checkbox" data-id="${t.id}" data-k="active" ${t.active ? "checked" : ""}> Active</label>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+            <div><label>Subject</label><input data-id="${t.id}" data-k="subject" value="${esc(t.subject)}"></div>
+            <div><label>Body</label><div class="rte" data-id="${t.id}" data-k="body" contenteditable="true">${esc(t.body)}</div></div>
+          </div>
+          <div class="rte-toolbar">
+            <button data-insert="{{Name}}" class="btn">+ Name</button>
+            <button data-insert="{{Company}}" class="btn">+ Company</button>
+            <button data-insert="{{Phone}}" class="btn">+ Phone</button>
+          </div>`;
+        box.appendChild(div);
+      });
+      $("#pill-len").textContent = `${state.settings.seqLen} steps`;
+    }
+
+    // Save templates
+    function saveTemplates() {
+      const map = Object.fromEntries(state.templates.map(t => [t.id, t]));
+      $$("#tpl-box [data-id]").forEach(el => {
+        const id = el.dataset.id, k = el.dataset.k, T = map[id];
+        if (!T) return;
+        if (el.tagName === "INPUT" && el.type === "checkbox") T.active = el.checked;
+        else if (el.tagName === "INPUT") T.subject = el.value;
+        else if (el.classList.contains("rte")) T.body = el.innerText.replace(/\r\n/g, "\n");
+      });
+      lsSet(LS.templates, state.templates);
+      toast("Templates saved.");
+    }
+
+    // Bind RTE
+    function bindRTE() {
+      $$("#tpl-box [data-insert]").forEach(b => {
+        b.onclick = () => {
+          const sel = window.getSelection(); if (!sel || !sel.rangeCount) return;
+          const range = sel.getRangeAt(0); range.deleteContents();
+          range.insertNode(document.createTextNode(b.dataset.insert)); range.collapse(false);
+        };
+      });
+    }
+
+    // Render contacts table
+    function renderContacts() {
+      const tb = $("#tbody"); tb.innerHTML = "";
+      state.contacts.forEach(c => {
+        const tr = document.createElement("tr");
+        const th = document.createElement("th");
+        th.innerHTML = `<div class="lead"><div class="name">${esc(c.name)}</div><div class="meta">${c.email ? `<a href="mailto:${c.email}">📧 ${esc(c.email)}</a>` : ""}${c.phone ? `<a href="tel:${c.phone.replace(/[^0-9+]/g,"")}">☎ ${esc(c.phone)}</a>` : ""}</div></div>`;
+        tr.appendChild(th);
+
+        // Daily cells (Monday to Sunday)
+        for (let d = 0; d < 7; d++) {
+          const td = document.createElement("td");
+          const sent = c.sentHistory?.find(h => h.day === d && h.date === new Date().toISOString().slice(0, 10)) || { step: 0, note: "" };
+          const cell = document.createElement("div"); cell.className = `cell ${sent.step ? "" : "empty"}`; cell.id = `cell-${c.id}-${d}`;
+          cell.innerHTML = `<div class="preview">${sent.step ? `Email ${sent.step}` : "Empty"}</div><span class="badge">${sent.step ? "Sent" : "Empty"}</span>`;
+          cell.onclick = () => openNoteModal(c.id, d, sent.note);
+          td.appendChild(cell);
+          tr.appendChild(td);
+        }
+
+        // Next Email Dropdown
+        const tdNext = document.createElement("td");
+        const nextStep = c.lastSent + 1 <= state.settings.seqLen ? c.lastSent + 1 : 0;
+        tdNext.innerHTML = `<select data-id="${c.id}" class="next-email"><option value="0">None</option>${state.templates.filter(t => t.active).map(t => `<option value="${t.step}" ${t.step === nextStep ? "selected" : ""}>Email ${t.step}</option>`).join("")}</select>`;
+        tr.appendChild(tdNext);
+
+        // Actions
+        const tdActions = document.createElement("td"); tdActions.className = "action-cell";
+        tdActions.innerHTML = `
+          <button class="btn primary btn-send" data-id="${c.id}">Send</button>
+          <button class="btn btn-mark" data-id="${c.id}">Mark Sent</button>
+          <button class="btn btn-notes" data-id="${c.id}">Notes (${c.notes?.length || 0})</button>
+          <button class="btn danger btn-del" data-id="${c.id}">Delete</button>`;
+        tr.appendChild(tdActions);
+
+        tb.appendChild(tr);
+      });
+    }
+
+    // Modal control
+    function openModal(title, content, buttons) {
+      $("#modalTitle").textContent = title;
+      $("#modalBody").innerHTML = content;
+      $("#modalFoot").innerHTML = buttons;
+      $("#modalBackdrop").style.display = "flex";
+      $("#modalBackdrop").setAttribute("aria-hidden", "false");
+      $("#modalBody").querySelector("input,textarea")?.focus();
+    }
+    
+    function closeModal() {
+      $("#modalBackdrop").style.display = "none";
+      $("#modalBackdrop").setAttribute("aria-hidden", "true");
+    }
+    
+    // Note modal
+    function openNoteModal(contactId, day, initial) {
+      const c = state.contacts.find(c => c.id === contactId);
+      openModal(
+        `${c.name} — ${["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][day]}`,
+        `<textarea id="note-text">${esc(initial || "")}</textarea>`,
+        `<button class="btn primary" onclick="saveNote('${contactId}',${day})">Save Note</button>`
+      );
+    }
+    
+    window.saveNote = (contactId, day) => {
+      const c = state.contacts.find(c => c.id === contactId);
+      const note = $("#note-text").value;
+      if (!c.sentHistory) c.sentHistory = [];
+      const idx = c.sentHistory.findIndex(h => h.day === day && h.date === new Date().toISOString().slice(0, 10));
+      if (idx >= 0) c.sentHistory[idx].note = note;
+      else c.sentHistory.push({ day, date: new Date().toISOString().slice(0, 10), note });
       lsSet(LS.contacts, state.contacts);
       renderContacts();
       closeModal();
+    };
+
+    // Contact editor modal
+    function openContactEditor(id) {
+      const c = id ? state.contacts.find(c => c.id === id) : new Contact();
+      openModal(
+        id ? "Edit Contact" : "Add Contact",
+        `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div><label>Name</label><input id="ed-name" value="${esc(c.name)}"></div>
+            <div><label>Email</label><input id="ed-email" value="${esc(c.email)}"></div>
+            <div><label>Company</label><input id="ed-company" value="${esc(c.company)}"></div>
+            <div><label>Phone</label><input id="ed-phone" value="${esc(c.phone)}"></div>
+          </div>`,
+        `<button class="btn primary" onclick="saveContact('${c.id}')">Save</button>`
+      );
     }
-  };
+    
+    window.saveContact = id => {
+      const c = id ? state.contacts.find(c => c.id === id) : new Contact();
+      c.name = $("#ed-name").value;
+      c.email = $("#ed-email").value;
+      c.company = $("#ed-company").value;
+      c.phone = $("#ed-phone").value;
+      if (!id) state.contacts.push(c);
+      lsSet(LS.contacts, state.contacts);
+      renderContacts();
+      closeModal();
+    };
 
-  // Export/Import
-  function exportJSON() {
-    const blob = new Blob([JSON.stringify({ contacts: state.contacts, templates: state.templates, settings: state.settings, lastSent: state.lastSentEmail }, null, 2)], { type: "application/json" });
-    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `heed-followups-${new Date().toISOString().slice(0, 10)}.json`; a.click();
-  }
-  async function importJSON(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const text = await file.text();
-    const data = JSON.parse(text);
-    if (data.contacts) state.contacts = data.contacts.map(c => new Contact(c));
-    if (data.templates) state.templates = data.templates.map(t => new TemplateStep(t));
-    if (data.settings) state.settings = new Settings(data.settings);
-    if (data.lastSent) state.lastSentEmail = data.lastSent;
-    lsSet(LS.contacts, state.contacts); lsSet(LS.templates, state.templates); lsSet(LS.settings, state.settings); lsSet(LS.lastSent, state.lastSentEmail);
-    renderTemplates(); renderContacts(); renderAnalytics();
-    if (state.lastSentEmail) updateCompletedEmail({ name: state.lastSentEmail.contact, email: state.lastSentEmail.email }, state.lastSentEmail.step, state.lastSentEmail.sentAt);
-  }
+    // Analytics
+    function renderAnalytics() {
+      const cs = state.contacts;
+      const N = state.settings.seqLen;
+      const completed = cs.filter(c => c.status === "Completed").length;
+      const avgStep = cs.reduce((a, c) => a + (c.lastSent || 0), 0) / (cs.length || 1);
+      const notes = cs.reduce((a, c) => a + (c.notes?.length || 0), 0);
+      $("#an-complete").textContent = cs.length ? `${Math.round((completed / cs.length) * 100)}% (${completed}/${cs.length})` : "—";
+      $("#an-avgstep").textContent = cs.length ? `${avgStep.toFixed(2)} / ${N}` : "—";
+      $("#an-notes").textContent = String(notes);
+    }
 
-  // Initialize
-  document.addEventListener("DOMContentLoaded", () => {
-    bindSettings();
-    bindTableActions();
-    if (state.lastSentEmail) updateCompletedEmail({ name: state.lastSentEmail.contact, email: state.lastSentEmail.email }, state.lastSentEmail.step, state.lastSentEmail.sentAt);
-    renderAnalytics();
-    $("#btn-refresh").onclick = () => { renderContacts(); renderTemplates(); renderAnalytics(); toast("Refreshed."); };
-    $("#btn-save").onclick = () => { lsSet(LS.contacts, state.contacts); lsSet(LS.templates, state.templates); lsSet(LS.settings, state.settings); toast("Saved to local storage."); };
-    $("#btn-export").onclick = exportJSON;
-    $("#import-json").onchange = importJSON;
-    $("#btn-reset").onclick = () => { if (confirm("Reset all data?")) { localStorage.clear(); location.reload(); } };
-  });
+    // Email sending
+    function sendEmail(contactId) {
+      const c = state.contacts.find(c => c.id === contactId);
+      const sel = $(`select[data-id="${contactId}"]`).value;
+      const step = parseInt(sel);
+      if (!step) return toast("Select an email to send.");
+      const { subject, body } = buildEmail(c, step);
+      window.open(`mailto:${encodeURIComponent(c.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, "_blank");
+    }
 
-  function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
-</script>
+    function markSent(contactId) {
+      const c = state.contacts.find(c => c.id === contactId);
+      const sel = $(`select[data-id="${contactId}"]`).value;
+      const step = parseInt(sel);
+      if (!step) return toast("Select an email to mark sent.");
+      c.lastSent = step;
+      c.lastSentAt = new Date().toISOString();
+      if (!c.sentHistory) c.sentHistory = [];
+      const today = new Date().toISOString().slice(0, 10);
+      const day = new Date().getDay() - 1; // 0=Monday
+      c.sentHistory.push({ step, date: today, day, note: `Email ${step} sent` });
+      c.status = step >= state.settings.seqLen ? "Completed" : "Active";
+      lsSet(LS.contacts, state.contacts);
+      updateCompletedEmail(c, step, c.lastSentAt);
+      renderContacts();
+      renderAnalytics();
+      toast(`Marked Email ${step} sent to ${c.name}`);
+    }
+
+    // Bind settings
+    function bindSettings() {
+      $("#seq-len").value = state.settings.seqLen;
+      $("#default-gap").value = state.settings.defaultGap;
+      $("#target-time").value = state.settings.targetTime;
+      $("#seq-len").onchange = e => {
+        state.settings.seqLen = clamp(parseInt(e.target.value) || 7, 7, 10);
+        if (state.templates.length < state.settings.seqLen) {
+          for (let s = state.templates.length + 1; s <= state.settings.seqLen; s++) {
+            state.templates.push(new TemplateStep({ step: s, active: true, subject: `Email ${s}`, body: `Hi {{Name}},\n\n...\n\nTeam HD HeeD` }));
+          }
+        } else if (state.templates.length > state.settings.seqLen) {
+          state.templates = state.templates.slice(0, state.settings.seqLen);
+        }
+        lsSet(LS.templates, state.templates); lsSet(LS.settings, state.settings);
+        renderTemplates(); renderContacts();
+      };
+      $("#default-gap").onchange = e => { state.settings.defaultGap = clamp(parseInt(e.target.value) || 3, 1, 30); lsSet(LS.settings, state.settings); };
+      $("#target-time").onchange = e => { state.settings.targetTime = e.target.value || "09:00"; lsSet(LS.settings, state.settings); };
+    }
+
+    // Bind table actions
+    function bindTableActions() {
+      $$(".btn-send").forEach(b => b.onclick = () => sendEmail(b.dataset.id));
+      $$(".btn-mark").forEach(b => b.onclick = () => markSent(b.dataset.id));
+      $$(".btn-notes").forEach(b => b.onclick = () => {
+        const c = state.contacts.find(c => c.id === b.dataset.id);
+        openModal(
+          `Notes — ${c.name}`,
+          `<div id="notes-list">${(c.notes || []).map(n => `<div class="status">${n.by}: ${esc(n.text)} (${new Date(n.at).toLocaleString("en-AU")})</div>`).join("")}</div><input id="note-text" placeholder="Add note">`,
+          `<button class="btn primary" onclick="addNote('${b.dataset.id}')">Add Note</button>`
+        );
+      });
+      $$(".btn-del").forEach(b => b.onclick = () => {
+        if (confirm("Delete contact?")) {
+          state.contacts = state.contacts.filter(c => c.id !== b.dataset.id);
+          lsSet(LS.contacts, state.contacts);
+          renderContacts();
+          renderAnalytics();
+        }
+      });
+    }
+    
+    window.addNote = id => {
+      const c = state.contacts.find(c => c.id === id);
+      const text = $("#note-text").value;
+      if (text) {
+        if (!c.notes) c.notes = [];
+        c.notes.push({ at: new Date().toISOString(), by: state.settings.initials || "HS", text });
+        lsSet(LS.contacts, state.contacts);
+        renderContacts();
+        closeModal();
+      }
+    };
+
+    // Export/Import
+    function exportJSON() {
+      const blob = new Blob([JSON.stringify({ contacts: state.contacts, templates: state.templates, settings: state.settings, lastSent: state.lastSentEmail }, null, 2)], { type: "application/json" });
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `heed-followups-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+    }
+    
+    async function importJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (data.contacts) state.contacts = data.contacts.map(c => new Contact(c));
+      if (data.templates) state.templates = data.templates.map(t => new TemplateStep(t));
+      if (data.settings) state.settings = new Settings(data.settings);
+      if (data.lastSent) state.lastSentEmail = data.lastSent;
+      lsSet(LS.contacts, state.contacts); lsSet(LS.templates, state.templates); lsSet(LS.settings, state.settings); lsSet(LS.lastSent, state.lastSentEmail);
+      renderTemplates(); renderContacts(); renderAnalytics();
+      if (state.lastSentEmail) updateCompletedEmail({ name: state.lastSentEmail.contact, email: state.lastSentEmail.email }, state.lastSentEmail.step, state.lastSentEmail.sentAt);
+    }
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      ensureTemplates();
+      preloadContacts();
+      renderTemplates();
+      bindRTE();
+      renderContacts();
+      bindSettings();
+      bindTableActions();
+      if (state.lastSentEmail) updateCompletedEmail({ name: state.lastSentEmail.contact, email: state.lastSentEmail.email }, state.lastSentEmail.step, state.lastSentEmail.sentAt);
+      renderAnalytics();
+      
+      $("#modalClose").onclick = closeModal;
+      $("#modalBackdrop").onclick = e => { if (e.target === $("#modalBackdrop")) closeModal(); };
+      document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#modalBackdrop").getAttribute("aria-hidden") === "false") closeModal(); });
+      
+      $("#save-templates").onclick = saveTemplates;
+      $("#btn-add-template").onclick = () => {
+        const next = (state.templates[state.templates.length - 1]?.step || 0) + 1;
+        if (next > 10) return toast("Max 10 steps");
+        state.templates.push(new TemplateStep({ step: next, active: true, subject: `Email ${next}`, body: `Hi {{Name}},\n\n...\n\nTeam HD HeeD` }));
+        lsSet(LS.templates, state.templates); renderTemplates(); bindRTE();
+      };
+      $("#btn-remove-template").onclick = () => {
+        if (state.templates.length <= 7) return toast("Min 7 steps");
+        state.templates.pop(); lsSet(LS.templates, state.templates); renderTemplates(); bindRTE();
+      };
+      
+      $("#btn-refresh").onclick = () => { renderContacts(); renderTemplates(); renderAnalytics(); toast("Refreshed."); };
+      $("#btn-save").onclick = () => { lsSet(LS.contacts, state.contacts); lsSet(LS.templates, state.templates); lsSet(LS.settings, state.settings); toast("Saved to local storage."); };
+      $("#btn-export").onclick = exportJSON;
+      $("#import-json").onchange = importJSON;
+      $("#btn-reset").onclick = () => { if (confirm("Reset all data?")) { localStorage.clear(); location.reload(); } };
+    });
+
+    function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+  </script>
+</body>
+</html>
+<style>
+  .card { background: #0e162e; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+  .rte { border: 1px solid var(--line); border-radius: 10px; background: #0f1b3b; padding: 10px; min-height: 130px; color: var(--ink); }
+  .rte-toolbar { display: flex; gap: 6px; margin: 6px 0; }
+  label { font-size: 12px; color: var(--muted); font-weight: 700; display: block; margin-bottom: 4px; }
+  
+  .cell { background: #0f1b3b; border: 1px solid #2a3b68; border-radius: 10px; padding: 8px; min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; }
+  .cell .preview { flex: 1; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #d8e2ff; opacity: .95; }
+  .cell .badge { font-size: 12px; border: 1px solid #35508a; background: #0f254f; color: #cfe0ff; border-radius: 999px; padding: 4px 8px; }
+  .cell.empty .badge, .cell.empty .preview { opacity: .6; }
+  .cell:hover { box-shadow: 0 0 0 2px rgba(255,209,64,.25); }
+  .action-cell { display: flex; gap: 8px; flex-wrap: wrap; }
+  
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(2,6,22,.58); backdrop-filter: blur(2px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+  .modal { width: min(900px, 94vw); max-height: 85vh; background: linear-gradient(180deg, #10172a, #0b0f1a); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); display: flex; flex-direction: column; }
+  .modal-head { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  .modal-title { font-weight: 900; }
+  .modal-close { margin-left: auto; border: 1px solid var(--line); background: #0f1b3b; color: #fff; border-radius: 999px; padding: 6px 10px; cursor: pointer; }
+  .modal-body { padding: 12px 14px; }
+  .modal-body textarea, .modal-body input { width: 100%; min-height: 100px; border: 1px solid #2a3b68; border-radius: 10px; padding: 10px; background: #0f1b3b; color: var(--ink); font-family: inherit; }
+  .modal-foot { padding: 12px 14px; border-top: 1px dashed var(--line); display: flex; gap: 8px; justify-content: flex-end; }
+  .analytics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  
+  .toast { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 8px; z-index: 1000; }
+  .toast .item { background: #0e162e; border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); padding: 10px 12px; }
+</style>
