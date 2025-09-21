@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Unified dark theme based on Follow-up Board */
       --ink: #e8edff;
       --ink-2: #cfe0ff;
       --muted: #a8b6e8;
@@ -70,7 +69,7 @@
     }
     .theme-toggle:hover { transform: rotate(15deg); }
 
-    /* Only nav links pulse (hint to switch sections) */
+    /* Only nav links pulse */
     @keyframes pulseHeading {
       0% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 193, 7, 0.5); }
       50% { transform: scale(1.05); text-shadow: 0 0 20px rgba(255, 193, 7, 0.7); }
@@ -97,14 +96,13 @@
       box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
-    /* Stop all other pulsation on headings */
+    /* Stop other pulses */
     .email-section h1, .board-section .title {
       margin: 0; font-weight: 900; font-size: 2.5rem;
       letter-spacing: -0.03em;
       background: linear-gradient(90deg, var(--brand), var(--warn));
       -webkit-background-clip: text; background-clip: text; color: transparent;
-      animation: none; /* disable pulses */
-      text-shadow: none;
+      animation: none; text-shadow: none;
     }
     .email-section .sub, .board-section .sub {
       font-size: 0.95rem; color: var(--muted); font-weight: 500; letter-spacing: 0.01em;
@@ -116,76 +114,37 @@
       border-radius: 999px; font-weight: 700; letter-spacing: 0.03em; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
       transition: transform 0.2s ease;
     }
-    .email-section .badge:hover { transform: scale(1.05); }
 
     .email-section .card, .board-section .card {
       background: linear-gradient(180deg, var(--panel), var(--bg)); border: 1px solid var(--line); border-radius: var(--radius);
       box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05); padding: 1.5rem; margin-bottom: 1.5rem;
-      transition: box-shadow 0.3s ease;
     }
-    .email-section .card:hover, .board-section .card:hover { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6); }
-    .email-section .eyebrow {
-      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
-      font-weight: 700; margin-bottom: 0.3rem; opacity: 0.85;
-    }
-    .email-section .title {
-      margin: 0 0 1rem 0; font-size: 1.4rem; font-weight: 900; letter-spacing: -0.01em; color: var(--warn);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    }
-    .email-section label {
-      display: block; font-size: 0.8rem; font-weight: 700; color: var(--ink-2); margin: 0.6rem 0 0.4rem;
-      letter-spacing: 0.02em;
-    }
+    .email-section .eyebrow { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 0.3rem; opacity: 0.85; }
+    .email-section .title { margin: 0 0 1rem 0; font-size: 1.4rem; font-weight: 900; letter-spacing: -0.01em; color: var(--warn); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); }
+    .email-section label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--ink-2); margin: 0.6rem 0 0.4rem; letter-spacing: 0.02em; }
     .email-section input[type="text"], .email-section textarea {
-      width: 100%; border: 1px solid var(--line); border-radius: 0.75rem;
-      background: var(--panel); color: var(--text); padding: 0.8rem 1rem; font: inherit; font-size: 0.95rem;
+      width: 100%; border: 1px solid var(--line); border-radius: 0.75rem; background: var(--panel); color: var(--text); padding: 0.8rem 1rem; font: inherit; font-size: 0.95rem;
       box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.05);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .email-section input[type="text"]:focus, .email-section textarea:focus {
-      outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-    .email-section textarea { min-height: 14rem; line-height: 1.5; white-space: pre-wrap; resize: vertical; }
-    .email-section .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
-    .email-section .btn {
-      appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--text);
-      padding: 0.7rem 1rem; border-radius: 0.75rem; font-weight: 800; font-size: 0.9rem; cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    }
-    .email-section .btn.secondary { background: rgba(255, 209, 64, 0.1); color: var(--warn); border-color: var(--warn); }
-    .email-section .btn.brand { background: var(--brand); color: #2a2100; border-color: var(--brand-dark); box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3); }
-    .email-section .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); }
-    .email-section .btn:active { transform: translateY(0); }
     .email-section .note { font-size: 0.8rem; color: var(--muted); margin-top: 0.6rem; font-style: italic; }
     .email-section .footer { margin: 2rem 0 3rem; color: var(--muted); font-size: 0.8rem; text-align: center; opacity: 0.8; }
 
-    /* Stop alert pulsation */
     .email-section .paper-referral-alert {
       background: linear-gradient(180deg, #351616, #2a0f0f); border: 2px solid var(--alert-red); border-radius: var(--radius);
       padding: 1.2rem 1.5rem; margin: 0 0 1.8rem 0; text-align: center; box-shadow: 0 4px 12px rgba(255, 51, 51, 0.2), inset 0 1px 0 rgba(255, 51, 51, 0.1);
-      animation: none; /* disable pulses */
+      animation: none;
     }
-    .email-section .paper-referral-alert h3 {
-      color: var(--alert-red); margin: 0 0 0.5rem 0; font-weight: 900; font-size: 1.2rem; letter-spacing: -0.01em;
-    }
-    .email-section .paper-referral-alert p { margin: 0 0 0.8rem 0; color: var(--ink-2); font-size: 0.95rem; }
     .email-section .paper-referral-link {
       display: inline-block; background: var(--alert-red); color: #fff !important; padding: 0.8rem 1.5rem;
       border-radius: 0.7rem; font-weight: 800; font-size: 0.95rem; text-decoration: none;
-      box-shadow: 0 4px 8px rgba(255, 51, 51, 0.3); transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(255, 51, 51, 0.3);
     }
-    .email-section .paper-referral-link:hover {
-      background: #ff1a1a; transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 16px rgba(255, 51, 51, 0.4);
-    }
-    .email-section .paper-referral-link:active { transform: translateY(0) scale(1); }
 
     /* === Board container === */
     .board-section .shell {
       max-width: 1200px; margin: 0 auto; background: linear-gradient(180deg, var(--panel), var(--bg));
       border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
-      transition: box-shadow 0.3s ease;
     }
-    .board-section .shell:hover { box-shadow: 0 32px 120px rgba(0, 0, 0, 0.6); }
     .board-section .head { background: linear-gradient(180deg, var(--panel), var(--bg)); }
     .board-section .toolbar { margin-left: auto; display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
     .board-section .pill {
@@ -195,16 +154,7 @@
     .board-section .btn {
       border: 1px solid var(--line); background: rgba(255, 255, 255, 0.05); color: var(--text);
       border-radius: 0.75rem; padding: 0.7rem 1rem; font-weight: 800; font-size: 0.9rem; cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     }
-    .board-section .btn.primary {
-      background: var(--brand); color: #2a2100; border-color: var(--brand-dark); box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
-    }
-    .board-section .btn.warn { background: #351616; border-color: #6e1c1c; color: #ffdcdc; }
-    .board-section .btn.ghost { background: rgba(255, 255, 255, 0.05); }
-    .board-section .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .board-section .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); }
-    .board-section .btn:active { transform: translateY(0); }
     .board-section .status { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
 
     /* === Table compact layout === */
@@ -214,30 +164,24 @@
     }
     .board-section table {
       border-collapse: separate; border-spacing: 0; width: 100%;
-      table-layout: fixed; /* keep widths fixed so no overflow */
+      table-layout: fixed; /* keep widths fixed */
       font-size: 0.95rem;
     }
     .board-section th, .board-section td {
       border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); padding: 0.6rem; vertical-align: middle;
-      transition: background 0.3s ease;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .board-section th:first-child, .board-section td:first-child { border-left: 1px solid var(--line); }
     .board-section thead th {
       position: sticky; top: 0; background: linear-gradient(180deg, var(--panel), var(--bg)); color: var(--text); font-weight: 900; font-size: 1rem; z-index: 1;
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     }
     .board-section tbody th {
       background: linear-gradient(180deg, var(--panel), var(--bg)); text-align: left; font-weight: 800; min-width: 300px;
     }
     .board-section .lead { display: flex; flex-direction: column; gap: 0.3rem; }
-    .board-section .lead .name { font-weight: 900; font-size: 1.05rem; color: var(--warn); text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15); }
+    .board-section .lead .name { font-weight: 900; font-size: 1.05rem; color: var(--warn); }
     .board-section .lead .meta { display: flex; gap: 0.6rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--text); }
-    .board-section .lead .meta a {
-      color: #aee6ff; text-decoration: none; border-bottom: 1px dotted rgba(174, 230, 255, .35); padding-bottom: 0.1rem;
-      transition: color 0.3s ease, border-bottom-color 0.3s ease;
-    }
-    .board-section .lead .meta a:hover { color: #fff; border-bottom-color: #fff; }
+    .board-section .lead .meta a { color: #aee6ff; text-decoration: none; border-bottom: 1px dotted rgba(174, 230, 255, .35); padding-bottom: 0.1rem; }
 
     /* === Compact day boxes (fixed-size squares) === */
     .board-section tbody th { width: 360px; }             /* Lead column width (desktop) */
@@ -251,8 +195,7 @@
     .board-section .cell:hover{ transform: translateY(-2px); }
 
     /* Hide text/badges so visual size never changes */
-    .board-section .cell .preview,
-    .board-section .cell .badge{ display:none; }
+    .board-section .cell .preview, .board-section .cell .badge{ display:none; }
 
     .board-section .cell .box{
       width: 34px; height: 34px; border-radius: 8px;
@@ -261,7 +204,7 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
     }
     .board-section .cell.filled .box{
-      background: var(--danger);               /* red when there is content */
+      background: var(--danger);
       border-color: var(--danger);
       box-shadow: 0 0 0 3px rgba(255,93,93,.25);
     }
@@ -283,7 +226,63 @@
       .board-section .cell .box{ width: 22px; height: 22px; }
     }
 
-    @media print { .nav-bar, .board-section .toolbar, .board-section .foot, .board-section .modal-backdrop { display: none !important; } }
+    /* === New anchored POPOVER editor === */
+    .popover-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.35); backdrop-filter: blur(2px);
+      display: none; z-index: 1000;
+    }
+    .popover {
+      position: fixed; /* we compute top/left in JS */
+      max-width: min(560px, 94vw);
+      background: linear-gradient(180deg, var(--panel), var(--bg));
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 22px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04) inset;
+      display: none;
+      z-index: 1001;
+    }
+    .popover .pop-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.75rem .9rem; border-bottom:1px solid var(--line);
+    }
+    .popover .pop-title { font-weight: 900; font-size: 1rem; flex:1; }
+    .popover .pop-close {
+      border: 1px solid var(--line); background: rgba(255,255,255,.05);
+      border-radius: 999px; padding: .35rem .6rem; cursor: pointer; color: var(--text);
+    }
+    .popover .pop-body { padding: .9rem; }
+    .popover textarea {
+      width: 100%; min-height: 180px; max-height: 60vh;
+      border: 1px solid var(--line); border-radius: 10px; padding: .8rem;
+      background: rgba(255,255,255,.05); color: var(--text);
+      resize: vertical; font-family: inherit; font-size: 0.95rem;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,.2);
+    }
+    .popover .pop-foot {
+      display:flex; gap:.5rem; justify-content:flex-end; padding:.75rem .9rem; border-top:1px dashed var(--line);
+    }
+    .popover .btn {
+      border: 1px solid var(--line); background: rgba(255,255,255,0.05); color: var(--text);
+      border-radius: 10px; padding: .55rem .9rem; font-weight: 800; font-size: .9rem; cursor: pointer;
+    }
+    .popover .btn.primary {
+      background: var(--brand); color: #2a2100; border-color: var(--brand-dark);
+      box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    }
+    /* Arrow */
+    .popover:after {
+      content:""; position:absolute; width:12px; height:12px; background: linear-gradient(180deg, var(--panel), var(--bg));
+      border-left:1px solid var(--line); border-top:1px solid var(--line);
+      transform: rotate(45deg);
+    }
+
+    /* Sheet style on very small screens */
+    @media (max-width: 640px){
+      .popover { left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; max-width: 94vw; width: 94vw; }
+      .popover:after { display:none; }
+    }
+
+    @media print { .nav-bar, .board-section .toolbar, .board-section .foot, .popover, .popover-backdrop { display: none !important; } }
   </style>
 </head>
 <body>
@@ -329,6 +328,7 @@
         </div>
         <div class="note">This will copy Emails 1–4 in order with clear separators.</div>
       </div>
+
       <section class="card" id="e1">
         <div class="eyebrow">Email 1</div>
         <h3 class="title">Introduction to HD HeeD</h3>
@@ -497,34 +497,35 @@ Director – HD HeeD Pty Ltd
             <tbody id="tbody"></tbody>
           </table>
         </div>
-        <div class="hint">Tap a day square to open the full note. Press <span class="kbd">Esc</span> or click outside to close. Click <strong>Save changes</strong> to sync with the Sheet.</div>
+        <div class="hint">Tap a day square to open the full note. Press <span class="kbd">Esc</span> to close. Click <strong>Save changes</strong> to sync.</div>
       </div>
 
       <div class="foot">
         <div class="status" id="footStatus">Ready.</div>
         <div class="cleaner">
           <span class="status">Fresh week reset:</span>
-          <button id="btnArmClean" class="btn ghost">1) Arm</button>
-          <button id="btnDoClean" class="btn warn" disabled>2) Confirm &amp; wipe</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div class="modal-head">
-          <div id="modalTitle" class="modal-title">Edit note</div>
-          <button id="modalClose" class="modal-close">✕ Close</button>
-        </div>
-        <div class="modal-body">
-          <textarea id="modalTextarea" placeholder="Type your note…"></textarea>
-        </div>
-        <div class="modal-foot">
-          <button id="modalSave" class="btn primary">💾 Apply to cell</button>
+          <button id="btnArmClean" class="btn">1) Arm</button>
+          <button id="btnDoClean" class="btn" disabled>2) Confirm &amp; wipe</button>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- New floating editor (popover) -->
+  <div id="popBackdrop" class="popover-backdrop" aria-hidden="true"></div>
+  <div id="popover" class="popover" role="dialog" aria-modal="true" aria-labelledby="popTitle">
+    <div class="pop-head">
+      <div id="popTitle" class="pop-title">Edit note</div>
+      <button id="popClose" class="pop-close" aria-label="Close">✕</button>
+    </div>
+    <div class="pop-body">
+      <textarea id="popTextarea" placeholder="Type your follow-up…"></textarea>
+    </div>
+    <div class="pop-foot">
+      <button id="popCancel" class="btn">Cancel</button>
+      <button id="popSave" class="btn primary">💾 Save</button>
+    </div>
+  </div>
 
   <script>
     // Theme Toggle
@@ -541,7 +542,7 @@ Director – HD HeeD Pty Ltd
 
     // Make only top two nav tabs pulse
     const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach((l, i) => { if (i < 2) l.classList.add('pulse'); }); // Emails + Board only
+    navLinks.forEach((l, i) => { if (i < 2) l.classList.add('pulse'); });
 
     // Navigation
     const sections = document.querySelectorAll('.email-section, .board-section');
@@ -555,19 +556,12 @@ Director – HD HeeD Pty Ltd
       });
     });
 
-    // Email Section Scripts
+    // Email copy helpers
     async function copyText(text) {
-      try {
-        await navigator.clipboard.writeText(text);
-        alert('Copied to clipboard');
-      } catch (e) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        alert('Copied to clipboard');
+      try { await navigator.clipboard.writeText(text); alert('Copied to clipboard'); }
+      catch (e) {
+        const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); document.body.removeChild(ta); alert('Copied to clipboard');
       }
     }
     function copySubject(id) { copyText(document.getElementById(id).value); }
@@ -587,15 +581,11 @@ Director – HD HeeD Pty Ltd
       copyText(payload);
     }
 
-    // Board Section Scripts
+    // Board Section
     const API = "https://script.google.com/macros/s/AKfycbzwXW3Aabus6brnuawF9QvXX4dpq3MM03jmi4e9rkpiJUs2B9Vo_Qp36ht5BZ7bgbM/exec";
     const CONTACTS = {
-      "Taylor McGuiness — Interaction": {
-        phone: "1300 668 123", email: "info@interactionservices.org", website: "https://interactionservices.org"
-      },
-      "Assist Disability Services — SSC": {
-        phone: "1800 955 806", email: "enquiries@assistservices.com.au", website: "https://assistservices.com.au"
-      },
+      "Taylor McGuiness — Interaction": { phone: "1300 668 123", email: "info@interactionservices.org", website: "https://interactionservices.org" },
+      "Assist Disability Services — SSC": { phone: "1800 955 806", email: "enquiries@assistservices.com.au", website: "https://assistservices.com.au" },
       "Triniti Care — Support Coord": { phone: "(02) 8319 9433", website: "https://triniticare.com.au" },
       "MD Home Care — SSC": { phone: "08 6386 9999", website: "https://mdhomecare.com.au" },
       "Claremont Care — SC/PM": { phone: "0416 873 319", website: "https://claremontcare.com.au" },
@@ -607,78 +597,166 @@ Director – HD HeeD Pty Ltd
     let ROWS = [];
     let edits = new Map();
     let activeCellId = null;
+
     function $(id) { return document.getElementById(id); }
     function setStatus(msg, dim = false) {
       $("status").textContent = msg || "";
-      $("status").classList.toggle("dim", !!dim);
       $("footStatus").textContent = msg || "Ready.";
     }
     function mail(link) {
       const a = document.createElement("a");
-      a.href = "mailto:" + link;
-      a.textContent = "📧 " + link;
-      return a;
+      a.href = "mailto:" + link; a.textContent = "📧 " + link; return a;
     }
     function tel(link) {
       const a = document.createElement("a");
       a.href = "tel:" + (link || "").replace(/[^0-9+]/g, "");
-      a.textContent = "☎ " + link;
-      return a;
+      a.textContent = "☎ " + link; return a;
     }
     function formatLeadCell(name) {
-      const wrap = document.createElement("div");
-      wrap.className = "lead";
-      const nm = document.createElement("div");
-      nm.className = "name";
-      nm.textContent = name || "—";
-      wrap.appendChild(nm);
+      const wrap = document.createElement("div"); wrap.className = "lead";
+      const nm = document.createElement("div"); nm.className = "name"; nm.textContent = name || "—"; wrap.appendChild(nm);
       const info = CONTACTS[name];
       if (info) {
-        const meta = document.createElement("div");
-        meta.className = "meta";
+        const meta = document.createElement("div"); meta.className = "meta";
         if (info.email) meta.appendChild(mail(info.email));
         if (info.phone) meta.appendChild(tel(info.phone));
-        if (info.website) {
-          const w = document.createElement("a");
-          w.href = info.website;
-          w.target = "_blank";
-          w.rel = "noopener";
-          w.textContent = "🌐 Website";
-          meta.appendChild(w);
-        }
+        if (info.website) { const w = document.createElement("a"); w.href = info.website; w.target = "_blank"; w.rel = "noopener"; w.textContent = "🌐 Website"; meta.appendChild(w); }
         wrap.appendChild(meta);
       }
       return wrap;
     }
 
-    const modal = $("modalBackdrop");
-    const modalTA = $("modalTextarea");
-    function openModal(id, title, initial) {
-      activeCellId = id;
-      $("modalTitle").textContent = title || "Edit note";
-      modalTA.value = initial || "";
-      modal.style.display = "flex";
-      modal.setAttribute("aria-hidden", "false");
-      modalTA.focus();
+    // Popover elements
+    const popWrap = $("popover");
+    const popBackdrop = $("popBackdrop");
+    const popTA = $("popTextarea");
+    const popTitle = $("popTitle");
+    const popClose = $("popClose");
+    const popCancel = $("popCancel");
+    const popSave = $("popSave");
+
+    // Open popover anchored to a cell
+    function openPopover(cellId, title, initial, anchorEl) {
+      activeCellId = cellId;
+      popTitle.textContent = title || "Edit note";
+      popTA.value = initial || "";
+
+      // Show
+      popBackdrop.style.display = "block";
+      popWrap.style.display = "block";
+
+      // Position near anchor (viewport coords)
+      const rect = anchorEl.getBoundingClientRect();
+      const margin = 10;
+      const popW = Math.min(560, window.innerWidth * 0.94);
+      const popH = Math.min(360, window.innerHeight * 0.8);
+      popWrap.style.width = popW + "px";
+
+      // Default below the box
+      let top = rect.bottom + margin + window.scrollY;
+      let left = rect.left + window.scrollX - (popW / 2) + (rect.width / 2);
+
+      // Keep within viewport horizontally
+      left = Math.max(window.scrollX + margin, Math.min(left, window.scrollX + window.innerWidth - popW - margin));
+
+      // If not enough space below, flip above
+      if (rect.bottom + popH + 2 * margin > window.innerHeight) {
+        top = rect.top - popH - margin + window.scrollY;
+      }
+
+      // Apply
+      popWrap.style.top = top + "px";
+      popWrap.style.left = left + "px";
+      popWrap.style.transform = "none";
+
+      // Draw the little arrow towards the box
+      const arrowSize = 12;
+      const anchorCenter = rect.left + rect.width / 2;
+      const arrowLeft = Math.max(arrowSize, Math.min(anchorCenter - left - window.scrollX, popW - arrowSize));
+      popWrap.style.setProperty("--arrow-left", arrowLeft + "px");
+      popWrap.style.setProperty("--arrow-top", (top < rect.top + window.scrollY ? (popH - 6) : (-6)) + "px"); // not used in CSS, kept if needed
+      // Place arrow (below/above)
+      const showBelow = rect.bottom + popH + 20 <= window.innerHeight;
+      if (showBelow) {
+        popWrap.style.setProperty("--arrow-y", "-6px");
+        popWrap.style.setProperty("--arrow-top-abs", "-6px");
+        popWrap.style.setProperty("--arrow-rotate", "45deg");
+        popWrap.style.setProperty("--arrow-border-top", "none");
+        popWrap.style.setProperty("--arrow-border-left", "none");
+        popWrap.style.setProperty("--arrow-border-bottom", "1px solid var(--line)");
+        popWrap.style.setProperty("--arrow-border-right", "1px solid var(--line)");
+        popWrap.style.setProperty("--arrow-top-pos", "-6px");
+        popWrap.style.setProperty("--arrow-bottom-pos", "auto");
+        popWrap.style.setProperty("--arrow-offset-y", "0");
+        popWrap.style.setProperty("--arrow-placement", "bottom");
+        popWrap.style.removeProperty("bottom");
+      } else {
+        // Arrow at bottom (popover above the box)
+        popWrap.style.setProperty("--arrow-top-pos", "auto");
+        popWrap.style.setProperty("--arrow-bottom-pos", "-6px");
+        popWrap.style.setProperty("--arrow-placement", "top");
+      }
+
+      // Arrow actual placement
+      const after = popWrap;
+      after.style.setProperty("overflow", "visible");
+      after.style.setProperty("position", "fixed");
+      // Position the :after via inline style (we'll use absolute math)
+      // We can't set pseudo-element via JS directly, so we approximate with calc in CSS:
+      popWrap.style.setProperty("--arrow-left-px", arrowLeft + "px");
+      // Use inline style for :after with CSS variables:
+      popWrap.style.setProperty("--arrow-bottom", (showBelow ? "auto" : "-6px"));
+      popWrap.style.setProperty("--arrow-top", (showBelow ? "-6px" : "auto"));
+      // We will align it with left using transform.
+      popWrap.style.setProperty("--arrow-translate-x", `calc(var(--arrow-left-px) - 6px)`);
+
+      // Focus without page jump
+      setTimeout(() => { popTA.focus({ preventScroll: true }); }, 0);
+
+      // Place arrow via style attribute trick
+      popWrap.style.setProperty("--arrow-display", "block");
+      popWrap.style.cssText += `
+        --arrow-left-px:${arrowLeft}px;
+      `;
+      popWrap.style.setProperty("--arrow-top", showBelow ? "-6px" : "auto");
+      popWrap.style.setProperty("--arrow-bottom", showBelow ? "auto" : "-6px");
+      // Position the pseudo after using CSS rules below
     }
-    function closeModal() {
-      modal.style.display = "none";
-      modal.setAttribute("aria-hidden", "true");
+
+    // Enhance the arrow using CSS variables (applied after open)
+    (function enhanceArrow(){
+      const style = document.createElement('style');
+      style.textContent = `
+        #popover:after{
+          left: var(--arrow-left-px, 24px);
+          top: var(--arrow-top, -6px);
+          bottom: var(--arrow-bottom, auto);
+          transform: rotate(45deg);
+          border-left: 1px solid var(--line);
+          border-top: 1px solid var(--line);
+        }
+      `;
+      document.head.appendChild(style);
+    })();
+
+    function closePopover() {
+      popBackdrop.style.display = "none";
+      popWrap.style.display = "none";
       activeCellId = null;
     }
-    $("modalClose").addEventListener("click", closeModal);
-    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.getAttribute("aria-hidden") === "false") closeModal(); });
 
-    // Apply modal text into cell; keep small box; toggle red only
-    $("modalSave").addEventListener("click", () => {
+    popBackdrop.addEventListener('click', closePopover);
+    popClose.addEventListener('click', closePopover);
+    popCancel.addEventListener('click', closePopover);
+
+    // Save from popover
+    popSave.addEventListener('click', () => {
       if (!activeCellId) return;
-      const v = modalTA.value || "";
+      const v = popTA.value || "";
       const el = document.getElementById("cell-" + activeCellId);
       const ta = document.getElementById("ta-" + activeCellId);
       if (ta) ta.value = v;
 
-      // keep size identical; only toggle red state + tooltip
       el.classList.toggle("empty", !v);
       el.classList.toggle("filled", !!v);
       const bx = el.querySelector(".box");
@@ -686,9 +764,18 @@ Director – HD HeeD Pty Ltd
 
       edits.set(activeCellId, v);
       setStatus("Unsaved changes…");
-      closeModal();
+      closePopover();
     });
 
+    // Keyboard: Esc to close, Ctrl/Cmd+Enter to save
+    document.addEventListener('keydown', (e) => {
+      const open = popWrap.style.display === "block";
+      if (!open) return;
+      if (e.key === "Escape") { e.preventDefault(); closePopover(); }
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); popSave.click(); }
+    });
+
+    // Data loading / building
     async function load() {
       try {
         setStatus("Loading…");
@@ -697,7 +784,7 @@ Director – HD HeeD Pty Ltd
         const data = await r.json();
         ROWS = data;
         buildTable();
-        setStatus("Loaded.", true);
+        setStatus("Loaded.");
       } catch (err) {
         console.error(err);
         setStatus(err.message || "Load failed.");
@@ -730,17 +817,15 @@ Director – HD HeeD Pty Ltd
           cell.className = "cell";
           if (!ta.value) { cell.classList.add("empty"); }
           else { cell.classList.add("filled"); }
-
           cell.id = "cell-" + id;
 
-          // Small fixed-size box only
           const box = document.createElement("div");
           box.className = "box";
           box.title = ta.value ? "Filled — click to view/edit" : "Empty — click to add";
 
           cell.appendChild(box);
-          cell.addEventListener("click", () => {
-            openModal(id, `${lead} — ${day}`, ta.value);
+          cell.addEventListener("click", (ev) => {
+            openPopover(id, `${lead} — ${day}`, ta.value, cell);
           });
 
           td.appendChild(cell);
@@ -752,22 +837,21 @@ Director – HD HeeD Pty Ltd
     }
 
     async function save() {
-      if (edits.size === 0) { setStatus("No changes to save.", true); return; }
+      if (edits.size === 0) { setStatus("No changes to save."); return; }
       try {
         setStatus("Saving…");
         const rows = [];
         edits.forEach((value, key) => { const [ri, ci] = key.split("_").map(Number); rows.push({ rowIndex: ri, colIndex: ci, value }); });
         const resp = await fetch(API, { method: "POST", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ rows }) });
         const txt = await resp.text();
-        let ok = null;
-        try { ok = JSON.parse(txt); } catch (e) {}
+        let ok = null; try { ok = JSON.parse(txt); } catch (e) {}
         if (!resp.ok || !ok || !ok.ok) throw new Error(`Save failed (status ${resp.status}): ${txt.substring(0, 200)}`);
-        setStatus("Saved.", true);
+        setStatus("Saved.");
         edits.clear();
       } catch (err) {
         console.error(err);
         setStatus("Save failed.");
-        alert(err.message || "Save failed. In Apps Script: Deploy → Web app → set 'Who has access' to 'Anyone' and use the /exec URL.");
+        alert(err.message || "Save failed. In Apps Script: Deploy → Web app → use the /exec URL and set 'Anyone'.");
       }
     }
 
@@ -783,7 +867,7 @@ Director – HD HeeD Pty Ltd
       armTimeout = setTimeout(() => {
         $("btnDoClean").disabled = true;
         $("btnArmClean").textContent = "1) Arm";
-        setStatus("Cleanup disarmed.", true);
+        setStatus("Cleanup disarmed.");
       }, 8000);
     });
 
@@ -799,9 +883,8 @@ Director – HD HeeD Pty Ltd
             ta.value = "";
             if (el) {
               el.classList.add("empty");
-              el.classList.remove("filled");        // remove red when cleared
-              const bx = el.querySelector(".box");
-              if (bx) bx.title = "Empty — click to add";
+              el.classList.remove("filled");
+              const bx = el.querySelector(".box"); if (bx) bx.title = "Empty — click to add";
             }
             edits.set(id, "");
             updates.push({ rowIndex: r - 1, colIndex: c, value: "" });
@@ -811,15 +894,15 @@ Director – HD HeeD Pty Ltd
       if (armTimeout) clearTimeout(armTimeout);
       $("btnDoClean").disabled = true;
       $("btnArmClean").textContent = "1) Arm";
-      if (updates.length === 0) { setStatus("Nothing to clear.", true); return; }
+      if (updates.length === 0) { setStatus("Nothing to clear."); return; }
       try {
-        setStatus("Wiping all notes for a fresh week…");
+        setStatus("Wiping all notes…");
         const resp = await fetch(API, { method: "POST", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ rows: updates }) });
         const txt2 = await resp.text();
         let ok2 = null; try { ok2 = JSON.parse(txt2); } catch (e) {}
         if (!resp.ok || !ok2 || !ok2.ok) throw new Error(`Cleanup save failed (status ${resp.status}): ${txt2.substring(0, 200)}`);
         edits.clear();
-        setStatus("All notes cleared. Fresh week ready ✅", true);
+        setStatus("All notes cleared. Fresh week ready ✅");
       } catch (err) {
         console.error(err);
         setStatus("Cleanup failed.");
