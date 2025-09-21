@@ -49,7 +49,7 @@
 
     /* Top nav */
     .nav-bar {
-      position: sticky; top: 0; z-index: 10; background: linear-gradient(180deg, var(--panel), var(--bg)); border-bottom: 1px solid var(--line);
+      position: sticky; top: 0; z-index: 20; background: linear-gradient(180deg, var(--panel), var(--bg)); border-bottom: 1px solid var(--line);
       padding: 1.2rem 1.5rem; display: flex; gap: 1.2rem; align-items: center; box-shadow: var(--shadow);
       font-weight: 600; letter-spacing: 0.02em;
     }
@@ -69,7 +69,7 @@
     }
     .theme-toggle:hover { transform: rotate(15deg); }
 
-    /* Only nav links pulse */
+    /* Only nav links pulse (hint to switch sections) */
     @keyframes pulseHeading {
       0% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 193, 7, 0.5); }
       50% { transform: scale(1.05); text-shadow: 0 0 20px rgba(255, 193, 7, 0.7); }
@@ -81,66 +81,118 @@
       animation: pulseHeading 3s ease-in-out infinite;
     }
 
-    .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+    .container { max-width: 1280px; margin: 2rem auto; padding: 0 1.5rem; }
     .email-section, .board-section { display: none; transition: opacity 0.5s ease; }
     .email-section.active, .board-section.active { display: block; opacity: 1; }
     .email-section .wrap, .board-section .wrap { padding: 1.5rem; }
+
+    /* Hero headers */
     .email-section .hero, .board-section .head {
-      display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem;
+      display: flex; align-items: center; gap: 1rem; padding: 1.2rem 1.4rem;
       background: linear-gradient(180deg, var(--panel), var(--bg)); border-bottom: 1px solid var(--line);
       border-radius: var(--radius) var(--radius) 0 0; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
     .email-section .logo, .board-section .badge {
-      width: 2.8rem; height: 2.8rem; border-radius: 0.7rem; display: grid; place-items: center;
+      width: 3.2rem; height: 3.2rem; border-radius: 0.9rem; display: grid; place-items: center;
       font-weight: 900; color: #2a2100; background: linear-gradient(135deg, var(--warn), #ffe78f);
       box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
-
-    /* Stop other pulses */
     .email-section h1, .board-section .title {
-      margin: 0; font-weight: 900; font-size: 2.5rem;
+      margin: 0; font-weight: 900; font-size: 2.6rem;
       letter-spacing: -0.03em;
       background: linear-gradient(90deg, var(--brand), var(--warn));
       -webkit-background-clip: text; background-clip: text; color: transparent;
       animation: none; text-shadow: none;
     }
     .email-section .sub, .board-section .sub {
-      font-size: 0.95rem; color: var(--muted); font-weight: 500; letter-spacing: 0.01em;
+      font-size: 1rem; color: var(--ink-2); font-weight: 500; letter-spacing: 0.01em;
     }
 
-    .email-section .bar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1rem 0 1.5rem; }
+    /* ===== Outreach Emails (roomier, elegant) ===== */
+    .email-section .bar {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1rem 0 1.5rem;
+    }
     .email-section .badge {
-      font-size: 0.8rem; color: #2a2100; background: var(--warn); padding: 0.5rem 0.8rem;
-      border-radius: 999px; font-weight: 700; letter-spacing: 0.03em; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease;
+      font-size: 0.85rem; color: #2a2100; background: var(--warn); padding: 0.55rem 0.9rem;
+      border-radius: 999px; font-weight: 800; letter-spacing: 0.02em; box-shadow: 0 6px 18px rgba(0,0,0,.25);
     }
 
-    .email-section .card, .board-section .card {
-      background: linear-gradient(180deg, var(--panel), var(--bg)); border: 1px solid var(--line); border-radius: var(--radius);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05); padding: 1.5rem; margin-bottom: 1.5rem;
+    .email-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.2rem;
+      margin-top: 1rem;
     }
-    .email-section .eyebrow { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 0.3rem; opacity: 0.85; }
-    .email-section .title { margin: 0 0 1rem 0; font-size: 1.4rem; font-weight: 900; letter-spacing: -0.01em; color: var(--warn); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); }
-    .email-section label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--ink-2); margin: 0.6rem 0 0.4rem; letter-spacing: 0.02em; }
-    .email-section input[type="text"], .email-section textarea {
-      width: 100%; border: 1px solid var(--line); border-radius: 0.75rem; background: var(--panel); color: var(--text); padding: 0.8rem 1rem; font: inherit; font-size: 0.95rem;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.05);
+    /* Feature card spans full width */
+    .email-feature {
+      grid-column: 1 / -1;
+      background: radial-gradient(800px 400px at 10% -50%, rgba(255,209,64,.15), transparent 60%) , linear-gradient(180deg, var(--panel), var(--bg));
+      border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 1.4rem; box-shadow: var(--shadow);
     }
-    .email-section .note { font-size: 0.8rem; color: var(--muted); margin-top: 0.6rem; font-style: italic; }
-    .email-section .footer { margin: 2rem 0 3rem; color: var(--muted); font-size: 0.8rem; text-align: center; opacity: 0.8; }
+    /* Email cards: bigger, comfy */
+    .email-card {
+      grid-column: span 6;
+      background: linear-gradient(180deg, var(--card), var(--bg));
+      border: 1px solid var(--line); border-radius: 16px;
+      padding: 1.2rem 1.2rem 1rem; box-shadow: 0 24px 80px rgba(0,0,0,.45);
+    }
+    .email-card .eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+      font-weight: 800; margin-bottom: 0.25rem; opacity: .9;
+    }
+    .email-card .title {
+      margin: 0 0 .8rem 0; font-size: 1.45rem; font-weight: 900; letter-spacing: -0.01em; color: var(--warn);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    }
+    .email-card .row {
+      display: grid; grid-template-columns: 1fr; gap: .65rem;
+    }
+    .email-card label {
+      display: block; font-size: 0.8rem; font-weight: 800; color: var(--ink-2); letter-spacing: 0.02em;
+    }
+    .email-card input[type="text"], .email-card textarea {
+      width: 100%; border: 1px solid var(--line); border-radius: 12px;
+      background: rgba(255,255,255,.03); color: var(--text); padding: 0.85rem 1rem; font: inherit; font-size: 1rem;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .email-card input[type="text"]:focus, .email-card textarea:focus {
+      outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25);
+    }
+    .email-card textarea { min-height: 18rem; line-height: 1.55; white-space: pre-wrap; resize: vertical; }
+    .email-card .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.7rem; }
+    .btn {
+      appearance: none; border: 1px solid var(--line); background: rgba(255,255,255,.05); color: var(--text);
+      padding: 0.72rem 1rem; border-radius: 0.75rem; font-weight: 800; font-size: 0.95rem; cursor: pointer;
+      transition: background 0.25s ease, transform 0.18s ease, box-shadow 0.25s ease;
+    }
+    .btn.brand { background: var(--brand); color: #2a2100; border-color: var(--brand-dark); box-shadow: 0 6px 20px rgba(255, 193, 7, 0.32); }
+    .btn.secondary { background: rgba(255, 209, 64, 0.1); color: var(--warn); border-color: var(--warn); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35); }
+    .btn:active { transform: translateY(0); }
 
-    .email-section .paper-referral-alert {
+    .email-icons {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin-top: .8rem;
+    }
+    .email-icons .chip {
+      display: flex; gap: .5rem; align-items: center;
+      background: rgba(255,255,255,.04); border: 1px dashed var(--line); border-radius: 999px; padding: .5rem .75rem;
+      font-weight: 700; color: var(--ink-2); font-size: .9rem;
+    }
+
+    .email-section .footer { margin: 2rem 0 3rem; color: var(--muted); font-size: 0.9rem; text-align: center; opacity: 0.9; }
+
+    /* Referral alert (no pulsation) */
+    .paper-referral-alert {
       background: linear-gradient(180deg, #351616, #2a0f0f); border: 2px solid var(--alert-red); border-radius: var(--radius);
       padding: 1.2rem 1.5rem; margin: 0 0 1.8rem 0; text-align: center; box-shadow: 0 4px 12px rgba(255, 51, 51, 0.2), inset 0 1px 0 rgba(255, 51, 51, 0.1);
       animation: none;
     }
-    .email-section .paper-referral-link {
-      display: inline-block; background: var(--alert-red); color: #fff !important; padding: 0.8rem 1.5rem;
-      border-radius: 0.7rem; font-weight: 800; font-size: 0.95rem; text-decoration: none;
-      box-shadow: 0 4px 8px rgba(255, 51, 51, 0.3);
-    }
+    .paper-referral-alert h3 { color: var(--alert-red); margin-bottom: .4rem; font-weight: 900; font-size: 1.2rem; }
+    .paper-referral-link { display: inline-block; background: var(--alert-red); color: #fff !important; padding: 0.8rem 1.5rem; border-radius: 0.7rem; font-weight: 800; }
 
-    /* === Board container === */
+    /* ===== Board container ===== */
     .board-section .shell {
       max-width: 1200px; margin: 0 auto; background: linear-gradient(180deg, var(--panel), var(--bg));
       border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
@@ -149,22 +201,18 @@
     .board-section .toolbar { margin-left: auto; display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
     .board-section .pill {
       border: 1px solid var(--line); background: rgba(255, 255, 255, 0.05); border-radius: 999px;
-      padding: 0.4rem 0.7rem; font-size: 0.8rem; color: var(--text); font-weight: 600; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      padding: 0.4rem 0.7rem; font-size: 0.8rem; color: var(--text); font-weight: 600;
     }
-    .board-section .btn {
-      border: 1px solid var(--line); background: rgba(255, 255, 255, 0.05); color: var(--text);
-      border-radius: 0.75rem; padding: 0.7rem 1rem; font-weight: 800; font-size: 0.9rem; cursor: pointer;
-    }
-    .board-section .status { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+    .board-section .status { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
 
-    /* === Table compact layout === */
+    /* ===== Table compact layout ===== */
     .board-section .board {
       border: 1px solid var(--line); background: rgba(255, 255, 255, 0.02); border-radius: 1rem; overflow: hidden;
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     .board-section table {
       border-collapse: separate; border-spacing: 0; width: 100%;
-      table-layout: fixed; /* keep widths fixed */
+      table-layout: fixed; /* keep widths fixed so no overflow */
       font-size: 0.95rem;
     }
     .board-section th, .board-section td {
@@ -173,7 +221,7 @@
     }
     .board-section th:first-child, .board-section td:first-child { border-left: 1px solid var(--line); }
     .board-section thead th {
-      position: sticky; top: 0; background: linear-gradient(180deg, var(--panel), var(--bg)); color: var(--text); font-weight: 900; font-size: 1rem; z-index: 1;
+      position: sticky; top: 0; background: linear-gradient(180deg, var(--panel), var(--bg)); color: var(--text); font-weight: 900; font-size: 1rem; z-index: 10;
     }
     .board-section tbody th {
       background: linear-gradient(180deg, var(--panel), var(--bg)); text-align: left; font-weight: 800; min-width: 300px;
@@ -183,7 +231,7 @@
     .board-section .lead .meta { display: flex; gap: 0.6rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--text); }
     .board-section .lead .meta a { color: #aee6ff; text-decoration: none; border-bottom: 1px dotted rgba(174, 230, 255, .35); padding-bottom: 0.1rem; }
 
-    /* === Compact day boxes (fixed-size squares) === */
+    /* ===== Compact day boxes (fixed-size squares) ===== */
     .board-section tbody th { width: 360px; }             /* Lead column width (desktop) */
     .board-section td { width: 88px; text-align: center; }/* Narrow day columns */
 
@@ -202,6 +250,7 @@
       border:1px solid var(--line);
       background: rgba(255,255,255,.05);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+      pointer-events: none; /* ensure clicks go to the cell itself */
     }
     .board-section .cell.filled .box{
       background: var(--danger);
@@ -209,16 +258,18 @@
       box-shadow: 0 0 0 3px rgba(255,93,93,.25);
     }
 
-    /* Mobile fit: smaller widths and squares, no horizontal scroll */
+    /* Mobile fit: smaller widths and squares */
     @media (max-width: 820px){
       .nav-bar { padding: 1rem; gap: 0.8rem; }
       .nav-bar a { font-size: 1rem; padding: 0.5rem 0.8rem; }
-      .email-section h1, .board-section .title { font-size: 2rem; }
+      .email-section h1, .board-section .title { font-size: 2.1rem; }
       .board-section thead th { font-size: .9rem; }
-      .board-section tbody th { width: 220px; }     /* narrower lead */
-      .board-section td { width: 44px; }            /* tighter day columns */
+      .board-section tbody th { width: 220px; }
+      .board-section td { width: 44px; }
       .board-section .cell{ min-height: 40px; }
       .board-section .cell .box{ width: 24px; height: 24px; border-radius: 6px; }
+      /* Allow taps to reach first row if header overlaps by a pixel */
+      .board-section thead { pointer-events: none; }
     }
     @media (max-width: 480px){
       .board-section tbody th { width: 200px; }
@@ -226,63 +277,49 @@
       .board-section .cell .box{ width: 22px; height: 22px; }
     }
 
-    /* === New anchored POPOVER editor === */
+    /* ===== New anchored POPOVER editor ===== */
     .popover-backdrop {
       position: fixed; inset: 0; background: rgba(0,0,0,.35); backdrop-filter: blur(2px);
       display: none; z-index: 1000;
     }
     .popover {
-      position: fixed; /* we compute top/left in JS */
+      position: fixed; /* positioned in JS */
       max-width: min(560px, 94vw);
       background: linear-gradient(180deg, var(--panel), var(--bg));
       border: 1px solid var(--line);
       border-radius: 14px;
       box-shadow: 0 22px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04) inset;
-      display: none;
-      z-index: 1001;
+      display: none; z-index: 1001;
     }
-    .popover .pop-head {
-      display:flex; align-items:center; gap:.6rem;
-      padding:.75rem .9rem; border-bottom:1px solid var(--line);
-    }
+    .popover .pop-head { display:flex; align-items:center; gap:.6rem; padding:.75rem .9rem; border-bottom:1px solid var(--line); }
     .popover .pop-title { font-weight: 900; font-size: 1rem; flex:1; }
-    .popover .pop-close {
-      border: 1px solid var(--line); background: rgba(255,255,255,.05);
-      border-radius: 999px; padding: .35rem .6rem; cursor: pointer; color: var(--text);
-    }
+    .popover .pop-close { border: 1px solid var(--line); background: rgba(255,255,255,.05); border-radius: 999px; padding: .35rem .6rem; cursor: pointer; color: var(--text); }
     .popover .pop-body { padding: .9rem; }
     .popover textarea {
-      width: 100%; min-height: 180px; max-height: 60vh;
+      width: 100%; min-height: 200px; max-height: 60vh;
       border: 1px solid var(--line); border-radius: 10px; padding: .8rem;
       background: rgba(255,255,255,.05); color: var(--text);
-      resize: vertical; font-family: inherit; font-size: 0.95rem;
+      resize: vertical; font-family: inherit; font-size: 0.98rem;
       box-shadow: inset 0 1px 3px rgba(0,0,0,.2);
     }
-    .popover .pop-foot {
-      display:flex; gap:.5rem; justify-content:flex-end; padding:.75rem .9rem; border-top:1px dashed var(--line);
-    }
-    .popover .btn {
-      border: 1px solid var(--line); background: rgba(255,255,255,0.05); color: var(--text);
-      border-radius: 10px; padding: .55rem .9rem; font-weight: 800; font-size: .9rem; cursor: pointer;
-    }
-    .popover .btn.primary {
-      background: var(--brand); color: #2a2100; border-color: var(--brand-dark);
-      box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
-    }
-    /* Arrow */
+    .popover .pop-foot { display:flex; gap:.5rem; justify-content:flex-end; padding:.75rem .9rem; border-top:1px dashed var(--line); }
+    .popover .btn { border: 1px solid var(--line); background: rgba(255,255,255,0.05); color: var(--text); border-radius: 10px; padding: .55rem .9rem; font-weight: 800; font-size: .9rem; cursor: pointer; }
+    .popover .btn.primary { background: var(--brand); color: #2a2100; border-color: var(--brand-dark); box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3); }
     .popover:after {
       content:""; position:absolute; width:12px; height:12px; background: linear-gradient(180deg, var(--panel), var(--bg));
       border-left:1px solid var(--line); border-top:1px solid var(--line);
       transform: rotate(45deg);
     }
-
-    /* Sheet style on very small screens */
     @media (max-width: 640px){
       .popover { left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; max-width: 94vw; width: 94vw; }
       .popover:after { display:none; }
+      .email-grid { grid-template-columns: 1fr; }
+      .email-card { grid-column: 1 / -1; }
     }
 
-    @media print { .nav-bar, .board-section .toolbar, .board-section .foot, .popover, .popover-backdrop { display: none !important; } }
+    @media print {
+      .nav-bar, .board-section .toolbar, .board-section .foot, .popover, .popover-backdrop { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -293,15 +330,14 @@
     <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
   </nav>
 
+  <!-- ===== Outreach Emails (expanded & elegant) ===== -->
   <section class="email-section active">
     <div class="wrap">
       <div class="hero">
         <div class="logo" aria-hidden="true"></div>
         <div>
           <h1>HD HeeD – Outreach Emails (1–4)</h1>
-          <div class="sub">Copy-ready subjects and bodies for Support Coordinators & Plan Managers.
-            <span class="small">Use the buttons to copy Subject, Body, or Both.</span>
-          </div>
+          <div class="sub">Copy-ready subjects and bodies for Support Coordinators & Plan Managers. Use the buttons to copy Subject, Body, or Both.</div>
         </div>
       </div>
 
@@ -315,27 +351,37 @@
       <div class="paper-referral-alert">
         <h3>📄 Paper-Based Referral Form Available</h3>
         <p>Prefer to use a paper form? Download our printable referral form and email the completed copy to info@hdheed.com.au</p>
-        <a href="https://drive.google.com/file/d/1Z3EJ2mycLwNAIDXs2fnIfD8H_wxcSdQx/view?usp=drive_link" class="paper-referral-link" target="_blank">
-          Download Paper Referral Form
-        </a>
+        <a href="https://drive.google.com/file/d/1Z3EJ2mycLwNAIDXs2fnIfD8H_wxcSdQx/view?usp=drive_link" class="paper-referral-link" target="_blank">Download Paper Referral Form</a>
       </div>
 
-      <div class="card">
-        <div class="eyebrow">Bulk tool</div>
-        <h2 class="title">Copy All Emails</h2>
-        <div class="actions">
-          <button class="btn brand" onclick="copyAll()">Copy All (Subjects + Bodies)</button>
+      <div class="email-grid">
+        <!-- Feature banner with quick actions -->
+        <div class="email-feature card">
+          <div style="display:flex; gap:1rem; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+            <div>
+              <div style="font-weight:900; font-size:1.4rem; letter-spacing:-.01em; margin-bottom:.35rem; color:var(--warn)">Bulk Tools</div>
+              <div style="color:var(--ink-2)">Copy all four emails (subjects + bodies) in one click, then paste into your campaign.</div>
+              <div class="email-icons">
+                <div class="chip">✅ RN-Led</div>
+                <div class="chip">⚙️ Audit-ready</div>
+                <div class="chip">⚡ Quick referrals</div>
+              </div>
+            </div>
+            <div>
+              <button class="btn brand" onclick="copyAll()">Copy All (Subjects + Bodies)</button>
+            </div>
+          </div>
         </div>
-        <div class="note">This will copy Emails 1–4 in order with clear separators.</div>
-      </div>
 
-      <section class="card" id="e1">
-        <div class="eyebrow">Email 1</div>
-        <h3 class="title">Introduction to HD HeeD</h3>
-        <label for="s1">Subject</label>
-        <input id="s1" type="text" value="Introducing HD HeeD – RN-Led NDIS Provider in Blacktown" />
-        <label for="b1">Body</label>
-        <textarea id="b1">Hi,
+        <!-- Email 1 -->
+        <section class="email-card" id="e1">
+          <div class="eyebrow">Email 1</div>
+          <h3 class="title">Introduction to HD HeeD</h3>
+          <div class="row">
+            <label for="s1">Subject</label>
+            <input id="s1" type="text" value="Introducing HD HeeD – RN-Led NDIS Provider in Blacktown" />
+            <label for="b1">Body</label>
+            <textarea id="b1">Hi,
 
 Please let me introduce HD HeeD Pty Ltd, an NDIS-registered provider based in Blacktown. We are an RN-led team, with the skills and systems to deliver safe, professional, and person-centred supports.
 
@@ -362,20 +408,23 @@ Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
 📞 02 8630 5500 | ✉️ info@hdheed.com.au</textarea>
-        <div class="actions">
-          <button class="btn brand" onclick="copySubject('s1')">Copy Subject</button>
-          <button class="btn" onclick="copyBody('b1')">Copy Body</button>
-          <button class="btn secondary" onclick="copyBoth('s1','b1')">Copy Both</button>
-        </div>
-      </section>
+            <div class="actions">
+              <button class="btn brand" onclick="copySubject('s1')">Copy Subject</button>
+              <button class="btn" onclick="copyBody('b1')">Copy Body</button>
+              <button class="btn secondary" onclick="copyBoth('s1','b1')">Copy Both</button>
+            </div>
+          </div>
+        </section>
 
-      <section class="card" id="e2">
-        <div class="eyebrow">Email 2</div>
-        <h3 class="title">Our RN-Led Strength</h3>
-        <label for="s2">Subject</label>
-        <input id="s2" type="text" value="Nursing Expertise at the Core of HD HeeD" />
-        <label for="b2">Body</label>
-        <textarea id="b2">Hi,
+        <!-- Email 2 -->
+        <section class="email-card" id="e2">
+          <div class="eyebrow">Email 2</div>
+          <h3 class="title">Our RN-Led Strength</h3>
+          <div class="row">
+            <label for="s2">Subject</label>
+            <input id="s2" type="text" value="Nursing Expertise at the Core of HD HeeD" />
+            <label for="b2">Body</label>
+            <textarea id="b2">Hi,
 
 At HD HeeD, we are proud to be a group of Registered Nurses who are extremely confident in our skills and experience. This allows us to provide participants with the highest standard of care, especially when it comes to complex health needs.
 
@@ -393,20 +442,23 @@ Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
 📞 02 8630 5500 | ✉️ info@hdheed.com.au</textarea>
-        <div class="actions">
-          <button class="btn brand" onclick="copySubject('s2')">Copy Subject</button>
-          <button class="btn" onclick="copyBody('b2')">Copy Body</button>
-          <button class="btn secondary" onclick="copyBoth('s2','b2')">Copy Both</button>
-        </div>
-      </section>
+            <div class="actions">
+              <button class="btn brand" onclick="copySubject('s2')">Copy Subject</button>
+              <button class="btn" onclick="copyBody('b2')">Copy Body</button>
+              <button class="btn secondary" onclick="copyBoth('s2','b2')">Copy Both</button>
+            </div>
+          </div>
+        </section>
 
-      <section class="card" id="e3">
-        <div class="eyebrow">Email 3</div>
-        <h3 class="title">AILR System</h3>
-        <label for="s3">Subject</label>
-        <input id="s3" type="text" value="Meet AILR – Advanced Intake & Long-form Registration" />
-        <label for="b3">Body</label>
-        <textarea id="b3">Hi,
+        <!-- Email 3 -->
+        <section class="email-card" id="e3">
+          <div class="eyebrow">Email 3</div>
+          <h3 class="title">AILR System</h3>
+          <div class="row">
+            <label for="s3">Subject</label>
+            <input id="s3" type="text" value="Meet AILR – Advanced Intake & Long-form Registration" />
+            <label for="b3">Body</label>
+            <textarea id="b3">Hi,
 
 One of our key strengths at HD HeeD is our AILR system – Advanced Intake & Long-form Registration.
 
@@ -427,20 +479,23 @@ Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
 📞 02 8630 5500 | ✉️ info@hdheed.com.au</textarea>
-        <div class="actions">
-          <button class="btn brand" onclick="copySubject('s3')">Copy Subject</button>
-          <button class="btn" onclick="copyBody('b3')">Copy Body</button>
-          <button class="btn secondary" onclick="copyBoth('s3','b3')">Copy Both</button>
-        </div>
-      </section>
+            <div class="actions">
+              <button class="btn brand" onclick="copySubject('s3')">Copy Subject</button>
+              <button class="btn" onclick="copyBody('b3')">Copy Body</button>
+              <button class="btn secondary" onclick="copyBoth('s3','b3')">Copy Both</button>
+            </div>
+          </div>
+        </section>
 
-      <section class="card" id="e4">
-        <div class="eyebrow">Email 4</div>
-        <h3 class="title">Easy Online Referrals</h3>
-        <label for="s4">Subject</label>
-        <input id="s4" type="text" value="Referrals Made Simple with HD HeeD" />
-        <label for="b4">Body</label>
-        <textarea id="b4">Hi,
+        <!-- Email 4 -->
+        <section class="email-card" id="e4">
+          <div class="eyebrow">Email 4</div>
+          <h3 class="title">Easy Online Referrals</h3>
+          <div class="row">
+            <label for="s4">Subject</label>
+            <input id="s4" type="text" value="Referrals Made Simple with HD HeeD" />
+            <label for="b4">Body</label>
+            <textarea id="b4">Hi,
 
 At HD HeeD, we understand how valuable your time is. That’s why we’ve created a quick and hassle-free online referral system to make things easier for you and your participants.
 
@@ -457,17 +512,20 @@ Kind regards,
 Mat Syan
 Director – HD HeeD Pty Ltd
 📞 02 8630 5500 | ✉️ info@hdheed.com.au</textarea>
-        <div class="actions">
-          <button class="btn brand" onclick="copySubject('s4')">Copy Subject</button>
-          <button class="btn" onclick="copyBody('b4')">Copy Body</button>
-          <button class="btn secondary" onclick="copyBoth('s4','b4')">Copy Both</button>
-        </div>
-      </section>
+            <div class="actions">
+              <button class="btn brand" onclick="copySubject('s4')">Copy Subject</button>
+              <button class="btn" onclick="copyBody('b4')">Copy Body</button>
+              <button class="btn secondary" onclick="copyBoth('s4','b4')">Copy Both</button>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <div class="footer">© HD HeeD Pty Ltd • ABN 47 665 228 768 • Blacktown, NSW • Phone: 02 8630 5500 • <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
     </div>
   </section>
 
+  <!-- ===== Follow-up Board (compact) ===== -->
   <section class="board-section">
     <div class="shell">
       <div class="head">
@@ -478,7 +536,7 @@ Director – HD HeeD Pty Ltd
         </div>
         <div class="toolbar">
           <button id="btnRefresh" class="btn">🔄 Refresh</button>
-          <button id="btnSave" class="btn primary">💾 Save changes</button>
+          <button id="btnSave" class="btn brand">💾 Save changes</button>
           <span id="status" class="status"></span>
           <span class="pill">Shared • Live</span>
         </div>
@@ -497,10 +555,12 @@ Director – HD HeeD Pty Ltd
             <tbody id="tbody"></tbody>
           </table>
         </div>
-        <div class="hint">Tap a day square to open the full note. Press <span class="kbd">Esc</span> to close. Click <strong>Save changes</strong> to sync.</div>
+        <div class="hint" style="text-align:center; color:var(--muted); margin-top:.8rem; font-size:.9rem;">
+          Tap a day square to open the full note. Press <span class="kbd" style="font-family:ui-monospace;">Esc</span> to close. Click <strong>Save changes</strong> to sync.
+        </div>
       </div>
 
-      <div class="foot">
+      <div class="foot" style="border-top:1px dashed var(--line); padding: .9rem 1.2rem; display:flex; gap:.7rem; align-items:center; justify-content:space-between;">
         <div class="status" id="footStatus">Ready.</div>
         <div class="cleaner">
           <span class="status">Fresh week reset:</span>
@@ -511,7 +571,7 @@ Director – HD HeeD Pty Ltd
     </div>
   </section>
 
-  <!-- New floating editor (popover) -->
+  <!-- Floating popover editor -->
   <div id="popBackdrop" class="popover-backdrop" aria-hidden="true"></div>
   <div id="popover" class="popover" role="dialog" aria-modal="true" aria-labelledby="popTitle">
     <div class="pop-head">
@@ -649,7 +709,7 @@ Director – HD HeeD Pty Ltd
       const rect = anchorEl.getBoundingClientRect();
       const margin = 10;
       const popW = Math.min(560, window.innerWidth * 0.94);
-      const popH = Math.min(360, window.innerHeight * 0.8);
+      const popH = Math.min(380, window.innerHeight * 0.8);
       popWrap.style.width = popW + "px";
 
       // Default below the box
@@ -664,63 +724,21 @@ Director – HD HeeD Pty Ltd
         top = rect.top - popH - margin + window.scrollY;
       }
 
-      // Apply
       popWrap.style.top = top + "px";
       popWrap.style.left = left + "px";
       popWrap.style.transform = "none";
 
-      // Draw the little arrow towards the box
+      // Arrow placement
       const arrowSize = 12;
       const anchorCenter = rect.left + rect.width / 2;
       const arrowLeft = Math.max(arrowSize, Math.min(anchorCenter - left - window.scrollX, popW - arrowSize));
-      popWrap.style.setProperty("--arrow-left", arrowLeft + "px");
-      popWrap.style.setProperty("--arrow-top", (top < rect.top + window.scrollY ? (popH - 6) : (-6)) + "px"); // not used in CSS, kept if needed
-      // Place arrow (below/above)
-      const showBelow = rect.bottom + popH + 20 <= window.innerHeight;
-      if (showBelow) {
-        popWrap.style.setProperty("--arrow-y", "-6px");
-        popWrap.style.setProperty("--arrow-top-abs", "-6px");
-        popWrap.style.setProperty("--arrow-rotate", "45deg");
-        popWrap.style.setProperty("--arrow-border-top", "none");
-        popWrap.style.setProperty("--arrow-border-left", "none");
-        popWrap.style.setProperty("--arrow-border-bottom", "1px solid var(--line)");
-        popWrap.style.setProperty("--arrow-border-right", "1px solid var(--line)");
-        popWrap.style.setProperty("--arrow-top-pos", "-6px");
-        popWrap.style.setProperty("--arrow-bottom-pos", "auto");
-        popWrap.style.setProperty("--arrow-offset-y", "0");
-        popWrap.style.setProperty("--arrow-placement", "bottom");
-        popWrap.style.removeProperty("bottom");
-      } else {
-        // Arrow at bottom (popover above the box)
-        popWrap.style.setProperty("--arrow-top-pos", "auto");
-        popWrap.style.setProperty("--arrow-bottom-pos", "-6px");
-        popWrap.style.setProperty("--arrow-placement", "top");
-      }
-
-      // Arrow actual placement
-      const after = popWrap;
-      after.style.setProperty("overflow", "visible");
-      after.style.setProperty("position", "fixed");
-      // Position the :after via inline style (we'll use absolute math)
-      // We can't set pseudo-element via JS directly, so we approximate with calc in CSS:
       popWrap.style.setProperty("--arrow-left-px", arrowLeft + "px");
-      // Use inline style for :after with CSS variables:
-      popWrap.style.setProperty("--arrow-bottom", (showBelow ? "auto" : "-6px"));
-      popWrap.style.setProperty("--arrow-top", (showBelow ? "-6px" : "auto"));
-      // We will align it with left using transform.
-      popWrap.style.setProperty("--arrow-translate-x", `calc(var(--arrow-left-px) - 6px)`);
+      const showBelow = rect.bottom + popH + 20 <= window.innerHeight;
+      popWrap.style.setProperty("--arrow-top", showBelow ? "-6px" : "auto");
+      popWrap.style.setProperty("--arrow-bottom", showBelow ? "auto" : "-6px");
 
       // Focus without page jump
       setTimeout(() => { popTA.focus({ preventScroll: true }); }, 0);
-
-      // Place arrow via style attribute trick
-      popWrap.style.setProperty("--arrow-display", "block");
-      popWrap.style.cssText += `
-        --arrow-left-px:${arrowLeft}px;
-      `;
-      popWrap.style.setProperty("--arrow-top", showBelow ? "-6px" : "auto");
-      popWrap.style.setProperty("--arrow-bottom", showBelow ? "auto" : "-6px");
-      // Position the pseudo after using CSS rules below
     }
 
     // Enhance the arrow using CSS variables (applied after open)
@@ -775,7 +793,6 @@ Director – HD HeeD Pty Ltd
       if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); popSave.click(); }
     });
 
-    // Data loading / building
     async function load() {
       try {
         setStatus("Loading…");
@@ -819,14 +836,15 @@ Director – HD HeeD Pty Ltd
           else { cell.classList.add("filled"); }
           cell.id = "cell-" + id;
 
+          // data attributes for robust event delegation
+          cell.dataset.lead = lead;
+          cell.dataset.day = day;
+
           const box = document.createElement("div");
           box.className = "box";
           box.title = ta.value ? "Filled — click to view/edit" : "Empty — click to add";
 
           cell.appendChild(box);
-          cell.addEventListener("click", (ev) => {
-            openPopover(id, `${lead} — ${day}`, ta.value, cell);
-          });
 
           td.appendChild(cell);
           td.appendChild(ta);
@@ -835,6 +853,19 @@ Director – HD HeeD Pty Ltd
         tb.appendChild(tr);
       }
     }
+
+    // One listener for all day cells (reliable for all boxes)
+    document.getElementById("tbody").addEventListener("click", (e) => {
+      const cell = e.target.closest(".cell");
+      if (!cell) return;
+
+      const id = cell.id.replace("cell-", "");
+      const ta = document.getElementById("ta-" + id);
+      const lead = cell.dataset.lead || "";
+      const day = cell.dataset.day || "";
+
+      openPopover(id, `${lead} — ${day}`, ta ? ta.value : "", cell);
+    });
 
     async function save() {
       if (edits.size === 0) { setStatus("No changes to save."); return; }
@@ -858,6 +889,7 @@ Director – HD HeeD Pty Ltd
     $("btnRefresh").addEventListener("click", load);
     $("btnSave").addEventListener("click", save);
 
+    // Cleaner
     let armTimeout = null;
     $("btnArmClean").addEventListener("click", () => {
       if (armTimeout) clearTimeout(armTimeout);
