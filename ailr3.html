@@ -579,100 +579,99 @@
   }
   /* ====== Formspree Submission (fixed from old code) ====== */
   function sendToFormspree(){
-    return new Promise(function(resolve, reject){
-      // Validate GS_WEBAPP URL
-      if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
-        console.error("Invalid GS_WEBAPP URL:", GS_WEBAPP);
-        reject(new Error("Invalid Google Apps Script URL. Please check the GS_WEBAPP configuration."));
-        return;
-      }
-      // Build policy flags
-      var policyAck = {
-        handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-        incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-        complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
-      };
-      // Build base payload
-      var payload = {
-        caller: S.caller,
-        participant: S.participant,
-        contacts: S.contacts,
-        comms: S.comms,
-        living: S.living,
-        clinical: S.clinical,
-        medications: S.medications,
-        risks: S.risks,
-        bsp: S.bsp,
-        supports: S.supports,
-        schedule: S.schedule,
-        policy_ack: policyAck,
-        acks: S.acks,
-        emergency_advocacy: S.emergency_advocacy,
-        submitter: S.submitter,
-        notes: S.notes,
-        timestamp: new Date().toISOString(),
-        _meta: { app: "AILR", version: "v16" }
-      };
-      // Add human-readable summaries
-      try {
-        var addr = S.participant && S.participant.address ? [
-          S.participant.address.line1, S.participant.address.line2,
-          S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
-        ].filter(Boolean).join(", ") : "";
-        var contactSummary = [
-          (S.contacts.email || ""), (S.contacts.phone ? (" • " + S.contacts.phone) : "")
-        ].join("");
-        var requiredSummary = mapRequiredForSummary(S.supports.required, S.supports.required_other);
-        var windowsSummary = mapWindowsSummary(S.schedule.windows);
-        var daysSummary = mapDaysSummary(S.schedule.days);
-        payload.supports.required_summary = requiredSummary;
-        payload.supports.details_text = S.supports.details_text || "";
-        payload.schedule.windows_summary = windowsSummary;
-        payload.schedule.days_summary = daysSummary;
-        payload.participant.address_summary = addr;
-        payload.contacts.contact_summary = contactSummary;
-      } catch (e) {
-        console.error("Error generating summaries:", e);
-      }
-      // Send request
-      console.log("Sending data to:", GS_WEBAPP);
-      console.log("Data payload:", payload);
-      fetch(GS_WEBAPP, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).then(async function(r){
-        console.log("Submission response:", {
-          status: r.status,
-          statusText: r.statusText
-        });
-        if (!r.ok) {
-          console.error("Submission failed:", {
-            status: r.status,
-            statusText: r.statusText,
-            response: await r.text()
-          });
-          throw new Error("Submission failed with status " + r.status + ": " + r.statusText);
-        }
-        var j = await r.json().catch(function(e){
-          console.error("Failed to parse response JSON:", e);
-          return {};
-        });
-        console.log("Parsed response:", j);
-        if (j.status !== 'ok') {
-          console.error("Server reported error:", j.message || "Unknown error");
-          throw new Error(j && j.message ? j.message : "Server error");
-        }
-        resolve(j);
-      }).catch(function(e){
-        console.error("Submission error details:", {
-          message: e.message,
-          stack: e.stack
-        });
-        reject(e);
-      });
+  return new Promise(function(resolve, reject){
+    if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
+      return reject(new Error("Invalid Google Apps Script URL. Please check GS_WEBAPP."));
+    }
+
+    // Build the same payload you already had:
+    var policyAck = {
+      handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
+      incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
+      complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
+    };
+
+    var payload = {
+      caller: S.caller,
+      participant: S.participant,
+      contacts: S.contacts,
+      comms: S.comms,
+      living: S.living,
+      clinical: S.clinical,
+      medications: S.medications,
+      risks: S.risks,
+      bsp: S.bsp,
+      supports: S.supports,
+      schedule: S.schedule,
+      policy_ack: policyAck,
+      acks: S.acks,
+      emergency_advocacy: S.emergency_advocacy,
+      submitter: S.submitter,
+      notes: S.notes,
+      timestamp: new Date().toISOString(),
+      _meta: { app: "AILR", version: "v16" }
+    };
+
+    // Add summaries (same as your code)
+    try {
+      var addr = S.participant && S.participant.address ? [
+        S.participant.address.line1, S.participant.address.line2,
+        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
+      ].filter(Boolean).join(", ") : "";
+      var contactSummary = [
+        (S.contacts.email || ""), (S.contacts.phone ? (" • " + S.contacts.phone) : "")
+      ].join("");
+      var requiredSummary = (function(arr, other){
+        var map = {
+          personal_care:"Personal care",
+          high_intensity:"High-intensity personal care",
+          household_tasks:"Household tasks",
+          life_skills:"Development of life skills",
+          community_participation:"Community participation",
+          group_centre:"Group/centre-based activities",
+          travel_transport:"Assist with travel & transport",
+          daily_tasks_sil:"Daily tasks & shared living",
+          not_sure:"Not sure — guide me"
+        };
+        var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
+        if (other) list.push("Other: "+other);
+        return list.length ? list.join(", ") : "";
+      })(S.supports.required, S.supports.required_other);
+
+      var mapWindows = function(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||""; };
+      var mapDays = function(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||""; };
+
+      payload.supports.required_summary = requiredSummary;
+      payload.supports.details_text = S.supports.details_text || "";
+      payload.schedule.windows_summary = mapWindows(S.schedule.windows);
+      payload.schedule.days_summary = mapDays(S.schedule.days);
+      payload.participant.address_summary = addr;
+      payload.contacts.contact_summary = contactSummary;
+    } catch (e) { console.error("Summary generation error:", e); }
+
+    // 🚫 Do NOT set headers. Use FormData to avoid preflight.
+    var fd = new FormData();
+    fd.append("payload", JSON.stringify(payload));
+
+    fetch(GS_WEBAPP, {
+      method: "POST",
+      body: fd,
+      // no headers, no mode, no credentials → keep it simple to avoid CORS preflight
+    })
+    .then(function(r){
+      if (!r.ok) throw new Error("Submission failed: " + r.status + " " + r.statusText);
+      return r.json();
+    })
+    .then(function(j){
+      if (j.status !== "ok") throw new Error(j.message || "Server error");
+      resolve(j);
+    })
+    .catch(function(err){
+      reject(err);
     });
-  }
+  });
+}
+
   /* ====== Render Review ====== */
   function renderReview(){
     var wrap = el('div','review');
