@@ -580,17 +580,17 @@
   /* ====== Formspree Submission (fixed from old code) ====== */
   function sendToFormspree(){
   return new Promise(function(resolve, reject){
+    // Validate web app URL
     if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
       return reject(new Error("Invalid Google Apps Script URL. Please check GS_WEBAPP."));
     }
 
-    // Build the same payload you already had:
+    // Build payload (unchanged from your code)
     var policyAck = {
       handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
       incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
       complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
     };
-
     var payload = {
       caller: S.caller,
       participant: S.participant,
@@ -621,7 +621,10 @@
       var contactSummary = [
         (S.contacts.email || ""), (S.contacts.phone ? (" • " + S.contacts.phone) : "")
       ].join("");
-      var requiredSummary = (function(arr, other){
+      var mapWindows = function(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||""; };
+      var mapDays = function(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||""; };
+
+      payload.supports.required_summary = (function(arr, other){
         var map = {
           personal_care:"Personal care",
           high_intensity:"High-intensity personal care",
@@ -634,41 +637,31 @@
           not_sure:"Not sure — guide me"
         };
         var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
-        if (other) list.push("Other: "+other);
+        if (other) list.push("Other: " + other);
         return list.length ? list.join(", ") : "";
       })(S.supports.required, S.supports.required_other);
 
-      var mapWindows = function(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||""; };
-      var mapDays = function(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||""; };
-
-      payload.supports.required_summary = requiredSummary;
       payload.supports.details_text = S.supports.details_text || "";
       payload.schedule.windows_summary = mapWindows(S.schedule.windows);
       payload.schedule.days_summary = mapDays(S.schedule.days);
       payload.participant.address_summary = addr;
       payload.contacts.contact_summary = contactSummary;
-    } catch (e) { console.error("Summary generation error:", e); }
+    } catch(e){ console.error("Summary generation error:", e); }
 
-    // 🚫 Do NOT set headers. Use FormData to avoid preflight.
+    // ✨ Key change: use FormData, no headers → avoids CORS preflight
     var fd = new FormData();
     fd.append("payload", JSON.stringify(payload));
 
-    fetch(GS_WEBAPP, {
-      method: "POST",
-      body: fd,
-      // no headers, no mode, no credentials → keep it simple to avoid CORS preflight
-    })
-    .then(function(r){
-      if (!r.ok) throw new Error("Submission failed: " + r.status + " " + r.statusText);
-      return r.json();
-    })
-    .then(function(j){
-      if (j.status !== "ok") throw new Error(j.message || "Server error");
-      resolve(j);
-    })
-    .catch(function(err){
-      reject(err);
-    });
+    fetch(GS_WEBAPP, { method: "POST", body: fd })
+      .then(function(r){
+        if (!r.ok) throw new Error("Submission failed: " + r.status + " " + r.statusText);
+        return r.json();
+      })
+      .then(function(j){
+        if (j.status !== "ok") throw new Error(j.message || "Server error");
+        resolve(j);
+      })
+      .catch(reject);
   });
 }
 
