@@ -552,7 +552,7 @@
     i.addEventListener('input', function(){ try{ if (typeof onSave === "function") onSave(i.value||""); } finally { setSaveHint("Draft saved"); } });
     box.appendChild(i); return box;
   }
-  /* ====== Summary Helpers ====== */
+  /* ====== Summary Helpers (from old code) ====== */
   function mapRequiredForSummary(arr, other){
     var map = {
       personal_care:"Personal care",
@@ -577,7 +577,7 @@
     var map = { d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun" };
     return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
   }
-  /* ====== Submission with timeout + fallback ====== */
+  /* ====== Formspree Submission (fixed from old code) ====== */
   function sendToFormspree(){
     return new Promise(function(resolve, reject){
       // Validate GS_WEBAPP URL
@@ -592,7 +592,7 @@
         incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
         complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
       };
-      // Base payload
+      // Build base payload
       var payload = {
         caller: S.caller,
         participant: S.participant,
@@ -613,7 +613,7 @@
         timestamp: new Date().toISOString(),
         _meta: { app: "AILR", version: "v16" }
       };
-      // Human-readable summaries
+      // Add human-readable summaries
       try {
         var addr = S.participant && S.participant.address ? [
           S.participant.address.line1, S.participant.address.line2,
@@ -634,68 +634,42 @@
       } catch (e) {
         console.error("Error generating summaries:", e);
       }
-
+      // Send request
       console.log("Sending data to:", GS_WEBAPP);
-      // Helper: timeout-able fetch
-      function timedFetch(resource, options, ms){
-        var controller = new AbortController();
-        var id = setTimeout(function(){ controller.abort(); }, ms);
-        return fetch(resource, Object.assign({}, options, { signal: controller.signal }))
-          .finally(function(){ clearTimeout(id); });
-      }
-
-      // First attempt: JSON
-      timedFetch(GS_WEBAPP, {
+      console.log("Data payload:", payload);
+      fetch(GS_WEBAPP, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        referrerPolicy: "no-referrer",
-        redirect: "follow",
         body: JSON.stringify(payload)
-      }, 12000).then(async function(r){
-        if (!r.ok) {
-          const text = await r.text().catch(()=>"(no body)");
-          throw new Error("Submission failed ("+r.status+" "+r.statusText+"): "+text.slice(0,300));
-        }
-        // GAS might return JSON or HTML; try JSON first, then tolerant parse
-        let j = {};
-        try { j = await r.clone().json(); }
-        catch{
-          const t = await r.text();
-          // best-effort detect success token in HTML
-          if (/\bok\b/i.test(t)) j = { status:"ok", html:true };
-          else throw new Error("Unexpected response. Not JSON and no 'ok' token.");
-        }
-        if (j.status !== 'ok') throw new Error(j.message || "Server error");
-        resolve(j);
-      }).catch(function(firstErr){
-        console.warn("JSON submit failed, retrying with URL-encoded…", firstErr);
-        // Fallback: URL-encoded form (many GAS examples expect this)
-        var data = new URLSearchParams();
-        data.set("data", JSON.stringify(payload));
-        timedFetch(GS_WEBAPP, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-          referrerPolicy: "no-referrer",
-          redirect: "follow",
-          body: data.toString()
-        }, 12000).then(async function(r2){
-          if (!r2.ok) {
-            const text = await r2.text().catch(()=>"(no body)");
-            throw new Error("Fallback failed ("+r2.status+" "+r2.statusText+"): "+text.slice(0,300));
-          }
-          let j = {};
-          try { j = await r2.clone().json(); }
-          catch{
-            const t = await r2.text();
-            if (/\bok\b/i.test(t)) j = { status:"ok", html:true };
-            else throw new Error("Fallback response unexpected. Not JSON and no 'ok' token.");
-          }
-          if (j.status !== 'ok') throw new Error(j.message || "Server error (fallback)");
-          resolve(j);
-        }).catch(function(fallbackErr){
-          console.error("Submission error details:", { firstErr, fallbackErr });
-          reject(fallbackErr);
+      }).then(async function(r){
+        console.log("Submission response:", {
+          status: r.status,
+          statusText: r.statusText
         });
+        if (!r.ok) {
+          console.error("Submission failed:", {
+            status: r.status,
+            statusText: r.statusText,
+            response: await r.text()
+          });
+          throw new Error("Submission failed with status " + r.status + ": " + r.statusText);
+        }
+        var j = await r.json().catch(function(e){
+          console.error("Failed to parse response JSON:", e);
+          return {};
+        });
+        console.log("Parsed response:", j);
+        if (j.status !== 'ok') {
+          console.error("Server reported error:", j.message || "Unknown error");
+          throw new Error(j && j.message ? j.message : "Server error");
+        }
+        resolve(j);
+      }).catch(function(e){
+        console.error("Submission error details:", {
+          message: e.message,
+          stack: e.stack
+        });
+        reject(e);
       });
     });
   }
@@ -992,23 +966,13 @@
           var row1 = el('div','ck-row');
           var c1 = el('input'); c1.type="checkbox"; c1.id="ack_read_"+d.id; c1.checked = !!S.acks[d.id].read;
           var l1 = el('label',null,"I have received & read this document."); l1.htmlFor=c1.id;
-          c1.addEventListener('change', function(){
-  S.acks[d.id].read = c1.checked;
-  save();
-  updateSum();
-});
-
+          c1.addEventListener('change', function(){ S.acks[d.id].read = c1.checked; save(); });
           row1.appendChild(c1); row1.appendChild(l1); card.appendChild(row1);
           if (d.requiresConsent){
             var row2 = el('div','ck-row');
             var c2 = el('input'); c2.type="checkbox"; c2.id="ack_con_"+d.id; c2.checked = !!S.acks[d.id].consent;
             var l2 = el('label',null,"I consent to the terms in this form."); l2.htmlFor=c2.id;
-            c2.addEventListener('change', function(){
-  S.acks[d.id].consent = c2.checked;
-  save();
-  updateSum();
-});
-
+            c2.addEventListener('change', function(){ S.acks[d.id].consent = c2.checked; save(); });
             row2.appendChild(c2); row2.appendChild(l2); card.appendChild(row2);
           }
           m.appendChild(card);
@@ -1043,14 +1007,53 @@
       build:function(m){
         m.appendChild(row("two",[ input("Your name (submitter)", S.submitter, "name"), input("Email (required if no phone)", S.submitter, "email","email") ]));
         m.appendChild(input("Phone (required if no email)", S.submitter, "phone","tel"));
-        // LEFT-aligned single Send button (Submit removed)
-        var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; justify-content:flex-start";
-        var btnSend = button("Send","primary", function(){
+        var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
+        var btnSubmit = button("Submit","primary", function(){
           if (S.caller.consent !== "Yes"){
             alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
             return;
           }
-          if (!canProceed(Steps.length-2)){ return; }
+          if (!canProceed(Steps.length-2)){
+            return;
+          }
+          var hasEmail = S.submitter.email && S.submitter.email.trim();
+          var hasPhone = S.submitter.phone && S.submitter.phone.trim();
+          if (!(hasEmail || hasPhone)){
+            alert("Please provide at least an email or a phone number to submit.");
+            return;
+          }
+          btnSubmit.disabled = true;
+          btnSubmit.textContent = "Submitting…";
+          sendToFormspree().then(function(j){
+            triggerConfetti(1200);
+            var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
+            alert("All done — we’ve received your onboarding." + pdfMsg);
+            try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+            var stage = document.querySelector("main.stage");
+            if (stage){
+              stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
+                <div class="q">Thank you for your submission</div>\
+                <p class="sub">We’ve received your referral and will be in touch soon.</p>\
+                <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
+            }
+          }).catch(function(e){
+            console.error("Submission error details:", {
+              message: e.message,
+              stack: e.stack
+            });
+            alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = "Submit";
+          });
+        });
+        var btnSend = button("Send Now","primary", function(){
+          if (S.caller.consent !== "Yes"){
+            alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
+            return;
+          }
+          if (!canProceed(Steps.length-2)){
+            return;
+          }
           var hasEmail = S.submitter.email && S.submitter.email.trim();
           var hasPhone = S.submitter.phone && S.submitter.phone.trim();
           if (!(hasEmail || hasPhone)){
@@ -1065,11 +1068,11 @@
             alert("All done — we’ve received your onboarding." + pdfMsg);
             try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
             var stage = document.querySelector("main.stage");
-                        if (stage){
+            if (stage){
               stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
                 <div class="q">Thank you for your submission</div>\
                 <p class="sub">We’ve received your referral and will be in touch soon.</p>\
-                <div class="foot" style="justify-content:flex-start"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
+                <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
             }
           }).catch(function(e){
             console.error("Submission error details:", {
@@ -1078,12 +1081,12 @@
             });
             alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
             btnSend.disabled = false;
-            btnSend.textContent = "Send";
+            btnSend.textContent = "Send Now";
           });
         });
-        actions.appendChild(btnSend);
+        var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
+        actions.appendChild(btnSubmit); actions.appendChild(btnSend); actions.appendChild(btnPdf);
         m.appendChild(actions);
-
         var hint = el('div','hint','We’ll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.');
         m.appendChild(hint);
       }
@@ -1125,7 +1128,6 @@
     if (targetIndex >= 2 && S.caller.consent !== "Yes") return true;
     return false;
   }
-
   /* ====== Validations (hard gates) ====== */
   function str(v){ return (v||"").toString().trim(); }
   function has(v){ return str(v).length>0; }
@@ -1177,7 +1179,6 @@
     }
     return true;
   }
-
   /* ====== Render ====== */
   function render(slide){
     var step = Steps[S.i];
@@ -1191,15 +1192,11 @@
     S.prevI = S.i;
     step.build(optsEl);
     backBtn.disabled = S.i === 0;
-
-    // Keep Next button label consistent (no misleading "Submit" text on last step)
-    nextBtn.textContent = S.i === Steps.length - 1 ? "Next →" : "Next →";
-
+    nextBtn.textContent = S.i === Steps.length - 1 ? "Submit" : "Next →";
     setPortrait();
     save();
   }
-
-  /* ====== Navigation buttons ====== */
+  /* ====== Navigation ====== */
   backBtn.addEventListener('click', function(){
     if (S.i > 0){
       S.i--;
@@ -1216,10 +1213,7 @@
       render(true);
       updateNavigation();
     } else {
-      // Final step: primary Send button in the step handles submission.
-      // Optionally focus the Send button if present.
-      var sendBtn = optsEl.querySelector('.btn.primary');
-      if (sendBtn) sendBtn.focus();
+      // Submit handled in the step’s button
     }
   });
   saveExitBtn.addEventListener('click', function(){
@@ -1227,8 +1221,7 @@
     alert("Your progress has been saved. You can return anytime to continue.");
     window.location.href = "https://hdheed.com.au";
   });
-
-  /* ====== History & lifecycle ====== */
+  /* ====== Handle Browser Navigation ====== */
   window.addEventListener('popstate', function(event) {
     if (event.state && typeof event.state.step === 'number') {
       S.i = event.state.step;
@@ -1238,13 +1231,13 @@
       restoreState();
     }
   });
+  /* ====== Handle BFCache Restore ====== */
   window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
       restoreState();
     }
   });
-
-  /* ====== Printable Summary (already used by "Print / Save summary") ====== */
+  /* ====== Printable Summary ====== */
   function openPrintableSummary(){
     var win = window.open('', '_blank');
     var submissionDate = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -1288,7 +1281,6 @@
     win.document.write(html);
     win.document.close();
   }
-
   /* ====== Confetti ====== */
   function triggerConfetti(duration){
     var canvas = document.getElementById('confetti');
@@ -1307,8 +1299,7 @@
       this.size = Math.random() * 6 + 2;
     }
     for (var i = 0; i < 100; i++) particles.push(new Particle());
-    var start = Date.now();
-    (function animate(){
+    function animate(){
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(function(p){
         p.x += p.vx;
@@ -1325,9 +1316,10 @@
         canvas.classList.add('hide');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
-    })();
+    }
+    var start = Date.now();
+    animate();
   }
-
   /* ====== Init ====== */
   restoreState();
   window.addEventListener('resize', function(){
@@ -1339,4 +1331,3 @@
 </script>
 </body>
 </html>
-
