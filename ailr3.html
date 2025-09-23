@@ -193,19 +193,16 @@
   .ck-row label{
     position:relative; padding-left:36px; cursor:pointer; user-select:none; line-height:1.2
   }
-  /* Base box */
   .ck-row label::before{
     content:""; position:absolute; left:6px; top:50%; transform:translateY(-50%);
     width:22px; height:22px; border:2px solid #6677a8; border-radius:6px; margin-right:10px;
     background:#0e162e; box-shadow:inset 0 2px 4px rgba(0,0,0,.35); transition: all .25s ease;
   }
-  /* When checked, fill box */
   .ck-row input[type="checkbox"]:checked + label::before{
     background: linear-gradient(135deg, var(--al-a1), var(--al-a2));
     border-color: transparent;
     box-shadow: 0 0 0 3px rgba(236,72,153,.25);
   }
-  /* Proper ✓ tick mark */
   .ck-row input[type="checkbox"]:checked + label::after{
     content:""; position:absolute; left:12px; top:50%;
     width:8px; height:14px; border: solid #fff; border-width:0 3px 3px 0;
@@ -250,7 +247,6 @@
     to  { box-shadow: 0 20px 50px rgba(0,0,0,.55), 0 0 20px var(--al-glow) }
   }
 
-  /* Slide transition container */
   .slide-enter{ animation: slideIn .35s cubic-bezier(.2,.8,.2,1) both }
   .slide-exit{ animation: slideOut .25s cubic-bezier(.4,0,.2,1) both }
 </style>
@@ -465,12 +461,14 @@
   var nextBtn = document.getElementById("nextBtn");
   var saveExitBtn = document.getElementById("saveExitBtn");
   var navList = document.getElementById("navList");
-  /* ====== Portrait images (kept stubs for alt text only) ====== */
+
+  /* ====== Portrait images (stubs) ====== */
   var AILR_IMAGES = {
     intro: "", caller: "", participant: "", contacts: "", comms: "", living: "", clinical: "",
     medications: "", risks: "", bsp: "", supports: "", schedule: "", policies: "", consents: "", uploads: "", review: "", submit: ""
   };
-  function setPortrait(){ /* (no external images to keep file standalone) */ }
+  function setPortrait(){}
+
   /* ====== UI builders ====== */
   function button(txt,variant,onClick){
     var b = el('button','btn '+(variant||'ghost')); b.type="button"; b.textContent=txt; b.addEventListener('click',onClick); return b;
@@ -552,7 +550,8 @@
     i.addEventListener('input', function(){ try{ if (typeof onSave === "function") onSave(i.value||""); } finally { setSaveHint("Draft saved"); } });
     box.appendChild(i); return box;
   }
-  /* ====== Summary Helpers (from old code) ====== */
+
+  /* ====== Summary Helpers ====== */
   function mapRequiredForSummary(arr, other){
     var map = {
       personal_care:"Personal care",
@@ -577,16 +576,13 @@
     var map = { d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun" };
     return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
   }
-  <script>
-  // ... keep everything else the same ...
 
+  /* ====== Submission (fixed: kept INSIDE this script) ====== */
   function sendToFormspree(){
     return new Promise(function(resolve, reject){
       if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
         return reject(new Error("Invalid Google Apps Script URL. Please check GS_WEBAPP."));
       }
-
-      // Build payload exactly as before
       var policyAck = {
         handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
         incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
@@ -606,7 +602,7 @@
 
       fetch(GS_WEBAPP, { method: "POST", body: fd })
         .then(async function(r){
-          const text = await r.text(); // read once
+          const text = await r.text();
           let data;
           try { data = JSON.parse(text); } catch(_) { data = { status:'error', message:'Non-JSON reply', raw:text }; }
           if (!r.ok || data.status !== 'ok') {
@@ -619,8 +615,6 @@
         });
     });
   }
-</script>
-
 
   /* ====== Render Review ====== */
   function renderReview(){
@@ -730,6 +724,7 @@
     ]));
     return wrap;
   }
+
   /* ====== Steps ====== */
   var Steps = [
     { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
@@ -958,21 +953,12 @@
         m.appendChild(input("Phone (required if no email)", S.submitter, "phone","tel"));
         var actions = el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
         var btnSubmit = button("Submit","primary", function(){
-          if (S.caller.consent !== "Yes"){
-            alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
-            return;
-          }
-          if (!canProceed(Steps.length-2)){
-            return;
-          }
+          if (S.caller.consent !== "Yes"){ alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”."); return; }
+          if (!canProceed(Steps.length-2)) return;
           var hasEmail = S.submitter.email && S.submitter.email.trim();
           var hasPhone = S.submitter.phone && S.submitter.phone.trim();
-          if (!(hasEmail || hasPhone)){
-            alert("Please provide at least an email or a phone number to submit.");
-            return;
-          }
-          btnSubmit.disabled = true;
-          btnSubmit.textContent = "Submitting…";
+          if (!(hasEmail || hasPhone)){ alert("Please provide at least an email or a phone number to submit."); return; }
+          btnSubmit.disabled = true; btnSubmit.textContent = "Submitting…";
           sendToFormspree().then(function(j){
             triggerConfetti(1200);
             var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
@@ -986,31 +972,18 @@
                 <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
             }
           }).catch(function(e){
-            console.error("Submission error details:", {
-              message: e.message,
-              stack: e.stack
-            });
+            console.error("Submission error details:", { message: e.message, stack: e.stack });
             alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
-            btnSubmit.disabled = false;
-            btnSubmit.textContent = "Submit";
+            btnSubmit.disabled = false; btnSubmit.textContent = "Submit";
           });
         });
         var btnSend = button("Send Now","primary", function(){
-          if (S.caller.consent !== "Yes"){
-            alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”.");
-            return;
-          }
-          if (!canProceed(Steps.length-2)){
-            return;
-          }
+          if (S.caller.consent !== "Yes"){ alert("We’re unable to submit without consent. Please go back to Step 2 and select “Yes”."); return; }
+          if (!canProceed(Steps.length-2)) return;
           var hasEmail = S.submitter.email && S.submitter.email.trim();
           var hasPhone = S.submitter.phone && S.submitter.phone.trim();
-          if (!(hasEmail || hasPhone)){
-            alert("Please provide at least an email or a phone number to submit.");
-            return;
-          }
-          btnSend.disabled = true;
-          btnSend.textContent = "Sending…";
+          if (!(hasEmail || hasPhone)){ alert("Please provide at least an email or a phone number to submit."); return; }
+          btnSend.disabled = true; btnSend.textContent = "Sending…";
           sendToFormspree().then(function(j){
             triggerConfetti(1200);
             var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
@@ -1019,18 +992,14 @@
             var stage = document.querySelector("main.stage");
             if (stage){
               stage.innerHTML = '<div class="head"><span class="step">Done</span><div class="meter"><div style="width:100%"></div></div></div>\
-                <div class="q">Thank you for your submission</div>\
+                                <div class="q">Thank you for your submission</div>\
                 <p class="sub">We’ve received your referral and will be in touch soon.</p>\
                 <div class="foot"><button class="btn ghost" onclick="location.reload()">Start a new referral</button></div>';
             }
           }).catch(function(e){
-            console.error("Submission error details:", {
-              message: e.message,
-              stack: e.stack
-            });
+            console.error("Submission error details:", { message: e.message, stack: e.stack });
             alert("Couldn’t send the form. Error: " + (e.message || e) + "\nPlease email info@hdheed.com.au with this error or try again. Check the browser console (F12) for details.");
-            btnSend.disabled = false;
-            btnSend.textContent = "Send Now";
+            btnSend.disabled = false; btnSend.textContent = "Send Now";
           });
         });
         var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
@@ -1041,6 +1010,7 @@
       }
     }
   ];
+
   /* ====== NAVIGATION (with consent lock) ====== */
   function buildNavigation(){
     navList.innerHTML = '';
@@ -1064,6 +1034,7 @@
     });
     updateNavigation();
   }
+
   function updateNavigation(){
     var items = navList.querySelectorAll('.nav-item');
     items.forEach(function(item, index){
@@ -1073,10 +1044,12 @@
       if (isStepLocked(index)) item.classList.add('locked');
     });
   }
+
   function isStepLocked(targetIndex){
     if (targetIndex >= 2 && S.caller.consent !== "Yes") return true;
     return false;
   }
+
   /* ====== Validations (hard gates) ====== */
   function str(v){ return (v||"").toString().trim(); }
   function has(v){ return str(v).length>0; }
@@ -1128,6 +1101,7 @@
     }
     return true;
   }
+
   /* ====== Render ====== */
   function render(slide){
     var step = Steps[S.i];
@@ -1145,7 +1119,8 @@
     setPortrait();
     save();
   }
-  /* ====== Navigation ====== */
+
+  /* ====== Navigation buttons ====== */
   backBtn.addEventListener('click', function(){
     if (S.i > 0){
       S.i--;
@@ -1162,7 +1137,7 @@
       render(true);
       updateNavigation();
     } else {
-      // Submit handled in the step’s button
+      // Final submit handled by the buttons in the last step
     }
   });
   saveExitBtn.addEventListener('click', function(){
@@ -1170,7 +1145,8 @@
     alert("Your progress has been saved. You can return anytime to continue.");
     window.location.href = "https://hdheed.com.au";
   });
-  /* ====== Handle Browser Navigation ====== */
+
+  /* ====== History / lifecycle ====== */
   window.addEventListener('popstate', function(event) {
     if (event.state && typeof event.state.step === 'number') {
       S.i = event.state.step;
@@ -1180,12 +1156,13 @@
       restoreState();
     }
   });
-  /* ====== Handle BFCache Restore ====== */
+
   window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
       restoreState();
     }
   });
+
   /* ====== Printable Summary ====== */
   function openPrintableSummary(){
     var win = window.open('', '_blank');
@@ -1230,6 +1207,7 @@
     win.document.write(html);
     win.document.close();
   }
+
   /* ====== Confetti ====== */
   function triggerConfetti(duration){
     var canvas = document.getElementById('confetti');
@@ -1248,6 +1226,7 @@
       this.size = Math.random() * 6 + 2;
     }
     for (var i = 0; i < 100; i++) particles.push(new Particle());
+    var start = Date.now();
     function animate(){
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(function(p){
@@ -1266,9 +1245,9 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
-    var start = Date.now();
     animate();
   }
+
   /* ====== Init ====== */
   restoreState();
   window.addEventListener('resize', function(){
@@ -1276,7 +1255,9 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   });
-})();
+
+})(); // end IIFE
 </script>
 </body>
 </html>
+
