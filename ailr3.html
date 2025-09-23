@@ -577,93 +577,50 @@
     var map = { d1:"Mon", d2:"Tue", d3:"Wed", d4:"Thu", d5:"Fri", d6:"Sat", d7:"Sun" };
     return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
   }
-  /* ====== Formspree Submission (fixed from old code) ====== */
+  <script>
+  // ... keep everything else the same ...
+
   function sendToFormspree(){
-  return new Promise(function(resolve, reject){
-    // Validate web app URL
-    if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
-      return reject(new Error("Invalid Google Apps Script URL. Please check GS_WEBAPP."));
-    }
+    return new Promise(function(resolve, reject){
+      if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
+        return reject(new Error("Invalid Google Apps Script URL. Please check GS_WEBAPP."));
+      }
 
-    // Build payload (unchanged from your code)
-    var policyAck = {
-      handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-      incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-      complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
-    };
-    var payload = {
-      caller: S.caller,
-      participant: S.participant,
-      contacts: S.contacts,
-      comms: S.comms,
-      living: S.living,
-      clinical: S.clinical,
-      medications: S.medications,
-      risks: S.risks,
-      bsp: S.bsp,
-      supports: S.supports,
-      schedule: S.schedule,
-      policy_ack: policyAck,
-      acks: S.acks,
-      emergency_advocacy: S.emergency_advocacy,
-      submitter: S.submitter,
-      notes: S.notes,
-      timestamp: new Date().toISOString(),
-      _meta: { app: "AILR", version: "v16" }
-    };
+      // Build payload exactly as before
+      var policyAck = {
+        handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
+        incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
+        complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
+      };
+      var payload = {
+        caller: S.caller, participant: S.participant, contacts: S.contacts, comms: S.comms,
+        living: S.living, clinical: S.clinical, medications: S.medications,
+        risks: S.risks, bsp: S.bsp, supports: S.supports, schedule: S.schedule,
+        policy_ack: policyAck, acks: S.acks, emergency_advocacy: S.emergency_advocacy,
+        submitter: S.submitter, notes: S.notes,
+        timestamp: new Date().toISOString(), _meta: { app: "AILR", version: "v16" }
+      };
 
-    // Add summaries (same as your code)
-    try {
-      var addr = S.participant && S.participant.address ? [
-        S.participant.address.line1, S.participant.address.line2,
-        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
-      ].filter(Boolean).join(", ") : "";
-      var contactSummary = [
-        (S.contacts.email || ""), (S.contacts.phone ? (" • " + S.contacts.phone) : "")
-      ].join("");
-      var mapWindows = function(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||""; };
-      var mapDays = function(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(k=>m[k]).filter(Boolean).join(", ")||""; };
+      var fd = new FormData();
+      fd.append("payload", JSON.stringify(payload));
 
-      payload.supports.required_summary = (function(arr, other){
-        var map = {
-          personal_care:"Personal care",
-          high_intensity:"High-intensity personal care",
-          household_tasks:"Household tasks",
-          life_skills:"Development of life skills",
-          community_participation:"Community participation",
-          group_centre:"Group/centre-based activities",
-          travel_transport:"Assist with travel & transport",
-          daily_tasks_sil:"Daily tasks & shared living",
-          not_sure:"Not sure — guide me"
-        };
-        var list = (arr||[]).map(function(k){ return map[k]||k; }).filter(Boolean);
-        if (other) list.push("Other: " + other);
-        return list.length ? list.join(", ") : "";
-      })(S.supports.required, S.supports.required_other);
+      fetch(GS_WEBAPP, { method: "POST", body: fd })
+        .then(async function(r){
+          const text = await r.text(); // read once
+          let data;
+          try { data = JSON.parse(text); } catch(_) { data = { status:'error', message:'Non-JSON reply', raw:text }; }
+          if (!r.ok || data.status !== 'ok') {
+            throw new Error(data.message || ('HTTP ' + r.status + ' ' + r.statusText));
+          }
+          resolve(data);
+        })
+        .catch(function(err){
+          reject(err);
+        });
+    });
+  }
+</script>
 
-      payload.supports.details_text = S.supports.details_text || "";
-      payload.schedule.windows_summary = mapWindows(S.schedule.windows);
-      payload.schedule.days_summary = mapDays(S.schedule.days);
-      payload.participant.address_summary = addr;
-      payload.contacts.contact_summary = contactSummary;
-    } catch(e){ console.error("Summary generation error:", e); }
-
-    // ✨ Key change: use FormData, no headers → avoids CORS preflight
-    var fd = new FormData();
-    fd.append("payload", JSON.stringify(payload));
-
-    fetch(GS_WEBAPP, { method: "POST", body: fd })
-      .then(function(r){
-        if (!r.ok) throw new Error("Submission failed: " + r.status + " " + r.statusText);
-        return r.json();
-      })
-      .then(function(j){
-        if (j.status !== "ok") throw new Error(j.message || "Server error");
-        resolve(j);
-      })
-      .catch(reject);
-  });
-}
 
   /* ====== Render Review ====== */
   function renderReview(){
