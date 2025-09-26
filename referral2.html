@@ -2,126 +2,160 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>HD HeeD — Simple Referral</title>
   <meta name="description" content="Ultra-simple HD HeeD referral. Clean email summary + downloadable summary. Auto-CC to info@hdheed.com.au and ndis@hdheed.com.au."/>
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root{
-      --bg:#0b1220;--ink:#0b1220;--card:#fff;--muted:#6b7280;--ring:#a5f3fc;
-      --brand:#0ea5a8;--brand2:#06b6d4;--brand3:#14b8a6;--brand4:#0891b2;
+      /* AILR-like dark theme */
+      --bg:#0b0f1a;          /* page background */
+      --ink:#e8edff;         /* primary text on dark */
+      --card:#10172a;        /* main panel/card */
+      --muted:#94a3b8;       /* muted text/borders */
+      --ring:#60a5fa;        /* focus ring / input focus */
+
+      /* Brand accent (gold/yellow) */
+      --brand:#ffc107;
+      --brand2:#ffd95c;
+      --brand3:#ffe78f;
+      --brand4:#ffefb0;
+
       --danger:#ef4444;
     }
-    *{box-sizing:border-box} html,body{height:100%}
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
-      margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;
-      background:
-        radial-gradient(1200px 800px at 10% -10%, #1e293b 0%, transparent 60%),
-        radial-gradient(900px 700px at 100% 10%, #0b1220 0%, transparent 55%),
-        linear-gradient(135deg,#0b1220,#111827 60%);
-      color:#e5e7eb;display:flex;justify-content:center;padding:24px
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;
+      background:linear-gradient(180deg, var(--bg), #0d1428 60%, #0b0f1a);
+      color:var(--ink);
+      display:flex;justify-content:center;padding:24px
     }
     .shell{width:100%;max-width:1100px}
-    .card{background:var(--card);color:var(--ink);border-radius:22px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45);position:relative}
-
-    /* Header */
-    header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border-bottom:1px solid #e5e7eb;position:relative;background:#fff}
-    header:before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:linear-gradient(90deg,var(--brand),var(--brand2),var(--brand3),var(--brand4));}
+    .card{
+      background:var(--card);color:var(--ink);
+      border-radius:22px;overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);position:relative
+    }
+    header{
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
+      padding:20px 22px;border-bottom:1px solid var(--muted);position:relative
+    }
+    header:before{
+      content:"";position:absolute;inset:0 0 auto 0;height:6px;
+      background:linear-gradient(90deg,var(--brand),var(--brand2),var(--brand3),var(--brand4));
+    }
     .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:40px;height:40px;border-radius:10px;background:#0ea5a8 url('https://www.hdheed.com.au/images/logo.png') center/cover no-repeat;box-shadow:inset 0 0 18px rgba(255,255,255,.2)}
+    .logo{
+      width:40px;height:40px;border-radius:10px;
+      background:var(--brand) url('https://www.hdheed.com.au/images/logo.png') center/cover no-repeat;
+      box-shadow:inset 0 0 18px rgba(255,255,255,.2)
+    }
     .title{font-weight:800;letter-spacing:.2px}
-    .subtitle{color:#475569;font-size:.95rem}
+    .subtitle{color:var(--muted);font-size:.95rem}
 
-    /* Progress */
-    .progress{height:12px;background:#eef2f7;border-radius:999px;overflow:hidden;width:340px;border:1px solid #e5e7eb}
-    .progress>div{height:100%;width:0%;background:linear-gradient(90deg,var(--brand2),var(--brand3));box-shadow:0 0 12px rgba(20,184,166,.45);transition:width .35s ease}
+    .progress{height:12px;background:#1e293b;border-radius:999px;overflow:hidden;width:340px}
+    .progress>div{
+      height:100%;width:0%;
+      background:linear-gradient(90deg,var(--brand2),var(--brand3));
+      box-shadow:0 0 12px rgba(255,217,92,.45);
+      transition:width .35s ease
+    }
 
-    /* Layout */
     main{display:grid;grid-template-columns:280px 1fr;min-height:640px}
     @media (max-width:920px){main{grid-template-columns:1fr}}
 
-    /* Nav */
-    nav{background:linear-gradient(180deg,#f0fdfa,#f8fafc);border-right:1px solid #e5e7eb;padding:18px;display:flex;flex-direction:column;gap:8px}
-    .step-link{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;cursor:pointer;color:#111827;text-decoration:none;border:1px solid #e2e8f0;background:#ffffff;transition:transform .05s ease, box-shadow .15s ease, border-color .15s ease}
-    .step-link:active{transform:translateY(1px)}
-    .step-link .dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1;box-shadow:inset 0 0 0 2px #e2e8f0}
-    .step-link.active{background:linear-gradient(180deg,#e0f2fe,#fff);border-color:#99f6e4;box-shadow:0 4px 14px rgba(8,145,178,.12)}
-    .step-link.active .dot{background:var(--brand2);box-shadow:0 0 0 2px #ccfbf1 inset}
-    .step-link.done{background:linear-gradient(180deg,#ecfeff,#ffffff);border-color:#99f6e4}
-    .step-link.done .dot{background:var(--brand3)}
-    .badge{margin-left:auto;font-size:.75rem;color:#475569}
+    nav{
+      background:#0f172a;border-right:1px solid var(--muted);
+      padding:18px;display:flex;flex-direction:column;gap:8px
+    }
+    .step-link{
+      display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;cursor:pointer;
+      color:var(--ink);text-decoration:none;border:1px solid var(--muted);
+      background:#1e293b;transition:.2s
+    }
+    .step-link .dot{width:10px;height:10px;border-radius:50%;background:#334155;box-shadow:inset 0 0 0 2px var(--muted)}
+    .step-link.active{
+      background:#172554;border-color:var(--brand3);box-shadow:0 4px 14px rgba(255,217,92,.12)
+    }
+    .step-link.active .dot{background:var(--brand2);box-shadow:0 0 0 2px var(--brand4) inset}
+    .step-link.done{background:#1e3a8a;border-color:var(--brand4)}
+    .step-link.done .dot{background:var(--brand)}
+    .badge{margin-left:auto;font-size:.75rem;color:var(--muted)}
 
-    /* Pane + blocks */
-    .pane{padding:24px 24px 28px;position:relative;min-height:560px}
-    .block{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 6px 22px rgba(2,6,23,.04)}
+    .pane{padding:24px 24px 28px}
+    .block{
+      background:#0f172a;border:1px solid var(--muted);border-radius:16px;
+      padding:18px;margin-bottom:16px;box-shadow:0 6px 22px rgba(2,6,23,.35)
+    }
     h2{margin:.25rem 0 .75rem 0;position:relative;padding-left:12px}
-    h2:before{content:"";position:absolute;left:0;top:.1rem;bottom:.1rem;width:6px;border-radius:999px;background:linear-gradient(180deg,var(--brand2),var(--brand3))}
-    .muted{color:#64748b}
+    h2:before{
+      content:"";position:absolute;left:0;top:.1rem;bottom:.1rem;width:6px;border-radius:999px;
+      background:linear-gradient(180deg,var(--brand2),var(--brand3))
+    }
+    .muted{color:var(--muted)}
 
     .grid{display:grid;gap:14px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
     @media (max-width:720px){.two,.three{grid-template-columns:1fr}}
 
-    /* Inputs */
-    label{font-weight:700;font-size:.95rem;color:#111827}
-    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;outline:none;background:#fff;transition:box-shadow .15s, border-color .15s;color:#0f172a}
-    input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px var(--ring); border-color:#67e8f9}
+    label{font-weight:700;font-size:.95rem;color:var(--ink)}
+    input,select,textarea{
+      width:100%;padding:12px 14px;border-radius:12px;border:1px solid #334155;
+      outline:none;background:#1e293b;color:var(--ink);transition:box-shadow .15s, border-color .15s
+    }
+    input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px var(--ring); border-color:var(--ring)}
     textarea{min-height:110px}
 
-    /* 3-way toggle (Yes/No/Not sure) */
-    .yn3{display:grid;grid-template-columns:1fr 1fr 1fr;background:#f8fafc;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb}
-    .yn3 button{appearance:none;padding:12px 14px;border:none;background:transparent;cursor:pointer;font-weight:700;transition:background .15s, transform .03s}
+    .yn3{
+      display:grid;grid-template-columns:1fr 1fr 1fr;background:#1e293b;border-radius:12px;overflow:hidden;border:1px solid #334155
+    }
+    .yn3 button{
+      appearance:none;padding:12px 14px;border:none;background:transparent;cursor:pointer;font-weight:700;
+      transition:background .15s, transform .03s; color:var(--ink)
+    }
     .yn3 button:active{transform:scale(.99)}
-    .yn3 button[data-v="yes"][aria-pressed="true"]{background:rgba(20,184,166,.15)}
+    .yn3 button[data-v="yes"][aria-pressed="true"]{background:rgba(255,217,92,.12)}
     .yn3 button[data-v="no"][aria-pressed="true"]{background:rgba(239,68,68,.12)}
-    .yn3 button[data-v="unsure"][aria-pressed="true"]{background:rgba(6,182,212,.12)}
+    .yn3 button[data-v="unsure"][aria-pressed="true"]{background:rgba(255,255,255,.05)}
 
-    /* Buttons */
     .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
-    .btn{appearance:none;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer;transition:filter .15s, transform .03s, box-shadow .15s}
+    .btn{appearance:none;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer;transition:filter .15s, transform .03s}
     .btn:active{transform:translateY(1px)}
-    .primary{background:linear-gradient(90deg,var(--brand2),var(--brand3));color:#fff;box-shadow:0 8px 18px rgba(8,145,178,.25)}
-    .ghost{background:linear-gradient(180deg,#f8fafc,#ffffff);border:1px solid #e5e7eb}
+    .primary{
+      background:linear-gradient(90deg,var(--brand2),var(--brand3));color:#111827;
+      box-shadow:0 8px 18px rgba(255,217,92,.25)
+    }
+    .ghost{background:#1e293b;border:1px solid var(--muted);color:var(--ink)}
     .danger{background:linear-gradient(90deg,#ef4444,#f97316);color:#fff;box-shadow:0 8px 18px rgba(239,68,68,.25)}
     .primary:hover,.danger:hover{filter:brightness(1.03)}
-    .ghost:hover{box-shadow:0 6px 16px rgba(2,6,23,.06)}
 
-    .hint{font-size:.85rem;color:#64748b}
-    .review{background:linear-gradient(180deg,#f0fdfa,#f0f9ff);border:1px dashed #cbd5e1;border-radius:14px;padding:16px}
-    pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px;max-height:300px;overflow:auto}
+    .hint{font-size:.85rem;color:var(--muted)}
+    .review{background:#0f1d36;border:1px dashed var(--muted);border-radius:14px;padding:16px}
+    pre{
+      white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      background:#1e293b;border:1px solid var(--muted);border-radius:12px;padding:12px;max-height:300px;overflow:auto;color:var(--ink)
+    }
 
-    /* Toast */
-    .toast{position:fixed;inset:auto 20px 20px auto;background:linear-gradient(90deg,#111827,#0b1220);color:#fff;padding:12px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+    .toast{
+      position:fixed;inset:auto 20px 20px auto;background:linear-gradient(90deg,#111827,#0b1220);
+      color:#fff;padding:12px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.4)
+    }
     .toast.show{opacity:1}
 
-    /* Tickable “pill” checkboxes — upgraded with clear ✓ */
+    .pill{
+      display:flex;align-items:center;gap:8px;background:#1e293b;border:1px solid var(--muted);
+      border-radius:999px;padding:10px 12px;transition:background .15s,border-color .15s, box-shadow .15s
+    }
+    .pill input{width:auto}
+    .pill span{font-weight:600;color:var(--ink)}
+    .pill:hover{box-shadow:0 6px 16px rgba(2,6,23,.2)}
+    .pill:has(input:checked){background:linear-gradient(90deg,var(--brand3),var(--brand2));border-color:var(--brand)}
+    .pill:has(input:checked) span{color:#1f2937}
+
     .pill-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     @media (max-width:720px){.pill-grid{grid-template-columns:1fr}}
-    .pill{
-      display:flex;align-items:center;gap:10px;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px;
-      transition:background .15s,border-color .15s, box-shadow .15s, transform .03s;
-      box-shadow:0 6px 16px rgba(2,6,23,.06)
-    }
-    .pill:active{transform:translateY(1px)}
-    .pill input{
-      appearance:none;width:20px;height:20px;border:2px solid #94a3b8;border-radius:6px;background:#fff;display:inline-grid;place-content:center;
-      transition:all .15s ease; flex:0 0 20px;
-    }
-    .pill input:focus-visible{outline:4px solid rgba(103,232,249,.45);outline-offset:2px}
-    .pill input::before{
-      content:""; width:6px; height:12px; border:solid transparent; border-width:0 3px 3px 0; transform:rotate(45deg) translate(-1px,-1px);
-    }
-    .pill input:checked{
-      background:linear-gradient(135deg,var(--brand2),var(--brand3)); border-color:transparent; box-shadow:0 0 0 3px rgba(20,184,166,.18)
-    }
-    .pill input:checked::before{ border-color:#fff }
-    .pill span{font-weight:600;color:#0f172a}
-    .pill:hover{box-shadow:0 8px 22px rgba(2,6,23,.08)}
-    .pill:has(input:checked){background:linear-gradient(90deg,#ecfeff,#f0fdfa);border-color:#99f6e4}
-    .pill:has(input:checked) span{color:#0f766e}
-
-    /* Pane slide transitions */
-    .pane.slide-enter{animation: slideIn .28s cubic-bezier(.2,.8,.2,1) both}
-    @keyframes slideIn{from{opacity:0; transform:translateX(24px)} to{opacity:1; transform:none}}
   </style>
 </head>
 <body>
@@ -131,7 +165,7 @@
         <div class="brand">
           <div class="logo" aria-hidden="true"></div>
           <div>
-            <div id="form-title" class="title-HD HeeD — Super-Simple Referral</div>
+            <div id="form-title" class="title">HD HeeD — Super-Simple Referral</div>
             <div class="subtitle">Everything optional — only consent is required.</div>
           </div>
         </div>
@@ -154,13 +188,12 @@
   <div class="toast" id="toast">Saved</div>
 
   <script>
-    /* ======== State & helpers (unchanged logic/consent) ======== */
-    const AUTOSAVE_KEY  = "hdheed_referral_simple_teal_v1";
+    const AUTOSAVE_KEY  = "hdheed_referral_simple_teal_v1"; // kept as-is to preserve existing saves
 
     const state = JSON.parse(localStorage.getItem(AUTOSAVE_KEY) || "{}");
     const $ = (s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
-    const flash = (m)=>{ const t=$("#toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1200); };
     const save = ()=>{ localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state)); flash("Saved"); };
+    const flash = (m)=>{ const t=$("#toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1200); };
 
     const Steps = [
       {id:"consent",     label:"Consent",                render:rConsent},
@@ -182,32 +215,13 @@
         a.className="step-link";
         a.innerHTML=`<span class="dot"></span><span>${i+1}. ${s.label}</span><span class="badge" id="b-${s.id}"></span>`;
         a.href="#";
-        a.onclick=e=>{
-          e.preventDefault();
-          /* Consent lock — unchanged rule */
-          if(i>0 && state.consent!=="yes"){ alert("Consent is required to proceed."); return; }
-          go(i);
-        };
+        a.onclick=e=>{ e.preventDefault(); if(i>0 && state.consent!=="yes"){ alert("Consent is required to proceed."); return; } go(i); };
         nav.appendChild(a);
       });
     }
-    function setActive(){
-      $$(".step-link").forEach((el,i)=>{ el.classList.toggle("active",i===current); el.classList.toggle("done",i<current); });
-      $("#bar").style.width = Math.round((current)/(Steps.length-1)*100)+"%";
-    }
-    function go(i){
-      current=Math.max(0,Math.min(Steps.length-1,i)); setActive();
-      const pane=$("#pane");
-      // slide-in transition
-      pane.classList.remove("slide-enter");
-      pane.getBoundingClientRect(); // reflow
-      pane.classList.add("slide-enter");
-      pane.innerHTML="";
-      Steps[current].render(pane);
-      window.scrollTo({top:0,behavior:"smooth"});
-    }
+    function setActive(){ $$(".step-link").forEach((el,i)=>{ el.classList.toggle("active",i===current); el.classList.toggle("done",i<current); }); $("#bar").style.width = Math.round((current)/(Steps.length-1)*100)+"%"; }
+    function go(i){ current=Math.max(0,Math.min(Steps.length-1,i)); setActive(); const pane=$("#pane"); pane.innerHTML=""; Steps[current].render(pane); window.scrollTo({top:0,behavior:"smooth"}); }
 
-    /* Input builders (unchanged data model) */
     function input(id,label,o={}){const{type="text",placeholder="",hint=""}=o; const v = state[id]??"";
       return `<div><label for="${id}">${label}</label>
       <input id="${id}" name="${id}" type="${type}" placeholder="${placeholder}" value="${v??""}"/>
@@ -218,22 +232,9 @@
       <div class="yn3"><button type="button" data-yn3="${id}" data-v="yes" aria-pressed="${v==='yes'}">Yes</button>
       <button type="button" data-yn3="${id}" data-v="no" aria-pressed="${v==='no'}">No</button>
       <button type="button" data-yn3="${id}" data-v="unsure" aria-pressed="${v==='unsure'}">Not sure</button></div></div>`}
-    function bindModel(root){
-      $$("input,select,textarea",root).forEach(el=>{
-        const k=el.id;if(!k)return;
-        el.value=state[k]??"";
-        el.addEventListener("input",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); });
-        el.addEventListener("change",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); });
-      });
-    }
-    function bindYN3(root){
-      $$("[data-yn3]",root).forEach(btn=>btn.addEventListener("click",()=>{
-        const k=btn.dataset.yn3; state[k]=btn.dataset.v; save();
-        $$("[data-yn3='"+k+"']",root).forEach(b=>b.setAttribute("aria-pressed", String(b===btn)));
-      }));
-    }
+    function bindModel(root){ $$("input,select,textarea",root).forEach(el=>{const k=el.id;if(!k)return; el.value=state[k]??""; el.addEventListener("input",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); el.addEventListener("change",()=>{ state[k]=el.type==="checkbox"?el.checked:el.value; save(); }); }); }
+    function bindYN3(root){ $$("[data-yn3]",root).forEach(btn=>btn.addEventListener("click",()=>{const k=btn.dataset.yn3; state[k]=btn.dataset.v; save(); $$("[data-yn3='"+k+"']",root).forEach(b=>b.setAttribute("aria-pressed", String(b===btn))); })); }
 
-    /* Steps (content and consent rules unchanged) */
     function rConsent(p){ p.innerHTML = `<div class="block">
       <h2>Consent <span class="muted">(required)</span></h2>
       ${yn3("consent","Has the Participant or Primary Carer consented to this referral?")}
@@ -354,7 +355,6 @@
       $("#back",p).onclick=e=>{e.preventDefault(); go(6)};
       $("#next",p).onclick=e=>{
         e.preventDefault();
-        /* Consent hard gates — unchanged */
         if(state.consent!=="yes"){ alert("Initial consent (Step 1) must be Yes to proceed."); go(0); return; }
         const checked = $("#referral_consent").checked;
         if(!checked){ alert("Please tick the final consent box to continue."); return; }
@@ -378,7 +378,6 @@
       $("#reset",p).onclick=()=>{ if(confirm("Clear all answers?")){ localStorage.removeItem(AUTOSAVE_KEY); location.reload(); } };
     }
 
-    /* Utilities */
     function pickSupports(){
       const labels = [
         "Personal care (shower, dressing)",
@@ -392,144 +391,91 @@
       ];
       return labels.filter((_,i)=>state["sup_"+i]).join(", ");
     }
+
     function ynu(k){ return state[k]==="yes"?"Yes": state[k]==="no"?"No": state[k]==="unsure"?"Not sure": (state[k]||""); }
 
     function buildSummaryPlain(){
       const L=[];
       L.push("HD HeeD — Referral Summary","");
-
       L.push(`Consent: ${ynu("consent")} | Final consent: ${state.referral_consent?"Yes":"No"}`,"");
-
       L.push(`Referrer: ${state.referrer_name||""} (${state.relationship||""})`);
       L.push(`Contact: ${state.email||""} | Phone: ${state.phone||""} | Mobile: ${state.mobile||""}`,"");
-
       L.push(`Participant: ${state.participant_fname||""} ${state.participant_lname||""} | DOB: ${state.dob||""}`);
       L.push(`NDIS: ${state.ndis_number||""} | Gender: ${ynu("gender")} | Marital: ${state.marital_status||""}`);
       L.push(`Address: ${[state.street,state.suburb,state.city,state.postcode].filter(Boolean).join(", ")}`);
       L.push(`Phone: ${state.home_phone||""} | Mobile: ${state.participant_mobile||""} | Email: ${state.participant_email||""}`);
       L.push(`Language: ${state.language||""} | Interpreter: ${ynu("interpreter")} ${state.interpreter_type?`(${state.interpreter_type})`:""}`,"");
-
       L.push(`Primary Carer: ${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""}) | ${state.carer_email||""}`);
       L.push(`Shared care / custody: ${ynu("custody")}`,"");
-
       L.push(`Safety: Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}`);
       if(state.risk_notes) L.push(`Risk notes: ${state.risk_notes}`);
       L.push("");
-
       if(state.key_area) L.push(`Main reason: ${state.key_area}`);
       const sup = pickSupports(); if(sup) L.push(`Supports requested: ${sup}`);
-      if(state.allergies) L.push(`Allergies: ${ynu("allergies")}${state.allergy_list?` – ${state.allergy_list}`:""}`);
+      if(state.allergies) L.push(`Allergies: ${ynu("allergies")} ${state.allergy_list?`– ${state.allergy_list}`:""}`);
       if(state.service_location) L.push(`Service location: ${state.service_location}`);
       L.push("");
-
       L.push(`Plan management: ${ynu("plan_managed")} | Funding notes: ${state.funding_area||""}`);
       return L.join("\n");
     }
 
     function buildSummaryHTML(){
-      const esc = s => (s||"").toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-      const row = (k,v)=>`<tr><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;color:#1e293b;font-weight:600;width:30%;vertical-align:top">${esc(k)}</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;color:#111827">${esc(v)}</td></tr>`;
+      const esc = s => (s||"").toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+      const row = (k,v)=>`<tr><td style="padding:8px;border-bottom:1px solid #eee;color:#334155;width:32%">${esc(k)}</td><td style="padding:8px;border-bottom:1px solid #eee;color:#0f172a">${esc(v)}</td></tr>`;
       const sect = (t,rows)=>`
-        <div style="margin-bottom:24px">
-          <h3 style="font-size:16px;margin:0 0 12px 0;padding-bottom:6px;border-bottom:1px solid #e5e7eb;color:#0f766e;font-weight:700">${esc(t)}</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:14px">${rows.join("")}</table>
-        </div>`;
+        <h3 style="margin:16px 0 8px;border-bottom:1px solid #e5e7eb;padding-bottom:6px;color:#0f172a">${esc(t)}</h3>
+        <table style="width:100%;border-collapse:collapse;font:14px system-ui,Segoe UI,Roboto,Arial">${rows.join("")}</table>`;
       const sup = pickSupports();
 
-      return `<!doctype html>
-      <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <title>HD HeeD Referral Summary</title>
-        <style>
-          body {
-            font-family: Arial, Helvetica, sans-serif;
-            color: #111827;
-            margin: 40px;
-            padding: 0;
-            background: #fff;
-            line-height: 1.5;
-          }
-          .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-          }
-          h1 {
-            font-size: 24px;
-            color: #0f766e;
-            margin: 0 0 10px 0;
-            text-align: center;
-          }
-          .timestamp {
-            font-size: 12px;
-            color: #6b7280;
-            text-align: center;
-            margin-bottom: 20px;
-          }
-          @media print {
-            body { margin: 0; }
-            .container { border: none; padding: 0; }
-            @page { margin: 2cm; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>HD HeeD — Referral Summary</h1>
-          <div class="timestamp">Generated ${new Date().toLocaleString()}</div>
-          ${sect("Consent",[
-            row("Initial Consent", ynu("consent")),
-            row("Final Consent", state.referral_consent ? "Ticked" : "Not ticked")
-          ])}
-          ${sect("Referrer",[
-            row("Name", `${state.referrer_name || ""} (${state.relationship || ""})`),
-            row("Email", state.email || ""),
-            row("Phone", `${state.phone || ""} ${state.mobile || ""}`)
-          ])}
-          ${sect("Participant",[
-            row("Name / DOB", `${(state.participant_fname || "") + " " + (state.participant_lname || "")} | ${state.dob || ""}`),
-            row("NDIS / Gender", `${state.ndis_number || ""} | ${ynu("gender")}`),
-            row("Address", [state.street, state.suburb, state.city, state.postcode].filter(Boolean).join(", ")),
-            row("Contacts", `${state.home_phone || ""} ${state.participant_mobile || ""} ${state.participant_email || ""}`),
-            row("Language / Interpreter", `${state.language || ""} | ${ynu("interpreter")}${state.interpreter_type ? ` (${state.interpreter_type})` : ""}`)
-          ])}
-          ${sect("Primary Carer (NOK)",[
-            row("Name / Relationship", `${state.carer_fname || ""} ${state.carer_lname || ""} (${state.carer_relationship || ""})`),
-            row("Contacts", `${state.carer_home || ""} ${state.carer_mobile || ""} ${state.carer_email || ""}`),
-            row("Shared Care / Custody", ynu("custody"))
-          ])}
-          ${sect("Safety & Risks",[
-            row("Fall / Wound / Pain / Pressure / Behaviour",
-                `Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}`),
-            row("Risk Notes", state.risk_notes || "")
-          ])}
-          ${sect("Supports",[
-            row("Main Reason", state.key_area || ""),
-            row("Requested Supports", sup || ""),
-            row("Allergies", `${ynu("allergies")}${state.allergy_list ? ` – ${state.allergy_list}` : ""}`),
-            row("Service Location", state.service_location || "")
-          ])}
-          ${sect("Funding & Plan",[
-            row("Plan Management", ynu("plan_managed")),
-            row("Funding Notes", state.funding_area || "")
-          ])}
-        </div>
-      </body>
-      </html>`;
+      return `<!doctype html><meta charset="utf-8">
+      <div style="font:14px system-ui,Segoe UI,Roboto,Arial;color:#0f172a">
+        <h2 style="margin:0 0 8px 0;color:#0f766e">HD HeeD — Referral Summary</h2>
+        <div style="color:#64748b;font:13px system-ui">Generated ${new Date().toLocaleString()}</div>
+        ${sect("Consent",[
+          row("Initial consent", ynu("consent")),
+          row("Final consent", state.referral_consent?"Ticked":"Not ticked")
+        ])}
+        ${sect("Referrer",[
+          row("Name", `${state.referrer_name||""} (${state.relationship||""})`),
+          row("Email", state.email||""), row("Phone", `${state.phone||""}  ${state.mobile||""}`)
+        ])}
+        ${sect("Participant",[
+          row("Name / DOB", `${(state.participant_fname||"")+" "+(state.participant_lname||"")} | ${state.dob||""}`),
+          row("NDIS / Gender", `${state.ndis_number||""} | ${ynu("gender")}`),
+          row("Address", [state.street,state.suburb,state.city,state.postcode].filter(Boolean).join(", ")),
+          row("Contacts", `${state.home_phone||""}  ${state.participant_mobile||""}  ${state.participant_email||""}`),
+          row("Language / Interpreter", `${state.language||""} | ${ynu("interpreter")}${state.interpreter_type?` (${state.interpreter_type})`:""}`)
+        ])}
+        ${sect("Primary Carer (NOK)",[
+          row("Name / Relationship", `${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""})`),
+          row("Contacts", `${state.carer_home||""}  ${state.carer_mobile||""}  ${state.carer_email||""}`),
+          row("Shared care / custody", ynu("custody"))
+        ])}
+        ${sect("Safety & Risks",[
+          row("Fall / Wound / Pain / Pressure / Behaviour",
+              \`Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}\`),
+          row("Risk notes", state.risk_notes||"")
+        ])}
+        ${sect("Supports",[
+          row("Main reason", state.key_area||""),
+          row("Requested supports", sup||""),
+          row("Allergies", \`${ynu("allergies")}${state.allergy_list?` – ${state.allergy_list}`:""}\`),
+          row("Service location", state.service_location||"")
+        ])}
+        ${sect("Funding & Plan",[
+          row("Plan management", ynu("plan_managed")),
+          row("Funding notes", state.funding_area||"")
+        ])}
+      </div>`;
     }
 
     function submitOnline(){
-      /* Consent gates unchanged */
       if(state.consent!=="yes"){ alert("Consent (Step 1) is required to submit."); go(0); return; }
       if(!state.referral_consent){ alert("Please tick the final consent box on the Review step before submitting."); go(7); return; }
 
       const form = document.getElementById('silentPost');
       if(!form){ alert("Submit form not found."); return; }
 
-      // remove any stray non-hidden fields (safety)
       Array.from(form.querySelectorAll('input[name]:not([type=hidden]), textarea, select')).forEach(el => el.remove());
 
       const add = (name, value) => { const i=document.createElement('input'); i.type='hidden'; i.name=name; i.value=(value==null?'':String(value)); form.appendChild(i); };
@@ -568,20 +514,6 @@
     }
 
     init();
-
-    /* ====== Window Resize Handler ====== */
-    window.addEventListener('resize', function(){
-      // Ensure progress bar stays aligned on resize
-      setActive();
-    });
-
-    /* ====== Form Submission Success Handler ====== */
-    window.addEventListener('load', function(){
-      if (window.location.search.includes('formspree_success')) {
-        flash("Referral submitted successfully!");
-        localStorage.removeItem(AUTOSAVE_KEY); // Clear saved state on successful submission
-      }
-    });
   </script>
 </body>
 </html>
