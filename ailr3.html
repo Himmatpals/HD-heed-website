@@ -577,6 +577,59 @@
     return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
   }
 
+  /* ====== REPORT BUILDERS (NEW) ====== */
+  function consentAuditTableHTML(){
+    try{
+      var rows = DOCS.map(function(d){
+        var ack = (S.acks && S.acks[d.id]) ? S.acks[d.id] : {read:false, consent:false};
+        var readTxt = ack.read ? "Yes" : "No";
+        var conTxt  = d.requiresConsent ? (ack.consent ? "Yes" : "No") : "—";
+        return '<tr><td>'+d.title+'</td><td>'+readTxt+'</td><td>'+conTxt+'</td></tr>';
+      }).join("");
+      return '<table style="width:100%; border-collapse:collapse; margin-top:8px">'+
+             '<thead><tr><th style="text-align:left;border-bottom:1px solid #ddd;padding:6px 4px">Document</th>'+
+             '<th style="text-align:left;border-bottom:1px solid #ddd;padding:6px 4px">Read</th>'+
+             '<th style="text-align:left;border-bottom:1px solid #ddd;padding:6px 4px">Consented</th></tr></thead>'+
+             '<tbody>'+rows+'</tbody></table>';
+    }catch(e){ return "<div>Consent audit unavailable.</div>"; }
+  }
+  function kvRowHTML(label, value){
+    var v = (value===null || value===undefined || value==="") ? "—" : (""+value);
+    return '<div style="display:flex;gap:12px;margin:4px 0"><b style="min-width:220px">'+label+'</b><span>'+v+'</span></div>';
+  }
+  function buildFinalReportHTML(){
+    var submissionDate = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    var reviewHTML = renderReview().outerHTML;
+    var consentAudit = consentAuditTableHTML();
+    return ''+
+    '<!DOCTYPE html><html><head><meta charset="utf-8" />'+
+    '<title>HD HeeD AILR – Final Submission Report</title>'+
+    '<style>'+
+    'body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:#111;margin:0;padding:0;line-height:1.5;background:#fff}'+
+    '.container{max-width:860px;margin:0 auto;padding:24px}'+
+    '.hdr{border-bottom:3px solid #4f46e5;padding-bottom:12px;margin-bottom:16px}'+
+    '.hdr h1{margin:0;font-size:26px;color:#4f46e5}'+
+    '.hdr p{margin:4px 0;color:#444}'+
+    'details.card{background:#fafafa;border:1px solid #e5e7eb;border-radius:10px;padding:14px}'+
+    'summary{cursor:pointer;font-weight:700;color:#334155}'+
+    '.kv b{color:#111} .kv span{color:#222}'+
+    'table{font-size:14px} th,td{padding:6px 4px}'+
+    '@page{size:A4;margin:14mm}'+
+    '</style></head><body>'+
+    '<div class="container">'+
+    '<div class="hdr">'+
+      '<h1>HD HeeD – AILR Final Submission Report</h1>'+
+      '<p><b>Participant:</b> '+(S.participant.legal_name || "Not provided")+'</p>'+
+      '<p><b>Submission Date:</b> '+submissionDate+'</p>'+
+      '<p><b>Prepared by:</b> HD HeeD • info@hdheed.com.au • 02 8630 5500</p>'+
+    '</div>'+
+    '<h2 style="margin:12px 0 8px">Consent Audit</h2>'+
+    consentAudit+
+    '<h2 style="margin:18px 0 8px">Full Responses</h2>'+
+    reviewHTML+
+    '</div></body></html>';
+  }
+
   function sendToFormspree(){
   return new Promise(function(resolve, reject){
     // === 1) Validate your Apps Script URL ===
@@ -638,6 +691,11 @@
       payload.schedule.days_summary = mapDays(S.schedule.days);
       payload.participant.address_summary = addr;
       payload.contacts.contact_summary = contactSummary;
+
+      /* === NEW: include docs meta + rendered report and flag to create Doc/PDF === */
+      payload.docs_meta = DOCS.map(function(d){ return { id:d.id, title:d.title, requiresConsent:!!d.requiresConsent }; });
+      payload.report_html = buildFinalReportHTML();
+      payload.makeDoc = true;
     } catch (e) {
       console.warn("Summary generation warning:", e);
     }
@@ -1023,8 +1081,11 @@
           btnSubmit.disabled = true; btnSubmit.textContent = "Submitting…";
           sendToFormspree().then(function(j){
             triggerConfetti(1200);
-            var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
-            alert("All done — we’ve received your onboarding." + pdfMsg);
+            var parts = [];
+            if (j && j.pdfUrl) parts.push("PDF: " + j.pdfUrl);
+            if (j && j.fileUrl) parts.push("Doc: " + j.fileUrl);
+            var extra = parts.length ? ("\n" + parts.join("\n")) : "";
+            alert("All done — we’ve received your onboarding." + extra);
             try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
             var stage = document.querySelector("main.stage");
             if (stage){
@@ -1048,8 +1109,11 @@
           btnSend.disabled = true; btnSend.textContent = "Sending…";
           sendToFormspree().then(function(j){
             triggerConfetti(1200);
-            var pdfMsg = j && j.fileUrl ? ("\nPDF saved to Drive.\nView: " + j.fileUrl) : "";
-            alert("All done — we’ve received your onboarding." + pdfMsg);
+            var parts = [];
+            if (j && j.pdfUrl) parts.push("PDF: " + j.pdfUrl);
+            if (j && j.fileUrl) parts.push("Doc: " + j.fileUrl);
+            var extra = parts.length ? ("\n" + parts.join("\n")) : "";
+            alert("All done — we’ve received your onboarding." + extra);
             try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
             var stage = document.querySelector("main.stage");
             if (stage){
@@ -1322,4 +1386,3 @@
 </script>
 </body>
 </html>
-
