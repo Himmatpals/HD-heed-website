@@ -5,154 +5,113 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>HD HeeD — Simple Referral</title>
   <meta name="description" content="Ultra-simple HD HeeD referral. Clean email summary + downloadable summary. Auto-CC to info@hdheed.com.au and ndis@hdheed.com.au."/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root{
-      /* AILR-like dark theme */
-      --bg:#0b0f1a;          /* page background */
-      --ink:#e8edff;         /* primary text on dark */
-      --card:#10172a;        /* main panel/card */
-      --muted:#94a3b8;       /* muted text/borders */
-      --ring:#60a5fa;        /* focus ring / input focus */
+      /* Dark Purple & Yellow palette */
+      --bg:#0f0a1f;           /* deep purple backdrop */
+      --ink:#0b0a18;          /* dark ink on white cards */
+      --card:#ffffff;         /* keep cards white for readability */
+      --muted:#6b7280;
+      --ring:#fde68a;         /* yellow focus ring */
 
-      /* Brand accent (gold/yellow) */
-      --brand:#ffc107;
-      --brand2:#ffd95c;
-      --brand3:#ffe78f;
-      --brand4:#ffefb0;
+      /* Brand accents */
+      --brand:#7c3aed;        /* purple */
+      --brand2:#8b5cf6;       /* lighter purple */
+      --brand3:#facc15;       /* yellow */
+      --brand4:#4c1d95;       /* deep violet */
 
       --danger:#ef4444;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{box-sizing:border-box} html,body{height:100%}
     body{
-      margin:0;
-      font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;
-      background:linear-gradient(180deg, var(--bg), #0d1428 60%, #0b0f1a);
-      color:var(--ink);
-      display:flex;justify-content:center;padding:24px
+      margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;
+      background:
+        radial-gradient(1200px 800px at 10% -10%, #1f1440 0%, transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, #140b2c 0%, transparent 55%),
+        linear-gradient(135deg,#0f0a1f,#1a1036 60%);
+      color:#e5e7eb;display:flex;justify-content:center;padding:24px
     }
-    .shell{width:100%;max-width:1100px}
-    .card{
-      background:var(--card);color:var(--ink);
-      border-radius:22px;overflow:hidden;
-      box-shadow:0 20px 60px rgba(0,0,0,.6);position:relative
-    }
-    header{
-      display:flex;align-items:center;justify-content:space-between;gap:14px;
-      padding:20px 22px;border-bottom:1px solid var(--muted);position:relative
-    }
-    header:before{
-      content:"";position:absolute;inset:0 0 auto 0;height:6px;
-      background:linear-gradient(90deg,var(--brand),var(--brand2),var(--brand3),var(--brand4));
-    }
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{
-      width:40px;height:40px;border-radius:10px;
-      background:var(--brand) url('https://www.hdheed.com.au/images/logo.png') center/cover no-repeat;
-      box-shadow:inset 0 0 18px rgba(255,255,255,.2)
-    }
-    .title{font-weight:800;letter-spacing:.2px}
-    .subtitle{color:var(--muted);font-size:.95rem}
 
-    .progress{height:12px;background:#1e293b;border-radius:999px;overflow:hidden;width:340px}
-    .progress>div{
-      height:100%;width:0%;
-      background:linear-gradient(90deg,var(--brand2),var(--brand3));
-      box-shadow:0 0 12px rgba(255,217,92,.45);
-      transition:width .35s ease
-    }
+    .shell{width:100%;max-width:1100px}
+    .card{background:var(--card);color:var(--ink);border-radius:22px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45);position:relative}
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;border-bottom:1px solid #e5e7eb;position:relative}
+    header:before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:linear-gradient(90deg,var(--brand),var(--brand2),var(--brand3),var(--brand4));}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:40px;height:40px;border-radius:10px;background:var(--brand) url('https://www.hdheed.com.au/images/logo.png') center/cover no-repeat;box-shadow:inset 0 0 18px rgba(255,255,255,.2)}
+    .title{font-weight:800;letter-spacing:.2px}
+    .subtitle{color:#475569;font-size:.95rem}
+
+    .progress{height:12px;background:#eef2f7;border-radius:999px;overflow:hidden;width:340px}
+    .progress>div{height:100%;width:0%;background:linear-gradient(90deg,var(--brand2),var(--brand3));box-shadow:0 0 12px rgba(250,204,21,.45);transition:width .35s ease}
 
     main{display:grid;grid-template-columns:280px 1fr;min-height:640px}
     @media (max-width:920px){main{grid-template-columns:1fr}}
 
+    /* Sidebar */
     nav{
-      background:#0f172a;border-right:1px solid var(--muted);
+      background:linear-gradient(180deg,#f5f3ff,#fffbeb);
+      border-right:1px solid #e5e7eb;
       padding:18px;display:flex;flex-direction:column;gap:8px
     }
-    .step-link{
-      display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;cursor:pointer;
-      color:var(--ink);text-decoration:none;border:1px solid var(--muted);
-      background:#1e293b;transition:.2s
-    }
-    .step-link .dot{width:10px;height:10px;border-radius:50%;background:#334155;box-shadow:inset 0 0 0 2px var(--muted)}
-    .step-link.active{
-      background:#172554;border-color:var(--brand3);box-shadow:0 4px 14px rgba(255,217,92,.12)
-    }
-    .step-link.active .dot{background:var(--brand2);box-shadow:0 0 0 2px var(--brand4) inset}
-    .step-link.done{background:#1e3a8a;border-color:var(--brand4)}
-    .step-link.done .dot{background:var(--brand)}
-    .badge{margin-left:auto;font-size:.75rem;color:var(--muted)}
+    .step-link{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;cursor:pointer;color:#111827;text-decoration:none;border:1px solid #e2e8f0;background:#ffffff}
+    .step-link .dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1;box-shadow:inset 0 0 0 2px #e2e8f0}
+    .step-link.active{background:linear-gradient(180deg,#fef9c3,#ffffff);border-color:#fde68a;box-shadow:0 4px 14px rgba(124,58,237,.15)}
+    .step-link.active .dot{background:var(--brand3);box-shadow:0 0 0 2px #fef9c3 inset}
+    .step-link.done{background:linear-gradient(180deg,#fefce8,#ffffff);border-color:#fde68a}
+    .step-link.done .dot{background:var(--brand2)}
+    .badge{margin-left:auto;font-size:.75rem;color:#475569}
 
     .pane{padding:24px 24px 28px}
-    .block{
-      background:#0f172a;border:1px solid var(--muted);border-radius:16px;
-      padding:18px;margin-bottom:16px;box-shadow:0 6px 22px rgba(2,6,23,.35)
-    }
+    .block{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 6px 22px rgba(2,6,23,.04)}
+
     h2{margin:.25rem 0 .75rem 0;position:relative;padding-left:12px}
-    h2:before{
-      content:"";position:absolute;left:0;top:.1rem;bottom:.1rem;width:6px;border-radius:999px;
-      background:linear-gradient(180deg,var(--brand2),var(--brand3))
-    }
-    .muted{color:var(--muted)}
+    h2:before{content:"";position:absolute;left:0;top:.1rem;bottom:.1rem;width:6px;border-radius:999px;background:linear-gradient(180deg,var(--brand2),var(--brand3))}
+    .muted{color:#64748b}
 
     .grid{display:grid;gap:14px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
     @media (max-width:720px){.two,.three{grid-template-columns:1fr}}
 
-    label{font-weight:700;font-size:.95rem;color:var(--ink)}
-    input,select,textarea{
-      width:100%;padding:12px 14px;border-radius:12px;border:1px solid #334155;
-      outline:none;background:#1e293b;color:var(--ink);transition:box-shadow .15s, border-color .15s
-    }
-    input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px var(--ring); border-color:var(--ring)}
+    label{font-weight:700;font-size:.95rem;color:#111827}
+    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;outline:none;background:#fff;transition:box-shadow .15s, border-color .15s}
+    input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px var(--ring); border-color:#fcd34d}
     textarea{min-height:110px}
 
-    .yn3{
-      display:grid;grid-template-columns:1fr 1fr 1fr;background:#1e293b;border-radius:12px;overflow:hidden;border:1px solid #334155
-    }
-    .yn3 button{
-      appearance:none;padding:12px 14px;border:none;background:transparent;cursor:pointer;font-weight:700;
-      transition:background .15s, transform .03s; color:var(--ink)
-    }
+    /* Yes/No/Unsure pills */
+    .yn3{display:grid;grid-template-columns:1fr 1fr 1fr;background:#f8fafc;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb}
+    .yn3 button{appearance:none;padding:12px 14px;border:none;background:transparent;cursor:pointer;font-weight:700;transition:background .15s, transform .03s}
     .yn3 button:active{transform:scale(.99)}
-    .yn3 button[data-v="yes"][aria-pressed="true"]{background:rgba(255,217,92,.12)}
-    .yn3 button[data-v="no"][aria-pressed="true"]{background:rgba(239,68,68,.12)}
-    .yn3 button[data-v="unsure"][aria-pressed="true"]{background:rgba(255,255,255,.05)}
+    .yn3 button[data-v="yes"][aria-pressed="true"]{background:rgba(250,204,21,.18)}   /* yellow */
+    .yn3 button[data-v="no"][aria-pressed="true"]{background:rgba(239,68,68,.12)}    /* red */
+    .yn3 button[data-v="unsure"][aria-pressed="true"]{background:rgba(124,58,237,.15)}/* purple */
 
     .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
     .btn{appearance:none;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer;transition:filter .15s, transform .03s}
     .btn:active{transform:translateY(1px)}
-    .primary{
-      background:linear-gradient(90deg,var(--brand2),var(--brand3));color:#111827;
-      box-shadow:0 8px 18px rgba(255,217,92,.25)
-    }
-    .ghost{background:#1e293b;border:1px solid var(--muted);color:var(--ink)}
+    .primary{background:linear-gradient(90deg,var(--brand2),var(--brand3));color:#fff;box-shadow:0 8px 18px rgba(124,58,237,.25)}
+    .ghost{background:linear-gradient(180deg,#f8fafc,#ffffff);border:1px solid #e5e7eb}
     .danger{background:linear-gradient(90deg,#ef4444,#f97316);color:#fff;box-shadow:0 8px 18px rgba(239,68,68,.25)}
     .primary:hover,.danger:hover{filter:brightness(1.03)}
 
-    .hint{font-size:.85rem;color:var(--muted)}
-    .review{background:#0f1d36;border:1px dashed var(--muted);border-radius:14px;padding:16px}
-    pre{
-      white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-      background:#1e293b;border:1px solid var(--muted);border-radius:12px;padding:12px;max-height:300px;overflow:auto;color:var(--ink)
+    .hint{font-size:.85rem;color:#64748b}
+
+    .review{
+      background:linear-gradient(180deg,#f5f3ff,#fffbeb);
+      border:1px dashed #cbd5e1;border-radius:14px;padding:16px
     }
 
-    .toast{
-      position:fixed;inset:auto 20px 20px auto;background:linear-gradient(90deg,#111827,#0b1220);
-      color:#fff;padding:12px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.4)
-    }
+    pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px;max-height:300px;overflow:auto}
+
+    .toast{position:fixed;inset:auto 20px 20px auto;background:linear-gradient(90deg,#111827,#1a1036);color:#fff;padding:12px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
     .toast.show{opacity:1}
 
-    .pill{
-      display:flex;align-items:center;gap:8px;background:#1e293b;border:1px solid var(--muted);
-      border-radius:999px;padding:10px 12px;transition:background .15s,border-color .15s, box-shadow .15s
-    }
+    .pill{display:flex;align-items:center;gap:8px;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:999px;padding:10px 12px;transition:background .15s,border-color .15s, box-shadow .15s}
     .pill input{width:auto}
-    .pill span{font-weight:600;color:var(--ink)}
-    .pill:hover{box-shadow:0 6px 16px rgba(2,6,23,.2)}
-    .pill:has(input:checked){background:linear-gradient(90deg,var(--brand3),var(--brand2));border-color:var(--brand)}
-    .pill:has(input:checked) span{color:#1f2937}
+    .pill span{font-weight:600}
+    .pill:hover{box-shadow:0 6px 16px rgba(2,6,23,.06)}
+    .pill:has(input:checked){background:linear-gradient(90deg,#fef3c7,#f5f3ff);border-color:#fde68a}
+    .pill:has(input:checked) span{color:#4c1d95}
 
     .pill-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     @media (max-width:720px){.pill-grid{grid-template-columns:1fr}}
@@ -188,7 +147,7 @@
   <div class="toast" id="toast">Saved</div>
 
   <script>
-    const AUTOSAVE_KEY  = "hdheed_referral_simple_teal_v1"; // kept as-is to preserve existing saves
+    const AUTOSAVE_KEY  = "hdheed_referral_simple_teal_v1";
 
     const state = JSON.parse(localStorage.getItem(AUTOSAVE_KEY) || "{}");
     const $ = (s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
@@ -446,20 +405,20 @@
           row("Contacts", `${state.home_phone||""}  ${state.participant_mobile||""}  ${state.participant_email||""}`),
           row("Language / Interpreter", `${state.language||""} | ${ynu("interpreter")}${state.interpreter_type?` (${state.interpreter_type})`:""}`)
         ])}
-        ${sect("Primary Carer (NOK",[
+        ${sect("Primary Carer (NOK)",[
           row("Name / Relationship", `${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""})`),
           row("Contacts", `${state.carer_home||""}  ${state.carer_mobile||""}  ${state.carer_email||""}`),
           row("Shared care / custody", ynu("custody"))
         ])}
         ${sect("Safety & Risks",[
           row("Fall / Wound / Pain / Pressure / Behaviour",
-              \`Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}\`),
+              `Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}`),
           row("Risk notes", state.risk_notes||"")
         ])}
         ${sect("Supports",[
           row("Main reason", state.key_area||""),
           row("Requested supports", sup||""),
-          row("Allergies", \`${ynu("allergies")}${state.allergy_list?` – ${state.allergy_list}`:""}\`),
+          row("Allergies", `${ynu("allergies")}${state.allergy_list?` – ${state.allergy_list}`:""}`),
           row("Service location", state.service_location||"")
         ])}
         ${sect("Funding & Plan",[
