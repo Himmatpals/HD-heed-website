@@ -330,7 +330,7 @@
   var GS_WEBAPP = "https://script.google.com/macros/s/AKfycbzUWa21y9xhjoRJdpLfW-MBpd964lNOI6nkyHChRcQlksfVMmZq8xxbAn2HAA7m6Bkh1A/exec";
   var STORAGE_KEY = "hdheed_ailr_v16";
 
-  /* Optional, off by default: blind no-CORS fallback POST if CORS blocks the request */
+  /* Optional, off by default: blind no-CORS fallback POST if CORS blocks the request (kept from previous reply) */
   var BLIND_FALLBACK = false;
 
   /* === Your 11 PDFs (updated privacy fileId) === */
@@ -581,125 +581,113 @@
     return (arr||[]).map(function(k){ return map[k]; }).filter(Boolean).join(", ") || "";
   }
 
+  /* ====== Submission to Apps Script (unchanged logic) ====== */
   function sendToFormspree(){
-  return new Promise(function(resolve, reject){
-    // === 1) Validate your Apps Script URL ===
-    if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
-      return reject(new Error("Invalid Google Apps Script URL (GS_WEBAPP)."));
-    }
-
-    // === 2) Build payload from state S ===
-    var policyAck = {
-      handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
-      incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
-      complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
-    };
-
-    var payload = {
-      caller: S.caller,
-      participant: S.participant,
-      contacts: S.contacts,
-      comms: S.comms,
-      living: S.living,
-      clinical: S.clinical,
-      medications: S.medications,
-      risks: S.risks,
-      bsp: S.bsp,
-      supports: S.supports,
-      schedule: S.schedule,
-      policy_ack: policyAck,
-      acks: S.acks,
-      emergency_advocacy: S.emergency_advocacy,
-      submitter: S.submitter,
-      notes: S.notes,
-      timestamp: new Date().toISOString(),
-      _meta: { app: "AILR", version: "v16" }
-    };
-
-    // === 3) Add text summaries (kept self-contained) ===
-    try {
-      function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
-      function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
-      function mapSupports(arr, other){
-        var m={personal_care:"Personal care",high_intensity:"High-intensity personal care",household_tasks:"Household tasks",life_skills:"Development of life skills",community_participation:"Community participation",group_centre:"Group/centre-based activities",travel_transport:"Assist with travel & transport",daily_tasks_sil:"Daily tasks & shared living",not_sure:"Not sure — guide me"};
-        var list=(arr||[]).map(function(k){return m[k]||k;}).filter(Boolean);
-        if (other) list.push("Other: "+other);
-        return list.join(", ");
+    return new Promise(function(resolve, reject){
+      if (!GS_WEBAPP || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(GS_WEBAPP)) {
+        return reject(new Error("Invalid Google Apps Script URL (GS_WEBAPP)."));
       }
+      var policyAck = {
+        handbook: !!(S.acks && S.acks.handbook && S.acks.handbook.read),
+        incident: !!(S.acks && S.acks.incident_ack && S.acks.incident_ack.read),
+        complaints: !!(S.acks && S.acks.complaints_feedback && S.acks.complaints_feedback.read)
+      };
+      var payload = {
+        caller: S.caller,
+        participant: S.participant,
+        contacts: S.contacts,
+        comms: S.comms,
+        living: S.living,
+        clinical: S.clinical,
+        medications: S.medications,
+        risks: S.risks,
+        bsp: S.bsp,
+        supports: S.supports,
+        schedule: S.schedule,
+        policy_ack: policyAck,
+        acks: S.acks,
+        emergency_advocacy: S.emergency_advocacy,
+        submitter: S.submitter,
+        notes: S.notes,
+        timestamp: new Date().toISOString(),
+        _meta: { app: "AILR", version: "v16" }
+      };
+      try {
+        function mapWindows(arr){ var m={w1:"Weekday AM",w2:"Weekday PM",w3:"Evenings",w4:"Weekends"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
+        function mapDays(arr){ var m={d1:"Mon",d2:"Tue",d3:"Wed",d4:"Thu",d5:"Fri",d6:"Sat",d7:"Sun"}; return (arr||[]).map(function(k){return m[k];}).filter(Boolean).join(", "); }
+        function mapSupports(arr, other){
+          var m={personal_care:"Personal care",high_intensity:"High-intensity personal care",household_tasks:"Household tasks",life_skills:"Development of life skills",community_participation:"Community participation",group_centre:"Group/centre-based activities",travel_transport:"Assist with travel & transport",daily_tasks_sil:"Daily tasks & shared living",not_sure:"Not sure — guide me"};
+          var list=(arr||[]).map(function(k){return m[k]||k;}).filter(Boolean);
+          if (other) list.push("Other: "+other);
+          return list.join(", ");
+        }
+        var addr = S.participant && S.participant.address ? [
+          S.participant.address.line1, S.participant.address.line2,
+          S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
+        ].filter(Boolean).join(", ") : "";
+        var contactSummary = [
+          (S.contacts.email || ""), (S.contacts.phone ? (" • " + S.contacts.phone) : "")
+        ].join("");
+        payload.supports.required_summary = mapSupports(S.supports.required, S.supports.required_other);
+        payload.supports.details_text = S.supports.details_text || "";
+        payload.schedule.windows_summary = mapWindows(S.schedule.windows);
+        payload.schedule.days_summary = mapDays(S.schedule.days);
+        payload.participant.address_summary = addr;
+        payload.contacts.contact_summary = contactSummary;
+      } catch (e) {
+        console.warn("Summary generation warning:", e);
+      }
+      var body = new URLSearchParams({ payload: JSON.stringify(payload) });
 
-      var addr = S.participant && S.participant.address ? [
-        S.participant.address.line1, S.participant.address.line2,
-        S.participant.address.suburb, S.participant.address.state, S.participant.address.postcode
-      ].filter(Boolean).join(", ") : "";
-
-      var contactSummary = [
-        (S.contacts.email || ""), (S.contacts.phone ? (" • " + S.contacts.phone) : "")
-      ].join("");
-
-      payload.supports.required_summary = mapSupports(S.supports.required, S.supports.required_other);
-      payload.supports.details_text = S.supports.details_text || "";
-      payload.schedule.windows_summary = mapWindows(S.schedule.windows);
-      payload.schedule.days_summary = mapDays(S.schedule.days);
-      payload.participant.address_summary = addr;
-      payload.contacts.contact_summary = contactSummary;
-    } catch (e) {
-      console.warn("Summary generation warning:", e);
-    }
-
-    // === 4) Primary: POST as x-www-form-urlencoded (very reliable for Apps Script) ===
-    var body = new URLSearchParams({ payload: JSON.stringify(payload) });
-
-    fetch(GS_WEBAPP, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-      body: body,
-      cache: "no-store"
-    })
-    .then(function(r){
-      if (!r.ok) throw new Error("POST failed: " + r.status + " " + r.statusText);
-      return r.json();
-    })
-    .then(function(j){
-      if (!j || j.status !== "ok") throw new Error((j && j.message) || "Server error");
-      resolve(j);
-    })
-    .catch(function(postErr){
-      console.warn("POST failed, trying GET fallback:", postErr && postErr.message);
-      // === 5) Fallback: GET ?payload=... (works even when postData is stripped) ===
-      var url = GS_WEBAPP + "?payload=" + encodeURIComponent(JSON.stringify(payload));
-      fetch(url, { method: "GET", cache: "no-store" })
-        .then(function(r){
-          if (!r.ok) throw new Error("GET failed: " + r.status + " " + r.statusText);
-          return r.json();
-        })
-        .then(function(j){
-          if (!j || j.status !== "ok") throw new Error((j && j.message) || "Server error");
-          resolve(j);
-        })
-        .catch(function(getErr){
-          // Optional last resort blind POST (no JSON back) — only if you enable BLIND_FALLBACK
-          if (BLIND_FALLBACK) {
-            console.warn("GET failed; attempting no-CORS blind POST fallback.");
-            fetch(GS_WEBAPP, {
-              method: "POST",
-              mode: "no-cors",
-              headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-              body: new URLSearchParams({ payload: JSON.stringify(payload) }),
-              cache: "no-store"
-            }).then(function(){
-              resolve({ status: "ok", blind: true });
-            }).catch(function(err2){
-              reject(err2 || getErr || postErr);
-            });
-          } else {
-            reject(getErr || postErr);
-          }
-        });
+      fetch(GS_WEBAPP, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: body,
+        cache: "no-store"
+      })
+      .then(function(r){
+        if (!r.ok) throw new Error("POST failed: " + r.status + " " + r.statusText);
+        return r.json();
+      })
+      .then(function(j){
+        if (!j || j.status !== "ok") throw new Error((j && j.message) || "Server error");
+        resolve(j);
+      })
+      .catch(function(postErr){
+        console.warn("POST failed, trying GET fallback:", postErr && postErr.message);
+        var url = GS_WEBAPP + "?payload=" + encodeURIComponent(JSON.stringify(payload));
+        fetch(url, { method: "GET", cache: "no-store" })
+          .then(function(r){
+            if (!r.ok) throw new Error("GET failed: " + r.status + " " + r.statusText);
+            return r.json();
+          })
+          .then(function(j){
+            if (!j || j.status !== "ok") throw new Error((j && j.message) || "Server error");
+            resolve(j);
+          })
+          .catch(function(getErr){
+            if (BLIND_FALLBACK) {
+              console.warn("GET failed; attempting no-CORS blind POST fallback.");
+              fetch(GS_WEBAPP, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+                body: new URLSearchParams({ payload: JSON.stringify(payload) }),
+                cache: "no-store"
+              }).then(function(){
+                resolve({ status: "ok", blind: true });
+              }).catch(function(err2){
+                reject(err2 || getErr || postErr);
+              });
+            } else {
+              reject(getErr || postErr);
+            }
+          });
+      });
     });
-  });
-}
+  }
 
-  /* ====== Render Review ====== */
+  /* ====== Review rendering (existing) ====== */
   function renderReview(){
     var wrap = el('div','review');
     function sect(title, pairs){
@@ -808,7 +796,479 @@
     return wrap;
   }
 
-  /* ====== Steps ====== */
+  /* ====== NEW: Designer Full PDF ====== */
+  function buildFullReportHTML(){
+    function safe(v){ return (v===null||v===undefined||v==="") ? "—" : String(v); }
+    function row(k,v){ return '<tr><th>'+k+'</th><td>'+safe(v)+'</td></tr>'; }
+    function yesno(x){ return x===true?'Yes':x===false?'No':(x===null?'Not sure':'—'); }
+    function join(arr, sep){ return (arr||[]).filter(Boolean).join(sep||', '); }
+    function addr(){
+      var a=S.participant.address||{};
+      return join([a.line1,a.line2,a.suburb,a.state,a.postcode], ', ');
+    }
+    function listTrue(obj, map){
+      var out=[]; for (var k in map){ if(obj && obj[k]) out.push(map[k]); }
+      return out.length? out.join(', ') : '—';
+    }
+    var readCt=0, conCt=0, needCon=DOCS.filter(function(d){return d.requiresConsent;}).length;
+    DOCS.forEach(function(d){ var ack=S.acks[d.id]||{}; if(ack.read) readCt++; if(d.requiresConsent && ack.consent) conCt++; });
+
+    var today = new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
+
+    var html = '';
+    html += '<!DOCTYPE html><html><head><meta charset="utf-8"><title>HD HeeD — AILR Full Report</title>';
+    html += '<style>';
+    html += 'html,body{margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:#111}';
+    html += '@page{size:A4;margin:18mm 14mm}';
+    html += 'header.print{position:fixed;top:0;left:0;right:0;height:40px;border-bottom:1px solid #e5e7eb;font-weight:700;font-size:12px;color:#334155;background:#fff;padding:10px 0}';
+    html += 'header.print .brand{display:flex;justify-content:space-between;align-items:center}';
+    html += 'footer.print{position:fixed;bottom:0;left:0;right:0;height:30px;border-top:1px solid #e5e7eb;font-size:11px;color:#475569;background:#fff}';
+    html += 'footer.print .row{display:flex;justify-content:space-between;align-items:center;padding-top:6px}';
+    html += '.pnum:after{counter-increment:page;content:"Page " counter(page)}';
+    html += '.container{counter-reset:page;page-break-inside:avoid}';
+    html += 'h1,h2,h3{margin:0 0 4px}';
+    html += '.cover{page-break-after:always}';
+    html += '.cover h1{font-size:28px;color:#111827}';
+    html += '.subtitle{color:#64748b;margin-top:2px}';
+    html += '.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}';
+    html += '.section{page-break-inside:avoid;margin:14px 0;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;background:#fafafa}';
+    html += '.section h2{font-size:16px;color:#111827;margin-bottom:8px}';
+    html += 'table.kv{width:100%;border-collapse:separate;border-spacing:0 6px}';
+    html += 'table.kv th{width:220px;text-align:left;padding:6px 8px;background:#eef2ff;border-radius:8px;font-weight:700;color:#1e3a8a;vertical-align:top}';
+    html += 'table.kv td{padding:6px 8px;background:#fff;border-radius:8px;border:1px solid #e5e7eb;color:#0f172a}';
+    html += '.pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#f1f5f9;border:1px solid #e2e8f0;font-size:12px;margin-right:6px;margin-bottom:6px}';
+    html += '.toc{page-break-after:always}';
+    html += '.toc ol{margin:8px 0 0 18px}';
+    html += '.sig{height:80px;border:1px dashed #cbd5e1;border-radius:8px;background:#fff}';
+    html += '.break{page-break-before:always}';
+    html += '</style></head><body>';
+    html += '<header class="print"><div class="brand" style="margin:0 14mm;">';
+    html += '<div>HD HeeD • AILR Full Report</div><div>'+today+'</div>';
+    html += '</div></header>';
+    html += '<footer class="print"><div class="row" style="margin:0 14mm;"><div>info@hdheed.com.au • 02 8630 5500</div><div class="pnum"></div></div></footer>';
+    html += '<div class="container" style="margin:50px 14mm 34px;">';
+
+    /* Cover */
+    html += '<section class="cover">';
+    html += '<h1>AILR Onboarding — Full Report</h1>';
+    html += '<div class="subtitle">Prepared by HD HeeD</div>';
+    html += '<div style="margin-top:10px" class="grid">';
+    html += '<div class="section"><h2>Participant</h2><table class="kv">';
+    html += row('Legal name', S.participant.legal_name);
+    html += row('Preferred name', S.participant.preferred_name);
+    html += row('DOB', S.participant.dob);
+    html += row('NDIS number', S.participant.ndis_number);
+    html += row('Address', addr());
+    html += '</table></div>';
+    html += '<div class="section"><h2>Submission</h2><table class="kv">';
+    html += row('Submitted by', S.submitter.name);
+    html += row('Contact email', S.submitter.email);
+    html += row('Contact phone', S.submitter.phone);
+    html += row('Consent to proceed', S.caller.consent);
+    html += '</table></div></div>';
+    html += '<div class="section"><h2>Documents Acknowledgement</h2><table class="kv">';
+    html += row('Documents read', readCt + ' / ' + DOCS.length);
+    html += row('Consents provided', conCt + ' / ' + needCon);
+    html += '</table></div>';
+    html += '</section>';
+
+    /* TOC */
+    html += '<section class="toc"><h2>Table of Contents</h2><ol>';
+    var parts = ['Who is completing','Participant','Contacts','Communication & preferences','Living & access','Health & clinical','Medication management','Risks','Behaviour Support Plan','Supports & schedule','Policies & Consents (Acknowledgements)','Uploads (emailed)','Signatures'];
+    for(var i=0;i<parts.length;i++){ html += '<li>'+parts[i]+'</li>'; }
+    html += '</ol></section>';
+
+    /* Sections */
+    function tableStart(title){ return '<section class="section break"><h2>'+title+'</h2><table class="kv">'; }
+    function tableEnd(){ return '</table></section>'; }
+
+    html += tableStart('Who is completing');
+    html += row('Role', S.caller.role);
+    html += row('Name', S.caller.name);
+    html += row('Relationship', S.caller.relationship);
+    html += row('Consent to proceed', S.caller.consent);
+    html += tableEnd();
+
+    html += tableStart('Participant');
+    html += row('Legal name', S.participant.legal_name);
+    html += row('Preferred name', S.participant.preferred_name);
+    html += row('Pronouns', S.participant.pronouns);
+    html += row('Date of birth', S.participant.dob);
+    html += row('NDIS number', S.participant.ndis_number);
+    html += row('Address', addr());
+    html += row('Plan management', S.participant.plan_mgmt);
+    html += row('Plan manager (org)', S.participant.plan_manager.org);
+    html += row('Plan manager (contact)', S.participant.plan_manager.contact);
+    html += row('Plan manager (email)', S.participant.plan_manager.email);
+    html += row('Plan manager (phone)', S.participant.plan_manager.phone);
+    html += row('Plan dates', (S.participant.plan_dates.start||'') + (S.participant.plan_dates.end?(' → '+S.participant.plan_dates.end):''));
+    html += tableEnd();
+
+    html += tableStart('Contacts');
+    html += row('Participant email', S.contacts.email);
+    html += row('Participant phone', S.contacts.phone);
+    html += row('Emergency contact', join([S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone],' • '));
+    html += row('Support Coordinator', join([S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone],' • '));
+    html += row('GP / Practice', join([S.contacts.gp.name,S.contacts.gp.practice],' • '));
+    html += row('GP contact', join([S.contacts.gp.phone,S.contacts.gp.email],' • '));
+    html += tableEnd();
+
+    html += tableStart('Communication & preferences');
+    html += row('Primary language', S.comms.primary_language);
+    html += row('Interpreter', S.comms.interpreter);
+    html += row('Interpreter language', S.comms.interpreter_language);
+    html += row('Cultural / religious considerations', S.comms.cultural_considerations);
+    html += row('Worker gender preference', S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other);
+    html += row('Transport required', S.comms.preferences.transport_required);
+    html += tableEnd();
+
+    html += tableStart('Living & access');
+    html += row('Residence type', S.living.residence_type);
+    html += row('Lives with', S.living.lives_with);
+    html += row('Entry notes', S.living.entry_notes);
+    html += row('Keysafe available', S.living.keysafe);
+    html += row('Smoking on premises', S.living.smoking_on_premises);
+    html += row('Hazards', S.living.hazards);
+    html += tableEnd();
+
+    html += tableStart('Health & clinical');
+    html += row('Primary diagnoses', S.clinical.primary_diagnoses);
+    html += row('Other diagnoses', S.clinical.other_diagnoses);
+    html += row('Allergies', S.clinical.allergies);
+    html += row('Mobility', S.clinical.mobility);
+    html += row('Equipment / aids', S.clinical.equipment);
+    html += row('Continence', S.clinical.continence);
+    html += row('Cognition', S.clinical.cognition);
+    html += row('Pressure injury risk', S.clinical.pressure_injury_risk);
+    html += row('Falls risk', S.clinical.falls_risk);
+    html += row('Seizures', yesno(S.clinical.seizures.has));
+    html += row('Seizure plan', S.clinical.seizures.plan);
+    html += row('Seizure frequency', S.clinical.seizures.frequency);
+    html += row('Stoma/ostomy care', yesno(S.clinical.stoma_care));
+    html += row('Diet / swallowing', S.clinical.diet_notes);
+    html += tableEnd();
+
+    html += tableStart('Medication management');
+    html += row('Has medications', yesno(S.medications.has_meds));
+    html += row('Method', S.medications.method);
+    html += row('Webster pack', yesno(S.medications.webster_pack));
+    html += row('Storage location', S.medications.storage);
+    html += row('Self-admin', yesno(S.medications.self_admin));
+    html += row('Staff admin', yesno(S.medications.staff_admin));
+    html += row('Notes', S.medications.notes);
+    html += tableEnd();
+
+    html += tableStart('Risks');
+    html += row('Behavioural concerns', S.risks.behavioural.present);
+    html += row('Behaviour notes', S.risks.behavioural.notes);
+    html += row('Clinical concerns',
+      listTrue(S.risks.clinical, {
+        wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy",
+        tube_feeding:"Enteral tube feeding", mental_health:"Significant mental health needs",
+        stoma_care:"Stoma care"
+      })
+    );
+    html += row('Clinical other', S.risks.clinical.other);
+    html += row('Environmental concerns',
+      listTrue(S.risks.environmental, { animals:"Reactive animals", hoarding:"Hoarding / clutter", weapons:"Weapons on site" })
+    );
+    html += row('Environmental other', S.risks.environmental.other);
+    html += row('Home risks',
+      listTrue(S.risks.home_checklist, { trip_hazards:"Trip hazards", smoke_alarms:"No working smoke alarms", lighting:"Poor lighting", bathroom_safety:"Bathroom lacks safety rails / mats" })
+    );
+    html += row('Home notes', S.risks.home_checklist.notes);
+    html += row('Other risk notes', S.risks.other_notes);
+    html += row('Overall risk rating', S.risks.overall_rating);
+    html += tableEnd();
+
+    html += tableStart('Behaviour Support Plan');
+    html += row('BSP in place', yesno(S.bsp.has_bsp));
+    html += row('Restrictive practices', yesno(S.bsp.restrictive_practices));
+    html += row('BSP provider', S.bsp.provider);
+    html += row('Notes', S.bsp.notes);
+    html += tableEnd();
+
+    html += tableStart('Supports & schedule');
+    html += row('Required supports', (function(){
+      var map = {personal_care:"Personal care",high_intensity:"High-intensity personal care",household_tasks:"Household tasks",life_skills:"Development of life skills",community_participation:"Community participation",group_centre:"Group/centre-based activities",travel_transport:"Assist with travel & transport",daily_tasks_sil:"Daily tasks & shared living",not_sure:"Not sure — guide me"};
+      var list = (S.supports.required||[]).map(function(k){return map[k]||k;});
+      if (S.supports.required_other) list.push("Other: "+S.supports.required_other);
+      return list.length? list.join(', ') : '—';
+    })());
+    html += row('Specific support details', S.supports.details_text);
+    html += row('Goals', S.supports.goals);
+    html += row('Preferred outcomes', S.supports.outcomes);
+    html += row('Windows', mapWindowsSummary(S.schedule.windows));
+    html += row('Days', mapDaysSummary(S.schedule.days));
+    html += row('Hours/week', S.schedule.hours_per_week);
+    html += row('Urgency', S.schedule.urgency);
+    html += row('Start preference', S.schedule.start_preference);
+    html += tableEnd();
+
+    html += tableStart('Policies & Consents (Acknowledgements)');
+    DOCS.forEach(function(d){
+      var ack=S.acks[d.id]||{};
+      var status = (ack.read?'Read ✓':'Read —') + (d.requiresConsent? (' • Consent: ' + (ack.consent?'Yes ✓':'—')) : '');
+      html += row(d.title, status);
+    });
+    html += tableEnd();
+
+    html += tableStart('Uploads (emailed reminder)');
+    html += row('Files selected in-app', (S.uploads.files||[]).map(function(f){return f.name;}).join(' • '));
+    html += row('Reminder', 'Email documents to info@hdheed.com.au (ID, Medicare card, NDIS plan, care/medication plans, signed consents).');
+    html += tableEnd();
+
+    /* Signature blocks */
+    html += '<section class="section break"><h2>Signatures</h2><table class="kv">';
+    html += row('Participant / Representative — Name', '');
+    html += '<tr><th>Signature</th><td><div class="sig"></div></td></tr>';
+    html += row('Date', today);
+    html += row('HD HeeD Representative — Name', '');
+    html += '<tr><th>Signature</th><td><div class="sig"></div></td></tr>';
+    html += row('Date', today);
+    html += '</table></section>';
+
+    html += '</div></body></html>';
+    return html;
+  }
+
+  function openFullPDF(){
+    var win = window.open('', '_blank');
+    win.document.write(buildFullReportHTML());
+    win.document.close();
+    /* Let the user use browser "Save as PDF". */
+    setTimeout(function(){ try{ win.focus(); }catch(e){} }, 100);
+  }
+
+  /* ====== NEW: Editable RTF download ====== */
+  function downloadEditableRTF(){
+    function esc(s){ return (s||'').toString().replace(/[\\{}]/g, function(m){ return '\\'+m; }).replace(/\n/g,'\\par '); }
+    function line(k,v){ return '\\b '+esc(k)+':\\b0\\tab '+esc(v||'—')+'\\par '; }
+    function block(title, lines){
+      var out = '{\\pard\\sa120\\b\\ul '+esc(title)+'\\ul0\\b0\\par }';
+      out += '{\\pard\\sa80 '+lines.join('')+'}';
+      return out;
+    }
+    var a=S.participant.address||{};
+    var addr=[a.line1,a.line2,a.suburb,a.state,a.postcode].filter(Boolean).join(', ');
+    var parts=[];
+    parts.push(block('Who is completing',[
+      line('Role',S.caller.role),
+      line('Name',S.caller.name),
+      line('Relationship',S.caller.relationship),
+      line('Consent to proceed',S.caller.consent)
+    ]));
+    parts.push(block('Participant',[
+      line('Legal name',S.participant.legal_name),
+      line('Preferred name',S.participant.preferred_name),
+      line('Pronouns',S.participant.pronouns),
+      line('DOB',S.participant.dob),
+      line('NDIS number',S.participant.ndis_number),
+      line('Address',addr),
+      line('Plan management',S.participant.plan_mgmt),
+      line('Plan manager (org)',S.participant.plan_manager.org),
+      line('Plan manager (contact)',S.participant.plan_manager.contact),
+      line('Plan manager email',S.participant.plan_manager.email),
+      line('Plan manager phone',S.participant.plan_manager.phone),
+      line('Plan dates',(S.participant.plan_dates.start||'') + (S.participant.plan_dates.end?(' → '+S.participant.plan_dates.end):''))
+    ]));
+    parts.push(block('Contacts',[
+      line('Participant email',S.contacts.email),
+      line('Participant phone',S.contacts.phone),
+      line('Emergency contact', [S.contacts.emergency.name,S.contacts.emergency.relationship,S.contacts.emergency.phone].filter(Boolean).join(' • ')),
+      line('Support Coordinator', [S.contacts.support_coordinator.name,S.contacts.support_coordinator.org,S.contacts.support_coordinator.email,S.contacts.support_coordinator.phone].filter(Boolean).join(' • ')),
+      line('GP / Practice', [S.contacts.gp.name,S.contacts.gp.practice].filter(Boolean).join(' • ')),
+      line('GP contact', [S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(' • '))
+    ]));
+    parts.push(block('Communication & preferences',[
+      line('Primary language',S.comms.primary_language),
+      line('Interpreter',S.comms.interpreter),
+      line('Interpreter language',S.comms.interpreter_language),
+      line('Cultural considerations',S.comms.cultural_considerations),
+      line('Worker gender preference',S.comms.preferences.worker_gender || S.comms.preferences.worker_gender_other),
+      line('Transport required',S.comms.preferences.transport_required)
+    ]));
+    parts.push(block('Living & access',[
+      line('Residence type',S.living.residence_type),
+      line('Lives with',S.living.lives_with),
+      line('Entry notes',S.living.entry_notes),
+      line('Keysafe available',S.living.keysafe),
+      line('Smoking on premises',S.living.smoking_on_premises),
+      line('Hazards',S.living.hazards)
+    ]));
+    parts.push(block('Health & clinical',[
+      line('Primary diagnoses',S.clinical.primary_diagnoses),
+      line('Other diagnoses',S.clinical.other_diagnoses),
+      line('Allergies',S.clinical.allergies),
+      line('Mobility',S.clinical.mobility),
+      line('Equipment / aids',S.clinical.equipment),
+      line('Continence',S.clinical.continence),
+      line('Cognition',S.clinical.cognition),
+      line('Pressure injury risk',S.clinical.pressure_injury_risk),
+      line('Falls risk',S.clinical.falls_risk),
+      line('Seizures', (S.clinical.seizures.has===true?'Yes':S.clinical.seizures.has===false?'No':(S.clinical.seizures.has===null?'Not sure':'—'))),
+      line('Seizure plan',S.clinical.seizures.plan),
+      line('Seizure frequency',S.clinical.seizures.frequency),
+      line('Stoma/ostomy care', (S.clinical.stoma_care===true?'Yes':S.clinical.stoma_care===false?'No':(S.clinical.stoma_care===null?'Not sure':'—'))),
+      line('Diet / swallowing',S.clinical.diet_notes)
+    ]));
+    parts.push(block('Medication management',[
+      line('Has medications',S.medications.has_meds===true?'Yes':S.medications.has_meds===false?'No':(S.medications.has_meds===null?'Not sure':'—')),
+      line('Method',S.medications.method),
+      line('Webster pack',S.medications.webster_pack===true?'Yes':S.medications.webster_pack===false?'No':(S.medications.webster_pack===null?'Not sure':'—')),
+      line('Storage location',S.medications.storage),
+      line('Self-admin',S.medications.self_admin===true?'Yes':S.medications.self_admin===false?'No':(S.medications.self_admin===null?'Not sure':'—')),
+      line('Staff admin',S.medications.staff_admin===true?'Yes':S.medications.staff_admin===false?'No':(S.medications.staff_admin===null?'Not sure':'—')),
+      line('Notes',S.medications.notes)
+    ]));
+    function listTrue(obj, map){
+      var out=[]; for (var k in map){ if(obj && obj[k]) out.push(map[k]); } return out.join(', ');
+    }
+    parts.push(block('Risks',[
+      line('Behavioural concerns',S.risks.behavioural.present),
+      line('Behaviour notes',S.risks.behavioural.notes),
+      line('Clinical concerns',listTrue(S.risks.clinical,{wounds:"Wounds/dressings",diabetes:"Diabetes",tracheostomy:"Tracheostomy",tube_feeding:"Enteral tube feeding",mental_health:"Significant mental health needs",stoma_care:"Stoma care"})),
+      line('Clinical other',S.risks.clinical.other),
+      line('Environmental concerns',listTrue(S.risks.environmental,{animals:"Reactive animals",hoarding:"Hoarding / clutter",weapons:"Weapons on site"})),
+      line('Environmental other',S.risks.environmental.other),
+      line('Home risks',listTrue(S.risks.home_checklist,{trip_hazards:"Trip hazards",smoke_alarms:"No working smoke alarms",lighting:"Poor lighting",bathroom_safety:"Bathroom lacks safety rails / mats"})),
+      line('Home notes',S.risks.home_checklist.notes),
+      line('Other risk notes',S.risks.other_notes),
+      line('Overall risk rating',S.risks.overall_rating)
+    ]));
+    parts.push(block('Behaviour Support Plan',[
+      line('BSP in place', S.bsp.has_bsp===true?'Yes':S.bsp.has_bsp===false?'No':(S.bsp.has_bsp===null?'Not sure':'—')),
+      line('Restrictive practices', S.bsp.restrictive_practices===true?'Yes':S.bsp.restrictive_practices===false?'No':(S.bsp.restrictive_practices===null?'Not sure':'—')),
+      line('BSP provider', S.bsp.provider),
+      line('Notes', S.bsp.notes)
+    ]));
+    function supportsList(){
+      var map={personal_care:"Personal care",high_intensity:"High-intensity personal care",household_tasks:"Household tasks",life_skills:"Development of life skills",community_participation:"Community participation",group_centre:"Group/centre-based activities",travel_transport:"Assist with travel & transport",daily_tasks_sil:"Daily tasks & shared living",not_sure:"Not sure — guide me"};
+      var l=(S.supports.required||[]).map(function(k){return map[k]||k;});
+      if(S.supports.required_other) l.push('Other: '+S.supports.required_other);
+      return l.join(', ');
+    }
+    parts.push(block('Supports & schedule',[
+      line('Required supports',supportsList()),
+      line('Specific support details',S.supports.details_text),
+      line('Goals',S.supports.goals),
+      line('Preferred outcomes',S.supports.outcomes),
+      line('Windows',mapWindowsSummary(S.schedule.windows)),
+      line('Days',mapDaysSummary(S.schedule.days)),
+      line('Hours/week',S.schedule.hours_per_week),
+      line('Urgency',S.schedule.urgency),
+      line('Start preference',S.schedule.start_preference)
+    ]));
+    parts.push(block('Policies & Consents (Acknowledgements)',
+      DOCS.map(function(d){
+        var ack=S.acks[d.id]||{};
+        var txt=(ack.read?'Read ✓':'Read —')+(d.requiresConsent?(' • Consent: '+(ack.consent?'Yes ✓':'—')):'');
+        return line(d.title,txt);
+      })
+    ));
+
+    var today = new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
+    parts.push(block('Signatures (add below in Word/Docs)',[
+      line('Participant/Representative — Name',''),
+      line('Date',today),
+      line('HD HeeD Representative — Name',''),
+      line('Date',today)
+    ]));
+
+    var rtf = '{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Arial;}}\\fs21 '+parts.join(' ')+' }';
+    var blob = new Blob([rtf], {type:'application/rtf'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'HD_HeeD_AILR_Editable.rtf';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+
+  /* ====== Printable Summary (existing lightweight) ====== */
+  function openPrintableSummary(){
+    var win = window.open('', '_blank');
+    var submissionDate = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    var html = '<html><head><title>HD HeeD AILR Onboarding Summary</title>';
+    html += '<style>';
+    html += 'body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: #ffffff; color: #333333; margin: 0; padding: 0; line-height: 1.5; }';
+    html += '.container { max-width: 800px; margin: 0 auto; padding: 20px; }';
+    html += '.header { text-align: center; padding: 20px 0; border-bottom: 2px solid #4f46e5; }';
+    html += '.header h1 { font-size: 28px; font-weight: 700; color: #4f46e5; margin: 0; }';
+    html += '.header p { font-size: 16px; color: #666666; margin: 5px 0; }';
+    html += '.review { display: grid; gap: 20px; margin-top: 20px; }';
+    html += 'details.card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; background: #f9f9f9; }';
+    html += 'summary { font-size: 18px; font-weight: 600; color: #4f46e5; cursor: pointer; padding-bottom: 10px; }';
+    html += '.kv { display: grid; gap: 10px; }';
+    html += '.kv div { display: flex; align-items: flex-start; font-size: 14px; color: #333333; }';
+    html += '.kv div b { min-width: 200px; font-weight: 600; color: #000000; }';
+    html += '.kv div span { flex: 1; word-break: break-word; }';
+    html += '.footer { text-align: center; font-size: 12px; color: #666666; margin-top: 20px; padding-top: 10px; border-top: 1px solid #e0e0e0; }';
+    html += '.footer p { margin: 5px 0; }';
+    html += '.print-btn { display: block; margin: 20px auto; padding: 10px 20px; font-size: 16px; font-weight: 600; color: #ffffff; background: #4f46e5; border: none; border-radius: 5px; cursor: pointer; }';
+    html += '.print-btn:hover { background: #3b82f6; }';
+    html += '@media print { .print-btn { display: none; } .container { padding: 10px; } .header { border-bottom: none; } .footer { border-top: none; } }';
+    html += '@page { size: A4; margin: 15mm; }';
+    html += '</style>';
+    html += '</head><body>';
+    html += '<div class="container">';
+    html += '<div class="header">';
+    html += '<h1>HD HeeD AILR Onboarding Summary</h1>';
+    html += '<p>Participant: ' + (S.participant.legal_name || 'Not provided') + '</p>';
+    html += '<p>Submission Date: ' + submissionDate + '</p>';
+    html += '<p>Prepared by HD HeeD | info@hdheed.com.au | 02 8630 5500</p>';
+    html += '</div>';
+    html += renderReview().outerHTML;
+    html += '<div class="footer">';
+    html += '<p>HD HeeD | AILR Onboarding Summary | info@hdheed.com.au | 02 8630 5500</p>';
+    html += '<p>Page <span class="pageNumber"></span> of <span class="totalPages"></span></p>';
+    html += '</div>';
+    html += '<button class="print-btn" onclick="window.print()">Print / Save as PDF</button>';
+    html += '</div>';
+    html += '</body></html>';
+    win.document.write(html);
+    win.document.close();
+  }
+
+  /* ====== Confetti (existing) ====== */
+  function triggerConfetti(duration){
+    var canvas = document.getElementById('confetti');
+    canvas.classList.remove('hide');
+    var ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var particles = [];
+    var colors = ['#4f46e5', '#ec4899', '#22c55e', '#f59e0b'];
+    function Particle(){
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height - canvas.height;
+      this.vx = Math.random() * 4 - 2;
+      this.vy = Math.random() * 6 + 2;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.size = Math.random() * 6 + 2;
+    }
+    for (var i = 0; i < 100; i++) particles.push(new Particle());
+    var start = Date.now();
+    function animate(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(function(p){
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.1;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      if (Date.now() < start + duration){
+        requestAnimationFrame(animate);
+      } else {
+        canvas.classList.add('hide');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+    animate();
+  }
+
+  /* ====== Steps (unchanged content; only added new buttons) ====== */
   var Steps = [
     { key:"intro", title:"Welcome — let’s begin", sub:"Pick a card or type. You can choose Not sure or Prefer not to say anywhere.",
       build:function(m){
@@ -1028,7 +1488,15 @@
       build:function(m){ S.uploads.files = []; save(); }
     },
     { key:"review", title:"Review your answers", sub:"Check the sections below. You can go back to edit anything.",
-      build:function(m){ m.appendChild(renderReview()); }
+      build:function(m){
+        m.appendChild(renderReview());
+        var actions=el('div',null); actions.style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px";
+        var btnFullPdf = button("Full PDF report","primary", function(){ openFullPDF(); });
+        var btnEditable = button("Download editable (.rtf)","ghost", function(){ downloadEditableRTF(); });
+        var btnLite = button("Lite summary PDF","ghost", function(){ openPrintableSummary(); });
+        actions.appendChild(btnFullPdf); actions.appendChild(btnEditable); actions.appendChild(btnLite);
+        m.appendChild(actions);
+      }
     },
     { key:"submit", title:"Submit your onboarding", sub:"Provide a contact. At least an email or phone is required to submit. <br><br><b>Next steps:</b> We’ll review, prepare your Service Agreement for e-signature, and contact you to schedule supports.",
       build:function(m){
@@ -1085,8 +1553,12 @@
             btnSend.disabled = false; btnSend.textContent = "Send Now";
           });
         });
-        var btnPdf = button("Print / Save summary as PDF","ghost", function(){ openPrintableSummary(); });
-        actions.appendChild(btnSubmit); actions.appendChild(btnSend); actions.appendChild(btnPdf);
+        /* NEW: export buttons on submit too */
+        var btnFullPdf2 = button("Full PDF report","ghost", function(){ openFullPDF(); });
+        var btnEditable2 = button("Download editable (.rtf)","ghost", function(){ downloadEditableRTF(); });
+        var btnLite2 = button("Lite summary PDF","ghost", function(){ openPrintableSummary(); });
+        actions.appendChild(btnSubmit); actions.appendChild(btnSend);
+        actions.appendChild(btnFullPdf2); actions.appendChild(btnEditable2); actions.appendChild(btnLite2);
         m.appendChild(actions);
         var hint = el('div','hint','We’ll contact you from <b>info@hdheed.com.au</b> or <b>02 8630 5500</b>. <br>By submitting, you confirm the on-screen consent above and understand a Service Agreement must be signed before supports commence.');
         m.appendChild(hint);
@@ -1245,91 +1717,6 @@
       restoreState();
     }
   });
-
-  /* ====== Printable Summary ====== */
-  function openPrintableSummary(){
-    var win = window.open('', '_blank');
-    var submissionDate = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
-    var html = '<html><head><title>HD HeeD AILR Onboarding Summary</title>';
-    html += '<style>';
-    html += 'body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: #ffffff; color: #333333; margin: 0; padding: 0; line-height: 1.5; }';
-    html += '.container { max-width: 800px; margin: 0 auto; padding: 20px; }';
-    html += '.header { text-align: center; padding: 20px 0; border-bottom: 2px solid #4f46e5; }';
-    html += '.header h1 { font-size: 28px; font-weight: 700; color: #4f46e5; margin: 0; }';
-    html += '.header p { font-size: 16px; color: #666666; margin: 5px 0; }';
-    html += '.review { display: grid; gap: 20px; margin-top: 20px; }';
-    html += 'details.card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; background: #f9f9f9; }';
-    html += 'summary { font-size: 18px; font-weight: 600; color: #4f46e5; cursor: pointer; padding-bottom: 10px; }';
-    html += '.kv { display: grid; gap: 10px; }';
-    html += '.kv div { display: flex; align-items: flex-start; font-size: 14px; color: #333333; }';
-    html += '.kv div b { min-width: 200px; font-weight: 600; color: #000000; }';
-    html += '.kv div span { flex: 1; word-break: break-word; }';
-    html += '.footer { text-align: center; font-size: 12px; color: #666666; margin-top: 20px; padding-top: 10px; border-top: 1px solid #e0e0e0; }';
-    html += '.footer p { margin: 5px 0; }';
-    html += '.print-btn { display: block; margin: 20px auto; padding: 10px 20px; font-size: 16px; font-weight: 600; color: #ffffff; background: #4f46e5; border: none; border-radius: 5px; cursor: pointer; }';
-    html += '.print-btn:hover { background: #3b82f6; }';
-    html += '@media print { .print-btn { display: none; } .container { padding: 10px; } .header { border-bottom: none; } .footer { border-top: none; } }';
-    html += '@page { size: A4; margin: 15mm; }';
-    html += '</style>';
-    html += '</head><body>';
-    html += '<div class="container">';
-    html += '<div class="header">';
-    html += '<h1>HD HeeD AILR Onboarding Summary</h1>';
-    html += '<p>Participant: ' + (S.participant.legal_name || 'Not provided') + '</p>';
-    html += '<p>Submission Date: ' + submissionDate + '</p>';
-    html += '<p>Prepared by HD HeeD | info@hdheed.com.au | 02 8630 5500</p>';
-    html += '</div>';
-    html += renderReview().outerHTML;
-    html += '<div class="footer">';
-    html += '<p>HD HeeD | AILR Onboarding Summary | info@hdheed.com.au | 02 8630 5500</p>';
-    html += '<p>Page <span class="pageNumber"></span> of <span class="totalPages"></span></p>';
-    html += '</div>';
-    html += '<button class="print-btn" onclick="window.print()">Print / Save as PDF</button>';
-    html += '</div>';
-    html += '</body></html>';
-    win.document.write(html);
-    win.document.close();
-  }
-
-  /* ====== Confetti ====== */
-  function triggerConfetti(duration){
-    var canvas = document.getElementById('confetti');
-    canvas.classList.remove('hide');
-    var ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    var particles = [];
-    var colors = ['#4f46e5', '#ec4899', '#22c55e', '#f59e0b'];
-    function Particle(){
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height - canvas.height;
-      this.vx = Math.random() * 4 - 2;
-      this.vy = Math.random() * 6 + 2;
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.size = Math.random() * 6 + 2;
-    }
-    for (var i = 0; i < 100; i++) particles.push(new Particle());
-    var start = Date.now();
-    function animate(){
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(function(p){
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.1;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      if (Date.now() < start + duration){
-        requestAnimationFrame(animate);
-      } else {
-        canvas.classList.add('hide');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
-    animate();
-  }
 
   /* ====== Init ====== */
   restoreState();
