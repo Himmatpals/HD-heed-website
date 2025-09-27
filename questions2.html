@@ -1556,7 +1556,456 @@
       </div>
     </div>
   </section>
-  
+ <!-- ===================== ADVANCED TTS PLAYER — START ===================== -->
+<style>
+  :root{
+    /* dark grey + yellow */
+    --panel:#0b101a; --panel-2:#0f1522; --ink:#e5e7eb; --muted:#9ca3af;
+    --accent:#f59e0b; --accent-ink:#111827; --border:#262c3a; --ring:#fde68a;
+    --radius:16px; --shadow:0 12px 28px rgba(0,0,0,.35);
+  }
+  .atp{
+    position:fixed; left:16px; right:16px; bottom:16px; z-index:70;
+    max-width:1100px; margin:0 auto; background:var(--panel); color:var(--ink);
+    border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
+  }
+  .atp__row{display:flex; gap:12px; align-items:center; padding:10px 14px; flex-wrap:wrap}
+  .atp__title{font-weight:800; letter-spacing:.2px}
+  .atp__btn{
+    background:var(--panel-2); color:#fef3c7; border:1px solid var(--border);
+    padding:10px 12px; border-radius:12px; font-weight:800; cursor:pointer
+  }
+  .atp__btn--accent{background:var(--accent); color:var(--accent-ink); border-color:transparent}
+  .atp__btn:disabled{opacity:.5; cursor:not-allowed}
+  .atp__sel,.atp__range,.atp__text{
+    background:var(--panel-2); color:var(--ink); border:1px solid var(--border);
+    border-radius:12px; padding:8px 10px; min-height:38px
+  }
+  .atp__range{width:160px}
+  .atp__meta{font-size:12px; color:var(--muted)}
+  .atp__prog{position:relative; height:10px; background:var(--panel-2); border:1px solid var(--border); border-radius:999px; overflow:hidden; cursor:pointer}
+  .atp__bar{height:100%; width:0%; background:var(--accent)}
+  .atp__ghost{position:absolute; top:0; bottom:0; width:2px; background:#fef08a; opacity:.7; display:none}
+  .atp__hl{outline:2px dashed var(--ring); border-radius:12px; scroll-margin:120px}
+  .atp__pill{background:var(--accent); color:var(--accent-ink); border-radius:999px; padding:4px 10px; font-size:11px; font-weight:900}
+  .atp__grow{flex:1}
+  .atp__sp{min-width:70px; text-align:right}
+  .atp__close{background:transparent; border:none; color:var(--muted); font-weight:900; cursor:pointer}
+  .atp__close:hover{color:#fef08a}
+  @media (max-width:760px){ .atp{left:10px; right:10px} }
+</style>
+
+<div class="atp" id="atp" role="region" aria-label="Advanced Text to Speech Player">
+  <div class="atp__row" style="border-bottom:1px solid var(--border)">
+    <div class="atp__title"><span class="atp__pill">TTS</span> Advanced Reader</div>
+    <select id="atpSection" class="atp__sel atp__grow" aria-label="Section to read"></select>
+    <button class="atp__btn atp__btn--accent" id="atpPlay">▶ Play</button>
+    <button class="atp__btn" id="atpPrevQ" title="Previous Q&A">⏮</button>
+    <button class="atp__btn" id="atpBack10" title="Back 10s">↺ 10s</button>
+    <button class="atp__btn" id="atpFwd10" title="Forward 10s">10s ↻</button>
+    <button class="atp__btn" id="atpNextQ" title="Next Q&A">⏭</button>
+    <button class="atp__btn" id="atpStop">⏹ Stop</button>
+    <button class="atp__close" id="atpHide" title="Hide">✕</button>
+  </div>
+
+  <div class="atp__row">
+    <div class="atp__prog atp__grow" id="atpProg" aria-label="Seek">
+      <div class="atp__bar" id="atpBar"></div>
+      <div class="atp__ghost" id="atpGhost"></div>
+    </div>
+    <div class="atp__sp atp__meta"><span id="atpClock">0:00 / 0:00</span></div>
+  </div>
+
+  <div class="atp__row" style="border-top:1px solid var(--border)">
+    <label class="atp__meta">Speed
+      <input type="range" min="0.6" max="2" step="0.1" value="1" id="atpRate" class="atp__range">
+      <span id="atpRateVal" class="atp__meta">1.0×</span>
+    </label>
+    <select id="atpVoice" class="atp__sel" aria-label="Voice"></select>
+    <label class="atp__meta"><input type="checkbox" id="atpAutoNext" checked> Auto-advance to next section</label>
+    <button class="atp__btn" id="atpSel">🖱️ Read selection</button>
+    <div class="atp__meta atp__grow" id="atpNow">Ready. Choose a section or just press Play.</div>
+  </div>
+</div>
+
+<script>
+(()=> {
+  // ---------- Helpers
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const fmt = s => { const m=Math.floor(s/60), x=Math.max(0,Math.floor(s%60)); return `${m}:${x<10?'0':''}${x}` };
+
+  // ---------- DOM
+  const atp = $('#atp');
+  const ddSection = $('#atpSection'), btnPlay = $('#atpPlay'), btnPrevQ = $('#atpPrevQ'), btnNextQ = $('#atpNextQ');
+  const btnStop = $('#atpStop'), btnBack10 = $('#atpBack10'), btnFwd10 = $('#atpFwd10'), btnSel = $('#atpSel');
+  const prog = $('#atpProg'), bar = $('#atpBar'), ghost = $('#atpGhost'), clock = $('#atpClock'), now = $('#atpNow');
+  const rate = $('#atpRate'), rateVal = $('#atpRateVal'), voiceSel = $('#atpVoice'), chkAuto = $('#atpAutoNext'), btnHide = $('#atpHide');
+
+  // ---------- State
+  const synth = window.speechSynthesis;
+  let voices = [];
+  let utter = null;
+  let tick = null;
+  let playing = false;
+
+  // Section model
+  let sections = []; // [{el, id, label, qas:[details], sentences:[{text, node, type, qIndex}], words, map:[startSec] }]
+  let cur = { sIdx: 0, sentIdx: 0, elapsed: 0, total: 0, wps: 150/60 };
+
+  // ---------- Build sections (each .section inside the currently visible .shell part)
+  function detectCurrentPart(){
+    const parts = $$('.shell[id^="part-"]');
+    // choose part from URL hash first, else top-most
+    if (location.hash && document.querySelector(location.hash)) return document.querySelector(location.hash);
+    let top = parts[0], minY = Infinity;
+    parts.forEach(p => { const r=p.getBoundingClientRect(); if (r.top>=-40 && r.top<minY){ minY=r.top; top=p; }});
+    return top;
+  }
+
+  function splitSentences(text){
+    // simple sentence splitter respecting bullets/line breaks
+    return text
+      .replace(/\s+/g,' ')
+      .split(/(?<=[.!?])\s+(?=[A-Z0-9"“])/)
+      .filter(Boolean);
+  }
+
+  function gatherSection(secEl){
+    const label = (secEl.querySelector('h2,h3')?.innerText || 'Untitled Section').trim();
+    const qas = Array.from(secEl.querySelectorAll('details.qa'));
+    const blocks = [];
+
+    // Intro text (outside of details)
+    const introNodes = Array.from(secEl.querySelectorAll(':scope > p, :scope > .sub, :scope > ul, :scope > ol'));
+    introNodes.forEach(node=>{
+      const txt = node.innerText.trim();
+      if (txt) blocks.push({ type:'intro', node, text: txt });
+    });
+
+    // Q&A blocks
+    qas.forEach((d, i)=>{
+      const q = (d.querySelector('summary')?.innerText || '').trim();
+      const a = (d.querySelector('.answer')?.innerText || '').trim();
+      if (q) blocks.push({ type:'q', node:d, text: `Question: ${q}`, qIndex:i });
+      if (a) blocks.push({ type:'a', node:d, text: `Answer: ${a}`, qIndex:i });
+    });
+
+    // Sentence-level with backrefs
+    const sentences = [];
+    blocks.forEach(b=>{
+      if (b.type==='intro'){
+        splitSentences(b.text).forEach(t=> sentences.push({text:t, node:b.node, type:'intro', qIndex:null}));
+      } else {
+        // keep Q and A each as one "sentence" chunk so prev/next Q works neatly
+        sentences.push({text:b.text, node:b.node, type:b.type, qIndex:b.qIndex ?? null});
+      }
+    });
+
+    // word count + timing map (approx seeking)
+    const words = sentences.reduce((n,s)=> n + s.text.split(/\s+/).filter(Boolean).length, 0);
+
+    return { el: secEl, id: secEl.id || '', label, qas, sentences, words, map: [] };
+  }
+
+  function build(){
+    sections = [];
+    const part = detectCurrentPart();
+    if (!part){ ddSection.innerHTML = ''; return; }
+    const secEls = Array.from(part.querySelectorAll(':scope .section'));
+    secEls.forEach(el => sections.push(gatherSection(el)));
+
+    // labels
+    ddSection.innerHTML = '';
+    sections.forEach((s, i)=>{
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = `${i+1}. ${s.label}`;
+      ddSection.appendChild(opt);
+    });
+    cur.sIdx = 0; cur.sentIdx = 0;
+    indexHighlight();
+    updateTotals();
+  }
+
+  function updateTotals(){
+    const s = sections[cur.sIdx]; if (!s){ clock.textContent='0:00 / 0:00'; return; }
+    const totalSecs = estimateTotalSecs(s);
+    cur.total = totalSecs;
+    clock.textContent = `${fmt(cur.elapsed)} / ${fmt(cur.total)}`;
+  }
+
+  function estimateTotalSecs(s){
+    const wps = cur.wps = (150/60) * parseFloat(rate.value || '1');
+    // build a cumulative start-time map per sentence
+    let t=0; s.map = s.sentences.map(sn => {
+      const wc = sn.text.split(/\s+/).filter(Boolean).length || 1;
+      const dur = wc / wps;
+      const start = t; t += dur;
+      return start;
+    });
+    return t;
+  }
+
+  // ---------- Voices
+  function loadVoices(){
+    voices = synth.getVoices();
+    voiceSel.innerHTML = '';
+    voices.forEach(v=>{
+      const opt = document.createElement('option');
+      opt.textContent = `${v.name} (${v.lang})`;
+      voiceSel.appendChild(opt);
+    });
+    // prefer en-AU, then en-GB/US
+    let idx = voices.findIndex(v=>/en-AU/i.test(v.lang));
+    if (idx<0) idx = voices.findIndex(v=>/en-GB|en-US/i.test(v.lang));
+    if (idx>=0) voiceSel.selectedIndex = idx;
+  }
+  if (typeof synth.onvoiceschanged !== 'undefined') synth.onvoiceschanged = loadVoices;
+  loadVoices();
+
+  // ---------- Play logic (sentence-based queue so we can "seek")
+  function currentSentence(){
+    const s = sections[cur.sIdx]; if (!s) return null;
+    return s.sentences[cur.sentIdx] || null;
+  }
+
+  function speakText(text, onend){
+    if (!text) return;
+    stop(true);
+    utter = new SpeechSynthesisUtterance(text);
+    const v = voices[voiceSel.selectedIndex]; if (v) utter.voice = v;
+    utter.rate = parseFloat(rate.value || '1'); utter.pitch = 1;
+    utter.onstart = () => {
+      playing = true; btnPlay.textContent='⏸ Pause';
+      startTicker();
+    };
+    utter.onend = () => {
+      stopTicker();
+      playing = false; btnPlay.textContent='▶ Play';
+      if (onend) onend();
+    };
+    utter.onerror = () => {
+      stopTicker(); playing=false; btnPlay.textContent='▶ Play';
+      now.textContent='TTS error. Try another voice.';
+    };
+    synth.speak(utter);
+  }
+
+  function playFromCurrent(){
+    const s = sections[cur.sIdx]; if (!s || !s.sentences.length){ now.textContent='Nothing to read in this section.'; return; }
+    // open the details of the first QA if needed (non-intrusive; we don't block toggling)
+    highlightActive(true);
+    const remaining = s.sentences.slice(cur.sentIdx).map(sn=>sn.text).join('\n');
+    speakText(remaining, ()=>{
+      // when the joined utterance ends, we mark completion (approx). Then auto-next if enabled.
+      cur.elapsed = cur.total;
+      renderProgress();
+      if (chkAuto.checked && cur.sIdx < sections.length-1){
+        cur.sIdx += 1; cur.sentIdx = 0; updateTotals(); smoothIntoView(sections[cur.sIdx].el);
+        playFromCurrent();
+      } else {
+        indexHighlight();
+        now.textContent='Finished section.';
+      }
+    });
+  }
+
+  function stop(silent=false){
+    if (synth.speaking || synth.paused) synth.cancel();
+    stopTicker();
+    playing=false; btnPlay.textContent='▶ Play';
+    if (!silent) now.textContent='Stopped.';
+  }
+
+  function pauseResume(){
+    if (synth.speaking && !synth.paused){ synth.pause(); playing=false; btnPlay.textContent='▶ Resume'; return; }
+    if (synth.paused){ synth.resume(); playing=true; btnPlay.textContent='⏸ Pause'; return; }
+    // start fresh
+    playFromCurrent();
+  }
+
+  // ---------- Progress / timing (approximate, sentence-based)
+  function startTicker(){
+    const s = sections[cur.sIdx]; if (!s) return;
+    const startedAt = performance.now()/1000 - (s.map[cur.sentIdx]||0);
+    tick = setInterval(()=>{
+      const t = performance.now()/1000 - startedAt;
+      // find current sentence index by map
+      let i = 0; while (i < s.map.length-1 && t >= s.map[i+1]) i++;
+      cur.sentIdx = i;
+      cur.elapsed = Math.min(t, cur.total);
+      renderProgress();
+      highlightActive(false);
+    }, 100);
+  }
+  function stopTicker(){ clearInterval(tick); tick=null; }
+
+  function renderProgress(){
+    const pct = cur.total>0 ? (cur.elapsed/cur.total)*100 : 0;
+    bar.style.width = Math.min(100, Math.max(0, pct))+'%';
+    clock.textContent = `${fmt(cur.elapsed)} / ${fmt(cur.total)}`;
+  }
+
+  // ---------- Seeking
+  function seekToPercent(p){
+    const s = sections[cur.sIdx]; if (!s) return;
+    const target = p * cur.total;
+    // choose nearest sentence start <= target
+    let i = 0; while (i < s.map.length-1 && s.map[i+1] <= target) i++;
+    cur.sentIdx = i; cur.elapsed = s.map[i]; renderProgress();
+    // restart from that sentence
+    if (playing || synth.paused){ playFromCurrent(); }
+    highlightActive(true);
+  }
+  prog.addEventListener('mousemove', e=>{
+    const r = prog.getBoundingClientRect();
+    const p = (e.clientX - r.left) / r.width;
+    ghost.style.display = 'block'; ghost.style.left = Math.max(0, Math.min(100, p*100))+'%';
+  });
+  prog.addEventListener('mouseleave', ()=> ghost.style.display='none');
+  prog.addEventListener('click', e=>{
+    const r = prog.getBoundingClientRect();
+    const p = (e.clientX - r.left) / r.width;
+    seekToPercent(Math.max(0, Math.min(1, p)));
+  });
+
+  // Jumps are just relative seeks
+  function jump(sec){
+    const s = sections[cur.sIdx]; if (!s) return;
+    const newT = Math.max(0, Math.min(cur.total, cur.elapsed + sec));
+    const p = cur.total ? newT / cur.total : 0;
+    seekToPercent(p);
+  }
+
+  // ---------- Highlight & navigation
+  function smoothIntoView(el){ el?.scrollIntoView({behavior:'smooth', block:'start'}); }
+  function highlightActive(scroll){
+    // remove all
+    $$('.atp__hl').forEach(n=> n.classList.remove('atp__hl'));
+    const sn = currentSentence(); if (!sn) return;
+    // If it's a Q or A, highlight its details container to show user context
+    if (sn.type==='q' || sn.type==='a'){
+      const d = sn.node.closest('details'); if (d){ d.classList.add('atp__hl'); d.open = true; if (scroll) smoothIntoView(d); }
+    } else { sn.node.classList.add('atp__hl'); if (scroll) smoothIntoView(sn.node); }
+    // status
+    if (sn.type==='q'){
+      now.textContent = `Reading Question ${ (sn.qIndex??0) + 1 }`;
+    } else if (sn.type==='a'){
+      now.textContent = `Reading Answer ${ (sn.qIndex??0) + 1 }`;
+    } else {
+      now.textContent = 'Reading section intro…';
+    }
+    indexHighlight();
+  }
+
+  function indexHighlight(){
+    // optional: could add active state in your left index; we keep it simple here.
+  }
+
+  // ---------- Wire controls
+  btnPlay.addEventListener('click', pauseResume);
+  btnStop.addEventListener('click', ()=> stop());
+  btnPrevQ.addEventListener('click', ()=>{
+    const s = sections[cur.sIdx]; if (!s) return;
+    // jump back to previous Q (or its intro)
+    for (let i = cur.sentIdx-1; i >= 0; i--){
+      if (s.sentences[i].type === 'q'){ cur.sentIdx = i; break; }
+      if (i===0) cur.sentIdx = 0;
+    }
+    playFromCurrent();
+  });
+  btnNextQ.addEventListener('click', ()=>{
+    const s = sections[cur.sIdx]; if (!s) return;
+    for (let i = cur.sentIdx+1; i < s.sentences.length; i++){
+      if (s.sentences[i].type === 'q'){ cur.sentIdx = i; break; }
+      if (i===s.sentences.length-1) cur.sentIdx = i;
+    }
+    playFromCurrent();
+  });
+  btnBack10.addEventListener('click', ()=> jump(-10));
+  btnFwd10.addEventListener('click', ()=> jump(10));
+  btnSel.addEventListener('click', ()=>{
+    const sel = (window.getSelection()?.toString() || '').trim();
+    if (!sel){ now.textContent='Select text on the page, then press “Read selection”.'; return; }
+    stop(true); speakText(sel);
+  });
+  rate.addEventListener('input', ()=>{
+    rateVal.textContent = `${parseFloat(rate.value).toFixed(1)}×`;
+    // refresh timing maps & progress estimate
+    updateTotals();
+    if (playing || synth.paused){ playFromCurrent(); }
+  });
+  voiceSel.addEventListener('change', ()=>{
+    if (playing || synth.paused){ playFromCurrent(); }
+  });
+  ddSection.addEventListener('change', ()=>{
+    cur.sIdx = parseInt(ddSection.value||'0',10) || 0; cur.sentIdx = 0; cur.elapsed = 0;
+    updateTotals(); highlightActive(true);
+    if (playing || synth.paused) playFromCurrent();
+  });
+
+  // ---------- Keep details toggling intact (we *observe* clicks; we never preventDefault)
+  document.addEventListener('click', e=>{
+    const sum = e.target.closest('summary');
+    if (sum){
+      // When user manually opens a specific Q, make it the active one
+      const d = sum.closest('details.qa');
+      if (!d) return;
+      // find which section contains this details
+      const secEl = d.closest('.section');
+      const sIdx = sections.findIndex(s=>s.el === secEl);
+      if (sIdx >= 0){
+        cur.sIdx = sIdx;
+        const s = sections[sIdx];
+        // find the 'q' sentence matching this details
+        const i = s.sentences.findIndex(sn => (sn.type==='q' && sn.node===d));
+        if (i >= 0){ cur.sentIdx = i; ddSection.value = sIdx; highlightActive(true); }
+      }
+    }
+  }, { passive:true });
+
+  // ---------- Init
+  function init(){
+    build();
+    ddSection.value = cur.sIdx;
+    updateTotals();
+    highlightActive(false);
+  }
+  init();
+
+  // Rebuild when navigating between parts
+  window.addEventListener('hashchange', ()=>{ stop(true); init(); });
+  let throttle=null;
+  window.addEventListener('scroll', ()=>{
+    if (throttle) return;
+    throttle=setTimeout(()=>{ throttle=null; const prevPart = sections[0]?.el?.closest('.shell'); build(); }, 500);
+  });
+
+  // Hide/show
+  btnHide.addEventListener('click', ()=>{
+    atp.style.display='none';
+    const reopen = document.createElement('button');
+    reopen.textContent='TTS';
+    Object.assign(reopen.style,{position:'fixed', right:'12px', bottom:'12px', zIndex:71,
+      background:'var(--accent)', color:'var(--accent-ink)', border:'none', borderRadius:'999px', padding:'10px 14px', fontWeight:'900', cursor:'pointer'});
+    reopen.addEventListener('click', ()=>{ atp.style.display='block'; reopen.remove(); });
+    document.body.appendChild(reopen);
+  });
+
+  // Keyboard shortcuts (don’t interfere with form fields)
+  document.addEventListener('keydown', ev=>{
+    if (/input|select|textarea/i.test(ev.target.tagName)) return;
+    if (ev.code==='Space'){ ev.preventDefault(); pauseResume(); }
+    if (ev.code==='ArrowLeft'){ ev.preventDefault(); jump(-5); }
+    if (ev.code==='ArrowRight'){ ev.preventDefault(); jump(5); }
+    if (ev.code==='KeyJ'){ ev.preventDefault(); btnBack10.click(); }
+    if (ev.code==='KeyL'){ ev.preventDefault(); btnFwd10.click(); }
+  });
+
+})();
+</script>
+<!-- ====================== ADVANCED TTS PLAYER — END ====================== -->
+ 
 
 </body>
 </html>
