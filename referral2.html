@@ -379,54 +379,163 @@
     }
 
     function buildSummaryHTML(){
-      const esc = s => (s||"").toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-      const row = (k,v)=>`<tr><td style="padding:8px;border-bottom:1px solid #eee;color:#334155;width:32%">${esc(k)}</td><td style="padding:8px;border-bottom:1px solid #eee;color:#0f172a">${esc(v)}</td></tr>`;
-      const sect = (t,rows)=>`
-        <h3 style="margin:16px 0 8px;border-bottom:1px solid #e5e7eb;padding-bottom:6px;color:#0f172a">${esc(t)}</h3>
-        <table style="width:100%;border-collapse:collapse;font:14px system-ui,Segoe UI,Roboto,Arial">${rows.join("")}</table>`;
-      const sup = pickSupports();
+  const esc = s => (s||"").toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const chips = (arr)=> arr && arr.length
+    ? arr.split(",").map(x=>`<span class="chip">${esc(x.trim())}</span>`).join("")
+    : `<span class="muted">None noted</span>`;
+  const sup = pickSupports();
+  const addr = [state.street,state.suburb,state.city,state.postcode].filter(Boolean).join(", ");
+  const dt = new Date().toLocaleString();
 
-      return `<!doctype html><meta charset="utf-8">
-      <div style="font:14px system-ui,Segoe UI,Roboto,Arial;color:#0f172a">
-        <h2 style="margin:0 0 8px 0;color:#0f766e">HD HeeD — Referral Summary</h2>
-        <div style="color:#64748b;font:13px system-ui">Generated ${new Date().toLocaleString()}</div>
-        ${sect("Consent",[
-          row("Initial consent", ynu("consent")),
-          row("Final consent", state.referral_consent?"Ticked":"Not ticked")
-        ])}
-        ${sect("Referrer",[
-          row("Name", `${state.referrer_name||""} (${state.relationship||""})`),
-          row("Email", state.email||""), row("Phone", `${state.phone||""}  ${state.mobile||""}`)
-        ])}
-        ${sect("Participant",[
-          row("Name / DOB", `${(state.participant_fname||"")+" "+(state.participant_lname||"")} | ${state.dob||""}`),
-          row("NDIS / Gender", `${state.ndis_number||""} | ${ynu("gender")}`),
-          row("Address", [state.street,state.suburb,state.city,state.postcode].filter(Boolean).join(", ")),
-          row("Contacts", `${state.home_phone||""}  ${state.participant_mobile||""}  ${state.participant_email||""}`),
-          row("Language / Interpreter", `${state.language||""} | ${ynu("interpreter")}${state.interpreter_type?` (${state.interpreter_type})`:""}`)
-        ])}
-        ${sect("Primary Carer (NOK)",[
-          row("Name / Relationship", `${state.carer_fname||""} ${state.carer_lname||""} (${state.carer_relationship||""})`),
-          row("Contacts", `${state.carer_home||""}  ${state.carer_mobile||""}  ${state.carer_email||""}`),
-          row("Shared care / custody", ynu("custody"))
-        ])}
-        ${sect("Safety & Risks",[
-          row("Fall / Wound / Pain / Pressure / Behaviour",
-              `Fall ${ynu("recent_fall")} | Wound ${ynu("wound")} | Pain ${ynu("uncontrolled_pain")} | Pressure ${ynu("pressure_risk")} | Behaviour ${ynu("behaviour_risk")}`),
-          row("Risk notes", state.risk_notes||"")
-        ])}
-        ${sect("Supports",[
-          row("Main reason", state.key_area||""),
-          row("Requested supports", sup||""),
-          row("Allergies", `${ynu("allergies")}${state.allergy_list?` – ${state.allergy_list}`:""}`),
-          row("Service location", state.service_location||"")
-        ])}
-        ${sect("Funding & Plan",[
-          row("Plan management", ynu("plan_managed")),
-          row("Funding notes", state.funding_area||"")
-        ])}
-      </div>`;
+  const yn = (k)=> ynu(k) || "—";
+  const v  = (x)=> esc(x || "—");
+
+  return `<!doctype html><html><head><meta charset="utf-8">
+  <title>HD HeeD — Referral Summary</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    :root{
+      --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
+      --brand:#7c3aed; --brand2:#8b5cf6; --accent:#facc15; /* purple & yellow */
+      --chip:#f3f4f6; --chip-text:#111827; --card:#ffffff; --bg:#fff;
     }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);font:14px/1.5 system-ui,Segoe UI,Roboto,Arial;color:var(--ink)}
+    .wrap{max-width:900px;margin:32px auto;padding:0 24px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 30px rgba(2,6,23,.06);overflow:hidden}
+    .head{display:flex;align-items:center;gap:14px;padding:20px 22px;border-bottom:1px solid var(--line);position:relative}
+    .head:before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--brand),var(--brand2),var(--accent))}
+    .logo{width:44px;height:44px;border-radius:12px;background:var(--brand) url('https://www.hdheed.com.au/images/logo.png') center/cover no-repeat;
+          box-shadow:inset 0 0 18px rgba(255,255,255,.25)}
+    .title{font-weight:800;font-size:1.25rem}
+    .subtitle{color:var(--muted);font-size:.9rem;margin-top:2px}
+    .meta{margin-left:auto;text-align:right}
+    .meta .k{color:var(--muted);font-size:.8rem}
+    .meta .v{font-weight:700}
+
+    .body{padding:22px}
+    h3.section{margin:18px 0 10px; font-size:1.05rem}
+    .divider{height:1px;background:var(--line);margin:14px 0}
+    .badge{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;background:#fef9c3;border:1px solid #fde68a;color:#713f12;font-weight:700;font-size:.82rem}
+    .grid{display:grid;gap:10px}
+    .two{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media (max-width:720px){.two,.three{grid-template-columns:1fr}}
+
+    .kv{display:flex;gap:10px}
+    .kv .k{min-width:180px;color:var(--muted)}
+    .kv .v{flex:1;font-weight:600}
+
+    table{width:100%;border-collapse:collapse;margin-top:6px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    th{background:#fafafa;color:#0f172a;font-weight:800}
+    tr:last-child td{border-bottom:none}
+
+    .chip{display:inline-block;background:var(--chip);color:var(--chip-text);border:1px solid var(--line);
+          border-radius:999px;padding:6px 10px;margin:4px 6px 0 0;font-weight:600;font-size:.85rem}
+
+    .muted{color:var(--muted)}
+    .note{background:#f8fafc;border:1px dashed var(--line);border-radius:12px;padding:12px;margin-top:8px}
+    .foot{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--muted);font-size:.85rem}
+  </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="head">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <div class="title">HD HeeD — Referral Summary</div>
+            <div class="subtitle">Structured overview for triage & onboarding</div>
+          </div>
+          <div class="meta">
+            <div class="k">Generated</div>
+            <div class="v">${esc(dt)}</div>
+          </div>
+        </div>
+
+        <div class="body">
+          <!-- Consent strip -->
+          <div class="badge">
+            Initial consent: <strong>${esc(ynu("consent")||"—")}</strong> · Final consent: <strong>${state.referral_consent?"Ticked":"Not ticked"}</strong>
+          </div>
+
+          <!-- Identity blocks -->
+          <h3 class="section">Participant</h3>
+          <div class="grid two">
+            <div class="kv"><div class="k">Name / DOB</div><div class="v">${v((state.participant_fname||"")+" "+(state.participant_lname||""))} · ${v(state.dob)}</div></div>
+            <div class="kv"><div class="k">NDIS / Gender</div><div class="v">${v(state.ndis_number)} · ${v(ynu("gender"))}</div></div>
+            <div class="kv"><div class="k">Address</div><div class="v">${v(addr)}</div></div>
+            <div class="kv"><div class="k">Contacts</div><div class="v">${v(state.home_phone)} ${state.home_phone&&state.participant_mobile?"·":""} ${v(state.participant_mobile)} ${state.participant_email?"· ":""}${v(state.participant_email)}</div></div>
+            <div class="kv"><div class="k">Language / Interpreter</div><div class="v">${v(state.language)} · ${v(ynu("interpreter"))}${state.interpreter_type?` · ${v(state.interpreter_type)}`:""}</div></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3 class="section">Referrer</h3>
+          <div class="grid two">
+            <div class="kv"><div class="k">Name / Relationship</div><div class="v">${v(state.referrer_name)} ${state.relationship?`· ${v(state.relationship)}`:""}</div></div>
+            <div class="kv"><div class="k">Contact</div><div class="v">${v(state.email)} ${state.phone?"· ":""}${v(state.phone)} ${state.mobile?"· ":""}${v(state.mobile)}</div></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3 class="section">Primary Carer (NOK)</h3>
+          <div class="grid two">
+            <div class="kv"><div class="k">Name / Relationship</div><div class="v">${v(state.carer_fname)} ${v(state.carer_lname)} ${state.carer_relationship?`· ${v(state.carer_relationship)}`:""}</div></div>
+            <div class="kv"><div class="k">Contacts</div><div class="v">${v(state.carer_home)} ${state.carer_mobile?"· ":""}${v(state.carer_mobile)} ${state.carer_email?"· ":""}${v(state.carer_email)}</div></div>
+            <div class="kv"><div class="k">Shared care / custody</div><div class="v">${v(ynu("custody"))}</div></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Risk table -->
+          <h3 class="section">Safety & Immediate Risks</h3>
+          <table>
+            <thead>
+              <tr><th>Domain</th><th>Status</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Recent fall</td><td>${v(yn("recent_fall"))}</td><td rowspan="5">${v(state.risk_notes)}</td></tr>
+              <tr><td>Wound / post-op care</td><td>${v(yn("wound"))}</td></tr>
+              <tr><td>Uncontrolled pain</td><td>${v(yn("uncontrolled_pain"))}</td></tr>
+              <tr><td>Pressure injury risk</td><td>${v(yn("pressure_risk"))}</td></tr>
+              <tr><td>Behaviours of concern</td><td>${v(yn("behaviour_risk"))}</td></tr>
+            </tbody>
+          </table>
+
+          <div class="divider"></div>
+
+          <!-- Supports -->
+          <h3 class="section">Supports Requested</h3>
+          <div class="kv"><div class="k">Main reason</div><div class="v">${v(state.key_area)}</div></div>
+          <div class="kv"><div class="k">Service location</div><div class="v">${v(state.service_location)}</div></div>
+          <div class="kv" style="margin-top:6px;"><div class="k">Support list</div><div class="v">${sup ? chips(sup) : '<span class="muted">None selected</span>'}</div></div>
+          <div class="kv" style="margin-top:6px;"><div class="k">Allergies</div><div class="v">${v(ynu("allergies"))}${state.allergy_list?` · ${v(state.allergy_list)}`:""}</div></div>
+
+          <div class="divider"></div>
+
+          <!-- Funding -->
+          <h3 class="section">Funding & Plan</h3>
+          <div class="grid two">
+            <div class="kv"><div class="k">Plan management</div><div class="v">${v(ynu("plan_managed"))}</div></div>
+            <div class="kv"><div class="k">Funding notes</div><div class="v">${v(state.funding_area)}</div></div>
+          </div>
+
+          <!-- Optional note block -->
+          <div class="note">
+            This summary is generated from the referral form for intake triage. Please confirm details at first contact and update in ShiftCare / EHR accordingly.
+          </div>
+        </div>
+
+        <div class="foot">
+          <div>HD HeeD Pty Ltd (ABN 47 665 228 768)</div>
+          <div>info@hdheed.com.au · ndis@hdheed.com.au</div>
+        </div>
+      </div>
+    </div>
+  </body></html>`;
+}
+
 
     function submitOnline(){
       if(state.consent!=="yes"){ alert("Consent (Step 1) is required to submit."); go(0); return; }
