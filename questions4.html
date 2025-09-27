@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDIS Intake Training - Complete Audio Guide</title>
+    <style>
+        :root {
+            --brand: #FFEB3B;
+            --brand-ink: #FBC02D;
+            --ink: #E0E0E0;
+            --muted: #BDBDBD;
+            --bg: #424242;
+            --bg-soft: #616161;
+            --ring: #FFEB3B;
+            --ok: #059669;
+            --warn: #d97706;
+            --err: #dc2626;
+            --card: #757575;
+            --shadow: 0 8px 24px rgba(0,0,0,.2);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --radius-xs: 10px;
+            --space: clamp(16px, 2vw, 24px);
+            --max: 1280px;
+            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans";
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html, body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--sans);
+            line-height: 1.55;
+            height: 100%;
+        }
+        
+        .container {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 0 var(--space);
+        }
+        
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: rgba(66, 66, 66, 0.9);
+            backdrop-filter: saturate(1.2) blur(8px);
+            border-bottom: 1px solid #616161;
+        }
+        
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: space-between;
+            padding: 12px 0;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .brand .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--brand), #FBC02D);
+            box-shadow: 0 4px 12px rgba(255, 235, 59, 0.35);
+        }
+        
+        .brand h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: .2px;
+        }
+        
+        .hero {
+            padding: 28px 0 14px;
+            border-bottom: 1px solid #616161;
+            background: var(--bg);
+        }
+        
+        .hero h2 {
+            margin: 0 0 6px;
+            font-size: 28px;
+            letter-spacing: .2px;
+        }
+        
+        .hero p {
+            color: var(--muted);
+            margin: 0;
+        }
+        
+        .audio-player {
+            background: var(--bg-soft);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+        }
+        
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background: var(--brand);
+            color: #424242;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: var(--brand-ink);
+            transform: scale(1.05);
+        }
+        
+        .btn-play {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background: #757575;
+            height: 8px;
+            border-radius: 4px;
+            margin: 15px 0;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .progress-bar {
+            background: var(--brand);
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .rate-control, .voice-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        select, input[type="range"] {
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #757575;
+            background: var(--bg-soft);
+            color: var(--ink);
+        }
+        
+        .lesson-content {
+            padding: 20px 0;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .lesson-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: var(--radius);
+            background: var(--card);
+            box-shadow: var(--shadow);
+            border: 1px solid #616161;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--brand);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #616161;
+        }
+        
+        .section-content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .section-content p {
+            margin-bottom: 15px;
+        }
+        
+        .section-content ul, .section-content ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .section-content li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            background-color: #FFEB3B;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #424242;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-top: 1px solid #616161;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            background: var(--brand);
+            color: #424242;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: var(--brand-ink);
+        }
+        
+        .nav-btn:disabled {
+            background: #757575;
+            cursor: not-allowed;
+        }
+        
+        .lesson-title {
+            font-size: 1.3rem;
+            text-align: center;
+            margin: 10px 0;
+            color: var(--brand);
+        }
+        
+        .active-section {
+            background-color: #616161;
+            border-left: 4px solid var(--brand);
+            transition: all 0.3s ease;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-speaking {
+            background-color: #4CAF50;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .status-paused {
+            background-color: #FF9800;
+        }
+        
+        .status-stopped {
+            background-color: #F44336;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .search-box {
+            margin: 15px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #757575;
+            border-radius: 4px;
+            font-size: 1rem;
+            background: var(--bg-soft);
+            color: var(--ink);
+        }
+        
+        .search-highlight {
+            background-color: var(--brand);
+            color: #424242;
+        }
+        
+        footer {
+            margin: 48px 0 60px;
+            color: var(--muted);
+            text-align: center;
+        }
+        
+        .sidebar {
+            float: left;
+            width: 250px;
+            padding: 20px;
+            background: var(--bg-soft);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar h3 {
+            color: var(--brand);
+            margin-bottom: 15px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar a {
+            color: var(--ink);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .sidebar a:hover {
+            color: var(--brand);
+        }
+        
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .player-controls {
+                flex-wrap: wrap;
+            }
+            
+            .controls-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container topbar">
+            <div class="brand">
+                <div class="logo" aria-hidden="true"></div>
+                <h1>HD HeeD • NDIS Intake Training</h1>
+            </div>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <h3>Index</h3>
+        <ul id="partList"></ul>
+    </aside>
+
+    <div class="main-content">
+        <div class="hero">
+            <h2>NDIS Intake Training - Complete Audio Guide</h2>
+            <p>Master phone call skills with this comprehensive text-to-speech training program</p>
+        </div>
+
+        <main>
+            <div class="audio-player">
+                <div class="lesson-title" id="currentLesson">Part 1: General Guidelines & Standard Participant Inquiry</div>
+                
+                <div class="player-controls">
+                    <button class="btn" id="prevSectionBtn" title="Previous Section">⏮</button>
+                    <button class="btn btn-play" id="playPauseBtn" title="Play/Pause">▶</button>
+                    <button class="btn" id="nextSectionBtn" title="Next Section">⏭</button>
+                    <button class="btn" id="stopBtn" title="Stop">⏹</button>
+                </div>
+                
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <div class="time-display">
+                    <span id="currentTime">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+                
+                <div class="controls-row">
+                    <div class="rate-control">
+                        <span>Speed:</span>
+                        <input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1">
+                        <span id="rateValue">1.0x</span>
+                    </div>
+                    
+                    <div class="voice-control">
+                        <span>Voice:</span>
+                        <select id="voiceSelect"></select>
+                    </div>
+                    
+                    <div>
+                        <span>Status:</span>
+                        <span class="status-indicator status-stopped" id="statusIndicator"></span>
+                        <span id="statusText">Stopped</span>
+                    </div>
+                </div>
+                
+                <input type="text" class="search-box" id="searchBox" placeholder="Search content...">
+            </div>
+            
+            <div class="lesson-content" id="lessonContent">
+                <!-- Lesson sections will be dynamically loaded here -->
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" id="prevLessonBtn" disabled>Previous Lesson</button>
+                <span id="lessonProgress">Part 1 of 10</span>
+                <button class="nav-btn" id="nextLessonBtn">Next Lesson</button>
+            </div>
+        </main>
+    </div>
+
+    <footer class="container">
+        <p>© HD HeeD • NDIS Intake Training - Complete Audio Guide</p>
+    </footer>
+
+    <script>
+        // NDIS Training Content - All Parts
+        const trainingContent = [
+            {
+                title: "Part 1: General Guidelines & Standard Participant Inquiry",
+                sections: [
+                    {
+                        title: "Universal Standards for NDIS Intake Calls",
+                        content: `
+                            <p><span class="highlight">Purpose of the Call:</span> The initial phone call with a potential client serves as both a screening and onboarding conversation. Your goal is to determine if and how you can meet the caller's needs, explain your services, and guide them toward the next steps.</p>
+                            
+                            <p><span class="highlight">Key Principles:</span></p>
+                            <ul>
+                                <li><span class="highlight">Empathy and Active Listening:</span> Start by warmly greeting the caller, introducing yourself and your organization. Listen actively to their story without interruption.</li>
+                                <li><span class="highlight">Clarity and Simplicity:</span> Use clear, jargon-free language. Many callers may not be familiar with all NDIS terms.</li>
+                                <li><span class="highlight">Person-Centered Approach:</span> Every participant's situation is unique. Tailor the conversation to their needs and goals.</li>
+                                <li><span class="highlight">Gather Key Information:</span> Have an intake checklist handy to collect important details about the participant.</li>
+                            </ul>
+                            
+                            <p>Important details to collect:</p>
+                            <ul>
+                                <li>Participant's Name, Age, and Disability</li>
+                                <li>Caller's Relationship to participant</li>
+                                <li>NDIS Status and plan management type</li>
+                                <li>Location and Service Needs</li>
+                                <li>Current Situation and time constraints</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Standard New Participant Inquiry",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> A participant themselves (or their close supporter) calls for the first time to inquire about services. They likely have an NDIS plan already and are shopping around for providers.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> These callers might ask broad questions about your services, how everything works, and why they should choose your organization. They may be nervous or unsure about the process if they're new to NDIS.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Warm Greeting:</span> "Hello, you've reached [Your Organization], this is [Your Name]. How can I help you today?"</li>
+                                <li><span class="highlight">Understand Needs:</span> Ask what supports they are looking for and listen.</li>
+                                <li><span class="highlight">Gather Details:</span> Confirm NDIS plan status and management, basic personal details, location.</li>
+                                <li><span class="highlight">Explain Suitability:</span> If you can provide what they need, assure them.</li>
+                                <li><span class="highlight">Cover Process:</span> Describe how onboarding works.</li>
+                                <li><span class="highlight">Invite Questions:</span> "Feel free to ask any questions at all."</li>
+                                <li><span class="highlight">Close Positively:</span> Summarize next steps, thank them for reaching out.</li>
+                            </ol>
+                        `
+                    },
+                    {
+                        title: "Common Questions & Answers - Standard Inquiry",
+                        content: `
+                            <p><span class="highlight">Q: What services do you provide under NDIS?</span></p>
+                            <p><span class="highlight">A:</span> We offer a range of NDIS-funded supports. Our core services include assistance with daily personal activities (such as help with showering, dressing, meal prep), domestic assistance (household tasks), community participation (support to go out for shopping, appointments or social activities), and nursing care for any health-related needs. We tailor services to each person – during our initial assessment we’ll discuss exactly what support you want and create a plan around your goals.</p>
+                            
+                            <p><span class="highlight">Q: Are you a registered NDIS provider?</span></p>
+                            <p><span class="highlight">A:</span> Yes, we are fully NDIS Registered. This means we have met the government’s strict quality and safety standards for providers. Being registered also means if your plan is NDIA-managed, we can make service bookings and claims directly through the NDIS portal. You can have confidence that we adhere to all the NDIS Practice Standards – in other words, you’re in safe and qualified hands.</p>
+                            
+                            <p><span class="highlight">Q: How much experience do you have? How do I know I can trust your service?</span></p>
+                            <p><span class="highlight">A:</span> [Your Organization] has been supporting people under the NDIS since [Year]. We have extensive experience working with participants of all ages and needs – from basic daily support to very high care needs. Many of our team members have years (even decades) of experience in disability support. We pride ourselves on quality – for example, we undergo regular audits to maintain our NDIS registration and even have additional accreditation (like ISO 9001 for quality management) to prove our high standards. We’re happy to share testimonials or connect you with existing clients who can speak to our reliability and care. Ultimately, we let our track record speak – our focus is building trust by delivering on what we promise.</p>
+                            
+                            <p><span class="highlight">Q: Who are your staff? Are they qualified?</span></p>
+                            <p><span class="highlight">A:</span> Our support staff come from a range of professional backgrounds in disability and community care. Every support worker undergoes thorough training to ensure they can provide respectful, safe, and empowering support. We provide ongoing training beyond the basic certifications – for instance, our nurses give hands-on workshops to support workers on things like using hoists safely or managing a feeding tube. All staff have cleared relevant background checks (like police checks and Working With Children Checks where needed). We also try to match staff to participants thoughtfully – if you have any preferences (like you’d prefer a female support worker, or someone who speaks a certain language), we’ll do our best to accommodate that. Our goal is to have a skilled team member that you feel comfortable with.</p>
+                            
+                            <p><span class="highlight">Q: What areas do you service?</span></p>
+                            <p><span class="highlight">A:</span> We currently provide services across [list regions, e.g., “the greater Melbourne area focusing on the northern and western suburbs”]. (If applicable: We also have staff in [Other Region]). If you’re unsure whether we cover your suburb, let me know where you are – I’ll confirm.  (If out of area:) If it turns out you’re outside our service area, I can help refer you to a provider closer to you. </p>
+                            
+                            <p><span class="highlight">Q: How soon can you start services?</span></p>
+                            <p><span class="highlight">A:</span> We understand many people need support as soon as possible. Our intake process can be quite quick. Typically, after this call, we would arrange to meet you (or have another detailed chat) to develop a Service Agreement and support plan. We can often begin services within [X] days of signing the agreement – sometimes sooner, depending on staff availability and your schedule. If there’s urgency (for example, you have no current support or you’re being discharged from hospital), please let us know – we will prioritize getting things in place quickly. We’ve handled urgent starts before successfully.</p>
+                            
+                            <p><span class="highlight">Q: What’s the process to get started?</span></p>
+                            <p><span class="highlight">A:</span> The process is straightforward:<br>Initial Assessment: We’ll schedule a time (either a phone call or face-to-face meeting) where we do a more detailed assessment of your needs and goals. This helps us create a tailored support plan.<br>Service Agreement: We’ll put together a Service Agreement – this is a document that outlines what supports we’ll provide, the rates (which follow the NDIS price guide), and terms like the notice required if you cancel a service. We’ll review it with you to make sure you’re happy with everything. Once you sign the agreement, we can lock in a start date.<br>Staff Matching: We select a suitable support worker (or team of workers) based on your preferences and needs. We can arrange an introduction with them before regular supports begin, if you like.<br>Commencement: Services begin as scheduled. We’ll check in with you frequently in the early days to ensure things are going well. And of course, you can contact us anytime with questions or adjustments.<br>Throughout, we aim to keep things simple and transparent. We handle any NDIS admin (service bookings, documentation) in the background so you can focus on the support itself.</p>
+                            
+                            <p><span class="highlight">Q: Do I have to sign a Service Agreement?</span></p>
+                            <p><span class="highlight">A:</span> While it’s not legally mandatory, the NDIS strongly encourages having a written Service Agreement with your provider – and we find it’s best practice for clarity. The Service Agreement protects you because it clearly states what we will deliver and any terms of service. It also covers things like how you or we can end the service if needed. We keep our agreements very straightforward and in plain language. We will never lock you in indefinitely – you remain in control and can change or cancel the agreement if your needs or preferences change (we just ask for a notice period, usually 2 weeks, as is standard). We’re happy to go through the agreement line by line with you to ensure you’re comfortable.</p>
+                            
+                            <p><span class="highlight">Q: How are services billed and paid?</span></p>
+                            <p><span class="highlight">A:</span> This depends on how your NDIS plan is managed:<br>If you’re NDIA-managed (Agency-managed): We will create a service booking in the NDIS MyPlace portal for the supports you’ll use with us. After we deliver services (e.g. each week), we claim payments directly from your NDIS funding. You don’t have to pay us out of pocket – it’s all handled through the portal.<br>If you’re Plan-managed: We will send our invoices to your Plan Management provider. They pay us on your behalf from your NDIS funds. We are very familiar with working with plan managers and will coordinate with them for smooth payments.<br>If you’re Self-managed: We will send invoices to you (usually weekly or fortnightly). You can then pay us directly (we accept bank transfer and other common methods), and you claim the expense back from NDIS. We’ll make sure the invoices have all the info you need to do the reimbursement easily.<br>In all cases, the rates we charge are per the NDIS Pricing Arrangements (price guide), so no out-of-pocket costs for you except if you deliberately choose extra services not covered by NDIS (which is rare and we’d discuss beforehand). We’ll talk about the specific funding categories and ensure you have enough budget for the services – part of our job is to help you manage the funding so it lasts the plan duration.</p>
+                            
+                            <p><span class="highlight">Q: Do you charge any additional fees or travel costs?</span></p>
+                            <p><span class="highlight">A:</span> We follow the NDIS pricing rules on any additional charges. For example, if a support worker needs to travel to your home or community location, NDIS allows providers to charge a travel fee (usually the time or distance equivalent of the trip) – but within strict limits. We will be transparent about any such charges: they would all be clearly listed in the Service Agreement and come out of your NDIS funds, not your pocket. We do not have hidden fees like “administration fees” or sign-up fees. Everything is covered by your NDIS funding as per the price guide. If you have specific concerns (like you live in a rural area and worried about travel costs), let’s discuss and we can estimate those for you.</p>
+                            
+                            <p><span class="highlight">Q: What is your cancellation policy?</span></p>
+                            <p><span class="highlight">A:</span> Our cancellation policy is aligned with the NDIS policy. The NDIS requires 7 clear days’ notice to cancel a scheduled support without charge. This means if you cancel a service with less than 7 days’ notice, we are permitted to charge the cost of that service (since we’ve set aside the time/staff for you). However, we understand emergencies happen – we encourage you to let us know as soon as possible if you need to cancel or reschedule, and we’ll be as flexible as we can. (If your organization offers a more lenient policy, mention it: For instance, our organization only requires 24 hours notice for most supports – which is more flexible than the NDIS rule.) We will clearly explain the cancellation terms in the Service Agreement as well. The bottom line: if you wake up sick one day or something urgent comes up, just inform us and we’ll try to work with you to avoid unnecessary charges.</p>
+                            
+                            <p><span class="highlight">Q: What if I start services and then decide I want to stop or switch provider?</span></p>
+                            <p><span class="highlight">A:</span> You are always in control of your supports. If you decide our service isn’t the right fit or your circumstances change, you have the right to end the Service Agreement. We ask for [X] days’ notice (common is 14 days) in the agreement. This notice allows us to appropriately close out your services and for you to line up other supports. The NDIS gives participants full freedom to change providers – you don’t even have to give a reason if you don’t want to. We’ll respect your decision and even help with a transition if needed (for example, we can provide copies of support notes or handover information to your new provider, with your consent). Our priority is that you get the support you need, even if it ends up being with someone else.</p>
+                            
+                            <p><span class="highlight">Q: Why should I choose your service over others? (Often unspoken, but it’s in the caller’s mind)</span></p>
+                            <p><span class="highlight">A:</span> (This is your opportunity to summarize your value proposition.) We believe what sets [Your Org] apart is our commitment to person-centered care and reliability. We are not a huge impersonal company – when you join us, you get a small, dedicated team that knows you well. You’ll have a consistent point of contact (like a Care Coordinator) for any questions, and we really get to know your preferences. We also have clinical oversight – for instance, our services are clinically led (our care managers include registered nurses who ensure even complex needs are safely supported). In short, we combine the resources of a professional organization with the heart of a family business. Our current clients often commend us on being responsive and going the extra mile. Ultimately, we’re here to empower you to live your best life – and we’d be honored to be your chosen support provider.</p>
+                            
+                            <p><span class="highlight">Q: Okay, what are the next steps if I want to proceed?</span></p>
+                            <p><span class="highlight">A:</span> Great! The next step would be [schedule an in-person meeting / a longer intake call] so we can develop a detailed plan together. We’ll also prepare a Service Agreement for you to review. How about we set up a meeting on [proposed date/time]? If that works, I’ll come to you (or we can meet at our office/your home/coffee shop – wherever you’re comfortable) and we can go through everything. I will also send you an email today with my contact details, a summary of what we discussed, and the list of any documents that might be useful to have (for example, a copy of your NDIS plan or OT reports, if available – but no rush). Feel free to call or email me anytime if you think of more questions. We’re excited to work with you and make sure you get the support that suits you well!</p>
+                        `
+                    },
+                    {
+                        title: "Example Dialogue - Standard Inquiry",
+                        content: `
+                            <p>Caller: Hi, I’m looking for some help at home and someone gave me your number. I have an NDIS plan... I just, I’m not sure how this all works.</p>
+                            <p>Staff: Hello!  You’ve  reached  Helping  Hands  Care,  this  is  Maria.  I’m  happy  you  called.  I understand the NDIS can be a bit confusing. Let’s start with your name and what you’re looking for, and we’ll go from there.</p>
+                            <p>Caller: Thanks, my name is Alex. I use a wheelchair and I need help in the mornings mainly. I do have an NDIS plan, yes.</p>
+                            <p>Staff: Nice to meet you, Alex. We certainly can assist with morning routines. Just to check, what suburb are you in? (Caller answers) Great, we have support workers in that area. And you have funding in your NDIS plan for daily living supports, right?</p>
+                            <p>Caller: I believe so – it’s a plan-managed package.</p>
+                            <p>Staff: Perfect. Since it’s plan-managed, we’ll just send invoices to your plan manager – no cost to you directly. Our team has lots of experience with similar supports. For example, we can help you get out of bed, showered, dressed, have breakfast – whatever your morning needs are. We’ll tailor it to your routine.</p>
+                            <p>Caller: That sounds good. How quickly could someone start? My previous carer just left...</p>
+                            <p>Staff: I’m sorry to hear that your carer left. We will do our best to get you up and running quickly. Typically, we like to meet first and make a plan. I actually have a care coordinator available to visit you tomorrow or Friday. We could start services within a few days after that, if all goes well. In the meantime, if you have any immediate needs, let me know and we’ll see if we can cover them.</p>
+                            <p>Caller: Tomorrow would be great, yes.</p>
+                            <p>Staff: Wonderful. I’ll arrange for Jane, our care coordinator, to come out to your home at 10am tomorrow. She’ll bring a draft service agreement and talk through everything with you. There’s absolutely  no pressure or cost just to meet and talk. We want to ensure you’re comfortable and that we set up the right supports.</p>
+                            <p>Caller: I appreciate that. One question – am I locked in if I sign up with you? What if things don’t work out?</p>
+                            <p>Staff: That’s a very good question. No, you’re not locked in long-term. Our service agreement will have a clause that if you ever want to stop, you just give us 2 weeks notice. You have full choice and control under NDIS – you can change providers any time. Of course, our aim is to do such a good job that you  want to stay with us!  [light laugh] But yes, you remain in charge.</p>
+                            <p>Caller: Great to know. You’ve been very helpful.</p>
+                            <p>Staff: It’s my pleasure. I’ll email you this afternoon with what we agreed and Jane’s contact. Do you prefer email or a phone text confirmation? … Perfect. We look forward to meeting you tomorrow. Do call me if any other questions pop up. Thanks, Alex!</p>
+                            <p>Caller: Will do. Thank you so much, Maria.</p>
+                        `
+                    }
+                ]
+            },
+            {
+                title: "Part 2: Family Member & Support Coordinator Inquiries",
+                sections: [
+                    {
+                        title: "Family Member or Advocate Inquiry",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> Here, a family member, guardian, or advocate of the participant is the one calling. For example, a parent might call about services for their adult child.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> When a third party is calling, you have to balance including them and respecting the participant's autonomy. Always ascertain whether the participant is aware of this inquiry and has given permission.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Establish Authority Early:</span> "May I ask, are you calling on behalf of an NDIS participant? What is your relationship to them?"</li>
+                                <li><span class="highlight">Show Respect for Participant:</span> Use the participant's name often. Emphasize that your service is person-centered.</li>
+                                <li><span class="highlight">Address Family's Key Worries:</span> Provide reassurance on trustworthiness of staff, consistency, communication channels.</li>
+                                <li><span class="highlight">Gather Info:</span> Get the participant's details and needs.</li>
+                                <li><span class="highlight">Plan Next Steps with Inclusion:</span> Suggest meeting with the participant and family if possible.</li>
+                                <li><span class="highlight">Boundary Setting:</span> If needed, gently clarify privacy boundaries.</li>
+                            </ol>
+                        `
+                    },
+                    {
+                        title: "Common Questions & Answers - Family Calls",
+                        content: `
+                            <p><span class="highlight">Q: I’m calling for my [son/daughter/parent/etc]. They have an NDIS plan. Can I arrange services for them?</span></p>
+                            <p><span class="highlight">A:</span> Yes, absolutely – we often work with family members or advocates during the intake process. First, may I have your name and your relationship to [Participant]? (Confirm caller’s authority). We’re very happy to have your involvement. We will of course want [Participant] to be as involved as possible in decisions (to the extent they’re comfortable), but we know how vital family support is. We can definitely discuss and start arrangements through you. Many of our best outcomes come from collaborating closely with families.</p>
+                            
+                            <p><span class="highlight">Q: My [relative] isn’t very communicative / has intellectual disability. How will you ensure they’re looked after properly?</span></p>
+                            <p><span class="highlight">A:</span> We have experience supporting clients who have communication difficulties or cognitive impairments. Our approach is to get to know how your family member communicates – whether it’s through certain behaviors, non-verbal cues, or using assistive communication devices. We often consult with family to learn the individual’s likes/dislikes, routines and triggers. Every support plan is very personalized. We also implement regular care notes and communication logs – so after each visit, we record what was done and how [Participant] was, which can be shared with you if you wish. Regarding safety: all our staff are trained to be attentive and gentle, and to watch for any signs of discomfort or issues. If something seems off, we address it immediately and inform the appropriate contacts. We really treat each participant with the same care and caution we’d want for our own family.</p>
+                            
+                            <p><span class="highlight">Q: Will I be kept informed about what’s going on?</span></p>
+                            <p><span class="highlight">A:</span> With the participant’s consent (and assuming they’re okay with us discussing their support with you), yes, we can keep you in the loop regularly. We can arrange updates in a way that works for everyone – for example, a brief weekly email or a quick call to you, or even sharing access to our client portal if we have one. At the outset, we’ll ask [Participant] and you about communication preferences. Many families appreciate being informed of progress or any issues, and we’re happy to do that. We just balance it with the participant’s privacy and independence; we find most participants welcome their family being involved, but we always double-check. If at any point you have questions or concerns, you’ll also have our contact and you can reach out anytime. You should never feel left in the dark.</p>
+                            
+                            <p><span class="highlight">Q: What if my family member doesn’t want support on a given day, or refuses the worker?</span></p>
+                            <p><span class="highlight">A:</span> We understand that can happen. If [Participant] is having a day where they refuse service, our staff are trained not to force anything. We’ll try gentle encouragement or offer alternate activities, but ultimately we respect the person’s wishes. We’d then communicate with you (and the NDIS support coordinator if involved) to adjust the plan if needed. As for not liking a particular support worker: we take careful matching steps to avoid this, but if it does occur, please let us know immediately. We will not be offended – we will simply assign someone else who might be a better fit. Participant choice is paramount; they have the right to say who comes into their home. We maintain a roster of diverse staff, so we can usually find the right match after getting feedback.</p>
+                            
+                            <p><span class="highlight">Q: Are your support workers trustworthy and qualified? How do you vet them?</span></p>
+                            <p><span class="highlight">A:</span> All our support workers go through rigorous screening. We do nationwide police checks, reference checks, and they must have up-to-date Working With Children Checks (for minors) and other relevant screenings. We verify their qualifications and past experience. Once they join us, as I mentioned, we also provide ongoing training and supervision. We often introduce a new support worker to a client gradually – for example, a meet-and-greet visit first – so you and [Participant] can get comfortable. If you ever have any concern about a staff member, we would act on that immediately. Our service is also fully insured and adheres to the NDIS Code of Conduct, which all workers are oriented to. You can have peace of mind that we have high standards for whom we hire.</p>
+                            
+                            <p><span class="highlight">Q: Will the same person come every time? We really want consistency for [Participant].</span></p>
+                            <p><span class="highlight">A:</span> We also believe consistency is very important. We aim to allocate a primary support worker (or a small team of two for backup) to each participant, rather than a rotating cast of strangers. So yes, in general, the same person will come to each scheduled shift. If that primary worker is sick or on leave, we would inform you and provide a suitable substitute – but we’ll always discuss it with you first whenever possible. Our goal is that [Participant] builds a trusting relationship with their support staff, and that can only happen with continuity. Over time, if your needs increase, the team might grow, but we keep it as consistent as possible.</p>
+                            
+                            <p><span class="highlight">Q: How do you handle medications or special medical needs?</span></p>
+                            <p><span class="highlight">A:</span> We have trained staff for various health-related supports. If your family member requires medication administration, we ensure that only workers with proper medication training (and nursing oversight if needed) handle that. We keep detailed medication records. If there are specific medical tasks (like PEG feeding, catheter care, seizure management), we involve our Registered Nurse in developing the care plan and training the support workers. You can provide any existing care plans from doctors or therapists, and we’ll incorporate those. Your loved one’s health and safety needs will be meticulously planned for. If a nurse needs to do certain tasks directly, we can arrange nursing visits as part of the plan. Rest assured, we won’t do anything we aren’t qualified to do – and for what we are, we do it to a high standard of care.</p>
+                            
+                            <p><span class="highlight">Q: My parent is older (over 65) and on NDIS – will their support change or end when they age more?</span></p>
+                            <p><span class="highlight">A:</span> If your parent is already an NDIS participant who entered the scheme before 65, they can continue receiving NDIS supports beyond age 65 – the NDIS won’t cut them off just due to age. Many people choose to stay with NDIS because the supports are tailored to disability needs. The only caveat is if they decide to move into aged care or start using government aged care home services after 65 – that could affect NDIS eligibility. But if they’re living at home and happy with NDIS, they can stick with it. We have had clients in their 70s still on NDIS plans. We might also suggest looking at My Aged Care for additional help, as sometimes they can get extra funding for things like home modifications through aged care while still on NDIS. We can guide you through those options if needed. But bottom line: turning 65 doesn’t automatically stop NDIS supports, so you don’t need to worry about a sudden cutoff.</p>
+                            
+                            <p><span class="highlight">Q: As a parent, I’m very nervous about letting someone into our home to care for my child. How can I be sure it’s safe?</span></p>
+                            <p><span class="highlight">A:</span> Your concern is completely understandable. Inviting a support worker into your home and trusting them with your child is huge. Here’s what we do to ensure safety and quality: We involve you in the introduction – you’ll meet the worker beforehand and can be present initially during support visits until everyone is comfortable. We have a strict Code of Conduct for our staff. Respecting your home, privacy, and cultural values is mandatory. All staff are trained in safeguarding and professional boundaries. There’s zero tolerance for any form of abuse, neglect, or even rudeness. We have incident reporting mechanisms – if anything at all is amiss, our management will address it immediately. And we encourage families to give feedback anytime. If it gives peace of mind, some parents install cameras in common areas or drop in occasionally – we are fine with that openness (just let us and the worker know, for transparency). Our stance is that we have nothing to hide and we want you to feel 100% confident. Over time, as you see the worker build a positive rapport with your child and reliably show professionalism, we hope your worries will ease. We truly treat our participants like family – and by extension, we want families to feel secure and happy with our care.</p>
+                            
+                            <p><span class="highlight">Q: Do you have experience with children/young adults (or a specific condition like autism, cerebral palsy, etc.)?</span></p>
+                            <p><span class="highlight">A:</span> Yes, we do. We have dedicated staff who specialize in working with [children/individuals with specific condition]. For example, many of our support workers have backgrounds in special education or have worked in pediatric settings. We also ensure all staff working with minors have Working With Children clearance and are trained in child-safety protocols. If your child has specific behavioral or sensory needs (as is common with autism, for instance), we will take extra steps: we’ll ask you for insight into what strategies work best, and we can also consult with any therapists (like behavior support practitioners or OTs) involved. We really take a team approach for kids – involving parents, therapists, and teachers if applicable, so that we’re consistent with routines and strategies.</p>
+                            
+                            <p><span class="highlight">Q: Will you work with other professionals involved (support coordinator, therapists, etc.)?</span></p>
+                            <p><span class="highlight">A:</span> Definitely. We believe collaboration yields the best outcomes. If the participant has a Support Coordinator, we’ll maintain regular contact with them (with permission) to ensure services are coordinated and the NDIS plan is used effectively. For example, we can communicate about how hours are tracking, any need for plan adjustments, or issues that arise. Similarly, if there are therapists (physio, speech, behavior support), we welcome their input on techniques we should use during support. We have attended case conferences and school meetings when invited, to represent the care side. Essentially, we’re team players and will work alongside all stakeholders to support your family member holistically.</p>
+                            
+                            <p><span class="highlight">Q: How do you handle emergencies or if something goes wrong during support?</span></p>
+                            <p><span class="highlight">A:</span> All staff are trained in basic first aid and emergency procedures. If there’s a medical emergency, they will call 000 (ambulance) immediately and then notify you and our management. We have your emergency contact information on file. For less urgent incidents (like a minor fall, or the participant feeling unwell), the worker will use their judgement – possibly call you to pick up the participant or ask how you’d like to handle it, while ensuring the person is safe in the meantime. We also have on-call supervisors – so our staff can reach a senior manager 24/7 for guidance in a crisis. Afterwards, we document any incidents and ensure follow-up (like reviewing what happened, updating risk management plans to prevent future issues). Transparency is key – you would be informed of anything affecting your loved one’s well-being right away. Thankfully serious incidents are rare, but we prepare for them so that we can respond calmly and effectively if needed.</p>
+                        `
+                    },
+                    {
+                        title: "Support Coordinator or Professional Referral",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> In this case, a Support Coordinator or other professional calls to refer a participant to your service.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> Support coordinators value efficient communication. They usually want to know: do you provide service X in location Y, do you have capacity, and how soon can you start?</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Quick Introduction Exchange:</span> Take note of their name and agency.</li>
+                                <li><span class="highlight">Assess Fit and Capacity:</span> Verify that the service needed is within your offerings.</li>
+                                <li><span class="highlight">Gather Essential Info:</span> Ask for key details about the participant's support needs.</li>
+                                <li><span class="highlight">Explain Onboarding Process:</span> Clarify your process for meeting the participant.</li>
+                                <li><span class="highlight">Discuss Collaboration:</span> Assure the SC you will keep them in the loop.</li>
+                                <li><span class="highlight">Closing:</span> Exchange contact information.</li>
+                            </ol>
+                        `
+                    },
+                    {
+                        title: "Common Questions & Answers - Support Coordinator Calls",
+                        content: `
+                            <p><span class="highlight">Q (SC): We have a participant, [Name], requiring [Service Type] in [Location]. Do you have capacity to take this on?</span></p>
+                            <p><span class="highlight">A:</span> (First, get specifics) Thank you for reaching out. To confirm, you’re looking for [e.g. in-home personal care, 5 mornings a week, in Suburb X]? If so, yes, we do have capacity to support that. We currently have staff in that area with the right skill set. I anticipate we could initiate services within [timeframe, e.g. “2 weeks”] once the paperwork is done. Let me gather a bit more detail to ensure a good match… (If capacity is questionable:) We are very interested in supporting [Name]. I do want to be transparent that we’re quite busy in that region. I believe we can accommodate it by [adjustment or adding staff], but the start date might be roughly [date]. Is the participant’s situation urgent or do we have some flexibility? (This signals honesty and sets realistic expectations.)</p>
+                            
+                            <p><span class="highlight">Q (SC): The participant has [specific needs, e.g. complex behaviors, high medical needs]. Can your team handle this?</span></p>
+                            <p><span class="highlight">A:</span> We have experience with [that specific need]. For instance, we support other participants with similar [behaviors/medical requirements]. We have specialized staff and processes in place. Let me give you an overview: If behavior: We have staff trained in positive behavior support and de-escalation techniques. We’d want to review the participant’s behavior support plan (if one exists) or work with their psychologist/ behavior practitioner. We also ensure consistency and structure, which often helps. If medical: We involve our Registered Nurse in the intake. They’ll do a risk assessment and train support workers on tasks like [seizure management, insulin injections, etc.]. We ensure all high- intensity supports comply with the NDIS Practice Standards. Given what you’ve described, I’m confident we can meet those needs. We might request any supporting documents (like behavior support plan, nursing care plan) to prepare our team appropriately. But yes, we’re equipped for this.</p>
+                            
+                            <p><span class="highlight">Q (SC): Are you registered for [specific registration group]?</span></p>
+                            <p><span class="highlight">A:</span> Yes – we are registered for multiple groups. Specifically, for [Service Type], we are NDIS-registered under [Registration Group name/code]. (For example: “We are registered for ‘Assist Personal Activities’ and ‘Community Participation,’ as well as nursing and therapeutic supports.”) This means we can serve NDIA-managed participants in this area. If by chance something is outside our registration, let me know – but generally we cover all the core and capacity supports that our service entails.</p>
+                            
+                            <p><span class="highlight">Q (SC): The participant’s plan is Agency-managed. You mentioned you’re registered, so claiming will be through the portal, correct?</span></p>
+                            <p><span class="highlight">A:</span> Correct. Since [Your Org] is a Registered Provider, we will handle service bookings and claims in the NDIA portal for any Agency-managed funding. You might need to provide us the NDIS number and some plan details (like end date and allocated hours for this support) so we can set up the service booking properly. We’ll make sure to not exceed the budget – we can coordinate with you on the exact hours/week that fit the plan.</p>
+                            
+                            <p><span class="highlight">Q (SC): Can you give me a quick quote or breakdown of costs for X hours per week until plan end?</span></p>
+                            <p><span class="highlight">A:</span> Certainly. Our rates follow the NDIS Price Guide. For [Service], the current rate is $XX per hour (assuming [weekday daytime] support). If we provide, say, 10 hours per week, that’s ~$XX per week. If the plan has, for example, 6 months remaining, that would total approximately $XX for the period. I can prepare a formal service quote document with these calculations and email it to you today. The quote will include any potential additional charges (like travel if applicable, though we keep that minimal and within NDIS limits). We’ll align the quote with the participant’s plan dates so you can ensure it fits their budget.</p>
+                            
+                            <p><span class="highlight">Q (SC): What’s your referral/ intake process from here?</span></p>
+                            <p><span class="highlight">A:</span> Once you send through the referral details (you can email to [email]), we will: Contact the Participant/Family: We prefer to meet the participant (and family, if appropriate) to introduce ourselves and do an initial assessment of their needs and preferences. If you or someone from your team wants to join that meeting, you’re very welcome. Service Agreement & Service Booking: We will draft a Service Agreement outlining the supports, schedule, and our obligations. We’ll share that with the participant (and you, if participant consents, so you’re in the loop). After signing, we’ll create the service booking in the portal for the agreed hours. Commencement: We then match a support worker and set a start date. We’ll let you know when the first service is scheduled and confirm everything is in place. Throughout, we’ll keep you informed. For example, we can copy you on the service agreement email if the participant is okay with that. We find collaborative approach helpful.</p>
+                            
+                            <p><span class="highlight">Q (SC): Do you require any documents from me?</span></p>
+                            <p><span class="highlight">A:</span> If you have a referral form or participant profile, that’s very helpful (many SCs have a referral template – feel free to use that or I can accept an email summary). Specifically, useful information would be: The NDIS plan goals (a brief idea so we can align our support). Any risk assessment or support plans (behavior support plan, health care plans). Emergency contacts and other providers involved. Funding details: support category and budget allocated for this service. Additionally, if the participant has a preference for support times or any cultural/language preferences, include that. We’ll take all that into account. And yes, please send their NDIS number and date of birth so we can verify on the portal when making a booking.</p>
+                            
+                            <p><span class="highlight">Q (SC): How do you communicate progress or issues?</span></p>
+                            <p><span class="highlight">A:</span> We can adapt to your preferred level of involvement. Typically, if there’s any significant issue (missed sessions, incidents, participant not engaging, etc.), we inform the support coordinator promptly. For routine progress, we can provide updates at plan review time or monthly summaries if you need. Some SCs appreciate a quick email every month or two on how things are going – we’re happy to do that. Also, if the participant’s needs seem to change such that they might require a plan review (more hours, different support), we’ll alert you so that you can take action on the funding side.  Communication  is  key for  us;  we  see  support  coordinators  as  partners  in  ensuring  the participant succeeds. So, you can call or email me any time as well if you need an update or have a question.</p>
+                            
+                            <p><span class="highlight">Q (SC): The participant has had trouble with providers in the past (e.g. staff not turning up, poor communication). How will you be better?</span></p>
+                            <p><span class="highlight">A:</span> I’m sorry to hear they’ve had bad experiences. We strive to be very reliable and transparent. We have  an  internal  policy that  shifts  are  never  missed  –  our  workers  know  that  a  no-show  is unacceptable. In the rare event a staff member is ill or unavailable last-minute, our scheduler or on- call manager finds a substitute and we inform the participant (and you) immediately,  before the scheduled time. We also use a scheduling system that allows us to track check-ins, so we know when a worker arrives and leaves. Communication-wise, we ensure our office is responsive. If you email or call, you will get a prompt reply (typically same day). We also assign a specific coordinator (like myself or a colleague) to oversee this participant’s services, so you have a consistent contact. We’ve learned that consistent follow-through is what builds trust, and we take that responsibility seriously. We welcome feedback at any point, so if something isn’t up to expectations, we will address it quickly. Our aim is to make your job easier by being one of the providers you can count on.</p>
+                            
+                            <p><span class="highlight">Q (SC): Great, what do you need from me to move forward?</span></p>
+                            <p><span class="highlight">A:</span> You can email me at [email] with the referral information we discussed. I’ll look out for it. I will acknowledge as soon as I receive it and give you an estimated timeline for next steps (like when we plan to meet the participant). If there are any other internal processes on your end, let me know. Otherwise, consider the referral accepted. I’ll keep you updated as it progresses. And please, if the participant or yourself think of any other questions or adjustments, reach out anytime.</p>
+                        `
+                    }
+                ]
+            },
+            {
+                title: "Part 3: Complex Needs & Hospital Discharge",
+                sections: [
+                    {
+                        title: "Participants with Complex or High Needs",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> This scenario involves participants with complex needs, which could mean high physical support needs, multiple disabilities, significant behaviors of concern, or complex medical conditions.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> When dealing with complex needs, confidence and competence are what the caller is seeking from you. They will ask detailed questions to gauge if you truly have the expertise.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Listen to the Complexity:</span> Let the caller describe the situation in detail.</li>
+                                <li><span class="highlight">Express Capability:</span> After hearing, respond with specific examples of your experience.</li>
+                                <li><span class="highlight">Safety and Quality Emphasis:</span> Reassure them that complex needs will be met with stringent care plans.</li>
+                                <li><span class="highlight">Team Approach:</span> Highlight that you would form a multidisciplinary support team.</li>
+                                <li><span class="highlight">Questions & Answers:</span> Be prepared for detailed questions.</li>
+                                <li><span class="highlight">Next Steps:</span> For complex cases, often a face-to-face meeting is necessary.</li>
+                            </ol>
+                        `
+                    },
+                    {
+                        title: "Common Questions & Answers - Complex Needs",
+                        content: `
+                            <p><span class="highlight">Q: Have you worked with someone with [similar complex condition] before?</span></p>
+                            <p><span class="highlight">A:</span> We have experience with clients who have [that condition or challenge]. For example, currently we support a participant who [describe relevant scenario briefly: e.g. “also has quadriplegia with a PEG feeding  tube  and  frequent  seizures”  or  “has  an  intellectual  disability  with  complex behaviors requiring 2:1 support”]. Through that, we’ve learned the importance of detailed planning and highly trained staff. In your situation, [mention any differences if any, and state you’re prepared]. If there are aspects new to us, we are committed to getting the necessary training and consulting experts. We never take on a complex case unless we’re confident we can do it safely and effectively. Based on what you’ve shared, I’m confident we can develop the right support strategy for [Participant].</p>
+                            
+                            <p><span class="highlight">Q: How do you ensure support workers are skilled enough for high needs?</span></p>
+                            <p><span class="highlight">A:</span> We handle high-needs cases with a lot of oversight and training: First, our Registered Nurse (RN) or experienced manager will do an initial assessment and write up a very detailed support plan (covering medical protocols, behavior support strategies, etc.). We select a team of support workers who already have relevant experience (for instance, we’d pick those who’ve worked in ICU or complex disability settings, or who have done specific training like epilepsy management, catheter care, etc.). Before they work independently, each staff will undergo specialized training for this participant’s needs. That might involve training sessions with our RN, shadow shifts with you or existing caregivers, and reading all protocols. They might practice using equipment (like hoists or feeding pumps) under supervision until proficient. We often implement “buddy shifts” at the start – meaning a new worker pairs with a senior worker or nurse for a few shifts to ensure they’re comfortable and competent. Ongoing, our RN will regularly check in, do spot visits, and update training as needed. We also keep emergency instructions posted so any staff knows exactly what to do if something happens (like seizure action plan, etc.). In short, we approach complex support as a team effort with strong oversight. You’d also have direct contact to our nurse or care manager if you ever have concerns about staff competency. We take pride in building capable teams around our high-needs participants.</p>
+                            
+                            <p><span class="highlight">Q: What if a support worker encounters a situation beyond their skills (e.g. a medical emergency)?</span></p>
+                            <p><span class="highlight">A:</span> Our protocol in any emergency is that the support worker will ensure [Participant] is safe and call emergency services (911/000) immediately if it’s life-threatening. For example, if [Participant] has a severe seizure that’s longer than their care plan allows or they have breathing difficulties, our staff won’t hesitate to call an ambulance. They are trained in first aid and emergency to assist while waiting. We also have an on-call nurse/manager 24/7 – the worker will call them as well to get guidance in real time. So, the worker is never left alone to figure it out; they have backup. After any incident, we’d notify you (or the designated emergency contact) right away. And then we would review together how to prevent or better handle future incidents. The key is that we prepare for known risks in advance (for instance, having rescue medications on hand if prescribed for seizures, and training staff on their use). If something truly unexpected occurs, the combination of staff training, on-call support, and emergency services ensures the participant gets the help needed quickly. We haven’t had a major incident where staff were unprepared, and we intend to keep it that way by rigorous planning.</p>
+                            
+                            <p><span class="highlight">Q: My loved one can have challenging behaviors (aggression or self-harm). How will staff handle that?</span></p>
+                            <p><span class="highlight">A:</span> Behavioral challenges are something we approach with a positive behavior support mindset. Before starting, we’d want to see any Behavior Support Plan in place (if not, we may suggest involving a behavior specialist). We train our staff in de-escalation techniques: staying calm, using a low and reassuring voice, keeping a safe distance if needed, removing triggers from the environment. We don’t use any restrictive practices unless they are formally authorized and absolutely necessary for safety – and even then, only trained staff would apply them, following strict protocols and reporting. The aim is always to understand the cause of the behavior: are they in pain? Frustrated? Overstimulated? Our team will learn the early warning signs of escalation unique to [Participant] and intervene early (like redirecting their attention, offering a break, or a calming activity that we know they like). We also emphasize consistency – the support workers will all follow the same strategies so as not to confuse [Participant]. If an incident does occur, the staff ensure everyone’s safety as best as possible (other people are cleared from the area, objects that could cause harm are moved) and then follow the plan’s steps. Afterwards, we’d analyze triggers and outcomes to continuously improve. Additionally, we keep communication with you (and any clinicians) to adjust approaches. We know it can be stressful, but our ultimate goal is to reduce those behaviors over time by providing the right support and environment.</p>
+                            
+                            <p><span class="highlight">Q: Do you have nurses on staff for high medical needs?</span></p>
+                            <p><span class="highlight">A:</span> Yes, we do. We have Registered Nurses on our team who oversee high-medical-needs participants. Their role includes doing the initial and periodic health assessments, writing health care plans, training support workers in medical tasks, and even doing direct nursing tasks when required (for example, changing a complex wound dressing or administering injections if support workers aren’t allowed). So if [Participant] requires, say, bowel care, or has a pressure sore to monitor, our nurses are involved. Importantly, even when nurses aren’t present, they are available on-call to our support workers for any questions. With nursing oversight, we can manage things like ventilator care, tube feeding, catheter care, etc., as long as we have clear orders from the primary doctors which we will follow exactly. Essentially, you’re not just getting a support worker – you’re getting a clinical support system around the participant. This is a strength of our service; being clinically led means we maintain a high standard for all those complex health tasks.</p>
+                            
+                            <p><span class="highlight">Q: What if my family member needs two people to assist or very long hours (even 24/7)?</span></p>
+                            <p><span class="highlight">A:</span> We can absolutely provide multiple support workers as needed. If two support workers are required at once (for example, for safe transfers or personal care due to weight/complexity), we will schedule a consistent two-person team for those shifts. We coordinate their training together so they work in sync. For 24/7 care, we will create a rotating roster of staff. We aim to keep the team as small and consistent as possible – for example, maybe 4-5 core staff who cover all the shifts between them, rather than a parade of people. We’ll also include contingency plans for when someone is sick (relief staff who are also trained on the participant’s needs). Managing a 24/7 roster is something we’re experienced in, including adherence to worker fatigue rules, etc. We also set up a communication book or handover notes so each shift knows what happened in the last. Rest assured, continuous care is something we handle by strong coordination. We’ll also involve you in crafting the schedule to make sure important times (mealtimes, personal care routines) are appropriately staffed with the right people.</p>
+                            
+                            <p><span class="highlight">Q: How do you coordinate with hospitals or other healthcare providers?</span></p>
+                            <p><span class="highlight">A:</span> If [Participant] is coming out of hospital or has regular medical appointments, we will definitely coordinate closely. For hospital discharge, we like to connect with the hospital’s discharge planner or treating team before discharge to get a full briefing. We might even attend a case conference at the hospital if invited. They can teach our staff any specific procedures or equipment usage. We’ll also ensure any equipment needed at home is arranged (sometimes via NDIS or hospital loan). Post- discharge, we monitor health closely in case any complications arise. We keep the GP or specialists in the loop, with your permission – for example, our nurse might periodically update the GP about wound healing progress or similar. Should [Participant] be re-admitted to hospital for any reason, our staff can provide a handover summary to hospital staff about their daily routines and recent issues, which helps continuity of care. Basically, we don’t operate in a silo – we are part of [Participant]’s wider care network, and we take that collaboration seriously for their benefit.</p>
+                            
+                            <p><span class="highlight">Q: This all sounds good, but how do I know it will work in practice?</span></p>
+                            <p><span class="highlight">A:</span> It’s completely valid to want proof. We can, with permission, share references from other families or coordinators we work with in complex cases. They can tell you about their experience with us. Additionally, we typically propose a trial period: let’s say we start services and review after 1 month intensively. If at that point you feel something isn’t working, we’ll address it head-on or help you transition to another option. We won’t be defensive – our priority is the participant’s welfare. Also, because we document everything (support logs, incident reports, etc.), you’ll have transparency. We often invite families to be part of the training sessions for staff too, since you know [Participant] best. You’ll see firsthand how we prepare the team. Over time, as you see the worker build a positive rapport with your child and reliably show professionalism, we hope your worries will ease. We truly treat our participants like family – and by extension, we want families to feel secure and happy with our care.</p>
+                        `
+                    },
+                    {
+                        title: "Hospital Discharge or Post-Acute Support",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> This scenario involves a participant who is in the hospital or just about to leave it, needing NDIS supports to resume life at home.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> Hospitals are keen to discharge as soon as it's safe, so they might push for quick provider engagement. However, planning must be solid to avoid readmission or crisis at home.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Get Hospital Details:</span> Ask which hospital, unit, and if there's a discharge planner involved.</li>
+                                <li><span class="highlight">Timeline:</span> "When is the anticipated discharge date?"</li>
+                                <li><span class="highlight">Needs Post-Discharge:</span> Identify the range of support needed.</li>
+                                <li><span class="highlight">Staff Availability:</span> Ensure you have staff ready to start on that date.</li>
+                                <li><span class="highlight">Plan Funding:</span> Address funding considerations for post-discharge support.</li>
+                                <li><span class="highlight">Team Approach:</span> Emphasize collaboration with hospital teams.</li>
+                                <li><span class="highlight">Reassure Quality:</span> Address concerns about patient safety at home.</li>
+                            </ol>
+                        `
+                    }
+                ]
+            },
+            {
+                title: "Part 4: Special Scenarios & Transitions",
+                sections: [
+                    {
+                        title: "Nursing-Only Services Inquiry",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> This scenario is when a participant specifically needs nursing services under NDIS. Perhaps the participant's primary need is nursing care rather than or in addition to general support work.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> NDIS funds nursing for disability-related health needs. The caller might be unsure if what they need is covered by NDIS vs. the health system.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Identify Nursing Needs:</span> Ask exactly what tasks they need a nurse for.</li>
+                                <li><span class="highlight">Confirm Nurse Availability:</span> Check your roster for availability.</li>
+                                <li><span class="highlight">Discuss Integration:</span> Will nursing be a standalone service or part of a broader support package?</li>
+                                <li><span class="highlight">NDIS Funding Clarification:</span> Make sure they know under which funding item this will be billed.</li>
+                                <li><span class="highlight">Liaison with Health providers:</span> Ensure them that your nurse can communicate with their GP or specialists.</li>
+                            </ol>
+                        `
+                    },
+                    {
+                        title: "Disengaged or Hard-to-Engage Participant",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> In this scenario, the participant has disengaged from services or is hesitant to engage. The call could be from a support coordinator or family worried that the participant isn't accepting support.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> The key here is patience, empathy, and motivational approach. The participant might have lost trust, might be feeling services are useless, or could be depressed or overwhelmed.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Listen to the Participant's Perspective:</span> Let them vent without interruption.</li>
+                                <li><span class="highlight">Identify Barriers:</span> Gently ask what hasn't worked.</li>
+                                <li><span class="highlight">Reaffirm Their Autonomy:</span> Make sure they know it's their choice to use supports or not.</li>
+                                <li><span class="highlight">Offer Adjustments:</span> Propose changes based on what they disliked.</li>
+                                <li><span class="highlight">Highlight Benefits:</span> Remind them what supports can help them achieve.</li>
+                                <li><span class="highlight">Involve Others if Okayed:</span> Ask if they'd like a family member or friend involved.</li>
+                                <li><span class="highlight">Set a Small Next Step:</span> Instead of pushing full re-engagement, agree on a trial.</li>
+                            </ol>
+                        `
+                    }
+                ]
+            },
+            {
+                title: "Part 5: Provider Transition & Plan Reviews",
+                sections: [
+                    {
+                        title: "Transition from Another Provider",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> This scenario is a participant who is currently with another provider but wants to switch to your service. They might be leaving due to dissatisfaction, relocation, or simply needing a different service.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> Emphasize that participants have the right to change providers at any time. They do not need to justify it, though often they'll tell you why. Key is to coordinate timing to ensure no gap in essential support.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Ask Why They're Switching:</span> This gives insight into their needs.</li>
+                                <li><span class="highlight">Ask about Notice/Current Agreement:</span> "Have you informed your current provider?"</li>
+                                <li><span class="highlight">Plan overlap or start:</span> Ideally, no overlap between providers.</li>
+                                <li><span class="highlight">Service Booking Transfer:</span> If NDIA-managed, old provider must cancel their service booking.</li>
+                                <li><span class="highlight">Reassure Simplicity:</span> Emphasize that switching is straightforward.</li>
+                                <li><span class="highlight">Continuity of Staff or Routine:</span> If there's anything they liked that you can continue.</li>
+                                <li><span class="highlight">Keep Participant at Center:</span> Affirm you'll tailor the new support to them.</li>
+                            </ol>
+                        `
+                    },
+                    {
+                        title: "Plan Review or Funding Changes Support",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> This is when a participant is approaching their NDIS plan review or has just had one, and they have questions about how your service will adapt or assist.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> Demonstrate knowledge of NDIS review processes and the importance of documentation. Reassure that you can provide any necessary progress reports or support letters aligned with their goals.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Acknowledge Review Importance:</span> Recognize the participant's concerns.</li>
+                                <li><span class="highlight">Offer Reports:</span> "Would you like us to prepare a report on the supports we've provided?"</li>
+                                <li><span class="highlight">Review Goals:</span> Quickly revisit their current goals and how your supports align.</li>
+                                <li><span class="highlight">Underspend or Overspend:</span> If underspending, plan how to explain it.</li>
+                                <li><span class="highlight">Continuity of Service:</span> Explain how you handle a new plan.</li>
+                                <li><span class="highlight">Attending Meeting:</span> Clarify that typically providers don't attend formal planning meetings unless invited.</li>
+                            </ol>
+                        `
+                    }
+                ]
+            },
+            {
+                title: "Part 6: Aged Care & Pediatric Scenarios",
+                sections: [
+                    {
+                        title: "Aged Care Crossover or Turning 65 Scenario",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> This involves participants who are nearing 65 or already 65+ and on NDIS, or those who might have to consider transitioning to the aged care system.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> The rules: NDIS won't accept new entrants after 65; if on NDIS before 65, they can continue beyond 65. They have a choice at 65: stay on NDIS or switch to aged care; most stay if already on NDIS because it's more comprehensive.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Ask Age or Situation:</span> Find out if participant is already NDIS and their age.</li>
+                                <li><span class="highlight">If <65 and on NDIS:</span> Reassure continuation beyond 65 as long as they remain eligible.</li>
+                                <li><span class="highlight">If >65 on NDIS:</span> Same reassurance, but discuss integration with aged care if needed.</li>
+                                <li><span class="highlight">If >65 not on NDIS:</span> Gently inform that NDIS is for under 65 at entry.</li>
+                                <li><span class="highlight">Outline differences:</span> NDIS vs Aged Care (flexibility, funding, services).</li>
+                                <li><span class="highlight">Offer Support in Transition:</span> Help connect with services if they choose aged care.</li>
+                            </ol>
+                        `
+                    },
+                    {
+                        title: "Pediatric Participants (Children & Early Teens)",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> This scenario deals with inquiries about children on NDIS. The caller is often a parent or guardian of a child with disability.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> Emphasize safeguards for children (Working With Children Check, child-specific training). Show you understand developmental needs and use play-based approaches when appropriate. Parents often want involvement, so mention open communication.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Listen to Parent's Goals/Concerns:</span> Are they looking for assistance like personal care, skill building, or respite?</li>
+                                <li><span class="highlight">Highlight Child-Friendly Approach:</span> Use of play, adapting to child's communication level.</li>
+                                <li><span class="highlight">Safety & Qualifications:</span> WWC checks, specialized training if applicable.</li>
+                                <li><span class="highlight">Involving Family:</span> Parents are key decision-makers and partners in support.</li>
+                                <li><span class="highlight">Flexibility:</span> Kids can have meltdowns or sick days - be understanding.</li>
+                                <li><span class="highlight">Examples:</span> Share successful child support scenarios to illustrate your points.</li>
+                            </ol>
+                        `
+                    }
+                ]
+            },
+            {
+                title: "Part 7: Crisis & Interpreter Scenarios",
+                sections: [
+                    {
+                        title: "Crisis or Immediate Risk",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> This scenario involves participants who are in immediate danger or without essential care. The caller might be the participant themselves, a family member, or a support coordinator.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> Immediate action is required. Safety is the priority. Follow emergency protocols while maintaining professionalism and documentation.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Assess the Situation:</span> Determine if there is immediate danger.</li>
+                                <li><span class="highlight">Emergency Response:</span> If life-threatening, call 000 immediately.</li>
+                                <li><span class="highlight">Internal Escalation:</span> Notify clinical lead or manager immediately.</li>
+                                <li><span class="highlight">Documentation:</span> Record exact statements, time, and actions taken.</li>
+                                <li><span class="highlight">Follow-up:</span> Schedule welfare check and next-day clinical review.</li>
+                            </ol>
+                        `
+                    },
+                    {
+                        title: "Interpreter / CALD (Culturally & Linguistically Diverse)",
+                        content: `
+                            <p><span class="highlight">Scenario Overview:</span> This scenario involves participants who require interpreter services or have specific cultural needs that should be respected in service delivery.</p>
+                            
+                            <p><span class="highlight">Special Considerations:</span> Always ask about language preferences first. Offer professional interpreter services at no cost to the participant. Respect cultural practices and preferences in how support is delivered.</p>
+                            
+                            <p><span class="highlight">Checklist/Steps:</span></p>
+                            <ol>
+                                <li><span class="highlight">Language Preference:</span> "Which language would you prefer for our calls and visits?"</li>
+                                <li><span class="highlight">Interpreter Services:</span> "We can arrange a professional interpreter (phone or face-to-face)."</li>
+                                <li><span class="highlight">Cultural Practices:</span> "Are there cultural or religious practices you'd like us to respect?"</li>
+                                <li><span class="highlight">Document Preferences:</span> Record language and cultural preferences clearly.</li>
+                                <li><span class="highlight">Staff Briefing:</span> Ensure all staff are briefed on preferences before visits.</li>
+                            </ol>
+                        `
+                    }
+                ]
+            },
+            {
+                title: "Part 8: Objections & Model Responses",
+                sections: [
+                    {
+                        title: "Handling Objections & Model Responses",
+                        content: `
+                            <p><span class="highlight">Overview:</span> Intake often means facing concerns, doubts, or objections. Below are common ones with model professional responses designed to reassure, clarify, and move the intake forward without pressure.</p>
+                            
+                            <p><span class="highlight">Common Objections & Responses:</span></p>
+                            
+                            <p><span class="highlight">"I don't want to pay anything out-of-pocket."</span><br>
+                            <span class="highlight">Response:</span> "Absolutely - our supports are billed directly to your NDIS plan if they're reasonable and necessary. We'll confirm line items with you before starting so there are no surprises."</p>
+                            
+                            <p><span class="highlight">"Last time, staff didn't show up."</span><br>
+                            <span class="highlight">Response:</span> "I'm sorry to hear that. We guarantee communication - if a worker is unwell, we notify you early and send a backup if you want. We keep rosters stable so you know who's coming and when."</p>
+                            
+                            <p><span class="highlight">"Can you start tomorrow?"</span><br>
+                            <span class="highlight">Response:</span> "I'll check our local availability right now. If we can't place a worker tomorrow, we'll prioritize you for the soonest slot and keep you updated as shifts open."</p>
+                        `
+                    },
+                    {
+                        title: "Follow-ups & Call Closures",
+                        content: `
+                            <p><span class="highlight">Overview:</span> A professional intake call doesn't end when you hang up. Always confirm next steps, provide reassurance, and send a written follow-up summarizing the conversation.</p>
+                            
+                            <p><span class="highlight">Closing Lines:</span></p>
+                            <ul>
+                                <li>"Thank you for sharing that with me today - I've summarized your goals and preferences."</li>
+                                <li>"I'll send a quick SMS/email now so you have everything in writing."</li>
+                                <li>"Your next step is: [what to expect]. I'll update you by [timeframe]."</li>
+                                <li>"If you think of anything else, please reply to my SMS/email or call our office."</li>
+                            </ul>
+                            
+                            <p><span class="highlight">Follow-up Timing:</span></p>
+                            <ul>
+                                <li><span class="highlight">Immediately after call:</span> Send summary SMS/email with key points.</li>
+                                <li><span class="highlight">Within 24h:</span> Email full intake summary or Service Agreement draft.</li>
+                                <li><span class="highlight">Day 2-3:</span> Phone check-in if waiting for start date or missing info.</li>
+                                <li><span class="highlight">Week 1:</span> Confirm satisfaction, worker match, and early feedback.</li>
+                            </ul>
+                        `
+                    }
+                ]
+            },
+            {
+                title: "Part 9: Documentation & Compliance",
+                sections: [
+                    {
+                        title: "Documentation & Compliance (Intake Call Notes)",
+                        content: `
+                            <p><span class="highlight">Principles:</span> Write notes that are clear, objective, and audit-ready. Capture only what you need, but capture it accurately.</p>
+                            
+                            <p><span class="highlight">Required Fields (Minimum Dataset):</span></p>
+                            <ul>
+                                <li>Caller: name, role/relationship, contact, OK to SMS (Y/N)</li>
+                                <li>Participant: legal name, preferred name, DOB, suburb/postcode</li>
+                                <li>NDIS details: number (if known), plan dates, management type, budgets</li>
+                                <li>Goals/priorities; preferred days/times; worker preferences</li>
+                                <li>Existing supports/providers; reason for change if transitioning</li>
+                                <li>Risks/alerts; equipment/AT</li>
+                                <li>Consent scope recorded; interpreter required (Y/N & language)</li>
+                                <li>Outcome & next steps; agreed contact method; follow-up date/time</li>
+                            </ul>
+                            
+                            <p><span class="highlight">Good vs Poor Notes Examples:</span></p>
+                            <p><span class="highlight">Good:</span> "Caller reports 'missed morning meds twice this week'."</p>
+                            <p><span class="highlight">Poor:</span> "Family unreliable." (judgemental; offer facts instead)</p>
+                        `
+                    },
+                    {
+                        title: "Quality & KPI Framework",
+                        content: `
+                            <p><span class="highlight">Goal:</span> Consistent, compassionate, compliant calls that convert appropriate enquiries into safe, timely supports.</p>
+                            
+                            <p><span class="highlight">Core KPIs (Targets):</span></p>
+                            <ul>
+                                <li><span class="highlight">First Response Time (FRT):</span> Call answered or callback within agreed window</li>
+                                <li><span class="highlight">Time to First Service (TTFS):</span> Days from intake to first shift/visit</li>
+                                <li><span class="highlight">Conversion Rate:</span> Enquiries → service agreements</li>
+                                <li><span class="highlight">Consent Accuracy:</span> % of calls with complete consent fields recorded</li>
+                                <li><span class="highlight">Risk Escalation Compliance:</span> % of red-flag calls escalated correctly</li>
+                                <li><span class="highlight">Documentation Completeness:</span> % of notes meeting minimum dataset</li>
+                                <li><span class="highlight">Participant Satisfaction:</span> CSAT/NPS or post-first-week pulse check</li>
+                            </ul>
+                        `
+                    }
+                ]
+            },
+            {
+                title: "Part 10: Implementation & Continuous Improvement",
+                sections: [
+                    {
+                        title: "Implementation, Governance & Versioning",
+                        content: `
+                            <p><span class="highlight">How to Deploy This Training:</span></p>
+                            <ul>
+                                <li>Host as a single internal page; ensure mobile-friendly rendering</li>
+                                <li>Bookmark in CRM/phone toolbar; train staff to keep it open during calls</li>
+                                <li>Print quick-reference for the desk; update quarterly</li>
+                            </ul>
+                            
+                            <p><span class="highlight">Roles & Ownership:</span></p>
+                            <ul>
+                                <li><span class="highlight">Content owner:</span> Intake Lead (keeps scripts current; gathers feedback)</li>
+                                <li><span class="highlight">Clinical owner:</span> RN Lead (reviews risk, nursing, complex needs sections)</li>
+                                <li><span class="highlight">QA owner:</span> Quality Manager (runs scorecards, calibrations, audits)</li>
+                            </ul>
+                            
+                            <p><span class="highlight">Continuous Improvement:</span></p>
+                            <ul>
+                                <li>Monthly review of objection handling based on real calls</li>
+                                <li>Quarterly update of scenarios with new scripts</li>
+                                <li>Maintain "Known capacity constraints" banner (kept current by rostering)</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Conclusion & Next Steps",
+                        content: `
+                            <p><span class="highlight">Summary of Key Principles:</span></p>
+                            <ul>
+                                <li>Listen actively and show empathy in every interaction</li>
+                                <li>Provide clear, accurate information tailored to the caller's needs</li>
+                                <li>Respect participant choice and control at all times</li>
+                                <li>Maintain professional yet warm communication</li>
+                                <li>Follow up promptly on commitments and document thoroughly</li>
+                            </ul>
+                            
+                            <p><span class="highlight">Next Steps for Implementation:</span></p>
+                            <ol>
+                                <li>Review each section of this training with your team</li>
+                                <li>Practice common scenarios through role-playing exercises</li>
+                                <li>Implement the documentation templates in your CRM system</li>
+                                <li>Establish regular quality assurance checks for intake calls</li>
+                                <li>Schedule quarterly refresher training sessions</li>
+                            </ol>
+                            
+                            <p>Thank you for completing this comprehensive NDIS Intake Training. Your commitment to quality service makes a real difference in participants' lives.</p>
+                            <p><span class="highlight">Closing Code: END_OF_TRAINING_2025</span></p>
+                        `
+                    }
+                ]
+            }
+        ];
+
+        // Text-to-Speech functionality
+        let synth = window.speechSynthesis;
+        let currentUtterance = null;
+        let isPlaying = false;
+        let currentLesson = 0;
+        let currentSection = 0;
+        let speechStartTime = 0;
+        let speechProgressInterval;
+        let voices = [];
+        
+        // DOM elements
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const prevSectionBtn = document.getElementById('prevSectionBtn');
+        const nextSectionBtn = document.getElementById('nextSectionBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const prevLessonBtn = document.getElementById('prevLessonBtn');
+        const nextLessonBtn = document.getElementById('nextLessonBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressContainer = document.getElementById('progressContainer');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const durationDisplay = document.getElementById('duration');
+        const rateSlider = document.getElementById('rateSlider');
+        const rateValue = document.getElementById('rateValue');
+        const voiceSelect = document.getElementById('voiceSelect');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        const lessonContent = document.getElementById('lessonContent');
+        const currentLessonTitle = document.getElementById('currentLesson');
+        const lessonProgress = document.getElementById('lessonProgress');
+        const searchBox = document.getElementById('searchBox');
+        const partList = document.getElementById('partList');
+        
+        // Initialize voices
+        function loadVoices() {
+            voices = synth.getVoices();
+            
+            // Clear existing options
+            voiceSelect.innerHTML = '';
+            
+            // Add voices to dropdown
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.setAttribute('data-lang', voice.lang);
+                option.setAttribute('data-name', voice.name);
+                voiceSelect.appendChild(option);
+            });
+            
+            // Try to set a default voice (preferably Australian English)
+            const preferredVoices = voices.filter(voice => 
+                voice.lang.includes('en-AU') || voice.lang.includes('en-GB') || voice.lang.includes('en-US')
+            );
+            
+            if (preferredVoices.length > 0) {
+                voiceSelect.selectedIndex = voices.indexOf(preferredVoices[0]);
+            }
+        }
+        
+        // Load voices when they become available
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+        
+        // Load the initial voices
+        loadVoices();
+        
+        // Format time from seconds to MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        
+        // Load a lesson into the interface
+        function loadLesson(lessonIndex) {
+            currentLesson = lessonIndex;
+            currentSection = 0;
+            
+            const lesson = trainingContent[lessonIndex];
+            currentLessonTitle.textContent = lesson.title;
+            lessonProgress.textContent = `Part ${lessonIndex + 1} of ${trainingContent.length}`;
+            
+            // Update navigation buttons
+            prevLessonBtn.disabled = lessonIndex === 0;
+            nextLessonBtn.disabled = lessonIndex === trainingContent.length - 1;
+            
+            // Display lesson content
+            displayLessonContent();
+            
+            // Reset player
+            resetPlayer();
+        }
+        
+        // Display the current lesson's content
+        function displayLessonContent() {
+            const lesson = trainingContent[currentLesson];
+            let html = '';
+            
+            for (let i = 0; i < lesson.sections.length; i++) {
+                const section = lesson.sections[i];
+                const isActive = i === currentSection;
+                
+                html += `
+                    <div class="lesson-section ${isActive ? 'active-section' : ''}" id="section-${i}">
+                        <h2 class="section-title">${section.title}</h2>
+                        <div class="section-content">${section.content}</div>
+                    </div>
+                `;
+            }
+            
+            lessonContent.innerHTML = html;
+            
+            // Scroll to the active section
+            const activeSection = document.getElementById(`section-${currentSection}`);
+            if (activeSection) {
+                activeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        // Speak the current section
+        function speakCurrentSection() {
+            if (isPlaying) {
+                pauseSpeech();
+                return;
+            }
+            
+            const lesson = trainingContent[currentLesson];
+            const section = lesson.sections[currentSection];
+            
+            if (!section) return;
+            
+            // Extract text content from HTML (remove tags)
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = section.content;
+            const textContent = tempDiv.textContent || tempDiv.innerText || '';
+            
+            if (textContent.trim() === '') return;
+            
+            // Create utterance
+            currentUtterance = new SpeechSynthesisUtterance(textContent);
+            
+            // Set utterance properties
+            const selectedVoice = voices[voiceSelect.selectedIndex];
+            if (selectedVoice) {
+                currentUtterance.voice = selectedVoice;
+            }
+            
+            currentUtterance.rate = parseFloat(rateSlider.value);
+            currentUtterance.pitch = 1;
+            currentUtterance.volume = 1;
+            
+            // Set up event handlers
+            currentUtterance.onstart = () => {
+                isPlaying = true;
+                speechStartTime = Date.now();
+                updateStatus('speaking', 'Speaking...');
+                playPauseBtn.innerHTML = '⏸';
+                
+                // Start progress tracking
+                startProgressTracking();
+            };
+            
+            currentUtterance.onend = () => {
+                isPlaying = false;
+                updateStatus('stopped', 'Stopped');
+                playPauseBtn.innerHTML = '▶';
+                clearInterval(speechProgressInterval);
+                progressBar.style.width = '100%';
+                
+                // Auto-advance to next section if available
+                setTimeout(() => {
+                    if (currentSection < lesson.sections.length - 1) {
+                        nextSection();
+                    } else if (currentLesson < trainingContent.length - 1) {
+                        // Move to next lesson
+                        loadLesson(currentLesson + 1);
+                    }
+                }, 1000);
+            };
+            
+            currentUtterance.onerror = (event) => {
+                console.error('SpeechSynthesis error:', event);
+                isPlaying = false;
+                updateStatus('stopped', 'Error occurred');
+                playPauseBtn.innerHTML = '▶';
+                clearInterval(speechProgressInterval);
+            };
+            
+            currentUtterance.onpause = () => {
+                isPlaying = false;
+                updateStatus('paused', 'Paused');
+                playPauseBtn.innerHTML = '▶';
+                clearInterval(speechProgressInterval);
+            };
+            
+            currentUtterance.onresume = () => {
+                isPlaying = true;
+                updateStatus('speaking', 'Speaking...');
+                playPauseBtn.innerHTML = '⏸';
+                startProgressTracking();
+            };
+            
+            // Speak the text
+            synth.speak(currentUtterance);
+        }
+        
+        // Pause speech
+        function pauseSpeech() {
+            if (synth.speaking && !synth.paused) {
+                synth.pause();
+                isPlaying = false;
+                updateStatus('paused', 'Paused');
+                playPauseBtn.innerHTML = '▶';
+                clearInterval(speechProgressInterval);
+            }
+        }
+        
+        // Resume speech
+        function resumeSpeech() {
+            if (synth.speaking && synth.paused) {
+                synth.resume();
+                isPlaying = true;
+                updateStatus('speaking', 'Speaking...');
+                playPauseBtn.innerHTML = '⏸';
+                startProgressTracking();
+            }
+        }
+        
+        // Stop speech
+        function stopSpeech() {
+            if (synth.speaking) {
+                synth.cancel();
+                isPlaying = false;
+                updateStatus('stopped', 'Stopped');
+                playPauseBtn.innerHTML = '▶';
+                clearInterval(speechProgressInterval);
+                progressBar.style.width = '0%';
+                currentTimeDisplay.textContent = '0:00';
+            }
+        }
+        
+        // Start tracking speech progress
+        function startProgressTracking() {
+            clearInterval(speechProgressInterval);
+            
+            speechProgressInterval = setInterval(() => {
+                if (currentUtterance && isPlaying) {
+                    const elapsed = (Date.now() - speechStartTime) / 1000;
+                    const estimatedDuration = estimateSpeechDuration();
+                    
+                    if (estimatedDuration > 0) {
+                        const progressPercent = (elapsed / estimatedDuration) * 100;
+                        progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
+                        currentTimeDisplay.textContent = formatTime(elapsed);
+                        durationDisplay.textContent = formatTime(estimatedDuration);
+                    }
+                }
+            }, 100);
+        }
+        
+        // Estimate speech duration based on text length and rate
+        function estimateSpeechDuration() {
+            const lesson = trainingContent[currentLesson];
+            const section = lesson.sections[currentSection];
+            
+            if (!section) return 0;
+            
+            // Extract text content from HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = section.content;
+            const textContent = tempDiv.textContent || tempDiv.innerText || '';
+            
+            // Average reading speed: 150 words per minute
+            const wordCount = textContent.split(/\s+/).length;
+            const wordsPerSecond = (150 / 60) * parseFloat(rateSlider.value);
+            
+            return wordCount / wordsPerSecond;
+        }
+        
+        // Update status indicator
+        function updateStatus(status, text) {
+            statusIndicator.className = 'status-indicator';
+            
+            switch(status) {
+                case 'speaking':
+                    statusIndicator.classList.add('status-speaking');
+                    break;
+                case 'paused':
+                    statusIndicator.classList.add('status-paused');
+                    break;
+                case 'stopped':
+                    statusIndicator.classList.add('status-stopped');
+                    break;
+            }
+            
+            statusText.textContent = text;
+        }
+        
+        // Reset the player
+        function resetPlayer() {
+            stopSpeech();
+            progressBar.style.width = '0%';
+            currentTimeDisplay.textContent = '0:00';
+            durationDisplay.textContent = '0:00';
+        }
+        
+        // Navigate to the previous section
+        function prevSection() {
+            if (currentSection > 0) {
+                currentSection--;
+                displayLessonContent();
+                resetPlayer();
+            }
+        }
+        
+        // Navigate to the next section
+        function nextSection() {
+            const lesson = trainingContent[currentLesson];
+            if (currentSection < lesson.sections.length - 1) {
+                currentSection++;
+                displayLessonContent();
+                resetPlayer();
+            }
+        }
+        
+        // Search functionality
+        function searchContent() {
+            const searchTerm = searchBox.value.toLowerCase();
+            const sections = document.querySelectorAll('.section-content');
+            
+            // Remove previous highlights
+            sections.forEach(section => {
+                section.innerHTML = section.innerHTML.replace(/<span class="search-highlight">([^<]*)<\/span>/g, '$1');
+            });
+            
+            if (searchTerm.trim() === '') return;
+            
+            // Highlight matches
+            sections.forEach(section => {
+                const content = section.innerHTML;
+                const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                section.innerHTML = content.replace(regex, '<span class="search-highlight">$1</span>');
+            });
+        }
+        
+        // Populate the index
+        function populateIndex() {
+            trainingContent.forEach((part, index) => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.textContent = part.title;
+                a.addEventListener('click', () => loadLesson(index));
+                li.appendChild(a);
+                partList.appendChild(li);
+            });
+        }
+        
+        // Event listeners
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                pauseSpeech();
+            } else {
+                if (synth.paused) {
+                    resumeSpeech();
+                } else {
+                    speakCurrentSection();
+                }
+            }
+        });
+        
+        prevSectionBtn.addEventListener('click', prevSection);
+        nextSectionBtn.addEventListener('click', nextSection);
+        stopBtn.addEventListener('click', stopSpeech);
+        
+        prevLessonBtn.addEventListener('click', () => {
+            if (currentLesson > 0) {
+                loadLesson(currentLesson - 1);
+            }
+        });
+        
+        nextLessonBtn.addEventListener('click', () => {
+            if (currentLesson < trainingContent.length - 1) {
+                loadLesson(currentLesson + 1);
+            }
+        });
+        
+        rateSlider.addEventListener('input', () => {
+            rateValue.textContent = `${rateSlider.value}x`;
+            if (currentUtterance) {
+                currentUtterance.rate = parseFloat(rateSlider.value);
+            }
+        });
+        
+        voiceSelect.addEventListener('change', () => {
+            if (currentUtterance) {
+                const selectedVoice = voices[voiceSelect.selectedIndex];
+                if (selectedVoice) {
+                    currentUtterance.voice = selectedVoice;
+                }
+            }
+        });
+        
+        searchBox.addEventListener('input', searchContent);
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                if (isPlaying) {
+                    pauseSpeech();
+                } else {
+                    if (synth.paused) {
+                        resumeSpeech();
+                    } else {
+                        speakCurrentSection();
+                    }
+                }
+            } else if (event.code === 'ArrowLeft') {
+                event.preventDefault();
+                prevSection();
+            } else if (event.code === 'ArrowRight') {
+                event.preventDefault();
+                nextSection();
+            } else if (event.code === 'Escape') {
+                event.preventDefault();
+                stopSpeech();
+            }
+        });
+        
+        // Initialize the application
+        window.addEventListener('load', () => {
+            populateIndex();
+            loadLesson(0);
+        });
+    </script>
+</body>
+</html>
