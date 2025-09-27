@@ -1,1308 +1,1570 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>HD HeeD | Phone Scripts “Super-Bible” Online Course</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="HD HeeD comprehensive NDIS phone scripts online course for intake and customer calls. Interactive audio lessons for staff training." />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>HD HeeD — NDIS Intake Phone Bible (Q&A)</title>
+  <meta name="description" content="Comprehensive NDIS intake Q&A with scenarios and model responses."/>
   <style>
-    /* ====== Shared HD HeeD-inspired theme ====== */
-    :root {
-      --brand: #0ea5e9; --brand-ink: #0b79a5;
-      --ink: #0f172a; --muted: #475569;
-      --bg: #ffffff; --bg-soft: #f8fafc;
-      --ring: #bae6fd; --ok: #059669; --warn: #d97706; --err: #dc2626;
-      --card: #ffffff; --shadow: 0 8px 24px rgba(2,6,23,.06), 0 1px 2px rgba(2,6,23,.04);
-      --radius: 16px; --radius-sm: 12px; --radius-xs: 10px;
-      --space: clamp(16px, 2vw, 24px); --max: 1280px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    :root{
+      /* Dark grey + yellow theme */
+      --bg:#0f1115;           /* page background */
+      --panel:#151923;        /* cards/panels */
+      --ink:#e5e7eb;          /* main text */
+      --muted:#a1a1aa;        /* muted text */
+      --accent:#facc15;       /* yellow */
+      --accent-ink:#1c1917;   /* dark ink over yellow */
+      --border:#232633;       /* subtle borders */
+      --ring:#fde04755;       /* focus ring */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+      --radius-sm:12px;
+      --radius-xs:10px;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans";
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --space: clamp(14px, 2vw, 22px);
+      --max: 1280px;
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.55; }
-    a { color: var(--brand); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { max-width: var(--max); margin: auto; padding: 0 var(--space); }
-    header {
-      position: sticky; top: 0; z-index: 30;
-      background: rgba(255,255,255,.9); backdrop-filter: saturate(1.2) blur(8px);
-      border-bottom: 1px solid #e2e8f0;
+    *{box-sizing:border-box} html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6}
+
+    /* Top bar */
+    .topbar{
+      position: sticky; top:0; z-index:40;
+      display:flex; align-items:center; gap:12px; justify-content:space-between;
+      padding:12px clamp(12px, 3vw, 24px);
+      background: linear-gradient(180deg, #121620cc, #0f1115cc);
+      backdrop-filter: saturate(1.1) blur(6px);
+      border-bottom:1px solid var(--border);
     }
-    .topbar { display: flex; align-items: center; gap: 16px; justify-content: space-between; padding: 12px 0; }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand .logo {
-      width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--brand), #67e8f9);
-      box-shadow: 0 4px 12px rgba(14,165,233,.35);
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{width:38px; height:38px; border-radius:10px; background: radial-gradient(circle at 30% 30%, #fff59e, #facc15 50%, #f59e0b 100%); box-shadow:0 6px 18px rgba(250, 204, 21, .3)}
+    .title{font-weight:800; letter-spacing:.2px}
+    .title small{display:block; color:var(--muted); font-weight:600; letter-spacing:.3px}
+
+    /* Shell: left index + right content */
+    .shell{
+      display:grid; grid-template-columns: 280px 1fr;
+      gap: clamp(16px,2.2vw,24px);
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(14px,2vw,22px);
     }
-    .brand h1 { font-size: 18px; margin: 0; font-weight: 700; letter-spacing: .2px; }
-    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 10px 14px; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff;
-      box-shadow: 0 1px 1px rgba(2,6,23,.04); font-weight: 600; color: var(--ink);
+    @media (max-width: 980px){ .shell{grid-template-columns: 1fr} .index{position:static; top:auto; max-height:none} }
+
+    /* Left index */
+    .index{
+      position: sticky; top: 14px;
+      background: linear-gradient(180deg, #181c27, #121620);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      height: fit-content;
     }
-    .btn.primary { background: var(--brand); border-color: var(--brand); color: white; }
-    .btn.ghost { background: transparent; }
-    .btn:focus { outline: 3px solid var(--ring); }
-    .hero { padding: 28px 0 14px; border-bottom: 1px solid #eef2f7; background: var(--bg); }
-    .hero h2 { margin: 0 0 6px; font-size: 28px; letter-spacing: .2px; }
-    .hero p { color: var(--muted); margin: 0; }
-    .grid { display: grid; gap: var(--space); }
-    @media (min-width: 1024px) { .grid.cols-2 { grid-template-columns: 320px 1fr; } }
-    .toc {
-      position: sticky; top: 82px; align-self: start;
-      border: 1px solid #e6eef6; border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow);
-      padding: 16px; max-height: calc(100vh - 120px); overflow: auto;
+    .idx-title{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800; letter-spacing:.2px; font-size:14px;
+      text-transform:uppercase; color:#fef08a;
+      border-bottom:1px dashed var(--border); padding:10px 8px 12px;
     }
-    .toc h3 { margin: 0 0 8px; font-size: 14px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
-    .toc nav a { display: block; padding: 8px 10px; border-radius: 10px; color: var(--muted); }
-    .toc nav a:hover { background: var(--bg-soft); color: var(--ink); }
-    .toc nav a.active { background: var(--brand); color: white; }
-    .toc nav .module { font-weight: 700; margin: 12px 0 6px; color: var(--ink); }
-    section { scroll-margin-top: 96px; }
-    .card {
-      border: 1px solid #e6eef6; border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow);
-      padding: 22px;
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      background: var(--accent); color: var(--accent-ink);
+      border-radius: 999px; padding: 6px 12px; font-weight:800; font-size:11px; letter-spacing:.3px;
     }
-    .card h3 { margin-top: 0; }
-    .kbd { font-family: var(--mono); font-size: .92em; background: var(--bg-soft); padding: 2px 6px; border-radius: 8px; border: 1px solid #e5e7eb; }
-    .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; border: 1px solid #e5e7eb; background: var(--bg-soft); font-size: 12px; color: var(--muted); }
-    .block { display: block; }
-    .two-col { display: grid; gap: 16px; }
-    @media (min-width: 860px) { .two-col { grid-template-columns: 1fr 1fr; } }
-    .kv { display: grid; gap: 6px; margin: 10px 0 0; }
-    .kv label { font-size: 12px; color: var(--muted); }
-    .kv .val { font-weight: 600; }
-    .callout {
-      border-left: 4px solid var(--brand); background: linear-gradient(0deg, #f0f9ff, #fff);
-      padding: 16px; border-radius: 12px; border: 1px dashed #cfeaff;
+    .idx-list{list-style:none; margin:10px 0 0; padding:0}
+    .idx-list a{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 10px; margin:4px 0;
+      border-radius:10px; text-decoration:none; color:var(--ink);
+      border:1px solid transparent;
     }
-    .qa { border-top: 1px dashed #e5e7eb; padding-top: 14px; margin-top: 12px; }
-    details { border: 1px solid #e6eef6; border-radius: 12px; padding: 14px 16px; background: #fff; margin-bottom: 12px; }
-    summary { cursor: pointer; font-weight: 700; padding: 8px 0; }
-    summary:focus { outline: 3px solid var(--ring); }
-    .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #ecfeff; color: #065f46; border: 1px solid #a7f3d0; }
-    .flex { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .list { margin: 8px 0 0; padding-left: 18px; }
-    .list li { margin: 4px 0; }
-    .divider { height: 1px; background: #eaeef5; margin: 16px 0; }
-    .muted { color: var(--muted); }
-    .small { font-size: 13px; }
-    .copy { float: right; font-size: 12px; }
-    .sticky-toolbar { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 10px; z-index: 40; }
-    .fab { border: none; border-radius: 16px; padding: 12px 14px; font-weight: 700; box-shadow: 0 10px 24px rgba(2,6,23,.12); cursor: pointer; }
-    .fab.primary { background: var(--brand); color: #fff; }
-    .fab.secondary { background: #fff; border: 1px solid #e5e7eb; }
-    code, pre { font-family: var(--mono); }
-    pre { white-space: pre-wrap; word-break: break-word; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; }
-    footer { margin: 48px 0 60px; color: var(--muted); }
-    .lesson-intro { font-style: italic; color: var(--brand-ink); margin-bottom: 16px; }
+    .idx-list a .dot{width:8px;height:8px;border-radius:999px;background:#3f3f46;flex:0 0 auto}
+    .idx-list a:hover{background:#0d1018;border-color:var(--border)}
+    .idx-list a.active{background:#1b2230;border-color:#303545}
+    .idx-list a.active .dot{background:var(--accent)}
+
+    /* Right content */
+    .content{min-height:65vh}
+    .section{
+      background: var(--panel);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(16px,1.8vw,22px);
+      margin-bottom: clamp(16px,1.8vw,22px);
+    }
+    .h1{font-size: clamp(22px, 2.6vw, 30px); font-weight: 800; letter-spacing:.2px; margin:0 0 4px}
+    .sub{color:var(--muted); margin:0 0 12px}
+
+    /* Q&A accordion */
+    details.qa{
+      border:1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow:hidden; margin:10px 0 14px; background:#121723;
+    }
+    details.qa summary{
+      list-style:none; cursor:pointer; position:relative; user-select:none;
+      padding:16px 48px 16px 16px; font-weight:700;
+      display:flex; align-items:center; gap:10px;
+    }
+    details.qa summary::-webkit-details-marker{display:none}
+    details.qa summary .q{
+      background:#0b101a; border:1px solid var(--border);
+      color:#fef3c7; font-family:var(--mono); font-size:12px; padding:4px 8px; border-radius:8px
+    }
+    details.qa[open] summary{background:#0f1522}
+    details.qa .answer{border-top:1px dashed var(--border); padding:14px 16px 18px; color:#e7e7ea}
+    .answer p{margin:0 0 10px} .answer ul{margin:0 0 10px 18px} .answer li{margin:6px 0}
+    .kbd{font-family:var(--mono); background:#0b101a;border:1px solid var(--border); padding:2px 6px; border-radius:6px}
+    .note{color:var(--muted); font-size:13px}
+    .rule{height:1px; background:var(--border); margin:10px 0 14px}
   </style>
 </head>
 <body>
-  <header>
-    <div class="container topbar">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <h1>HD HeeD • Phone Scripts “Super-Bible” Online Course</h1>
-      </div>
-      <div class="actions">
-        <a href="tel:0286305500" class="btn primary">Call 02&nbsp;8630&nbsp;5500</a>
-        <a href="mailto:info@hdheed.com.au" class="btn">info@hdheed.com.au</a>
-        <a href="/referral.html" class="btn ghost">Start referral</a>
+
+  <!-- ======= TOP BAR ======= -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div class="title">
+        HD HeeD — NDIS Intake Phone Bible
+        <small>Comprehensive Q&A • Dark Grey + Yellow</small>
       </div>
     </div>
   </header>
 
-  <div class="hero">
-    <div class="container">
-      <h2>Customer Call Mastery for NDIS Intake — Online Training Course</h2>
-      <p>This online course trains admin staff on handling NDIS phone calls with clear, professional, and empathetic responses. Each section is an audio lesson: click 'Play Audio Lesson' to hear the teaching narrative, scripts, and responses. Practice what to say and how to respond. Begin with the General Script, then explore scenarios.</p>
+  <!-- ======= PART 1 LAYOUT (keeps body/html open for Parts 2–10) ======= -->
+  <section id="part-1" class="shell" aria-label="NDIS Intake Q&A — Part 1">
+
+    <!-- Left Index (identical across all parts; anchor targets for parts 1–10) -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a class="active" href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a href="#part-8"><span class="dot"></span>Part 8 · Objections & Model Responses</a></li>
+        <li><a href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+      <div class="section">
+        <span class="chip">Part 1</span>
+        <h2 class="h1">General Guidelines & Standard Participant Inquiry</h2>
+        <p class="sub">Use these model answers during first-contact calls with participants. Keep tone warm, clear, and person-centred.</p>
+        <div class="rule"></div>
+
+        <!-- Universal Standards -->
+        <details class="qa" open>
+          <summary><span class="q">Prompt</span> Universal Standards for NDIS Intake Calls</summary>
+          <div class="answer">
+            <ul>
+              <li><b>Empathy & Listening:</b> greet, introduce, and let the caller finish before responding.</li>
+              <li><b>Clarity:</b> avoid jargon; explain essentials (service agreement, plan mgmt) in plain English.</li>
+              <li><b>Person-centred:</b> ask open questions to map goals, routines, and preferences.</li>
+              <li><b>Key data:</b> caller/participant details, plan status & management, suburb, supports sought, urgency.</li>
+              <li><b>Close:</b> confirm next steps, timeframes, and preferred contact method.</li>
+            </ul>
+            <p class="note">This framing underpins all Q&As below.</p>
+          </div>
+        </details>
+
+        <!-- Common Questions & Answers — Standard Inquiry -->
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> What services do you provide under NDIS?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Personal care, domestic assistance, community participation, and RN-led nursing for disability-related health needs. We tailor supports to your goals after a brief assessment and plan together.</p>
+          </div>
+        </details>
+
+        <details class="qa" open>
+          <summary><span class="q">Q2</span> Are you a registered NDIS provider?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes—fully NDIS Registered. If you’re Agency-managed we claim via service bookings; Plan-managed we invoice your plan manager; Self-managed we invoice you to claim back.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> How much experience do you have? How do I know I can trust your service?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We’ve supported a wide range of needs for years, maintain NDIS registration through external audits, and operate with clinical oversight. We prioritise reliable rosters, fast communication, and transparent pricing.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> Who are your staff? Are they qualified?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Workers are screened (Police/WWCC), trained (manual handling, meds, hoists/AT), and receive ongoing education. We match workers to your preferences (language, gender), with RN oversight for health tasks.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> What areas do you service?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Greater Sydney, prioritising Blacktown/Western Sydney. Share your suburb and preferred times and we’ll confirm capacity. If outside area, we’ll recommend suitable local providers.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q6</span> How soon can you start?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> After today’s call we book your assessment and draft a Service Agreement. Starts are often within a few days (subject to roster fit/your schedule). If urgent (e.g., hospital discharge), we’ll prioritise.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q7</span> What’s the process to get started?</summary>
+          <div class="answer">
+            <ul>
+              <li><b>Assessment</b> (phone or in-person) to map goals/routines.</li>
+              <li><b>Service Agreement</b> (plain-English terms, price-guide rates, notice period).</li>
+              <li><b>Worker matching</b> + intros if you want.</li>
+              <li><b>Commencement</b> + early check-ins to optimise schedule.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q8</span> Do I have to sign a Service Agreement?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> It’s best practice and protects your choice & control—sets supports, rates, cancellations, and how to change/exit (commonly 14-day notice). We review it together and keep it simple.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q9</span> How are services billed and paid?</summary>
+          <div class="answer">
+            <ul>
+              <li><b>Agency-managed:</b> we claim via the NDIS portal with a service booking.</li>
+              <li><b>Plan-managed:</b> we invoice your plan manager.</li>
+              <li><b>Self-managed:</b> we invoice you; you claim from NDIS.</li>
+            </ul>
+            <p class="note">No hidden sign-up/admin fees; we follow NDIS Pricing Arrangements.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q10</span> Do you charge travel or extra fees?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Only as permitted by NDIS (e.g., travel time/distance caps). Any such items are quoted upfront in the Service Agreement—no surprises.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q11</span> What is your cancellation policy?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We align with NDIS cancellation rules (7 clear days) unless our agreement is more flexible. Tell us ASAP; we try to avoid charges where possible.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q12</span> Can I stop or switch providers later?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes—NDIS is about choice and control. Provide the notice period in the agreement (commonly 14 days). We’ll support a smooth handover if you request it.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q13</span> Why should I choose your service?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> RN-led, person-centred care, reliable rosters, fast communication, transparent pricing, and consistent workers—professional systems with a family-run heart.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q14</span> What are the next steps if I want to proceed?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Let’s book your assessment (e.g., <span class="kbd">Thu 10:00</span>). We’ll email a summary + draft Service Agreement today and start worker matching. You can reply to the email/SMS or call anytime.</p>
+          </div>
+        </details>
+
+      </div>
     </div>
-  </div>
+  </section>
 
-  <main class="container" style="padding: var(--space) 0;">
-    <div class="grid cols-2">
-      <!-- TOC -->
-      <aside class="toc">
-        <h3>On this Course</h3>
-        <nav>
-          <a href="#universal">Universal Standards</a>
-          <a href="#general-script">General Intake Script</a>
-          <a href="#call-structure">Call Structure</a>
-          <a href="#data-capture">Data Capture Checklist</a>
-          <a href="#consent">Consent & Privacy Lines</a>
-          <a href="#triage">Triage & Safeguarding</a>
-          <a href="#faqs">FAQs & Perfect Answers</a>
-          <div class="divider"></div>
-          <a href="#scenarios">Scenarios</a>
-          <a href="#support-coordinator">Support Coordinator Referral</a>
-          <a href="#family-carer">Family / Carer Calling</a>
-          <a href="#participant-self">Participant — Self</a>
-          <a href="#complex-needs">Complex Needs / Behaviours</a>
-          <a href="#hospital-discharge">Hospital Discharge</a>
-          <a href="#nursing-only">Nursing-Only Request</a>
-          <a href="#disengaged">Disengaged / Returning</a>
-          <a href="#provider-transition">Transition from Provider</a>
-          <a href="#plan-review">Plan Review Coming Up</a>
-          <a href="#aged-care">Aged Care Crossover</a>
-          <a href="#paediatrics">Paediatrics</a>
-          <a href="#crisis">Crisis or Immediate Risk</a>
-          <a href="#interpreter">Interpreter / CALD</a>
-          <div class="divider"></div>
-          <a href="#objections">Objections & Model Responses</a>
-          <a href="#follow-ups">Follow-ups (SMS/Email)</a>
-          <a href="#documentation">Documentation Templates</a>
-          <a href="#quality">Quality & KPIs</a>
-        </nav>
-      </aside>
-
-      <!-- CONTENT COLUMN -->
-      <div class="content" style="display:grid;gap:var(--space)">
-                <!-- 1. UNIVERSAL -->
-        <section id="universal" class="card">
-          <h3>Universal Standards (use on every call)</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Universal Standards. This elaborative lesson will teach you the standards to apply on every call, including tone, speed, structure, compliance, and empathy. Listen to the guidelines, golden lines, and practice mirroring the language to build rapport with callers.</p>
-          <button class="btn primary" onclick="playLesson('universal')">Play Audio Lesson</button>
-          <div class="two-col">
-            <div>
-              <ul class="list">
-                <li><span class="pill">Tone</span> Warm, unhurried, person-centred. Avoid jargon unless the caller uses it. Mirror their language gently.</li>
-                <li><span class="pill">Speed</span> 140–160 wpm. Pause to check understanding.</li>
-                <li><span class="pill">Structure</span> Greet → Purpose → Permission → Discovery → Offer → Next steps → Confirm.</li>
-                <li><span class="pill">Compliance</span> Privacy, consent, and accurate notes every time (NDIS-aligned). <span class="small muted">If in doubt, capture & escalate.</span></li>
-                <li><span class="pill">Empathy</span> Validate feelings; acknowledge effort; focus on goals and outcomes.</li>
-              </ul>
-            </div>
-            <div class="callout">
-              <b>Golden line:</b> “Thanks for calling HD HeeD — how can we make things easier for you today?”<br/>
-              <div class="kv">
-                <label>Availability cues</label>
-                <div class="val">“I’m here with you.” • “Take your time.” • “I’ll summarise back to make sure I’ve got it right.”</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- 2. GENERAL SCRIPT -->
-        <section id="general-script" class="card">
-          <h3>General Intake Script (default)</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on the General Intake Script. This lesson will teach you the default script for most inbound calls, including greeting, consent, discovery, and closing. Listen to the phrasing and practice delivering it unhurriedly to guide the caller effectively.</p>
-          <button class="btn primary" onclick="playLesson('general-script')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Use for most inbound calls</span>
-            <button class="btn small copy" onclick="copyBlock('gen-script')">Copy</button>
-          </div>
-<pre id="gen-script"><code>👋 “Good &lt;time-of-day&gt;, you’ve reached HD HeeD, this is &lt;name&gt;. How can I help today?”
-🔐 “Before we begin, is it okay if I take a few details so we can support you properly?”
-🧭 “What would you like help with right now?” (Listen. Reflect back a short summary.)
-✅ “We can help with &lt;service&gt;. We’re NDIS registered and clinically led. The next step is to understand your goals and supports, then line up the right team.”
-🧾 “Can I grab your full name, best contact, suburb, and NDIS number (if handy)?”
-🧩 Discovery (see Data Capture). Check safety, timeframes, preferences.
-📌 “Here’s what I can do for you today: &lt;action&gt;. We can start &lt;when&gt;.”
-🗓 “Would you like me to email or text a summary with next steps?”
-🤝 “Thanks for calling — you’re in good hands. Anything else I can answer?”
-</code></pre>
-        </section>
-
-        <!-- 3. CALL STRUCTURE -->
-        <section id="call-structure" class="card">
-          <h3>Call Structure — checkpoints</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Call Structure. This lesson will teach you the checkpoints for organized calls, including opening, discovery, match, commit, and close. Listen to the escalation windows and practice structuring your calls to ensure smooth flow and compliance.</p>
-          <button class="btn primary" onclick="playLesson('call-structure')">Play Audio Lesson</button>
-          <div class="two-col">
-            <div>
-              <ol class="list">
-                <li><b>Opening & permission</b> — who, why, consent to take notes.</li>
-                <li><b>Discovery</b> — goals, current supports, risks, preferences, timeframes.</li>
-                <li><b>Match</b> — what we can do; realistic start dates; expectations.</li>
-                <li><b>Commit</b> — referrals, documentation, consent, next steps.</li>
-                <li><b>Close</b> — confirm details, recap, how to reach us.</li>
-              </ol>
-            </div>
-            <div>
-              <div class="kv"><label>Escalation windows</label><div class="val">Immediate risk • Clinical complexity • Safeguarding concerns</div></div>
-              <div class="kv"><label>Response time guide</label><div class="val">Urgent same-day • Standard 1–2 business days • Non-urgent 3–5 days</div></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- 4. DATA CAPTURE -->
-        <section id="data-capture" class="card">
-          <h3>Data Capture Checklist</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Data Capture Checklist. This lesson will teach you the essential details to capture during calls, including participant info, NDIS details, goals, and risks. Listen to the checklist and practice confirming spellings and repeating numbers for accuracy.</p>
-          <button class="btn primary" onclick="playLesson('data-capture')">Play Audio Lesson</button>
-          <div class="two-col">
-            <div>
-              <ul class="list">
-                <li>Participant legal name; preferred name; DOB; pronouns (optional).</li>
-                <li>Best phone & email; <span class="muted">OK to SMS?</span></li>
-                <li>Suburb & postcode; living situation; access constraints at home.</li>
-                <li>NDIS number; plan dates; plan manager (or self/agency managed); budget category(s) & capacity.</li>
-                <li>Primary goals; priorities; days/times preferred; cultural or language needs; interpreter required.</li>
-                <li>Existing supports; current provider(s); reason for change if transitioning.</li>
-                <li>Risks/alerts (falls, behaviours, pressure injuries, seizures, allergies); equipment/AT.</li>
-                <li>Referrer details (SC, family, hospital); consent to share updates.</li>
-              </ul>
-            </div>
-            <div>
-<textarea style="width:100%;height:220px;border:1px solid #e6eef6;border-radius:12px;padding:12px" placeholder="Quick-note pad (copyable into your CRM)&#10;• Name / DOB / Pronouns&#10;• Contact / OK to SMS&#10;• Suburb / Living&#10;• NDIS # / Plan dates / Mgmt / Budgets&#10;• Goals / Prefs&#10;• Supports / Providers&#10;• Risks / AT&#10;• Referrer / Consent"></textarea>
-              <p class="small muted">Tip: confirm spelling aloud for names/suburbs; repeat NDIS number in pairs.</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 5. CONSENT -->
-        <section id="consent" class="card">
-          <h3>Consent & Privacy Lines</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Consent & Privacy Lines. This lesson will teach you how to obtain and record consent using friendly phrasing. Listen to the lines for different situations and practice explaining privacy to build trust.</p>
-          <button class="btn primary" onclick="playLesson('consent')">Play Audio Lesson</button>
-          <p class="muted small">Use matter-of-fact, friendly phrasing. Obtain consent before collecting or sharing personal info.</p>
-          <details>
-            <summary>Collecting details (participant on the line)</summary>
-            <div class="qa">
-              <b>Line:</b> “I’ll note your details to arrange supports. We keep your information private and use it only for care. Is that okay to proceed?”
-            </div>
-          </details>
-          <details>
-            <summary>Third party (family/SC) — verbal consent</summary>
-            <div class="qa">
-              <b>Line:</b> “Do we have &lt;participant’s name&gt; on the line to confirm they’re happy for you to speak on their behalf? If not, I can take general info now and organise a quick consent call or consent form.”
-            </div>
-          </details>
-          <details>
-            <summary>Sharing updates with referrers</summary>
-            <div class="qa">
-              <b>Line:</b> “Would you like us to share progress updates with &lt;name&gt;? We’ll only share what’s needed to coordinate your supports.”
-            </div>
-          </details>
-          <details>
-            <summary>Recording consent in notes</summary>
-            <div class="qa">
-              • Verbal consent: Y/N, who gave it, date/time<br/>
-              • Scope: intake only / ongoing updates / full coordination<br/>
-              • Review/expiry date for consent
-            </div>
-          </details>
-        </section>
-
-        <!-- 6. TRIAGE -->
-        <section id="triage" class="card">
-          <h3>Triage & Safeguarding</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Triage & Safeguarding. This lesson will teach you how to screen for immediate risks and escalate appropriately. Listen to the urgent cue and practice staying calm while recording details.</p>
-          <button class="btn primary" onclick="playLesson('triage')">Play Audio Lesson</button>
-          <div class="two-col">
-            <div>
-              <ul class="list">
-                <li>Check for immediate risks (harm, medical crisis, lack of essential care).</li>
-                <li>If urgent: stay on the line, call 000 or relevant crisis line; escalate internally (clinical lead).</li>
-                <li>Record exact statements, time, and actions taken.</li>
-              </ul>
-            </div>
-            <div class="callout">
-              <b>Urgent cue:</b> “Are you or anyone with you in immediate danger, or without essential care today?”<br/>
-              <span class="small muted">If yes → follow emergency pathway, then document and notify clinical lead.</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- 7. FAQs — FULL -->
-        <section id="faqs" class="card">
-          <h3>FAQs — Perfect Answers (Full Set)</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on FAQs — Perfect Answers. This lesson will teach you how to respond to common questions with confidence and clarity. Listen to each question and perfect answer, and practice delivering them professionally to reassure callers.</p>
-          <button class="btn primary" onclick="playLesson('faqs')">Play Audio Lesson</button>
-          <details open>
-            <summary>Are you NDIS registered and what services do you offer?</summary>
-            <div class="qa">
-              Yes — HD HeeD is an NDIS registered provider. We support daily personal activities, domestic assistance, community participation, skill building, in-home respite, and clinically led nursing care at home. Share your goals and suburb; I’ll confirm what we can start and when.
-            </div>
-          </details>
-
-          <details>
-            <summary>How soon can services start?</summary>
-            <div class="qa">
-              Standard supports often begin within days once we confirm details and the Service Agreement. Complex/nursing supports may require a brief clinician review first. I’ll give you the earliest realistic start window now and watch for any earlier openings.
-            </div>
-          </details>
-
-          <details>
-            <summary>How do payments work for NDIA-managed, plan-managed, and self-managed?</summary>
-            <div class="qa">
-              • <b>NDIA-managed</b>: we create a service booking and claim directly — no out-of-pocket.<br/>
-              • <b>Plan-managed</b>: we invoice your Plan Manager.<br/>
-              • <b>Self-managed</b>: we invoice you; you then claim from the NDIS portal. Our rates follow the NDIS Pricing Arrangements.
-            </div>
-          </details>
-
-          <details>
-            <summary>What about travel, public holidays, or short-notice cancellations?</summary>
-            <div class="qa">
-              We follow NDIS rules. Any allowable travel or public holiday loadings are listed upfront in your Service Agreement. We aim to reschedule where possible to avoid cancellation fees.
-            </div>
-          </details>
-
-          <details>
-            <summary>Will I get the same worker each time?</summary>
-            <div class="qa">
-              We prioritise continuity and build a small, consistent team. We’ll also set a backup so there’s coverage for leave or illness, with advance notice whenever possible.
-            </div>
-          </details>
-
-          <details>
-            <summary>Can I choose worker gender, language, or cultural background?</summary>
-            <div class="qa">
-              We’ll do our best to match your preferences while keeping safety and quality front-of-mind. Tell me what matters to you and I’ll note it for rostering.
-            </div>
-          </details>
-
-          <details>
-            <summary>Do you talk to my Support Coordinator or Plan Manager?</summary>
-            <div class="qa">
-              Yes — with your consent we coordinate with your Support Coordinator and Plan Manager so invoicing and service bookings are smooth and aligned to your goals.
-            </div>
-          </details>
-
-          <details>
-            <summary>I don’t know my NDIS number — can we still proceed?</summary>
-            <div class="qa">
-              Absolutely. We can start with your contact details and suburb. Your NDIS number helps link your plan later — we can confirm it with you or your SC/PM.
-            </div>
-          </details>
-
-          <details>
-            <summary>Can you help with reports for a plan review?</summary>
-            <div class="qa">
-              Yes. We can summarise supports delivered, progress toward goals, and any unmet needs, and provide notes for your review meeting — with your consent.
-            </div>
-          </details>
-
-          <details>
-            <summary>What happens in an emergency or after hours?</summary>
-            <div class="qa">
-              If there’s danger or a medical emergency, call <b>000</b>. For urgent non-emergencies, we follow our escalation pathway and place priority notes for the on-call/next business day team. We’ll agree on your preferred contact method during intake.
-            </div>
-          </details>
-        </section>
-                <!-- 8. SCENARIOS — INTRO -->
-        <section id="scenarios" class="card">
-          <h3>Scenarios (overview)</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Scenarios. This lesson will teach you how to adapt the general script to different caller scenarios. Listen to the overview and practice jumping to relevant sections based on the caller's needs.</p>
-          <button class="btn primary" onclick="playLesson('scenarios')">Play Audio Lesson</button>
-          <div class="two-col">
-            <div>
-              <ul class="list">
-                <li><a href="#support-coordinator">Support Coordinator referral</a></li>
-                <li><a href="#family-carer">Family / Carer calling</a></li>
-                <li><a href="#participant-self">Participant — Self</a></li>
-                <li><a href="#complex-needs">Complex needs / behaviours</a></li>
-                <li><a href="#hospital-discharge">Hospital discharge</a></li>
-                <li><a href="#nursing-only">Nursing-only request</a></li>
-              </ul>
-            </div>
-            <div>
-              <ul class="list">
-                <li><a href="#disengaged">Disengaged / returning client</a></li>
-                <li><a href="#provider-transition">Transitioning from another provider</a></li>
-                <li><a href="#plan-review">Plan review approaching</a></li>
-                <li><a href="#aged-care">Aged care crossover</a></li>
-                <li><a href="#paediatrics">Paediatrics</a></li>
-                <li><a href="#crisis">Crisis / immediate risk</a> • <a href="#interpreter">Interpreter/CALD</a></li>
-              </ul>
-            </div>
-          </div>
-          <p class="small muted">Tip: Start with the <a href="#general-script">General Intake Script</a>, then jump to the relevant scenario and use the exact lines provided.</p>
-        </section>
-
-        <!-- 9. SUPPORT COORDINATOR REFERRAL -->
-        <section id="support-coordinator" class="card">
-          <h3>Support Coordinator Referral</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Support Coordinator Referral. This lesson will teach you how to handle referrals from support coordinators, including capturing details and providing quotes. Listen to the script and practice prioritizing clinician reviews for quick starts.</p>
-          <button class="btn primary" onclick="playLesson('support-coordinator')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Caller is SC / professional</span>
-            <button class="btn small copy" onclick="copyBlock('sc-script')">Copy</button>
-          </div>
-<pre id="sc-script"><code>👋 “Hi, thanks for calling HD HeeD — &lt;name&gt; here. Are you referring a participant today?”
-🔐 “With the participant’s consent, I’ll note details to progress intake quickly.”
-🧾 “Participant full name, DOB, NDIS number, management type, plan dates, and current budget capacity?”
-🎯 “Top goals/priorities right now? Any risks/behaviours/alerts?”
-📍 “Suburb and preferred schedule? Worker preferences (gender/language/culture)?”
-📨 “Please email referral notes and risk info to info@hdheed.com.au. With the participant’s consent, we’ll keep you updated.”
-📌 “Earliest start for &lt;service&gt; in &lt;suburb&gt; is &lt;window&gt;. If clinician review is needed, I’ll prioritise that and confirm today.”</code></pre>
-
-          <div class="qa"><b>Perfect answer — “Can you start this week?”</b><br/>
-          “I’ll check local capacity now and hold the first suitable slot. If a clinical sign-off is required, I’ll fast-track it and confirm a realistic start time today.”</div>
-
-          <details>
-            <summary>Quick quote & line items (what to say)</summary>
-            <div class="qa">
-              “We follow NDIS Pricing Arrangements. I can send a quote aligned to plan dates and weekly hours, including any allowable travel. Once accepted, we’ll lock in the schedule and service booking where applicable.”
-            </div>
-          </details>
-        </section>
-
-        <!-- 10. FAMILY / CARER CALLING -->
-        <section id="family-carer" class="card">
-          <h3>Family / Carer Calling</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Family / Carer Calling. This lesson will teach you how to handle calls from family or carers, including consent and safety checks. Listen to the script and practice validating concerns to build trust.</p>
-          <button class="btn primary" onclick="playLesson('family-carer')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Third-party caller</span>
-            <button class="btn small copy" onclick="copyBlock('family-script')">Copy</button>
-          </div>
-<pre id="family-script"><code>👋 “Hi, you’ve reached HD HeeD — &lt;name&gt; speaking. Who am I chatting with today?”
-🔐 “Is &lt;participant&gt; with you and happy for you to speak on their behalf? If not, I can take general info and arrange a quick consent call.”
-🧭 “What support are you hoping to arrange? What feels most urgent?”
-🧾 “May I take &lt;participant&gt;’s name, DOB, contact, suburb, and NDIS number (if handy) — and your details and relationship?”
-🛟 “Any safety concerns today? Any alerts (behaviours, allergies, falls, seizures)? Any equipment/AT at home?”
-📌 “Here’s what we can do now: &lt;action&gt; and next steps. With &lt;participant&gt;’s consent we’ll keep you updated. I’ll send a summary today.”</code></pre>
-
-          <div class="qa"><b>Perfect answer — “We’ve had a bad experience before.”</b><br/>
-          “I’m sorry that happened. We’ll match carefully, do a meet-and-greet, and check in after the first shift. You’ll have a direct contact if anything feels off.”</div>
-
-          <details>
-            <summary>Boundaries & consent — how we include family</summary>
-            <div class="qa">
-              “We involve family as much as the participant wants. We’ll record consent scope (updates, rostering, coordination) and stick to that.”
-            </div>
-          </details>
-        </section>
-
-        <!-- 11. PARTICIPANT — SELF -->
-        <section id="participant-self" class="card">
-          <h3>Participant — Self</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Participant — Self. This lesson will teach you how to handle self-referrals, including validating needs and building confidence. Listen to the script and practice reflecting back to show understanding.</p>
-          <button class="btn primary" onclick="playLesson('participant-self')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Inbound self-referral</span>
-            <button class="btn small copy" onclick="copyBlock('self-script')">Copy</button>
-          </div>
-<pre id="self-script"><code>👋 “Hi, you’re speaking with &lt;name&gt; at HD HeeD. How can we help today?”
-🧭 “What would you like support with right now?” (Listen. Reflect and validate.)
-🧾 “Can I take a few details to get things moving? Name, best contact, suburb, and NDIS number if you have it.”
-🎯 “Top priorities and times that suit you? Any preferences for your worker match?”
-🛟 “Any immediate risks or care gaps today?”
-📌 “We can help with &lt;service&gt;. Realistically we can start &lt;window&gt;. I’ll lock in next steps and send you a summary by SMS or email.”</code></pre>
-
-          <div class="qa"><b>Perfect answer — “What will it cost me?”</b><br/>
-          “Your NDIS plan funds the support if it aligns with your goals and budgets. We’ll confirm the correct line items and rates before we start so there are no surprises.”</div>
-
-          <details>
-            <summary>Building confidence for first visits</summary>
-            <div class="qa">
-              “We can arrange a meet-and-greet, keep the same worker for continuity, and agree on a simple plan for the first two weeks with an early check-in.”
-            </div>
-          </details>
-        </section>
-
-        <!-- 12. COMPLEX NEEDS / BEHAVIOURS -->
-        <section id="complex-needs" class="card">
-          <h3>Complex Needs / Behaviours of Concern</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Complex Needs / Behaviours of Concern. This lesson will teach you how to handle calls involving complex needs, including outlining behaviours and escalating to clinical leads. Listen to the script and practice noting triggers and safety plans carefully.</p>
-          <button class="btn primary" onclick="playLesson('complex-needs')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Escalate to clinical if needed</span>
-            <button class="btn small copy" onclick="copyBlock('complex-script')">Copy</button>
-          </div>
-<pre id="complex-script"><code>👋 “Thanks for sharing — I’ll take this carefully.”
-🧠 “Could you outline any behaviours of concern, known triggers, positive strategies that work, and any safety plans?”
-🔐 “Are any restrictive practices in place or proposed? Do you have a current Behaviour Support Plan we should review?”
-🏥 “Health conditions, medications, allergies, seizure/falls history?”
-🏠 “Home environment and equipment/AT? Who else is involved day-to-day?”
-📌 “We’ll involve our clinical lead, match workers with the right experience, and confirm a realistic start date after that step.”</code></pre>
-
-          <div class="qa"><b>Perfect answer — “Have you handled a case like this?”</b><br/>
-          “Yes — we outline a similar pathway (no identifiers), the team composition, and training. If anything is new, we obtain training and clinical guidance before starting.”</div>
-
-          <details>
-            <summary>Staff competency & emergency response (what to say)</summary>
-            <div class="qa">
-              “We complete an RN assessment, a written care plan, worker training with buddy shifts, and set clear escalation steps including when to call 000. Incidents are reviewed and improvements are fed back quickly.”
-            </div>
-          </details>
-
-          <details>
-            <summary>24/7 or 2-person support</summary>
-            <div class="qa">
-              “We build a small, consistent roster with trained relief and use fatigue-aware scheduling. You’ll know everyone on the team.”
-            </div>
-          </details>
-
-          <details>
-            <summary>Consent & safeguarding lines</summary>
-            <div class="qa">
-              “We’ll only share information with people you choose. If there’s a safety concern, we act quickly and document exactly what happened and what we did.”
-            </div>
-          </details>
-        </section>
-
-        <!-- 13. HOSPITAL DISCHARGE / POST-ACUTE -->
-        <section id="hospital-discharge" class="card">
-          <h3>Hospital Discharge</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Hospital Discharge. This lesson will teach you how to coordinate time-sensitive discharges, including gathering summaries and planning supports. Listen to the script and practice prioritizing day-one safety for smooth transitions.</p>
-          <button class="btn primary" onclick="playLesson('hospital-discharge')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Time-sensitive coordination</span>
-            <button class="btn small copy" onclick="copyBlock('hospital-script')">Copy</button>
-          </div>
-<pre id="hospital-script"><code>🏥 “Let’s line everything up so home feels safe on day one.”
-📅 “What’s the expected discharge date/time and ward contact?”
-📄 “Can we receive the discharge summary, allied health recommendations, and any risk alerts?”
-🏠 “Home setup: access, bed/bath layout, equipment/AT status, and the support hours needed in the first 72 hours.”
-🧑‍⚕️ “If a clinician review is needed, I’ll prioritise it and hold immediate slots around discharge.”</code></pre>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Perfect answers (common objections)</h4>
-              <details open><summary>“Can you start within 48 hours?”</summary><div class="qa">
-                “We’ll prioritise your case. If helpful, we can connect with the ward pre-discharge for a direct handover and schedule day-one supports. I’ll confirm exact times today.”
-              </div></details>
-              <details><summary>“AT/home modifications aren’t ready.”</summary><div class="qa">
-                “We’ll implement safe interim strategies (extra staffing/alternate techniques) and coordinate with OT/supplier on delivery dates.”
-              </div></details>
-              <details><summary>“We’ll ramp down after week one.”</summary><div class="qa">
-                “Great — we’ll document an initial higher-support period and a taper plan as recovery progresses.”
-              </div></details>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Day 0–7 checklist</h4>
-              <ul class="list">
-                <li>RN assessment within 24–48h; vitals & wound check if applicable.</li>
-                <li>Medication chart set-up; explain red-flag symptoms & who to call.</li>
-                <li>Home safety walk-through; emergency numbers visible.</li>
-                <li>Follow-up visits booked; GP review coordinated if advised.</li>
-              </ul>
-            </div>
-          </div>
-        </section
-                  <!-- 14. NURSING-ONLY REQUEST -->
-        <section id="nursing-only" class="card">
-          <h3>Nursing-Only Request</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Nursing-Only Request. This lesson will teach you how to handle nursing-specific requests, including clinical tasks and billing. Listen to the script and practice booking RN assessments for appropriate care.</p>
-          <button class="btn primary" onclick="playLesson('nursing-only')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Clinically led</span>
-            <button class="btn small copy" onclick="copyBlock('nursing-script')">Copy</button>
-          </div>
-<pre id="nursing-script"><code>🩺 “You’re after nursing support — noted. What’s the primary clinical task or goal?”
-🧾 “Diagnosis/conditions; current meds; GP/specialist; any recent changes or discharge?”
-🩹 “Any wound care, injections, PEG/catheter care, monitoring, or carer training needed?”
-📅 “Frequency and preferred days/times; any access notes at the home?”
-📌 “I’ll book an RN assessment if appropriate and confirm the earliest visit today.”</code></pre>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Nursing FAQs</h4>
-              <details open><summary>RN vs EN and competencies</summary><div class="qa">
-                “We deploy RNs for community visits; ENs may support under RN supervision. We ensure task-specific competencies and liaise with your GP/specialists.”
-              </div></details>
-              <details><summary>Billing & line items</summary><div class="qa">
-                “We use the appropriate NDIS community nursing line items. Rates follow the Pricing Arrangements; I can send a clear quote and plan-aligned schedule.”
-              </div></details>
-              <details><summary>Training caregivers</summary><div class="qa">
-                “Where appropriate, our RN can train family/support workers with written instructions and supervision boundaries.”
-              </div></details>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Short dialogue</h4>
-<pre><code>Caller: Need wound dressings 3× weekly for 2 weeks.
-Staff: I’ll book an RN for tomorrow, confirm supplies, and align with your GP plan. We’ll taper as healing progresses.</code></pre>
-            </div>
-          </div>
-        </section>
-
-        <!-- 15. DISENGAGED / RETURNING CLIENT -->
-        <section id="disengaged" class="card">
-          <h3>Disengaged / Returning Client</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Disengaged / Returning Client. This lesson will teach you how to re-engage clients, addressing past issues and starting small. Listen to the script and practice empathizing with previous experiences.</p>
-          <button class="btn primary" onclick="playLesson('disengaged')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Re-engagement focus</span>
-            <button class="btn small copy" onclick="copyBlock('disengaged-script')">Copy</button>
-          </div>
-<pre id="disengaged-script"><code>👋 “Welcome back — thank you for reaching out again.”
-🔍 “What made supports hard before? What would make it easier this time?”
-🧾 “Can I confirm your details (contact, plan, goals) and any changes since last time?”
-🗓 “Let’s start small — a short trial schedule and a check-in after week one.”
-📌 “We’ll write down what matters to you so every worker sees it, and you won’t have to repeat yourself.”</code></pre>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Perfect answers — common concerns</h4>
-              <details open><summary>“I felt unheard.”</summary>
-                <div class="qa">“I’m sorry — I’ll summarise your priorities now and share them with the team. We’ll check in early to confirm we’re on track.”</div>
-              </details>
-              <details><summary>“Staff kept changing.”</summary>
-                <div class="qa">“We’ll match a primary worker and a small backup for coverage. Any change will be discussed first where possible.”</div>
-              </details>
-              <details><summary>“Too much admin.”</summary>
-                <div class="qa">“We’ll streamline: one point of contact, simple scheduling, and plain-English updates.”</div>
-              </details>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Re-engagement checklist</h4>
-              <ul class="list">
-                <li>Confirm preferred contact & OK to SMS.</li>
-                <li>Capture “must-haves” and “no-gos”.</li>
-                <li>Offer meet-and-greet before first shift.</li>
-                <li>Book a 7-day pulse check & document outcomes.</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- 16. TRANSITIONING FROM ANOTHER PROVIDER -->
-        <section id="provider-transition" class="card">
-          <h3>Transitioning from Another Provider</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Transitioning from Another Provider. This lesson will teach you how to ensure smooth changeovers, including handover notes and no gaps in support. Listen to the script and practice proposing transition plans.</p>
-          <button class="btn primary" onclick="playLesson('provider-transition')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Continuity of care</span>
-            <button class="btn small copy" onclick="copyBlock('transition-script')">Copy</button>
-          </div>
-<pre id="transition-script"><code>👋 “We’ll make the changeover smooth.”
-🧾 “Which provider, which services/hours, and why the change?”
-🔐 “With your consent, we’ll request relevant handover notes and confirm budgets with your Plan Manager.”
-🗓 “Desired start date and any ‘must-have’ preferences for workers?”
-📌 “We’ll propose a clear transition plan and time our first shift so there’s no gap in support.”</code></pre>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Perfect answers — objections</h4>
-              <details open><summary>“I’m worried about gaps.”</summary>
-                <div class="qa">“We’ll overlap planning and schedule our first shift as your current provider finishes, so there’s no gap in care.”</div>
-              </details>
-              <details><summary>“What about notice periods?”</summary>
-                <div class="qa">“We’ll help draft the notice and coordinate portal service bookings so your funds free up at the right time.”</div>
-              </details>
-              <details><summary>“Can you keep my routines?”</summary>
-                <div class="qa">“Yes — we’ll retain what works and change what doesn’t. We’ll note your routines in the care plan and brief every worker.”</div>
-              </details>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Transition checklist</h4>
-              <ul class="list">
-                <li>Consent recorded to request handover info.</li>
-                <li>Budget & plan dates verified with PM/portal.</li>
-                <li>Routines & risk alerts captured verbatim.</li>
-                <li>First-week roster issued with backup worker identified.</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- 17. PLAN REVIEW APPROACHING -->
-        <section id="plan-review" class="card">
-          <h3>Plan Review Approaching</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Plan Review Approaching. This lesson will teach you how to prepare for plan reviews, including summarizing progress and proposing supports. Listen to the script and practice coordinating with support coordinators.</p>
-          <button class="btn primary" onclick="playLesson('plan-review')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Preparation & evidence</span>
-            <button class="btn small copy" onclick="copyBlock('planreview-script')">Copy</button>
-          </div>
-<pre id="planreview-script"><code>📅 “When is your plan review or reassessment?”
-🎯 “Which outcomes matter most to show?” “Any reports needed from providers?”
-🧾 “We’ll summarise progress against your goals, note any unmet needs, and propose supports going forward.”
-🤝 “With your consent, we can coordinate with your Support Coordinator/Plan Manager so everything lands on time.”</code></pre>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Perfect answers — tricky questions</h4>
-              <details open><summary>“Will you attend my meeting?”</summary>
-                <div class="qa">“We can provide notes and be available if invited — whatever best supports you. You lead; we support.”</div>
-              </details>
-              <details><summary>“I underspent this year.”</summary>
-                <div class="qa">“We can explain reasons (supply, illness, mismatched supports) and justify ongoing need with schedules, outcomes, and notes.”</div>
-              </details>
-              <details><summary>“Can you recommend future hours?”</summary>
-                <div class="qa">“We’ll map goals to hours with clear rationales (safety, independence, community participation) and align to plan dates.”</div>
-              </details>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Evidence pack — what we prepare</h4>
-              <ul class="list">
-                <li>Support summary: frequency, duration, goals addressed.</li>
-                <li>Outcomes & examples (plain English; measurable where possible).</li>
-                <li>Risks & safeguards; any clinical notes if relevant.</li>
-                <li>Proposed schedule & line items aligned to goals.</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- 18. AGED CARE CROSSOVER -->
-        <section id="aged-care" class="card">
-          <h3>Aged Care Crossover</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Aged Care Crossover. This lesson will teach you how to clarify NDIS vs aged care pathways and guide callers to the right funding. Listen to the script and practice explaining eligibility based on age.</p>
-          <button class="btn primary" onclick="playLesson('aged-care')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">NDIS vs Aged Care interface</span>
-            <button class="btn small copy" onclick="copyBlock('aged-script')">Copy</button>
-          </div>
-<pre id="aged-script"><code>👋 “We can help clarify NDIS vs aged care pathways.”
-🧾 “Can I ask your age, current funding type, and your main goals?”
-📌 “If you’re under 65 (or first entered NDIS before 65), we’ll continue through NDIS. 
-If over 65 without NDIS access, My Aged Care may be the better pathway.”
-🤝 “Either way, we’ll support you with referrals and explain the next steps.”</code></pre>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Common caller questions</h4>
-              <details open><summary>“I’m 64 but turning 65 soon.”</summary>
-                <div class="qa">“If you enter NDIS before turning 65, you remain eligible even after 65. We’ll help make sure you’re supported through that transition.”</div>
-              </details>
-              <details><summary>“I’m 70, can I get NDIS?”</summary>
-                <div class="qa">“Generally no, but there are aged care options. We’ll guide you to My Aged Care and provide contact details.”</div>
-              </details>
-              <details><summary>“What about high nursing needs?”</summary>
-                <div class="qa">“If you’re under 65, NDIS funds clinical nursing supports. If over 65, aged care funding can cover many of the same supports.”</div>
-              </details>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Cross-system checklist</h4>
-              <ul class="list">
-                <li>Confirm DOB and current funding.</li>
-                <li>Explain pathway clearly (NDIS vs My Aged Care).</li>
-                <li>Give contact details: My Aged Care 1800 200 422.</li>
-                <li>If unclear, escalate to RN or intake lead for further guidance.</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- 19. PAEDIATRICS -->
-        <section id="paediatrics" class="card">
-          <h3>Paediatrics</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Paediatrics. This lesson will teach you how to handle paediatric calls, focusing on child and family needs. Listen to the script and practice coordinating with schools and therapists.</p>
-          <button class="btn primary" onclick="playLesson('paediatrics')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Child & family centred</span>
-            <button class="btn small copy" onclick="copyBlock('peds-script')">Copy</button>
-          </div>
-<pre id="peds-script"><code>👋 “Thanks for calling — let’s make this simple for you.”
-👨‍👩‍👧 “Can I take your child’s name, DOB, and your contact details?”
-🏫 “Is your child at school or daycare? Any current supports or therapists involved?”
-🧠 “What’s working well, and what are the challenges?”
-📅 “Which days/times work best around school or family routines?”
-📌 “We’ll coordinate with existing therapists (with your consent) and set a comfortable start date.”</code></pre>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Perfect answers — parent concerns</h4>
-              <details open><summary>“Will my child see the same worker?”</summary>
-                <div class="qa">“Yes, we aim for continuity so your child can build trust. We’ll also assign a backup worker for consistency during leave.”</div>
-              </details>
-              <details><summary>“Can you talk to the school?”</summary>
-                <div class="qa">“With your written consent, yes. We can coordinate with teachers and learning support staff to align goals.”</div>
-              </details>
-              <details><summary>“What if my child refuses care?”</summary>
-                <div class="qa">“We’ll use gradual introduction, short sessions, and child-friendly approaches. Parents guide us on what works best.”</div>
-              </details>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Paediatric intake checklist</h4>
-              <ul class="list">
-                <li>Parent/guardian details & legal authority confirmed.</li>
-                <li>Child’s health and developmental history.</li>
-                <li>Existing therapy and medical team contacts.</li>
-                <li>Preferred routines, strengths, and motivators.</li>
-                <li>Safety needs (allergies, seizure action plans, emergency contacts).</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- 20. CRISIS / IMMEDIATE RISK -->
-        <section id="crisis" class="card">
-          <h3>Crisis / Immediate Risk</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Crisis / Immediate Risk. This lesson will teach you the emergency pathway for urgent calls. Listen to the script and practice staying on the line while escalating to ensure safety.</p>
-          <button class="btn primary" onclick="playLesson('crisis')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Emergency pathway</span>
-            <button class="btn small copy" onclick="copyBlock('crisis-script')">Copy</button>
-          </div>
-<pre id="crisis-script"><code>🚨 “Are you or anyone with you in immediate danger, or without essential care today?”
-👉 If YES: stay on the line, call 000, alert internal clinical lead, document exact words/time.
-👉 If NO but urgent: set same-day visit/triage, create a safety plan, and escalate internally.</code></pre>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">What to listen for</h4>
-              <ul class="list">
-                <li>Words like “unsafe”, “alone”, “can’t manage tonight”.</li>
-                <li>No carer overnight or medication not available.</li>
-                <li>Recent hospital discharge with no support arranged.</li>
-              </ul>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Perfect answers — FAQs</h4>
-              <details open><summary>“Who else can I call after hours?”</summary>
-                <div class="qa">“If it’s life-threatening, call 000. For urgent care gaps, we’ll flag your case for our on-call team or first shift in the morning. I’ll document this right now.”</div>
-              </details>
-              <details><summary>“Can you send someone right now?”</summary>
-                <div class="qa">“If safe and within reach, we’ll deploy immediately. If not, we’ll stay with you on the phone and connect you with emergency services.”</div>
-              </details>
-            </div>
-          </div>
-        </section>
-
-        <!-- 21. INTERPRETER / CALD -->
-        <section id="interpreter" class="card">
-          <h3>Interpreter / CALD (Culturally & Linguistically Diverse)</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Interpreter / CALD. This lesson will teach you how to handle language and cultural needs, including arranging interpreters and respecting practices. Listen to the script and practice asking for preferences to ensure respectful support.</p>
-          <button class="btn primary" onclick="playLesson('interpreter')">Play Audio Lesson</button>
-          <div class="flex">
-            <span class="badge">Language access & cultural respect</span>
-            <button class="btn small copy" onclick="copyBlock('interpreter-script')">Copy</button>
-          </div>
-<pre id="interpreter-script"><code>🌏 “Which language would you prefer for our calls and visits?”
-📞 “We can arrange a professional interpreter (phone or face-to-face).”
-🙏 “Are there cultural or religious practices you’d like us to respect in how we deliver support?”
-📌 “We’ll record your preferences and make sure every staff member is briefed before visits.”</code></pre>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Perfect answers — FAQs</h4>
-              <details open><summary>“Can my family interpret?”</summary>
-                <div class="qa">“They can if you prefer, but for accuracy and privacy we recommend a professional interpreter. We can arrange that at no cost to you.”</div>
-              </details>
-              <details><summary>“How do I request the same interpreter each time?”</summary>
-                <div class="qa">“We’ll request consistency, though it depends on interpreter availability. We’ll note your preference and book early where possible.”</div>
-              </details>
-              <details><summary>“Do workers speak my language?”</summary>
-                <div class="qa">“We’ll check our team for language matches. If not, we’ll pair workers with interpreters and still respect cultural preferences.”</div>
-              </details>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Cultural sensitivity checklist</h4>
-              <ul class="list">
-                <li>Always ask <i>preferred</i> language first — don’t assume from name/accent.</li>
-                <li>Ask if the participant prefers same-gender workers for personal care.</li>
-                <li>Check for cultural/religious routines (dietary, prayer times, modesty).</li>
-                <li>Respect decision-making style (individual vs family-centred).</li>
-                <li>Use plain language; avoid jargon; pause to check understanding.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <h4>Interpreter logistics</h4>
-          <details open>
-            <summary>Phone interpreter (TIS National)</summary>
-            <div class="qa">
-              • Dial 131 450 (24/7).<br/>
-              • Provide language needed, participant’s suburb, and your provider ID.<br/>
-              • Note interpreter code for continuity if the participant prefers.
-            </div>
-          </details>
-          <details>
-            <summary>Face-to-face interpreter</summary>
-            <div class="qa">
-              • Request 3–5 days ahead if possible.<br/>
-              • Confirm time and location clearly; allow extra time for discussion.<br/>
-              • Always introduce interpreter, explain their role, and confirm confidentiality.
-            </div>
-          </details>
-          <details>
-            <summary>NDIS compliance note</summary>
-            <div class="qa">
-              • Record that an interpreter was offered and accepted/declined.<br/>
-              • Note interpreter’s name/code and type (phone / face-to-face).<br/>
-              • Document any cultural preferences flagged and how they’ll be respected.
-            </div>
-          </details>
-
-          <div class="callout">
-            <b>Golden line:</b> “Your language and culture matter. We’ll make sure support feels respectful and clear — always in the way that suits you best.”
-          </div>
-        </section>
-                <!-- 22. OBJECTIONS & MODEL RESPONSES -->
-        <section id="objections" class="card">
-          <h3>Handling Objections & Model Responses</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Handling Objections & Model Responses. This lesson will teach you how to address common concerns in intake calls. Listen to each objection and model response, and practice acknowledging feelings to turn objections into trust-building opportunities.</p>
-          <button class="btn primary" onclick="playLesson('objections')">Play Audio Lesson</button>
-          <p class="muted small">
-            Intake often means facing concerns, doubts, or objections. Below are the most common ones with model professional responses. Each answer is designed to reassure, clarify, and move the intake forward without pressure.
-          </p>
-
-          <div class="two-col">
-            <div>
-              <h4>Funding & Costs</h4>
-              <details open><summary>“I don’t want to pay anything out-of-pocket.”</summary>
-                <div class="qa">“Absolutely — our supports are billed directly to your NDIS plan if they’re reasonable and necessary. We’ll confirm line items with you before starting so there are no surprises.”</div>
-              </details>
-              <details><summary>“Why is your rate higher than another provider?”</summary>
-                <div class="qa">“All our rates are within the NDIS Pricing Arrangements. If you’ve seen a different rate, it may be because that provider isn’t including travel, public holiday loadings, or is using a different line item. I can walk you through a transparent comparison.”</div>
-              </details>
-              <details><summary>“What if my plan doesn’t have enough funds?”</summary>
-                <div class="qa">“We’ll check your plan budget with you and help prioritise supports. We can also work with your Support Coordinator or Plan Manager to explore flexibility or request a plan reassessment if needed.”</div>
-              </details>
-            </div>
-
-            <div>
-              <h4>Trust & Reliability</h4>
-              <details open><summary>“Last time, staff didn’t show up.”</summary>
-                <div class="qa">“I’m sorry to hear that. We guarantee communication — if a worker is unwell, we notify you early and send a backup if you want. We keep rosters stable so you know who’s coming and when.”</div>
-              </details>
-              <details><summary>“I don’t want too many different workers.”</summary>
-                <div class="qa">“We’ll keep your team small — usually a primary worker and one backup. We’ll ask your preference first and make sure you’re comfortable.”</div>
-              </details>
-              <details><summary>“I had a bad experience with another provider.”</summary>
-                <div class="qa">“I understand that must have been hard. We’ll go at your pace, start with a short trial, and check in with you after the first week. You’ll have direct contact if anything feels wrong.”</div>
-              </details>
-            </div>
-          </div>
-
-          <div class="two-col">
-            <div>
-              <h4>Timing & Availability</h4>
-              <details open><summary>“Can you start tomorrow?”</summary>
-                <div class="qa">“I’ll check our local availability right now. If we can’t place a worker tomorrow, we’ll prioritise you for the soonest slot and keep you updated as shifts open.”</div>
-              </details>
-              <details><summary>“Why is there a waitlist?”</summary>
-                <div class="qa">“We match the right staff to your needs — especially if you’ve requested specific skills or cultural matches. While waiting, we can keep you updated and sometimes arrange interim supports.”</div>
-              </details>
-              <details><summary>“What if I only want support for 2 hours a week?”</summary>
-                <div class="qa">“That’s fine — supports can be as little or as much as your plan and goals allow. We’ll schedule what you’re comfortable with.”</div>
-              </details>
-            </div>
-
-            <div>
-              <h4>Scope of Services</h4>
-              <details open><summary>“Do you provide housing too?”</summary>
-                <div class="qa">“We don’t provide housing directly, but we can support with daily living, tenancy support, and link you to housing services if needed.”</div>
-              </details>
-              <details><summary>“Can you do transport?”</summary>
-                <div class="qa">“Yes — transport to appointments, community activities, and shopping is included if it’s in your plan. We’ll confirm the right line item and keep a log of trips.”</div>
-              </details>
-              <details><summary>“Do you do therapy?”</summary>
-                <div class="qa">“We provide RN-led clinical care but not allied health therapy. We can collaborate with your therapists and follow their plans if you’d like.”</div>
-              </details>
-            </div>
-          </div>
-
-          <div class="two-col">
-            <div>
-              <h4>Consent & Privacy</h4>
-              <details open><summary>“I don’t want my family involved.”</summary>
-                <div class="qa">“That’s completely your choice. We’ll only involve people you authorise, and we’ll note your preferences clearly so staff know who to share updates with.”</div>
-              </details>
-              <details><summary>“Can I change my mind about who gets updates?”</summary>
-                <div class="qa">“Yes — you can update your consent at any time. We’ll make sure it’s recorded and followed straight away.”</div>
-              </details>
-              <details><summary>“How is my information stored?”</summary>
-                <div class="qa">“All information is stored securely under NDIS rules and Australian privacy law. Access is only for staff directly supporting your care.”</div>
-              </details>
-            </div>
-
-            <div>
-              <h4>Clinical & Safety</h4>
-              <details open><summary>“Your staff won’t know my medical needs.”</summary>
-                <div class="qa">“We’ll arrange an RN assessment and detailed care plan first. Workers receive training and written instructions before starting.”</div>
-              </details>
-              <details><summary>“What if something goes wrong?”</summary>
-                <div class="qa">“We have clear escalation steps: staff contact the on-call clinician or 000 depending on urgency, and we notify your GP and family if you wish. All incidents are documented and reviewed.”</div>
-              </details>
-              <details><summary>“Do you do restrictive practices?”</summary>
-                <div class="qa">“Only if authorised under a Behaviour Support Plan by an NDIS Behaviour Support Practitioner, and only with your consent and oversight.”</div>
-              </details>
-            </div>
-          </div>
-
-          <div class="callout">
-            <b>Golden rule:</b> Always acknowledge the concern, show empathy, provide a clear factual answer, and outline next steps. Never dismiss or rush objections — they’re opportunities to build trust.
-          </div>
-        </section>
-
-        <!-- 23. FOLLOW-UPS & CALL CLOSURES -->
-        <section id="follow-ups" class="card">
-          <h3>Follow-ups (SMS/Email)</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Follow-ups & Call Closures. This lesson will teach you how to close calls and send follow-ups to reinforce trust. Listen to the closing lines and templates, and practice sending summaries to reduce confusion.</p>
-          <button class="btn primary" onclick="playLesson('follow-ups')">Play Audio Lesson</button>
-          <p class="muted small">
-            A professional intake call doesn’t end when you hang up. Always confirm next steps, provide reassurance, and send a written follow-up (SMS/email) summarising the conversation.
-          </p>
-
-          <h4>Closing lines — model scripts</h4>
-          <ul class="list">
-            <li>“Thank you for sharing that with me today — I’ve summarised your goals and preferences.”</li>
-            <li>“I’ll send a quick SMS/email now so you have everything in writing.”</li>
-            <li>“Your next step is: &lt;what to expect&gt;. I’ll update you by &lt;timeframe&gt;.”</li>
-            <li>“If you think of anything else, please reply to my SMS/email or call our office.”</li>
-          </ul>
-
-          <div class="divider"></div>
-
-          <h4>Follow-up timing</h4>
-          <ul class="list">
-            <li><b>Immediately after call</b>: Send summary SMS/email with key points.</li>
-            <li><b>Within 24h</b>: Email full intake summary or Service Agreement draft.</li>
-            <li><b>Day 2–3</b>: Phone check-in if waiting for start date or missing info.</li>
-            <li><b>Week 1</b>: Confirm satisfaction, worker match, and early feedback.</li>
-          </ul>
-
-          <div class="divider"></div>
-
-          <h4>Templates — SMS</h4>
-          <pre><code>[HD HeeD] Hi &lt;Name&gt;, thanks for your call today. 
-We’ve noted your goals: &lt;summary&gt;. 
-Next step: &lt;action&gt;. 
-We’ll contact you by &lt;time&gt;. 
-Reply to this message or call 02 8630 5500 anytime. 
-– HD HeeD Intake</code></pre>
-
-          <pre><code>[HD HeeD] Hi &lt;Name&gt;, your first support is booked for &lt;day/date&gt; at &lt;time&gt;. 
-Worker: &lt;first name&gt;. 
-We’ll check in after the shift — call us if you have any questions. 
-– HD HeeD</code></pre>
-
-          <div class="divider"></div>
-
-          <h4>Templates — Email</h4>
-          <pre><code>Subject: Your HD HeeD Intake Summary — Thank You
-
-Hello &lt;Name&gt;,
-
-Thank you for speaking with us today. 
-Here is a quick summary of what we discussed:
-
-• Your goals/priorities: &lt;summary&gt;
-• Services we will provide: &lt;services&gt;
-• Next steps: &lt;action&gt; by &lt;timeframe&gt;
-• Point of contact: &lt;staff name&gt; (this email or phone 02 8630 5500)
-
-Please reply if you’d like to add anything or if your details change.
-We look forward to supporting you.
-
-Warm regards,  
-&lt;Your Name&gt;  
-HD HeeD Intake Team</code></pre>
-
-          <pre><code>Subject: Your First HD HeeD Support Visit Confirmed
-
-Hello &lt;Name&gt;,
-
-This is to confirm your first support visit:  
-Date: &lt;day/date&gt;  
-Time: &lt;time&gt;  
-Worker: &lt;first name&gt;
-
-What to expect: &lt;brief info, e.g., meet-and-greet, care task&gt;.  
-Please keep your phone on and have your buzzer/door access ready.
-
-If you have any concerns, call us at 02 8630 5500.
-
-Kind regards,  
-HD HeeD Intake Team</code></pre>
-
-          <div class="callout">
-            <b>Golden rule:</b> Always leave the participant with something in writing. Written follow-ups build trust, reduce confusion, and create an audit trail.
-          </div>
-        </section>
-
-        <!-- 24. DOCUMENTATION & COMPLIANCE -->
-        <section id="documentation" class="card">
-          <h3>Documentation Templates</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Documentation Templates. This lesson will teach you how to write clear, objective notes for audits. Listen to the principles and templates, and practice using SBAR or SOAP for accurate records.</p>
-          <button class="btn primary" onclick="playLesson('documentation')">Play Audio Lesson</button>
-          <p class="muted small">Write notes that are clear, objective, and audit-ready. Capture only what you need, but capture it accurately.</p>
-
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Principles</h4>
-              <ul class="list">
-                <li><b>Objective, not judgemental:</b> use observed facts and caller quotes (verbatim in quotation marks).</li>
-                <li><b>Complete, not cluttered:</b> capture required fields first; add context only if it changes decisions/risks.</li>
-                <li><b>Plain English:</b> avoid jargon; expand acronyms on first use.</li>
-                <li><b>Privacy by default:</b> record <i>necessary</i> personal info only; no gossip or speculation.</li>
-                <li><b>Timestamp everything:</b> date/time, who you spoke with, your name/role.</li>
-              </ul>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Required fields (minimum dataset)</h4>
-              <ul class="list">
-                <li>Caller: name, role/relationship, contact, OK to SMS (Y/N).</li>
-                <li>Participant: legal name, preferred name, DOB, suburb/postcode.</li>
-                <li>NDIS details: number (if known), plan dates, management type (NDIA/Plan/Self), budgets known/unknown.</li>
-                <li>Goals/priorities; preferred days/times; worker preferences (gender/language/culture).</li>
-                <li>Existing supports/providers; reason for change if transitioning.</li>
-                <li>Risks/alerts (behaviours, seizures, falls, allergies, pressure injury risk); equipment/AT.</li>
-                <li>Consent scope recorded (who can receive updates); interpreter required (Y/N & language).</li>
-                <li>Outcome & next steps (who, what, when), agreed contact method, follow-up date/time.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <h4>Note templates (copy-ready)</h4>
-          <div class="two-col">
-            <div>
-              <div class="flex"><span class="badge">SBAR</span> <button class="btn small copy" onclick="copyBlock('tmpl-sbar')">Copy</button></div>
-<pre id="tmpl-sbar"><code>SITUATION — Intake call with &lt;Caller Name&gt; (role: &lt;SC/Family/Participant&gt;) about &lt;Participant&gt; on &lt;DD/MM/YYYY&gt; &lt;HH:MM&gt;.
-BACKGROUND — NDIS mgmt: &lt;NDIA/Plan/Self&gt;; Plan dates: &lt;start–end&gt;; Suburb: &lt;...&gt;. Existing supports: &lt;...&gt;.
-ASSESSMENT — Goals/priorities: &lt;...&gt;. Risks/alerts: &lt;...&gt;. Preferences: &lt;gender/language/schedule&gt;. Interpreter: &lt;Y/N & language&gt;. Consent: &lt;scope&gt;.
-RECOMMENDATION/NEXT — Actions: &lt;what&gt; by &lt;who&gt; by &lt;when&gt;. Start window offered: &lt;...&gt;. Follow-up booked: &lt;date/time&gt; via &lt;channel&gt;.</code></pre>
-            </div>
-            <div>
-              <div class="flex"><span class="badge">SOAP</span> <button class="btn small copy" onclick="copyBlock('tmpl-soap')">Copy</button></div>
-<pre id="tmpl-soap"><code>SUBJECTIVE — Caller states: “&lt;verbatim concerns/needs&gt;”.
-OBJECTIVE — Participant details verified; NDIS mgmt & plan dates noted; risks/alerts listed; supports/providers documented.
-ASSESSMENT — Fit to service: &lt;yes/conditional&gt;; capacity & start window: &lt;...&gt;; clinical review required: &lt;Y/N&gt;.
-PLAN — &lt;Action 1&gt; by &lt;owner&gt; due &lt;date/time&gt;; &lt;Action 2&gt; ...; follow-up &lt;date/time&gt; via &lt;channel&gt;.</code></pre>
-            </div>
-          </div>
-
-          <div class="two-col" style="margin-top:12px">
-            <div>
-              <div class="flex"><span class="badge">Narrative (NDIS audit-ready)</span> <button class="btn small copy" onclick="copyBlock('tmpl-narr')">Copy</button></div>
-<pre id="tmpl-narr"><code>Call with &lt;Caller&gt; (role: &lt;...&gt;). Consented to note details and to share updates with &lt;names&gt; (scope: &lt;...&gt;).
-Goals/priorities: &lt;...&gt;. Preferred schedule: &lt;days/times&gt;. Preferences: &lt;gender/language/culture&gt;.
-Risks/alerts: &lt;...&gt; (source: caller report). Safety today: &lt;no/yes — actions&gt;.
-Offered services: &lt;...&gt; with start window &lt;...&gt;. Agreed next steps: &lt;...&gt;. Follow-up booked for &lt;date/time&gt; by &lt;channel&gt;.
-Note by &lt;Your Name&gt;, &lt;Role&gt;, on &lt;DD/MM/YYYY HH:MM&gt;.</code></pre>
-            </div>
-            <div>
-              <h4 style="margin-top:0">Consent logging (matrix)</h4>
-              <ul class="list">
-                <li>Verbal consent: <b>Y/N</b>; who gave it; date/time; scope (intake only / ongoing updates / full coordination).</li>
-                <li>Third-party authority: <b>Y/N</b>; participant present <b>Y/N</b>; callback arranged for direct consent <b>Y/N</b>.</li>
-                <li>Interpreter offered: accepted/declined; language; interpreter code (if known).</li>
-                <li>Review date for consent; how to withdraw consent (note provided to caller).</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <h4>Good vs poor notes (examples)</h4>
-          <div class="two-col">
-            <div>
-              <b>Good</b>
-              <ul class="list">
-                <li>“Caller reports ‘missed morning meds twice this week’.”</li>
-                <li>“Plan-managed; plan ends 14/12/2025; budget sufficiency unknown.”</li>
-                <li>“Start window offered: next Tue–Thu mornings; meet-and-greet first.”</li>
-                <li>“Escalated to RN for wound review; action due 28/09 10:00.”</li>
-              </ul>
-            </div>
-            <div>
-              <b>Poor</b>
-              <ul class="list">
-                <li>“Family unreliable.” (judgemental; offer facts instead)</li>
-                <li>“Lots of issues.” (vague; specify what/when/impact)</li>
-                <li>No timestamps, no owner for actions, no consent record.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <h4>Privacy & data minimisation</h4>
-          <ul class="list">
-            <li>Store only necessary personal and clinical details; avoid unrelated history.</li>
-            <li>Never include credentials (portal passwords) or unnecessary third-party info.</li>
-            <li>Mark sensitive risk details clearly; restrict visibility as per role-based access.</li>
-            <li>If notes contain allegations or safeguarding concerns, flag and follow escalation (see below).</li>
-            <li>Record corrections/amendments with timestamp and author; never delete audit trails.</li>
-          </ul>
-        </section>
-
-        <!-- 25. QUALITY & KPIs -->
-        <section id="quality" class="card">
-          <h3>Quality & KPIs</h3>
-          <p class="lesson-intro">Welcome to the audio lesson on Quality & KPIs. This lesson will teach you the framework for measuring call quality and performance. Listen to the KPIs and practice tracking your own metrics for continuous improvement.</p>
-          <button class="btn primary" onclick="playLesson('quality')">Play Audio Lesson</button>
-          <div class="two-col">
-            <div>
-              <h4 style="margin-top:0">Core KPIs (targets)</h4>
-              <ul class="list">
-                <li><b>First Response Time (FRT)</b> — call answered or callback within agreed window (e.g., <i>same business day</i> for new enquiries).</li>
-                <li><b>Time to First Service (TTFS)</b> — days from intake to first shift/visit; tracked by scenario (standard, nursing, discharge).</li>
-                <li><b>Conversion Rate</b> — enquiries → service agreements (or booked first shifts).</li>
-                <li><b>Consent Accuracy</b> — % of calls with complete consent fields (scope, who, date/time) recorded.</li>
-                <li><b>Risk Escalation Compliance</b> — % of red-flag calls escalated correctly and within timeframe.</li>
-                <li><b>Documentation Completeness</b> — % of notes meeting minimum dataset + one objective quote.</li>
-                <li><b>Continuity</b> — % of participants with primary + named backup worker in first 14 days.</li>
-                <li><b>Participant Satisfaction</b> — CSAT/NPS or post-first-week pulse (“How was your first support?”).</li>
-                <li><b>Rework</b> — % of invoices/quotes returned due to errors (lower is better).</li>
-                <li><b>Privacy Incidents</b> — target zero; investigate and learn if any occur.</li>
-              </ul>
-            </div>
-            <div>
-              <h4 style="margin-top:0">How we measure</h4>
-              <ul class="list">
-                <li>Weekly report: FRT, TTFS, conversions by scenario and suburb.</li>
-                <li>Monthly QA sample: ≥10% of calls per staff member scored via rubric.</li>
-                <li>Risk audit: 100% of escalations reviewed next business day.</li>
-                <li>Participant pulse: SMS/email after week 1, logged in CRM.</li>
-                <li>Quarterly calibration: team reviews the same 5 calls to sync standards.</li>
-              </ul>
-              <div class="callout">
-                <b>Golden line:</b> “If we can’t measure it, we can’t improve it.” — Keep metrics simple, visible, owned.
-              </div>
-            </div>
-          </div>
-        </section>
-      </div><!-- /content -->
-    </div><!-- /grid -->
-  </main>
-
-  <!-- Sticky tools (usable across all parts) -->
-  <div class="sticky-toolbar">
-    <button class="fab primary" onclick="toTop()">↑ Top</button>
-    <button class="fab secondary" onclick="expandAll()">Expand all</button>
-    <button class="fab secondary" onclick="speechSynthesis.cancel()">Stop Audio</button>
-  </div>
-
+  <!-- Small helper script: keep index highlight in sync -->
   <script>
-    function toTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
-    function expandAll(){ document.querySelectorAll('details').forEach(d => d.open = true); }
-    function copyBlock(id){
-      const el = document.getElementById(id);
-      if(!el) return;
-      const text = el.innerText || el.textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = event.target.closest('button');
-        if(!btn) return;
-        const prev = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(()=> btn.textContent = prev, 1200);
-      });
-    }
-    // Audio Lesson Playback
-    function playLesson(id){
-      if ('speechSynthesis' in window) {
-        speechSynthesis.cancel(); // Stop any ongoing speech
-        const el = document.getElementById(id);
-        let text = el.querySelector('.lesson-intro').innerText + ' ';
-        text += el.innerText.replace(el.querySelector('.lesson-intro').innerText, ''); // Append rest of content
-        text = text.replace(/\n/g, ' ').replace(/ +/g, ' '); // Clean whitespace
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-AU'; // Australian English
-        utterance.rate = 0.9; // Slightly slower for clarity
-        speechSynthesis.speak(utterance);
-      } else {
-        alert('Your browser does not support audio lessons (text-to-speech). Use a modern browser like Chrome.');
-      }
-    }
-    // Anchor alias: map #follow-ups -> #followups if present
     (function(){
-      function handleAliasClick(e){
-        if (e.target.closest) {
-          const a = e.target.closest('a[href^="#"]');
-          if (!a) return;
-          const href = a.getAttribute('href');
-          if (href === '#follow-ups') {
-            e.preventDefault();
-            const el = document.querySelector('#followups');
-            if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
-          }
-        }
+      const links=[...document.querySelectorAll('.idx-list a')];
+      function setActive(){
+        const hash = location.hash || '#part-1';
+        links.forEach(a=>a.classList.toggle('active', a.getAttribute('href')===hash));
       }
-      document.addEventListener('click', handleAliasClick, true);
+      window.addEventListener('hashchange', setActive, false);
+      document.addEventListener('DOMContentLoaded', setActive);
     })();
   </script>
+  <!-- ======= PART 2 (Expanded) ======= -->
+  <section id="part-2" class="shell" aria-label="NDIS Intake Q&A — Part 2">
+
+    <!-- Left Index -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a class="active" href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a href="#part-8"><span class="dot"></span>Part 8 · Objections & Model Responses</a></li>
+        <li><a href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+
+      <!-- Family / Advocate Inquiry -->
+      <div class="section">
+        <span class="chip">Part 2A</span>
+        <h2 class="h1">Family Member or Advocate Inquiry</h2>
+        <p class="sub">When a parent, guardian, or advocate calls on behalf of the participant. Balance inclusion of family with respect for the participant’s autonomy.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> I’m calling for my [son/daughter/parent]. Can I arrange services for them?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes—absolutely. We often work with family members during intake. May I have your name and relationship to [Participant]? We’ll want [Participant] involved as much as possible in decisions, but your support is valued and welcomed.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> My relative isn’t communicative / has intellectual disability. How will you ensure they’re looked after?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We specialise in supporting people with communication difficulties. We learn each person’s cues and work closely with families. Staff are trained in supported decision-making, ensuring the participant’s voice is respected in all care.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> Will I be kept informed?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> With [Participant]’s consent, yes. We can provide updates by phone, email, or secure notes. We confirm the preferred communication method during onboarding so families always feel included.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> What if my family member refuses support on a given day?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We respect participant choice. Our staff gently encourage or adapt the plan for the day. If refusal is repeated, we review strategies with you and [Participant] to find solutions together.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> How do you safeguard against abuse or neglect?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> All staff hold mandatory NDIS Worker Screening and police checks. We follow strict safeguarding policies and NDIS Practice Standards. Any concern raised is reported, documented, and escalated immediately.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q6</span> What happens if there is an emergency while staff are with my family member?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Staff are trained in first aid and follow clear escalation protocols. If urgent, they call 000 first, then notify family and our office. An incident report is completed within 24 hours and you are updated immediately.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q7</span> Will the same staff come each time?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes, we prioritise continuity of care. You’ll usually see the same small team of workers. If a replacement is needed, we inform you in advance and introduce them properly.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q8</span> Do you offer after-hours or weekend services?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes, we provide supports 24/7 including weekends and public holidays. Some rates differ under the NDIS Price Guide—we always confirm costs upfront.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q9</span> How do you document what happens in each shift?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Staff complete detailed shift notes after every visit—covering care provided, any incidents, and progress toward goals. These are stored securely and can be shared with you (with consent).</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Support Coordinator / Professional Referral -->
+      <div class="section">
+        <span class="chip">Part 2B</span>
+        <h2 class="h1">Support Coordinator or Professional Referral</h2>
+        <p class="sub">When a Support Coordinator (SC), LAC, or professional refers a participant. Calls are efficient, info-heavy, and businesslike.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> We have a participant needing [Service] in [Location]. Do you have capacity?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Thank you for contacting us. We do provide [Service] in [Location]. Capacity depends on staff roster—if immediate start isn’t possible, we provide clear timeframes. We’ll prioritise urgent needs where possible.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> The participant has complex needs (behaviours / medical). Can your team handle this?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. Our workforce includes RNs and behaviour-trained support workers. We request behaviour support or medical plans before starting, and ensure staff have completed required competencies.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> How do you handle onboarding and communication?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We complete intake, develop a Service Agreement, and commence supports. You’ll receive timely updates and incident reports as required. We maintain professional collaboration and meet NDIS compliance obligations.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> Do you provide progress reports for plan reviews?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We can prepare progress reports detailing outcomes, hours used, and recommendations. These align with NDIS review requirements and help participants secure appropriate future funding.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> What is your escalation process if issues arise?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We encourage open communication. Minor issues are addressed directly with the participant or family. For major concerns, we escalate to management, document the matter, and inform the SC promptly. We follow the NDIS Complaints and Incident Management framework.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+   <!-- ======= PART 3 (Elaborated) ======= -->
+  <section id="part-3" class="shell" aria-label="NDIS Intake Q&A — Part 3">
+
+    <!-- Left Index -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a class="active" href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a href="#part-8"><span class="dot"></span>Part 8 · Objections & Model Responses</a></li>
+        <li><a href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+
+      <!-- Complex Needs -->
+      <div class="section">
+        <span class="chip">Part 3A</span>
+        <h2 class="h1">Participants with Complex or High Needs</h2>
+        <p class="sub">Scenarios involving multiple disabilities, behaviours of concern, high physical support needs, or advanced medical interventions.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> My family member requires 2:1 support and hoist transfers. Do you have staff for this?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We maintain a pool of staff trained in manual handling, hoist operations, and 2:1 complex support. A manual handling plan and risk assessment are developed before services commence. We also ensure staff complete competency refreshers annually and check equipment is serviced and safe.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> The participant has behaviours of concern. How do you manage this?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We work strictly under Behaviour Support Plans approved by the NDIS Commission. Staff are trained in Positive Behaviour Support, trauma-informed care, and de-escalation. We use proactive strategies to reduce triggers, track behaviour data, and collaborate with practitioners to review outcomes regularly.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> They require complex health supports (PEG feeding, diabetes, seizures). Can you provide this?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. Our RNs and delegated workers are competent in PEG feeding, tracheostomy care, insulin administration, seizure management, and continence care. Supports are delivered under “High Intensity Daily Personal Activities” NDIS line items. Staff complete mandatory competency assessments and follow care protocols aligned with treating clinicians’ orders.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> How do you ensure safety with complex cases?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Each participant has an individualised Care and Risk Plan. This includes emergency contacts, escalation procedures, and safety alerts (e.g., allergies, seizure protocols). Plans are shared with staff through our secure platform and updated monthly, or immediately after changes in condition.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> Do you coordinate with multiple professionals (GP, OT, speech therapist)?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We liaise with all allied health and medical practitioners to ensure a team approach. We attend case conferences if requested, share progress notes, and integrate therapy recommendations into daily routines. This ensures consistency and goal alignment across disciplines.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q6</span> Can you provide respite for carers in complex cases?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We arrange in-home respite or short-term accommodation (STA) depending on participant goals and plan funding. Staff trained in complex care provide safe continuity so families can rest knowing care needs are fully met.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q7</span> What about transport for complex participants?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We provide transport supports using modified vehicles if needed (wheelchair accessible). Our staff are trained in safe transfers and vehicle safety. Travel costs are billed under NDIS transport or provider travel line items in compliance with the Price Guide.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Hospital Discharge -->
+      <div class="section">
+        <span class="chip">Part 3B</span>
+        <h2 class="h1">Hospital Discharge or Post-Acute Support</h2>
+        <p class="sub">Supporting participants leaving hospital to return home safely, avoiding readmission, and ensuring continuity of care.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> Can you start supports immediately on discharge?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We mobilise staff as quickly as possible—often within 24–48 hours. For urgent discharges, we escalate to management. If immediate capacity is unavailable, we liaise with hospital social workers for interim supports to ensure no unsafe gaps.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> The participant needs wound care and medication management. Do you provide this?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. Our RNs can perform wound dressings, administer medications, and monitor vitals. We follow discharge summaries and keep GPs updated. All care is documented for compliance and participant safety.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> How do you prepare for a safe transition home?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We review the hospital discharge plan, confirm home safety (ramps, rails, AT), arrange equipment delivery (pressure mattresses, hoists), and ensure staff are rostered to meet the participant at home. We also complete medication reconciliation and confirm family communication preferences.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> Who funds post-discharge supports?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Acute medical services remain funded by the health system. Disability-related daily supports (personal care, community access, wound maintenance) are NDIS-funded. We clarify line items at intake to avoid billing confusion and document clearly in the Service Agreement.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> Can you manage palliative discharges?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We support participants with palliative care needs in line with hospital and GP directions. RNs oversee comfort care, medication, and family support. Staff are trained in end-of-life care with an emphasis on dignity, comfort, and family involvement.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q6</span> Do you provide transport from hospital to home?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We can arrange accessible transport, including stretcher or wheelchair transport where required. This is billed under appropriate NDIS or health funding streams, depending on the context.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q7</span> How do you ensure staff are ready for post-discharge care?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Before discharge, staff are briefed on the participant’s medical and functional needs. Competencies are checked (e.g., wound care, medication handling). Where required, shadow shifts or RN supervision occur before independent support begins.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q8</span> How do you prevent readmission?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> By monitoring early warning signs, completing daily shift reports, maintaining medication adherence, and escalating concerns promptly to GPs or hospitals. We also educate families and participants on what to watch for at home.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+   <!-- ======= PART 4 (Elaborated) ======= -->
+  <section id="part-4" class="shell" aria-label="NDIS Intake Q&A — Part 4">
+
+    <!-- Left Index -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a class="active" href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a href="#part-8"><span class="dot"></span>Part 8 · Objections & Model Responses</a></li>
+        <li><a href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+
+      <!-- Nursing-only Services -->
+      <div class="section">
+        <span class="chip">Part 4A</span>
+        <h2 class="h1">Nursing-Only Services Inquiry</h2>
+        <p class="sub">For participants whose primary or sole NDIS-funded need is nursing care (catheter, stoma, wound care, medication).</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> My participant only needs nursing care, not general support workers. Do you provide this?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We offer Registered Nurse supports under NDIS for disability-related health care. Examples include catheter changes, continence care, wound management, PEG/tracheostomy care, and diabetes management. We can tailor purely nursing-focused rosters if that’s all required.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> Will the same nurse come each time?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We aim for continuity—usually one or two nurses assigned. If another RN is required, we provide proper handover and introduce them to ensure seamless care.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> Is nursing funded by NDIS or Health?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> If the health need is directly related to the participant’s disability, NDIS covers it (e.g., catheter, tracheostomy). Acute medical treatments (hospital stays, GP, chemotherapy) remain funded by Health. We clarify at intake so there’s no overlap or billing error.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> Can your nurses liaise with GPs and specialists?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. Our RNs communicate directly with treating doctors, allied health, and specialists. This ensures continuity, medication safety, and up-to-date care planning.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Disengaged or Hard-to-Engage Participants -->
+      <div class="section">
+        <span class="chip">Part 4B</span>
+        <h2 class="h1">Disengaged or Hard-to-Engage Participants</h2>
+        <p class="sub">Participants who are hesitant, withdrawn, or resistant to services. Common with trauma histories, mental health conditions, or prior poor experiences.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> My participant refuses to let anyone into the house. How will you support them?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We respect autonomy. Our staff approach gently, at the participant’s pace, and sometimes start with phone/video check-ins. We may suggest “meet and greet” sessions without obligations to slowly build trust. No supports are forced; choice and control remain central.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> The participant has disengaged from multiple providers. Why would it be different with you?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We take a trauma-informed, person-centred approach. We adapt supports around what matters to the participant, not just “what’s funded.” We spend time listening, setting achievable small goals, and ensuring staff are a good personality match.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> What if they cancel or avoid supports repeatedly?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We document cancellations and follow-up with the participant and support coordinator to explore why. Sometimes reducing hours or offering flexible supports helps. We avoid penalty fees in genuine cases of disengagement unless agreed upfront in the Service Agreement.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> How do you encourage re-engagement?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> By focusing on participant goals. For example, if independence or social outings motivate them, we tailor supports to those outcomes rather than generic tasks. We also involve trusted family/friends if the participant agrees.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Transition Scenarios -->
+      <div class="section">
+        <span class="chip">Part 4C</span>
+        <h2 class="h1">Special Transition Scenarios</h2>
+        <p class="sub">Participants moving between stages of life or services (e.g., child to adult, school to community, SIL to independent living).</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> Our child is turning 18. How do you support transition to adult services?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We plan proactively. Supports may change from school-based to community access, vocational skills, and independence building. We involve the young person in decision-making and coordinate with schools, therapists, and families to ensure continuity.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> The participant wants to move from SIL to independent living. How do you help?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We assess daily living skills, arrange trials with drop-in supports, and liaise with housing providers. Supports are gradually “stepped down” from 24/7 SIL to part-time supports, giving the participant confidence to live independently while staying safe.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> Do you support transition planning for school leavers?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We assist with School Leaver Employment Supports (SLES), community access, and skill-building. We coordinate with support coordinators and schools to ensure funding is directed toward training, work experience, and independence goals.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Cultural / Spiritual Transition Needs -->
+      <div class="section">
+        <span class="chip">Part 4D</span>
+        <h2 class="h1">Cultural & Spiritual Considerations</h2>
+        <p class="sub">Special scenarios where cultural practices, spiritual beliefs, or community networks are central to intake.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> The participant needs staff from a specific cultural background. Can you provide this?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Where possible, yes. We record language, cultural, and religious preferences at intake. We aim to match staff accordingly, but if unavailable, we provide cultural training and interpreters to respect those needs.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> Will you respect religious practices (prayer times, fasting, dietary needs)?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Absolutely. We ask about these preferences at intake and ensure they are integrated into the care plan. Staff receive cultural competence training to support participants’ spiritual wellbeing.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+   <!-- ======= PART 5 (Elaborated) ======= -->
+  <section id="part-5" class="shell" aria-label="NDIS Intake Q&A — Part 5">
+
+    <!-- Left Index -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a class="active" href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a href="#part-8"><span class="dot"></span>Part 8 · Objections & Model Responses</a></li>
+        <li><a href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+
+      <!-- Transition from Another Provider -->
+      <div class="section">
+        <span class="chip">Part 5A</span>
+        <h2 class="h1">Transition from Another Provider</h2>
+        <p class="sub">For participants currently with another provider who wish to change due to dissatisfaction, relocation, or new needs.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> Do I need to give a reason for switching providers?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> No. Participants have the right to choose their provider at any time. Many share their reasons with us to help tailor supports, but it’s entirely your choice. We respect your decision without judgement.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> What if my current provider refuses to release records?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Your current provider is required to cooperate in safe transition of care. If they delay, we can still commence services using your Service Agreement and intake information, then integrate records once received. You can also involve your Support Coordinator for advocacy if needed.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> Will there be gaps in services when switching?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We aim for seamless transition. We confirm end date with the old provider and start immediately after, so there’s no gap. For essential supports, we prioritise continuity and communicate closely with all parties involved.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> How do service bookings transfer in the NDIS system?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> If your plan is Agency-managed, the old provider must end their booking. Then we create a new service booking. If Plan- or Self-managed, we can start directly once you sign a Service Agreement. We guide you through the process step by step.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> Will I have to pay exit fees to my current provider?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Some providers include short notice or exit clauses in their Service Agreements. We advise reviewing your current contract. If there’s a dispute, you may escalate to the NDIS Commission. We never charge exit fees ourselves.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q6</span> Will new staff know my routines?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We conduct a thorough intake interview and, with your consent, review notes from your previous provider. This ensures staff understand your preferences, routines, and support needs from day one.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Plan Reviews & Funding Changes -->
+      <div class="section">
+        <span class="chip">Part 5B</span>
+        <h2 class="h1">Plan Reviews & Funding Changes</h2>
+        <p class="sub">Helping participants prepare for NDIS plan reviews, adapt to new budgets, and secure funding aligned with goals.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> Will you help me prepare for my plan review?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We provide detailed progress reports that outline services delivered, goals achieved, and any additional supports required. Reports are written in NDIS language to clearly demonstrate outcomes and justify funding needs.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> What happens if I underspent my plan?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> If underspending occurs, we explain why (e.g., hospital admission, participant choice). This helps avoid reduced budgets in the future. We also suggest strategies to use funds more effectively, such as capacity-building supports.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> What happens if I overspent my plan?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We notify you early if spending is tracking high. If overspend occurs, we provide evidence for why (e.g., increased needs, emergencies). This supports requests for higher budgets at review. We never bill beyond available funding without prior consent.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> Do you attend review meetings with the NDIA?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Providers are not usually invited unless requested by the participant. If you would like us present, we’re happy to attend or provide a written statement of support. The final decision is always yours.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> How do you document outcomes for plan reviews?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We track progress against your NDIS goals and include specific evidence (e.g., “Participant now attends community activities twice weekly independently”). We also highlight unmet needs requiring additional funding. Our reports align with NDIA expectations for measurable outcomes.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q6</span> What if my plan is cut and I can’t afford the same supports?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We help you prioritise essential supports within the budget and advocate (with your consent) for a review or appeal. We provide evidence of impact to support requests for funding adjustments.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q7</span> Do you work with Support Coordinators on reviews?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We collaborate closely with SCs to ensure consistent information is presented to the NDIA. We share reports, spending summaries, and recommendations so the participant receives strong, unified advocacy.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+   <!-- ======= PART 6 (Elaborated) ======= -->
+  <section id="part-6" class="shell" aria-label="NDIS Intake Q&A — Part 6">
+
+    <!-- Left Index -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a class="active" href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a href="#part-8"><span class="dot"></span>Part 8 · Objections & Model Responses</a></li>
+        <li><a href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+
+      <!-- Aged Care -->
+      <div class="section">
+        <span class="chip">Part 6A</span>
+        <h2 class="h1">Aged Care & Older Participants</h2>
+        <p class="sub">For participants close to or over 65 years, navigating overlaps between NDIS and Aged Care systems.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> I’m turning 65 soon. Will I lose my NDIS plan?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> No. If you entered NDIS before turning 65, you stay with NDIS for life (unless you choose My Aged Care instead). Your plan continues with reviews as normal. Only new applicants after 65 go through the aged care system.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> What if I prefer My Aged Care over NDIS?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> That’s your choice. My Aged Care offers Home Care Packages, but usually with lower funding than NDIS. If you already have an NDIS plan, most participants choose to remain with NDIS because of broader supports and funding flexibility.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> Can you provide both NDIS and aged care supports together?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. Some participants have both. We ensure clear separation of billing streams (NDIS vs My Aged Care) to stay compliant. For example, personal care may be under NDIS, while domestic tasks may be My Aged Care funded.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> Do you provide nursing and aged care-style supports?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. Our team includes RNs and carers experienced in aged care. We provide assistance with ADLs, continence, mobility, medication, and end-of-life care. Supports are tailored to maintain independence, dignity, and safety at home.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> How do you handle dementia or age-related decline?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We follow dementia care best practices—consistent staff, low-stimulus environments, meaningful engagement, and safety measures. We adapt care plans as cognition changes and support families with education and respite options.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Paediatrics -->
+      <div class="section">
+        <span class="chip">Part 6B</span>
+        <h2 class="h1">Children & Paediatric Participants</h2>
+        <p class="sub">For families with children receiving NDIS, focusing on development, therapy, respite, and parental concerns.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> My child is only 4. Are they eligible for NDIS?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes, if your child has a permanent and significant disability, or developmental delay. Early Childhood Approach (ECA) providers support children under 9 with NDIS-funded early interventions. We guide parents through this process.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> Do you provide therapy supports for children?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We link families with occupational therapists, speech pathologists, psychologists, and physiotherapists. We also provide therapy assistants who help children practice skills at home or in the community.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> What about school support?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> While schools are responsible for curriculum support, NDIS can fund personal care, therapy, or transport around schooling. We work with schools to ensure children are safe, supported, and engaged in learning.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> Do you provide respite for parents?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. Respite can be in-home, community-based, or Short-Term Accommodation (STA). It provides children with fun, engaging care while giving parents vital rest. Activities are tailored to each child’s interests and needs.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> My child has challenging behaviours. How will staff manage this?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Staff follow Behaviour Support Plans developed by specialists. Strategies include positive reinforcement, structured routines, and low-stress environments. Safety and wellbeing are prioritised while supporting skill-building.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q6</span> Will staff respect our parenting style?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Absolutely. Parents are the primary decision-makers. We align supports with family values, routines, and cultural preferences, ensuring children feel secure and parents feel respected.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q7</span> How do you ensure child safety?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> All staff hold NDIS Worker Screening and Working with Children Checks. Safeguards include supervision policies, incident reporting, and clear communication with parents. We also maintain strict compliance with the NDIS Child Safe Standards.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+   <!-- ======= PART 7 (Elaborated) ======= -->
+  <section id="part-7" class="shell" aria-label="NDIS Intake Q&A — Part 7">
+
+    <!-- Left Index -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a class="active" href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a href="#part-8"><span class="dot"></span>Part 8 · Objections & Model Responses</a></li>
+        <li><a href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+
+      <!-- Crisis Scenarios -->
+      <div class="section">
+        <span class="chip">Part 7A</span>
+        <h2 class="h1">Crisis & Emergency Scenarios</h2>
+        <p class="sub">When participants, families, or staff face an emergency or crisis situation during intake or ongoing supports.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> What if the participant experiences a mental health crisis?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Our staff are trained in mental health first aid and de-escalation. If there’s immediate danger, we call 000. We then notify family and the participant’s treating team. We document the incident and review strategies with professionals for ongoing safety.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> How do you handle a medical emergency at home?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Staff follow emergency care plans first (e.g., seizure protocols). If urgent, they call 000, administer first aid, and stay with the participant until help arrives. We notify family immediately, complete incident reports, and escalate to management the same day.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> What if there are safeguarding concerns (abuse, neglect, exploitation)?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We follow strict safeguarding protocols. Any suspicion is documented and escalated to management, the NDIS Commission, and/or relevant authorities as required. Staff are mandated reporters. Participant safety and dignity are always the priority.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> Do you provide crisis respite if a family can’t cope?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. Subject to staff availability, we provide urgent respite at home or Short-Term Accommodation (STA). This ensures the participant is safe while giving families immediate relief. We then review longer-term strategies to avoid repeat crises.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q5</span> How do you prevent re-occurring crises?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We work with participants, families, and professionals to create proactive crisis plans. These include early warning signs, escalation contacts, preferred calming techniques, and pre-approved emergency responses.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Complaints & Escalations -->
+      <div class="section">
+        <span class="chip">Part 7B</span>
+        <h2 class="h1">Complaints & Escalations</h2>
+        <p class="sub">Participants or families may raise urgent issues, disputes, or dissatisfaction with services.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> What if I have a complaint about staff or services?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We encourage open communication. Complaints can be made verbally, in writing, or anonymously. All complaints are acknowledged within 24 hours, investigated, and outcomes shared with you. If unsatisfied, you may escalate directly to the NDIS Quality & Safeguards Commission.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> Will I be penalised for complaining?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Absolutely not. Feedback and complaints help us improve. Participants will never be penalised for raising concerns—services will continue unaffected. We welcome feedback as part of our quality improvement culture.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> How fast are complaints resolved?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Minor issues are often resolved within 48 hours. Complex matters may take up to 21 days. We provide regular updates and keep you informed throughout the process.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Interpreter & Non-English Speakers -->
+      <div class="section">
+        <span class="chip">Part 7C</span>
+        <h2 class="h1">Interpreter & Non-English Speaker Support</h2>
+        <p class="sub">For participants or families who speak little or no English, ensuring communication is clear and culturally respectful.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> My first language isn’t English. Can you provide interpreters?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. We arrange accredited interpreters (phone, video, or face-to-face) through the National Translating and Interpreting Service (TIS). This ensures participants and families fully understand intake and service planning.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> Do you have bilingual staff?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Where possible, yes. We record language preferences at intake and match staff accordingly. If bilingual staff aren’t available, interpreters are engaged to ensure communication is clear.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q3</span> How do you make written information accessible?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> We can provide Service Agreements, intake forms, and key policies in translated versions where available. For less common languages, we read documents aloud with an interpreter to ensure full understanding before signing.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q4</span> Do you respect cultural practices alongside language needs?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Yes. Staff receive cultural awareness training. We incorporate dietary, religious, and cultural needs into the care plan and respect participants’ spiritual and community connections as part of holistic care.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+    <!-- ======= PART 8 (Elaborated) ======= -->
+  <section id="part-8" class="shell" aria-label="NDIS Intake Q&A — Part 8">
+
+    <!-- Left Index -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a class="active" href="#part-8"><span class="dot"></span>Part 8 · Objections & Model Responses</a></li>
+        <li><a href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+
+      <!-- Objections & Model Responses -->
+      <div class="section">
+        <span class="chip">Part 8A</span>
+        <h2 class="h1">Handling Objections — Model Responses</h2>
+        <p class="sub">Use calm, clear, and respectful phrasing. Acknowledge, clarify, answer, and check comfort before moving on.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">O1</span> “It’s too expensive / I don’t want out-of-pocket costs.”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Totally understand wanting no surprises. We bill strictly to your NDIS plan at the standard Price Guide rates. Before we start, we’ll list the exact line items and expected hours in the Service Agreement so you can approve or change anything first.”</p>
+            <p class="note">Offer to send a one-page quote with weekly cost and remaining budget forecast.</p>
+          </div>
+        </details>
+
+        <details class="qa" open>
+          <summary><span class="q">O2</span> “Can you start tomorrow?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “I’ll check roster availability immediately. If we can’t place for tomorrow, we’ll prioritise you for the earliest slot and update you today with a confirmed start time and interim options if needed.”</p>
+            <ul>
+              <li>Ask urgency drivers (discharge, safety risk, care gap).</li>
+              <li>Offer a nurse/short shift bridge if applicable.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="qa" open>
+          <summary><span class="q">O3</span> “Staff didn’t show last time with another provider.”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “I’m sorry that happened. We run proactive confirmations and backups. If someone is unwell, we notify you early and, with your permission, send a qualified replacement. You’ll always know who is coming and when.”</p>
+            <p class="note">Explain SMS confirmations, live roster changes, and on-call number.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O4</span> “We prefer a female/male worker / a specific culture or language.”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “No problem—your comfort matters. We’ll prioritise that preference. If we can’t match perfectly at first, we’ll discuss interim options and keep searching until you’re happy.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O5</span> “What if I don’t like the worker?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “You have full choice. Tell us and we’ll rematch quickly—no hard feelings. We want you to feel comfortable and supported.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O6</span> “Can you do cash rates / discount below NDIS price?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “We follow NDIS Pricing Arrangements for fairness and compliance. What we can do is plan supports efficiently to get the most value out of your budget.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O7</span> “Do you charge travel?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Only as allowed by NDIS (time and km caps). If travel applies to your location, we’ll show it in the Agreement upfront so there are no surprises.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O8</span> “We need after-hours/weekends but heard rates are higher.”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Correct—NDIS has different rates for evenings, weekends, and public holidays. We’ll map your ideal schedule and show both standard and after-hours costs so you can choose what suits.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O9</span> “We only want private carers, not a provider.”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Totally your choice. The benefit of a provider is vetted staff, replacements, insurance cover, clinical oversight, and 24/7 support line. If you prefer self-recruited workers, we can still help with nursing or backup coverage when needed.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O10</span> “We’re worried about safety/abuse.”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Safety is non-negotiable. All workers hold NDIS Worker Screening (and WWCC where required), complete safeguarding training, and follow strict incident/complaints policies. You can contact management anytime.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O11</span> “I don’t want to lock into a contract.”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Our Service Agreement is plain English and flexible. It protects your rights and explains rates, cancellations, and changes. You can end services with notice—usually 14 days.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O12</span> “How do I know you’re qualified?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “We’re an NDIS Registered provider and audited externally. Staff complete competencies (manual handling, medications, high-intensity tasks) and ongoing training. We’re happy to share credentials relevant to your supports.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O13</span> “Can you guarantee the same worker every time?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “We build a small, consistent team so you usually see the same faces. If someone is away, we’ll brief a backup and introduce them in advance.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O14</span> “We’ve had poor communication before.”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “We set clear contact channels—SMS confirmations, a dedicated inbox/phone, and escalation to a team lead. We also agree on update frequency (weekly/fortnightly) so you’re never left guessing.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O15</span> “What if things go wrong?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Tell us immediately—no matter how small. We log the issue, fix it quickly, and follow up to make sure you’re satisfied. You can also complain formally or to the NDIS Commission at any time.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O16</span> “Do you do trial shifts?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Yes—many participants like a short trial. We schedule a meet-and-greet or first short visit; if you’re happy, we lock in the regular roster.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O17</span> “What’s your cancellation policy?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “We align with NDIS cancellation rules (typically 7 clear days). If circumstances are outside your control, talk to us—we do our best to be fair.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O18</span> “Can you provide references/testimonials?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Yes—on request we can share de-identified feedback and, where appropriate, referee contacts. We also offer a short pilot period so you can try us first.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O19</span> “We’re confused about NDIS rules.”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “No worries—NDIS can be complex. We’ll explain funding categories, how claiming works, and what’s reasonable & necessary for your goals—always in plain English.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">O20</span> “Do you have minimum hours?”</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Some visits have a short minimum to cover travel/setup. We’ll outline it upfront and design shifts that make sense for you and your budget.”</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Follow-ups & Closures (call wrap-ups) -->
+      <div class="section">
+        <span class="chip">Part 8B</span>
+        <h2 class="h1">Follow-ups & Call Closures</h2>
+        <p class="sub">Finish every call with clarity, reassurance, and written confirmation.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">C1</span> How do you wrap up the call professionally?</summary>
+          <div class="answer">
+            <p><b>Model:</b> “Thanks for sharing today. I’ll send a summary email/SMS now with the agreed next steps. If anything changes, message or call us anytime.”</p>
+            <ul>
+              <li>Confirm <b>who</b> will send the follow-up and <b>when</b> (e.g., within 1 hour).</li>
+              <li>List <b>attachments</b>: quote, draft Service Agreement, intake form link.</li>
+              <li>Set a <b>check-in</b> time (e.g., “I’ll call Thursday 10am”).</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">C2</span> What goes into the written follow-up?</summary>
+          <div class="answer">
+            <ul>
+              <li>Concise recap of needs/goals and preferred schedule.</li>
+              <li>Proposed start date + who’s doing what (you/us/SC).</li>
+              <li>Pricing table (line item, hourly rate, est. weekly hours).</li>
+              <li>Links: intake form, Service Agreement, contact details, on-call.</li>
+            </ul>
+            <p class="note">Keep it one screen long; attach detail as PDFs if needed.</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">C3</span> How do you keep momentum without pressure?</summary>
+          <div class="answer">
+            <p><b>Model:</b> “No rush—when you’re ready, reply ‘YES’ to this SMS or sign the Agreement, and we’ll lock in your start and staff matching.”</p>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">C4</span> What if we’re waiting on documents/capacity?</summary>
+          <div class="answer">
+            <p><b>Model:</b> “I’ll update you by [time/date]. If anything shifts sooner, I’ll message right away. You’ll never be left wondering.”</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+   <!-- ======= PART 9 (Elaborated) ======= -->
+  <section id="part-9" class="shell" aria-label="NDIS Intake Q&A — Part 9">
+
+    <!-- Left Index -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a href="#part-8"><span class="dot"></span>Part 8 · Objections & Responses</a></li>
+        <li><a class="active" href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+
+      <!-- Intake Documentation -->
+      <div class="section">
+        <span class="chip">Part 9A</span>
+        <h2 class="h1">Intake Call Documentation</h2>
+        <p class="sub">Accurate, objective, and audit-ready notes are essential for compliance and safe handover.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> What must be captured in intake notes?</summary>
+          <div class="answer">
+            <ul>
+              <li><b>Caller Details:</b> name, role/relationship, contact, consent to SMS/email.</li>
+              <li><b>Participant Info:</b> legal/preferred name, DOB, disability/diagnoses, suburb/postcode.</li>
+              <li><b>NDIS Plan:</b> plan number, management type, dates, funding categories.</li>
+              <li><b>Goals & Priorities:</b> what the participant wants to achieve.</li>
+              <li><b>Service Preferences:</b> days/times, gender/staff preferences, cultural/linguistic needs.</li>
+              <li><b>Risks/Alerts:</b> behaviours of concern, allergies, equipment needs.</li>
+              <li><b>Consent:</b> verbal consent scope recorded (sharing info, SC/plan manager comms).</li>
+              <li><b>Outcome:</b> next steps, timelines, who will follow up.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> How should notes be written?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Notes must be <b>factual, clear, and free of bias</b>. Use the participant’s words where possible.</p>
+            <p><b>Good:</b> “Caller reports missed medication twice this week.”</p>
+            <p><b>Poor:</b> “Family unreliable.” (judgemental)</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Consent & Risk -->
+      <div class="section">
+        <span class="chip">Part 9B</span>
+        <h2 class="h1">Consent & Risk Flags</h2>
+        <p class="sub">Always check permission, privacy boundaries, and safety risks.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> What consent needs recording?</summary>
+          <div class="answer">
+            <ul>
+              <li>Consent for storing and sharing personal information.</li>
+              <li>Consent to liaise with support coordinators, plan managers, or family.</li>
+              <li>Consent to send SMS/email communications.</li>
+              <li>Interpreter and cultural needs recorded.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> How do you capture risk alerts?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Document specific risks (e.g., “Seizure history — midazolam prescribed, staff to be trained”). Avoid vague terms (“High risk”). Include triggers, early warning signs, and required responses.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Compliance & KPIs -->
+      <div class="section">
+        <span class="chip">Part 9C</span>
+        <h2 class="h1">Compliance & Quality KPIs</h2>
+        <p class="sub">Measure intake quality against NDIS and internal standards.</p>
+        <div class="rule"></div>
+
+        <details class="qa" open>
+          <summary><span class="q">Q1</span> What are the key compliance metrics?</summary>
+          <div class="answer">
+            <ul>
+              <li><b>First Response Time:</b> calls answered or returned within agreed window.</li>
+              <li><b>Conversion Rate:</b> enquiries to signed Service Agreements.</li>
+              <li><b>Time to First Service:</b> days from intake to first shift.</li>
+              <li><b>Documentation Completeness:</b> % of notes with all required fields.</li>
+              <li><b>Risk Escalation:</b> % of flagged issues escalated correctly.</li>
+              <li><b>Participant Satisfaction:</b> follow-up survey scores after first week.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="qa">
+          <summary><span class="q">Q2</span> What happens if compliance fails?</summary>
+          <div class="answer">
+            <p><b>Answer:</b> Non-compliance can result in audit findings, funding delays, or risk to participant safety. Immediate corrective action, retraining, and documentation audits are required if gaps are found.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+    <!-- ======= PART 10 (Elaborated) ======= -->
+  <section id="part-10" class="shell" aria-label="NDIS Intake Q&A — Part 10">
+
+    <!-- Left Index -->
+    <nav class="index" aria-label="Index">
+      <div class="idx-title"><span class="chip">Index</span> Phone Intake — Q&A</div>
+      <ul class="idx-list">
+        <li><a href="#part-1"><span class="dot"></span>Part 1 · General & Standard Inquiry</a></li>
+        <li><a href="#part-2"><span class="dot"></span>Part 2 · Family & Support Coordinators</a></li>
+        <li><a href="#part-3"><span class="dot"></span>Part 3 · Complex Needs & Hospital Discharge</a></li>
+        <li><a href="#part-4"><span class="dot"></span>Part 4 · Special Scenarios & Transitions</a></li>
+        <li><a href="#part-5"><span class="dot"></span>Part 5 · Provider Transition & Plan Reviews</a></li>
+        <li><a href="#part-6"><span class="dot"></span>Part 6 · Aged Care & Paediatrics</a></li>
+        <li><a href="#part-7"><span class="dot"></span>Part 7 · Crisis & Interpreter</a></li>
+        <li><a href="#part-8"><span class="dot"></span>Part 8 · Objections & Responses</a></li>
+        <li><a href="#part-9"><span class="dot"></span>Part 9 · Documentation & Compliance</a></li>
+        <li><a class="active" href="#part-10"><span class="dot"></span>Part 10 · Implementation & CI</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="content">
+
+      <!-- Governance & Roles -->
+      <div class="section">
+        <span class="chip">Part 10A</span>
+        <h2 class="h1">Governance & Roles</h2>
+        <p class="sub">Clear ownership ensures the scripts stay current, compliant, and effective.</p>
+        <div class="rule"></div>
+        <ul>
+          <li><b>Content Owner (Intake Lead):</b> updates scripts quarterly, integrates staff feedback.</li>
+          <li><b>Clinical Owner (RN Lead):</b> reviews clinical accuracy, risk management, and safeguarding.</li>
+          <li><b>Quality Manager:</b> audits call notes, monitors KPIs, and conducts calibrations.</li>
+          <li><b>Training Manager:</b> ensures onboarding and refresher training uses this script.</li>
+          <li><b>IT/CRM Admin:</b> maintains digital accessibility and integration into systems.</li>
+        </ul>
+      </div>
+
+      <!-- Training & Rollout -->
+      <div class="section">
+        <span class="chip">Part 10B</span>
+        <h2 class="h1">Training & Rollout</h2>
+        <p class="sub">Introduce scripts in a structured rollout to maximise adoption.</p>
+        <div class="rule"></div>
+        <ol>
+          <li><b>Phase 1 — Induction:</b> All new intake staff complete guided training using sample calls.</li>
+          <li><b>Phase 2 — Role-play:</b> Staff simulate scenarios (general, crisis, complaints, objections).</li>
+          <li><b>Phase 3 — Supervised Calls:</b> Shadowing by senior intake staff until confident.</li>
+          <li><b>Phase 4 — Live Monitoring:</b> Quality manager reviews first 10 calls for compliance.</li>
+          <li><b>Refresher Training:</b> Quarterly sessions and after any major script update.</li>
+        </ol>
+      </div>
+
+      <!-- Monitoring & Scorecards -->
+      <div class="section">
+        <span class="chip">Part 10C</span>
+        <h2 class="h1">Monitoring & Scorecards</h2>
+        <p class="sub">Measure ongoing performance against participant experience and compliance standards.</p>
+        <div class="rule"></div>
+        <ul>
+          <li><b>Call Calibration:</b> monthly review of random calls with scoring rubric (tone, accuracy, documentation).</li>
+          <li><b>Audit Logs:</b> all calls linked with notes checked against compliance dataset.</li>
+          <li><b>Participant Feedback:</b> SMS/email surveys post-intake asking clarity & satisfaction.</li>
+          <li><b>Scorecard Metrics:</b> empathy, accuracy, compliance, resolution, timeliness.</li>
+        </ul>
+      </div>
+
+      <!-- Continuous Improvement -->
+      <div class="section">
+        <span class="chip">Part 10D</span>
+        <h2 class="h1">Continuous Improvement</h2>
+        <p class="sub">Keep the scripts alive — updated with reality, policy changes, and feedback.</p>
+        <div class="rule"></div>
+        <ul>
+          <li><b>Monthly:</b> review common objections & update model responses.</li>
+          <li><b>Quarterly:</b> update training guide with new NDIS policy changes or price guide updates.</li>
+          <li><b>Annual:</b> full review & re-audit; refresh staff training and re-certify compliance.</li>
+          <li><b>Feedback Loop:</b> encourage staff to submit “real call” examples to refine scripts.</li>
+          <li><b>Version Control:</b> assign version numbers (v1.1, v1.2) and keep archive for audits.</li>
+        </ul>
+      </div>
+
+      <!-- Final Summary -->
+      <div class="section">
+        <span class="chip">Part 10E</span>
+        <h2 class="h1">Conclusion & Next Steps</h2>
+        <p class="sub">Bring it all together — empower staff and safeguard participants.</p>
+        <div class="rule"></div>
+        <ul>
+          <li>Always lead with empathy and active listening.</li>
+          <li>Provide clear, accurate, and jargon-free responses.</li>
+          <li>Respect participant choice, culture, and autonomy at all times.</li>
+          <li>Follow through with commitments and keep participants informed.</li>
+          <li>Document every call objectively — compliance protects both participant and provider.</li>
+        </ul>
+        <p class="note">Thank you for committing to best-practice intake. This work ensures participants feel safe, respected, and supported from the very first phone call.</p>
+      </div>
+    </div>
+  </section>
+  
+
 </body>
 </html>
+
+
+
+
+
+
+
+
