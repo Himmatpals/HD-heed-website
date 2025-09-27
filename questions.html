@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HD HeeD | Phone Scripts “Super-Bible” (NDIS Intake & Customer Calls)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="HD HeeD comprehensive NDIS phone scripts & FAQs for intake and customer calls. Clean, professional, scenario-based answers." />
+  <style>
+    /* ====== Shared HD HeeD-inspired theme (used by all parts) ====== */
+    :root{
+      --brand:#0ea5e9; --brand-ink:#0b79a5;
+      --ink:#0f172a; --muted:#475569;
+      --bg:#ffffff; --bg-soft:#f8fafc;
+      --ring:#bae6fd; --ok:#059669; --warn:#d97706; --err:#dc2626;
+      --card:#ffffff; --shadow:0 8px 24px rgba(2,6,23,.06), 0 1px 2px rgba(2,6,23,.04);
+      --radius:16px; --radius-sm:12px; --radius-xs:10px;
+      --space: clamp(16px, 2vw, 24px); --max: 1280px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans";
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:var(--max);margin:auto;padding:0 var(--space)}
+    header{
+      position:sticky;top:0;z-index:30;
+      background:rgba(255,255,255,.9);backdrop-filter:saturate(1.2) blur(8px);
+      border-bottom:1px solid #e2e8f0;
+    }
+    .topbar{display:flex;align-items:center;gap:16px;justify-content:space-between;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand .logo{
+      width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--brand),#67e8f9);
+      box-shadow:0 4px 12px rgba(14,165,233,.35);
+    }
+    .brand h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.2px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:10px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;
+      box-shadow:0 1px 1px rgba(2,6,23,.04);
+      font-weight:600;color:var(--ink)
+    }
+    .btn.primary{background:var(--brand);border-color:var(--brand);color:white}
+    .btn.ghost{background:transparent}
+    .btn:focus{outline:3px solid var(--ring)}
+    .hero{
+      padding:28px 0 14px;border-bottom:1px solid #eef2f7;background:var(--bg);
+    }
+    .hero h2{margin:0 0 6px;font-size:28px;letter-spacing:.2px}
+    .hero p{color:var(--muted);margin:0}
+    .grid{display:grid;gap:var(--space)}
+    @media (min-width: 1024px){ .grid.cols-2{grid-template-columns:320px 1fr} }
+    .toc{
+      position:sticky; top:82px; align-self:start;
+      border:1px solid #e6eef6;border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);
+      padding:16px; max-height:calc(100vh - 120px); overflow:auto;
+    }
+    .toc h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+    .toc nav a{display:block;padding:8px 10px;border-radius:10px;color:var(--muted)}
+    .toc nav a:hover{background:var(--bg-soft);color:var(--ink)}
+    section{scroll-margin-top:96px}
+    .card{
+      border:1px solid #e6eef6;border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);
+      padding:22px;
+    }
+    .card h3{margin-top:0}
+    .kbd{font-family:var(--mono);font-size:.92em;background:var(--bg-soft);padding:2px 6px;border-radius:8px;border:1px solid #e5e7eb}
+    .pill{display:inline-block;padding:2px 10px;border-radius:999px;border:1px solid #e5e7eb;background:var(--bg-soft);font-size:12px;color:var(--muted)}
+    .block{display:block}
+    .two-col{display:grid;gap:16px}
+    @media (min-width: 860px){ .two-col{grid-template-columns:1fr 1fr} }
+    .kv{display:grid;gap:6px;margin:10px 0 0}
+    .kv label{font-size:12px;color:var(--muted)}
+    .kv .val{font-weight:600}
+    .callout{
+      border-left:4px solid var(--brand);background:linear-gradient(0deg,#f0f9ff,#fff);
+      padding:16px;border-radius:12px;border:1px dashed #cfeaff
+    }
+    .qa{border-top:1px dashed #e5e7eb;padding-top:14px;margin-top:12px}
+    details{border:1px solid #e6eef6;border-radius:12px;padding:14px 16px;background:#fff}
+    details+details{margin-top:12px}
+    summary{cursor:pointer;font-weight:700}
+    .badge{font-size:11px;padding:2px 8px;border-radius:999px;background:#ecfeff;color:#065f46;border:1px solid #a7f3d0}
+    .flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .list{margin:8px 0 0;padding-left:18px}
+    .list li{margin:4px 0}
+    .divider{height:1px;background:#eaeef5;margin:16px 0}
+    .muted{color:var(--muted)}
+    .small{font-size:13px}
+    .copy{float:right;font-size:12px}
+    .sticky-toolbar{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:10px;z-index:40}
+    .fab{border:none;border-radius:16px;padding:12px 14px;font-weight:700;box-shadow:0 10px 24px rgba(2,6,23,.12);cursor:pointer}
+    .fab.primary{background:var(--brand);color:#fff}
+    .fab.secondary{background:#fff;border:1px solid #e5e7eb}
+    code, pre{font-family:var(--mono)}
+    pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px}
+    footer{margin:48px 0 60px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>HD HeeD • Phone Scripts “Super-Bible”</h1>
+      </div>
+      <div class="actions">
+        <a href="tel:0286305500" class="btn primary">Call 02&nbsp;8630&nbsp;5500</a>
+        <a href="mailto:info@hdheed.com.au" class="btn">info@hdheed.com.au</a>
+        <a href="/referral.html" class="btn ghost">Start referral</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="container">
+      <h2>Customer call mastery for NDIS intake — clear, professional, and empathetic.</h2>
+      <p>Use this for phone calls only. Begin with the General Script, then jump to scenario sections. Every module includes suggested phrasing, data capture, compliance notes, and objection handling.</p>
+    </div>
+  </div>
+
+  <main class="container" style="padding: var(--space) 0;">
+    <div class="grid cols-2">
+      <!-- TOC (links for all parts; later sections will be appended) -->
+      <aside class="toc">
+        <h3>On this page</h3>
+        <nav>
+          <a href="#universal">Universal Standards</a>
+          <a href="#general-script">General Intake Script</a>
+          <a href="#call-structure">Call Structure</a>
+          <a href="#data-capture">Data Capture Checklist</a>
+          <a href="#consent">Consent & Privacy Lines</a>
+          <a href="#triage">Triage & Safeguarding</a>
+          <a href="#faqs">FAQs & Perfect Answers</a>
+          <div class="divider"></div>
+          <a href="#scenarios">Scenarios</a>
+          <a href="#support-coordinator">Support Coordinator Referral</a>
+          <a href="#family-carer">Family / Carer Calling</a>
+          <a href="#participant-self">Participant — Self</a>
+          <a href="#complex-needs">Complex Needs / Behaviours</a>
+          <a href="#hospital-discharge">Hospital Discharge</a>
+          <a href="#nursing-only">Nursing-Only Request</a>
+          <a href="#disengaged">Disengaged / Returning</a>
+          <a href="#provider-transition">Transition from Provider</a>
+          <a href="#plan-review">Plan Review Coming Up</a>
+          <a href="#aged-care">Aged Care Crossover</a>
+          <a href="#paediatrics">Paediatrics</a>
+          <a href="#crisis">Crisis or Immediate Risk</a>
+          <a href="#interpreter">Interpreter / CALD</a>
+          <div class="divider"></div>
+          <a href="#objections">Objections & Model Responses</a>
+          <a href="#follow-ups">Follow-ups (SMS/Email)</a>
+          <a href="#documentation">Documentation Templates</a>
+          <a href="#quality">Quality & KPIs</a>
+        </nav>
+      </aside>
+
+      <!-- CONTENT COLUMN (PART 1 CONTENT ONLY) -->
+      <div class="content" style="display:grid;gap:var(--space)">
+
+        <!-- 1. UNIVERSAL -->
+        <section id="universal" class="card">
+          <h3>Universal Standards (use on every call)</h3>
+          <div class="two-col">
+            <div>
+              <ul class="list">
+                <li><span class="pill">Tone</span> Warm, unhurried, person-centred. Avoid jargon unless the caller uses it. Mirror their language gently.</li>
+                <li><span class="pill">Speed</span> 140–160 wpm. Pause to check understanding.</li>
+                <li><span class="pill">Structure</span> Greet → Purpose → Permission → Discovery → Offer → Next steps → Confirm.</li>
+                <li><span class="pill">Compliance</span> Privacy, consent, and accurate notes every time (NDIS-aligned). <span class="small muted">If in doubt, capture & escalate.</span></li>
+                <li><span class="pill">Empathy</span> Validate feelings; acknowledge effort; focus on goals and outcomes.</li>
+              </ul>
+            </div>
+            <div class="callout">
+              <b>Golden line:</b> “Thanks for calling HD HeeD — how can we make things easier for you today?”<br/>
+              <div class="kv">
+                <label>Availability cues</label>
+                <div class="val">“I’m here with you.” • “Take your time.” • “I’ll summarise back to make sure I’ve got it right.”</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. GENERAL SCRIPT -->
+        <section id="general-script" class="card">
+          <h3>General Intake Script (default)</h3>
+          <div class="flex">
+            <span class="badge">Use for most inbound calls</span>
+            <button class="btn small copy" onclick="copyBlock('gen-script')">Copy</button>
+          </div>
+<pre id="gen-script"><code>👋 “Good &lt;time-of-day&gt;, you’ve reached HD HeeD, this is &lt;name&gt;. How can I help today?”
+🔐 “Before we begin, is it okay if I take a few details so we can support you properly?”
+🧭 “What would you like help with right now?” (Listen. Reflect back a short summary.)
+✅ “We can help with &lt;service&gt;. We’re NDIS registered and clinically led. The next step is to understand your goals and supports, then line up the right team.”
+🧾 “Can I grab your full name, best contact, suburb, and NDIS number (if handy)?”
+🧩 Discovery (see Data Capture). Check safety, timeframes, preferences.
+📌 “Here’s what I can do for you today: &lt;action&gt;. We can start &lt;when&gt;.”
+🗓 “Would you like me to email or text a summary with next steps?”
+🤝 “Thanks for calling — you’re in good hands. Anything else I can answer?”
+</code></pre>
+        </section>
+
+        <!-- 3. CALL STRUCTURE -->
+        <section id="call-structure" class="card">
+          <h3>Call Structure — checkpoints</h3>
+          <div class="two-col">
+            <div>
+              <ol class="list">
+                <li><b>Opening & permission</b> — who, why, consent to take notes.</li>
+                <li><b>Discovery</b> — goals, current supports, risks, preferences, timeframes.</li>
+                <li><b>Match</b> — what we can do; realistic start dates; expectations.</li>
+                <li><b>Commit</b> — referrals, documentation, consent, next steps.</li>
+                <li><b>Close</b> — confirm details, recap, how to reach us.</li>
+              </ol>
+            </div>
+            <div>
+              <div class="kv"><label>Escalation windows</label><div class="val">Immediate risk • Clinical complexity • Safeguarding concerns</div></div>
+              <div class="kv"><label>Response time guide</label><div class="val">Urgent same-day • Standard 1–2 business days • Non-urgent 3–5 days</div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. DATA CAPTURE -->
+        <section id="data-capture" class="card">
+          <h3>Data Capture Checklist</h3>
+          <div class="two-col">
+            <div>
+              <ul class="list">
+                <li>Participant legal name; preferred name; DOB; pronouns (optional).</li>
+                <li>Best phone & email; <span class="muted">OK to SMS?</span></li>
+                <li>Suburb & postcode; living situation; access constraints at home.</li>
+                <li>NDIS number; plan dates; plan manager (or self/agency managed); budget category(s) & capacity.</li>
+                <li>Primary goals; priorities; days/times preferred; cultural or language needs; interpreter required.</li>
+                <li>Existing supports; current provider(s); reason for change if transitioning.</li>
+                <li>Risks/alerts (falls, behaviours, pressure injuries, seizures, allergies); equipment/AT.</li>
+                <li>Referrer details (SC, family, hospital); consent to share updates.</li>
+              </ul>
+            </div>
+            <div>
+<textarea style="width:100%;height:220px;border:1px solid #e6eef6;border-radius:12px;padding:12px" placeholder="Quick-note pad (copyable into your CRM)&#10;• Name / DOB / Pronouns&#10;• Contact / OK to SMS&#10;• Suburb / Living&#10;• NDIS # / Plan dates / Mgmt / Budgets&#10;• Goals / Prefs&#10;• Supports / Providers&#10;• Risks / AT&#10;• Referrer / Consent"></textarea>
+              <p class="small muted">Tip: confirm spelling aloud for names/suburbs; repeat NDIS number in pairs.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. CONSENT -->
+        <section id="consent" class="card">
+          <h3>Consent & Privacy Lines</h3>
+          <p class="muted small">Use matter-of-fact, friendly phrasing. Obtain consent before collecting or sharing personal info.</p>
+          <details>
+            <summary>Collecting details (participant on the line)</summary>
+            <div class="qa">
+              <b>Line:</b> “I’ll note your details to arrange supports. We keep your information private and use it only for care. Is that okay to proceed?”
+            </div>
+          </details>
+          <details>
+            <summary>Third party (family/SC) — verbal consent</summary>
+            <div class="qa">
+              <b>Line:</b> “Do we have &lt;participant’s name&gt; on the line to confirm they’re happy for you to speak on their behalf? If not, I can take general info now and organise a quick consent call or consent form.”
+            </div>
+          </details>
+          <details>
+            <summary>Sharing updates with referrers</summary>
+            <div class="qa">
+              <b>Line:</b> “Would you like us to share progress updates with &lt;name&gt;? We’ll only share what’s needed to coordinate your supports.”
+            </div>
+          </details>
+          <details>
+            <summary>Recording consent in notes</summary>
+            <div class="qa">
+              • Verbal consent: Y/N, who gave it, date/time<br/>
+              • Scope: intake only / ongoing updates / full coordination<br/>
+              • Review/expiry date for consent
+            </div>
+          </details>
+        </section>
+
+        <!-- 6. TRIAGE -->
+        <section id="triage" class="card">
+          <h3>Triage & Safeguarding</h3>
+          <div class="two-col">
+            <div>
+              <ul class="list">
+                <li>Check for immediate risks (harm, medical crisis, lack of essential care).</li>
+                <li>If urgent: stay on the line, call 000 or relevant crisis line; escalate internally (clinical lead).</li>
+                <li>Record exact statements, time, and actions taken.</li>
+              </ul>
+            </div>
+            <div class="callout">
+              <b>Urgent cue:</b> “Are you or anyone with you in immediate danger, or without essential care today?”<br/>
+              <span class="small muted">If yes → follow emergency pathway, then document and notify clinical lead.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. FAQs placeholder (link appears in TOC; full FAQs arrive in Part 2) -->
+        <section id="faqs" class="card">
+          <h3>FAQs — Perfect Answers (overview)</h3>
+          <p class="muted">Common questions and model answers continue in <b>Part 2</b> with expanded responses and scripts.</p>
+        </section>
+
+      </div><!-- /content -->
+    </div><!-- /grid -->
+  </main>
+
+  <!-- Sticky tools (usable across all parts) -->
+  <div class="sticky-toolbar">
+    <button class="fab primary" onclick="toTop()">↑ Top</button>
+    <button class="fab secondary" onclick="expandAll()">Expand all</button>
+  </div>
+
+  <script>
+    function toTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
+    function expandAll(){ document.querySelectorAll('details').forEach(d => d.open = true); }
+    function copyBlock(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      const text = el.innerText || el.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target.closest('button');
+        if(!btn) return;
+        const prev = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(()=> btn.textContent = prev, 1200);
+      });
+    }
+  </script>
