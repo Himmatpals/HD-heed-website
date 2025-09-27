@@ -1557,6 +1557,321 @@
     </div>
   </section>
   
+<!-- ===================== TTS TUTOR — START ===================== -->
+<style>
+  /* Uses your existing CSS variables */
+  .tts-wrap{
+    position:fixed; right:16px; bottom:16px; z-index:60;
+    width:min(440px, 92vw); background:var(--panel); color:var(--ink);
+    border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:12px;
+  }
+  .tts-head{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px}
+  .tts-title{display:flex; align-items:center; gap:8px; font-weight:800; letter-spacing:.2px}
+  .tts-pill{background:var(--accent); color:var(--accent-ink); border-radius:999px; padding:4px 10px; font-size:11px; font-weight:900}
+  .tts-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:8px 0}
+  .tts-btn{
+    border:1px solid var(--border); background:#0f1522; color:#fef3c7;
+    padding:10px 12px; border-radius:999px; font-weight:800; cursor:pointer
+  }
+  .tts-btn:disabled{opacity:.6; cursor:not-allowed}
+  .tts-btn--accent{background:var(--accent); color:var(--accent-ink); border-color:transparent}
+  .tts-sel, .tts-range{
+    background:#0b101a; color:var(--ink); border:1px solid var(--border);
+    border-radius:10px; padding:8px; min-height:38px
+  }
+  .tts-range{width:160px}
+  .tts-tog{display:flex; align-items:center; gap:8px; font-size:13px}
+  .tts-status{font-size:12px; color:var(--muted)}
+  .tts-prog{height:6px; background:#0b101a; border:1px solid var(--border); border-radius:999px; overflow:hidden}
+  .tts-bar{height:100%; width:0%; background:var(--accent)}
+  .tts-reading{outline:1px dashed var(--accent); border-radius:12px}
+  .tts-mini{font-size:12px; color:#fef08a}
+  .tts-close{background:transparent; border:none; color:var(--muted); cursor:pointer; font-weight:800}
+  .tts-close:hover{color:#fef08a}
+  @media (max-width: 760px){ .tts-wrap{right:10px; left:10px; width:auto} }
+</style>
+
+<div class="tts-wrap" role="region" aria-label="Text to Speech Tutor" id="ttsTutor">
+  <div class="tts-head">
+    <div class="tts-title"><span class="tts-pill">TTS</span> <span>Text-to-Speech Tutor</span></div>
+    <button class="tts-close" id="ttsHideBtn" title="Hide">✕</button>
+  </div>
+
+  <div class="tts-row">
+    <button class="tts-btn" id="ttsPrev" title="Previous Q&A">⏮</button>
+    <button class="tts-btn tts-btn--accent" id="ttsPlay" title="Play / Pause">▶</button>
+    <button class="tts-btn" id="ttsNext" title="Next Q&A">⏭</button>
+    <button class="tts-btn" id="ttsStop" title="Stop">⏹</button>
+    <button class="tts-btn" id="ttsSel" title="Read highlighted text">🖱️ Read selection</button>
+  </div>
+
+  <div class="tts-row">
+    <label class="tts-tog"><input type="checkbox" id="ttsAll"/> Read whole part</label>
+    <label class="tts-tog">Speed <input type="range" min="0.6" max="2" step="0.1" value="1" id="ttsRate" class="tts-range"> <span id="ttsRateVal" class="tts-mini">1.0×</span></label>
+    <select id="ttsVoice" class="tts-sel" aria-label="Voice"></select>
+  </div>
+
+  <div class="tts-row" style="width:100%">
+    <div class="tts-prog" style="flex:1">
+      <div class="tts-bar" id="ttsBar"></div>
+    </div>
+    <div class="tts-status" style="min-width:110px; text-align:right"><span id="ttsClock">0:00 / 0:00</span></div>
+  </div>
+
+  <div class="tts-status" id="ttsNow">Ready. Tip: click any question to set it as “active”.</div>
+</div>
+
+<script>
+(function(){
+  // -------- DOM refs
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const wrap = $('#ttsTutor');
+  const btnPrev = $('#ttsPrev'), btnPlay = $('#ttsPlay'), btnNext = $('#ttsNext'), btnStop = $('#ttsStop'), btnSel = $('#ttsSel');
+  const chkAll = $('#ttsAll'), rate = $('#ttsRate'), rateVal = $('#ttsRateVal'), voiceSel = $('#ttsVoice'), bar = $('#ttsBar'), clock = $('#ttsClock'), now = $('#ttsNow');
+  const btnHide = $('#ttsHideBtn');
+
+  // -------- State
+  let synth = window.speechSynthesis;
+  let voices = [];
+  let utter = null;
+  let playing = false;
+  let curPart = null;         // current <section id="part-x">
+  let items = [];             // details.qa[] in current part
+  let idx = 0;                // active item index
+  let startMs = 0;
+  let tick = null;
+
+  // -------- Helpers
+  const fmt = s => {
+    const m = Math.floor(s/60), sec = Math.max(0, Math.floor(s%60));
+    return `${m}:${sec<10?'0':''}${sec}`;
+  };
+  const getPart = () => {
+    // Use hash if present, else top-most part in viewport
+    let id = location.hash && location.hash.startsWith('#part-') ? location.hash : null;
+    if (id && document.querySelector(id)) return document.querySelector(id);
+    const candidates = $$('.shell[id^="part-"]');
+    let top = candidates[0] || null, minY = Infinity;
+    candidates.forEach(el=>{
+      const r = el.getBoundingClientRect();
+      if (r.top>=-20 && r.top<minY){ minY=r.top; top=el; }
+    });
+    return top;
+  };
+  const collect = () => {
+    curPart = getPart();
+    items = curPart ? Array.from(curPart.querySelectorAll('details.qa')) : [];
+    if (items.length===0) { now.textContent = 'No Q&A items found in this part.'; }
+  };
+  const setIdx = (i) => {
+    if (!items.length) return;
+    // clamp
+    idx = Math.max(0, Math.min(i, items.length-1));
+    // open & highlight
+    items.forEach(d=>d.classList.remove('tts-reading'));
+    const d = items[idx];
+    if (!d.open) d.open = true;
+    d.classList.add('tts-reading');
+    // scroll into view
+    d.scrollIntoView({behavior:'smooth', block:'center'});
+    // show title
+    const q = d.querySelector('summary')?.innerText?.trim() || 'Question';
+    now.textContent = `Active: ${q}`;
+  };
+  const curText = () => {
+    if (!items.length) return '';
+    const d = items[idx];
+    const q = (d.querySelector('summary')?.innerText || '').trim();
+    const a = (d.querySelector('.answer')?.innerText || '').trim();
+    return `Question: ${q}. Answer: ${a}`;
+  };
+  const partText = () => {
+    // Read the whole part (ordered Q&A)
+    return items.map((d,i)=>{
+      const q = (d.querySelector('summary')?.innerText || '').trim();
+      const a = (d.querySelector('.answer')?.innerText || '').trim();
+      return `Question ${i+1}: ${q}. Answer: ${a}.`;
+    }).join('\n\n');
+  };
+  const selectionText = () => (window.getSelection()?.toString() || '').trim();
+
+  const estimateSecs = (txt) => {
+    if (!txt) return 0;
+    const words = txt.split(/\s+/).filter(Boolean).length;
+    const wps = (150/60) * parseFloat(rate.value || '1'); // ~150 wpm baseline
+    return words / wps;
+  };
+
+  const setClock = (elapsed, total) => {
+    clock.textContent = `${fmt(elapsed)} / ${fmt(total)}`;
+  };
+
+  const stop = (silent=false) => {
+    if (synth.speaking || synth.paused) synth.cancel();
+    clearInterval(tick); tick = null;
+    playing = false;
+    btnPlay.textContent = '▶';
+    bar.style.width = '0%';
+    if (!silent) now.textContent = 'Stopped.';
+  };
+
+  // -------- Speaking
+  const speak = (txt, ondone) => {
+    if (!txt) { now.textContent='Nothing to read.'; return; }
+    stop(true);
+    utter = new SpeechSynthesisUtterance(txt);
+    const v = voices[voiceSel.selectedIndex] || null;
+    if (v) utter.voice = v;
+    utter.rate = parseFloat(rate.value || '1');
+    utter.pitch = 1;
+    utter.onstart = () => {
+      playing = true; btnPlay.textContent = '⏸';
+      startMs = Date.now();
+      const est = estimateSecs(txt);
+      setClock(0, est);
+      tick = setInterval(()=>{
+        const el = (Date.now()-startMs)/1000;
+        const pct = Math.min(100, (el/est)*100);
+        bar.style.width = pct+'%';
+        setClock(el, est);
+      }, 100);
+    };
+    utter.onend = () => {
+      clearInterval(tick); tick=null; playing=false; btnPlay.textContent='▶'; bar.style.width='100%';
+      if (ondone) ondone();
+    };
+    utter.onerror = () => {
+      clearInterval(tick); tick=null; playing=false; btnPlay.textContent='▶';
+      now.textContent = 'TTS error. Try a different voice or reload.';
+    };
+    synth.speak(utter);
+  };
+
+  // -------- Voices
+  const loadVoices = () => {
+    voices = synth.getVoices();
+    voiceSel.innerHTML = '';
+    voices.forEach(v=>{
+      const opt = document.createElement('option');
+      opt.textContent = `${v.name} (${v.lang})`;
+      voiceSel.appendChild(opt);
+    });
+    // prefer en-AU then en-GB/US
+    const pref = voices.findIndex(v=>/en-AU/i.test(v.lang)) >= 0
+      ? voices.findIndex(v=>/en-AU/i.test(v.lang))
+      : voices.findIndex(v=>/en-GB|en-US/i.test(v.lang));
+    if (pref >= 0) voiceSel.selectedIndex = pref;
+  };
+  if (typeof synth.onvoiceschanged !== 'undefined') synth.onvoiceschanged = loadVoices;
+  loadVoices();
+
+  // -------- Init collection
+  collect();
+  setIdx(0);
+
+  // -------- Events
+  btnPlay.addEventListener('click', ()=>{
+    // Toggle pause/resume if currently speaking, else start
+    if (synth.speaking && !synth.paused) { synth.pause(); playing=false; btnPlay.textContent='▶'; now.textContent='Paused.'; return; }
+    if (synth.paused){ synth.resume(); playing=true; btnPlay.textContent='⏸'; now.textContent='Resumed.'; return; }
+
+    // Start from selection / current / whole part
+    const sel = selectionText();
+    if (sel) { speak(sel); return; }
+
+    if (chkAll.checked){
+      // read whole part
+      speak(partText(), ()=> now.textContent='Finished this part.');
+    } else {
+      // read current Q&A; auto-advance to next item
+      speak(curText(), ()=>{
+        if (idx < items.length-1){
+          setIdx(idx+1);
+          if (chkAll.checked) speak(curText()); // (if user ticked mid-read)
+        } else {
+          now.textContent = 'Finished last Q&A in this part.';
+        }
+      });
+    }
+  });
+
+  btnStop.addEventListener('click', ()=> stop());
+  btnPrev.addEventListener('click', ()=>{
+    stop(true); setIdx(idx-1);
+    if (chkAll.checked) btnPlay.click();
+  });
+  btnNext.addEventListener('click', ()=>{
+    stop(true); setIdx(idx+1);
+    if (chkAll.checked) btnPlay.click();
+  });
+  btnSel.addEventListener('click', ()=>{
+    const sel = selectionText();
+    if (!sel){ now.textContent = 'Select text on the page, then press “Read selection”.'; return; }
+    speak(sel);
+  });
+
+  rate.addEventListener('input', ()=>{
+    rateVal.textContent = `${parseFloat(rate.value).toFixed(1)}×`;
+    if (utter) utter.rate = parseFloat(rate.value);
+  });
+  voiceSel.addEventListener('change', ()=>{
+    if (synth.speaking){ stop(true); btnPlay.click(); }
+  });
+
+  // Clicking a question sets it active
+  document.addEventListener('click', (e)=>{
+    const sum = e.target.closest('summary');
+    if (sum){
+      const d = sum.closest('details.qa');
+      if (!d) return;
+      collect();
+      const i = items.indexOf(d);
+      if (i>=0) setIdx(i);
+    }
+  });
+
+  // When user navigates to another part (hash change / scroll), refresh list
+  window.addEventListener('hashchange', ()=>{ collect(); setIdx(0); stop(true); });
+
+  // If the visible part changes on scroll (no hash), try to track it (simple throttle)
+  let t=null;
+  window.addEventListener('scroll', ()=>{
+    if (t) return;
+    t = setTimeout(()=>{ t=null; const prevPart = curPart; collect(); if (curPart!==prevPart){ setIdx(0); stop(true);} }, 400);
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (ev)=>{
+    if (ev.target && (/input|select|textarea/i.test(ev.target.tagName))) return;
+    if (ev.code==='Space'){ ev.preventDefault(); btnPlay.click(); }
+    if (ev.code==='ArrowLeft'){ ev.preventDefault(); btnPrev.click(); }
+    if (ev.code==='ArrowRight'){ ev.preventDefault(); btnNext.click(); }
+    if (ev.code==='Escape'){ ev.preventDefault(); btnStop.click(); }
+  });
+
+  // Hide/Show
+  btnHide.addEventListener('click', ()=>{
+    wrap.style.display = 'none';
+    // Add a small re-open button in the corner
+    const reopen = document.createElement('button');
+    reopen.textContent = 'TTS';
+    reopen.title = 'Show Text-to-Speech Tutor';
+    Object.assign(reopen.style, {
+      position:'fixed', right:'12px', bottom:'12px', zIndex:61,
+      background:'var(--accent)', color:'var(--accent-ink)',
+      border:'none', borderRadius:'999px', padding:'10px 14px', fontWeight:'900', cursor:'pointer'
+    });
+    reopen.addEventListener('click', ()=>{ wrap.style.display='block'; reopen.remove(); });
+    document.body.appendChild(reopen);
+  });
+
+  // If the page loads without a hash, keep the index highlight script happy
+  document.addEventListener('DOMContentLoaded', ()=>{ collect(); setIdx(0); });
+})();
+</script>
+
 
 </body>
 </html>
