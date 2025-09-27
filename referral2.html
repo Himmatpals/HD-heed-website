@@ -380,72 +380,127 @@
 
     function buildSummaryHTML(){
   const esc = s => (s||"").toString().replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-  const chips = (arr)=> arr && arr.length
-    ? arr.split(",").map(x=>`<span class="chip">${esc(x.trim())}</span>`).join("")
-    : `<span class="muted">None noted</span>`;
-  const sup = pickSupports();
+  const yn  = (k)=> ynu(k) || "—";
+  const v   = (x)=> esc(x || "—");
   const addr = [state.street,state.suburb,state.city,state.postcode].filter(Boolean).join(", ");
-  const dt = new Date().toLocaleString();
+  const sup  = pickSupports();
+  const dt   = new Date().toLocaleString();
 
-  const yn = (k)=> ynu(k) || "—";
-  const v  = (x)=> esc(x || "—");
+  const pill = (txt)=>{
+    const t = (txt||"").toLowerCase();
+    let cls = "pill gray";
+    if (t==="yes") cls="pill green";
+    else if (t==="no") cls="pill red";
+    else if (t==="not sure") cls="pill amber";
+    return `<span class="${cls}">${esc(txt||"—")}</span>`;
+  };
+
+  const chips = (csv)=> {
+    if (!csv) return `<span class="muted">None selected</span>`;
+    return csv.split(",").map(s=>`<span class="chip">${esc(s.trim())}</span>`).join("");
+  };
 
   return `<!doctype html><html><head><meta charset="utf-8">
   <title>HD HeeD — Referral Summary</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
-      --brand:#7c3aed; --brand2:#8b5cf6; --accent:#facc15; /* purple & yellow */
-      --chip:#f3f4f6; --chip-text:#111827; --card:#ffffff; --bg:#fff;
+      /* Dark-purple & yellow identity */
+      --ink:#0b1020; --ink-2:#1b2340; --muted:#6b7280; --line:#e5e7eb; --soft:#f4f6fb;
+      --brand:#6d28d9; --brand-2:#8b5cf6; --accent:#f59e0b; --accent-2:#facc15;
+      --ok:#16a34a; --warn:#d97706; --no:#dc2626;
+      --chip:#f1f5f9; --chip-text:#0f172a;
+      --card:#ffffff; --bg:#ffffff;
     }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);font:14px/1.5 system-ui,Segoe UI,Roboto,Arial;color:var(--ink)}
-    .wrap{max-width:900px;margin:32px auto;padding:0 24px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 30px rgba(2,6,23,.06);overflow:hidden}
-    .head{display:flex;align-items:center;gap:14px;padding:20px 22px;border-bottom:1px solid var(--line);position:relative}
-    .head:before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--brand),var(--brand2),var(--accent))}
-    .logo{width:44px;height:44px;border-radius:12px;background:var(--brand) url('https://www.hdheed.com.au/images/logo.png') center/cover no-repeat;
-          box-shadow:inset 0 0 18px rgba(255,255,255,.25)}
-    .title{font-weight:800;font-size:1.25rem}
-    .subtitle{color:var(--muted);font-size:.9rem;margin-top:2px}
-    .meta{margin-left:auto;text-align:right}
-    .meta .k{color:var(--muted);font-size:.8rem}
-    .meta .v{font-weight:700}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Plus Jakarta Sans",Inter,system-ui,Segoe UI,Roboto,Arial}
+    .wrap{max-width:980px;margin:40px auto;padding:0 24px}
+    .doc{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 12px 40px rgba(2,6,23,.08)}
+    .head{position:relative;padding:22px 24px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;align-items:center;gap:18px}
+    .head::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:
+      linear-gradient(90deg,var(--brand),var(--brand-2),var(--accent),var(--accent-2))}
+    .logo{width:52px;height:52px;border-radius:14px;background:var(--brand) url('https://www.hdheed.com.au/images/logo.png') center/cover no-repeat;box-shadow:inset 0 0 18px rgba(255,255,255,.35)}
+    .brand{display:flex;align-items:center;gap:14px}
+    .title{font-weight:800;font-size:1.4rem;letter-spacing:.2px}
+    .subtitle{color:#475569;font-size:.95rem;margin-top:2px}
+    .meta{ text-align:right}
+    .meta .k{color:#64748b;font-size:.85rem}
+    .meta .v{font-weight:800;color:var(--ink-2)}
 
-    .body{padding:22px}
-    h3.section{margin:18px 0 10px; font-size:1.05rem}
-    .divider{height:1px;background:var(--line);margin:14px 0}
-    .badge{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;background:#fef9c3;border:1px solid #fde68a;color:#713f12;font-weight:700;font-size:.82rem}
-    .grid{display:grid;gap:10px}
+    .body{padding:22px 24px}
+    h3.sec{margin:18px 0 10px;font-size:1.05rem;color:var(--ink-2);letter-spacing:.2px}
+    .divider{height:1px;background:var(--line);margin:16px 0}
+
+    /* Section cards */
+    .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 6px 22px rgba(2,6,23,.05)}
+    .card.headed{padding:0}
+    .card.headed .card-h{padding:12px 16px;background:linear-gradient(180deg,#faf5ff,#fffbeb);border-bottom:1px solid var(--line);
+      display:flex;align-items:center;gap:10px}
+    .card.headed .card-h .dot{width:10px;height:10px;border-radius:50%;background:var(--brand)}
+    .card.headed .card-b{padding:16px}
+
+    /* Key-value grid */
+    .grid{display:grid;gap:12px}
     .two{grid-template-columns:repeat(2,minmax(0,1fr))}
     .three{grid-template-columns:repeat(3,minmax(0,1fr))}
-    @media (max-width:720px){.two,.three{grid-template-columns:1fr}}
+    @media (max-width:760px){.two,.three{grid-template-columns:1fr}}
+    .kv{display:grid;grid-template-columns:220px 1fr;gap:10px;align-items:start}
+    .k{color:#64748b;font-weight:700}
+    .v{font-weight:700;color:var(--ink)}
 
-    .kv{display:flex;gap:10px}
-    .kv .k{min-width:180px;color:var(--muted)}
-    .kv .v{flex:1;font-weight:600}
+    /* Pills & chips */
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-weight:800;font-size:.85rem;
+      border:1px solid var(--line)}
+    .pill.green{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
+    .pill.red{background:#fef2f2;color:#7f1d1d;border-color:#fecaca}
+    .pill.amber{background:#fffbeb;color:#7c2d12;border-color:#fde68a}
+    .pill.gray{background:#f3f4f6;color:#374151}
 
-    table{width:100%;border-collapse:collapse;margin-top:6px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-    th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    .chip{display:inline-block;background:var(--chip);color:var(--chip-text);border:1px solid var(--line);border-radius:999px;
+      padding:6px 10px;margin:6px 8px 0 0;font-weight:700;font-size:.88rem}
+
+    /* Table */
+    table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+    th,td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
     th{background:#fafafa;color:#0f172a;font-weight:800}
+    tr:nth-child(even) td{background:#fbfcff}
     tr:last-child td{border-bottom:none}
 
-    .chip{display:inline-block;background:var(--chip);color:var(--chip-text);border:1px solid var(--line);
-          border-radius:999px;padding:6px 10px;margin:4px 6px 0 0;font-weight:600;font-size:.85rem}
+    /* Badges */
+    .badge{display:inline-flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;
+      background:linear-gradient(180deg,#f5f3ff,#fffbeb);border:1px solid #e9d5ff;font-weight:800}
+    .badge .s{color:#6b21a8}
+    .badge .v{color:#92400e}
 
-    .muted{color:var(--muted)}
-    .note{background:#f8fafc;border:1px dashed var(--line);border-radius:12px;padding:12px;margin-top:8px}
-    .foot{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--muted);font-size:.85rem}
+    /* Notes */
+    .note{background:var(--soft);border:1px dashed var(--line);border-radius:12px;padding:12px;margin-top:12px;color:#334155}
+    .muted{color:#6b7280}
+
+    /* Footer */
+    .foot{padding:14px 24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:#6b7280;font-size:.9rem}
+
+    /* Print */
+    @media print{
+      body{background:#fff}
+      .wrap{margin:0;padding:0}
+      .doc{box-shadow:none;border:none}
+      .head::before{height:6px}
+      .badge{filter:grayscale(.1)}
+    }
   </style>
   </head>
   <body>
     <div class="wrap">
-      <div class="card">
+      <div class="doc">
         <div class="head">
-          <div class="logo" aria-hidden="true"></div>
-          <div>
-            <div class="title">HD HeeD — Referral Summary</div>
-            <div class="subtitle">Structured overview for triage & onboarding</div>
+          <div class="brand">
+            <div class="logo" aria-hidden="true"></div>
+            <div>
+              <div class="title">HD HeeD — Referral Summary</div>
+              <div class="subtitle">Structured overview for triage & onboarding</div>
+            </div>
           </div>
           <div class="meta">
             <div class="k">Generated</div>
@@ -454,87 +509,104 @@
         </div>
 
         <div class="body">
-          <!-- Consent strip -->
+          <!-- Consent banner -->
           <div class="badge">
-            Initial consent: <strong>${esc(ynu("consent")||"—")}</strong> · Final consent: <strong>${state.referral_consent?"Ticked":"Not ticked"}</strong>
+            <span class="s">Initial consent:</span> <span class="v">${esc(yn("consent"))}</span>
+            <span class="s" style="margin-left:10px">Final consent:</span>
+            <span class="v">${state.referral_consent?"Ticked":"Not ticked"}</span>
           </div>
 
-          <!-- Identity blocks -->
-          <h3 class="section">Participant</h3>
+          <!-- Participant -->
+          <h3 class="sec">Participant</h3>
+          <div class="card">
+            <div class="grid two">
+              <div class="kv"><div class="k">Name / DOB</div><div class="v">${v((state.participant_fname||"")+" "+(state.participant_lname||""))} · ${v(state.dob)}</div></div>
+              <div class="kv"><div class="k">NDIS / Gender</div><div class="v">${v(state.ndis_number)} · ${v(yn("gender"))}</div></div>
+              <div class="kv"><div class="k">Address</div><div class="v">${v(addr)}</div></div>
+              <div class="kv"><div class="k">Contacts</div><div class="v">${v(state.home_phone)}${state.home_phone&&state.participant_mobile?" · ":""}${v(state.participant_mobile)}${state.participant_email?" · ":""}${v(state.participant_email)}</div></div>
+              <div class="kv"><div class="k">Language / Interpreter</div><div class="v">${v(state.language)} · ${v(yn("interpreter"))}${state.interpreter_type?` · ${v(state.interpreter_type)}`:""}</div></div>
+            </div>
+          </div>
+
+          <!-- Referrer & NOK -->
+          <div class="divider"></div>
           <div class="grid two">
-            <div class="kv"><div class="k">Name / DOB</div><div class="v">${v((state.participant_fname||"")+" "+(state.participant_lname||""))} · ${v(state.dob)}</div></div>
-            <div class="kv"><div class="k">NDIS / Gender</div><div class="v">${v(state.ndis_number)} · ${v(ynu("gender"))}</div></div>
-            <div class="kv"><div class="k">Address</div><div class="v">${v(addr)}</div></div>
-            <div class="kv"><div class="k">Contacts</div><div class="v">${v(state.home_phone)} ${state.home_phone&&state.participant_mobile?"·":""} ${v(state.participant_mobile)} ${state.participant_email?"· ":""}${v(state.participant_email)}</div></div>
-            <div class="kv"><div class="k">Language / Interpreter</div><div class="v">${v(state.language)} · ${v(ynu("interpreter"))}${state.interpreter_type?` · ${v(state.interpreter_type)}`:""}</div></div>
+            <div class="card headed">
+              <div class="card-h"><span class="dot"></span><strong>Referrer</strong></div>
+              <div class="card-b">
+                <div class="grid">
+                  <div class="kv"><div class="k">Name / Relationship</div><div class="v">${v(state.referrer_name)}${state.relationship?" · "+v(state.relationship):""}</div></div>
+                  <div class="kv"><div class="k">Contact</div><div class="v">${v(state.email)}${state.phone?" · ":""}${v(state.phone)}${state.mobile?" · ":""}${v(state.mobile)}</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card headed">
+              <div class="card-h"><span class="dot"></span><strong>Primary Carer (NOK)</strong></div>
+              <div class="card-b">
+                <div class="grid">
+                  <div class="kv"><div class="k">Name / Relationship</div><div class="v">${v(state.carer_fname)} ${v(state.carer_lname)}${state.carer_relationship?" · "+v(state.carer_relationship):""}</div></div>
+                  <div class="kv"><div class="k">Contacts</div><div class="v">${v(state.carer_home)}${state.carer_mobile?" · ":""}${v(state.carer_mobile)}${state.carer_email?" · ":""}${v(state.carer_email)}</div></div>
+                  <div class="kv"><div class="k">Shared care / custody</div><div class="v">${v(yn("custody"))}</div></div>
+                </div>
+              </div>
+            </div>
           </div>
 
+          <!-- Risks -->
           <div class="divider"></div>
-
-          <h3 class="section">Referrer</h3>
-          <div class="grid two">
-            <div class="kv"><div class="k">Name / Relationship</div><div class="v">${v(state.referrer_name)} ${state.relationship?`· ${v(state.relationship)}`:""}</div></div>
-            <div class="kv"><div class="k">Contact</div><div class="v">${v(state.email)} ${state.phone?"· ":""}${v(state.phone)} ${state.mobile?"· ":""}${v(state.mobile)}</div></div>
+          <h3 class="sec">Safety & Immediate Risks</h3>
+          <div class="card">
+            <table>
+              <thead><tr><th style="width:40%">Domain</th><th style="width:25%">Status</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>Recent fall</td><td>${pill(yn("recent_fall"))}</td><td rowspan="5">${v(state.risk_notes)}</td></tr>
+                <tr><td>Wound / post-op care</td><td>${pill(yn("wound"))}</td></tr>
+                <tr><td>Uncontrolled pain</td><td>${pill(yn("uncontrolled_pain"))}</td></tr>
+                <tr><td>Pressure injury risk</td><td>${pill(yn("pressure_risk"))}</td></tr>
+                <tr><td>Behaviours of concern</td><td>${pill(yn("behaviour_risk"))}</td></tr>
+              </tbody>
+            </table>
           </div>
-
-          <div class="divider"></div>
-
-          <h3 class="section">Primary Carer (NOK)</h3>
-          <div class="grid two">
-            <div class="kv"><div class="k">Name / Relationship</div><div class="v">${v(state.carer_fname)} ${v(state.carer_lname)} ${state.carer_relationship?`· ${v(state.carer_relationship)}`:""}</div></div>
-            <div class="kv"><div class="k">Contacts</div><div class="v">${v(state.carer_home)} ${state.carer_mobile?"· ":""}${v(state.carer_mobile)} ${state.carer_email?"· ":""}${v(state.carer_email)}</div></div>
-            <div class="kv"><div class="k">Shared care / custody</div><div class="v">${v(ynu("custody"))}</div></div>
-          </div>
-
-          <div class="divider"></div>
-
-          <!-- Risk table -->
-          <h3 class="section">Safety & Immediate Risks</h3>
-          <table>
-            <thead>
-              <tr><th>Domain</th><th>Status</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Recent fall</td><td>${v(yn("recent_fall"))}</td><td rowspan="5">${v(state.risk_notes)}</td></tr>
-              <tr><td>Wound / post-op care</td><td>${v(yn("wound"))}</td></tr>
-              <tr><td>Uncontrolled pain</td><td>${v(yn("uncontrolled_pain"))}</td></tr>
-              <tr><td>Pressure injury risk</td><td>${v(yn("pressure_risk"))}</td></tr>
-              <tr><td>Behaviours of concern</td><td>${v(yn("behaviour_risk"))}</td></tr>
-            </tbody>
-          </table>
-
-          <div class="divider"></div>
 
           <!-- Supports -->
-          <h3 class="section">Supports Requested</h3>
-          <div class="kv"><div class="k">Main reason</div><div class="v">${v(state.key_area)}</div></div>
-          <div class="kv"><div class="k">Service location</div><div class="v">${v(state.service_location)}</div></div>
-          <div class="kv" style="margin-top:6px;"><div class="k">Support list</div><div class="v">${sup ? chips(sup) : '<span class="muted">None selected</span>'}</div></div>
-          <div class="kv" style="margin-top:6px;"><div class="k">Allergies</div><div class="v">${v(ynu("allergies"))}${state.allergy_list?` · ${v(state.allergy_list)}`:""}</div></div>
-
           <div class="divider"></div>
-
-          <!-- Funding -->
-          <h3 class="section">Funding & Plan</h3>
-          <div class="grid two">
-            <div class="kv"><div class="k">Plan management</div><div class="v">${v(ynu("plan_managed"))}</div></div>
-            <div class="kv"><div class="k">Funding notes</div><div class="v">${v(state.funding_area)}</div></div>
+          <h3 class="sec">Supports Requested</h3>
+          <div class="card">
+            <div class="grid two">
+              <div class="kv"><div class="k">Main reason</div><div class="v">${v(state.key_area)}</div></div>
+              <div class="kv"><div class="k">Service location</div><div class="v">${v(state.service_location)}</div></div>
+            </div>
+            <div style="margin-top:10px">
+              <div class="k" style="margin-bottom:6px">Support list</div>
+              ${chips(sup)}
+            </div>
+            <div style="margin-top:10px">
+              <div class="k" style="margin-bottom:6px">Allergies</div>
+              <div class="v">${v(yn("allergies"))}${state.allergy_list?` · ${v(state.allergy_list)}`:""}</div>
+            </div>
           </div>
 
-          <!-- Optional note block -->
-          <div class="note">
-            This summary is generated from the referral form for intake triage. Please confirm details at first contact and update in ShiftCare / EHR accordingly.
+          <!-- Funding -->
+          <div class="divider"></div>
+          <h3 class="sec">Funding & Plan</h3>
+          <div class="card">
+            <div class="grid two">
+              <div class="kv"><div class="k">Plan management</div><div class="v">${v(yn("plan_managed"))}</div></div>
+              <div class="kv"><div class="k">Funding notes</div><div class="v">${v(state.funding_area)}</div></div>
+            </div>
+            <div class="note">This summary is auto-generated from the referral form for intake triage. Confirm details at first contact and update in ShiftCare / EHR accordingly.</div>
           </div>
         </div>
 
         <div class="foot">
-          <div>HD HeeD Pty Ltd (ABN 47 665 228 768)</div>
+          <div>HD HeeD Pty Ltd · ABN 47 665 228 768</div>
           <div>info@hdheed.com.au · ndis@hdheed.com.au</div>
         </div>
       </div>
     </div>
   </body></html>`;
 }
+
 
 
     function submitOnline(){
