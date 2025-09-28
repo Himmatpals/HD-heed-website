@@ -99,7 +99,8 @@
 
     <script>
         let currentCharacter = null;
-        let conversationHistory = []; // For context in API calls
+        let conversationHistory = [];
+        let characterMemory = [];
 
         // Sections Toggle
         function showSection(sectionId) {
@@ -126,21 +127,19 @@
             event.preventDefault();
             const formData = new FormData(event.target);
             const avatarFile = document.getElementById('charAvatar').files[0];
-            let avatarUrl = document.getElementById('avatarPreview').src || 'https://via.placeholder.com/200?text=Avatar'; // Default if no upload
+            let avatarUrl = document.getElementById('avatarPreview').src || 'https://via.placeholder.com/200?text=Avatar';
 
-            if (avatarFile) {
-                // For simplicity, use data URL; in production, upload to server
-                avatarUrl = URL.createObjectURL(avatarFile);
-            }
+            if (avatarFile) avatarUrl = URL.createObjectURL(avatarFile);
 
             const character = {
                 id: Date.now(),
                 name: document.getElementById('charName').value,
                 avatar: avatarUrl,
                 desc: document.getElementById('charDesc').value,
-                personality: document.getElementById('charPersonality').value,
+                personality: document.getElementById('charPersonality').value.split(',').map(t => t.trim()),
                 greeting: document.getElementById('charGreeting').value,
-                scenario: document.getElementById('charScenario').value
+                scenario: document.getElementById('charScenario').value,
+                memory: []
             };
 
             let characters = JSON.parse(localStorage.getItem('characters') || '[]');
@@ -175,10 +174,48 @@
             document.getElementById('chatGreeting').textContent = currentCharacter.greeting;
             document.getElementById('chatScenario').textContent = currentCharacter.scenario || '';
 
-            conversationHistory = [{ role: 'system', content: `You are ${currentCharacter.name}, a ${currentCharacter.desc}. Personality: ${currentCharacter.personality}. Scenario: ${currentCharacter.scenario || 'Casual chat.'}` }];
+            conversationHistory = [{ role: 'system', content: buildSystemPrompt() }];
+            characterMemory = currentCharacter.memory || [];
             document.getElementById('chatMessages').innerHTML = `<div class="message ai-message"><span onclick="speak('${currentCharacter.greeting}')">${currentCharacter.greeting} <button class="voice-btn">🔊</button></span></div>`;
             showSection('chat');
             document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+
+        // Build System Prompt (Incorporates evolution)
+        function buildSystemPrompt() {
+            const personalityStr = currentCharacter.personality.join(', ');
+            const memoryStr = characterMemory.length > 0 ? `Evolved traits from chat: ${characterMemory.join(', ')}.` : '';
+            return `You are ${currentCharacter.name}, a ${currentCharacter.desc}. Base personality: ${personalityStr}. ${memoryStr} Scenario: ${currentCharacter.scenario || 'Casual chat.'}. Assume this role fully, adapt subtly based on user cues, but stay true to your core description. Respond in character.`;
+        }
+
+        // Detect Cues for Evolution
+        function detectCues(message) {
+            const cues = [];
+            if (/be more dominant/i.test(message)) cues.push('more dominant');
+            if (/be nicer/i.test(message)) cues.push('nicer');
+            if (/tell me your secret/i.test(message)) cues.push('revealing secrets');
+            if (/i like (.*)/i.test(message)) {
+                const match = /i like (.*)/i.exec(message);
+                if (match) cues.push(`user likes ${match[1]}`);
+            }
+            // Add more NSFW-specific cues as needed (e.g., /be kinkier/i)
+            return cues;
+        }
+
+        // Update Character Evolution
+        function updateEvolution(cues) {
+            if (cues.length > 0) {
+                characterMemory.push(...cues);
+                if (characterMemory.length > 5) characterMemory.shift();
+                let characters = JSON.parse(localStorage.getItem('characters') || '[]');
+                const index = characters.findIndex(c => c.id === currentCharacter.id);
+                if (index !== -1) {
+                    characters[index].memory = characterMemory;
+                    characters[index].personality = [...new Set([...currentCharacter.personality, ...cues])];
+                    localStorage.setItem('characters', JSON.stringify(characters));
+                    currentCharacter = characters[index];
+                }
+            }
         }
 
         // Send Message
@@ -187,21 +224,24 @@
             const message = input.value.trim();
             if (!message || !currentCharacter) return;
 
-            // Add user message
+            const cues = detectCues(message);
+            updateEvolution(cues);
+
             addMessage('user', message);
             input.value = '';
 
-            // Typing indicator
             addMessage('ai', '<div class="typing">Typing...</div>');
 
             try {
+                conversationHistory[0].content = buildSystemPrompt();
                 const response = await fetchAIResponse(message);
                 document.querySelector('.typing').remove();
                 addMessage('ai', response);
-                speak(response); // Auto-speak new response
+                speak(response);
             } catch (error) {
                 document.querySelector('.typing').remove();
                 addMessage('ai', 'Sorry, something went wrong. Try again.');
+                console.error(error);
             }
         }
 
@@ -226,33 +266,23 @@
             }
         }
 
-        // HF API Integration (Replace YOUR_HF_TOKEN and MODEL_ID)
+        // Proxy API Call (Token hidden server-side)
         async function fetchAIResponse(message) {
-            const HF_TOKEN = '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'; // From steps below
-            const MODEL_ID = 'NousResearch/Hermes-3-Llama-3.1-8B'; // Uncensored NSFW model (see recommendations)
-
-            const response = await fetch(`https://api-inference.huggingface.co/models/${MODEL_ID}`, {
+            const response = await fetch('http://localhost:3000/api/chat', {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${HF_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    inputs: conversationHistory.map(h => `${h.role}: ${h.content}`).join('\n') + `\nassistant:`,
-                    parameters: { max_new_tokens: 200, temperature: 0.7, return_full_text: false }
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: conversationHistory.map(h => `${h.role}: ${h.content}`).join('\n') + '\nassistant:' })
             });
-
-            if (!response.ok) throw new Error('API error');
+            if (!response.ok) throw new Error('Proxy error');
             const data = await response.json();
-            return data[0]?.generated_text?.trim() || 'I didn\'t catch that...';
+            return data.generated_text || 'No response from AI.';
         }
 
         // Voice Functions
         function speak(text) {
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.9; // Slightly slower for immersion
-            utterance.pitch = 1.1; // Feminine tone (adjust per char)
+            utterance.rate = 0.9;
+            utterance.pitch = 1.1; // Adjustable per character
             window.speechSynthesis.speak(utterance);
         }
 
