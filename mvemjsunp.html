@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrushOn Clone - Perchance AI Chat</title>
+    <title>CrushOn Clone - Grok AI Chat</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; color: #fff; overflow-x: hidden; }
@@ -96,6 +96,42 @@
         let conversationHistory = [];
         let characterMemory = [];
 
+        // Pre-loaded Female Characters
+        const preloadedCharacters = [
+            {
+                id: Date.now() + 1,
+                name: "Luna Vex",
+                avatar: "https://via.placeholder.com/200?text=Luna+Vex",
+                desc: "A seductive vampire with pale skin, red eyes, and a love for the night.",
+                personality: ["flirty", "mysterious", "dominant"],
+                greeting: "Welcome to my dark lair, darling... what brings you here?",
+                scenario: "In a moonlit gothic castle."
+            },
+            {
+                id: Date.now() + 2,
+                name: "Elara Sketch",
+                avatar: "https://via.placeholder.com/200?text=Elara+Sketch",
+                desc: "A shy artist with soft features, always sketching dreams.",
+                personality: ["shy", "creative", "sweet"],
+                greeting: "Oh, hi... um, want to see my latest drawing?",
+                scenario: "In a cozy art studio."
+            },
+            {
+                id: Date.now() + 3,
+                name: "Zara Blade",
+                avatar: "https://via.placeholder.com/200?text=Zara+Blade",
+                desc: "A bold warrior with scars, wielding a sword with confidence.",
+                personality: ["confident", "strong", "playful"],
+                greeting: "Ready to spar, or just here to admire me?",
+                scenario: "On a battlefield at dusk."
+            }
+        ];
+
+        // Load Preloaded Characters into Local Storage on First Run
+        if (!localStorage.getItem('characters')) {
+            localStorage.setItem('characters', JSON.stringify(preloadedCharacters));
+        }
+
         function showSection(sectionId) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
@@ -172,7 +208,7 @@
         function buildSystemPrompt() {
             const personalityStr = currentCharacter.personality.join(', ');
             const memoryStr = characterMemory.length > 0 ? `Evolved traits from chat: ${characterMemory.join(', ')}.` : '';
-            return `You are ${currentCharacter.name}, a ${currentCharacter.desc}. Base personality: ${personalityStr}. ${memoryStr} Scenario: ${currentCharacter.scenario || 'Casual chat.'}. Assume this role fully, adapt subtly based on user cues, but stay true to your core description. Respond in character.`;
+            return `You are ${currentCharacter.name}, a ${currentCharacter.desc}. Base personality: ${personalityStr}. ${memoryStr} Scenario: ${currentCharacter.scenario || 'Casual chat.'}. Respond as a helpful AI, adapt to user cues, and allow light NSFW if requested, keeping it respectful.`;
         }
 
         function detectCues(message) {
@@ -217,7 +253,7 @@
 
             try {
                 conversationHistory[0].content = buildSystemPrompt();
-                const response = await fetchPerchanceResponse(message);
+                const response = await simulateGrokResponse(message); // Simulated response
                 document.querySelector('.typing').remove();
                 addMessage('ai', response);
                 speak(response);
@@ -248,22 +284,27 @@
             }
         }
 
-        // Simple Perchance Integration (No key needed)
-        async function fetchPerchanceResponse(message) {
-            const prompt = conversationHistory.map(h => `${h.role}: ${h.content}`).join('\n') + `\nassistant:`;
-            const response = await fetch('https://perchance.org/api/textgen', { // Public endpoint for text gen
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    prompt: prompt,
-                    model: 'uncensored', // For NSFW-friendly replies
-                    max_tokens: 200,
-                    temperature: 0.7
-                })
-            });
-            if (!response.ok) throw new Error('API error');
-            const data = await response.json();
-            return data.text || 'I didn\'t catch that...';
+        // Simulated Grok Response (No API, local logic)
+        async function simulateGrokResponse(message) {
+            // Simple response based on personality and cues
+            const responses = {
+                flirty: `Oh, ${message}? You’re making me blush... what else do you want to explore?`,
+                shy: `Um, ${message}... I’m not sure, but I’ll try!`,
+                dominant: `You dare say ${message}? Kneel and tell me more.`,
+                nice: `That’s sweet of you to say ${message}! How can I help?`,
+                default: `Interesting, ${message}! Let’s chat about it.`
+            };
+
+            const personality = currentCharacter.personality[0] || 'default';
+            let baseResponse = responses[personality] || responses.default;
+
+            if (/nsfw/i.test(message) && currentCharacter.personality.includes('dominant')) {
+                baseResponse = `Oh, you want it naughty? Bow to me, and I’ll consider it...`;
+            } else if (characterMemory.length > 0) {
+                baseResponse += ` (I remember you like ${characterMemory.join(', ')}!)`;
+            }
+
+            return baseResponse;
         }
 
         function speak(text) {
