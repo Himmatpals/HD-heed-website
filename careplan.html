@@ -952,4 +952,156 @@ function openPDF(){
   w.document.write(html); w.document.close();
   setTimeout(()=>{ try{ w.focus(); }catch{} }, 200);
 }
+/* Export: RTF */
+function downloadRTF(){
+  function esc(s){ return (s||"").toString().replace(/[\\{}]/g, m=>"\\"+m).replace(/\n/g,"\\par "); }
+  function line(k,v){ return `\\b ${esc(k)}:\\b0\\tab ${esc(v||"—")}\\par `; }
+  function block(title, rows){ return `{\\pard\\sa180\\b\\ul ${esc(title)}\\ul0\\b0\\par }{${rows.join("")}}`; }
+
+  // Helper for address
+  const addr = [S?.participant?.address,S?.participant?.suburb,S?.participant?.state,S?.participant?.postcode]
+               .filter(Boolean).join(", ");
+
+  // Helper to flatten meds
+  const medsFlat = (S?.meds?.list||[])
+    .map(m=>[m.name,m.dose,m.route,m.when,m.purpose].filter(Boolean).join(" • "))
+    .join("\\par ");
+
+  const parts = [];
+
+  // 1) Participant
+  parts.push(block("Participant", [
+    line("Legal name", S?.participant?.legal_name),
+    line("Preferred name", S?.participant?.preferred_name),
+    line("Pronouns", S?.participant?.pronouns),
+    line("DOB", S?.participant?.dob),
+    line("Age", S?.participant?.age),
+    line("NDIS number", S?.participant?.ndis),
+    line("Plan management", S?.participant?.plan_mgmt),
+    line("Plan dates", ((S?.participant?.plan_start||"") + (S?.participant?.plan_end ? (" → " + S.participant.plan_end) : ""))),
+    line("Phone", S?.participant?.phone),
+    line("Email", S?.participant?.email),
+    line("Address", addr),
+    line("Emergency contact", [S?.emergency?.name,S?.emergency?.rel,S?.emergency?.phone].filter(Boolean).join(" • ")),
+    line("Support Coordinator", [S?.team?.sc_name,S?.team?.sc_org,S?.team?.sc_email,S?.team?.sc_phone].filter(Boolean).join(" • ")),
+    line("Plan Manager", [S?.team?.pm_name,S?.team?.pm_org,S?.team?.pm_email,S?.team?.pm_phone].filter(Boolean).join(" • ")),
+    line("GP", [S?.team?.gp_name,S?.team?.gp_practice,S?.team?.gp_phone,S?.team?.gp_email].filter(Boolean).join(" • "))
+  ]));
+
+  // 2) Health & Medical
+  parts.push(block("Health & Medical", [
+    line("Primary diagnoses", S?.health?.primary_dx),
+    line("Other diagnoses", S?.health?.other_dx),
+    line("Allergies", S?.health?.allergies),
+    line("Equipment / aids", S?.health?.equipment),
+    line("Cognition / capacity", S?.health?.cognition),
+    line("Vision / Hearing", S?.health?.vision_hearing),
+    line("Mental health notes", S?.health?.mental_health),
+    line("Nutrition / diet", S?.health?.diet)
+  ]));
+
+  // 3) Daily Living & Personal Care
+  parts.push(block("Daily Living & Personal Care", [
+    line("Bathing support", S?.daily?.bathing),
+    line("Bathing preferences", S?.daily?.bathing_prefs),
+    line("Dressing support", S?.daily?.dressing),
+    line("Grooming / oral care", S?.daily?.grooming),
+    line("Toileting", S?.daily?.toileting),
+    line("Continence management", S?.daily?.continence),
+    line("Mobility status", S?.daily?.mobility),
+    line("Transfers / hoist", S?.daily?.transfers),
+    line("Assistive aids", S?.daily?.aids),
+    line("Important routines", S?.daily?.routines),
+    line("Home environment / access", S?.daily?.environment),
+    line("Home safety notes", S?.risk?.home_check?.notes)
+  ]));
+
+  // 4) Communication & Sensory
+  parts.push(block("Communication & Sensory", [
+    line("Primary language", S?.comms?.language),
+    line("Communication method", S?.comms?.method),
+    line("Interpreter required", S?.comms?.interpreter),
+    line("Interpreter language", S?.comms?.interpreter_lang),
+    line("Decision-making support", S?.comms?.decision_support),
+    line("Behavioural cues", S?.comms?.cues),
+    line("Sensory considerations", S?.comms?.sensory)
+  ]));
+
+  // 5) Social & Lifestyle
+  parts.push(block("Social & Lifestyle", [
+    line("Living situation", S?.social?.living),
+    line("Household members", S?.social?.household),
+    line("Key supports", S?.social?.supports),
+    line("Interests & activities", S?.social?.interests),
+    line("Typical routine", S?.social?.routine)
+  ]));
+
+  // 6) Behaviour Management
+  parts.push(block("Behaviour Management", [
+    line("Behaviour(s) of concern", S?.behaviour?.description),
+    line("Known triggers / antecedents", S?.behaviour?.triggers),
+    line("Early warning signs", S?.behaviour?.early_signs),
+    line("Preventative strategies", S?.behaviour?.prevention),
+    line("Preferred de-escalation", S?.behaviour?.deescalation),
+    line("Post-incident response", S?.behaviour?.post_incident),
+    line("BSP in place", (S?.behaviour?.bsp===true?"Yes":S?.behaviour?.bsp===false?"No":(S?.behaviour?.bsp||"—"))),
+    line("Restrictive practices", (S?.behaviour?.restrictive===true?"Yes":S?.behaviour?.restrictive===false?"No":(S?.behaviour?.restrictive||"—"))),
+    line("Restrictive practice notes", S?.behaviour?.restrictive_notes),
+    line("Reporting & communication", S?.behaviour?.reporting)
+  ]));
+
+  // 7) Medication Management
+  parts.push(block("Medication Management", [
+    line("Medication list", medsFlat || "—"),
+    line("Self-administration ability", S?.meds?.self_admin),
+    line("Webster / blister pack", S?.meds?.webster),
+    line("Storage location", S?.meds?.storage),
+    line("Access / keys", S?.meds?.access),
+    line("Consent to administer", S?.meds?.consent),
+    line("Side effects to monitor", S?.meds?.side_effects),
+    line("Required monitoring", S?.meds?.monitoring),
+    line("Emergency medication plan", S?.meds?.emergency_plan),
+    line("Missed / refused dose protocol", S?.meds?.missed),
+    line("Recent changes / reviews", S?.meds?.changes)
+  ]));
+
+  // 8) Risk & Safety
+  parts.push(block("Risk & Safety", [
+    line("Falls risk", S?.risk?.falls),
+    line("Falls prevention strategies", S?.risk?.falls_strat),
+    line("Pressure injury risk", S?.risk?.pressure),
+    line("Pressure care strategies", S?.risk?.pressure_strat),
+    line("Wandering / elopement risk", S?.risk?.wandering),
+    line("Wandering safeguards", S?.risk?.wandering_strat),
+    line("Smoking / alcohol / substances", S?.risk?.substances),
+    line("Transport & vehicle safety", S?.risk?.transport),
+    line("Emergency plan", S?.risk?.emergency_plan)
+  ]));
+
+  // 9) Goals & Outcomes
+  parts.push(block("Goals & Outcomes", [
+    line("Participant goals", S?.goals?.items),
+    line("Desired outcomes", S?.goals?.outcomes),
+    line("Strategies / supports", S?.goals?.strategies)
+  ]));
+
+  // 10) Consents
+  parts.push(block("Consents", [
+    line("Consent to share plan", (S?.consent?.share_info===true||S?.consent?.share_info==="Yes")?"Yes":(S?.consent?.share_info===false||S?.consent?.share_info==="No")?"No":"—"),
+    line("Consent notes / scope", S?.consent?.share_notes)
+  ]));
+
+  // 11) Signatures
+  parts.push(block("Signatures", [
+    line("Participant / Representative — name", S?.signatures?.client_name),
+    line("Date", S?.signatures?.client_date),
+    line("Provider representative — name", S?.signatures?.provider_name),
+    line("Role / title", S?.signatures?.provider_role),
+    line("Date", S?.signatures?.provider_date)
+  ]));
+
+  // Assemble RTF doc
+  const rtf = `{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Arial;}}\\fs22 ${parts.join(" ")} }`;
+
+  
 
