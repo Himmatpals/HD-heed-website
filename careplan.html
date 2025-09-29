@@ -1103,5 +1103,362 @@ function downloadRTF(){
   // Assemble RTF doc
   const rtf = `{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Arial;}}\\fs22 ${parts.join(" ")} }`;
 
-  
+  // Download
+const blob = new Blob([rtf], {type:"application/rtf"});
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "NDIS_Care_Plan_Editable.rtf";
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+} // <-- end of downloadRTF()
+
+/* ===========================
+   Wire up buttons & voice fill
+   =========================== */
+
+// Hook the RTF export button to the new function
+(function wireActions(){
+  const rtfBtn = document.getElementById("genRTF");
+  if (rtfBtn) {
+    // Ensure no double-binding
+    rtfBtn.replaceWith(rtfBtn.cloneNode(true));
+    document.getElementById("genRTF").addEventListener("click", downloadRTF);
+  }
+
+  // Add a Mic button (Talk-to-Fill) if not present
+  const actions = document.querySelector("header .actions");
+  if (actions && !document.getElementById("micBtn")) {
+    const mic = document.createElement("button");
+    mic.className = "btn";
+    mic.type = "button";
+    mic.id = "micBtn";
+    mic.innerHTML = "🎤 Talk-to-Fill";
+    mic.title = "Dictate values like: “Set allergies to no known allergies”";
+    actions.insertBefore(mic, actions.firstChild);
+  }
+})();
+
+/* ===========================
+   Talk-to-Fill (Web Speech API)
+   - Say things like:
+     “Set name to John Smith”
+     “NDIS number 123456789”
+     “Allergies no known allergies”
+     “Address 12 River Road”
+   - Then edit manually if needed.
+   =========================== */
+
+(function voiceFill(){
+  const micBtn = document.getElementById("micBtn");
+  if (!micBtn) return;
+
+  // Live transcript HUD
+  const hud = document.createElement("div");
+  hud.style.cssText = "position:fixed;left:12px;bottom:12px;max-width:520px;padding:10px 12px;border:1px solid #234;color:#dff; background:rgba(4,14,22,.9);border-radius:12px;box-shadow:0 6px 22px rgba(0,0,0,.45);font-size:14px;z-index:9999;display:none";
+  hud.id = "speechHud";
+  hud.innerHTML = "<b>Listening…</b> <span id='speechText' style='opacity:.9'></span>";
+  document.body.appendChild(hud);
+  const hudText = document.getElementById("speechText");
+
+  // Map common spoken labels → state paths
+  const FIELD_MAP = [
+    // Participant core
+    {k:["name","legal name","participant name"], p:"participant.legal_name", lbl:"Legal name"},
+    {k:["preferred name","nickname"], p:"participant.preferred_name", lbl:"Preferred name"},
+    {k:["pronouns"], p:"participant.pronouns", lbl:"Pronouns"},
+    {k:["dob","date of birth","birth date"], p:"participant.dob", lbl:"Date of birth"},
+    {k:["age"], p:"participant.age", lbl:"Age"},
+    {k:["ndis","ndis number"], p:"participant.ndis", lbl:"NDIS number"},
+    {k:["phone","mobile"], p:"participant.phone", lbl:"Phone"},
+    {k:["email","mail"], p:"participant.email", lbl:"Email"},
+    {k:["address","street"], p:"participant.address", lbl:"Address (street)"},
+    {k:["suburb","town"], p:"participant.suburb", lbl:"Suburb"},
+    {k:["state"], p:"participant.state", lbl:"State"},
+    {k:["postcode","post code","zip"], p:"participant.postcode", lbl:"Postcode"},
+    {k:["plan management","plan manager type","management type"], p:"participant.plan_mgmt", lbl:"Plan management"},
+    {k:["plan start","start date"], p:"participant.plan_start", lbl:"Plan start"},
+    {k:["plan end","end date"], p:"participant.plan_end", lbl:"Plan end"},
+
+    // Contacts
+    {k:["emergency name","emergency contact name"], p:"emergency.name", lbl:"Emergency contact — name"},
+    {k:["emergency relationship","emergency relation"], p:"emergency.rel", lbl:"Relationship"},
+    {k:["emergency phone"], p:"emergency.phone", lbl:"Phone"},
+
+    // Team (SC / PM / GP)
+    {k:["support coordinator name","sc name"], p:"team.sc_name", lbl:"Support Coordinator — name"},
+    {k:["support coordinator organisation","sc organisation","sc organization"], p:"team.sc_org", lbl:"Organisation"},
+    {k:["support coordinator email","sc email"], p:"team.sc_email", lbl:"SC email"},
+    {k:["support coordinator phone","sc phone"], p:"team.sc_phone", lbl:"SC phone"},
+    {k:["plan manager name","pm name"], p:"team.pm_name", lbl:"Plan Manager — name"},
+    {k:["plan manager organisation","pm organisation","pm organization"], p:"team.pm_org", lbl:"Organisation"},
+    {k:["plan manager email","pm email"], p:"team.pm_email", lbl:"PM email"},
+    {k:["plan manager phone","pm phone"], p:"team.pm_phone", lbl:"PM phone"},
+    {k:["gp name","doctor name"], p:"team.gp_name", lbl:"GP name"},
+    {k:["gp practice","doctor practice"], p:"team.gp_practice", lbl:"GP practice"},
+    {k:["gp phone","doctor phone"], p:"team.gp_phone", lbl:"GP phone"},
+    {k:["gp email","doctor email"], p:"team.gp_email", lbl:"GP email"},
+
+    // Health
+    {k:["primary diagnosis","diagnosis","diagnoses"], p:"health.primary_dx", lbl:"Primary diagnoses"},
+    {k:["other diagnosis","other diagnoses"], p:"health.other_dx", lbl:"Other diagnoses"},
+    {k:["allergy","allergies"], p:"health.allergies", lbl:"Allergies"},
+    {k:["equipment","aids"], p:"health.equipment", lbl:"Equipment / aids (mobility, comms)"},
+    {k:["cognition","capacity"], p:"health.cognition", lbl:"Cognition / capacity"},
+    {k:["vision","hearing"], p:"health.vision_hearing", lbl:"Vision/Hearing considerations"},
+    {k:["mental health"], p:"health.mental_health", lbl:"Mental health notes"},
+    {k:["diet","nutrition"], p:"health.diet", lbl:"Nutrition / diet"},
+
+    // Daily
+    {k:["bathing"], p:"daily.bathing", lbl:"Bathing support level"},
+    {k:["bathing preferences"], p:"daily.bathing_prefs", lbl:"Bathing preferences (time, products)"},
+    {k:["dressing"], p:"daily.dressing", lbl:"Dressing support"},
+    {k:["grooming","oral care"], p:"daily.grooming", lbl:"Grooming/oral care"},
+    {k:["toileting"], p:"daily.toileting", lbl:"Toileting"},
+    {k:["continence"], p:"daily.continence", lbl:"Continence management (aids/schedule)"},
+    {k:["mobility"], p:"daily.mobility", lbl:"Mobility status"},
+    {k:["transfers","hoist"], p:"daily.transfers", lbl:"Transfers / hoist"},
+    {k:["assistive aids","home aids"], p:"daily.aids", lbl:"Assistive aids in home"},
+    {k:["routines"], p:"daily.routines", lbl:"Important routines to maintain"},
+    {k:["home environment","access notes","entry notes"], p:"daily.environment", lbl:"Home environment / access notes (parking, pets, keysafe)"},
+
+    // Comms
+    {k:["language"], p:"comms.language", lbl:"Primary language"},
+    {k:["communication method","comms method"], p:"comms.method", lbl:"Communication method (verbal, AAC, sign, device)"},
+    {k:["interpreter required"], p:"comms.interpreter", lbl:"Interpreter required? (Yes/No/Not sure)"},
+    {k:["interpreter language"], p:"comms.interpreter_lang", lbl:"Interpreter language"},
+    {k:["decision support","guardian","nominee"], p:"comms.decision_support", lbl:"Decision-making support / guardian/nominee"},
+    {k:["cues","behaviour cues","behavior cues"], p:"comms.cues", lbl:"Behavioural cues (if non-verbal)"},
+    {k:["sensory"], p:"comms.sensory", lbl:"Sensory considerations (noise, lights, textures)"},
+
+    // Social
+    {k:["living situation","housing"], p:"social.living", lbl:"Living situation (home type)"},
+    {k:["household","family"], p:"social.household", lbl:"Household members / relationships"},
+    {k:["supports involved"], p:"social.supports", lbl:"Key family/friends/supports involved"},
+    {k:["interests","activities"], p:"social.interests", lbl:"Interests & activities (motivators, community)"},
+    {k:["routine"], p:"social.routine", lbl:"Typical daily/weekly routine"},
+
+    // Behaviour
+    {k:["behaviour description","behavior description","behaviours of concern"], p:"behaviour.description", lbl:"Behaviour(s) of concern — description"},
+    {k:["triggers","antecedents"], p:"behaviour.triggers", lbl:"Known triggers / antecedents"},
+    {k:["early signs","warning signs"], p:"behaviour.early_signs", lbl:"Early warning signs"},
+    {k:["prevention","preventative strategies"], p:"behaviour.prevention", lbl:"Preventative strategies (proactive)"},
+    {k:["de escalation","de-escalation"], p:"behaviour.deescalation", lbl:"Preferred de-escalation techniques"},
+    {k:["post incident","post-incident"], p:"behaviour.post_incident", lbl:"Post-incident response / debrief / recovery"},
+
+    // Meds (summary fields)
+    {k:["self administration","self-admin"], p:"meds.self_admin", lbl:"Self-administration ability"},
+    {k:["webster","blister pack"], p:"meds.webster", lbl:"Webster/blister pack"},
+    {k:["medication storage","meds storage","storage"], p:"meds.storage", lbl:"Storage location (locked cupboard etc.)"},
+    {k:["access keys","keys"], p:"meds.access", lbl:"Access/keys (who holds)"},
+    {k:["consent to administer","medication consent"], p:"meds.consent", lbl:"Consent to administer (form, scope)"},
+    {k:["side effects"], p:"meds.side_effects", lbl:"Common side effects to monitor & responses"},
+    {k:["monitoring required","observations"], p:"meds.monitoring", lbl:"Required monitoring (e.g., BP weekly, BSL before meals)"},
+    {k:["emergency medication plan","emergency plan"], p:"meds.emergency_plan", lbl:"Emergency medication plan (EpiPen, midazolam — triggers, steps, who to call)"},
+    {k:["missed dose","refused dose","missed/refused"], p:"meds.missed", lbl:"Missed/refused dose protocol"},
+    {k:["recent changes","medication review"], p:"meds.changes", lbl:"Recent changes / upcoming reviews"},
+
+    // Risk
+    {k:["falls risk"], p:"risk.falls", lbl:"Falls risk"},
+    {k:["falls strategy","falls prevention"], p:"risk.falls_strat", lbl:"Falls — prevention strategies"},
+    {k:["pressure injury risk"], p:"risk.pressure", lbl:"Pressure injury risk"},
+    {k:["pressure strategy","pressure care"], p:"risk.pressure_strat", lbl:"Pressure care strategies"},
+    {k:["wandering risk","elopement risk"], p:"risk.wandering", lbl:"Wandering / elopement risk"},
+    {k:["wandering safeguards"], p:"risk.wandering_strat", lbl:"Wandering safeguards (supervision, alarms)"},
+    {k:["substances","smoking alcohol"], p:"risk.substances", lbl:"Smoking / alcohol / substances (notes)"},
+    {k:["transport safety"], p:"risk.transport", lbl:"Transport & vehicle safety (seating, restraints, WAV)"},
+    {k:["emergency plan"], p:"risk.emergency_plan", lbl:"Emergency plan (evac, hospital preferences, contact order)"},
+
+    // Goals & Consents
+    {k:["goals"], p:"goals.items", lbl:"Participant goals (from plan / aspirations)"},
+    {k:["outcomes"], p:"goals.outcomes", lbl:"Desired outcomes (what success looks like)"},
+    {k:["strategies"], p:"goals.strategies", lbl:"Strategies / supports to achieve goals"},
+    {k:["consent to share","share plan"], p:"consent.share_info", lbl:"Consent to share plan with relevant parties"},
+    {k:["consent notes"], p:"consent.share_notes", lbl:"Consent notes / scope / limits"},
+
+    // Signatures
+    {k:["participant name for signature","sign name","signature name"], p:"signatures.client_name", lbl:"Participant / Representative — printed name"},
+    {k:["signature date","participant date"], p:"signatures.client_date", lbl:"Date"},
+    {k:["provider name"], p:"signatures.provider_name", lbl:"Provider representative — name"},
+    {k:["provider role","title"], p:"signatures.provider_role", lbl:"Role / title"},
+    {k:["provider date"], p:"signatures.provider_date", lbl:"Date"}
+  ];
+
+  // Try to locate an input/textarea by its label text (best effort)
+  function findFieldByLabelText(lbl){
+    const labs = document.querySelectorAll(".field > label");
+    lbl = (lbl||"").toLowerCase();
+    for (const L of labs){
+      const t = (L.textContent||"").trim().toLowerCase();
+      if (t.includes(lbl)) {
+        const holder = L.parentElement;
+        const inp = holder.querySelector("input,textarea,select");
+        if (inp) return inp;
+      }
+    }
+    return null;
+  }
+
+  // Visual flash to show what was updated
+  function flash(elm){
+    if (!elm) return;
+    const old = elm.style.boxShadow;
+    elm.style.boxShadow = "0 0 0 3px rgba(34,211,238,.35)";
+    setTimeout(()=>{ elm.style.boxShadow = old || ""; }, 800);
+  }
+
+  function setPathFromSpeech(path, value, labelForFind){
+    // Persist state (uses helpers defined earlier in the app)
+    try { set(path, value); persist(); } catch(e){}
+    // Try to update visible input if present
+    const input = findFieldByLabelText(labelForFind || "");
+    if (input) { input.value = value; flash(input); }
+  }
+
+  function parseAndApply(transcript){
+    const t = transcript.trim();
+    hudText.textContent = " “" + t + "”";
+    const lower = t.toLowerCase();
+
+    // Try commands like "set allergies to no known allergies"
+    const SET_RE = /^(?:set\s+)?(.+?)\s+(?:to|is|:)\s+(.+)$/i;
+    let m = lower.match(SET_RE);
+    let label, value;
+    if (m) { label = m[1].trim(); value = t.slice(t.toLowerCase().indexOf(m[2])).trim(); }
+    else {
+      // Fallback: "allergies no known allergies"
+      const parts = t.split(/[:\-–]\s*/);
+      if (parts.length >= 2){ label = parts[0].trim().toLowerCase(); value = parts.slice(1).join(": ").trim(); }
+      else {
+        // Heuristic: take first word(s) as label until we hit a number or next uppercase? Keep it simple:
+        const firstWord = t.split(/\s+/)[0];
+        label = firstWord.toLowerCase();
+        value = t.replace(new RegExp("^"+firstWord+"\\s*","i"), "");
+      }
+    }
+
+    if (!label || !value) return;
+
+    // Match against FIELD_MAP
+    let best = null;
+    for (const f of FIELD_MAP){
+      if (f.k.some(k => label.includes(k))) { best = f; break; }
+    }
+    if (!best) return;
+
+    // Normalise booleans for certain fields
+    if (/^(yes|no|not sure|unknown)$/i.test(value)){
+      const norm = value.toLowerCase();
+      if (["consent.share_info","behaviour.bsp","behaviour.restrictive"].includes(best.p)) {
+        value = (norm==="yes") ? "Yes" : (norm==="no" ? "No" : "Not sure");
+      }
+    }
+
+    setPathFromSpeech(best.p, value, best.lbl);
+  }
+
+  // SpeechRecognition setup
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let listening = false;
+
+  function ensureSR(){
+    if (!SR) {
+      alert("Speech recognition is not supported in this browser. Try Chrome on desktop.");
+      return null;
+    }
+    const rec = new SR();
+    rec.lang = "en-AU";
+    rec.interimResults = true;
+    rec.continuous = true;
+    rec.maxAlternatives = 1;
+    return rec;
+  }
+
+  function startListening(){
+    if (listening) return;
+    recognition = ensureSR();
+    if (!recognition) return;
+
+    listening = true;
+    micBtn.classList.add("primary");
+    micBtn.textContent = "🛑 Stop Talking";
+    hud.style.display = "block";
+    hudText.textContent = "";
+
+    recognition.onresult = (ev)=>{
+      const r = ev.results;
+      let finalTxt = "";
+      for (let i=ev.resultIndex; i<r.length; i++){
+        const alt = r[i][0]?.transcript || "";
+        if (r[i].isFinal) finalTxt += alt + " ";
+        else hudText.textContent = " “" + alt + "” (…)";
+      }
+      if (finalTxt.trim()) {
+        parseAndApply(finalTxt.trim());
+      }
+    };
+    recognition.onerror = (e)=>{ console.warn("Speech error:", e.error); };
+    recognition.onend = ()=>{ // auto-restart unless stopped
+      if (listening) { try { recognition.start(); } catch(e){} }
+    };
+
+    try { recognition.start(); } catch(e) { console.error(e); }
+  }
+
+  function stopListening(){
+    listening = false;
+    if (recognition) {
+      try { recognition.stop(); } catch(e){}
+      recognition = null;
+    }
+    micBtn.classList.remove("primary");
+    micBtn.textContent = "🎤 Talk-to-Fill";
+    hud.style.display = "none";
+  }
+
+  micBtn.addEventListener("click", ()=>{
+    if (!listening) startListening(); else stopListening();
+  });
+
+  // Stop listening when navigating away
+  window.addEventListener("beforeunload", ()=>{ if (listening) stopListening(); });
+})();
+
+/* ===========================
+   Optional: small utility to
+   open all sections for review
+   =========================== */
+(function reviewHelper(){
+  const btn = document.getElementById("reviewBtn");
+  if (!btn) return;
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll("details[id^='sec_']").forEach(d=>{
+      const key = d.id.replace(/^sec_/,"");
+      const disabled = (S && S._nr && S._nr[key]===true);
+      d.open = !disabled;
+    });
+  });
+})();
+
+/* ===========================
+   Safety: keyboard shortcuts
+   - Ctrl/Cmd + S : export RTF
+   - Ctrl/Cmd + P : print to PDF
+   =========================== */
+document.addEventListener("keydown", (e)=>{
+  const isMac = navigator.platform.toUpperCase().indexOf("MAC")>=0;
+  const mod = isMac ? e.metaKey : e.ctrlKey;
+  if (!mod) return;
+  if (e.key.toLowerCase() === "s"){
+    e.preventDefault();
+    if (typeof downloadRTF === "function") downloadRTF();
+  }
+  // Let Ctrl/Cmd+P fall through to browser print for PDF generation
+});
+
+/* ===========================
+   End of script
+   =========================== */
+
 
