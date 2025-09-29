@@ -2,893 +2,954 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>NDIS Comprehensive Care Plan — All-in-One</title>
-
-<!-- ===== THEME (different to AILR: teal/emerald + slate) ===== -->
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NDIS Comprehensive Care Plan — Pro Edition</title>
+<meta name="theme-color" content="#0b1420" />
 <style>
   :root{
-    --ink:#0b1220; --bg:#0a0f15; --panel:#0f1720; --line:#223244;
-    --text:#eaf6ff; --muted:#b9d2e6;
-    --a1:#10b981; /* emerald */
-    --a2:#22d3ee; /* cyan */
-    --warn:#f59e0b; --danger:#ef4444; --ok:#22c55e;
-    --grad: linear-gradient(135deg, var(--a1), var(--a2));
-    --soft: linear-gradient(135deg, #0f1720, #111b27);
-    --glow: rgba(34, 211, 238, .45);
+    /* Palette (distinct from AILR: cooler teal/indigo, high contrast) */
+    --ink:#0b1420; --bg:#0a0f16; --panel:#0f1722; --line:#253247;
+    --text:#e9f3ff; --muted:#b9c8de;
+    --a1:#0ea5a5; --a2:#4f46e5; --accent: linear-gradient(135deg, var(--a1), var(--a2));
+    --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444;
+
+    /* Focus ring */
+    --ring: 0 0 0 3px rgba(79,70,229,.35), 0 0 0 5px rgba(14,165,165,.2);
   }
-  *{box-sizing:border-box}
+  *{ box-sizing:border-box }
   html,body{height:100%}
   body{
-    margin:0; font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Arial, sans-serif;
-    background:
-      radial-gradient(1200px 600px at 12% -10%, rgba(16,185,129,.22), transparent 60%),
-      radial-gradient(1200px 600px at 88% 10%, rgba(34,211,238,.18), transparent 60%),
-      linear-gradient(180deg,#091018 0%, #0c1520 45%, #081019 100%);
+    margin:0; font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
     color:var(--text);
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(14,165,165,.18), transparent 60%),
+      radial-gradient(1200px 600px at 85% 0%, rgba(79,70,229,.18), transparent 60%),
+      linear-gradient(180deg, #0a0f16 0%, #0b1420 45%, #08101a 100%);
   }
-  a{ color:#8fe9ff; text-decoration:none } a:hover{ color:#c8f6ff }
-  .wrap{max-width:1180px;margin:20px auto 40px;padding:0 16px;display:grid;gap:16px;grid-template-columns: 300px 1fr}
-  @media (max-width:980px){ .wrap{ grid-template-columns:1fr } }
+  a{color:#a9d3ff;text-decoration:none} a:hover{color:#d6e7ff}
 
   /* Header */
   header{
-    position:sticky; top:0; z-index:50;
-    background: linear-gradient(135deg, #0a131b, #0f1a24);
+    position:sticky; top:0; z-index:60;
+    background: linear-gradient(135deg,#0a111b,#0d1725);
     border-bottom:1px solid var(--line);
-    box-shadow: 0 6px 24px rgba(0,0,0,.55); backdrop-filter: blur(6px);
+    box-shadow: 0 8px 30px rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
   }
-  header .bar{max-width:1180px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
-  .brand{font-weight:900; letter-spacing:.2px}
-  .tag{font-size:12px;color:#9bd0e9;margin-left:6px}
-  .actions{margin-left:auto; display:flex; gap:8px; flex-wrap:wrap}
-  .btn{
-    border:0; border-radius:14px; padding:12px 14px; font-weight:800; cursor:pointer; min-height:44px;
-    background:var(--soft); color:var(--text); border:1px solid var(--line);
-    box-shadow:0 6px 18px rgba(0,0,0,.35)
-  }
-  .btn.primary{ background:var(--grad); color:#00151a; border-color:transparent }
-  .btn.warn{ background:linear-gradient(135deg,#1a2533,#203044); color:#ffe69a; border-color:#2a4059 }
-  .btn:hover{ transform: translateY(-1px); box-shadow:0 10px 26px rgba(0,0,0,.45) }
+  .bar{ max-width:1200px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:12px }
+  .brand{ font-weight:900; letter-spacing:.2px; background:var(--accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
+  .tag{ font-size:12px; color:#9fb7d8 }
+  .hint{ color:#9fb7d8; font-size:12px }
+
+  /* Layout */
+  .wrap{ max-width:1200px; margin:16px auto 24px; padding:0 16px; display:grid; gap:16px; grid-template-columns: 300px 1fr }
+  @media (max-width:980px){ .wrap{ grid-template-columns: 1fr } }
 
   /* Sidebar */
-  .side{
-    position:sticky; top:74px; align-self:start; background:var(--soft); border:1px solid var(--line);
-    border-radius:18px; padding:12px; box-shadow:0 18px 50px rgba(0,0,0,.55), 0 0 14px var(--glow)
+  .nav{
+    position:sticky; top:76px; align-self:start; background:linear-gradient(180deg,#0d1623,#0a1220);
+    border:1px solid var(--line); border-radius:18px; padding:14px; box-shadow:0 18px 60px rgba(0,0,0,.55)
   }
-  .side h3{margin:0 0 10px; font-size:16px; font-weight:900; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent}
-  .toc{ list-style:none; padding:0; margin:0; display:grid; gap:6px; max-height:70vh; overflow:auto }
-  .toc button{
-    width:100%; text-align:left; padding:10px 12px; border-radius:12px; border:1px solid transparent;
-    background:transparent; color:#d6efff; cursor:pointer
+  .nav h3{ margin:0 0 8px; font-size:16px; font-weight:900 }
+  .toc{ list-style:none; padding:0; margin:0; display:grid; gap:8px; max-height: calc(100vh - 140px); overflow:auto }
+  .toc a{
+    display:flex; gap:8px; align-items:center; border:1px solid transparent; border-radius:12px; padding:10px 12px; color:#cfe0ff;
+    background:linear-gradient(135deg,#0e1725,#0d1422); transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease
   }
-  .toc button:hover{ background:linear-gradient(135deg,#0d1822,#0f1c27); border-color:#24394f }
-  .toc .current{ background:var(--grad); color:#062229; border-color:transparent; box-shadow:0 0 10px var(--glow) }
+  .toc a:hover{ transform: translateY(-1px); box-shadow:0 10px 24px rgba(0,0,0,.4); border-color:var(--line) }
+  .badge{ margin-left:auto; font-size:11px; color:#a7ffcf }
 
-  /* Stage */
-  main.stage{
-    background: linear-gradient(180deg, rgba(10,18,28,.92), rgba(9,16,25,.92));
-    border:1px solid var(--line); border-radius:22px; padding:16px;
-    box-shadow:0 22px 60px rgba(0,0,0,.5), inset 0 0 14px rgba(255,255,255,.04)
+  /* Main */
+  main{
+    border:1px solid var(--line); border-radius:22px; background:linear-gradient(180deg,#0e1826,#0b1420);
+    box-shadow:0 24px 70px rgba(0,0,0,.55), inset 0 0 14px rgba(255,255,255,.04);
+    padding:18px;
   }
-  .hint{font-size:12px; color:#a8cbe3}
-  .section{
-    border:1px solid var(--line); border-radius:16px; background:linear-gradient(135deg,#0d1721,#0c1520);
-    box-shadow:0 10px 30px rgba(0,0,0,.35); overflow:hidden
+  .headerRow{ display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap }
+  .controls{ display:flex; gap:8px; flex-wrap:wrap }
+  .btn{
+    border:0; border-radius:14px; padding:12px 14px; font-weight:800; cursor:pointer; min-height:46px;
+    background:linear-gradient(135deg,#121f33,#0f192a); color:#e9f3ff; border:1px solid var(--line);
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
   }
-  .section details{ border-top:1px dashed #203347 }
-  .section details:first-of-type{ border-top:0 }
+  .btn:hover{ transform: translateY(-1px); box-shadow:0 12px 28px rgba(0,0,0,.5) }
+  .btn.primary{ background:var(--accent); color:#fff; border-color:transparent }
+  .btn.warn{ background: linear-gradient(135deg,#1e3350,#344d82); color:#ffd86a; border-color:#314976 }
+  .btn.ghost{ background: linear-gradient(135deg,#102034,#0e1a2c) }
+
+  /* Sections */
+  details.section{
+    border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg,#0f1a2b,#0c1626);
+    padding:10px 12px; margin:12px 0; box-shadow:0 6px 18px rgba(0,0,0,.4)
+  }
+  details[open].section{ box-shadow:0 14px 40px rgba(0,0,0,.55) }
   summary{
-    list-style:none; cursor:pointer; padding:14px 14px; font-weight:900; display:flex; align-items:center; gap:10px;
-    background:linear-gradient(135deg,#0d1824,#0f1b27); position:sticky; top:0
+    cursor:pointer; list-style:none; display:flex; gap:10px; align-items:center; font-weight:900;
+    background:var(--accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
   }
-  summary::-webkit-details-marker{display:none}
-  .badge{ font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #2a3f56; background:#0e1a26; color:#bdefff }
-  .nr{ margin-left:auto; display:flex; align-items:center; gap:8px; font-size:13px; color:#d5f8ff }
-  .panel{ padding:14px; display:grid; gap:12px }
-  .grid.two{ display:grid; gap:12px }
-  .grid.three{ display:grid; gap:12px }
-  @media (min-width:720px){ .grid.two{ grid-template-columns:repeat(2,minmax(0,1fr)) } .grid.three{ grid-template-columns:repeat(3,minmax(0,1fr)) } }
-
-  .field{
-    border:1px solid #25405a; background:linear-gradient(135deg,#0b1420,#0e1926);
-    border-radius:14px; padding:10px; display:grid; gap:8px
+  .sect-meta{ margin-left:auto; display:flex; gap:10px; align-items:center }
+  .na{
+    display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#cfe0ff; opacity:.95;
+    border:1px solid var(--line); border-radius:999px; padding:6px 10px; background:linear-gradient(135deg,#0e1a2d,#0b1626);
   }
-  .field label{ font-weight:800; color:#cfeaff }
-  .field input,.field select,.field textarea{
-    width:100%; padding:12px; border-radius:10px; border:1px solid #2a4a66;
-    background:linear-gradient(135deg,#0e1b29,#112034); color:#e8f8ff; font-size:15px; outline:none
+  .na input{ width:16px; height:16px }
+
+  /* Grid + inputs */
+  .grid{ display:grid; gap:12px }
+  .two{ grid-template-columns: repeat(2,minmax(0,1fr)) } .three{ grid-template-columns: repeat(3,minmax(0,1fr)) }
+  @media (max-width:900px){ .two,.three{ grid-template-columns:1fr } }
+  .box{
+    border:1px solid #2a3b57; border-radius:14px; padding:12px; background:linear-gradient(135deg,#102039,#0e1b32);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.35)
   }
-  .field textarea{ min-height:96px; resize:vertical }
-  .disabled{ opacity:.45; filter:saturate(.6) }
-  .chipset{ display:flex; gap:8px; flex-wrap:wrap }
-  .chip{ border:1px solid #2a4a66; background:linear-gradient(135deg,#0e1b29,#112034); color:#dff6ff; padding:10px 12px; border-radius:999px; cursor:pointer }
-  .chip[aria-pressed="true"]{ box-shadow:0 0 0 3px rgba(34,211,238,.28); border-image: var(--grad) 1 }
+  .box label{ font-weight:800; display:block; margin-bottom:6px }
+  input[type="text"],input[type="email"],input[type="tel"],input[type="date"],input[type="number"],textarea,select{
+    width:100%; padding:12px; border-radius:12px; border:1px solid #314767; background:linear-gradient(135deg,#0f203b,#0d1a31);
+    color:#e9f3ff; font-size:15px; outline:none; transition:border-color .2s ease, box-shadow .2s ease
+  }
+  textarea{ min-height:96px; resize:vertical }
+  input:focus, textarea:focus, select:focus{ border-color:#4f46e5; box-shadow:var(--ring) }
 
-  /* Footer actions */
-  .foot{ display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; margin-top:14px; padding-top:12px; border-top:1px dashed var(--line) }
+  /* mic buttons for dictation */
+  .mic{
+    position:relative; margin-top:6px; display:inline-flex; align-items:center; gap:6px; font-size:12px;
+    padding:6px 8px; border:1px solid var(--line); border-radius:999px; background:linear-gradient(135deg,#0f1f36,#0d1b2e);
+    cursor:pointer; user-select:none;
+  }
+  .mic[data-live="true"]{ box-shadow:0 0 0 4px rgba(239,68,68,.2); border-color:#7b3140 }
+  .mic i{ width:8px; height:8px; border-radius:50%; background:#7aa1ff }
+  .mic[data-live="true"] i{ background:#ef4444; box-shadow:0 0 8px rgba(239,68,68,.6) }
 
-  /* Modal viewer */
-  .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.72); z-index:1000; backdrop-filter: blur(5px) }
-  .modal.open{ display:flex }
-  .modal .panel{ width:min(960px,96vw); height:min(88vh,1000px); background: linear-gradient(135deg,#0b1420,#0f1b27); border:1px solid var(--line); border-radius:18px; overflow:hidden; display:flex; flex-direction:column; box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 20px var(--glow) }
-  .modal .head{ display:flex; align-items:center; justify-content:space-between; padding:12px; border-bottom:1px solid var(--line) }
-  .modal .body{ flex:1; background: linear-gradient(135deg,#0e1a26,#0f1c2a) }
-  .modal embed{ width:100%; height:100% }
+  /* checklists */
+  .ck-list{ list-style:none; padding:0; margin:0; display:grid; gap:8px }
+  .ck-row{ display:flex; gap:10px; align-items:center }
+  .ck-row input{ width:18px; height:18px }
+
+  /* pills */
+  .pill{ display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid var(--line); background:linear-gradient(135deg,#0f1e33,#0e1a2c); font-size:12px; color:#bfe0ff }
+
+  /* signature pad */
+  .sigpad{ border:1px dashed #496082; border-radius:10px; background:#0b1628; height:140px; position:relative }
+  .sigpad canvas{ width:100%; height:100%; display:block }
+  .sig-tools{ display:flex; gap:8px; margin-top:6px }
+
+  /* small helpers */
+  .muted{ color:#9fb7d8; font-size:13px }
+  .right{ margin-left:auto }
+  .sr{ position:absolute; width:1px; height:1px; clip:rect(1px,1px,1px,1px); overflow:hidden } /* screen reader only */
+
+  /* print styles for PDF export */
+  @media print{
+    header, .nav, .controls .btn.warn, .controls .btn.ghost, .mic, .sig-tools{ display:none !important }
+    body{ background:#fff; color:#111 }
+    main{ box-shadow:none; background:#fff; border-color:#ddd }
+    details.section{ background:#fff; border-color:#ddd }
+    summary{ -webkit-text-fill-color:initial; color:#0f172a }
+  }
 </style>
+
+<!-- PDF.js for robust PDF text extraction -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  if (window['pdfjsLib']) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.worker.min.js";
+  }
+</script>
 </head>
 <body>
-
 <header>
   <div class="bar">
     <div class="brand">NDIS Comprehensive Care Plan</div>
-    <div class="tag">Collapsible • “Not required” anywhere • Upload→Auto-fill • PDF/RTF export</div>
-    <div class="actions">
-      <button class="btn warn" id="resetBtn" type="button">Reset for next client</button>
-      <button class="btn" id="genRTF" type="button">Download RTF</button>
-      <button class="btn primary" id="genPDF" type="button">Generate PDF</button>
-    </div>
+    <div class="tag">Person-centred • Speech-to-fill • PDF/RTF export • Client-side autofill</div>
+    <div class="right hint">Autosaves locally • Works offline</div>
   </div>
 </header>
 
-<div class="wrap" id="app">
-  <!-- SIDEBAR -->
-  <aside class="side">
+<div class="wrap">
+  <!-- Sidebar -->
+  <aside class="nav" aria-label="Sections">
     <h3>Sections</h3>
-    <ul class="toc" id="tocList"></ul>
-    <div class="hint" id="saveHint" style="margin-top:8px">Draft saved</div>
-    <div class="field" style="margin-top:10px">
-      <label>Upload existing plan (PDF/RTF) → auto-fill</label>
-      <input id="fileInput" type="file" accept=".pdf,.rtf,application/pdf,application/rtf,text/rtf" />
-      <small class="hint">Best with RTF or text-based PDFs (scans won’t parse).</small>
-    </div>
+    <ul class="toc" id="toc"></ul>
   </aside>
 
-  <!-- MAIN -->
-  <main class="stage">
-    <div class="section" id="sections">
-      <!-- Sections are injected by JS -->
+  <!-- Main -->
+  <main id="app" role="region" aria-live="polite">
+    <div class="headerRow">
+      <div class="pill">Status: <span id="statusTxt">Draft saved</span></div>
+      <div class="controls">
+        <button class="btn ghost" id="dictationToggle" type="button">🎙️ Dictation: Off</button>
+        <label class="btn ghost" for="fileInput">📤 Upload PDF/RTF to auto-fill</label>
+        <input id="fileInput" type="file" accept=".pdf,.rtf,.txt" class="sr" />
+        <button class="btn warn" id="resetBtn" type="button">↺ Reset</button>
+        <button class="btn" id="rtfBtn" type="button">⬇️ Download .RTF</button>
+        <button class="btn primary" id="pdfBtn" type="button">🖨️ Generate PDF</button>
+      </div>
     </div>
-    <div class="foot">
-      <button class="btn" id="jumpTop" type="button">↑ Top</button>
-      <button class="btn primary" id="reviewBtn" type="button">Review & Finish</button>
-    </div>
+
+    <!-- Sections (details/summary accordions). Each has a "Not required" toggle. -->
+    <!-- 1. Participant -->
+    <details class="section" id="sec-participant" open>
+      <summary>
+        1) Participant — Personal & NDIS identifiers
+        <span class="sect-meta">
+          <span class="pill">Required</span>
+          <label class="na"><input type="checkbox" data-na="participant"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box"><label>Legal name</label><input data-field="participant.legal_name" type="text" placeholder="e.g., Jane A. Citizen"><div class="mic" data-mic="participant.legal_name"><i></i>Dictate</div></div>
+        <div class="box"><label>Preferred name</label><input data-field="participant.preferred_name" type="text"><div class="mic" data-mic="participant.preferred_name"><i></i>Dictate</div></div>
+        <div class="box"><label>Date of birth</label><input data-field="participant.dob" type="date"></div>
+        <div class="box"><label>NDIS number</label><input data-field="participant.ndis_number" type="text"></div>
+        <div class="box"><label>Address line 1</label><input data-field="participant.address.line1" type="text"><div class="mic" data-mic="participant.address.line1"><i></i>Dictate</div></div>
+        <div class="box"><label>Address line 2</label><input data-field="participant.address.line2" type="text"></div>
+        <div class="box"><label>Suburb</label><input data-field="participant.address.suburb" type="text"></div>
+        <div class="box"><label>State</label><input data-field="participant.address.state" type="text" placeholder="e.g., VIC"></div>
+        <div class="box"><label>Postcode</label><input data-field="participant.address.postcode" type="text"></div>
+        <div class="box"><label>Plan management</label>
+          <select data-field="participant.plan_mgmt">
+            <option value="">Select…</option>
+            <option>NDIA-managed</option><option>Plan-managed</option><option>Self-managed</option><option>Not sure</option>
+          </select>
+        </div>
+        <div class="box"><label>Plan dates — start</label><input data-field="participant.plan_dates.start" type="date"></div>
+        <div class="box"><label>Plan dates — end</label><input data-field="participant.plan_dates.end" type="date"></div>
+        <div class="box"><label>Plan manager — org</label><input data-field="participant.pm.org" type="text"></div>
+        <div class="box"><label>Plan manager — contact</label><input data-field="participant.pm.contact" type="text"></div>
+        <div class="box"><label>Plan manager — email</label><input data-field="participant.pm.email" type="email"></div>
+        <div class="box"><label>Plan manager — phone</label><input data-field="participant.pm.phone" type="tel"></div>
+      </div>
+      <div class="grid two" style="margin-top:10px">
+        <div class="box"><label>Participant email</label><input data-field="contacts.email" type="email"></div>
+        <div class="box"><label>Participant phone</label><input data-field="contacts.phone" type="tel"></div>
+      </div>
+      <div class="muted" style="margin-top:6px">At least email or phone will be required at submission/export.</div>
+    </details>
+
+    <!-- 2. Health & Medical -->
+    <details class="section" id="sec-health">
+      <summary>
+        2) Health & Medical (diagnoses, allergies, mobility, cognition)
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="health"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box"><label>Primary diagnoses</label><textarea data-field="health.primary_diagnoses" placeholder="e.g., Cerebral palsy GMFCS III; Epilepsy"></textarea><div class="mic" data-mic="health.primary_diagnoses"><i></i>Dictate</div></div>
+        <div class="box"><label>Other diagnoses</label><textarea data-field="health.other_diagnoses"></textarea></div>
+        <div class="box"><label>Allergies <span class="pill">required</span></label><input data-field="health.allergies" type="text" placeholder="Write “No known allergies” if none"></div>
+        <div class="box"><label>Equipment / aids</label><input data-field="health.equipment" type="text" placeholder="e.g., wheelchair, hoist, comms device"></div>
+        <div class="box"><label>Mobility</label>
+          <select data-field="health.mobility">
+            <option value="">Select…</option><option>Independent</option><option>With aid</option><option>Requires transfer</option><option>Bed-bound</option><option>Prefer not to say</option>
+          </select>
+        </div>
+        <div class="box"><label>Continence</label>
+          <select data-field="health.continence">
+            <option value="">Select…</option><option>Independent</option><option>Needs prompting</option><option>Incontinent</option><option>Catheter / stoma</option><option>Prefer not to say</option>
+          </select>
+        </div>
+        <div class="box"><label>Cognition</label>
+          <select data-field="health.cognition">
+            <option value="">Select…</option><option>Clear</option><option>Mild impairment</option><option>Moderate</option><option>Severe</option><option>Prefer not to say</option>
+          </select>
+        </div>
+        <div class="box"><label>Diet / swallowing notes</label><textarea data-field="health.diet_notes"></textarea></div>
+        <div class="box"><label>Pressure injury risk</label>
+          <select data-field="health.pressure_risk">
+            <option value="">Select…</option><option>Low</option><option>Medium</option><option>High</option><option>Not sure</option>
+          </select>
+        </div>
+        <div class="box"><label>Falls risk</label>
+          <select data-field="health.falls_risk">
+            <option value="">Select…</option><option>Low</option><option>Medium</option><option>High</option><option>Not sure</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid three" style="margin-top:10px">
+        <div class="box"><label>Seizures?</label>
+          <select data-field="health.seizures.has"><option value="">Select…</option><option>No</option><option>Yes</option><option>Not sure</option></select>
+        </div>
+        <div class="box"><label>Seizure plan</label><input data-field="health.seizures.plan" type="text"></div>
+        <div class="box"><label>Seizure frequency</label><input data-field="health.seizures.frequency" type="text"></div>
+      </div>
+    </details>
+
+    <!-- 3. Daily Living & Personal Care -->
+    <details class="section" id="sec-adl">
+      <summary>
+        3) Daily Living & Personal Care (ADLs)
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="adl"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box"><label>Bathing / showering</label><textarea data-field="adl.bathing" placeholder="Level of support, time of day preference, equipment (shower chair), temperature preferences, dignity notes"></textarea></div>
+        <div class="box"><label>Dressing / grooming</label><textarea data-field="adl.dressing"></textarea></div>
+        <div class="box"><label>Toileting / continence care</label><textarea data-field="adl.toileting"></textarea></div>
+        <div class="box"><label>Meal prep / feeding</label><textarea data-field="adl.meals"></textarea></div>
+        <div class="box"><label>Mobility & transfers</label><textarea data-field="adl.mobility"></textarea></div>
+        <div class="box"><label>Household tasks (cleaning, laundry)</label><textarea data-field="adl.household"></textarea></div>
+        <div class="box"><label>Transport / community access</label><textarea data-field="adl.transport"></textarea></div>
+        <div class="box"><label>Routines & preferences</label><textarea data-field="adl.routines"></textarea></div>
+      </div>
+    </details>
+
+    <!-- 4. Communication & Sensory -->
+    <details class="section" id="sec-comms">
+      <summary>
+        4) Communication & Sensory
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="comms"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box"><label>Primary language</label><input data-field="comms.language" type="text"></div>
+        <div class="box"><label>Interpreter</label>
+          <select data-field="comms.interpreter"><option value="">Select…</option><option>Required</option><option>Not required</option><option>Not sure</option></select>
+        </div>
+        <div class="box"><label>Communication methods</label><textarea data-field="comms.methods" placeholder="Verbal, sign, AAC device; how to present info; decision-making support"></textarea></div>
+        <div class="box"><label>Sensory considerations</label><textarea data-field="comms.sensory" placeholder="Noise/light sensitivities; calming strategies"></textarea></div>
+        <div class="box"><label>Worker preferences</label><textarea data-field="comms.worker_prefs" placeholder="Gender preference; cultural considerations; continuity"></textarea></div>
+      </div>
+    </details>
+
+    <!-- 5. Social & Lifestyle -->
+    <details class="section" id="sec-social">
+      <summary>
+        5) Social & Lifestyle
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="social"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box"><label>Living situation</label><textarea data-field="social.living" placeholder="Who lives at home; access/parking notes"></textarea></div>
+        <div class="box"><label>Support network</label><textarea data-field="social.network" placeholder="Family/friends involved; key contacts"></textarea></div>
+        <div class="box"><label>Interests & activities</label><textarea data-field="social.interests" placeholder="Hobbies; community activities; meaningful engagement"></textarea></div>
+        <div class="box"><label>Typical routine</label><textarea data-field="social.routine"></textarea></div>
+      </div>
+    </details>
+
+    <!-- 6. Behaviour Management -->
+    <details class="section" id="sec-behaviour">
+      <summary>
+        6) Behaviour Management (BSP, triggers, proactive & response strategies)
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="behaviour"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box"><label>Behaviours of concern — description</label><textarea data-field="behaviour.description" placeholder="Topography: what it looks like, frequency, intensity, duration"></textarea></div>
+        <div class="box"><label>Known triggers / antecedents</label><textarea data-field="behaviour.triggers" placeholder="Noise, transitions, demands, sensory overload, pain, hunger"></textarea></div>
+        <div class="box"><label>Preventative strategies</label><textarea data-field="behaviour.prevent" placeholder="Predictable routines, visual schedules, choices, skill building, environment changes"></textarea></div>
+        <div class="box"><label>De-escalation strategies</label><textarea data-field="behaviour.deescalate" placeholder="Calm voice, space, preferred activity, sensory tools, time-away"></textarea></div>
+        <div class="box"><label>Post-incident support / review</label><textarea data-field="behaviour.post" placeholder="Debrief, data capture, adapt strategies, communication with stakeholders"></textarea></div>
+        <div class="box"><label>BSP in place?</label>
+          <select data-field="behaviour.bsp"><option value="">Select…</option><option>Yes</option><option>No</option><option>Not sure</option></select>
+        </div>
+        <div class="box"><label>Restrictive practices involved?</label>
+          <select data-field="behaviour.restrictive"><option value="">Select…</option><option>No</option><option>Chemical</option><option>Physical</option><option>Mechanical</option><option>Seclusion</option></select>
+        </div>
+        <div class="box"><label>Authorisations & review cycle</label><textarea data-field="behaviour.authorisations" placeholder="Authorising body, expiry, reduction plan, safeguards"></textarea></div>
+      </div>
+    </details>
+
+    <!-- 7. Medication Management -->
+    <details class="section" id="sec-meds">
+      <summary>
+        7) Medication Management (full list, schedules, storage, PRN, emergencies)
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="meds"> Not required</label>
+        </span>
+      </summary>
+      <div class="box">
+        <label>Medication table</label>
+        <div class="muted">Add all regular and PRN medications (name, dose, route, times, purpose). Use the + button to add rows. Consider side-effects monitoring.</div>
+        <table id="medTable" style="width:100%; border-collapse:separate; border-spacing:0 8px; margin-top:8px">
+          <thead>
+            <tr style="font-size:12px;color:#cfe0ff">
+              <th align="left">Name</th><th align="left">Dose</th><th align="left">Route</th><th align="left">Times</th><th align="left">Purpose</th><th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button class="btn ghost" id="addMed">＋ Add medication</button>
+      </div>
+      <div class="grid two" style="margin-top:10px">
+        <div class="box"><label>Self-administration ability</label><textarea data-field="meds.self" placeholder="Independent vs prompting vs staff administer; capacity notes"></textarea></div>
+        <div class="box"><label>Webster / blister pack</label><select data-field="meds.webster"><option value="">Select…</option><option>Yes</option><option>No</option><option>Not sure</option></select></div>
+        <div class="box"><label>Storage & access control</label><textarea data-field="meds.storage" placeholder="Locked cupboard; temperature; keys held by…"></textarea></div>
+        <div class="box"><label>Consent for administration</label><select data-field="meds.consent"><option value="">Select…</option><option>Yes</option><option>No</option><option>Not applicable</option></select></div>
+        <div class="box"><label>Side-effects to monitor</label><textarea data-field="meds.sidefx" placeholder="By medication (e.g., dizziness, GI upset), what to do, who to inform"></textarea></div>
+        <div class="box"><label>Emergency meds & protocol</label><textarea data-field="meds.emergency" placeholder="e.g., EpiPen, midazolam: indications, steps, escalation"></textarea></div>
+        <div class="box"><label>Missed dose protocol</label><textarea data-field="meds.missed" placeholder="Do not double dose; contact GP if…; document/refuse protocol"></textarea></div>
+        <div class="box"><label>Recent changes / upcoming reviews</label><textarea data-field="meds.changes"></textarea></div>
+      </div>
+    </details>
+
+    <!-- 8. Risk & Safety -->
+    <details class="section" id="sec-risk">
+      <summary>
+        8) Risk & Safety (home, falls, pressure, wandering, transport)
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="risk"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box"><label>Home safety checklist</label>
+          <ul class="ck-list">
+            <li class="ck-row"><input type="checkbox" data-field="risk.home.trip"> <span>Trip hazards present</span></li>
+            <li class="ck-row"><input type="checkbox" data-field="risk.home.smoke"> <span>No working smoke alarms</span></li>
+            <li class="ck-row"><input type="checkbox" data-field="risk.home.light"> <span>Poor lighting</span></li>
+            <li class="ck-row"><input type="checkbox" data-field="risk.home.bath"> <span>Bathroom lacks rails / mats</span></li>
+          </ul>
+        </div>
+        <div class="box"><label>Notes / mitigations</label><textarea data-field="risk.home.notes"></textarea></div>
+        <div class="box"><label>Wandering / elopement risk</label>
+          <select data-field="risk.wander"><option value="">Select…</option><option>None</option><option>Low</option><option>Medium</option><option>High</option></select>
+        </div>
+        <div class="box"><label>Smoking / alcohol / substances</label><textarea data-field="risk.substances"></textarea></div>
+        <div class="box"><label>Transport safety</label><textarea data-field="risk.transport" placeholder="Wheelchair accessible vehicle, restraints, escort"></textarea></div>
+        <div class="box"><label>Emergency plan</label><textarea data-field="risk.emergency" placeholder="Evacuation, who to contact first, hospital preferences"></textarea></div>
+      </div>
+    </details>
+
+    <!-- 9. Goals & Outcomes -->
+    <details class="section" id="sec-goals">
+      <summary>
+        9) Goals & Outcomes (link supports to participant goals)
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="goals"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box"><label>Participant goals</label><textarea data-field="goals.list" placeholder="List goals (from NDIS plan or personal)"></textarea></div>
+        <div class="box"><label>Success indicators / outcomes</label><textarea data-field="goals.outcomes" placeholder="What does success look like? (measurable if possible)"></textarea></div>
+        <div class="box"><label>Support strategies to reach goals</label><textarea data-field="goals.supports" placeholder="How supports delivered will help achieve goals"></textarea></div>
+        <div class="box"><label>Scheduling / frequency notes</label><textarea data-field="goals.schedule"></textarea></div>
+      </div>
+    </details>
+
+    <!-- 10. Consents & Attachments -->
+    <details class="section" id="sec-consents">
+      <summary>
+        10) Consents & Attachments (info sharing; uploaded files)
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="consents"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box"><label>Consent to share plan</label>
+          <select data-field="consents.share"><option value="">Select…</option><option>Yes</option><option>No</option><option>Not sure</option></select>
+        </div>
+        <div class="box"><label>Consent notes</label><textarea data-field="consents.notes"></textarea></div>
+        <div class="box"><label>Emergency contact</label><input data-field="contacts.emer.name" type="text" placeholder="Name"> <div style="height:8px"></div>
+          <input data-field="contacts.emer.rel" type="text" placeholder="Relationship" style="margin-top:6px">
+          <input data-field="contacts.emer.phone" type="tel" placeholder="Phone" style="margin-top:6px">
+        </div>
+        <div class="box"><label>Support coordinator</label><input data-field="contacts.sc.name" type="text" placeholder="Name">
+          <input data-field="contacts.sc.org" type="text" placeholder="Organisation" style="margin-top:6px">
+          <input data-field="contacts.sc.email" type="email" placeholder="Email" style="margin-top:6px">
+        </div>
+        <div class="box"><label>GP / Practice</label><input data-field="contacts.gp.name" type="text" placeholder="GP name">
+          <input data-field="contacts.gp.practice" type="text" placeholder="Practice" style="margin-top:6px">
+          <input data-field="contacts.gp.phone" type="tel" placeholder="Phone" style="margin-top:6px">
+          <input data-field="contacts.gp.email" type="email" placeholder="Email" style="margin-top:6px">
+        </div>
+        <div class="box"><label>Uploaded files (auto-fill source)</label>
+          <ul id="uploadList" class="ck-list"></ul>
+          <div class="muted">Use the “Upload PDF/RTF” button at the top to add documents that will be parsed and mapped into fields.</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 11. Signatures & Authorisation -->
+    <details class="section" id="sec-sign">
+      <summary>
+        11) Signatures & Authorisation
+        <span class="sect-meta">
+          <label class="na"><input type="checkbox" data-na="sign"> Not required</label>
+        </span>
+      </summary>
+      <div class="grid two">
+        <div class="box">
+          <label>Participant / Representative — type name</label>
+          <input data-field="sign.participant_name" type="text" placeholder="Printed name">
+          <div class="sigpad" data-sig="participant"><canvas></canvas></div>
+          <div class="sig-tools">
+            <button class="btn ghost" data-sig-clear="participant" type="button">Clear</button>
+            <button class="btn ghost" data-sig-undo="participant" type="button">Undo</button>
+          </div>
+          <div class="box" style="margin-top:10px"><label>Date</label><input data-field="sign.participant_date" type="date"></div>
+        </div>
+        <div class="box">
+          <label>Provider Representative — name & title</label>
+          <input data-field="sign.provider_name" type="text" placeholder="Name">
+          <input data-field="sign.provider_title" type="text" placeholder="Title/Role" style="margin-top:6px">
+          <div class="sigpad" data-sig="provider"><canvas></canvas></div>
+          <div class="sig-tools">
+            <button class="btn ghost" data-sig-clear="provider" type="button">Clear</button>
+            <button class="btn ghost" data-sig-undo="provider" type="button">Undo</button>
+          </div>
+          <div class="box" style="margin-top:10px"><label>Date</label><input data-field="sign.provider_date" type="date"></div>
+        </div>
+      </div>
+      <div class="muted" style="margin-top:8px">Signature blocks capture drawn signatures and embed them into the exported PDF and .RTF (as text reference). If left blank, outputs will show a signing line.</div>
+    </details>
   </main>
 </div>
 
-<!-- DOC VIEWER (optional future use) -->
-<div id="docModal" class="modal" aria-hidden="true">
-  <div class="panel">
-    <div class="head">
-      <div class="ttl" id="docTitle">Document</div>
-      <button id="docClose" class="btn">Close</button>
-    </div>
-    <div class="body"><embed id="docViewer" src="" type="application/pdf" /></div>
-  </div>
-</div>
-
 <script>
-(function(){
-  /* ===== State & Storage ===== */
-  const STORAGE_KEY = "ndis_careplan_v1";
-  const $ = (s,r=document)=>r.querySelector(s);
-  const el = (t,c,h)=>{ const e=document.createElement(t); if(c) e.className=c; if(h!=null) e.innerHTML=h; return e; };
-  const saveHint = t => { const h=$("#saveHint"); if(h) h.textContent=t||"Draft saved"; };
+/* ============================================================
+   Data model & utilities
+============================================================ */
+const STORAGE_KEY = "ndis_care_plan_pro_v1";
 
-  const S = JSON.parse(localStorage.getItem(STORAGE_KEY)||"null") || {
-    participant:{ legal_name:"", preferred_name:"", pronouns:"", dob:"", age:"", ndis:"", address:"", suburb:"", state:"", postcode:"", phone:"", email:"", plan_mgmt:"", plan_start:"", plan_end:"" },
-    emergency:{ name:"", rel:"", phone:"" },
-    team:{ sc_name:"", sc_org:"", sc_email:"", sc_phone:"", pm_name:"", pm_org:"", pm_email:"", pm_phone:"", gp_name:"", gp_practice:"", gp_email:"", gp_phone:"" },
-    health:{ primary_dx:"", other_dx:"", allergies:"", equipment:"", cognition:"", vision_hearing:"", mental_health:"", diet:"" },
-    daily:{ bathing:"", bathing_prefs:"", dressing:"", grooming:"", toileting:"", continence:"", mobility:"", transfers:"", aids:"", routines:"", environment:"", home_risks:[] },
-    comms:{ language:"", method:"", interpreter:"", interpreter_lang:"", decision_support:"", cues:"", sensory:"" },
-    social:{ living:"", household:"", supports:"", interests:"", routine:"" },
-    behaviour:{ applicable:true, description:"", triggers:"", early_signs:"", prevention:"", deescalation:"", post_incident:"", bsp:false, restrictive:false, restrictive_notes:"", reporting:"" },
-    meds:{
-      applicable:true, list:[], self_admin:"Not sure", webster:"Not sure", storage:"", access:"", consent:"", side_effects:"", monitoring:"", missed:"", emergency_plan:"", changes:""
-    },
-    risk:{ falls:"Not sure", falls_strat:"", pressure:"Not sure", pressure_strat:"", wandering:"Not sure", wandering_strat:"", substances:"", transport:"", emergency_plan:"", home_check:{ smoke:false, lighting:false, rails:false, trip:false, notes:"" } },
-    goals:{ items:"", outcomes:"", strategies:"" },
-    consent:{ share_info:false, share_notes:"" },
-    signatures:{ client_name:"", client_date:"", provider_name:"", provider_role:"", provider_date:"" },
-    _nr:{}, // not-required map per section key
-  };
+/* App state */
+let S = {
+  participant:{ legal_name:"", preferred_name:"", dob:"", ndis_number:"",
+    address:{line1:"",line2:"",suburb:"",state:"",postcode:""},
+    plan_mgmt:"", plan_dates:{start:"",end:""}, pm:{org:"",contact:"",email:"",phone:""} },
+  contacts:{ email:"", phone:"",
+    emer:{name:"",rel:"",phone:""},
+    sc:{name:"",org:"",email:""},
+    gp:{name:"",practice:"",phone:"",email:""} },
+  health:{ primary_diagnoses:"", other_diagnoses:"", allergies:"", equipment:"",
+    mobility:"", continence:"", cognition:"", diet_notes:"", pressure_risk:"", falls_risk:"",
+    seizures:{has:"",plan:"",frequency:""} },
+  adl:{ bathing:"", dressing:"", toileting:"", meals:"", mobility:"", household:"", transport:"", routines:"" },
+  comms:{ language:"", interpreter:"", methods:"", sensory:"", worker_prefs:"" },
+  social:{ living:"", network:"", interests:"", routine:"" },
+  behaviour:{ description:"", triggers:"", prevent:"", deescalate:"", post:"", bsp:"", restrictive:"", authorisations:"" },
+  meds:{ list:[], self:"", webster:"", storage:"", consent:"", sidefx:"", emergency:"", missed:"", changes:"" },
+  risk:{ home:{trip:false,smoke:false,light:false,bath:false,notes:""}, wander:"", substances:"", transport:"", emergency:"" },
+  goals:{ list:"", outcomes:"", supports:"", schedule:"" },
+  consents:{ share:"", notes:"" },
+  sign:{ participant_name:"", participant_date:"", provider_name:"", provider_title:"", provider_date:"", sigs:{} },
+  uploads:[],
+  na:{ participant:false, health:false, adl:false, comms:false, social:false, behaviour:false, meds:false, risk:false, goals:false, consents:false, sign:false },
+  dictation:false
+};
 
-  function persist(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
-    saveHint("Draft saved");
-  }
+/* Save/restore */
+function save(){
+  try{
+    const serial = JSON.stringify(S);
+    localStorage.setItem(STORAGE_KEY, serial);
+    setStatus("Draft saved");
+  }catch(e){ console.warn("save failed", e); }
+}
+function restore(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const prev = JSON.parse(raw);
+    if (prev && typeof prev === "object") S = Object.assign(S, prev);
+  }catch(e){ console.warn("restore failed", e); }
+}
+function setStatus(t){ document.getElementById('statusTxt').textContent = t; }
 
-  /* ===== Helpers ===== */
-  function field(label, path, type="text", attrs={}){
-    const box = el('div','field');
-    const id = "f_"+Math.random().toString(36).slice(2,8);
-    const labelEl = el('label',null,label); labelEl.setAttribute('for',id);
-    let input;
-    if (type==="textarea"){ input = el('textarea'); input.value = get(path)||""; }
-    else if (type==="select"){
-      input = el('select'); (attrs.options||[]).forEach(v=>{ const o=document.createElement('option'); o.value=v; o.textContent=v; input.appendChild(o); });
-      input.value = get(path)||"";
-    } else {
-      input = el('input'); input.type = type; input.value = get(path)||"";
-      if (attrs.placeholder) input.placeholder = attrs.placeholder;
-    }
-    input.id = id;
-    input.addEventListener('input', ()=>{ set(path, input.value); persist(); });
-    box.append(labelEl, input);
-    return box;
-  }
-  function chips(label, path, options){
-    const wrap = el('div','field'); wrap.appendChild(el('label',null,label));
-    const row = el('div','chipset');
-    const cur = get(path);
-    options.forEach(v=>{
-      const b = el('button','chip',v); b.type="button";
-      if (v===cur) b.setAttribute('aria-pressed','true');
-      b.addEventListener('click',()=>{
-        row.querySelectorAll('.chip').forEach(x=>x.removeAttribute('aria-pressed'));
-        b.setAttribute('aria-pressed','true'); set(path,v); persist();
-      });
-      row.appendChild(b);
+/* Field binding */
+function bindAll(){
+  // inputs/selects/textarea
+  document.querySelectorAll('[data-field]').forEach(node=>{
+    const path = node.getAttribute('data-field');
+    // set initial
+    const v = get(S, path);
+    if (node.type === 'checkbox') node.checked = !!v; else if (v!=null) node.value = v;
+    // listen
+    node.addEventListener('input', ()=>{
+      set(S, path, node.type==='checkbox'? node.checked : node.value);
+      save();
     });
-    wrap.appendChild(row); return wrap;
-  }
-  function checklist(label, objPath, map){
-    const wrap = el('div','field'); wrap.appendChild(el('label',null,label));
-    const list = el('div','chipset');
-    const cur = get(objPath) || {};
-    Object.keys(map).forEach(k=>{
-      const id="ck_"+k+"_"+Math.random().toString(36).slice(2,6);
-      const c = el('input'); c.type="checkbox"; c.id=id; c.checked = !!cur[k];
-      c.addEventListener('change',()=>{ const o=get(objPath)||{}; o[k]=c.checked; set(objPath,o); persist(); });
-      const lab = el('label',null,map[k]); lab.setAttribute('for',id); lab.style.marginRight="10px";
-      const row = el('div',null); row.append(c,lab); list.appendChild(row);
+  });
+  // NA toggles
+  document.querySelectorAll('input[data-na]').forEach(cb=>{
+    const key = cb.getAttribute('data-na');
+    cb.checked = !!S.na[key];
+    applyNA(key, cb.checked);
+    cb.addEventListener('change', ()=>{
+      S.na[key] = cb.checked; applyNA(key, cb.checked); save();
     });
-    wrap.appendChild(list); return wrap;
-  }
-  function nrToggle(sectionKey, container){
-    const chk = el('input'); chk.type='checkbox';
-    chk.checked = S._nr[sectionKey]===true;
-    const lbl = el('label',null,'Not required for this participant');
-    lbl.style.cursor='pointer';
-    const id = "nr_"+sectionKey; chk.id=id; lbl.setAttribute('for',id);
-    const holder = el('div','nr'); holder.append(chk,lbl);
-    function apply(){
-      const disabled = chk.checked;
-      S._nr[sectionKey]=disabled; persist();
-      container.classList.toggle('disabled', disabled);
-      container.querySelectorAll('input,select,textarea,button').forEach(n=>{
-        if(n===chk) return;
-        if(n.closest('.nr')) return;
-        n.disabled = disabled;
-      });
-    }
-    chk.addEventListener('change',apply);
-    setTimeout(apply,0);
-    return holder;
-  }
-  function get(path){
-    const keys=path.split('.'); let cur=S;
-    for(const k of keys){ if(cur==null) return undefined; cur=cur[k]; }
-    return cur;
-  }
-  function set(path, val){
-    const keys=path.split('.'); let cur=S;
-    for(let i=0;i<keys.length-1;i++){ const k=keys[i]; if(typeof cur[k]!=='object'||cur[k]==null) cur[k]={}; cur=cur[k]; }
-    cur[keys[keys.length-1]] = val;
-  }
+  });
+}
 
-  /* ===== Sections builder ===== */
-  const container = $("#sections");
-  const TOC = $("#tocList");
-  const SECTIONS = [
-    { key:"intro", title:"Overview & quick guidance", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          el('div','hint', 'Complete any sections that apply. Tick “Not required” to skip irrelevant sections. Use Upload to auto-fill from an existing plan.'),
-          el('div','hint','Export to PDF for signing, or download an editable RTF.')
-        );
-      }
-    },
-    { key:"participant", title:"1) Participant — personal & NDIS details", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          el('div','grid.two',[
-            field("Legal name","participant.legal_name"),
-            field("Preferred name","participant.preferred_name")
-          ]),
-          el('div','grid.three',[
-            field("Pronouns","participant.pronouns"),
-            field("Date of birth","participant.dob","date"),
-            field("Age","participant.age","number")
-          ]),
-          el('div','grid.two',[
-            field("NDIS number","participant.ndis"),
-            field("Plan management","participant.plan_mgmt","select",{options:["NDIA-managed","Plan-managed","Self-managed","Not sure"]})
-          ]),
-          el('div','grid.three',[
-            field("Plan start","participant.plan_start","date"),
-            field("Plan end","participant.plan_end","date"),
-            field("Phone","participant.phone","tel")
-          ]),
-          el('div','grid.two',[
-            field("Email","participant.email","email"),
-            field("Address (street)","participant.address")
-          ]),
-          el('div','grid.three',[
-            field("Suburb","participant.suburb"),
-            field("State","participant.state"),
-            field("Postcode","participant.postcode")
-          ]),
-          el('div','grid.three',[
-            field("Emergency contact — name","emergency.name"),
-            field("Relationship","emergency.rel"),
-            field("Phone","emergency.phone","tel")
-          ]),
-          el('div','grid.two',[
-            field("Support Coordinator — name","team.sc_name"),
-            field("Organisation","team.sc_org")
-          ]),
-          el('div','grid.two',[
-            field("SC email","team.sc_email","email"),
-            field("SC phone","team.sc_phone","tel")
-          ]),
-          el('div','grid.two',[
-            field("Plan Manager — name","team.pm_name"),
-            field("Organisation","team.pm_org")
-          ]),
-          el('div','grid.two',[
-            field("PM email","team.pm_email","email"),
-            field("PM phone","team.pm_phone","tel")
-          ]),
-          el('div','grid.three',[
-            field("GP name","team.gp_name"),
-            field("GP practice","team.gp_practice"),
-            field("GP phone","team.gp_phone","tel")
-          ]),
-          field("GP email","team.gp_email","email")
-        );
-      }
-    },
-    { key:"health", title:"2) Health & medical (diagnoses, allergies, equipment, diet)", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          field("Primary diagnoses","health.primary_dx","textarea",{placeholder:"e.g., Autism Spectrum Disorder; Multiple Sclerosis"}),
-          field("Other diagnoses (optional)","health.other_dx","textarea"),
-          field("Allergies (write “No known allergies” if none)","health.allergies"),
-          el('div','grid.two',[
-            field("Equipment / aids (mobility, comms)","health.equipment"),
-            field("Cognition / capacity","health.cognition","select",{options:["Clear","Mild impairment","Moderate","Severe","Prefer not to say"]})
-          ]),
-          el('div','grid.two',[
-            field("Vision/Hearing considerations","health.vision_hearing"),
-            field("Mental health notes","health.mental_health","textarea")
-          ]),
-          field("Nutrition / diet (texture, restrictions, supplements)","health.diet","textarea")
-        );
-      }
-    },
-    { key:"daily", title:"3) Daily living & personal care (ADLs + preferences)", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          el('div','grid.two',[
-            field("Bathing support level","daily.bathing","select",{options:["Independent","Prompting","Partial assist","Full assist","Not required"]}),
-            field("Bathing preferences (time, products)","daily.bathing_prefs","textarea")
-          ]),
-          el('div','grid.three',[
-            field("Dressing support","daily.dressing","select",{options:["Independent","Prompting","Partial assist","Full assist","Not required"]}),
-            field("Grooming/oral care","daily.grooming","select",{options:["Independent","Prompting","Partial assist","Full assist","Not required"]}),
-            field("Toileting","daily.toileting","select",{options:["Independent","Prompting","Assistance","Incontinent","Catheter/stoma"]})
-          ]),
-          el('div','grid.three',[
-            field("Continence management (aids/schedule)","daily.continence","textarea"),
-            field("Mobility status","daily.mobility","select",{options:["Independent","With aid","Requires transfer","Bed-bound"]}),
-            field("Transfers / hoist","daily.transfers")
-          ]),
-          el('div','grid.two',[
-            field("Assistive aids in home","daily.aids"),
-            field("Important routines to maintain","daily.routines","textarea")
-          ]),
-          field("Home environment / access notes (parking, pets, keysafe)","daily.environment","textarea"),
-          checklist("Quick home safety risks","risk.home_check",{
-            smoke:"No working smoke alarms",
-            lighting:"Poor lighting",
-            rails:"No grab rails / mats",
-            trip:"Trip hazards"
-          }),
-          field("Home risks — notes","risk.home_check.notes","textarea")
-        );
-      }
-    },
-    { key:"comms", title:"4) Communication & sensory needs", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          el('div','grid.two',[
-            field("Primary language","comms.language"),
-            field("Communication method (verbal, AAC, sign, device)","comms.method")
-          ]),
-          el('div','grid.two',[
-            field("Interpreter required? (Yes/No/Not sure)","comms.interpreter"),
-            field("Interpreter language","comms.interpreter_lang")
-          ]),
-          field("Decision-making support / guardian/nominee","comms.decision_support","textarea"),
-          field("Behavioural cues (if non-verbal)","comms.cues","textarea"),
-          field("Sensory considerations (noise, lights, textures)","comms.sensory","textarea")
-        );
-      }
-    },
-    { key:"social", title:"5) Social & lifestyle", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          el('div','grid.two',[
-            field("Living situation (home type)","social.living"),
-            field("Household members / relationships","social.household")
-          ]),
-          field("Key family/friends/supports involved","social.supports","textarea"),
-          field("Interests & activities (motivators, community)","social.interests","textarea"),
-          field("Typical daily/weekly routine","social.routine","textarea")
-        );
-      }
-    },
-    { key:"behaviour", title:"6) Behaviour management plan (detailed)", build(buildPanel, key){
-        const p = buildPanel(key);
-        p.append(
-          field("Behaviour(s) of concern — description","behaviour.description","textarea"),
-          field("Known triggers / antecedents","behaviour.triggers","textarea"),
-          field("Early warning signs","behaviour.early_signs","textarea"),
-          field("Preventative strategies (proactive)","behaviour.prevention","textarea"),
-          field("Preferred de-escalation techniques","behaviour.deescalation","textarea"),
-          field("Post-incident response / debrief / recovery","behaviour.post_incident","textarea"),
-          chips("Behaviour Support Plan (BSP) in place?","behaviour.bsp",["Yes","No","Not sure"]),
-          chips("Restrictive practices authorized?","behaviour.restrictive",["Yes","No","Not sure"]),
-          field("If restrictive practices: rationale, approvals, reduction plan, monitoring","behaviour.restrictive_notes","textarea"),
-          field("Reporting & communication (who to notify, timeframes)","behaviour.reporting","textarea")
-        );
-      }
-    },
-    { key:"meds", title:"7) Medication management plan (very detailed)", build(buildPanel, key){
-        const p = buildPanel(key);
+/* Enable/disable subsection */
+function applyNA(key, val){
+  const section = document.querySelector(`#sec-${key}`) || document.querySelector(`[id="sec-${key}"]`);
+  if (!section) return;
+  section.querySelectorAll('input,select,textarea,button').forEach(el=>{
+    if (el.closest('summary') || el.hasAttribute('data-na') || el.id==='addMed') return; // keep toggles active
+    el.disabled = !!val;
+  });
+  section.style.opacity = val ? .55 : 1;
+}
 
-        /* Medication list table (dynamic) */
-        const medsWrap = el('div','field');
-        medsWrap.appendChild(el('label',null,'Medication list (add rows as needed)'));
-        const tbl = el('table'); tbl.style.width="100%"; tbl.style.borderSpacing="0 6px";
-        tbl.innerHTML = `
-          <thead>
-            <tr>
-              <th style="text-align:left">Name</th>
-              <th style="text-align:left">Dose</th>
-              <th style="text-align:left">Route</th>
-              <th style="text-align:left">When / Frequency</th>
-              <th style="text-align:left">Purpose</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="medRows"></tbody>
-        `;
-        const tbody = tbl.querySelector('#medRows');
-        function renderMeds(){
-          tbody.innerHTML="";
-          (S.meds.list||[]).forEach((m,idx)=>{
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td><input data-k="name" value="${m.name||''}"></td>
-              <td><input data-k="dose" value="${m.dose||''}"></td>
-              <td><input data-k="route" value="${m.route||''}"></td>
-              <td><input data-k="when" value="${m.when||''}"></td>
-              <td><input data-k="purpose" value="${m.purpose||''}"></td>
-              <td><button class="btn" data-del="${idx}" type="button">✕</button></td>
-            `;
-            tr.querySelectorAll('input').forEach(inp=>{
-              inp.addEventListener('input',()=>{
-                const k = inp.getAttribute('data-k'); S.meds.list[idx][k]=inp.value; persist();
-              });
-            });
-            tr.querySelector('button[data-del]').addEventListener('click',()=>{
-              S.meds.list.splice(idx,1); persist(); renderMeds();
-            });
-            tbody.appendChild(tr);
-          });
-        }
-        const addBtn = el('button','btn'); addBtn.type='button'; addBtn.textContent='Add medication';
-        addBtn.addEventListener('click',()=>{ S.meds.list.push({name:"",dose:"",route:"",when:"",purpose:""}); persist(); renderMeds(); });
-        medsWrap.append(tbl, addBtn);
-        p.append(medsWrap);
+/* Deep get/set helpers */
+function get(obj, path){
+  return path.split('.').reduce((o,k)=> (o ? o[k] : undefined), obj);
+}
+function set(obj, path, val){
+  const parts = path.split('.');
+  const last = parts.pop();
+  const parent = parts.reduce((o,k)=> (o[k]??(o[k]={})), obj);
+  parent[last] = val;
+}
 
-        p.append(
-          chips("Self-administration ability","meds.self_admin",["Independent","Prompting only","Partial assist","Staff administer","Not sure"]),
-          chips("Webster/blister pack","meds.webster",["Yes","No","Not sure"]),
-          el('div','grid.two',[
-            field("Storage location (locked cupboard etc.)","meds.storage"),
-            field("Access/keys (who holds)","meds.access")
-          ]),
-          field("Consent to administer (form, scope)","meds.consent","textarea"),
-          field("Common side effects to monitor & responses","meds.side_effects","textarea"),
-          field("Required monitoring (e.g., BP weekly, BSL before meals)","meds.monitoring","textarea"),
-          field("Emergency medication plan (EpiPen, midazolam — triggers, steps, who to call)","meds.emergency_plan","textarea"),
-          field("Missed/refused dose protocol","meds.missed","textarea"),
-          field("Recent changes / upcoming reviews","meds.changes","textarea")
-        );
-      }
-    },
-    { key:"risk", title:"8) Risk assessment & safety", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          el('div','grid.two',[
-            chips("Falls risk","risk.falls",["Low","Medium","High","Not sure"]),
-            field("Falls — prevention strategies","risk.falls_strat","textarea")
-          ]),
-          el('div','grid.two',[
-            chips("Pressure injury risk","risk.pressure",["Low","Medium","High","Not sure"]),
-            field("Pressure care strategies","risk.pressure_strat","textarea")
-          ]),
-          el('div','grid.two',[
-            chips("Wandering / elopement risk","risk.wandering",["No","Sometimes","Yes","Not sure"]),
-            field("Wandering safeguards (supervision, alarms)","risk.wandering_strat","textarea")
-          ]),
-          field("Smoking / alcohol / substances (notes)","risk.substances","textarea"),
-          field("Transport & vehicle safety (seating, restraints, WAV)","risk.transport","textarea"),
-          field("Emergency plan (evac, hospital preferences, contact order)","risk.emergency_plan","textarea")
-        );
-      }
-    },
-    { key:"goals", title:"9) Goals & outcomes (person-centred)", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          field("Participant goals (from plan / aspirations)","goals.items","textarea"),
-          field("Desired outcomes (what success looks like)","goals.outcomes","textarea"),
-          field("Strategies / supports to achieve goals","goals.strategies","textarea")
-        );
-      }
-    },
-    { key:"consent", title:"10) Additional consents & attachments", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          chips("Consent to share plan with relevant parties","consent.share_info",["Yes","No"]),
-          field("Consent notes / scope / limits","consent.share_notes","textarea")
-        );
-      }
-    },
-    { key:"sign", title:"11) Signatures (sign-off)", build(buildPanel){
-        const p = buildPanel();
-        p.append(
-          el('div','grid.two',[
-            field("Participant / Representative — printed name","signatures.client_name"),
-            field("Date","signatures.client_date","date")
-          ]),
-          el('div','field',`<label>Signature (to sign after PDF print, or integrate e-signature later)</label>
-            <div style="height:90px;border:1px dashed #2a4a66;border-radius:10px;background:#0e1b29"></div>`),
-          el('div','grid.three',[
-            field("Provider representative — name","signatures.provider_name"),
-            field("Role / title","signatures.provider_role"),
-            field("Date","signatures.provider_date","date")
-          ])
-        );
-      }
-    }
+/* Table: medications */
+const medTableBody = ()=> document.querySelector('#medTable tbody');
+function addMedRow(item={name:"",dose:"",route:"",times:"",purpose:""}){
+  S.meds.list.push(item);
+  renderMedRows();
+  save();
+}
+function removeMedRow(ix){
+  S.meds.list.splice(ix,1);
+  renderMedRows();
+  save();
+}
+function renderMedRows(){
+  const tb = medTableBody();
+  tb.innerHTML = "";
+  S.meds.list.forEach((m,ix)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" value="${m.name||""}" data-med="${ix}.name"></td>
+      <td><input type="text" value="${m.dose||""}" data-med="${ix}.dose"></td>
+      <td><input type="text" value="${m.route||""}" data-med="${ix}.route"></td>
+      <td><input type="text" value="${m.times||""}" data-med="${ix}.times"></td>
+      <td><input type="text" value="${m.purpose||""}" data-med="${ix}.purpose"></td>
+      <td><button class="btn ghost" data-med-del="${ix}" type="button">✕</button></td>
+    `;
+    tb.appendChild(tr);
+  });
+  // bind
+  tb.querySelectorAll('[data-med]').forEach(inp=>{
+    const p = inp.getAttribute('data-med');
+    inp.addEventListener('input', ()=>{
+      const [i, key] = p.split('.');
+      S.meds.list[+i][key] = inp.value;
+      save();
+    });
+  });
+  tb.querySelectorAll('[data-med-del]').forEach(btn=>{
+    btn.addEventListener('click', ()=> removeMedRow(+btn.getAttribute('data-med-del')));
+  });
+}
+
+/* Upload & autofill — PDF.js + RTF */
+function addUploadTag(name){ 
+  const li=document.createElement('li'); li.textContent = name; 
+  document.getElementById('uploadList').appendChild(li);
+}
+async function extractPdfText(file){
+  if (!window.pdfjsLib) throw new Error("PDF.js not loaded");
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  let full = "";
+  for (let p=1;p<=pdf.numPages;p++){
+    const page = await pdf.getPage(p);
+    const c = await page.getTextContent();
+    full += c.items.map(it=>it.str).join(" ") + "\n\n";
+  }
+  return full.trim();
+}
+function rtfToText(rtf){
+  // very lightweight: strips {\control} and \'xx hex codes into unicode
+  let t = rtf.replace(/\\'([0-9a-fA-F]{2})/g, (_,h)=> String.fromCharCode(parseInt(h,16)));
+  t = t.replace(/\\par[d]?/g,"\n");
+  t = t.replace(/\\[a-z]+\d* ?/g,""); // control words
+  t = t.replace(/[{}]/g,"");
+  return t.replace(/\n{3,}/g,"\n\n").trim();
+}
+function mapTextToFields(text){
+  // heuristic keyword mapping — extend as necessary
+  const map = [
+    { re:/\b(Allerg(?:y|ies)|Allergic to)\s*[:\-]\s*([^\n]+)/i, field:"health.allergies" },
+    { re:/\bDiagnoses?\s*[:\-]\s*([^\n]+)/i, field:"health.primary_diagnoses" },
+    { re:/\bOther diagnoses?\s*[:\-]\s*([^\n]+)/i, field:"health.other_diagnoses" },
+    { re:/\bNDIS\s*(No|Number)\s*[:\-]\s*([0-9\s]+)/i, field:"participant.ndis_number" },
+    { re:/\bAddress\s*[:\-]\s*([^\n]+)/i, field:"participant.address.line1" },
+    { re:/\bPlan\s*management\s*[:\-]\s*([^\n]+)/i, field:"participant.plan_mgmt" },
+    { re:/\bGP\s*(?:Name)?\s*[:\-]\s*([^\n]+)/i, field:"contacts.gp.name" },
+    { re:/\bEmergency\s*Contact\s*[:\-]\s*([^\n]+)/i, field:"contacts.emer.name" },
+    { re:/\bMedication(?:s)?\s*[:\-]\s*([^\n]+)/i, field:"meds.changes" }, // catch-all
   ];
+  map.forEach(m=>{
+    const hit = text.match(m.re);
+    if (hit){ set(S, m.field, (hit[2]||hit[1]).trim()); }
+  });
 
-  function buildPanelWrapper(title, key){
-    const det = document.createElement('details');
-    det.id = "sec_"+key;
-    det.open = (S._nr[key]!==true); // open unless marked not required
-    const sum = document.createElement('summary');
-    sum.innerHTML = `<span>${title}</span> <span class="badge" id="badge_${key}">Section</span>`;
-    sum.appendChild(nrToggle(key, det));
-    const panel = el('div','panel');
-    det.append(sum, panel);
-    return { det, panel };
-  }
+  // crude medication line detection
+  const medLines = text.split(/\n/).filter(l=>/\b(mg|mcg|ml)\b/i.test(l) && /\b(am|pm|daily|noon|night|prn)\b/i.test(l));
+  medLines.forEach(l=>{
+    const m = { name:"", dose:"", route:"", times:"", purpose:"" };
+    const dose = l.match(/\b\d+(\.\d+)?\s*(mg|mcg|ml)\b/i); if (dose) m.dose = dose[0];
+    const route = l.match(/\b(oral|po|inhaled|neb|patch|sc|im|iv)\b/i); if (route) m.route = route[0].toUpperCase();
+    const times = l.match(/\b(morning|noon|evening|night|am|pm|daily|bd|tds|qds|prn)\b/gi); if (times) m.times = Array.from(new Set(times)).join(", ");
+    m.name = l.split(/[:\-]/)[0].trim();
+    S.meds.list.push(m);
+  });
+}
 
-  function buildAll(){
-    container.innerHTML="";
-    TOC.innerHTML="";
-    SECTIONS.forEach((s,idx)=>{
-      const {det,panel} = buildPanelWrapper(s.title, s.key);
-      function buildPanel(){ return panel; }
-      s.build(buildPanel, s.key);
-      container.appendChild(det);
-
-      const tocBtn = document.createElement('button');
-      tocBtn.textContent = (idx+1)+". "+s.title.replace(/^\d+\)\s*/,'');
-      tocBtn.addEventListener('click',()=>{ document.getElementById('sec_'+s.key).scrollIntoView({behavior:'smooth', block:'start'}); highlightTOC(idx); });
-      TOC.appendChild(tocBtn);
-    });
-    highlightTOC(0);
-    persist();
-  }
-
-  function highlightTOC(i){
-    TOC.querySelectorAll('button').forEach((b,idx)=>{ b.classList.toggle('current', idx===i); });
-  }
-
-  /* ===== Upload & Auto-fill ===== */
-  $("#fileInput").addEventListener('change', async (e)=>{
-    const f = e.target.files && e.target.files[0]; if(!f) return;
-    try{
-      if (/\.(rtf)$/i.test(f.name)) {
-        const txt = await f.text();
-        const plain = rtfToText(txt);
-        autofillFromText(plain);
-      } else if (/\.(pdf)$/i.test(f.name)) {
-        // Best-effort: some browsers expose text via .text() for simple PDFs; otherwise this will fail silently.
-        // For production, wire in PDF.js.
-        if (f.text) {
-          const maybe = await f.text();
-          autofillFromText(maybe);
-        } else {
-          alert("PDF text extraction needs PDF.js for reliable results. Please upload RTF or a text-based PDF.");
-        }
-      } else {
-        const text = await f.text();
-        autofillFromText(text);
+/* Dictation */
+let recognizer=null, recField=null, globalDictation=false;
+function initSpeech(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.continuous = true; r.interimResults = true; r.lang = "en-AU";
+  r.onresult = (evt)=>{
+    let transcript = "";
+    for (let i=evt.resultIndex; i<evt.results.length; i++){
+      transcript += evt.results[i][0].transcript;
+    }
+    if (recField){
+      const el = document.querySelector(`[data-field="${recField}"]`);
+      if (el){
+        el.value = transcript.trim();
+        set(S, recField, el.value); save();
       }
-      persist();
-      alert("Auto-fill complete. Please review and adjust any fields.");
-    } catch(err){
-      console.error(err);
-      alert("Couldn’t read that file. For best results, upload RTF or a text-based PDF.");
-    } finally {
-      e.target.value = "";
     }
-  });
+  };
+  r.onerror = (e)=>{ console.warn("speech error", e); stopSpeech(); };
+  r.onend = ()=>{ if (globalDictation && recField) startSpeech(recField); }; // auto-restart when global on
+  return r;
+}
+function startSpeech(field){
+  if (!recognizer) recognizer = initSpeech();
+  if (!recognizer) { alert("Speech recognition not supported in this browser."); return; }
+  recField = field;
+  document.querySelectorAll('.mic').forEach(m=>m.dataset.live="false");
+  const m = document.querySelector(`.mic[data-mic="${field}"]`);
+  if (m) m.dataset.live="true";
+  try{ recognizer.start(); }catch{}
+}
+function stopSpeech(){
+  if (recognizer){ try{ recognizer.stop(); }catch{} }
+  document.querySelectorAll('.mic').forEach(m=>m.dataset.live="false");
+  recField = null;
+}
 
-  function rtfToText(rtf){
-    // Very lightweight RTF → text: strip control words, braces, hex escapes.
-    return rtf
-      .replace(/\\par[d]?/g, "\n")
-      .replace(/\\'[0-9a-fA-F]{2}/g, m=>String.fromCharCode(parseInt(m.slice(2),16)))
-      .replace(/\\[a-z]+-?\d* ?/g, "")
-      .replace(/[{}]/g,"")
-      .replace(/\n{3,}/g,"\n\n");
-  }
+/* Signature pad (simple canvas freehand with undo) */
+const sigPads = {};
+function initSigPads(){
+  document.querySelectorAll('.sigpad').forEach(wrap=>{
+    const key = wrap.getAttribute('data-sig');
+    const canvas = wrap.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+    const strokes = []; let drawing=false; let current=[];
 
-  function pick(text,label){
-    const re = new RegExp(String(label).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&')+`\\s*[:\\-]?\\s*(.+)`, 'i');
-    const m = text.match(re); return m ? m[1].trim().split(/\r?\n/)[0] : "";
-  }
-
-  function autofillFromText(t){
-    // Map common labels → fields (extend as needed)
-    set("participant.legal_name", pick(t,"Name") || pick(t,"Participant Name"));
-    set("participant.dob", (pick(t,"DOB")||"").replace(/[^0-9\-\/]/g,""));
-    set("participant.ndis", pick(t,"NDIS") || pick(t,"NDIS Number"));
-    set("health.allergies", pick(t,"Allergies"));
-    set("health.primary_dx", pick(t,"Diagnosis") || pick(t,"Primary Diagnoses"));
-    set("team.gp_name", pick(t,"GP") || pick(t,"General Practitioner"));
-    // very simple meds parse
-    const meds = [];
-    const medsSec = t.split(/Medications?:/i)[1] || "";
-    medsSec.split(/\n/).slice(0,20).forEach(line=>{
-      const m = line.match(/^([\w\- ()\/]+)\s+(\d[^\s]*)\s+(.+?)\s+@\s+(.+?)\s*-\s*(.+)$/i);
-      if(m) meds.push({name:m[1], dose:m[2], route:m[3], when:m[4], purpose:m[5]});
-    });
-    if (meds.length) S.meds.list = meds;
-    persist(); buildAll(); // re-render to show updates
-  }
-
-  /* ===== Export: PDF & RTF ===== */
-  $("#genPDF").addEventListener('click', ()=>{
-    const w = window.open('', '_blank');
-    w.document.write(buildPrintHTML());
-    w.document.close();
-    setTimeout(()=>{ try{ w.focus(); }catch(e){} }, 100);
-  });
-
-  $("#genRTF").addEventListener('click', ()=>{
-    const rtf = buildRTF();
-    const blob = new Blob([rtf], {type:'application/rtf'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = "NDIS_Care_Plan_Editable.rtf";
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  });
-
-  function safe(v){ return (v==null||v==="") ? "—" : String(v); }
-  function yesno(v){ if(v===true||v==="Yes") return "Yes"; if(v===false||v==="No") return "No"; return v||"—"; }
-  function addrLine(){ return [S.participant.address,S.participant.suburb,S.participant.state,S.participant.postcode].filter(Boolean).join(", "); }
-
-  function buildPrintHTML(){
-    const today = new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
-    function row(k,v){ return `<tr><th>${k}</th><td>${safe(v)}</td></tr>`; }
-    function tblStart(t){ return `<section class="section"><h2>${t}</h2><table class="kv">`; }
-    function tblEnd(){ return `</table></section>`; }
-
-    let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>NDIS Care Plan — Print</title>
-      <style>
-        html,body{margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:#111}
-        @page{size:A4;margin:16mm 14mm}
-        h1{margin:0 0 6px;font-size:24px}
-        .container{margin:10px 0}
-        .section{page-break-inside:avoid;margin:12px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px;background:#fafafa}
-        h2{font-size:16px;margin:0 0 8px}
-        table.kv{width:100%;border-collapse:separate;border-spacing:0 6px}
-        th{width:220px;text-align:left;padding:6px 8px;background:#e6fffb;border-radius:8px;font-weight:700;color:#065f46}
-        td{padding:6px 8px;background:#fff;border-radius:8px;border:1px solid #e5e7eb}
-      </style></head><body>
-      <h1>NDIS Comprehensive Care Plan</h1>
-      <div class="container">`;
-
-    // Participant
-    html += tblStart("Participant");
-    html += row("Legal name",S.participant.legal_name) + row("Preferred name",S.participant.preferred_name) + row("DOB",S.participant.dob) + row("NDIS number",S.participant.ndis) + row("Address",addrLine()) + row("Plan mgmt",S.participant.plan_mgmt) + row("Plan dates",(S.participant.plan_start||"")+" → "+(S.participant.plan_end||"")) + row("Phone",S.participant.phone) + row("Email",S.participant.email);
-    html += row("Emergency contact",[S.emergency.name,S.emergency.rel,S.emergency.phone].filter(Boolean).join(" • "));
-    html += row("Support Coordinator",[S.team.sc_name,S.team.sc_org,S.team.sc_email,S.team.sc_phone].filter(Boolean).join(" • "));
-    html += row("Plan Manager",[S.team.pm_name,S.team.pm_org,S.team.pm_email,S.team.pm_phone].filter(Boolean).join(" • "));
-    html += row("GP",[S.team.gp_name,S.team.gp_practice,S.team.gp_phone,S.team.gp_email].filter(Boolean).join(" • "));
-    html += tblEnd();
-
-    // Health
-    html += tblStart("Health & medical");
-    html += row("Primary diagnoses",S.health.primary_dx) + row("Other diagnoses",S.health.other_dx) + row("Allergies",S.health.allergies) + row("Equipment / aids",S.health.equipment) + row("Cognition",S.health.cognition) + row("Vision/Hearing",S.health.vision_hearing) + row("Mental health",S.health.mental_health) + row("Diet / nutrition",S.health.diet);
-    html += tblEnd();
-
-    // Daily living
-    html += tblStart("Daily living & personal care");
-    html += row("Bathing",S.daily.bathing) + row("Bathing preferences",S.daily.bathing_prefs) + row("Dressing",S.daily.dressing) + row("Grooming/oral care",S.daily.grooming) + row("Toileting",S.daily.toileting) + row("Continence",S.daily.continence) + row("Mobility",S.daily.mobility) + row("Transfers/hoist",S.daily.transfers) + row("Home aids",S.daily.aids) + row("Important routines",S.daily.routines) + row("Home env./access",S.daily.environment) + row("Home safety notes", (S.risk.home_check && S.risk.home_check.notes)||"—");
-    html += tblEnd();
-
-    // Comms
-    html += tblStart("Communication & sensory");
-    html += row("Language",S.comms.language) + row("Method",S.comms.method) + row("Interpreter",S.comms.interpreter + (S.comms.interpreter_lang?(" ("+S.comms.interpreter_lang+")"):"")) + row("Decision support",S.comms.decision_support) + row("Behavioural cues",S.comms.cues) + row("Sensory",S.comms.sensory);
-    html += tblEnd();
-
-    // Social
-    html += tblStart("Social & lifestyle");
-    html += row("Living situation",S.social.living) + row("Household",S.social.household) + row("Supports",S.social.supports) + row("Interests/activities",S.social.interests) + row("Routine",S.social.routine);
-    html += tblEnd();
-
-    // Behaviour
-    html += tblStart("Behaviour management");
-    html += row("Description",S.behaviour.description) + row("Triggers",S.behaviour.triggers) + row("Early signs",S.behaviour.early_signs) + row("Prevention",S.behaviour.prevention) + row("De-escalation",S.behaviour.deescalation) + row("Post-incident",S.behaviour.post_incident) + row("BSP in place", yesno(S.behaviour.bsp)) + row("Restrictive practices", yesno(S.behaviour.restrictive)) + row("Restrictive practice notes",S.behaviour.restrictive_notes) + row("Reporting/communication",S.behaviour.reporting);
-    html += tblEnd();
-
-    // Meds
-    html += tblStart("Medication management");
-    const meds = (S.meds.list||[]).map(m=>[m.name,m.dose,m.route,m.when,m.purpose].filter(Boolean).join(" • ")).join("<br>");
-    html += row("Medication list", meds||"—") + row("Self-admin",S.meds.self_admin) + row("Webster pack",S.meds.webster) + row("Storage",S.meds.storage) + row("Access/keys",S.meds.access) + row("Consent",S.meds.consent) + row("Side effects (monitor/response)",S.meds.side_effects) + row("Monitoring required",S.meds.monitoring) + row("Emergency medication plan",S.meds.emergency_plan) + row("Missed/refused protocol",S.meds.missed) + row("Recent changes/reviews",S.meds.changes);
-    html += tblEnd();
-
-    // Risk
-    html += tblStart("Risk & safety");
-    html += row("Falls risk",S.risk.falls) + row("Falls strategies",S.risk.falls_strat) + row("Pressure injury risk",S.risk.pressure) + row("Pressure strategies",S.risk.pressure_strat) + row("Wandering risk",S.risk.wandering) + row("Wandering safeguards",S.risk.wandering_strat) + row("Smoking/alcohol/substances",S.risk.substances) + row("Transport safety",S.risk.transport) + row("Emergency plan",S.risk.emergency_plan);
-    html += tblEnd();
-
-    // Goals
-    html += tblStart("Goals & outcomes");
-    html += row("Goals",S.goals.items) + row("Outcomes",S.goals.outcomes) + row("Strategies",S.goals.strategies);
-    html += tblEnd();
-
-    // Consents
-    html += tblStart("Additional consents");
-    html += row("Consent to share plan", yesno(S.consent.share_info)) + row("Consent notes",S.consent.share_notes);
-    html += tblEnd();
-
-    // Signatures
-    html += tblStart("Signatures");
-    html += row("Participant / Representative (name)",S.signatures.client_name) + row("Date",S.signatures.client_date);
-    html += `<tr><th>Signature (sign after printing)</th><td><div style="height:80px;border:1px dashed #cbd5e1;border-radius:8px"></div></td></tr>`;
-    html += row("Provider rep (name)",S.signatures.provider_name) + row("Role/title",S.signatures.provider_role) + row("Date",S.signatures.provider_date);
-    html += `<tr><th>Signature (provider)</th><td><div style="height:80px;border:1px dashed #cbd5e1;border-radius:8px"></div></td></tr>`;
-    html += tblEnd();
-
-    html += `</div><script>window.print()<\/script></body></html>`;
-    return html;
-  }
-
-  function buildRTF(){
-    function esc(s){ return (s||'').toString().replace(/[\\{}]/g, m=>'\\'+m).replace(/\n/g,'\\par '); }
-    function line(k,v){ return '\\b '+esc(k)+':\\b0\\tab '+esc(v||'—')+'\\par '; }
-    function block(title, lines){ return '{\\pard\\sa140\\b\\ul '+esc(title)+'\\ul0\\b0\\par }{\\pard\\sa80 '+lines.join('')+'}'; }
-    const addr = [S.participant.address,S.participant.suburb,S.participant.state,S.participant.postcode].filter(Boolean).join(', ');
-    const meds = (S.meds.list||[]).map(m=>[m.name,m.dose,m.route,m.when,m.purpose].filter(Boolean).join(' • ')).join('\\par ');
-    const parts = [];
-    parts.push(block('Participant',[
-      line('Legal name',S.participant.legal_name), line('Preferred name',S.participant.preferred_name),
-      line('DOB',S.participant.dob), line('NDIS number',S.participant.ndis),
-      line('Address',addr), line('Plan mgmt',S.participant.plan_mgmt),
-      line('Plan dates',(S.participant.plan_start||'')+' → '+(S.participant.plan_end||'')),
-      line('Phone',S.participant.phone), line('Email',S.participant.email),
-      line('Emergency contact',[S.emergency.name,S.emergency.rel,S.emergency.phone].filter(Boolean).join(' • ')),
-      line('Support Coordinator',[S.team.sc_name,S.team.sc_org,S.team.sc_email,S.team.sc_phone].filter(Boolean).join(' • ')),
-      line('Plan Manager',[S.team.pm_name,S.team.pm_org,S.team.pm_email,S.team.pm_phone].filter(Boolean).join(' • ')),
-      line('GP',[S.team.gp_name,S.team.gp_practice,S.team.gp_phone,S.team.gp_email].filter(Boolean).join(' • '))
-    ]));
-    parts.push(block('Health & medical',[
-      line('Primary diagnoses',S.health.primary_dx), line('Other diagnoses',S.health.other_dx),
-      line('Allergies',S.health.allergies), line('Equipment / aids',S.health.equipment),
-      line('Cognition',S.health.cognition), line('Vision/Hearing',S.health.vision_hearing),
-      line('Mental health',S.health.mental_health), line('Diet',S.health.diet)
-    ]));
-    parts.push(block('Daily living',[
-      line('Bathing',S.daily.bathing), line('Bathing prefs',S.daily.bathing_prefs),
-      line('Dressing',S.daily.dressing), line('Grooming/oral',S.daily.grooming),
-      line('Toileting',S.daily.toileting), line('Continence',S.daily.continence),
-      line('Mobility',S.daily.mobility), line('Transfers/hoist',S.daily.transfers),
-      line('Home aids',S.daily.aids), line('Routines',S.daily.routines),
-      line('Home env/access',S.daily.environment), line('Home safety notes', (S.risk.home_check && S.risk.home_check.notes)||'—')
-    ]));
-    parts.push(block('Communication & sensory',[
-      line('Language',S.comms.language), line('Method',S.comms.method),
-      line('Interpreter',S.comms.interpreter + (S.comms.interpreter_lang?(' ('+S.comms.interpreter_lang+')'):'') ),
-      line('Decision support',S.comms.decision_support), line('Cues',S.comms.cues), line('Sensory',S.comms.sensory)
-    ]));
-    parts.push(block('Social & lifestyle',[
-      line('Living',S.social.living), line('Household',S.social.household),
-      line('Supports',S.social.supports), line('Interests',S.social.interests), line('Routine',S.social.routine)
-    ]));
-    parts.push(block('Behaviour management',[
-      line('Description',S.behaviour.description), line('Triggers',S.behaviour.triggers),
-      line('Early signs',S.behaviour.early_signs), line('Prevention',S.behaviour.prevention),
-      line('De-escalation',S.behaviour.deescalation), line('Post-incident',S.behaviour.post_incident),
-      line('BSP in place', S.behaviour.bsp===true?'Yes':S.behaviour.bsp===false?'No':(S.behaviour.bsp||'—')),
-      line('Restrictive practices', S.behaviour.restrictive===true?'Yes':S.behaviour.restrictive===false?'No':(S.behaviour.restrictive||'—')),
-      line('Restrictive notes',S.behaviour.restrictive_notes), line('Reporting',S.behaviour.reporting)
-    ]));
-    parts.push(block('Medication management',[
-      line('Medication list', meds||'—'),
-      line('Self-admin',S.meds.self_admin), line('Webster',S.meds.webster),
-      line('Storage',S.meds.storage), line('Access/keys',S.meds.access),
-      line('Consent',S.meds.consent), line('Side effects',S.meds.side_effects),
-      line('Monitoring',S.meds.monitoring), line('Emergency med plan',S.meds.emergency_plan),
-      line('Missed/refused protocol',S.meds.missed), line('Recent changes/reviews',S.meds.changes)
-    ]));
-    parts.push(block('Risk & safety',[
-      line('Falls risk',S.risk.falls), line('Falls strategies',S.risk.falls_strat),
-      line('Pressure risk',S.risk.pressure), line('Pressure strategies',S.risk.pressure_strat),
-      line('Wandering risk',S.risk.wandering), line('Wandering safeguards',S.risk.wandering_strat),
-      line('Smoking/alcohol/substances',S.risk.substances),
-      line('Transport safety',S.risk.transport), line('Emergency plan',S.risk.emergency_plan)
-    ]));
-    parts.push(block('Goals & outcomes',[
-      line('Goals',S.goals.items), line('Outcomes',S.goals.outcomes), line('Strategies',S.goals.strategies)
-    ]));
-    parts.push(block('Consents',[
-      line('Share plan', (S.consent.share_info===true||S.consent.share_info==="Yes")?"Yes":(S.consent.share_info===false||S.consent.share_info==="No")?"No":"—"),
-      line('Consent notes',S.consent.share_notes)
-    ]));
-    parts.push(block('Signatures',[
-      line('Participant/Representative — name',S.signatures.client_name), line('Date',S.signatures.client_date),
-      line('Provider representative — name',S.signatures.provider_name), line('Role/title',S.signatures.provider_role), line('Date',S.signatures.provider_date)
-    ]));
-    return '{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Arial;}}\\fs22 '+parts.join(' ')+' }';
-  }
-
-  /* ===== Review jump, Reset, Top ===== */
-  $("#reviewBtn").addEventListener('click', ()=>{
-    // open all sections not marked NR for a quick scan
-    SECTIONS.forEach(s=>{
-      const det = document.getElementById('sec_'+s.key); if(!det) return;
-      det.open = (S._nr[s.key]!==true);
-    });
-    window.scrollTo({top:0, behavior:'smooth'});
-    alert("Review opened. Scroll to verify details, then export PDF or RTF.");
-  });
-
-  $("#resetBtn").addEventListener('click', ()=>{
-    if(!confirm("This will clear all data for a fresh client. Continue?")) return;
-    localStorage.removeItem(STORAGE_KEY);
-    location.reload();
-  });
-
-  $("#jumpTop").addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
-
-  /* ===== Init ===== */
-  buildAll();
-
-  // Highlight TOC based on scroll
-  const secEls = SECTIONS.map(s=>document.getElementById('sec_'+s.key));
-  document.addEventListener('scroll', ()=>{
-    let idx = 0;
-    for (let i=0;i<secEls.length;i++){
-      const r = secEls[i].getBoundingClientRect();
-      if (r.top < 140) idx = i;
+    function resize(){
+      const r = wrap.getBoundingClientRect();
+      const tmp = document.createElement('canvas');
+      tmp.width = r.width; tmp.height = r.height;
+      tmp.getContext('2d').drawImage(canvas,0,0);
+      canvas.width = r.width; canvas.height = r.height;
+      ctx.drawImage(tmp,0,0);
     }
-    highlightTOC(idx);
+    const ro = new ResizeObserver(resize); ro.observe(wrap); resize();
+
+    canvas.addEventListener('pointerdown', e=>{ drawing=true; current=[{x:e.offsetX,y:e.offsetY}]; });
+    canvas.addEventListener('pointermove', e=>{
+      if (!drawing) return; current.push({x:e.offsetX,y:e.offsetY}); redraw();
+    });
+    window.addEventListener('pointerup', ()=>{
+      if (drawing){ drawing=false; if (current.length>0){ strokes.push(current); current=[]; saveSig(); } }
+    });
+
+    function redraw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.lineWidth = 2; ctx.lineJoin="round"; ctx.lineCap="round"; ctx.strokeStyle="#9ed0ff";
+      [...strokes, current].forEach(st=>{
+        if (!st || st.length<2) return;
+        ctx.beginPath();
+        ctx.moveTo(st[0].x, st[0].y);
+        for (let i=1;i<st.length;i++) ctx.lineTo(st[i].x, st[i].y);
+        ctx.stroke();
+      });
+    }
+    function toDataURL(){ return canvas.toDataURL("image/png"); }
+    function clear(){ strokes.length=0; current=[]; redraw(); saveSig(); }
+    function undo(){ strokes.pop(); redraw(); saveSig(); }
+    function saveSig(){ S.sign.sigs[key] = strokes.length? toDataURL(): ""; save(); }
+
+    sigPads[key] = { clear, undo, data:()=>S.sign.sigs[key]||"" };
   });
 
-})();
-</script>
+  document.querySelectorAll('[data-sig-clear]').forEach(b=>{
+    b.addEventListener('click', ()=>{ const k=b.getAttribute('data-sig-clear'); sigPads[k]?.clear(); });
+  });
+  document.querySelectorAll('[data-sig-undo]').forEach(b=>{
+    b.addEventListener('click', ()=>{ const k=b.getAttribute('data-sig-undo'); sigPads[k]?.undo(); });
+  });
+}
 
-</body>
-</html>
+/* Export: PDF (print) */
+function openPDF(){
+  // Build a clean print view in a new window using current state.
+  const w = window.open('', '_blank');
+  const safe = v => (v===undefined||v===null||v===""?"—":String(v));
+  const yes = v => v===true ? "Yes" : v===false ? "No" : (v||"—");
+  const fmtAddr = a => [a.line1,a.line2,a.suburb,a.state,a.postcode].filter(Boolean).join(", ");
+
+  function section(title, rows){
+    return `<section style="page-break-inside:avoid;margin:14px 0;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;background:#fafafa">
+      <h2 style="margin:0 0 6px;font-size:16px;color:#0f172a">${title}</h2>
+      <table style="width:100%;border-collapse:separate;border-spacing:0 6px;font-size:13px">
+        ${rows.map(([k,v])=>`<tr><th style="width:240px;text-align:left;padding:6px 8px;background:#eef2ff;border-radius:8px;font-weight:700;color:#1e3a8a">${k}</th><td style="padding:6px 8px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;color:#0f172a">${v}</td></tr>`).join("")}
+      </table>
+    </section>`;
+  }
+
+  let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>NDIS Care Plan — PDF</title>
+  <style>@page{size:A4;margin:16mm} body{font-family:Inter,Arial,sans-serif;color:#111;margin:0} header,footer{position:fixed;left:0;right:0}
+  header{top:0;height:38px;border-bottom:1px solid #e5e7eb} footer{bottom:0;height:28px;border-top:1px solid #e5e7eb;font-size:11px;color:#475569}
+  .container{margin:52px 16mm 34px} .pnum:after{counter-increment:page;content:"Page " counter(page)}
+  </style></head><body><header><div style="display:flex;justify-content:space-between;align-items:center;padding:8px 16mm;font-weight:800;font-size:12px;color:#334155">NDIS Comprehensive Care Plan<span>${new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'})}</span></div></header>
+  <footer><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 16mm"><span>Generated from in-browser form</span><span class="pnum"></span></div></footer>
+  <div class="container">`;
+
+  // participant
+  if (!S.na.participant) html += section("Participant", [
+    ["Legal name", safe(S.participant.legal_name)],
+    ["Preferred name", safe(S.participant.preferred_name)],
+    ["DOB", safe(S.participant.dob)],
+    ["NDIS number", safe(S.participant.ndis_number)],
+    ["Address", safe(fmtAddr(S.participant.address))],
+    ["Plan management", safe(S.participant.plan_mgmt)],
+    ["Plan dates", safe([S.participant.plan_dates.start,S.participant.plan_dates.end].filter(Boolean).join(" → "))],
+    ["Plan manager", safe([S.participant.pm.org,S.participant.pm.contact].filter(Boolean).join(" • "))],
+    ["Plan manager contact", safe([S.participant.pm.email,S.participant.pm.phone].filter(Boolean).join(" • "))],
+    ["Contact", safe([S.contacts.email,S.contacts.phone].filter(Boolean).join(" • "))]
+  ]);
+
+  if (!S.na.health) html += section("Health & Medical", [
+    ["Primary diagnoses", safe(S.health.primary_diagnoses)],
+    ["Other diagnoses", safe(S.health.other_diagnoses)],
+    ["Allergies", safe(S.health.allergies)],
+    ["Equipment / aids", safe(S.health.equipment)],
+    ["Mobility", safe(S.health.mobility)],
+    ["Continence", safe(S.health.continence)],
+    ["Cognition", safe(S.health.cognition)],
+    ["Diet / swallowing", safe(S.health.diet_notes)],
+    ["Pressure injury risk", safe(S.health.pressure_risk)],
+    ["Falls risk", safe(S.health.falls_risk)],
+    ["Seizures", safe(S.health.seizures.has)],
+    ["Seizure plan", safe(S.health.seizures.plan)],
+    ["Seizure frequency", safe(S.health.seizures.frequency)],
+  ]);
+
+  if (!S.na.adl) html += section("Daily Living & Personal Care", [
+    ["Bathing / showering", safe(S.adl.bathing)],
+    ["Dressing / grooming", safe(S.adl.dressing)],
+    ["Toileting / continence", safe(S.adl.toileting)],
+    ["Meal prep / feeding", safe(S.adl.meals)],
+    ["Mobility & transfers", safe(S.adl.mobility)],
+    ["Household tasks", safe(S.adl.household)],
+    ["Transport / community", safe(S.adl.transport)],
+    ["Routines & preferences", safe(S.adl.routines)],
+  ]);
+
+  if (!S.na.comms) html += section("Communication & Sensory", [
+    ["Primary language", safe(S.comms.language)],
+    ["Interpreter", safe(S.comms.interpreter)],
+    ["Communication methods", safe(S.comms.methods)],
+    ["Sensory considerations", safe(S.comms.sensory)],
+    ["Worker preferences", safe(S.comms.worker_prefs)],
+  ]);
+
+  if (!S.na.social) html += section("Social & Lifestyle", [
+    ["Living situation", safe(S.social.living)],
+    ["Support network", safe(S.social.network)],
+    ["Interests & activities", safe(S.social.interests)],
+    ["Typical routine", safe(S.social.routine)],
+  ]);
+
+  if (!S.na.behaviour) html += section("Behaviour Management", [
+    ["Behaviours of concern", safe(S.behaviour.description)],
+    ["Triggers / antecedents", safe(S.behaviour.triggers)],
+    ["Preventative strategies", safe(S.behaviour.prevent)],
+    ["De-escalation strategies", safe(S.behaviour.deescalate)],
+    ["Post-incident support / review", safe(S.behaviour.post)],
+    ["BSP in place", safe(S.behaviour.bsp)],
+    ["Restrictive practices", safe(S.behaviour.restrictive)],
+    ["Authorisations / review", safe(S.behaviour.authorisations)],
+  ]);
+
+  if (!S.na.meds){
+    const medHTML = (S.meds.list||[]).length
+      ? `<table style="width:100%;border-collapse:collapse;border:1px solid #e5e7eb"><thead><tr style="background:#f8fafc">
+          <th align="left" style="padding:6px;border-bottom:1px solid #e5e7eb">Name</th>
+          <th align="left" style="padding:6px;border-bottom:1px solid #e5e7eb">Dose</th>
+          <th align="left" style="padding:6px;border-bottom:1px solid #e5e7eb">Route</th>
+          <th align="left" style="padding:6px;border-bottom:1px solid #e5e7eb">Times</th>
+          <th align="left" style="padding:6px;border-bottom:1px solid #e5e7eb">Purpose</th>
+        </tr></thead><tbody>${
+          S.meds.list.map(m=>`<tr>
+            <td style="padding:6px;border-top:1px solid #eef2f7">${safe(m.name)}</td>
+            <td style="padding:6px;border-top:1px solid #eef2f7">${safe(m.dose)}</td>
+            <td style="padding:6px;border-top:1px solid #eef2f7">${safe(m.route)}</td>
+            <td style="padding:6px;border-top:1px solid #eef2f7">${safe(m.times)}</td>
+            <td style="padding:6px;border-top:1px solid #eef2f7">${safe(m.purpose)}</td>
+          </tr>`).join("")
+        }</tbody></table>`
+      : "—";
+    html += section("Medication Management", [
+      ["Medication list", medHTML],
+      ["Self-administration", safe(S.meds.self)],
+      ["Webster / blister", safe(S.meds.webster)],
+      ["Storage & access", safe(S.meds.storage)],
+      ["Consent", safe(S.meds.consent)],
+      ["Side-effects to monitor", safe(S.meds.sidefx)],
+      ["Emergency meds & protocol", safe(S.meds.emergency)],
+      ["Missed dose protocol", safe(S.meds.missed)],
+      ["Recent changes / reviews", safe(S.meds.changes)],
+    ]);
+  }
+
+  if (!S.na.risk) html += section("Risk & Safety", [
+    ["Home safety", ["trip","smoke","light","bath"].filter(k=>S.risk.home[k]).map(k=>({trip:"Trip hazards",smoke:"No smoke alarms",light:"Poor lighting",bath:"Bathroom safety"}[k])).join(", ") || "—"],
+    ["Home notes", safe(S.risk.home.notes)],
+    ["Wandering / elopement", safe(S.risk.wander)],
+    ["Substances", safe(S.risk.substances)],
+    ["Transport safety", safe(S.risk.transport)],
+    ["Emergency plan", safe(S.risk.emergency)],
+  ]);
+
+  if (!S.na.goals) html += section("Goals & Outcomes", [
+    ["Goals", safe(S.goals.list)],
+    ["Success indicators", safe(S.goals.outcomes)],
+    ["Support strategies", safe(S.goals.supports)],
+    ["Scheduling / frequency", safe(S.goals.schedule)],
+  ]);
+
+  if (!S.na.consents) html += section("Consents & Attachments", [
+    ["Consent to share", safe(S.consents.share)],
+    ["Consent notes", safe(S.consents.notes)],
+    ["Emergency contact", safe([S.contacts.emer.name,S.contacts.emer.rel,S.contacts.emer.phone].filter(Boolean).join(" • "))],
+    ["Support coordinator", safe([S.contacts.sc.name,S.contacts.sc.org,S.contacts.sc.email].filter(Boolean).join(" • "))],
+    ["GP / Practice", safe([S.contacts.gp.name,S.contacts.gp.practice].filter(Boolean).join(" • "))],
+    ["GP contact", safe([S.contacts.gp.phone,S.contacts.gp.email].filter(Boolean).join(" • "))],
+    ["Uploads", (S.uploads||[]).map(u=>u.name).join(" • ") || "—"],
+  ]);
+
+  if (!S.na.sign){
+    const sigP = S.sign.sigs?.participant ? `<img src="${S.sign.sigs.participant}" style="max-height:80px">` : `<div style="height:80px;border:1px dashed #cbd5e1;border-radius:8px"></div>`;
+    const sigR = S.sign.sigs?.provider ? `<img src="${S.sign.sigs.provider}" style="max-height:80px">` : `<div style="height:80px;border:1px dashed #cbd5e1;border-radius:8px"></div>`;
+    html += section("Signatures", [
+      ["Participant/Representative — Name", safe(S.sign.participant_name)],
+      ["Signature", sigP],
+      ["Date", safe(S.sign.participant_date)],
+      ["Provider — Name/Title", safe([S.sign.provider_name,S.sign.provider_title].filter(Boolean).join(" • "))],
+      ["Signature", sigR],
+      ["Date", safe(S.sign.provider_date)],
+    ]);
+  }
+
+  html += `</div></body></html>`;
+  w.document.write(html); w.document.close();
+  setTimeout(()=>{ try{ w.focus(); }catch{} }, 200);
+}
+
