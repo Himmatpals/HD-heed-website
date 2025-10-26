@@ -6,7 +6,7 @@
   <title>My Support Preferences — HD HeeD</title>
   <meta name="description" content="Tell us what support you want, when you want it, and how you like things done. Plain language care planning form for HD HeeD.">
 
-  <!-- Font (match HD HeeD style: modern clean sans) -->
+  <!-- Font -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -29,7 +29,7 @@
       --radius-xl: 1.25rem;
       --radius-lg: 0.75rem;
 
-      --border-card: rgba(76,29,149,0.18); /* subtle purple border */
+      --border-card: rgba(76,29,149,0.18);
       --border-table: rgba(76,29,149,0.2);
       --row-divider: rgba(0,0,0,0.06);
       --shadow-card: 0 24px 48px -12px rgba(76,29,149,0.15);
@@ -74,28 +74,16 @@
       min-width: 0;
     }
 
+    /* actual logo from /images/hd heed.jpg */
     .logo-img {
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       border-radius: 0.5rem;
-      border: 2px solid var(--yellow-main);
-      background: var(--yellow-soft);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--purple-main);
-    }
-    /* Replace the div.logo-img with <img src="logo-hdheed.png" class="logo-img real-logo"> if you have the real file.
-       Keep .real-logo { background:none;border:0;border-radius:0;object-fit:contain;} below. */
-    .real-logo {
-      background: none !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      width: 44px;
-      height: 44px;
       object-fit: contain;
+      object-position: center;
+      background: #fff;
+      border: 2px solid var(--yellow-main);
+      box-shadow: 0 12px 24px -6px rgba(0,0,0,0.2);
     }
 
     .brand-text {
@@ -258,7 +246,7 @@
 
     input::placeholder,
     textarea::placeholder {
-      color: rgba(76,29,149,0.5); /* purple hint */
+      color: rgba(76,29,149,0.5);
     }
 
     input:focus,
@@ -374,7 +362,7 @@
       transform: scale(0.98);
     }
 
-    /* FIXED BOTTOM BAR (INSTRUCTIONS) */
+    /* FIXED BOTTOM BAR */
 
     .bottom-bar {
       position: fixed;
@@ -435,10 +423,10 @@
 
     /*
       PRINT MODE (Save as PDF)
-      - White background stays white
-      - Purple / yellow colours KEEP
-      - Hide helper text, section hints, placeholders
-      - Hide sticky bar + buttons
+      - Keep white / purple / yellow branding
+      - Show the HD HeeD header with logo
+      - Hide helper text, hints, placeholders
+      - Hide sticky bottom bar + buttons
     */
     @media print {
 
@@ -468,13 +456,13 @@
         color: transparent !important;
       }
 
-      /* hide sticky bottom bar and all buttons (we don't want UI controls on PDF) */
+      /* hide sticky bottom bar and all buttons in exported PDF */
       .bottom-bar,
       button {
         display: none !important;
       }
 
-      /* remove any box-shadows in print to avoid muddy gray blobs */
+      /* remove heavy drop shadows for a cleaner print */
       section.form-card {
         box-shadow: none !important;
       }
@@ -483,21 +471,18 @@
 
   <script>
     function downloadAsPDF() {
-      // Opens browser print dialog so they can "Save as PDF"
+      // Opens browser print dialog -> user can "Save as PDF"
       window.print();
     }
   </script>
 </head>
 <body>
 
-<!-- BRAND / TOP BAR -->
+<!-- BRAND / TOP BAR WITH REAL LOGO -->
 <div class="topbar">
   <div class="topbar-inner">
     <div class="logo-wrap">
-      <!-- replace this div with <img src="logo-hdheed.png" class="logo-img real-logo" alt="HD HeeD Logo" /> -->
-      <div class="logo-img">
-        HD<br>HeeD
-      </div>
+      <img src="images/hd heed.jpg" alt="HD HeeD Logo" class="logo-img" />
 
       <div class="brand-text">
         <div class="brand-line1">HD HeeD Pty Ltd</div>
