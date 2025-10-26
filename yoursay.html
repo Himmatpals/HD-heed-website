@@ -321,57 +321,45 @@
       }
     }
 
-    /* print styles:
-       - switch to white/black for PDF
-       - hide bottom bar and buttons
-       - hide helper hints
-       - hide placeholder text
+    /*
+      PRINT MODE (Save as PDF)
+      - KEEP colours (brand dark + yellow)
+      - HIDE helper hints, section hints, sticky bar, and buttons
+      - HIDE placeholder text so only answers are visible
     */
     @media print {
-      body {
-        background: #ffffff;
-        color: #000000;
+
+      /* allow background colors on print for most browsers */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
-      header,
-      main,
-      section.form-card,
-      .disclaimer-box,
-      footer {
-        box-shadow: none !important;
-        background: #ffffff !important;
-        color: #000 !important;
-        border-color: #000 !important;
-      }
-      .form-card {
-        border: 1px solid #000 !important;
-      }
-      input, textarea, select {
-        background: #ffffff !important;
-        color: #000 !important;
-        border: 1px solid #000 !important;
-        box-shadow: none !important;
-      }
-      /* hide instructional helper text under fields */
+
+      /* hide helper/example guidance text under fields */
       .helper {
         display: none !important;
       }
-      /* hide hint paragraphs in headers */
+
+      /* hide hint paragraphs under section headings */
       .section-hint {
         display: none !important;
       }
-      /* hide placeholder text so only user answers show on PDF */
+
+      /* hide placeholder so only what client typed appears */
       ::placeholder {
         color: transparent !important;
       }
-      /* hide sticky footer bar and all buttons in print/PDF */
+
+      /* hide sticky bottom bar and all buttons */
       .bottom-bar,
       button {
         display: none !important;
       }
-      .brand {
-        border: 1px solid #000 !important;
-        background: #fff !important;
-        color: #000 !important;
+
+      /* remove extra page header/footer browser margins if possible */
+      body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
     }
   </style>
@@ -710,7 +698,7 @@
 
 <script>
   function downloadAsPDF() {
-    // Opens the browser print dialog so the user can "Save as PDF"
+    // Browser print dialog -> user can Save as PDF with colours kept
     window.print();
   }
 </script>
