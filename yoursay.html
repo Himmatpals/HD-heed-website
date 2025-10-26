@@ -12,14 +12,27 @@
 
   <style>
     :root {
-      --bg-body: #0f172a;
-      --bg-card: #1e2537;
-      --text-main: #f8fafc;
-      --text-dim: #94a3b8;
-      --accent: #facc15;
-      --border-card: rgba(255,255,255,0.07);
+      --bg-page: #ffffff;
+      --bg-card: #ffffff;
+
+      --text-main: #1e1e2e;
+      --text-dim: #6b6b80;
+
+      --purple-main: #4c1d95;     /* deep purple */
+      --purple-soft: rgba(76,29,149,0.08);
+      --purple-border: rgba(76,29,149,0.3);
+
+      --yellow-main: #facc15;     /* brand yellow */
+      --yellow-soft: rgba(250,204,21,0.12);
+      --yellow-border: rgba(250,204,21,0.4);
+
       --radius-xl: 1.25rem;
       --radius-lg: 0.75rem;
+
+      --border-card: rgba(76,29,149,0.18); /* subtle purple border */
+      --border-table: rgba(76,29,149,0.2);
+      --row-divider: rgba(0,0,0,0.06);
+      --shadow-card: 0 24px 48px -12px rgba(76,29,149,0.15);
     }
 
     * {
@@ -27,36 +40,105 @@
     }
 
     body {
-      background-color: var(--bg-body);
+      background-color: var(--bg-page);
       color: var(--text-main);
       margin: 0;
       font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      line-height: 1.4;
+      line-height: 1.45;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 6rem; /* space for footer/action row */
+      padding-bottom: 7rem; /* space for fixed bottom bar */
     }
 
+    /* ===== HEADER / BRAND BAR ===== */
+
+    .topbar {
+      background: var(--bg-page);
+      border-bottom: 3px solid var(--purple-main);
+      padding: 1rem 1.25rem;
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+    }
+
+    .topbar-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem 1rem;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 0.5rem;
+      border: 2px solid var(--yellow-main);
+      background: var(--yellow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--purple-main);
+    }
+    /* Replace the div.logo-img with <img src="logo-hdheed.png" class="logo-img real-logo"> if you have the real file.
+       Keep .real-logo { background:none;border:0;border-radius:0;object-fit:contain;} below. */
+    .real-logo {
+      background: none !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .brand-line1 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--purple-main);
+      white-space: nowrap;
+    }
+
+    .brand-line2 {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    /* ==== PAGE HEADER TEXT ===== */
+
     header {
-      padding: 2rem 1.25rem 1rem;
+      padding: 1.25rem 1.25rem 0.5rem;
       max-width: 900px;
       margin: 0 auto;
     }
 
-    .brand {
-      font-size: 0.8rem;
+    .pill {
+      font-size: 0.7rem;
       font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      display: inline-block;
-      background: rgba(250,204,21,0.08);
-      border: 1px solid rgba(250,204,21,0.4);
+      color: var(--purple-main);
+      background: var(--yellow-soft);
+      border: 1px solid var(--yellow-border);
       border-radius: var(--radius-lg);
       padding: 0.4rem 0.6rem;
+      line-height: 1.1;
+      display: inline-block;
     }
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 600;
       margin: 1rem 0 0.5rem;
       color: var(--text-main);
@@ -68,6 +150,8 @@
       max-width: 700px;
       line-height: 1.5;
     }
+
+    /* ===== BODY LAYOUT ===== */
 
     main {
       max-width: 900px;
@@ -82,7 +166,7 @@
       border: 1px solid var(--border-card);
       border-radius: var(--radius-xl);
       padding: 1.25rem 1.25rem 1rem;
-      box-shadow: 0 24px 48px -12px rgba(0,0,0,0.9);
+      box-shadow: var(--shadow-card);
     }
 
     .section-head {
@@ -91,23 +175,25 @@
       align-items: flex-start;
       justify-content: space-between;
       margin-bottom: 1rem;
+      row-gap: 0.5rem;
     }
 
     .section-title {
       font-size: 1rem;
       font-weight: 600;
-      color: var(--text-main);
+      color: var(--purple-main);
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      line-height: 1.2;
     }
 
     .step-badge {
-      background: rgba(148,163,184,0.12);
-      border: 1px solid rgba(148,163,184,0.4);
-      color: var(--text-dim);
+      background: var(--purple-soft);
+      border: 1px solid var(--purple-border);
+      color: var(--purple-main);
       font-size: 0.7rem;
-      font-weight: 500;
+      font-weight: 600;
       line-height: 1;
       border-radius: var(--radius-lg);
       padding: 0.4rem 0.5rem;
@@ -120,7 +206,7 @@
       line-height: 1.4;
       color: var(--text-dim);
       max-width: 600px;
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
     }
 
     /* form grid */
@@ -159,8 +245,8 @@
     textarea,
     select {
       width: 100%;
-      background-color: rgba(15,23,42,0.6);
-      border: 1px solid rgba(148,163,184,0.3);
+      background-color: #ffffff;
+      border: 2px solid rgba(76,29,149,0.25); /* purple-ish border */
       border-radius: var(--radius-lg);
       color: var(--text-main);
       font-family: inherit;
@@ -172,14 +258,14 @@
 
     input::placeholder,
     textarea::placeholder {
-      color: rgba(226,232,240,0.4);
+      color: rgba(76,29,149,0.5); /* purple hint */
     }
 
     input:focus,
     textarea:focus,
     select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(250,204,21,0.2);
+      border-color: var(--purple-main);
+      box-shadow: 0 0 0 3px rgba(76,29,149,0.15);
     }
 
     textarea {
@@ -187,12 +273,13 @@
       resize: vertical;
     }
 
-    /* weekly timetable */
+    /* WEEKLY TIMETABLE */
+
     .week-grid-wrapper {
       overflow-x: auto;
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(148,163,184,0.3);
-      background: rgba(15,23,42,0.4);
+      border: 2px solid var(--purple-border);
+      background: #ffffff;
     }
 
     .week-grid {
@@ -204,19 +291,23 @@
     }
 
     .week-grid th {
-      background: rgba(30,37,55,0.8);
-      color: var(--text-main);
+      background: var(--purple-soft);
+      color: var(--purple-main);
       text-align: left;
-      font-weight: 500;
+      font-weight: 600;
       padding: 0.75rem;
       white-space: nowrap;
-      border-bottom: 1px solid rgba(148,163,184,0.3);
+      border-bottom: 2px solid var(--purple-border);
+      font-size: 0.8rem;
+      line-height: 1.3;
     }
 
     .week-grid td {
       vertical-align: top;
       padding: 0.75rem;
-      border-bottom: 1px solid rgba(148,163,184,0.15);
+      border-bottom: 1px solid var(--row-divider);
+      font-size: 0.8rem;
+      line-height: 1.4;
     }
 
     .week-grid input[type="text"] {
@@ -224,25 +315,35 @@
       padding: 0.5rem 0.6rem;
     }
 
+    /* DISCLAIMER BOX */
+
     .disclaimer-box {
       font-size: 0.7rem;
       line-height: 1.5;
       border-radius: var(--radius-lg);
-      background: rgba(148,163,184,0.07);
-      border: 1px solid rgba(148,163,184,0.3);
-      color: var(--text-dim);
+      background: var(--yellow-soft);
+      border: 1px solid var(--yellow-border);
+      color: var(--purple-main);
       padding: 0.75rem 0.9rem;
+      font-weight: 500;
     }
 
     footer {
       max-width: 900px;
-      margin: 2rem auto 6rem;
+      margin: 2rem auto 7rem;
       padding: 0 1.25rem;
       text-align: center;
-      color: var(--text-dim);
+      color: var(--text-main);
       font-size: 0.7rem;
       line-height: 1.5;
     }
+
+    footer .contact-line {
+      color: var(--purple-main);
+      font-weight: 600;
+    }
+
+    /* BUTTON ROW */
 
     .submit-row {
       display: flex;
@@ -263,8 +364,9 @@
       border-radius: var(--radius-lg);
       box-shadow: 0 20px 40px -8px rgba(250,204,21,0.4);
       padding: 0.9rem 1.1rem;
-      min-width: 140px;
+      min-width: 160px;
       cursor: pointer;
+      font-family: inherit;
     }
 
     button.submit-btn:active,
@@ -272,15 +374,16 @@
       transform: scale(0.98);
     }
 
-    /* fixed bottom instruction bar */
+    /* FIXED BOTTOM BAR (INSTRUCTIONS) */
+
     .bottom-bar {
       position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(30,37,55,0.95);
-      border-top: 1px solid rgba(250,204,21,0.4);
-      box-shadow: 0 -24px 48px -12px rgba(0,0,0,0.9);
+      background: var(--purple-main);
+      border-top: 3px solid var(--yellow-main);
+      box-shadow: 0 -24px 48px -12px rgba(0,0,0,0.25);
       padding: 1rem 1.25rem 1.25rem;
       z-index: 999;
       display: flex;
@@ -289,17 +392,18 @@
       justify-content: center;
       gap: 1rem;
       text-align: left;
+      color: #fff;
     }
 
     .bottom-text {
-      color: var(--text-main);
+      color: #fff;
       font-size: 0.8rem;
       line-height: 1.4;
       max-width: 600px;
     }
 
     .bottom-text .highlight {
-      color: var(--accent);
+      color: var(--yellow-main);
       font-weight: 600;
     }
 
@@ -308,6 +412,14 @@
       flex-wrap: wrap;
       gap: 0.75rem;
       justify-content: flex-end;
+    }
+
+    .bottom-bar button.download-btn {
+      background: radial-gradient(circle at 0% 0%, #fde047 0%, #facc15 40%, #eab308 100%);
+      color: #1e1e1e;
+      min-width: 180px;
+      font-size: 0.85rem;
+      line-height: 1.2;
     }
 
     @media(min-width:768px){
@@ -323,16 +435,22 @@
 
     /*
       PRINT MODE (Save as PDF)
-      - KEEP colours (brand dark + yellow)
-      - HIDE helper hints, section hints, sticky bar, and buttons
-      - HIDE placeholder text so only answers are visible
+      - White background stays white
+      - Purple / yellow colours KEEP
+      - Hide helper text, section hints, placeholders
+      - Hide sticky bar + buttons
     */
     @media print {
 
-      /* allow background colors on print for most browsers */
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: var(--text-main) !important;
+        padding-bottom: 0 !important;
       }
 
       /* hide helper/example guidance text under fields */
@@ -350,31 +468,47 @@
         color: transparent !important;
       }
 
-      /* hide sticky bottom bar and all buttons */
+      /* hide sticky bottom bar and all buttons (we don't want UI controls on PDF) */
       .bottom-bar,
       button {
         display: none !important;
       }
 
-      /* remove extra page header/footer browser margins if possible */
-      body {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+      /* remove any box-shadows in print to avoid muddy gray blobs */
+      section.form-card {
+        box-shadow: none !important;
       }
     }
   </style>
 
   <script>
     function downloadAsPDF() {
-      // Opens the browser print dialog so the user can "Save as PDF"
+      // Opens browser print dialog so they can "Save as PDF"
       window.print();
     }
   </script>
 </head>
 <body>
 
+<!-- BRAND / TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo-wrap">
+      <!-- replace this div with <img src="logo-hdheed.png" class="logo-img real-logo" alt="HD HeeD Logo" /> -->
+      <div class="logo-img">
+        HD<br>HeeD
+      </div>
+
+      <div class="brand-text">
+        <div class="brand-line1">HD HeeD Pty Ltd</div>
+        <div class="brand-line2">Because we care, we provide HD care</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <header>
-  <div class="brand">HD HeeD — Support Preferences</div>
+  <span class="pill">Support Preferences Form</span>
   <h1>How would you like us to help you?</h1>
   <p class="intro">
     This is your space. Tell us, in your own words, what kind of help you want,
@@ -676,8 +810,10 @@
 </main>
 
 <footer>
-  HD HeeD Pty Ltd — Because we care, we provide HD care.<br>
-  ABN 47 665 228 768 • Phone 02&nbsp;8630&nbsp;5500 • Email info@hdheed.com.au
+  <div class="contact-line">
+    ABN 47 665 228 768 • HD HeeD Pty Ltd
+  </div>
+  Phone 02&nbsp;8630&nbsp;5500 • Email info@hdheed.com.au
 </footer>
 
 <!-- fixed bottom bar with instructions -->
@@ -698,7 +834,6 @@
 
 <script>
   function downloadAsPDF() {
-    // Browser print dialog -> user can Save as PDF with colours kept
     window.print();
   }
 </script>
