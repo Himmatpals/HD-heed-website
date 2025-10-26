@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Support Preferences — HD HeeD</title>
+  <meta name="description" content="Tell us what support you want, when you want it, and how you like things done. Plain language care planning form for HD HeeD.">
+
+  <!-- Font (match HD HeeD style: modern clean sans) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-body: #0f172a;
+      --bg-card: #1e2537;
+      --text-main: #f8fafc;
+      --text-dim: #94a3b8;
+      --accent: #facc15;
+      --border-card: rgba(255,255,255,0.07);
+      --radius-xl: 1.25rem;
+      --radius-lg: 0.75rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 6rem; /* space for footer/action row */
+    }
+
+    header {
+      padding: 2rem 1.25rem 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-block;
+      background: rgba(250,204,21,0.08);
+      border: 1px solid rgba(250,204,21,0.4);
+      border-radius: var(--radius-lg);
+      padding: 0.4rem 0.6rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 1rem 0 0.5rem;
+      color: var(--text-main);
+    }
+
+    .intro {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      max-width: 700px;
+      line-height: 1.5;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    section.form-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      padding: 1.25rem 1.25rem 1rem;
+      box-shadow: 0 24px 48px -12px rgba(0,0,0,0.9);
+    }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .step-badge {
+      background: rgba(148,163,184,0.12);
+      border: 1px solid rgba(148,163,184,0.4);
+      color: var(--text-dim);
+      font-size: 0.7rem;
+      font-weight: 500;
+      line-height: 1;
+      border-radius: var(--radius-lg);
+      padding: 0.4rem 0.5rem;
+      min-width: 2rem;
+      text-align: center;
+    }
+
+    .section-hint {
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin-top: 0.5rem;
+    }
+
+    /* form grid */
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media(min-width:600px){
+      .field-grid.two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-main);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .helper {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      font-weight: 400;
+      line-height: 1.4;
+      margin-top: 0.4rem;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      background-color: rgba(15,23,42,0.6);
+      border: 1px solid rgba(148,163,184,0.3);
+      border-radius: var(--radius-lg);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 0.8rem 0.75rem;
+      outline: none;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(226,232,240,0.4);
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(250,204,21,0.2);
+    }
+
+    textarea {
+      min-height: 4.5rem;
+      resize: vertical;
+    }
+
+    /* weekly timetable */
+    .week-grid-wrapper {
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148,163,184,0.3);
+      background: rgba(15,23,42,0.4);
+    }
+
+    .week-grid {
+      min-width: 650px;
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.8rem;
+      color: var(--text-main);
+    }
+
+    .week-grid th {
+      background: rgba(30,37,55,0.8);
+      color: var(--text-main);
+      text-align: left;
+      font-weight: 500;
+      padding: 0.75rem;
+      white-space: nowrap;
+      border-bottom: 1px solid rgba(148,163,184,0.3);
+    }
+
+    .week-grid td {
+      vertical-align: top;
+      padding: 0.75rem;
+      border-bottom: 1px solid rgba(148,163,184,0.15);
+    }
+
+    .week-grid input[type="text"] {
+      font-size: 0.8rem;
+      padding: 0.5rem 0.6rem;
+    }
+
+    .disclaimer-box {
+      font-size: 0.7rem;
+      line-height: 1.5;
+      border-radius: var(--radius-lg);
+      background: rgba(148,163,184,0.07);
+      border: 1px solid rgba(148,163,184,0.3);
+      color: var(--text-dim);
+      padding: 0.75rem 0.9rem;
+    }
+
+    footer {
+      max-width: 900px;
+      margin: 2rem auto 6rem;
+      padding: 0 1.25rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.7rem;
+      line-height: 1.5;
+    }
+
+    .submit-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    button.submit-btn,
+    button.download-btn {
+      background: radial-gradient(circle at 0% 0%, #fde047 0%, #facc15 40%, #eab308 100%);
+      color: #1e1e1e;
+      border: 0;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.2;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 40px -8px rgba(250,204,21,0.4);
+      padding: 0.9rem 1.1rem;
+      min-width: 140px;
+      cursor: pointer;
+    }
+
+    button.submit-btn:active,
+    button.download-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* fixed bottom instruction bar */
+    .bottom-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(30,37,55,0.95);
+      border-top: 1px solid rgba(250,204,21,0.4);
+      box-shadow: 0 -24px 48px -12px rgba(0,0,0,0.9);
+      padding: 1rem 1.25rem 1.25rem;
+      z-index: 999;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 1rem;
+      text-align: left;
+    }
+
+    .bottom-text {
+      color: var(--text-main);
+      font-size: 0.8rem;
+      line-height: 1.4;
+      max-width: 600px;
+    }
+
+    .bottom-text .highlight {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+
+    @media(min-width:768px){
+      .bottom-bar {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        text-align: left;
+      }
+      .bottom-text {
+        max-width: 60%;
+      }
+    }
+
+    /* print styles: hide bottom bar buttons, tidy colors */
+    @media print {
+      body {
+        background: #ffffff;
+        color: #000000;
+      }
+      header,
+      main,
+      section.form-card,
+      .disclaimer-box,
+      footer {
+        box-shadow: none !important;
+        background: #ffffff !important;
+        color: #000 !important;
+        border-color: #000 !important;
+      }
+      .form-card {
+        border: 1px solid #000 !important;
+      }
+      input, textarea, select {
+        background: #ffffff !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+      }
+      .bottom-bar {
+        display: none !important;
+      }
+      button {
+        display: none !important;
+      }
+      .brand {
+        border: 1px solid #000 !important;
+        background: #fff !important;
+        color: #000 !important;
+      }
+    }
+  </style>
+
+  <script>
+    function downloadAsPDF() {
+      // This opens the browser's print dialog, where user can "Save as PDF"
+      window.print();
+    }
+  </script>
+</head>
+<body>
+
+<header>
+  <div class="brand">HD HeeD — Support Preferences</div>
+  <h1>How would you like us to help you?</h1>
+  <p class="intro">
+    This is your space. Tell us, in your own words, what kind of help you want,
+    what you don’t want, and when you want support.
+    We use this to build your care plan and roster.
+  </p>
+</header>
+
+<main>
+
+  <!-- SECTION 1 -->
+  <section class="form-card" id="about-you">
+    <div class="section-head">
+      <div class="section-title">
+        <span class="step-badge">1</span>
+        <span>About you</span>
+      </div>
+    </div>
+
+    <div class="field-grid two-col">
+      <div>
+        <label for="fullName">Your full name</label>
+        <input id="fullName" name="fullName" type="text" placeholder="First name Last name" />
+      </div>
+
+      <div>
+        <label for="preferredName">What do you like to be called?</label>
+        <input id="preferredName" name="preferredName" type="text" placeholder="Nickname / preferred name" />
+        <div class="helper">Example: “Please call me Sam, not Samantha.”</div>
+      </div>
+    </div>
+
+    <div class="field-grid two-col">
+      <div>
+        <label for="phone">Best phone number</label>
+        <input id="phone" name="phone" type="tel" placeholder="0412 345 678" />
+      </div>
+
+      <div>
+        <label for="contactPerson">If we can’t reach you, who should we call?</label>
+        <input id="contactPerson" name="contactPerson" type="text" placeholder="Name + phone number" />
+        <div class="helper">Optional: family / friend / support coordinator.</div>
+      </div>
+    </div>
+
+    <div class="field-grid">
+      <div>
+        <label for="address">Where is the support happening?</label>
+        <input id="address" name="address" type="text" placeholder="Your address (or other location)" />
+        <div class="helper">If support is in more than one place, list them here.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="form-card" id="daily-help">
+    <div class="section-head">
+      <div class="section-title">
+        <span class="step-badge">2</span>
+        <span>What do you want help with day to day?</span>
+      </div>
+      <div class="section-hint">
+        Tell us in normal words. Tick / write anything you want us to support.
+      </div>
+    </div>
+
+    <div class="field-grid two-col">
+      <div>
+        <label>Personal care</label>
+        <textarea name="personalCare" placeholder="Example: Shower assist, dressing, grooming, continence support, pads/briefs, shaving, brushing teeth..."></textarea>
+      </div>
+
+      <div>
+        <label>Meals & drinks</label>
+        <textarea name="meals" placeholder="Example: Cooking, cutting food, help to eat, making sure I drink water, thickened fluids, no pork, halal only, etc."></textarea>
+      </div>
+    </div>
+
+    <div class="field-grid two-col">
+      <div>
+        <label>Medication / health</label>
+        <textarea name="medication" placeholder="Example: Remind me to take meds at 8am and 8pm. I can swallow tablets whole. Please check my insulin."></textarea>
+      </div>
+
+      <div>
+        <label>Mobility / transfers</label>
+        <textarea name="mobility" placeholder="Example: I need 1 person to help me stand up. I use a walker inside, wheelchair in the community. Please don’t rush me."></textarea>
+      </div>
+    </div>
+
+    <div class="field-grid two-col">
+      <div>
+        <label>House / home support</label>
+        <textarea name="houseTasks" placeholder="Example: Cleaning bathroom once a week, vacuuming, changing bed sheets, laundry, bins out Tuesday night."></textarea>
+      </div>
+
+      <div>
+        <label>Community / appointments / social</label>
+        <textarea name="community" placeholder="Example: Take me shopping Fridays, GP appointments, walk in the park, church/temple/mosque on Sundays."></textarea>
+      </div>
+    </div>
+
+    <div class="field-grid">
+      <div>
+        <label for="otherSupport">Anything else you want us to know?</label>
+        <textarea id="otherSupport" name="otherSupport" placeholder="Pets, behaviours, mood, mental health check-ins, reminders, safety concerns, sleep, night support, etc."></textarea>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="form-card" id="how-you-like-it">
+    <div class="section-head">
+      <div class="section-title">
+        <span class="step-badge">3</span>
+        <span>How do you like things done?</span>
+      </div>
+      <div class="section-hint">
+        This helps us brief your regular support worker so they do things YOUR way.
+      </div>
+    </div>
+
+    <div class="field-grid">
+      <div>
+        <label for="routines">Daily routine / must-do steps</label>
+        <textarea id="routines" name="routines" placeholder="Example: I like shower in the evening, not morning. Please warm up the bathroom first. I use Dove soap only."></textarea>
+      </div>
+
+      <div>
+        <label for="communication">How should we talk to you?</label>
+        <textarea id="communication" name="communication" placeholder="Example: Speak slowly. English is fine but Punjabi is easier when I’m tired. Please show me before you touch my wheelchair."></textarea>
+      </div>
+
+      <div>
+        <label for="dignity">Things I don’t like / things that upset me</label>
+        <textarea id="dignity" name="dignity" placeholder="Example: Don’t open my bedroom drawers without asking. Don’t talk loud in public about my incontinence. Don’t force me to eat."></textarea>
+      </div>
+
+      <div>
+        <label for="safetyNotes">Safety / risk notes</label>
+        <textarea id="safetyNotes" name="safetyNotes" placeholder="Example: I can fall if I stand too fast. Please remind me ‘slow, hold frame, stand tall.’ I need gait belt for stairs."></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="form-card" id="schedule">
+    <div class="section-head">
+      <div class="section-title">
+        <span class="step-badge">4</span>
+        <span>When do you want support?</span>
+      </div>
+      <div class="section-hint">
+        Tell us the times you actually want someone with you. Example: “Morning shower 7-8am every day”, “Dinner help 6-8pm Mon–Fri”, “Shopping Friday 10am–1pm”.
+      </div>
+    </div>
+
+    <div class="week-grid-wrapper">
+      <table class="week-grid">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Morning<br><small>(5am–12pm)</small></th>
+            <th>Afternoon<br><small>(12pm–5pm)</small></th>
+            <th>Evening / Night<br><small>(5pm–12am)</small></th>
+            <th>Overnight<br><small>(12am–5am)</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Monday</strong></td>
+            <td><input type="text" name="mon_morn" placeholder="e.g. 7am-9am shower + meds" /></td>
+            <td><input type="text" name="mon_aft" placeholder="-" /></td>
+            <td><input type="text" name="mon_eve" placeholder="e.g. 6pm-8pm dinner support" /></td>
+            <td><input type="text" name="mon_night" placeholder="-" /></td>
+          </tr>
+          <tr>
+            <td><strong>Tuesday</strong></td>
+            <td><input type="text" name="tue_morn" placeholder="" /></td>
+            <td><input type="text" name="tue_aft" placeholder="" /></td>
+            <td><input type="text" name="tue_eve" placeholder="" /></td>
+            <td><input type="text" name="tue_night" placeholder="" /></td>
+          </tr>
+          <tr>
+            <td><strong>Wednesday</strong></td>
+            <td><input type="text" name="wed_morn" placeholder="" /></td>
+            <td><input type="text" name="wed_aft" placeholder="" /></td>
+            <td><input type="text" name="wed_eve" placeholder="" /></td>
+            <td><input type="text" name="wed_night" placeholder="" /></td>
+          </tr>
+          <tr>
+            <td><strong>Thursday</strong></td>
+            <td><input type="text" name="thu_morn" placeholder="" /></td>
+            <td><input type="text" name="thu_aft" placeholder="" /></td>
+            <td><input type="text" name="thu_eve" placeholder="" /></td>
+            <td><input type="text" name="thu_night" placeholder="" /></td>
+          </tr>
+          <tr>
+            <td><strong>Friday</strong></td>
+            <td><input type="text" name="fri_morn" placeholder="" /></td>
+            <td><input type="text" name="fri_aft" placeholder="" /></td>
+            <td><input type="text" name="fri_eve" placeholder="Shopping 10-1pm" /></td>
+            <td><input type="text" name="fri_night" placeholder="" /></td>
+          </tr>
+          <tr>
+            <td><strong>Saturday</strong></td>
+            <td><input type="text" name="sat_morn" placeholder="" /></td>
+            <td><input type="text" name="sat_aft" placeholder="" /></td>
+            <td><input type="text" name="sat_eve" placeholder="" /></td>
+            <td><input type="text" name="sat_night" placeholder="" /></td>
+          </tr>
+          <tr>
+            <td><strong>Sunday</strong></td>
+            <td><input type="text" name="sun_morn" placeholder="" /></td>
+            <td><input type="text" name="sun_aft" placeholder="" /></td>
+            <td><input type="text" name="sun_eve" placeholder="Church 9-12 / Temple / Mosque" /></td>
+            <td><input type="text" name="sun_night" placeholder="" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="field-grid">
+      <div>
+        <label for="priorityTimes">Most important times (non-negotiable)</label>
+        <textarea id="priorityTimes" name="priorityTimes" placeholder="Example: I MUST have someone 7am-8am daily to help me shower safely. I can’t skip this."></textarea>
+      </div>
+
+      <div>
+        <label for="genderPref">Worker preference</label>
+        <select id="genderPref" name="genderPref">
+          <option value="">No preference</option>
+          <option value="female">Female support worker preferred</option>
+          <option value="male">Male support worker preferred</option>
+          <option value="mixed">I’m OK with either</option>
+        </select>
+        <div class="helper">This helps us match the right person for personal care.</div>
+      </div>
+
+      <div>
+        <label for="otherPref">Any other matching preference?</label>
+        <textarea id="otherPref" name="otherPref" placeholder="Language, cultural background, driving licence, specific skills (catheter care, diabetes, PEG feeds, wound care etc.)."></textarea>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SECTION 5 -->
+  <section class="form-card" id="final">
+    <div class="section-head">
+      <div class="section-title">
+        <span class="step-badge">5</span>
+        <span>Anything we must know for Day 1?</span>
+      </div>
+      <div class="section-hint">
+        Tell us anything that would make you feel safe, respected, and comfortable from the very first shift.
+      </div>
+    </div>
+
+    <div class="field-grid">
+      <div>
+        <label for="dayOneNotes">Important Day 1 notes</label>
+        <textarea id="dayOneNotes" name="dayOneNotes" placeholder="Example: Please knock before entering. My dog is nervous. Please speak to me first before touching my hoist. The buzzer by my bed is emergency only."></textarea>
+      </div>
+    </div>
+
+    <div class="disclaimer-box">
+      We will build your roster based on what you’ve written here. We will also use this to brief your regular support
+      worker, so they understand how to support you in a safe and respectful way.
+    </div>
+
+    <div class="submit-row">
+      <button class="submit-btn" type="button">
+        Save my preferences
+      </button>
+
+      <button class="download-btn" type="button" onclick="downloadAsPDF()">
+        Download My Copy (PDF)
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  HD HeeD Pty Ltd — Because we care, we provide HD care.<br>
+  ABN 47 665 228 768 • Phone 02&nbsp;8630&nbsp;5500 • Email info@hdheed.com.au
+</footer>
+
+<!-- fixed bottom bar with instructions -->
+<div class="bottom-bar">
+  <div class="bottom-text">
+    After you fill this form:<br>
+    1. Tap <span class="highlight">“Download My Copy (PDF)”</span>.<br>
+    2. Save the file.<br>
+    3. Email the PDF to <span class="highlight">info@hdheed.com.au</span>.
+  </div>
+
+  <div class="action-buttons">
+    <button class="download-btn" type="button" onclick="downloadAsPDF()">
+      Download My Copy (PDF)
+    </button>
+  </div>
+</div>
+
+</body>
+</html>
