@@ -1,289 +1,2164 @@
+<!-- File: ndis-accelerator-training.html | PART 1/2 START -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Launch Your NDIS Business Accelerator Program - Interactive Training</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; color: #333; }
-        h1 { text-align: center; color: #2c3e50; }
-        h2 { color: #2980b9; }
-        h3 { color: #16a085; }
-        .week { margin-bottom: 40px; border: 1px solid #ddd; padding: 20px; background-color: #fff; border-radius: 8px; }
-        .accordion { cursor: pointer; padding: 15px; background-color: #3498db; color: white; margin-bottom: 5px; border-radius: 5px; }
-        .panel { display: none; background-color: #ecf0f1; padding: 15px; border-radius: 5px; }
-        .quiz { margin-top: 20px; padding: 15px; background-color: #e8f6f3; border: 1px solid #27ae60; border-radius: 5px; }
-        .quiz button { background-color: #27ae60; color: white; padding: 10px; border: none; cursor: pointer; border-radius: 5px; }
-        .resource { margin-top: 10px; font-style: italic; color: #7f8c8d; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .citation { font-size: 0.8em; vertical-align: super; color: #e74c3c; }
-    </style>
-    <script>
-        function toggleAccordion(id) {
-            var panel = document.getElementById(id);
-            panel.style.display = panel.style.display === "block" ? "none" : "block";
-        }
-        function checkQuiz(quizId, correctAnswer, feedbackId) {
-            var selected = document.querySelector(`input[name="${quizId}"]:checked`);
-            var feedback = document.getElementById(feedbackId);
-            if (selected && selected.value === correctAnswer) {
-                feedback.innerHTML = "Correct! Well done.";
-                feedback.style.color = "green";
-            } else {
-                feedback.innerHTML = "Incorrect. Try again or review the section.";
-                feedback.style.color = "red";
-            }
-        }
-    </script>
+  <meta charset="UTF-8" />
+  <title>Launch Your NDIS Business – 6-Week Accelerator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #131933;
+      --bg-softer: #191f3f;
+      --accent: #5ee0c2;
+      --accent-soft: rgba(94, 224, 194, 0.15);
+      --accent-strong: #3fd0af;
+      --danger: #ff6b6b;
+      --text: #f5f7ff;
+      --text-muted: #a9b3d5;
+      --border: #202744;
+      --card-radius: 16px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #1b2647, #050814);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    @media (max-width: 900px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #050814, #101729 40%, #050814);
+      border-right: 1px solid var(--border);
+      padding: 16px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #5ee0c2, #1e88ff);
+      box-shadow: 0 0 24px rgba(94, 224, 194, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-logo::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: inherit;
+      border: 2px solid rgba(4, 9, 30, 0.8);
+    }
+
+    .brand-title {
+      font-weight: 650;
+      letter-spacing: 0.03em;
+      font-size: 1.05rem;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .progress-card {
+      background: rgba(9, 13, 35, 0.9);
+      border-radius: var(--card-radius);
+      padding: 12px 12px 14px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+    }
+
+    .pill {
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(94, 224, 194, 0.14);
+      border: 1px solid rgba(94, 224, 194, 0.7);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+
+    .progress-bar-outer {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      background: #141b32;
+      overflow: hidden;
+    }
+
+    .progress-bar-inner {
+      position: absolute;
+      inset: 0;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #5ee0c2, #1e88ff);
+      transition: width 0.25s ease;
+    }
+
+    .progress-meta {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav {
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(84, 95, 145, 0.55);
+    }
+
+    .nav-section-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .nav-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.88rem;
+    }
+
+    .nav-list li button {
+      all: unset;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    }
+
+    .nav-list li button:hover {
+      background: rgba(26, 35, 68, 0.95);
+      transform: translateY(-1px);
+    }
+
+    .nav-list li button.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(139, 148, 205, 0.5);
+    }
+
+    .nav-list li button.completed .nav-dot {
+      background: var(--accent-strong);
+      box-shadow: 0 0 8px rgba(94, 224, 194, 0.9);
+    }
+
+    .nav-list li button span.week-label {
+      flex: 1;
+    }
+
+    .nav-list li button span.week-status {
+      font-size: 0.7rem;
+      opacity: 0.7;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(84, 95, 145, 0.55);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-footer small {
+      display: block;
+      margin-top: 4px;
+    }
+
+    .content {
+      padding: 20px 24px 30px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 12px;
+    }
+
+    .page-kicker {
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-size: clamp(1.7rem, 2.4vw, 2.1rem);
+      margin: 0;
+    }
+
+    .page-subtitle {
+      margin-top: 4px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 680px;
+    }
+
+    .banner {
+      margin: 12px 0 18px;
+      padding: 12px 14px;
+      border-radius: var(--card-radius);
+      background: linear-gradient(135deg, rgba(94, 224, 194, 0.2), rgba(38, 115, 230, 0.1));
+      border: 1px solid rgba(138, 178, 255, 0.35);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+    }
+
+    .banner-emoji {
+      font-size: 1.4rem;
+    }
+
+    .banner strong {
+      color: var(--accent);
+    }
+
+    .week-section {
+      margin-top: 26px;
+      padding: 18px 18px 20px;
+      border-radius: var(--card-radius);
+      background: rgba(8, 12, 32, 0.95);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border);
+    }
+
+    .week-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .week-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .week-title span.number-pill {
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      background: rgba(20, 30, 70, 0.9);
+      color: var(--accent);
+      border: 1px solid rgba(94, 224, 194, 0.5);
+    }
+
+    .week-tagline {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 540px;
+    }
+
+    .week-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(94, 224, 194, 0.6);
+      color: var(--accent);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pill-soft {
+      border-color: rgba(124, 136, 206, 0.7);
+      color: var(--text-muted);
+      background: rgba(17, 23, 55, 0.9);
+    }
+
+    p {
+      line-height: 1.6;
+      font-size: 0.9rem;
+      color: var(--text);
+      margin: 0 0 8px;
+    }
+
+    .muted {
+      color: var(--text-muted);
+    }
+
+    h3 {
+      font-size: 0.98rem;
+      margin: 16px 0 6px;
+    }
+
+    h4 {
+      font-size: 0.9rem;
+      margin: 10px 0 4px;
+    }
+
+    ul, ol {
+      margin: 4px 0 10px 20px;
+      padding: 0;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .accordion {
+      margin-top: 10px;
+      border-radius: 12px;
+      border: 1px solid #262d4b;
+      overflow: hidden;
+    }
+
+    .accordion-item + .accordion-item {
+      border-top: 1px solid #262d4b;
+    }
+
+    .accordion-header {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      background: #10152b;
+      color: var(--text);
+      border: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .accordion-header span.label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .accordion-header small {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .accordion-header:hover {
+      background: #151b35;
+    }
+
+    .accordion-icon {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    .accordion-panel {
+      max-height: 0;
+      overflow: hidden;
+      background: #090e23;
+      padding: 0 12px;
+      transition: max-height 0.23s ease;
+    }
+
+    .accordion-panel-inner {
+      padding: 10px 0 10px;
+    }
+
+    .accordion-item.open .accordion-panel {
+      padding-top: 0;
+    }
+
+    .accordion-item.open .accordion-panel {
+      max-height: 900px; /* Enough for text blocks; JS not needed for height */
+    }
+
+    .checklist {
+      margin-top: 8px;
+      padding: 10px 10px 10px;
+      border-radius: 10px;
+      background: #10152b;
+      border: 1px solid #262d4b;
+      font-size: 0.86rem;
+    }
+
+    .checklist h4 {
+      margin-top: 0;
+      font-size: 0.88rem;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .checklist-item input[type="checkbox"] {
+      margin-top: 3px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .checklist-item label {
+      cursor: pointer;
+    }
+
+    .notes-block {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #0b1024;
+      border: 1px dashed #343e6a;
+      font-size: 0.85rem;
+    }
+
+    .notes-block header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .notes-block textarea {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+      border-radius: 8px;
+      border: 1px solid #262d4b;
+      padding: 8px;
+      background: #050817;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+    }
+
+    .notes-block button {
+      margin-top: 4px;
+      padding: 3px 8px;
+      border-radius: 8px;
+      border: none;
+      background: #192041;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+
+    .notes-block button:hover {
+      background: #212955;
+      color: var(--accent);
+    }
+
+    .quiz {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #262d4b;
+      background: #10152b;
+      font-size: 0.86rem;
+    }
+
+    .quiz h4 {
+      margin-top: 0;
+      font-size: 0.9rem;
+    }
+
+    .quiz-question {
+      margin-bottom: 10px;
+    }
+
+    .quiz-options {
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .quiz-options label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .quiz button {
+      margin-top: 4px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: none;
+      background: var(--accent-soft);
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .quiz button:hover {
+      background: rgba(94, 224, 194, 0.26);
+    }
+
+    .quiz-result {
+      margin-top: 6px;
+      font-size: 0.8rem;
+    }
+
+    .quiz-result.correct {
+      color: var(--accent);
+    }
+
+    .quiz-result.incorrect {
+      color: var(--danger);
+    }
+
+    .inline-tag {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 1px solid #343e6a;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .resources {
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: var(--card-radius);
+      background: rgba(6, 10, 28, 0.98);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .resource-list {
+      list-style: none;
+      margin: 6px 0 0;
+      padding: 0;
+      font-size: 0.86rem;
+    }
+
+    .resource-list li {
+      margin-bottom: 6px;
+    }
+
+    .pill-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #10152b;
+      border: 1px solid #262d4b;
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: var(--accent);
+    }
+
+    .pill-link span.icon {
+      font-size: 0.9rem;
+    }
+
+    a {
+      color: var(--accent-strong);
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-    <h1>Launch Your NDIS Business Accelerator Program</h1>
-    <p>Welcome to this interactive training program designed specifically for registered NDIS providers like you, who are struggling to find clients. This self-paced course is based on the provided outline, with deep research integrated from official NDIS sources, market analyses, and practical strategies. We've focused on registered pathways, emphasizing client attraction while covering all aspects. Use the accordions to expand sections, take quizzes for self-assessment, and download templates where available. Contact us for more: [email protected]</p>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div>
+        <div class="brand">
+          <div class="brand-logo" aria-hidden="true"></div>
+          <div>
+            <div class="brand-title">NDIS Business Accelerator</div>
+            <div class="brand-sub">HD HeeD | 6-Week Training Hub</div>
+          </div>
+        </div>
 
-    <div class="week">
-        <h2>Week 1: Understand the NDIS Ecosystem</h2>
-        <p>An overview of the NDIS framework and stakeholders, explanation from a participant's perspective, and the NDIS provider's journey. As a registered provider, focus on how to leverage your status in this ecosystem.</p>
-        
-        <div class="accordion" onclick="toggleAccordion('week1-1')">NDIS Framework and Stakeholders</div>
-        <div id="week1-1" class="panel">
-            <p>The National Disability Insurance Scheme (NDIS) is Australia's national scheme to support people with disabilities, providing funding for reasonable and necessary supports. Key stakeholders include participants (people with disabilities), providers (like you, registered to deliver services), the NDIS Quality and Safeguards Commission (regulates quality and safety), the National Disability Insurance Agency (NDIA, administers the scheme), support coordinators, plan managers, and Local Area Coordinators (LACs).</p>
-            <p>Registered providers must comply with NDIS Practice Standards, which cover rights, governance, service provision, and safe environments.<grok-card data-id="8d41ce" data-type="citation_card"></grok-card> The scheme has grown to over 600,000 participants as of 2025, with a market value exceeding $40 billion.</p>
-            <table>
-                <tr><th>Stakeholder</th><th>Role</th></tr>
-                <tr><td>Participants</td><td>Receive individualized funding plans.</td></tr>
-                <tr><td>Providers</td><td>Deliver supports; registered ones can claim directly from NDIA.</td></tr>
-                <tr><td>NDIS Commission</td><td>Oversees audits, worker screening, and complaints.</td></tr>
-            </table>
+        <div class="progress-card">
+          <div class="progress-header">
+            <span>Program Progress</span>
+            <span class="pill" id="overall-pill">0% Complete</span>
+          </div>
+          <div class="progress-bar-outer">
+            <div class="progress-bar-inner" id="overall-progress-bar"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="overall-summary">0 / 6 weeks completed</span>
+            <span class="inline-tag">Autosaves in this browser</span>
+          </div>
         </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week1-2')">NDIS from a Participant's Perspective</div>
-        <div id="week1-2" class="panel">
-            <p>Participants want choice and control over their supports. They value providers who listen, offer culturally competent services, and focus on independence. Common desires include reliable communication, expertise in specific disabilities, and value for money.<grok-card data-id="86e2fc" data-type="citation_card"></grok-card> From surveys, top priorities are trust, visibility on budgets, and supports that enable social/economic participation.<grok-card data-id="845649" data-type="citation_card"></grok-card> Challenges include navigating complex processes and fear of funding cuts.</p>
-            <ul>
-                <li>What participants want: Direct engagement, respect, and tailored supports.<grok-card data-id="541c66" data-type="citation_card"></grok-card></li>
-                <li>Perspectives on providers: Avoid commoditizing participants; build trust.<grok-card data-id="ccab14" data-type="citation_card"></grok-card></li>
-            </ul>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week1-3')">The NDIS Provider's Journey</div>
-        <div id="week1-3" class="panel">
-            <p>As a registered provider, your journey involves ongoing compliance, client acquisition, and service delivery. Start with registration (already done), then focus on audits, marketing, and growth. Unregistered providers face limitations, but you can charge up to price limits and access more participants.<grok-card data-id="74838c" data-type="citation_card"></grok-card> Key stages: Setup, compliance, client intake, scaling.</p>
-            <p>Market data: 87% of providers are unregistered, leading to fraud risks; leverage your registered status for trust.<grok-card data-id="dd6736" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="quiz">
-            <h3>Week 1 Quiz</h3>
-            <p>What is a key stakeholder responsible for regulating provider quality?</p>
-            <input type="radio" name="quiz1" value="A"> A) NDIA<br>
-            <input type="radio" name="quiz1" value="B"> B) NDIS Commission<br>
-            <input type="radio" name="quiz1" value="C"> C) Participants<br>
-            <button onclick="checkQuiz('quiz1', 'B', 'feedback1')">Submit</button>
-            <p id="feedback1"></p>
-        </div>
-    </div>
 
-    <div class="week">
-        <h2>Week 2: NDIS Business Models</h2>
-        <p>Understand demand in the NDIS market, business models, price guide, and services you can deliver as a registered provider.</p>
-        
-        <div class="accordion" onclick="toggleAccordion('week2-1')">Demand in the NDIS Market</div>
-        <div id="week2-1" class="panel">
-            <p>The NDIS market is booming, with demand for supports in core areas like daily living, therapy, and accommodation. Profit margins range from 20-60% depending on service type.<grok-card data-id="0473fc" data-type="citation_card"></grok-card> High demand in remote/First Nations areas due to market gaps.<grok-card data-id="b4671e" data-type="citation_card"></grok-card> As a registered provider, target underserved niches like psychosocial supports.</p>
-            <table>
-                <tr><th>Service Area</th><th>Demand Level</th><th>Profit Potential</th></tr>
-                <tr><td>Therapy</td><td>High</td><td>40-60%</td></tr>
-                <tr><td>Support Coordination</td><td>Medium-High</td><td>20-40%</td></tr>
-                <tr><td>Accommodation</td><td>High</td><td>30-50%</td></tr>
-            </table><grok-card data-id="a8197c" data-type="citation_card"></grok-card>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week2-2')">NDIS Business Models</div>
-        <div id="week2-2" class="panel">
-            <p>Common models: Fee-for-service, bundled packages, or hybrid. For registered providers, emphasize compliance-driven models. Shift from block-funding to individualized funding for choice.<grok-card data-id="1c6f70" data-type="citation_card"></grok-card> Financial benchmarking shows staffing costs are key; aim for profitability through efficiency.<grok-card data-id="8a2c69" data-type="citation_card"></grok-card></p>
-            <ul>
-                <li>Solo Provider: Low overhead, personal touch.</li>
-                <li>Agency Model: Scale with staff, higher revenue.</li>
-                <li>Specialist: Focus on niches like SIL (Supported Independent Living).<grok-card data-id="fc165b" data-type="citation_card"></grok-card></li>
-            </ul>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week2-3')">Understanding the NDIS Price Guide</div>
-        <div id="week2-3" class="panel">
-            <p>The 2025-26 Price Guide sets maximum prices; e.g., standard support work $70.23/hr, psychology $232.99/hr, physiotherapy $193.99/hr.<grok-card data-id="1149a6" data-type="citation_card"></grok-card> Updates effective Nov 2025 include travel and non-face-to-face claims. Download: <a href="https://www.ndis.gov.au/providers/pricing-arrangements">NDIS Price Guide</a>.<grok-card data-id="2d2f6e" data-type="citation_card"></grok-card></p>
-            <p>Key categories: Core, Capacity Building, Capital. Negotiate below limits for competitiveness.</p>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week2-4')">Services You Can Deliver</div>
-        <div id="week2-4" class="panel">
-            <p>As registered, deliver high-risk supports like behavior support. Common: Assistance with daily life, transport, therapeutic supports. Expand to SDA (Specialist Disability Accommodation) for growth.<grok-card data-id="ac18bb" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="quiz">
-            <h3>Week 2 Quiz</h3>
-            <p>What is the 2025-26 price for standard weekday support work?</p>
-            <input type="radio" name="quiz2" value="A"> A) $66.17<br>
-            <input type="radio" name="quiz2" value="B"> B) $70.23<br>
-            <input type="radio" name="quiz2" value="C"> C) $193.99<br>
-            <button onclick="checkQuiz('quiz2', 'B', 'feedback2')">Submit</button>
-            <p id="feedback2"></p>
-        </div>
-        <div class="resource">Template: Business Model Canvas - Download <a href="#">here</a> (simulate link).</div>
-    </div>
+        <nav class="nav">
+          <div class="nav-section-label">Navigate Weeks</div>
+          <ul class="nav-list" id="nav-list">
+            <li>
+              <button data-target="intro" class="active">
+                <span class="nav-dot"></span>
+                <span class="week-label">Intro & How to Use</span>
+                <span class="week-status"></span>
+              </button>
+            </li>
+            <li>
+              <button data-target="week1">
+                <span class="nav-dot"></span>
+                <span class="week-label">Week 1 – Ecosystem & Participants</span>
+                <span class="week-status" data-week-status="1"></span>
+              </button>
+            </li>
+            <li>
+              <button data-target="week2">
+                <span class="nav-dot"></span>
+                <span class="week-label">Week 2 – Business Model & Pricing</span>
+                <span class="week-status" data-week-status="2"></span>
+              </button>
+            </li>
+            <li>
+              <button data-target="week3">
+                <span class="nav-dot"></span>
+                <span class="week-label">Week 3 – Attracting Clients</span>
+                <span class="week-status" data-week-status="3"></span>
+              </button>
+            </li>
+            <li>
+              <button data-target="week4">
+                <span class="nav-dot"></span>
+                <span class="week-label">Week 4 – Operations & Intake</span>
+                <span class="week-status" data-week-status="4"></span>
+              </button>
+            </li>
+            <li>
+              <button data-target="week5">
+                <span class="nav-dot"></span>
+                <span class="week-label">Week 5 – Compliance & Quality</span>
+                <span class="week-status" data-week-status="5"></span>
+              </button>
+            </li>
+            <li>
+              <button data-target="week6">
+                <span class="nav-dot"></span>
+                <span class="week-label">Week 6 – Launch Plan</span>
+                <span class="week-status" data-week-status="6"></span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
 
-    <div class="week">
-        <h2>Week 3: Attracting Clients</h2>
-        <p>Focus here as you're struggling. What participants want, developing a standout offer, marketing basics, social media, networking, niche choice.</p>
-        
-        <div class="accordion" onclick="toggleAccordion('week3-1')">What Participants Want</div>
-        <div id="week3-1" class="panel">
-            <p>Participants seek trust, direct engagement, cultural competence, and value. They want providers who greet them first, communicate well, and offer flexible supports.<grok-card data-id="da5589" data-type="citation_card"></grok-card> Avoid rorting perceptions; focus on independence.<grok-card data-id="ebcb37" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week3-2')">Developing a Standout Offer</div>
-        <div id="week3-2" class="panel">
-            <p>Create irresistible offers: Clear, value-packed, low-risk. Bundle services, offer discounts for bundles. Use participant language from research.<grok-card data-id="9e36af" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week3-3')">Marketing Basics for NDIS Providers</div>
-        <div id="week3-3" class="panel">
-            <p>Sign up to Clickability/MyCareSpace, list on directories, build website. Use NDIS logo. Network with coordinators/councils.<grok-card data-id="22b635" data-type="citation_card"></grok-card> Strategies: Word-of-mouth, community events.<grok-card data-id="f6ad9e" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week3-4')">Social Media and Content Planning</div>
-        <div id="week3-4" class="panel">
-            <p>Share success stories, tips. 26 ideas: Behind-the-scenes, participant testimonials. Platforms: Facebook, LinkedIn, X.<grok-card data-id="ff30f0" data-type="citation_card"></grok-card> Plan: Weekly posts, engage community.<grok-card data-id="f6af0f" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week3-5')">Building a Network</div>
-        <div id="week3-5" class="panel">
-            <p>Connect with support coordinators, other providers, local councils. Attend events, buddy up.<grok-card data-id="8dbc08" data-type="citation_card"></grok-card> Use X for discussions on client struggles.<grok-card data-id="9669f9" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week3-6')">Choosing Your NDIS Niche</div>
-        <div id="week3-6" class="panel">
-            <p>Select based on expertise: e.g., autism, psychosocial. Research demand via Care Sector Demand Map.<grok-card data-id="fb5a68" data-type="citation_card"></grok-card> Niche marketing: Targeted content, partnerships.<grok-card data-id="fc0ca9" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="quiz">
-            <h3>Week 3 Quiz</h3>
-            <p>Which is a top way to attract clients?</p>
-            <input type="radio" name="quiz3" value="A"> A) Networking with coordinators<br>
-            <input type="radio" name="quiz3" value="B"> B) Ignoring social media<br>
-            <input type="radio" name="quiz3" value="C"> C) High prices only<br>
-            <button onclick="checkQuiz('quiz3', 'A', 'feedback3')">Submit</button>
-            <p id="feedback3"></p>
-        </div>
-        <div class="resource">Template: Marketing Plan - Download <a href="#">here</a>. Assessment: Self-audit your current marketing.</div>
-    </div>
+      <div class="sidebar-footer">
+        Designed for: <strong>Registered NDIS providers struggling to find clients</strong>.<br />
+        <small>Tip: Use one browser/device so your checklists & notes stay in sync.</small>
+      </div>
+    </aside>
 
-    <div class="week">
-        <h2>Week 4: Getting Started</h2>
-        <p>Setting up for participant lifecycle, tech systems, first intake steps.</p>
-        
-        <div class="accordion" onclick="toggleAccordion('week4-1')">Lifecycle of a Participant</div>
-        <div id="week4-1" class="panel">
-            <p>Stages: Enquiry, planning meeting, plan approval, support implementation. For registered: Use myplace portal.<grok-card data-id="00a53e" data-type="citation_card"></grok-card> Manage from intake to review.</p>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week4-2')">Choosing the Right Tech Systems</div>
-        <div id="week4-2" class="panel">
-            <p>Top software: SafetyCulture, ShiftCare, iinsight for compliance, rostering, billing.<grok-card data-id="06482b" data-type="citation_card"></grok-card> Vertex360 for comprehensive features.<grok-card data-id="5c0a38" data-type="citation_card"></grok-card> Integrate for efficiency.</p>
-            <table>
-                <tr><th>Software</th><th>Features</th><th>Best For</th></tr>
-                <tr><td>ShiftCare</td><td>Rostering, invoicing</td><td>Small providers</td></tr>
-                <tr><td>FlowLogic</td><td>CRM</td><td>Client management</td></tr>
-            </table>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week4-3')">Step-by-Step First Participant Intake</div>
-        <div id="week4-3" class="panel">
-            <p>1. Initial enquiry. 2. Assessment (trauma-informed). 3. Service agreement. 4. Onboarding (unbillable for trust).<grok-card data-id="fc8097" data-type="citation_card"></grok-card><grok-card data-id="09e853" data-type="citation_card"></grok-card> Streamline with software.<grok-card data-id="5c9624" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="quiz">
-            <h3>Week 4 Quiz</h3>
-            <p>What is a key step in intake?</p>
-            <input type="radio" name="quiz4" value="A"> A) Ignore enquiries<br>
-            <input type="radio" name="quiz4" value="B"> B) Service agreement<br>
-            <input type="radio" name="quiz4" value="C"> C) Skip assessment<br>
-            <button onclick="checkQuiz('quiz4', 'B', 'feedback4')">Submit</button>
-            <p id="feedback4"></p>
-        </div>
-        <div class="resource">Template: Intake Form - Download <a href="#">here</a>.</div>
-    </div>
+    <main class="content">
+      <header class="page-header" id="intro">
+        <div class="page-kicker">Self-paced training</div>
+        <h1 class="page-title">Launch Your NDIS Business – 6-Week Accelerator</h1>
+        <p class="page-subtitle">
+          Use this interactive workbook to turn your registration into a steady flow of the right
+          NDIS participants. Work week-by-week or jump to the section you need today.
+        </p>
+      </header>
 
-    <div class="week">
-        <h2>Week 5: Provider Obligations</h2>
-        <p>Since you're registered, focus on audits, finances, HR, safe environments.</p>
-        
-        <div class="accordion" onclick="toggleAccordion('week5-1')">Audit Process</div>
-        <div id="week5-1" class="panel">
-            <p>Verification for low-risk, certification for high-risk. Prepare with checklists: Governance, risk management.<grok-card data-id="63fd4a" data-type="citation_card"></grok-card><grok-card data-id="9a4c69" data-type="citation_card"></grok-card> NDIS Commission oversees; new providers may need participant engagement audits.<grok-card data-id="a73d0d" data-type="citation_card"></grok-card></p>
+      <section class="banner">
+        <div class="banner-emoji">✅</div>
+        <div>
+          <strong>How this page works:</strong>
+          Tick the action checklists, type your notes, and complete quick quizzes.
+          Everything is saved locally in your browser so you can come back anytime.
         </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week5-2')">Basic Finances and Cashflow</div>
-        <div id="week5-2" class="panel">
-            <p>Optimize billing, reduce cancellations. Use software for invoicing. Profitability hinges on efficiency.<grok-card data-id="6ab823" data-type="citation_card"></grok-card> Benchmark: Staffing 50-60% of costs.<grok-card data-id="2b0ec2" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week5-3')">Human Resources Basics and Employee Lifecycle</div>
-        <div id="week5-3" class="panel">
-            <p>Worker screening mandatory. Lifecycle: Recruitment, training, retention. Use NDIS standards for safe staffing.<grok-card data-id="c638df" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week5-4')">Creating Safe Environments</div>
-        <div id="week5-4" class="panel">
-            <p>Manage incidents, medication, property. Compliance with Practice Standards.<grok-card data-id="4ad501" data-type="citation_card"></grok-card> Frameworks for quality and safety.<grok-card data-id="2e2755" data-type="citation_card"></grok-card></p>
-        </div>
-        
-        <div class="quiz">
-            <h3>Week 5 Quiz</h3>
-            <p>What applies to low-risk supports?</p>
-            <input type="radio" name="quiz5" value="A"> A) Verification audit<br>
-            <input type="radio" name="quiz5" value="B"> B) No audit<br>
-            <input type="radio" name="quiz5" value="C"> C) Annual review only<br>
-            <button onclick="checkQuiz('quiz5', 'A', 'feedback5')">Submit</button>
-            <p id="feedback5"></p>
-        </div>
-        <div class="resource">Template: Compliance Checklist - Download <a href="#">here</a>.</div>
-    </div>
+      </section>
 
-    <div class="week">
-        <h2>Week 6: Ready to Launch</h2>
-        <p>Action plan and resources to grow your registered NDIS business.</p>
-        
-        <div class="accordion" onclick="toggleAccordion('week6-1')">Action Plan</div>
-        <div id="week6-1" class="panel">
-            <p>1. Review business plan. 2. Implement marketing. 3. Optimize tech. 4. Network. 5. Monitor finances. 6. Scale services.<grok-card data-id="eaaf24" data-type="citation_card"></grok-card> Build cushion, focus on renewals.<grok-card data-id="66493e" data-type="citation_card"></grok-card></p>
-            <ol>
-                <li>Week 1: Audit current clients.</li>
-                <li>Month 1: Launch social media campaign.</li>
-                <li>Quarterly: Review profitability.</li>
-            </ol>
+      <section class="week-section">
+        <div class="week-header">
+          <div class="week-title">
+            <span class="number-pill">Start Here</span>
+            Orientation & How to Use This Accelerator
+          </div>
         </div>
-        
-        <div class="accordion" onclick="toggleAccordion('week6-2')">Resources</div>
-        <div id="week6-2" class="panel">
-            <p>NDIS website, Commission guides, toolkits.<grok-card data-id="6b5a04" data-type="citation_card"></grok-card> Business planning toolkit.<grok-card data-id="a70d0e" data-type="citation_card"></grok-card> Helpline: 1800 800 110.<grok-card data-id="efb0ba" data-type="citation_card"></grok-card></p>
-            <ul>
-                <li>Data: https://dataresearch.ndis.gov.au</li>
-                <li>Guides: NDIS Provider Registration Checklist.<grok-card data-id="83f380" data-type="citation_card"></grok-card></li>
-            </ul>
-        </div>
-        
-        <div class="quiz">
-            <h3>Week 6 Quiz</h3>
-            <p>What is a key resource for data?</p>
-            <input type="radio" name="quiz6" value="A"> A) NDIS Data Portal<br>
-            <input type="radio" name="quiz6" value="B"> B) Google<br>
-            <input type="radio" name="quiz6" value="C"> C) Local news<br>
-            <button onclick="checkQuiz('quiz6', 'A', 'feedback6')">Submit</button>
-            <p id="feedback6"></p>
-        </div>
-        <div class="resource">Template: Action Plan Worksheet - Download <a href="#">here</a>. Congratulations on completing the course!</div>
-    </div>
+        <p>
+          This program is built from a complete 6-week curriculum covering the NDIS ecosystem, business
+          models, marketing, operations, compliance, and your launch plan. It is tailored specifically for
+          you as a <strong>registered NDIS provider who is struggling to find clients</strong>.
+        </p>
+        <p>
+          You don’t have to do everything perfectly. The goal is steady progress: each week you put a few
+          building blocks in place so that, over time, you have a professional, compliant and
+          <em>client-attracting</em> NDIS business.
+        </p>
 
+        <div class="accordion">
+          <div class="accordion-item open">
+            <button class="accordion-header">
+              <span class="label">Using this page effectively</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <ul>
+                  <li><strong>Read:</strong> Work through the explanations and examples in each week.</li>
+                  <li><strong>Decide:</strong> Use the checklists to make concrete decisions (services, niche, prices, systems).</li>
+                  <li><strong>Capture:</strong> Put your thoughts into the notes box for each week – treat this as your live playbook.</li>
+                  <li><strong>Test yourself:</strong> Use the quick quiz to make sure key concepts are clear.</li>
+                  <li><strong>Revisit:</strong> You can re-open weeks anytime to refine offers, systems, or compliance as your business grows.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Recommended pacing</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>
+                  The content was originally designed as a 6-week accelerator. You can keep that pacing:
+                </p>
+                <ul>
+                  <li><strong>1–2 focused sessions per week</strong> (e.g., 60–90 minutes).</li>
+                  <li>Do the reading first, then the checklist and notes.</li>
+                  <li>At the end of each week, answer the quiz and mark the week as complete.</li>
+                </ul>
+                <p class="muted">
+                  If you are in a hurry, you can binge multiple weeks – but you’ll get the best results by
+                  implementing as you go, not just reading.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist" data-week="0">
+          <h4>Orientation – Action checklist</h4>
+          <div class="checklist-item">
+            <input type="checkbox" id="w0-t1" />
+            <label for="w0-t1">Decide when in the week you’ll consistently work on this program (e.g. Sunday evening, Wednesday morning).</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w0-t2" />
+            <label for="w0-t2">Skim all week headings (1–6) so you know what’s coming.</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w0-t3" />
+            <label for="w0-t3">Set a clear outcome: e.g. “Have 3–5 ideal participants onboarded within 3 months.”</label>
+          </div>
+        </div>
+
+        <div class="notes-block" data-week="0">
+          <header>
+            <span>Orientation notes (why you’re doing this)</span>
+            <span>Private to this browser</span>
+          </header>
+          <textarea placeholder="Write your main goal for this program, current barriers (e.g. no referrals, unclear offer), and what 'success' looks like for you."></textarea>
+          <button type="button" class="notes-save-btn">Save notes now</button>
+        </div>
+      </section>
+
+      <!-- WEEK 1 -->
+      <section class="week-section" id="week1" data-week="1">
+        <div class="week-header">
+          <div class="week-title">
+            <span class="number-pill">Week 1</span>
+            Understand the NDIS Ecosystem & Participants
+          </div>
+          <div class="week-meta">
+            <span class="badge">Foundation</span>
+            <span class="badge pill-soft">Goal: think like a participant</span>
+          </div>
+        </div>
+
+        <p>
+          In Week 1 you build a solid mental map of the NDIS: who the key players are, how funding flows,
+          and what participants actually want from providers. Everything else in your business – marketing,
+          service design, compliance – sits on this foundation.
+        </p>
+
+        <div class="accordion">
+          <!-- NDIS framework & stakeholders -->
+          <div class="accordion-item open">
+            <button class="accordion-header">
+              <span class="label">
+                NDIS framework & key stakeholders
+              </span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>
+                  The NDIS is a national scheme funding <strong>reasonable and necessary supports</strong> for
+                  people with permanent and significant disability. Two main bodies run the show:
+                </p>
+                <ul>
+                  <li>
+                    <strong>NDIA (National Disability Insurance Agency)</strong> – decides eligibility,
+                    builds participant plans, and pays for approved supports.
+                  </li>
+                  <li>
+                    <strong>NDIS Quality & Safeguards Commission</strong> – registers and regulates
+                    providers, enforces the NDIS Practice Standards and Code of Conduct, oversees
+                    complaints, incidents and worker screening.
+                  </li>
+                </ul>
+                <p>Key stakeholders you deal with as a provider:</p>
+                <ul>
+                  <li><strong>NDIS participants</strong> – at the centre; they hold the funding and choice.</li>
+                  <li>
+                    <strong>Providers</strong> (like HD HeeD) – delivering supports across Core, Capacity
+                    Building and Capital.
+                  </li>
+                  <li>
+                    <strong>Support coordinators</strong> – help participants understand and use their plan,
+                    find providers, coordinate supports, troubleshoot issues.
+                  </li>
+                  <li>
+                    <strong>Plan managers</strong> – manage finances and pay invoices for plan-managed
+                    participants.
+                  </li>
+                  <li>
+                    <strong>LACs / Early Childhood (ECEI) partners</strong> – NDIA partners in the
+                    community helping people access the NDIS and connect to services.
+                  </li>
+                  <li>
+                    <strong>Families & carers</strong> – often heavily involved in decision-making and daily
+                    life; treat them as partners (with consent).
+                  </li>
+                  <li>
+                    <strong>Mainstream & community services</strong> – health, education, transport,
+                    community centres, clubs, etc. You’ll often collaborate with them.
+                  </li>
+                </ul>
+                <p class="muted">
+                  Understanding how these pieces fit together makes conversations with coordinators,
+                  LACs, plan managers and families much smoother – and helps you position yourself as a
+                  trusted, knowledgeable provider.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Participant perspective -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">
+                Seeing your business from a participant’s perspective
+              </span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>
+                  From the participant’s side, NDIS can feel complex and exhausting. They’ve already told
+                  their story to multiple professionals. When they get to you, they mostly want to know:
+                  <em>“Will you really listen and will I be safe?”</em>
+                </p>
+                <p><strong>What participants and families commonly look for:</strong></p>
+                <ul>
+                  <li>
+                    <strong>Respect, trust, and safety</strong> – feeling heard, valued and not rushed. You
+                    explain things clearly, keep boundaries and confidentiality, and genuinely care.
+                  </li>
+                  <li>
+                    <strong>Qualified and competent staff</strong> – not just “someone with a Cert”, but
+                    people who understand their disability, communicate well and know practical strategies.
+                  </li>
+                  <li>
+                    <strong>Reliable communication</strong> – calls and emails returned, clear updates,
+                    no ghosting. This is often the biggest complaint about providers.
+                  </li>
+                  <li>
+                    <strong>Personalised, person-centred support</strong> – flexibility around goals,
+                    preferences, culture and routines rather than a one-size-fits-all roster.
+                  </li>
+                  <li>
+                    <strong>Consistency & good fit</strong> – minimal staff changes; workers whose style,
+                    language and personality feel like a good match.
+                  </li>
+                  <li>
+                    <strong>Focus on outcomes and independence</strong> – support that builds skills,
+                    confidence and genuine progress, not just “filling hours”.
+                  </li>
+                  <li>
+                    <strong>Ethical, transparent pricing</strong> – clear service agreements, no hidden
+                    fees, following NDIS price limits.
+                  </li>
+                </ul>
+                <p>
+                  Imagine a typical journey with you: how they find you, first contact, intake, day-to-day
+                  supports, reviews, and eventually transitions. At each step ask: “How can I make this
+                  feel easier, clearer and safer for them?”
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Week 1 action items -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">
+                Week 1 focus & decisions
+              </span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <h4>Decisions this week</h4>
+                <ul>
+                  <li>Who are your key local stakeholders? (SCs, LACs, community orgs, etc.)</li>
+                  <li>What does your ideal participant look like? (age, disability, goals, funding mix)</li>
+                  <li>How will you keep your NDIS knowledge up-to-date (sites, newsletters, groups)?</li>
+                </ul>
+                <p class="muted">
+                  The clearer your mental picture of your ideal participant and ecosystem, the easier
+                  marketing and service design become in later weeks.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist" data-week="1">
+          <h4>Week 1 – Action checklist</h4>
+          <div class="checklist-item">
+            <input type="checkbox" id="w1-t1" />
+            <label for="w1-t1">List your local NDIS stakeholders (support coordinators, plan managers, LACs, community orgs).</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w1-t2" />
+            <label for="w1-t2">Write a one-paragraph description of your “ideal participant” (disability, goals, funding type, location).</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w1-t3" />
+            <label for="w1-t3">Bookmark key official pages you’ll check regularly (NDIS, NDIS Commission, Price Guide, Provider updates).</label>
+          </div>
+        </div>
+
+        <div class="notes-block" data-week="1">
+          <header>
+            <span>Week 1 notes – Your ecosystem & ideal participant</span>
+            <span>Use this to sketch your real market</span>
+          </header>
+          <textarea placeholder="Describe your ideal participant, key local stakeholders, and any insights you have about what participants in your area are struggling to find."></textarea>
+          <button type="button" class="notes-save-btn">Save notes now</button>
+        </div>
+
+        <div class="quiz" data-week="1">
+          <h4>Quick check – Week 1</h4>
+          <div class="quiz-question" data-question-id="w1-q1">
+            <div>1. Who is responsible for regulating providers and enforcing the NDIS Code of Conduct?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="w1-q1" value="a" /> The NDIA</label>
+              <label><input type="radio" name="w1-q1" value="b" /> The NDIS Quality & Safeguards Commission</label>
+              <label><input type="radio" name="w1-q1" value="c" /> Local Area Coordinators</label>
+            </div>
+          </div>
+
+          <div class="quiz-question" data-question-id="w1-q2">
+            <div>2. The #1 thing participants usually want from a provider is:</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="w1-q2" value="a" /> The cheapest hourly rate</label>
+              <label><input type="radio" name="w1-q2" value="b" /> Trust, respect, and feeling heard</label>
+              <label><input type="radio" name="w1-q2" value="c" /> A huge list of registration groups</label>
+            </div>
+          </div>
+
+          <button type="button" class="quiz-submit-btn">Check answers</button>
+          <div class="quiz-result"></div>
+        </div>
+      </section>
+
+      <!-- WEEK 2 -->
+      <section class="week-section" id="week2" data-week="2">
+        <div class="week-header">
+          <div class="week-title">
+            <span class="number-pill">Week 2</span>
+            Business Models, Market Demand & Pricing
+          </div>
+          <div class="week-meta">
+            <span class="badge">Strategy</span>
+            <span class="badge pill-soft">Goal: define your place in the market</span>
+          </div>
+        </div>
+
+        <p>
+          In Week 2 you zoom out to the NDIS marketplace: how big it is, where demand is strong, and how
+          your registered provider business will position itself – what you offer, to whom, where and at what
+          NDIS-compliant prices.
+        </p>
+
+        <div class="accordion">
+          <!-- Demand in NDIS market -->
+          <div class="accordion-item open">
+            <button class="accordion-header">
+              <span class="label">Demand in the NDIS market</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>
+                  The NDIS is huge and growing, with hundreds of thousands of participants and billions of
+                  dollars of funding. At the same time:
+                </p>
+                <ul>
+                  <li>
+                    There are tens of thousands of providers – many very small – which makes the market
+                    competitive in some areas.
+                  </li>
+                  <li>
+                    Registered providers (like you) deliver the majority of overall NDIS spend, especially for
+                    NDIA-managed participants and higher-risk support types.
+                  </li>
+                  <li>
+                    Demand is not evenly spread – regional and remote areas, certain disability groups, and
+                    some high-intensity or specialised supports often have <strong>shortages</strong>.
+                  </li>
+                </ul>
+                <p>
+                  Your goal isn’t to “serve everyone”. It’s to identify where your skills and registration scope
+                  intersect with unmet or poorly served demand – that’s where you can stand out.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Business model -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Choosing your NDIS business model</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>Your business model answers: <em>“What do we offer, to whom, and how do we deliver it sustainably?”</em></p>
+                <h4>Key dimensions:</h4>
+                <ul>
+                  <li>
+                    <strong>Service categories & expertise</strong><br />
+                    Core (e.g. daily living, community access), Capacity Building (e.g. therapy, support
+                    coordination), Capital (e.g. AT, home mods). Choose services where you can maintain high
+                    quality with your current skills and registration groups.
+                  </li>
+                  <li>
+                    <strong>Target participant group (niche)</strong><br />
+                    For example: children with autism; adults with psychosocial disability; people from specific
+                    CALD communities; participants needing high-intensity in-home support; or aged-care
+                    interface participants who need experienced RNs. Specialisation makes your marketing and
+                    referrals sharper.
+                  </li>
+                  <li>
+                    <strong>Scale and structure</strong><br />
+                    Solo operator, small core team, or larger multi-disciplinary service? Each choice affects
+                    overheads, systems and supervision requirements.
+                  </li>
+                  <li>
+                    <strong>Multi-service vs specialist</strong><br />
+                    “One-stop shop” (e.g. support workers + therapy + coordination) versus being extremely
+                    good at one thing. Many successful businesses start focused, then expand services later.
+                  </li>
+                  <li>
+                    <strong>Geographic reach</strong><br />
+                    Local suburb, whole metro area, regional outreach, or state-wide via telehealth / remote
+                    services? Think about real travel time, staff availability and local demand.
+                  </li>
+                  <li>
+                    <strong>Registered vs unregistered</strong><br />
+                    You are already <strong>registered</strong>, which lets you serve NDIA-managed participants and
+                    offer higher-risk categories (SIL, behaviour support, plan management, etc., depending on
+                    your scope). Use this as a trust signal and market advantage.
+                  </li>
+                </ul>
+                <p class="muted">
+                  Write down your current model honestly: what you actually offer now, who you are really
+                  serving, and how. Then adjust it to better align with the niche you want.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing & NDIS Price Guide -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Pricing with the NDIS Price Guide</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>
+                  The NDIS sets <strong>price limits</strong> for most supports via the Pricing Arrangements and
+                  Support Catalogue. As a registered provider you must:
+                </p>
+                <ul>
+                  <li>Use the correct support item codes and stay within the published price caps.</li>
+                  <li>Understand when you can claim travel, non-face-to-face time, reports, cancellations, etc.</li>
+                  <li>
+                    Ensure your internal costs (wages, on-costs, admin, supervision, software) still leave a
+                    margin at NDIS rates.
+                  </li>
+                </ul>
+                <h4>Key concepts to build into your system:</h4>
+                <ul>
+                  <li>
+                    <strong>Support Catalogue</strong> – every line item has a code, description, and rate.
+                    Set these up in your invoicing / software correctly from day one.
+                  </li>
+                  <li>
+                    <strong>Plan categories</strong> – Core vs Capacity Building vs Capital. Check each
+                    participant’s plan so you bill to the right budget.
+                  </li>
+                  <li>
+                    <strong>Fair, transparent pricing</strong> – clearly written in your service agreement:
+                    hourly rates, any travel charges, cancellation policy, report fees, etc.
+                  </li>
+                </ul>
+                <p>
+                  Most participants are not price-sensitive in the usual way because NDIS covers the cost.
+                  They’re <em>quality-sensitive</em>. Compete more on service quality than on shaving a dollar off
+                  the hourly rate.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deciding your services -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Deciding exactly what you will offer</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <h4>Bring it together this week:</h4>
+                <ol>
+                  <li>Review your current registration groups and supports.</li>
+                  <li>List specific services you will actively promote (e.g. in-home support, community access, high-intensity care, etc.).</li>
+                  <li>Define geographic areas you’ll realistically cover.</li>
+                  <li>Allocate NDIS item codes and price caps for each service.</li>
+                  <li>Draft or refine your Service Agreement template to match your real offer and prices.</li>
+                </ol>
+                <p class="muted">
+                  This becomes the base for your website “Services” page, referral conversations, and
+                  onboarding documents.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist" data-week="2">
+          <h4>Week 2 – Action checklist</h4>
+          <div class="checklist-item">
+            <input type="checkbox" id="w2-t1" />
+            <label for="w2-t1">Write a one-page summary of your business model (services, target participants, locations).</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w2-t2" />
+            <label for="w2-t2">Download the latest NDIS Pricing Arrangements & Support Catalogue and highlight all items you will use.</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w2-t3" />
+            <label for="w2-t3">Set your standard hourly rates (within NDIS caps) for each service type, including evenings/weekends if relevant.</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w2-t4" />
+            <label for="w2-t4">Update or draft your Service Agreement so it clearly reflects your services, prices and cancellation rules.</label>
+          </div>
+        </div>
+
+        <div class="notes-block" data-week="2">
+          <header>
+            <span>Week 2 notes – Your model & pricing</span>
+            <span>Capture real numbers & decisions</span>
+          </header>
+          <textarea placeholder="Define your services, target niche, suburbs/regions, item codes and planned hourly rates. Note any questions you still have about pricing rules."></textarea>
+          <button type="button" class="notes-save-btn">Save notes now</button>
+        </div>
+
+        <div class="quiz" data-week="2">
+          <h4>Quick check – Week 2</h4>
+          <div class="quiz-question" data-question-id="w2-q1">
+            <div>1. Why is being a <strong>registered</strong> provider a market advantage?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="w2-q1" value="a" /> You can charge above NDIS price limits.</label>
+              <label><input type="radio" name="w2-q1" value="b" /> You can support NDIA-managed participants and certain higher-risk supports.</label>
+              <label><input type="radio" name="w2-q1" value="c" /> You never have to do audits.</label>
+            </div>
+          </div>
+
+          <div class="quiz-question" data-question-id="w2-q2">
+            <div>2. The NDIS Support Catalogue is mainly used to:</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="w2-q2" value="a" /> Design support plans for participants.</label>
+              <label><input type="radio" name="w2-q2" value="b" /> Find support coordinators in your area.</label>
+              <label><input type="radio" name="w2-q2" value="c" /> Look up line item codes, descriptions and price limits for billing.</label>
+            </div>
+          </div>
+
+          <button type="button" class="quiz-submit-btn">Check answers</button>
+          <div class="quiz-result"></div>
+        </div>
+      </section>
+
+      <!-- WEEK 3 (starts here, finished in Part 2) -->
+      <section class="week-section" id="week3" data-week="3">
+        <div class="week-header">
+          <div class="week-title">
+            <span class="number-pill">Week 3</span>
+            Attracting Clients – Marketing & Networking
+          </div>
+          <div class="week-meta">
+            <span class="badge">Growth</span>
+            <span class="badge pill-soft">Goal: create consistent enquiries</span>
+          </div>
+        </div>
+
+        <p>
+          Week 3 turns your understanding and business model into a pipeline of real clients. You’ll sharpen
+          your value proposition, build simple but effective marketing, and map a referral network so that
+          support coordinators, plan managers and community connections actually think of you.
+        </p>
+
+        <div class="accordion">
+          <div class="accordion-item open">
+            <button class="accordion-header">
+              <span class="label">Crafting your value proposition</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>
+                  Your <strong>value proposition</strong> answers:
+                  <em>“Why should a participant, family or support coordinator choose you instead of another provider?”</em>
+                </p>
+                <p>It should be short, specific, and focused on benefits for the participant, such as:</p>
+                <ul>
+                  <li>Reliability and communication (no one likes being ignored).</li>
+                  <li>Specialisation in a niche (e.g. autism, complex health, cultural group, age group).</li>
+                  <li>Consistency of staff and a person-centred approach.</li>
+                  <li>True understanding of clinical / behaviour risk where needed.</li>
+                </ul>
+                <p><strong>Template you can use:</strong></p>
+                <p class="muted">
+                  “We help <strong>[type of participant]</strong> in <strong>[area]</strong> to
+                  <strong>[achieve key outcomes]</strong> by providing
+                  <strong>[main services]</strong> with <strong>[your special strengths e.g. consistent staff, clinical expertise, cultural understanding]</strong>.”
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Continue Week 3 in Part 2 -->
+        </div>
+      </section>
+<!-- PART 1/2 END – paste Part 2/2 directly after this line -->
+<!-- File: ndis-accelerator-training.html | PART 2/2 CONTINUATION -->
+        <!-- WEEK 3 continued -->
+        <section class="week-section" id="week3-continued" aria-label="Week 3 continued content">
+          <div class="accordion">
+            <!-- Marketing basics -->
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span class="label">Marketing basics for NDIS providers</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-panel">
+                <div class="accordion-panel-inner">
+                  <h4>1. Brand & messaging</h4>
+                  <ul>
+                    <li>Pick a warm, clear tone that matches your value proposition.</li>
+                    <li>Use “you” language: focus on what life looks like for the participant.</li>
+                    <li>Consistent colours, logo, and wording across website, socials and documents.</li>
+                  </ul>
+
+                  <h4>2. Website</h4>
+                  <ul>
+                    <li>Simple, accessible layout; large text and plain language.</li>
+                    <li>Clear sections: About, Services, Areas We Serve, How NDIS Works, Contact.</li>
+                    <li>Strong call-to-action: “Call us” / “Submit referral” / “Request a callback”.</li>
+                  </ul>
+
+                  <h4>3. Social media & content</h4>
+                  <ul>
+                    <li>Facebook page is usually the most important for disability community visibility.</li>
+                    <li>Post short tips, stories, team intros, and accessible NDIS explanations.</li>
+                    <li>Join relevant Facebook groups (participants / carers / providers) and contribute ethically.</li>
+                  </ul>
+
+                  <h4>4. Community engagement</h4>
+                  <ul>
+                    <li>Attend local disability expos, community days, school transition events.</li>
+                    <li>Offer free info sessions on topics like “Understanding your NDIS plan”.</li>
+                    <li>Drop brochures to GPs, allied health clinics, community centres and schools attached to your niche.</li>
+                  </ul>
+
+                  <h4>5. Advertising & directories</h4>
+                  <ul>
+                    <li>Use targeted Facebook or Google Ads for your area and niche.</li>
+                    <li>List your services on NDIS-relevant directories and make sure your Provider Finder info is up-to-date.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Networking & referrals -->
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span class="label">Building referral relationships</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-panel">
+                <div class="accordion-panel-inner">
+                  <p>
+                    For many providers, the biggest shift comes when you stop waiting for random referrals and
+                    actively build a <strong>network</strong>.
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Support coordinators</strong> – map who is active in your area; introduce your service,
+                      be highly responsive when they trial you, and send short updates (with consent) on shared participants.
+                    </li>
+                    <li>
+                      <strong>Plan managers</strong> – register on their provider lists; ensure smooth, accurate invoices so you’re easy to work with.
+                    </li>
+                    <li>
+                      <strong>LACs / ECEI partners</strong> – ensure they know you exist as an option for particular participant profiles.
+                    </li>
+                    <li>
+                      <strong>Other providers</strong> – share clients where you have complementary services (e.g. therapy clinic ↔ support work).
+                    </li>
+                    <li>
+                      <strong>Community & condition-specific organisations</strong> – autism support groups, carer groups, multicultural orgs, etc.
+                    </li>
+                  </ul>
+                  <p class="muted">
+                    The aim is to be “top of mind” when a coordinator or community worker thinks, “Who is good with
+                    <em>this</em> type of participant in <em>this</em> area?”
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Niche -->
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span class="label">Leveraging your niche</span>
+                <span class="accordion-icon">▼</span>
+              </button>
+              <div class="accordion-panel">
+                <div class="accordion-panel-inner">
+                  <p>
+                    Marketing to “everyone” makes your message blurry. Marketing to a niche makes you memorable.
+                  </p>
+                  <ul>
+                    <li>Use niche-specific language (e.g. sensory needs, executive functioning, behaviour support, complex wounds).</li>
+                    <li>Create content that solves that niche’s real problems.</li>
+                    <li>Be visible where your niche hangs out (online groups, schools, clinics, cultural centres).</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="checklist" data-week="3">
+            <h4>Week 3 – Action checklist</h4>
+            <div class="checklist-item">
+              <input type="checkbox" id="w3-t1" />
+              <label for="w3-t1">Write a 2–3 sentence value proposition for your business and save it to use everywhere.</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="w3-t2" />
+              <label for="w3-t2">List at least 10 specific potential referrers (support coordinators, plan managers, community orgs).</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="w3-t3" />
+              <label for="w3-t3">Draft a simple intro email you can send to support coordinators & plan managers.</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="w3-t4" />
+              <label for="w3-t4">Plan 1 month of Facebook / social content aimed at your niche.</label>
+            </div>
+          </div>
+
+          <div class="notes-block" data-week="3">
+            <header>
+              <span>Week 3 notes – Your marketing & network</span>
+              <span>Turn ideas into concrete outreach</span>
+            </header>
+            <textarea placeholder="Write your value proposition, list your top referral targets, and note which marketing channels you’ll focus on first."></textarea>
+            <button type="button" class="notes-save-btn">Save notes now</button>
+          </div>
+
+          <div class="quiz" data-week="3">
+            <h4>Quick check – Week 3</h4>
+            <div class="quiz-question" data-question-id="w3-q1">
+              <div>1. The most powerful long-term source of clients is usually:</div>
+              <div class="quiz-options">
+                <label><input type="radio" name="w3-q1" value="a" /> Random Google searches</label>
+                <label><input type="radio" name="w3-q1" value="b" /> Word-of-mouth and professional referrals</label>
+                <label><input type="radio" name="w3-q1" value="c" /> Once-off print advertisements</label>
+              </div>
+            </div>
+
+            <div class="quiz-question" data-question-id="w3-q2">
+              <div>2. A good value proposition is:</div>
+              <div class="quiz-options">
+                <label><input type="radio" name="w3-q2" value="a" /> A long list of every service you provide.</label>
+                <label><input type="radio" name="w3-q2" value="b" /> A short, clear statement of who you help and how life improves for them.</label>
+                <label><input type="radio" name="w3-q2" value="c" /> Your full NDIS registration groups copied from the portal.</label>
+              </div>
+            </div>
+
+            <button type="button" class="quiz-submit-btn">Check answers</button>
+            <div class="quiz-result"></div>
+          </div>
+        </section>
+
+      <!-- WEEK 4 -->
+      <section class="week-section" id="week4" data-week="4">
+        <div class="week-header">
+          <div class="week-title">
+            <span class="number-pill">Week 4</span>
+            Operations & Participant Onboarding
+          </div>
+          <div class="week-meta">
+            <span class="badge">Systems</span>
+            <span class="badge pill-soft">Goal: have a smooth intake & service process</span>
+          </div>
+        </div>
+
+        <p>
+          Week 4 makes sure that when participants finally say “yes”, your operations are ready: intake is
+          clear, documents are in order, and your schedule, notes and billing flow properly.
+        </p>
+
+        <div class="accordion">
+          <div class="accordion-item open">
+            <button class="accordion-header">
+              <span class="label">Participant lifecycle – from enquiry to exit</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <ol>
+                  <li>
+                    <strong>Initial enquiry</strong><br />
+                    Answer phones/emails quickly, use a simple intake checklist: basic details, NDIS number,
+                    plan dates, funding categories, main goals, risks or health issues, referrer details.
+                  </li>
+                  <li>
+                    <strong>Intake meeting</strong><br />
+                    Confirm needs, goals, and match to your services; explain how your service works. Collect
+                    full details and <strong>Information & Consent</strong> (including consent to talk to SC/PM and
+                    to store information).
+                  </li>
+                  <li>
+                    <strong>Welcome pack & service agreement</strong><br />
+                    Provide a clear pack including Service Agreement, rights & responsibilities, how to give
+                    feedback/complaints, your privacy statement, and key contact details.
+                  </li>
+                  <li>
+                    <strong>Support / care plan</strong><br />
+                    Document their goals, agreed supports, frequencies, risk strategies, communication
+                    preferences, and any clinical/behaviour support plans you must follow.
+                  </li>
+                  <li>
+                    <strong>Service delivery & monitoring</strong><br />
+                    Staff deliver supports; progress notes completed each shift/visit; issues escalated as
+                    needed; regular informal check-ins with the participant and referrers.
+                  </li>
+                  <li>
+                    <strong>Reviews & transitions</strong><br />
+                    Periodically review progress and fit; support NDIS plan reviews; manage planned exits or
+                    transitions to other providers safely and respectfully.
+                  </li>
+                </ol>
+                <p class="muted">
+                  Having this lifecycle clearly mapped means every participant gets a consistent HD HeeD
+                  experience, not something ad-hoc.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tech systems -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Choosing your systems & tools</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>You need systems for at least:</p>
+                <ul>
+                  <li>Client records (intake forms, consents, support plans, notes).</li>
+                  <li>Scheduling (rosters, appointments, reminders).</li>
+                  <li>Progress notes and incident records.</li>
+                  <li>Invoicing and reconciliation to NDIS line items.</li>
+                  <li>Secure storage and privacy.</li>
+                </ul>
+                <p>
+                  You can start with a simple stack (secure cloud folders + spreadsheets + calendars) or use
+                  dedicated NDIS software. The important part is that <strong>everyone knows the process</strong>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- First participant step-by-step -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Step-by-step: your first participant</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <ol>
+                  <li>Receive enquiry → complete brief intake screen.</li>
+                  <li>Check service fit & capacity → offer intake meeting.</li>
+                  <li>At intake: gather details, confirm goals, explain services and pricing, collect consent.</li>
+                  <li>Complete Service Agreement & create support/care plan.</li>
+                  <li>Set them up in your client record, calendar and billing system.</li>
+                  <li>Confirm start date and roster worker(s).</li>
+                  <li>Begin service; ensure progress notes are completed every shift/visit.</li>
+                  <li>Check in after 2–4 weeks: “How is this going for you? Anything we should change?”</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist" data-week="4">
+          <h4>Week 4 – Action checklist</h4>
+          <div class="checklist-item">
+            <input type="checkbox" id="w4-t1" />
+            <label for="w4-t1">Create or refine your intake form & enquiry script.</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w4-t2" />
+            <label for="w4-t2">Assemble a Welcome Pack / Participant Handbook with Service Agreement, rights, complaints info and key contacts.</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w4-t3" />
+            <label for="w4-t3">Decide how you’ll store client records securely (software vs folder structure) and set it up.</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w4-t4" />
+            <label for="w4-t4">Do a “mock intake” for an imaginary participant to test your process end-to-end.</label>
+          </div>
+        </div>
+
+        <div class="notes-block" data-week="4">
+          <header>
+            <span>Week 4 notes – Operations & intake</span>
+            <span>Design the HD HeeD way of working</span>
+          </header>
+          <textarea placeholder="Document your intake process, key forms you’ll use, and any software or templates you’ve chosen."></textarea>
+          <button type="button" class="notes-save-btn">Save notes now</button>
+        </div>
+
+        <div class="quiz" data-week="4">
+          <h4>Quick check – Week 4</h4>
+          <div class="quiz-question" data-question-id="w4-q1">
+            <div>1. The most important document for transparency about services and pricing is:</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="w4-q1" value="a" /> Your Facebook page.</label>
+              <label><input type="radio" name="w4-q1" value="b" /> The Service Agreement.</label>
+              <label><input type="radio" name="w4-q1" value="c" /> Internal staff handbook.</label>
+            </div>
+          </div>
+
+          <button type="button" class="quiz-submit-btn">Check answers</button>
+          <div class="quiz-result"></div>
+        </div>
+      </section>
+
+      <!-- WEEK 5 -->
+      <section class="week-section" id="week5" data-week="5">
+        <div class="week-header">
+          <div class="week-title">
+            <span class="number-pill">Week 5</span>
+            Provider Obligations, Quality & Safety
+          </div>
+          <div class="week-meta">
+            <span class="badge">Compliance</span>
+            <span class="badge pill-soft">Goal: feel audit-ready, every day</span>
+          </div>
+        </div>
+
+        <p>
+          Registration brings obligations: NDIS Practice Standards, audits, incident management, worker
+          screening, safe environments, financial responsibility. Week 5 is about embedding these into your
+          everyday operations so compliance becomes “how we work”, not a last-minute scramble.
+        </p>
+
+        <div class="accordion">
+          <div class="accordion-item open">
+            <button class="accordion-header">
+              <span class="label">Registration, audits & practice standards</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <ul>
+                  <li>
+                    <strong>Registered provider status</strong> means you’ve been assessed against the NDIS
+                    Practice Standards and must maintain them.
+                  </li>
+                  <li>
+                    You’ll have <strong>regular audits</strong> (verification or certification) depending on the
+                    risk level of your registration groups.
+                  </li>
+                  <li>
+                    Practice Standards cover areas like governance, risk management, participant rights,
+                    provision of supports, incident management, human resources and environment.
+                  </li>
+                </ul>
+                <p class="muted">
+                  Think of the Standards as the blueprint for a high-quality, safe, participant-centred service.
+                  Your policies, procedures and day-to-day practice should all line up with them.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- HR & workforce -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Workforce, HR & screening</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <ul>
+                  <li>NDIS Worker Screening for all relevant staff and contractors.</li>
+                  <li>NDIS Worker Orientation Module and other mandatory training completed and recorded.</li>
+                  <li>Clear position descriptions, contracts, supervision and performance review processes.</li>
+                  <li>A training matrix that tracks who has done what, and when refreshers are due.</li>
+                </ul>
+                <p>
+                  Participants experience quality mainly through your staff – recruitment, training and
+                  supervision are core risk-management tools.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Risk, incidents & complaints -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Risk management, incidents & complaints</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>
+                  You must have clear systems for identifying and managing risks, handling incidents, and
+                  responding to complaints.
+                </p>
+                <ul>
+                  <li>Staff know what a reportable incident is and how to escalate it quickly.</li>
+                  <li>Serious incidents are notified to the NDIS Commission within required timeframes.</li>
+                  <li>Patterns of incidents are reviewed, with changes made to reduce risk.</li>
+                  <li>
+                    Participants know how to complain, can do so safely, and see that you actually act on
+                    feedback.
+                  </li>
+                </ul>
+                <p class="muted">
+                  Documenting what you <em>changed</em> after an incident or complaint is powerful audit
+                  evidence and builds real safety over time.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Finances -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Financial basics & cashflow</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <ul>
+                  <li>Track income and expenses clearly by service type and cost centre.</li>
+                  <li>Have a simple budget and cashflow plan, linked to realistic utilisation of hours.</li>
+                  <li>Ensure invoices match delivered services, line items, dates and rates.</li>
+                  <li>Avoid “over-servicing” or billing outside plan scope – it will backfire at review time.</li>
+                </ul>
+                <p>
+                  A financially healthy provider is better placed to offer stable, reliable supports – which is
+                  exactly what participants and coordinators want.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist" data-week="5">
+          <h4>Week 5 – Action checklist</h4>
+          <div class="checklist-item">
+            <input type="checkbox" id="w5-t1" />
+            <label for="w5-t1">Create a simple compliance checklist (worker screening, policies, incident reporting, complaints, audits).</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w5-t2" />
+            <label for="w5-t2">Review at least 3 staff / contractor files and make sure screening, contracts and training are documented.</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w5-t3" />
+            <label for="w5-t3">Write or refine your incident & complaints procedure in plain language.</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w5-t4" />
+            <label for="w5-t4">Draft a basic 12-month budget and cashflow overview for your NDIS services.</label>
+          </div>
+        </div>
+
+        <div class="notes-block" data-week="5">
+          <header>
+            <span>Week 5 notes – Compliance and quality</span>
+            <span>Turn obligations into habits</span>
+          </header>
+          <textarea placeholder="List your key compliance gaps and the steps you’ll take to close them over the next 3 months."></textarea>
+          <button type="button" class="notes-save-btn">Save notes now</button>
+        </div>
+
+        <div class="quiz" data-week="5">
+          <h4>Quick check – Week 5</h4>
+          <div class="quiz-question" data-question-id="w5-q1">
+            <div>1. Who do you notify about certain serious incidents involving NDIS participants?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="w5-q1" value="a" /> Only the participant’s family.</label>
+              <label><input type="radio" name="w5-q1" value="b" /> The NDIS Quality & Safeguards Commission (via its portal) within set timeframes.</label>
+              <label><input type="radio" name="w5-q1" value="c" /> No-one, if you fix it internally.</label>
+            </div>
+          </div>
+
+          <button type="button" class="quiz-submit-btn">Check answers</button>
+          <div class="quiz-result"></div>
+        </div>
+      </section>
+
+      <!-- WEEK 6 -->
+      <section class="week-section" id="week6" data-week="6">
+        <div class="week-header">
+          <div class="week-title">
+            <span class="number-pill">Week 6</span>
+            Ready to Launch – Action Plan & Resources
+          </div>
+          <div class="week-meta">
+            <span class="badge">Launch</span>
+            <span class="badge pill-soft">Goal: clear 30–90 day plan</span>
+          </div>
+        </div>
+
+        <p>
+          Week 6 pulls everything together into a concrete launch (or relaunch) plan, so you’re not just
+          “registered and waiting” but actively building a stable, sustainable client base.
+        </p>
+
+        <div class="accordion">
+          <div class="accordion-item open">
+            <button class="accordion-header">
+              <span class="label">30-day action plan</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <ol>
+                  <li>Finalise your value proposition and services list.</li>
+                  <li>Ensure your website or basic landing page clearly reflects your offer and has a contact pathway.</li>
+                  <li>Contact at least 10 support coordinators / plan managers with a clear intro and value proposition.</li>
+                  <li>Complete key compliance basics (worker screening documented, core policies in place).</li>
+                  <li>Onboard at least one new ideal participant using your refined intake and welcome pack.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">90-day momentum plan</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <ul>
+                  <li>Continue regular, respectful contact with referrers and update them on participant progress (with consent).</li>
+                  <li>Refine systems based on real experience (intake, rostering, notes, invoices).</li>
+                  <li>Collect testimonials or case studies (with permission) and add to your marketing.</li>
+                  <li>Track key numbers monthly: enquiries, conversions, active participants, hours delivered, cancellations, staff utilisation.</li>
+                  <li>Schedule a quarterly mini “quality review” to identify improvements.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span class="label">Staying supported as a provider</span>
+              <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-panel">
+              <div class="accordion-panel-inner">
+                <p>
+                  Running an NDIS business can feel isolating. Build your own support structures:
+                </p>
+                <ul>
+                  <li>Join provider networks and forums to share knowledge and stay updated.</li>
+                  <li>Follow official NDIS and Commission updates (newsletters, alerts).</li>
+                  <li>Consider occasional advice from NDIS-experienced accountants, lawyers or consultants.</li>
+                  <li>Invest in ongoing training for yourself and your team.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist" data-week="6">
+          <h4>Week 6 – Action checklist</h4>
+          <div class="checklist-item">
+            <input type="checkbox" id="w6-t1" />
+            <label for="w6-t1">Write a 30-day plan with specific dates for outreach, marketing, and system changes.</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w6-t2" />
+            <label for="w6-t2">Write a 90-day “momentum” goal (e.g. number of ideal participants and quality indicators you want to see).</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="w6-t3" />
+            <label for="w6-t3">Schedule your first quarterly internal quality review date in your calendar.</label>
+          </div>
+        </div>
+
+        <div class="notes-block" data-week="6">
+          <header>
+            <span>Week 6 notes – Your launch & growth plan</span>
+            <span>Make it real and time-bound</span>
+          </header>
+          <textarea placeholder="Write your concrete 30-day and 90-day goals, and the key actions you will take to get there."></textarea>
+          <button type="button" class="notes-save-btn">Save notes now</button>
+        </div>
+
+        <div class="quiz" data-week="6">
+          <h4>Quick check – Week 6</h4>
+          <div class="quiz-question" data-question-id="w6-q1">
+            <div>1. The purpose of this accelerator is ultimately to:</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="w6-q1" value="a" /> Memorise NDIS documents.</label>
+              <label><input type="radio" name="w6-q1" value="b" /> Build a sustainable, compliant business that consistently attracts and supports the right participants.</label>
+              <label><input type="radio" name="w6-q1" value="c" /> Focus only on audits.</label>
+            </div>
+          </div>
+
+          <button type="button" class="quiz-submit-btn">Check answers</button>
+          <div class="quiz-result"></div>
+        </div>
+      </section>
+
+      <!-- RESOURCES -->
+      <section class="resources">
+        <h3>Ongoing resources & reminders</h3>
+        <p class="muted">
+          These links and reminders are here so you don’t have to keep everything in your head. Integrate
+          them into your bookmarks and weekly routine.
+        </p>
+        <ul class="resource-list">
+          <li>
+            <span class="inline-tag">Internal</span>
+            Keep this page as your personal NDIS business playbook – revisit weeks whenever you update
+            services, systems or marketing.
+          </li>
+          <li>
+            <span class="inline-tag">Reflect</span>
+            Once a month, read your notes across all weeks and update them based on what you’ve learned.
+          </li>
+          <li>
+            <span class="inline-tag">Talk</span>
+            Use your value proposition and clear explanation of your processes when speaking to support
+            coordinators, auditors, staff and participants – consistency builds trust.
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // === Local storage helpers ===
+    const STORAGE_PREFIX = "ndisAccelerator_";
+
+    function saveToStorage(key, value) {
+      try {
+        localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value));
+      } catch (e) {
+        console.warn("Could not save to localStorage", e);
+      }
+    }
+
+    function loadFromStorage(key, defaultValue) {
+      try {
+        const item = localStorage.getItem(STORAGE_PREFIX + key);
+        return item ? JSON.parse(item) : defaultValue;
+      } catch (e) {
+        console.warn("Could not load from localStorage", e);
+        return defaultValue;
+      }
+    }
+
+    // === Navigation ===
+    const navList = document.getElementById("nav-list");
+    const navButtons = navList.querySelectorAll("button[data-target]");
+    navButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        const targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+
+        navButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    // === Accordion behaviour ===
+    document.querySelectorAll(".accordion-header").forEach((header) => {
+      header.addEventListener("click", () => {
+        const item = header.closest(".accordion-item");
+        if (!item) return;
+        const isOpen = item.classList.contains("open");
+        item.classList.toggle("open", !isOpen);
+      });
+    });
+
+    // === Checklists ===
+    function initChecklists() {
+      const checklistBlocks = document.querySelectorAll(".checklist[data-week]");
+      checklistBlocks.forEach((block) => {
+        const week = block.getAttribute("data-week");
+        const checkboxes = block.querySelectorAll('input[type="checkbox"]');
+        const stored = loadFromStorage("week" + week + "_checklist", {});
+
+        // restore
+        checkboxes.forEach((cb) => {
+          if (stored[cb.id]) cb.checked = true;
+          cb.addEventListener("change", () => {
+            const latest = loadFromStorage("week" + week + "_checklist", {});
+            latest[cb.id] = cb.checked;
+            saveToStorage("week" + week + "_checklist", latest);
+            updateWeekCompletion();
+          });
+        });
+      });
+    }
+
+    // === Notes ===
+    function initNotes() {
+      const noteBlocks = document.querySelectorAll(".notes-block[data-week]");
+      noteBlocks.forEach((block) => {
+        const week = block.getAttribute("data-week");
+        const textarea = block.querySelector("textarea");
+        const btn = block.querySelector(".notes-save-btn");
+        const storedText = loadFromStorage("week" + week + "_notes", "");
+        if (storedText) textarea.value = storedText;
+
+        function saveNotes() {
+          saveToStorage("week" + week + "_notes", textarea.value);
+        }
+
+        btn.addEventListener("click", () => {
+          saveNotes();
+          btn.textContent = "Saved ✓";
+          setTimeout(() => (btn.textContent = "Save notes now"), 1200);
+        });
+
+        textarea.addEventListener("blur", saveNotes);
+      });
+    }
+
+    // === Quizzes ===
+    const quizAnswers = {
+      "w1-q1": "b",
+      "w1-q2": "b",
+      "w2-q1": "b",
+      "w2-q2": "c",
+      "w3-q1": "b",
+      "w3-q2": "b",
+      "w4-q1": "b",
+      "w5-q1": "b",
+      "w6-q1": "b",
+    };
+
+    function initQuizzes() {
+      document.querySelectorAll(".quiz").forEach((quiz) => {
+        const week = quiz.getAttribute("data-week");
+        const btn = quiz.querySelector(".quiz-submit-btn");
+        const resultBox = quiz.querySelector(".quiz-result");
+
+        btn.addEventListener("click", () => {
+          const questions = quiz.querySelectorAll(".quiz-question");
+          let correct = 0;
+          let total = 0;
+
+          questions.forEach((q) => {
+            const qid = q.getAttribute("data-question-id");
+            const selected = q.querySelector('input[type="radio"]:checked');
+            if (!quizAnswers[qid]) return;
+            total++;
+            if (selected && selected.value === quizAnswers[qid]) {
+              correct++;
+            }
+          });
+
+          if (total === 0) return;
+          const msg = `You got ${correct} / ${total} correct.`;
+          resultBox.textContent = msg;
+          resultBox.classList.toggle("correct", correct === total);
+          resultBox.classList.toggle("incorrect", correct !== total);
+
+          saveToStorage("week" + week + "_quizScore", { correct, total });
+          updateWeekCompletion();
+        });
+      });
+    }
+
+    // === Week completion & overall progress ===
+    function updateWeekCompletion() {
+      const totalWeeks = 6;
+      let completedWeeks = 0;
+
+      for (let week = 1; week <= totalWeeks; week++) {
+        const checklistState = loadFromStorage("week" + week + "_checklist", {});
+        const checklistBlock = document.querySelector(
+          `.checklist[data-week="${week}"]`
+        );
+        const allChecked =
+          checklistBlock &&
+          [...checklistBlock.querySelectorAll('input[type="checkbox"]')].length >
+            0 &&
+          [...checklistBlock.querySelectorAll('input[type="checkbox"]')].every(
+            (cb) => checklistState[cb.id]
+          );
+
+        const quizScore = loadFromStorage("week" + week + "_quizScore", null);
+        const quizPassed = quizScore && quizScore.correct === quizScore.total;
+
+        const weekCompleted = allChecked && quizPassed;
+        const navStatusSpan = document.querySelector(
+          `.week-status[data-week-status="${week}"]`
+        );
+        const navBtn = navStatusSpan
+          ? navStatusSpan.closest("button")
+          : null;
+
+        if (navStatusSpan) {
+          navStatusSpan.textContent = weekCompleted ? "✓ Done" : "";
+        }
+        if (navBtn) {
+          navBtn.classList.toggle("completed", !!weekCompleted);
+        }
+
+        if (weekCompleted) completedWeeks++;
+      }
+
+      const overallPercent = Math.round((completedWeeks / totalWeeks) * 100);
+      const bar = document.getElementById("overall-progress-bar");
+      const pill = document.getElementById("overall-pill");
+      const summary = document.getElementById("overall-summary");
+      if (bar) bar.style.width = overallPercent + "%";
+      if (pill)
+        pill.textContent = overallPercent + "% Complete";
+      if (summary)
+        summary.textContent =
+          completedWeeks + " / " + totalWeeks + " weeks completed";
+    }
+
+    // Init all interactive pieces
+    initChecklists();
+    initNotes();
+    initQuizzes();
+    updateWeekCompletion();
+  </script>
 </body>
 </html>
+<!-- PART 2/2 END -->
