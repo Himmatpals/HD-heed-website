@@ -43,10 +43,45 @@
     display:flex; align-items:center; gap:12px; padding:12px 16px;
     max-width:1120px; margin:0 auto;
   }
-  .brand{display:flex; align-items:center; gap:10px}
-  .brand .name{font-weight:900; letter-spacing:.2px}
-  .brand .tag{font-size:12px; color:#b6c8ff}
+  .brand{
+    display:flex; align-items:center; gap:12px;
+  }
+  .brand img{
+    height:42px;
+    border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,.5);
+  }
+  .brand-text{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .brand-text .name{
+    font-weight:900;
+    letter-spacing:.2px;
+  }
+  .brand-text .tag{
+    font-size:12px;
+    color:#b6c8ff;
+  }
+  .biz-details{
+    font-size:12px;
+    color:#c5d5ff;
+    text-align:right;
+  }
+  .biz-details div{ white-space:nowrap }
   .hint{font-size:12px; color:#9fb4ff}
+
+  @media (max-width:720px){
+    header .bar{
+      flex-direction:column;
+      align-items:flex-start;
+      gap:6px;
+    }
+    .biz-details{
+      text-align:left;
+    }
+  }
 
   /* Hero */
   .hero{ max-width:1120px; margin:14px auto 0; padding:16px; }
@@ -256,10 +291,17 @@
 <header>
   <div class="bar">
     <div class="brand">
-      <div class="name">HD HeeD</div>
-      <div class="tag">AILR — Advanced Intake & Long-form Registration</div>
+      <img src="hdheed.jpg" alt="HD HeeD logo">
+      <div class="brand-text">
+        <div class="name">HD HeeD</div>
+        <div class="tag">AILR — Advanced Intake &amp; Long-form Registration</div>
+      </div>
     </div>
-    <div style="margin-left:auto" class="hint">Desktop-optimised • Mobile-friendly • Autosaves • You can pause and return anytime</div>
+    <div style="margin-left:auto" class="biz-details">
+      <div>HD HeeD Pty Ltd &nbsp;•&nbsp; ABN 47 665 228 768</div>
+      <div>info@hdheed.com.au &nbsp;•&nbsp; 02 8630 5500</div>
+      <div>www.hdheed.com.au</div>
+    </div>
   </div>
 </header>
 
@@ -348,7 +390,7 @@
     { id:"emergency_med", title:"Consent for Emergency Medical Treatment", requiresConsent:true,
       fileUrl:"https://drive.google.com/file/d/1mGUnc7z9gVkYw3KEC6qiEhBxOUrB_zIx/view?usp=sharing" },
     { id:"complaints_feedback", title:"Complaints and Feedback Form", requiresConsent:false,
-      fileUrl:"https://drive.google.com/file/d/12fK9zFbu0SnXyJ0Zs77hOvdXp-D9bwDU/view?usp=sharing" },
+      fileUrl:"https://drive.google.com/file/d/12fK9zFbu0SnXyJ0z77hOvdXp-D9bwDU/view?usp=sharing" },
     { id:"advocacy_auth", title:"Authority to Act as an Advocate", requiresConsent:true,
       fileUrl:"https://drive.google.com/file/d/1Ips2uYAXgsg_35ATUJzsWpad4haMlAtD/view?usp=sharing" },
     { id:"key_authority", title:"Authority to Hold a Key", requiresConsent:true,
@@ -403,7 +445,7 @@
     risks:{
       behavioural:{ present:null, notes:null },
       clinical:{ wounds:false, diabetes:false, tracheostomy:false, tube_feeding:false, mental_health:false, stoma_care:false, other:null },
-      environmental:{ animals:false, hoarding:false, weapons:false, other:null },
+      environmental:{ animals:false, hoarding:false, other:null, weapons:false },
       home_checklist:{ trip_hazards:false, smoke_alarms:false, lighting:false, bathroom_safety:false, notes:null },
       other_notes:null,
       overall_rating:"Not sure"
@@ -1068,7 +1110,7 @@
           input("Your email (for our records on the form)", S.submitter, "email")
         ]));
         m.appendChild(input("Your best contact number", S.submitter, "phone"));
-        var info = el("div","hint","When you click “Download full form (PDF)”, a new window/tab will open with your full admission form. Use your browser’s “Print” → “Save as PDF”, then email that PDF to info@hdheed.com.au.");
+        var info = el("div","hint","When you click “Download full form (PDF view)”, a new window/tab will open with your full admission form. Use your browser’s “Print” → “Save as PDF”, then email that PDF to info@hdheed.com.au.");
         m.appendChild(info);
 
         var btnRow = el("div");
@@ -1337,7 +1379,17 @@
     var html = "<!DOCTYPE html><html><head><meta charset='utf-8'><title>HD HeeD AILR — Admission Form</title>";
     html += "<style>body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:20px;color:#111;background:#fff;}h1,h2{color:#111;}h1{font-size:22px;margin-bottom:4px;}h2{font-size:18px;margin-top:18px;margin-bottom:6px;}table{border-collapse:collapse;width:100%;margin-bottom:12px;}th,td{border:1px solid #ccc;padding:6px 8px;font-size:13px;text-align:left;vertical-align:top;}th{background:#f5f5f5;width:260px;}small{color:#555;}@media print{body{margin:10mm;}table{page-break-inside:avoid;}}</style>";
     html += "</head><body>";
-    html += "<h1>HD HeeD — Advanced Intake & Long-form Registration (AILR)</h1>";
+
+    html += "<div style='display:flex;align-items:center;gap:12px;margin-bottom:10px;'>";
+    html += "<img src='hdheed.jpg' alt='HD HeeD logo' style='height:60px;border-radius:10px;margin-right:4px;'>";
+    html += "<div>";
+    html += "<div style='font-size:20px;font-weight:700;'>HD HeeD Pty Ltd</div>";
+    html += "<div>ABN 47 665 228 768</div>";
+    html += "<div>info@hdheed.com.au &nbsp;&bull;&nbsp; 02 8630 5500</div>";
+    html += "<div>www.hdheed.com.au</div>";
+    html += "</div></div>";
+
+    html += "<h1>Advanced Intake & Long-form Registration (AILR)</h1>";
     html += "<small>Date generated: "+new Date().toLocaleString()+"</small>";
 
     function tableStart(title){ return "<h2>"+title+"</h2><table>"; }
@@ -1543,7 +1595,18 @@
     if (!w){ alert("Please allow pop-ups to view the printable summary."); return; }
     var html = "<!DOCTYPE html><html><head><meta charset='utf-8'><title>AILR — Summary</title>";
     html += "<style>body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:20px;color:#111;}h1{font-size:20px;margin-bottom:8px;}details{margin-bottom:8px;}summary{font-weight:bold;cursor:pointer;}table{border-collapse:collapse;width:100%;margin-bottom:8px;}th,td{border:1px solid #ccc;padding:4px 6px;font-size:12px;text-align:left;}@media print{body{margin:10mm;}}</style>";
-    html += "</head><body><h1>AILR — Summary (for quick review)</h1>";
+    html += "</head><body>";
+
+    html += "<div style='display:flex;align-items:center;gap:12px;margin-bottom:10px;'>";
+    html += "<img src='hdheed.jpg' alt='HD HeeD logo' style='height:50px;border-radius:10px;margin-right:4px;'>";
+    html += "<div>";
+    html += "<div style='font-size:18px;font-weight:700;'>HD HeeD Pty Ltd</div>";
+    html += "<div>ABN 47 665 228 768</div>";
+    html += "<div>info@hdheed.com.au &nbsp;&bull;&nbsp; 02 8630 5500</div>";
+    html += "<div>www.hdheed.com.au</div>";
+    html += "</div></div>";
+
+    html += "<h1>AILR — Summary (for quick review)</h1>";
     var rev = renderReview();
     html += rev.outerHTML;
     html += "<p><strong>Note:</strong> This is a lighter summary. For the full admission document, please use the “Download full form (PDF view)” option on the main form.</p>";
