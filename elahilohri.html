@@ -205,7 +205,6 @@
     p2YVal: document.getElementById('p2YVal'),
   };
 
-  // Event details (used on the details slide)
   const DETAILS = {
     title: "Elahi’s Lohri",
     dateLine: "28 January 2026",
@@ -213,11 +212,9 @@
     venueLine: "Thousand Spices",
   };
 
-  // SAFE bitmaps live here (fix for “preview ok but record missing photos”)
   const imgs = { bg1:null, bg2:null, bg3:null, bg4:null, p1:null, p2:null };
   let raf=null;
 
-  // Sparkle particles
   const sparkles = Array.from({length: 70}, () => ({
     x: Math.random()*W,
     y: Math.random()*H,
@@ -242,17 +239,14 @@
   });
   setValLabels();
 
-  // Create SAFE bitmap from image file
   async function loadSafeBitmap(file, label){
     if(!file) return null;
 
-    // 1) Best path: createImageBitmap(file)
     try{
       const bmp = await createImageBitmap(file);
       return bmp;
     }catch(e){ /* fall back */ }
 
-    // 2) Fallback: Image -> canvas -> bitmap
     return new Promise((resolve) => {
       const url = URL.createObjectURL(file);
       const im = new Image();
@@ -333,7 +327,56 @@
     ctx.restore();
   }
 
-  function textBlock({y, lines, size=64, weight=700}){
+  // ===== TEXT: WRAP + AUTO-SHRINK (Fixes “out of frame”) =====
+  function wrapTextLines(text, maxWidth, font) {
+    ctx.save();
+    ctx.font = font;
+    const words = String(text).split(/\s+/);
+    const out = [];
+    let line = "";
+    for (const w of words) {
+      const test = line ? (line + " " + w) : w;
+      if (ctx.measureText(test).width <= maxWidth) {
+        line = test;
+      } else {
+        if (line) out.push(line);
+        line = w;
+      }
+    }
+    if (line) out.push(line);
+    ctx.restore();
+    return out;
+  }
+
+  function textBlock({ y, lines, size=64, weight=700, maxWidth=860, minSize=34, lineGap=1.18 }) {
+    const safeX = 110;
+    const safeW = W - safeX*2;
+    const w = Math.min(maxWidth, safeW);
+
+    let fontSize = size;
+    let flat = [];
+
+    while (fontSize >= minSize) {
+      flat = [];
+      const font = `${weight} ${fontSize}px Georgia, "Times New Roman", serif`;
+
+      for (const item of lines) {
+        const parts = String(item).split("\n");
+        for (const p of parts) {
+          const wrapped = wrapTextLines(p, w, font);
+          flat.push(...wrapped);
+        }
+      }
+
+      ctx.save();
+      ctx.font = `${weight} ${fontSize}px Georgia, "Times New Roman", serif`;
+      const tooWide = flat.some(t => ctx.measureText(t).width > w);
+      ctx.restore();
+
+      if (!tooWide) break;
+      fontSize -= 2;
+    }
+
     ctx.save();
     ctx.textAlign="center";
     ctx.textBaseline="middle";
@@ -341,12 +384,15 @@
     ctx.shadowColor="rgba(0,0,0,0.65)";
     ctx.shadowBlur=18;
     ctx.shadowOffsetY=6;
-    ctx.font=`${weight} ${size}px Georgia, "Times New Roman", serif`;
-    const lineH=size*1.2;
-    const startY=y - ((lines.length-1)*lineH)/2;
-    lines.forEach((t,i)=>ctx.fillText(t, W/2, startY + i*lineH));
+    ctx.font=`${weight} ${fontSize}px Georgia, "Times New Roman", serif`;
+
+    const lineH = fontSize * lineGap;
+    const startY = y - ((flat.length-1)*lineH)/2;
+
+    flat.forEach((t,i)=>ctx.fillText(t, W/2, startY + i*lineH));
     ctx.restore();
   }
+  // ==========================================================
 
   function roundRect(x,y,w,h,r){
     ctx.beginPath();
@@ -382,7 +428,6 @@
   function drawPhotoInFrame(photoBmp, controls){
     if(!photoBmp) return;
 
-    // Inner window — adjust if you change frame design
     const inner = { x:190, y:260, w:700, h:1180, r:30 };
 
     const zoom = controls.zoom;
@@ -405,16 +450,8 @@
     ctx.restore();
   }
 
-  // ✅ SIX slides total (4 backgrounds + 2 photo slides)
   function slideCount(){ return 6; }
 
-  // Map slides to background frames:
-  // 0 = bg4 + Photo1
-  // 1 = bg1
-  // 2 = bg2
-  // 3 = bg3 (details)
-  // 4 = bg1 or bg2 (we use bg1 for festive mood)
-  // 5 = bg4 + Photo2
   function drawSlide(idx, t){
     ctx.clearRect(0,0,W,H);
     const kb = 0.02;
@@ -424,74 +461,68 @@
     const p1Ctl = { zoom: +el.p1Zoom.value, x: +el.p1X.value, y: +el.p1Y.value };
     const p2Ctl = { zoom: +el.p2Zoom.value, x: +el.p2X.value, y: +el.p2Y.value };
 
-    // Slide 1 (Elahi photo) — "Please Join Us..."
     if(idx===0){
       coverDraw(imgs.bg4,{scaleBoost:1.01});
       glowOverlay(0.75);
       if(imgs.p1) drawPhotoInFrame(imgs.p1, p1Ctl);
       drawSparkles(t);
 
-      textBlock({ y:H*0.16, size:92, lines:["Please Join Us"]});
-      textBlock({ y:H*0.25, size:44, weight:500, lines:["for a warm celebration of"]});
-      textBlock({ y:H*0.84, size:58, weight:700, lines:[DETAILS.title]});
+      textBlock({ y:H*0.16, size:92, weight:800, maxWidth:860, lines:["Please Join Us"]});
+      textBlock({ y:H*0.25, size:44, weight:500, maxWidth:860, lines:["for a warm celebration of"]});
+      textBlock({ y:H*0.84, size:58, weight:700, maxWidth:860, lines:[DETAILS.title]});
       return;
     }
 
-    // Slide 2 — "Please join us to celebrate Elahi’s Lohri"
     if(idx===1){
       coverDraw(imgs.bg1,{scaleBoost:1+kb, panX, panY});
       glowOverlay(1);
       drawSparkles(t);
 
-      textBlock({ y:H*0.38, size:70, weight:600, lines:["Please join us to celebrate"]});
-      textBlock({ y:H*0.50, size:108, lines:["Elahi’s Lohri"]});
+      textBlock({ y:H*0.36, size:68, weight:600, maxWidth:860, lines:["Please join us to celebrate"]});
+      textBlock({ y:H*0.50, size:104, weight:800, maxWidth:860, lines:["Elahi’s Lohri"]});
       return;
     }
 
-    // Slide 3 — "Make this occasion more joyful..."
     if(idx===2){
       coverDraw(imgs.bg2,{scaleBoost:1+kb, panX, panY});
       glowOverlay(1);
       drawSparkles(t);
 
-      textBlock({ y:H*0.44, size:72, weight:600, lines:["Make this occasion more joyful"]});
-      textBlock({ y:H*0.56, size:66, weight:500, lines:["with your gracious presence"]});
+      textBlock({ y:H*0.45, size:70, weight:600, maxWidth:860, lines:["Make this occasion more joyful"]});
+      textBlock({ y:H*0.58, size:64, weight:500, maxWidth:860, lines:["with your gracious presence"]});
       return;
     }
 
-    // Slide 4 — Date & Time + venue pills
     if(idx===3){
       coverDraw(imgs.bg3,{scaleBoost:1+kb, panX, panY});
       glowOverlay(1);
       drawSparkles(t);
 
-      textBlock({ y:H*0.24, size:90, lines:["Date & Time"]});
+      textBlock({ y:H*0.24, size:90, weight:800, maxWidth:860, lines:["Date & Time"]});
       pill({ y:H*0.42, icon:"📅", label:DETAILS.dateLine });
       pill({ y:H*0.53, icon:"⏰", label:DETAILS.timeLine });
       pill({ y:H*0.64, icon:"📍", label:DETAILS.venueLine });
       return;
     }
 
-    // Slide 5 — "An evening of warmth..."
     if(idx===4){
       coverDraw(imgs.bg1,{scaleBoost:1+kb, panX, panY});
       glowOverlay(1);
       drawSparkles(t);
 
-      textBlock({ y:H*0.45, size:72, weight:600, lines:["An evening of warmth, tradition,"]});
-      textBlock({ y:H*0.57, size:78, weight:700, lines:["and togetherness"]});
+      textBlock({ y:H*0.45, size:70, weight:600, maxWidth:860, lines:["An evening of warmth, tradition,"]});
+      textBlock({ y:H*0.58, size:76, weight:800, maxWidth:860, lines:["and togetherness"]});
       return;
     }
 
-    // Slide 6 (Elahi photo) — "See you there"
     if(idx===5){
       coverDraw(imgs.bg4,{scaleBoost:1.01});
       glowOverlay(0.75);
       if(imgs.p2) drawPhotoInFrame(imgs.p2, p2Ctl);
       drawSparkles(t);
 
-      textBlock({ y:H*0.16, size:84, lines:[DETAILS.title]});
-      textBlock({ y:H*0.84, size:80, weight:700, lines:["See you there"]});
+      textBlock({ y:H*0.16, size:84, weight:800, maxWidth:860, lines:[DETAILS.title]});
+      textBlock({ y:H*0.84, size:80, weight:800, maxWidth:860, lines:["See you there"]});
       return;
     }
   }
@@ -532,7 +563,7 @@
       return;
     }
 
-    // fold default (soft)
+    // fold default
     ctx.clearRect(0,0,W,H);
     const first = e < 0.5;
     const k = first ? (1 - e*2) : ((e-0.5)*2);
@@ -699,7 +730,6 @@
     setTimeout(()=>URL.revokeObjectURL(url), 2000);
   });
 
-  // Initial screen
   ctx.fillStyle="#000"; ctx.fillRect(0,0,W,H);
   ctx.fillStyle="rgba(255,255,255,.85)";
   ctx.font="700 44px system-ui, -apple-system, Segoe UI, Roboto, Arial";
