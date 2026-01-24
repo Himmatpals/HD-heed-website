@@ -1,201 +1,713 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Elahi’s Lohri Invitation</title>
-
-<style>
-:root { color-scheme: dark; }
-body{
-  margin:0; padding:16px; min-height:100vh;
-  display:grid; place-items:center; gap:12px;
-  background:#0b0b0b; color:#fff;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-}
-.wrap{ width:min(560px,96vw); display:grid; gap:10px; }
-.card{
-  background:#121212; border:1px solid rgba(255,255,255,.08);
-  border-radius:14px; padding:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-  display:grid; gap:10px;
-}
-canvas{
-  width:min(390px,92vw); aspect-ratio:9/16;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);
-  background:#000;
-}
-.two{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.three{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
-@media (max-width:560px){ .two,.three{ grid-template-columns:1fr; } }
-label{ font-size:13px; opacity:.9; }
-input, select{ width:100%; background:#1a1a1a; color:#fff;
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:10px; padding:10px; }
-input[type=range]{ accent-color:#f6c65b; }
-button{
-  width:100%; border:0; border-radius:12px;
-  padding:12px; font-weight:800;
-  background:#f6c65b; color:#1b1305;
-}
-button.secondary{
-  background:#2a2a2a; color:#fff;
-  border:1px solid rgba(255,255,255,.12);
-}
-button:disabled{ opacity:.55; }
-.hint{ font-size:12px; opacity:.75; line-height:1.35; }
-.divider{ height:1px; background:rgba(255,255,255,.08); }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elahi's Lohri Invitation (Recorder)</title>
+  <style>
+    :root { color-scheme: dark; }
+    body{
+      margin:0; padding:16px; min-height:100vh;
+      display:grid; place-items:center; gap:12px;
+      background:#0b0b0b; color:#fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .wrap{ width:min(560px,96vw); display:grid; gap:10px; }
+    .card{
+      background:#121212;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      display:grid; gap:10px;
+    }
+    canvas{
+      width:min(390px,92vw);
+      aspect-ratio:9/16;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:#000;
+    }
+    .two{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .three{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+    @media (max-width: 560px){ .two,.three{ grid-template-columns:1fr; } }
+    label{ font-size:13px; opacity:.9; }
+    input[type="file"], select, input[type="number"], input[type="range"]{ width:100%; }
+    select, input[type="number"]{
+      background:#1a1a1a; color:#fff;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:10px; padding:10px; outline:none;
+    }
+    input[type="file"]{
+      padding:8px; background:#1a1a1a;
+      border-radius:10px; border:1px solid rgba(255,255,255,.14);
+    }
+    input[type="range"]{ accent-color:#f6c65b; }
+    button{
+      width:100%;
+      border:0; border-radius:12px;
+      padding:12px 14px;
+      font-weight:800; cursor:pointer;
+      background:#f6c65b; color:#1b1305;
+    }
+    button.secondary{
+      background:#2a2a2a; color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-weight:700;
+    }
+    button:disabled{ opacity:.55; cursor:not-allowed; }
+    .hint{ font-size:12px; opacity:.75; line-height:1.35; }
+    .tiny{ font-size:12px; opacity:.72; line-height:1.3; }
+    .divider{ height:1px; background:rgba(255,255,255,.08); margin:4px 0; }
+    .sectionTitle{ font-size:13px; font-weight:800; opacity:.9; margin-top:4px; }
+    .kv{ display:flex; justify-content:space-between; gap:10px; font-size:12px; opacity:.8; }
+    .kv span{ white-space:nowrap; }
+    .warn{
+      background:rgba(246,198,91,.08);
+      border:1px solid rgba(246,198,91,.35);
+      padding:10px; border-radius:12px;
+    }
+  </style>
 </head>
-
 <body>
-<div class="wrap">
-<canvas id="c" width="1080" height="1920"></canvas>
+  <div class="wrap">
+    <canvas id="c" width="1080" height="1920"></canvas>
 
-<div class="card">
+    <div class="card">
+      <div class="warn tiny">
+        ✅ If Elahi photos show in Preview but disappear in the downloaded video: this page converts uploads into a <b>safe bitmap</b> before recording (fixes many Android/Chrome recorder bugs).<br>
+        If your phone photo is <b>HEIC</b>, convert to JPG/PNG first.
+      </div>
 
-<div class="two">
-  <div><label>Background 1</label><input id="bg1" type="file" accept="image/*"></div>
-  <div><label>Background 2</label><input id="bg2" type="file" accept="image/*"></div>
-</div>
+      <div class="two">
+        <div><label>Background 1 (bonfire / festive)</label><input id="bg1" type="file" accept="image/*" /></div>
+        <div><label>Background 2 (venue / ambience)</label><input id="bg2" type="file" accept="image/*" /></div>
+      </div>
 
-<div class="two">
-  <div><label>Background 3</label><input id="bg3" type="file" accept="image/*"></div>
-  <div><label>Frame Background</label><input id="bg4" type="file" accept="image/*"></div>
-</div>
+      <div class="two">
+        <div><label>Background 3 (date / calendar style)</label><input id="bg3" type="file" accept="image/*" /></div>
+        <div><label>Background 4 (gold frame)</label><input id="bg4" type="file" accept="image/*" /></div>
+      </div>
 
-<div class="two">
-  <div><label>Elahi Photo (Front)</label><input id="p1" type="file" accept="image/*"></div>
-  <div><label>Elahi Photo (End)</label><input id="p2" type="file" accept="image/*"></div>
-</div>
+      <div class="two">
+        <div><label>Elahi Photo 1 (FRONT slide)</label><input id="p1" type="file" accept="image/*" /></div>
+        <div><label>Elahi Photo 2 (END slide)</label><input id="p2" type="file" accept="image/*" /></div>
+      </div>
 
-<div class="two">
-  <button id="previewBtn" class="secondary">Preview</button>
-  <button id="recordBtn" disabled>Record & Download</button>
-</div>
+      <div class="two">
+        <div>
+          <label>Background Music (optional MP3)</label>
+          <input id="music" type="file" accept="audio/*" />
+          <div class="tiny">Desktop Chrome records audio best. Some phones may record silent video.</div>
+        </div>
+        <div>
+          <label>Transition Style</label>
+          <select id="transition">
+            <option value="fold">Fold (premium)</option>
+            <option value="slide">Slide</option>
+            <option value="zoom">Zoom (Ken Burns)</option>
+            <option value="fade">Fade</option>
+          </select>
+        </div>
+      </div>
 
-<div class="hint">
-• Upload all 4 backgrounds  
-• Upload Elahi photo for first & last slide  
-• Preview → Record → WhatsApp-ready video
-</div>
+      <div class="two">
+        <div><label>Seconds per slide</label><input id="slideSec" type="number" min="2" max="10" step="0.5" value="4.0" /></div>
+        <div><label>Transition seconds</label><input id="fadeSec" type="number" min="0.5" max="3" step="0.1" value="0.8" /></div>
+      </div>
 
-</div>
-</div>
+      <div class="divider"></div>
+      <div class="sectionTitle">Fit Elahi photos inside frame</div>
+
+      <div class="three">
+        <div>
+          <label>Photo 1 Zoom</label>
+          <input id="p1Zoom" type="range" min="1" max="2.2" step="0.01" value="1.30" />
+          <div class="kv"><span>1.00</span><span id="p1ZoomVal">1.30</span><span>2.20</span></div>
+        </div>
+        <div>
+          <label>Photo 1 X</label>
+          <input id="p1X" type="range" min="-250" max="250" step="1" value="0" />
+          <div class="kv"><span>-250</span><span id="p1XVal">0</span><span>250</span></div>
+        </div>
+        <div>
+          <label>Photo 1 Y</label>
+          <input id="p1Y" type="range" min="-350" max="350" step="1" value="-60" />
+          <div class="kv"><span>-350</span><span id="p1YVal">-60</span><span>350</span></div>
+        </div>
+      </div>
+
+      <div class="three">
+        <div>
+          <label>Photo 2 Zoom</label>
+          <input id="p2Zoom" type="range" min="1" max="2.2" step="0.01" value="1.30" />
+          <div class="kv"><span>1.00</span><span id="p2ZoomVal">1.30</span><span>2.20</span></div>
+        </div>
+        <div>
+          <label>Photo 2 X</label>
+          <input id="p2X" type="range" min="-250" max="250" step="1" value="0" />
+          <div class="kv"><span>-250</span><span id="p2XVal">0</span><span>250</span></div>
+        </div>
+        <div>
+          <label>Photo 2 Y</label>
+          <input id="p2Y" type="range" min="-350" max="350" step="1" value="-60" />
+          <div class="kv"><span>-350</span><span id="p2YVal">-60</span><span>350</span></div>
+        </div>
+      </div>
+
+      <div class="tiny">Tip: adjust <b>Y</b> for up/down, <b>Zoom</b> for size, <b>X</b> for left/right.</div>
+
+      <div class="divider"></div>
+      <div class="two">
+        <button id="previewBtn" class="secondary">Preview</button>
+        <button id="recordBtn" disabled>Record & Download Video</button>
+      </div>
+
+      <div class="hint">
+        • Upload all 4 backgrounds. Elahi Photo 1 is first, Elahi Photo 2 is last.<br>
+        • Downloads as <b>.webm</b> (WhatsApp supports it). Convert to MP4 if needed.
+      </div>
+    </div>
+  </div>
 
 <script>
 (() => {
-const W=1080,H=1920,FPS=30;
-const canvas=document.getElementById('c');
-const ctx=canvas.getContext('2d');
+  const W=1080, H=1920, FPS=30;
+  const canvas=document.getElementById('c');
+  const ctx=canvas.getContext('2d');
 
-const el={
- bg1:bg1,bg2:bg2,bg3:bg3,bg4:bg4,p1:p1,p2:p2,
- preview:previewBtn, record:recordBtn
-};
+  const el = {
+    bg1: document.getElementById('bg1'),
+    bg2: document.getElementById('bg2'),
+    bg3: document.getElementById('bg3'),
+    bg4: document.getElementById('bg4'),
+    p1: document.getElementById('p1'),
+    p2: document.getElementById('p2'),
+    music: document.getElementById('music'),
+    transition: document.getElementById('transition'),
+    slideSec: document.getElementById('slideSec'),
+    fadeSec: document.getElementById('fadeSec'),
+    previewBtn: document.getElementById('previewBtn'),
+    recordBtn: document.getElementById('recordBtn'),
 
-const TEXT = [
-  ["Please Join Us"],
-  ["Please join us to celebrate","Elahi’s Lohri"],
-  ["Make this occasion more joyful","with your gracious presence"],
-  ["28 January 2026","10:00 AM","Thousand Spices"],
-  ["An evening of warmth, tradition,","and togetherness"],
-  ["See you there"]
-];
+    p1Zoom: document.getElementById('p1Zoom'),
+    p1X: document.getElementById('p1X'),
+    p1Y: document.getElementById('p1Y'),
+    p2Zoom: document.getElementById('p2Zoom'),
+    p2X: document.getElementById('p2X'),
+    p2Y: document.getElementById('p2Y'),
 
-const imgs={};
-async function loadBitmap(f){
- if(!f) return null;
- try{ return await createImageBitmap(f); }
- catch(e){ return null; }
-}
+    p1ZoomVal: document.getElementById('p1ZoomVal'),
+    p1XVal: document.getElementById('p1XVal'),
+    p1YVal: document.getElementById('p1YVal'),
+    p2ZoomVal: document.getElementById('p2ZoomVal'),
+    p2XVal: document.getElementById('p2XVal'),
+    p2YVal: document.getElementById('p2YVal'),
+  };
 
-async function loadAll(){
- imgs.bg1=await loadBitmap(el.bg1.files[0]);
- imgs.bg2=await loadBitmap(el.bg2.files[0]);
- imgs.bg3=await loadBitmap(el.bg3.files[0]);
- imgs.bg4=await loadBitmap(el.bg4.files[0]);
- imgs.p1=await loadBitmap(el.p1.files[0]);
- imgs.p2=await loadBitmap(el.p2.files[0]);
- el.record.disabled=!(imgs.bg1&&imgs.bg2&&imgs.bg3&&imgs.bg4);
-}
+  // Event details (used on the details slide)
+  const DETAILS = {
+    title: "Elahi’s Lohri",
+    dateLine: "28 January 2026",
+    timeLine: "10:00 AM",
+    venueLine: "Thousand Spices",
+  };
 
-function cover(img){
- if(!img) return;
- const s=Math.max(W/img.width,H/img.height);
- ctx.drawImage(img,(W-img.width*s)/2,(H-img.height*s)/2,img.width*s,img.height*s);
-}
+  // SAFE bitmaps live here (fix for “preview ok but record missing photos”)
+  const imgs = { bg1:null, bg2:null, bg3:null, bg4:null, p1:null, p2:null };
+  let raf=null;
 
-function drawText(lines,y){
- ctx.save();
- ctx.textAlign="center";
- ctx.fillStyle="#fff";
- ctx.shadowColor="rgba(0,0,0,.6)";
- ctx.shadowBlur=18;
- let size=72;
- lines.forEach((t,i)=>{
-  ctx.font=`700 ${size}px Georgia`;
-  ctx.fillText(t,W/2,y+i*90);
- });
- ctx.restore();
-}
+  // Sparkle particles
+  const sparkles = Array.from({length: 70}, () => ({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    r: 2 + Math.random()*4,
+    s: 10 + Math.random()*25,
+    a: 0.08 + Math.random()*0.12
+  }));
 
-function drawPhoto(photo){
- if(!photo) return;
- const x=190,y=260,w=700,h=1180;
- ctx.save();
- ctx.beginPath();
- ctx.roundRect(x,y,w,h,30);
- ctx.clip();
- const s=Math.max(w/photo.width,h/photo.height);
- ctx.drawImage(photo,x+(w-photo.width*s)/2,y+(h-photo.height*s)/2,photo.width*s,photo.height*s);
- ctx.restore();
-}
+  function easeInOut(t){ return t<.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b,v)); }
 
-function drawSlide(i){
- ctx.clearRect(0,0,W,H);
- if(i===0){ cover(imgs.bg4); drawPhoto(imgs.p1); drawText(TEXT[0],H*0.18); }
- if(i===1){ cover(imgs.bg1); drawText(TEXT[1],H*0.35); }
- if(i===2){ cover(imgs.bg1); drawText(TEXT[2],H*0.35); }
- if(i===3){ cover(imgs.bg3); drawText(TEXT[3],H*0.35); }
- if(i===4){ cover(imgs.bg2); drawText(TEXT[4],H*0.35); }
- if(i===5){ cover(imgs.bg4); drawPhoto(imgs.p2); drawText(TEXT[5],H*0.82); }
-}
-
-function play(preview,record){
- const dur=4,fade=0.8,total=6;
- let t0=performance.now();
- let rec,stream,chunks=[];
- if(record){
-  stream=canvas.captureStream(FPS);
-  rec=new MediaRecorder(stream,{mimeType:"video/webm"});
-  rec.ondataavailable=e=>chunks.push(e.data);
-  rec.start();
- }
- function frame(now){
-  const t=(now-t0)/1000;
-  const idx=Math.min(Math.floor(t/(dur+fade)),total-1);
-  drawSlide(idx);
-  if(t<(total*(dur+fade))){
-   requestAnimationFrame(frame);
-  }else if(record){
-   rec.stop();
-   rec.onstop=()=>{
-    const blob=new Blob(chunks,{type:"video/webm"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
-    a.download="Elahi-Lohri-Invitation.webm";
-    a.click();
-   };
+  function setValLabels(){
+    el.p1ZoomVal.textContent = (+el.p1Zoom.value).toFixed(2);
+    el.p1XVal.textContent = el.p1X.value;
+    el.p1YVal.textContent = el.p1Y.value;
+    el.p2ZoomVal.textContent = (+el.p2Zoom.value).toFixed(2);
+    el.p2XVal.textContent = el.p2X.value;
+    el.p2YVal.textContent = el.p2Y.value;
   }
- }
- requestAnimationFrame(frame);
-}
+  ["input","change"].forEach(evt=>{
+    [el.p1Zoom,el.p1X,el.p1Y,el.p2Zoom,el.p2X,el.p2Y].forEach(r=>r.addEventListener(evt, setValLabels));
+  });
+  setValLabels();
 
-el.preview.onclick=async()=>{ await loadAll(); play(true,false); };
-el.record.onclick=async()=>{ await loadAll(); play(false,true); };
+  // Create SAFE bitmap from image file
+  async function loadSafeBitmap(file, label){
+    if(!file) return null;
 
+    // 1) Best path: createImageBitmap(file)
+    try{
+      const bmp = await createImageBitmap(file);
+      return bmp;
+    }catch(e){ /* fall back */ }
+
+    // 2) Fallback: Image -> canvas -> bitmap
+    return new Promise((resolve) => {
+      const url = URL.createObjectURL(file);
+      const im = new Image();
+      im.onload = async () => {
+        try{
+          const oc = document.createElement("canvas");
+          oc.width = im.naturalWidth || im.width;
+          oc.height = im.naturalHeight || im.height;
+          const octx = oc.getContext("2d");
+          octx.drawImage(im, 0, 0);
+          URL.revokeObjectURL(url);
+
+          const bmp2 = await createImageBitmap(oc);
+          resolve(bmp2);
+        }catch(err){
+          alert("Could not load " + label + ". Please use JPG/PNG (not HEIC).");
+          resolve(null);
+        }
+      };
+      im.onerror = () => {
+        URL.revokeObjectURL(url);
+        alert("Could not load " + label + ". Please use JPG/PNG (not HEIC).");
+        resolve(null);
+      };
+      im.src = url;
+    });
+  }
+
+  async function loadAll(){
+    imgs.bg1 = await loadSafeBitmap(el.bg1.files[0], "Background 1");
+    imgs.bg2 = await loadSafeBitmap(el.bg2.files[0], "Background 2");
+    imgs.bg3 = await loadSafeBitmap(el.bg3.files[0], "Background 3");
+    imgs.bg4 = await loadSafeBitmap(el.bg4.files[0], "Background 4");
+    imgs.p1  = await loadSafeBitmap(el.p1.files[0],  "Elahi Photo 1");
+    imgs.p2  = await loadSafeBitmap(el.p2.files[0],  "Elahi Photo 2");
+
+    el.recordBtn.disabled = !(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4);
+  }
+
+  function coverDraw(bmp, opts={}){
+    if(!bmp) return;
+    const {alpha=1, panX=0, panY=0, scaleBoost=1} = opts;
+    ctx.save();
+    ctx.globalAlpha=alpha;
+
+    const iw=bmp.width, ih=bmp.height;
+    const base=Math.max(W/iw, H/ih) * scaleBoost;
+    const sw=iw*base, sh=ih*base;
+    const dx=(W-sw)/2 + panX;
+    const dy=(H-sh)/2 + panY;
+    ctx.drawImage(bmp, dx, dy, sw, sh);
+    ctx.restore();
+  }
+
+  function glowOverlay(alpha=1){
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    const g=ctx.createRadialGradient(W*.5,H*.30,80, W*.5,H*.30,H*1.0);
+    g.addColorStop(0,"rgba(255,220,140,0.22)");
+    g.addColorStop(1,"rgba(0,0,0,0.58)");
+    ctx.fillStyle=g;
+    ctx.fillRect(0,0,W,H);
+    ctx.restore();
+  }
+
+  function drawSparkles(t){
+    ctx.save();
+    ctx.globalCompositeOperation="screen";
+    for(const p of sparkles){
+      const yy = (p.y + (t*p.s)) % (H+200) - 100;
+      const tw = 0.5 + 0.5*Math.sin((t*1.6) + p.x*0.002);
+      ctx.globalAlpha = p.a * (0.6 + tw);
+      ctx.beginPath();
+      ctx.arc(p.x, yy, p.r*(0.7+tw), 0, Math.PI*2);
+      ctx.fillStyle="rgba(255,210,140,1)";
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function textBlock({y, lines, size=64, weight=700}){
+    ctx.save();
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillStyle="rgba(255,245,220,0.98)";
+    ctx.shadowColor="rgba(0,0,0,0.65)";
+    ctx.shadowBlur=18;
+    ctx.shadowOffsetY=6;
+    ctx.font=`${weight} ${size}px Georgia, "Times New Roman", serif`;
+    const lineH=size*1.2;
+    const startY=y - ((lines.length-1)*lineH)/2;
+    lines.forEach((t,i)=>ctx.fillText(t, W/2, startY + i*lineH));
+    ctx.restore();
+  }
+
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  function pill({y, icon, label}){
+    ctx.save();
+    const padX=34;
+    ctx.font=`600 44px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+    const textW=ctx.measureText(label).width;
+    const w=textW + padX*2 + 70, h=88;
+    const x=(W-w)/2;
+
+    ctx.globalAlpha=0.92;
+    ctx.fillStyle="rgba(0,0,0,0.46)";
+    roundRect(x, y-h/2, w, h, 26);
+    ctx.fill();
+
+    ctx.globalAlpha=1;
+    ctx.fillStyle="rgba(255,240,210,0.98)";
+    ctx.textAlign="left"; ctx.textBaseline="middle";
+    ctx.fillText(icon, x+26, y);
+    ctx.fillText(label, x+26+54, y);
+    ctx.restore();
+  }
+
+  function drawPhotoInFrame(photoBmp, controls){
+    if(!photoBmp) return;
+
+    // Inner window — adjust if you change frame design
+    const inner = { x:190, y:260, w:700, h:1180, r:30 };
+
+    const zoom = controls.zoom;
+    const offX = controls.x;
+    const offY = controls.y;
+
+    ctx.save();
+    roundRect(inner.x,inner.y,inner.w,inner.h,inner.r);
+    ctx.clip();
+
+    const iw=photoBmp.width, ih=photoBmp.height;
+    const base = Math.max(inner.w/iw, inner.h/ih);
+    const s = base * zoom;
+
+    const sw=iw*s, sh=ih*s;
+    const dx=inner.x + (inner.w - sw)/2 + offX;
+    const dy=inner.y + (inner.h - sh)/2 + offY;
+
+    ctx.drawImage(photoBmp, dx, dy, sw, sh);
+    ctx.restore();
+  }
+
+  // ✅ SIX slides total (4 backgrounds + 2 photo slides)
+  function slideCount(){ return 6; }
+
+  // Map slides to background frames:
+  // 0 = bg4 + Photo1
+  // 1 = bg1
+  // 2 = bg2
+  // 3 = bg3 (details)
+  // 4 = bg1 or bg2 (we use bg1 for festive mood)
+  // 5 = bg4 + Photo2
+  function drawSlide(idx, t){
+    ctx.clearRect(0,0,W,H);
+    const kb = 0.02;
+    const panX = Math.sin(t*0.5)*18;
+    const panY = Math.cos(t*0.45)*12;
+
+    const p1Ctl = { zoom: +el.p1Zoom.value, x: +el.p1X.value, y: +el.p1Y.value };
+    const p2Ctl = { zoom: +el.p2Zoom.value, x: +el.p2X.value, y: +el.p2Y.value };
+
+    // Slide 1 (Elahi photo) — "Please Join Us..."
+    if(idx===0){
+      coverDraw(imgs.bg4,{scaleBoost:1.01});
+      glowOverlay(0.75);
+      if(imgs.p1) drawPhotoInFrame(imgs.p1, p1Ctl);
+      drawSparkles(t);
+
+      textBlock({ y:H*0.16, size:92, lines:["Please Join Us"]});
+      textBlock({ y:H*0.25, size:44, weight:500, lines:["for a warm celebration of"]});
+      textBlock({ y:H*0.84, size:58, weight:700, lines:[DETAILS.title]});
+      return;
+    }
+
+    // Slide 2 — "Please join us to celebrate Elahi’s Lohri"
+    if(idx===1){
+      coverDraw(imgs.bg1,{scaleBoost:1+kb, panX, panY});
+      glowOverlay(1);
+      drawSparkles(t);
+
+      textBlock({ y:H*0.38, size:70, weight:600, lines:["Please join us to celebrate"]});
+      textBlock({ y:H*0.50, size:108, lines:["Elahi’s Lohri"]});
+      return;
+    }
+
+    // Slide 3 — "Make this occasion more joyful..."
+    if(idx===2){
+      coverDraw(imgs.bg2,{scaleBoost:1+kb, panX, panY});
+      glowOverlay(1);
+      drawSparkles(t);
+
+      textBlock({ y:H*0.44, size:72, weight:600, lines:["Make this occasion more joyful"]});
+      textBlock({ y:H*0.56, size:66, weight:500, lines:["with your gracious presence"]});
+      return;
+    }
+
+    // Slide 4 — Date & Time + venue pills
+    if(idx===3){
+      coverDraw(imgs.bg3,{scaleBoost:1+kb, panX, panY});
+      glowOverlay(1);
+      drawSparkles(t);
+
+      textBlock({ y:H*0.24, size:90, lines:["Date & Time"]});
+      pill({ y:H*0.42, icon:"📅", label:DETAILS.dateLine });
+      pill({ y:H*0.53, icon:"⏰", label:DETAILS.timeLine });
+      pill({ y:H*0.64, icon:"📍", label:DETAILS.venueLine });
+      return;
+    }
+
+    // Slide 5 — "An evening of warmth..."
+    if(idx===4){
+      coverDraw(imgs.bg1,{scaleBoost:1+kb, panX, panY});
+      glowOverlay(1);
+      drawSparkles(t);
+
+      textBlock({ y:H*0.45, size:72, weight:600, lines:["An evening of warmth, tradition,"]});
+      textBlock({ y:H*0.57, size:78, weight:700, lines:["and togetherness"]});
+      return;
+    }
+
+    // Slide 6 (Elahi photo) — "See you there"
+    if(idx===5){
+      coverDraw(imgs.bg4,{scaleBoost:1.01});
+      glowOverlay(0.75);
+      if(imgs.p2) drawPhotoInFrame(imgs.p2, p2Ctl);
+      drawSparkles(t);
+
+      textBlock({ y:H*0.16, size:84, lines:[DETAILS.title]});
+      textBlock({ y:H*0.84, size:80, weight:700, lines:["See you there"]});
+      return;
+    }
+  }
+
+  function drawTransition(fromIdx, toIdx, p, type, t){
+    const e = easeInOut(p);
+
+    if(type==="fade"){
+      drawSlide(fromIdx, t);
+      ctx.save(); ctx.globalAlpha = e; drawSlide(toIdx, t); ctx.restore();
+      return;
+    }
+
+    if(type==="slide"){
+      ctx.clearRect(0,0,W,H);
+      ctx.save(); ctx.translate(-e*W,0); drawSlide(fromIdx,t); ctx.restore();
+      ctx.save(); ctx.translate((1-e)*W,0); drawSlide(toIdx,t); ctx.restore();
+      return;
+    }
+
+    if(type==="zoom"){
+      ctx.clearRect(0,0,W,H);
+      ctx.save();
+      ctx.globalAlpha = 1 - e;
+      ctx.translate(W/2,H/2);
+      ctx.scale(1 + e*0.06, 1 + e*0.06);
+      ctx.translate(-W/2,-H/2);
+      drawSlide(fromIdx,t);
+      ctx.restore();
+
+      ctx.save();
+      ctx.globalAlpha = e;
+      ctx.translate(W/2,H/2);
+      ctx.scale(0.94 + e*0.06, 0.94 + e*0.06);
+      ctx.translate(-W/2,-H/2);
+      drawSlide(toIdx,t);
+      ctx.restore();
+      return;
+    }
+
+    // fold default (soft)
+    ctx.clearRect(0,0,W,H);
+    const first = e < 0.5;
+    const k = first ? (1 - e*2) : ((e-0.5)*2);
+    const sX = clamp(k, 0.06, 1);
+    const skew = (first ? 1 : -1) * (0.12 * (1 - sX));
+
+    ctx.save();
+    ctx.translate(W/2, 0);
+    ctx.transform(sX, 0, skew, 1, 0, 0);
+    ctx.translate(-W/2, 0);
+    drawSlide(first ? fromIdx : toIdx, t);
+    ctx.globalCompositeOperation="multiply";
+    ctx.fillStyle = `rgba(0,0,0,${0.18 + (1-sX)*0.45})`;
+    ctx.fillRect(0,0,W,H);
+    ctx.restore();
+  }
+
+  function buildTimeline(){
+    const per = parseFloat(el.slideSec.value || "4.0");
+    const fade = parseFloat(el.fadeSec.value || "0.8");
+    const n = slideCount();
+    const total = (n*per) + ((n-1)*fade);
+
+    const segments=[];
+    let cursor=0;
+    for(let i=0;i<n;i++){
+      segments.push({type:"hold", i, start:cursor, end:cursor+per});
+      cursor += per;
+      if(i<n-1){
+        segments.push({type:"x", from:i, to:i+1, start:cursor, end:cursor+fade});
+        cursor += fade;
+      }
+    }
+    return {n, total, segments};
+  }
+
+  function renderAtTime(t){
+    const tt = Math.max(0,t);
+    const {segments} = buildTimeline();
+    const seg = segments.find(s => tt >= s.start && tt < s.end) || segments[segments.length-1];
+    const mode = el.transition.value || "fold";
+
+    if(seg.type==="hold"){
+      drawSlide(seg.i, tt);
+      return;
+    }
+    const p = (tt - seg.start) / (seg.end - seg.start);
+    drawTransition(seg.from, seg.to, p, mode, tt);
+  }
+
+  async function buildAudioTrack(){
+    const file = el.music.files[0];
+    if(!file) return null;
+
+    const audio = new Audio();
+    audio.src = URL.createObjectURL(file);
+    audio.loop = true;
+    audio.crossOrigin = "anonymous";
+
+    const AudioContext_ = window.AudioContext || window.webkitAudioContext;
+    if(!AudioContext_) return null;
+
+    const ac = new AudioContext_();
+    const source = ac.createMediaElementSource(audio);
+    const dest = ac.createMediaStreamDestination();
+    source.connect(dest);
+    source.connect(ac.destination);
+    return {audio, ac, stream: dest.stream};
+  }
+
+  function animateOnce(onDone){
+    const {total} = buildTimeline();
+    const start = performance.now();
+    function frame(now){
+      const t = (now - start)/1000;
+      renderAtTime(Math.min(t, total));
+      if(t < total){
+        raf = requestAnimationFrame(frame);
+      } else {
+        if(onDone) onDone();
+      }
+    }
+    raf = requestAnimationFrame(frame);
+  }
+
+  el.previewBtn.addEventListener('click', async ()=>{
+    await loadAll();
+    if(!(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4)){
+      alert("Please upload all 4 background images first.");
+      return;
+    }
+    if(raf) cancelAnimationFrame(raf);
+    animateOnce(()=>{});
+  });
+
+  el.recordBtn.addEventListener('click', async ()=>{
+    await loadAll();
+    if(!(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4)){
+      alert("Please upload all 4 background images first.");
+      return;
+    }
+
+    const timeline = buildTimeline();
+    const videoStream = canvas.captureStream(FPS);
+
+    let audioPack = null;
+    try { audioPack = await buildAudioTrack(); } catch(e){ audioPack = null; }
+
+    let stream = videoStream;
+    if(audioPack && audioPack.stream && audioPack.stream.getAudioTracks().length){
+      stream = new MediaStream([
+        ...videoStream.getVideoTracks(),
+        ...audioPack.stream.getAudioTracks()
+      ]);
+    }
+
+    let mime = "video/webm;codecs=vp9";
+    if(!MediaRecorder.isTypeSupported(mime)) mime = "video/webm;codecs=vp8";
+    if(!MediaRecorder.isTypeSupported(mime)) mime = "video/webm";
+
+    const rec = new MediaRecorder(stream, { mimeType:mime, videoBitsPerSecond: 7_000_000 });
+    const chunks=[];
+
+    rec.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
+    const done = new Promise(resolve => rec.onstop = resolve);
+
+    if(audioPack){
+      try{
+        await audioPack.ac.resume();
+        audioPack.audio.currentTime = 0;
+        await audioPack.audio.play();
+      }catch(e){}
+    }
+
+    rec.start(250);
+
+    const start = performance.now();
+    function tick(now){
+      const t = (now - start)/1000;
+      renderAtTime(Math.min(t, timeline.total));
+      if(t < timeline.total){
+        requestAnimationFrame(tick);
+      } else {
+        rec.stop();
+      }
+    }
+    requestAnimationFrame(tick);
+
+    await done;
+
+    if(audioPack){
+      try{ audioPack.audio.pause(); }catch(e){}
+      try{ audioPack.ac.close(); }catch(e){}
+    }
+
+    const blob = new Blob(chunks, {type:mime});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "Elahi-Lohri-Invitation.webm";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 2000);
+  });
+
+  // Initial screen
+  ctx.fillStyle="#000"; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle="rgba(255,255,255,.85)";
+  ctx.font="700 44px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+  ctx.textAlign="center";
+  ctx.fillText("Upload backgrounds + Elahi photos", W/2, H/2 - 40);
+  ctx.fillStyle="rgba(255,255,255,.65)";
+  ctx.font="400 34px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+  ctx.fillText("Adjust fit sliders → Preview → Record", W/2, H/2 + 20);
 })();
 </script>
 </body>
