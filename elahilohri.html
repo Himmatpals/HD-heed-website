@@ -8,13 +8,13 @@
     :root { color-scheme: dark; }
     body{ margin:0; padding:16px; min-height:100vh; display:grid; place-items:center; gap:12px;
       background:#0b0b0b; color:#fff; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    .wrap{ width:min(540px,96vw); display:grid; gap:10px; }
+    .wrap{ width:min(560px,96vw); display:grid; gap:10px; }
     .card{ background:#121212; border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:12px;
       box-shadow:0 10px 30px rgba(0,0,0,.35); display:grid; gap:10px; }
-    canvas{ width:min(380px,92vw); aspect-ratio:9/16; border-radius:14px; border:1px solid rgba(255,255,255,.10); background:#000; }
+    canvas{ width:min(390px,92vw); aspect-ratio:9/16; border-radius:14px; border:1px solid rgba(255,255,255,.10); background:#000; }
     .two{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
     .three{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
-    @media (max-width: 540px){ .two,.three{ grid-template-columns:1fr; } }
+    @media (max-width: 560px){ .two,.three{ grid-template-columns:1fr; } }
     label{ font-size:13px; opacity:.9; }
     input[type="file"], select, input[type="number"], input[type="range"]{ width:100%; }
     select, input[type="number"]{ background:#1a1a1a; color:#fff; border:1px solid rgba(255,255,255,.14);
@@ -39,10 +39,9 @@
     <canvas id="c" width="1080" height="1920"></canvas>
 
     <div class="card">
-
       <div class="warn tiny">
-        If Elahi photos are not showing in the downloaded video, it’s usually because the phone photo is <b>HEIC</b>.
-        Please use <b>JPG or PNG</b> photos (WhatsApp photos are usually JPG).
+        ✅ Fix for “photos missing in downloaded video”: this page converts your uploaded photos into a <b>safe bitmap</b> before recording.<br>
+        If your photo is <b>HEIC</b>, convert to JPG/PNG first (WhatsApp photos are usually JPG).
       </div>
 
       <div class="two">
@@ -52,7 +51,7 @@
 
       <div class="two">
         <div><label>Background 3 (date)</label><input id="bg3" type="file" accept="image/*" /></div>
-        <div><label>Background 4 (gold frame)</label><input id="bg4" type="file" accept="image/*" /></div>
+        <div><label>Background 4 (frame)</label><input id="bg4" type="file" accept="image/*" /></div>
       </div>
 
       <div class="two">
@@ -83,7 +82,6 @@
       </div>
 
       <div class="divider"></div>
-
       <div class="sectionTitle">Fit Elahi photos inside frame</div>
 
       <div class="three">
@@ -122,12 +120,9 @@
         </div>
       </div>
 
-      <div class="tiny">
-        Tip: adjust <b>Y</b> for up/down, <b>Zoom</b> for size, <b>X</b> for left/right.
-      </div>
+      <div class="tiny">Tip: adjust <b>Y</b> for up/down, <b>Zoom</b> for size, <b>X</b> for left/right.</div>
 
       <div class="divider"></div>
-
       <div class="two">
         <button id="previewBtn" class="secondary">Preview</button>
         <button id="recordBtn" disabled>Record & Download Video</button>
@@ -183,6 +178,7 @@
     venueLine: "Thousand Spices",
   };
 
+  // We'll store SAFE bitmaps here (this fixes “preview ok but record missing photos” on some phones)
   const imgs = { bg1:null, bg2:null, bg3:null, bg4:null, p1:null, p2:null };
   let raf=null;
 
@@ -210,43 +206,69 @@
   });
   setValLabels();
 
-  async function loadImageFromFile(file, label){
+  // Create a SAFE bitmap from any image file (works better with MediaRecorder than Image() in some Android builds)
+  async function loadSafeBitmap(file, label){
     if(!file) return null;
+
+    // 1) try createImageBitmap directly (best)
+    try{
+      const bmp = await createImageBitmap(file);
+      return bmp;
+    }catch(e){ /* fallback below */ }
+
+    // 2) fallback: load as Image -> draw to canvas -> create bitmap
     return new Promise((resolve) => {
-      const url=URL.createObjectURL(file);
-      const im=new Image();
-      im.onload=()=>resolve(im);
-      im.onerror=()=> {
+      const url = URL.createObjectURL(file);
+      const im = new Image();
+      im.onload = async () => {
+        try{
+          const oc = document.createElement("canvas");
+          oc.width = im.naturalWidth || im.width;
+          oc.height = im.naturalHeight || im.height;
+          const octx = oc.getContext("2d");
+          octx.drawImage(im, 0, 0);
+          URL.revokeObjectURL(url);
+
+          // createImageBitmap from canvas (safe)
+          const bmp2 = await createImageBitmap(oc);
+          resolve(bmp2);
+        }catch(err){
+          alert("Could not load " + label + ". Please use JPG/PNG (not HEIC).");
+          resolve(null);
+        }
+      };
+      im.onerror = () => {
+        URL.revokeObjectURL(url);
         alert("Could not load " + label + ". Please use JPG/PNG (not HEIC).");
         resolve(null);
       };
-      im.src=url;
+      im.src = url;
     });
   }
 
   async function loadAll(){
-    imgs.bg1 = await loadImageFromFile(el.bg1.files[0], "Background 1");
-    imgs.bg2 = await loadImageFromFile(el.bg2.files[0], "Background 2");
-    imgs.bg3 = await loadImageFromFile(el.bg3.files[0], "Background 3");
-    imgs.bg4 = await loadImageFromFile(el.bg4.files[0], "Background 4");
-    imgs.p1  = await loadImageFromFile(el.p1.files[0],  "Elahi Photo 1");
-    imgs.p2  = await loadImageFromFile(el.p2.files[0],  "Elahi Photo 2");
+    imgs.bg1 = await loadSafeBitmap(el.bg1.files[0], "Background 1");
+    imgs.bg2 = await loadSafeBitmap(el.bg2.files[0], "Background 2");
+    imgs.bg3 = await loadSafeBitmap(el.bg3.files[0], "Background 3");
+    imgs.bg4 = await loadSafeBitmap(el.bg4.files[0], "Background 4");
+    imgs.p1  = await loadSafeBitmap(el.p1.files[0],  "Elahi Photo 1");
+    imgs.p2  = await loadSafeBitmap(el.p2.files[0],  "Elahi Photo 2");
 
     el.recordBtn.disabled = !(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4);
   }
 
-  function coverDraw(im, opts={}){
-    if(!im) return;
+  function coverDraw(bmp, opts={}){
+    if(!bmp) return;
     const {alpha=1, panX=0, panY=0, scaleBoost=1} = opts;
     ctx.save();
     ctx.globalAlpha=alpha;
 
-    const iw=im.width, ih=im.height;
+    const iw=bmp.width, ih=bmp.height;
     const base=Math.max(W/iw, H/ih) * scaleBoost;
     const sw=iw*base, sh=ih*base;
     const dx=(W-sw)/2 + panX;
     const dy=(H-sh)/2 + panY;
-    ctx.drawImage(im, dx, dy, sw, sh);
+    ctx.drawImage(bmp, dx, dy, sw, sh);
     ctx.restore();
   }
 
@@ -322,8 +344,9 @@
     ctx.restore();
   }
 
-  function drawPhotoInFrame(photo, controls){
-    if(!photo) return;
+  function drawPhotoInFrame(photoBmp, controls){
+    if(!photoBmp) return;
+    // inner window (adjust if you change frame)
     const inner = { x:190, y:260, w:700, h:1180, r:30 };
 
     const zoom = controls.zoom;
@@ -334,18 +357,17 @@
     roundRect(inner.x,inner.y,inner.w,inner.h,inner.r);
     ctx.clip();
 
-    const im=photo;
-    const base = Math.max(inner.w/im.width, inner.h/im.height);
+    const iw=photoBmp.width, ih=photoBmp.height;
+    const base = Math.max(inner.w/iw, inner.h/ih);
     const s = base * zoom;
 
-    const sw=im.width*s, sh=im.height*s;
+    const sw=iw*s, sh=ih*s;
     const dx=inner.x + (inner.w - sw)/2 + offX;
     const dy=inner.y + (inner.h - sh)/2 + offY;
 
-    ctx.drawImage(im, dx, dy, sw, sh);
+    ctx.drawImage(photoBmp, dx, dy, sw, sh);
     ctx.restore();
   }
-
   function slideCount(){ return imgs.p2 ? 5 : 4; }
 
   function drawSlide(idx, t){
