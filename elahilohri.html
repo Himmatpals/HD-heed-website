@@ -173,6 +173,10 @@
 <script>
 (() => {
   const W=1080, H=1920, FPS=30;
+
+  // ✅ extra hold so slide 6 stays visible and never gets cut off
+  const END_HOLD_SEC = 1.2;
+
   const canvas=document.getElementById('c');
   const ctx=canvas.getContext('2d');
 
@@ -581,35 +585,55 @@
     ctx.restore();
   }
 
+  // ✅ FIXED timeline: extends final hold so slide 6 is fully visible
   function buildTimeline(){
     const per = parseFloat(el.slideSec.value || "4.0");
     const fade = parseFloat(el.fadeSec.value || "0.8");
     const n = slideCount();
-    const total = (n*per) + ((n-1)*fade);
 
     const segments=[];
     let cursor=0;
+
     for(let i=0;i<n;i++){
       segments.push({type:"hold", i, start:cursor, end:cursor+per});
       cursor += per;
+
       if(i<n-1){
         segments.push({type:"x", from:i, to:i+1, start:cursor, end:cursor+fade});
         cursor += fade;
       }
     }
-    return {n, total, segments};
+
+    // Extend last hold only
+    segments[segments.length - 1].end += END_HOLD_SEC;
+    cursor += END_HOLD_SEC;
+
+    return {n, total: cursor, segments};
   }
 
+  // ✅ FIXED render: if time reaches the end, force last slide
   function renderAtTime(t){
-    const tt = Math.max(0,t);
-    const {segments} = buildTimeline();
-    const seg = segments.find(s => tt >= s.start && tt < s.end) || segments[segments.length-1];
+    const tt = Math.max(0, t);
+    const {segments, n, total} = buildTimeline();
     const mode = el.transition.value || "fold";
+
+    if(tt >= total){
+      drawSlide(n - 1, total - 0.0001);
+      return;
+    }
+
+    const seg = segments.find(s => tt >= s.start && tt < s.end);
+
+    if(!seg){
+      drawSlide(n - 1, tt);
+      return;
+    }
 
     if(seg.type==="hold"){
       drawSlide(seg.i, tt);
       return;
     }
+
     const p = (tt - seg.start) / (seg.end - seg.start);
     drawTransition(seg.from, seg.to, p, mode, tt);
   }
@@ -634,15 +658,19 @@
     return {audio, ac, stream: dest.stream};
   }
 
+  // ✅ FIXED preview: always draws last slide at end
   function animateOnce(onDone){
     const {total} = buildTimeline();
     const start = performance.now();
+
     function frame(now){
       const t = (now - start)/1000;
-      renderAtTime(Math.min(t, total));
+      renderAtTime(t);
+
       if(t < total){
         raf = requestAnimationFrame(frame);
       } else {
+        renderAtTime(total);
         if(onDone) onDone();
       }
     }
@@ -703,10 +731,13 @@
     const start = performance.now();
     function tick(now){
       const t = (now - start)/1000;
-      renderAtTime(Math.min(t, timeline.total));
+      renderAtTime(t);
+
       if(t < timeline.total){
         requestAnimationFrame(tick);
       } else {
+        // ✅ Force last slide drawn before stopping
+        renderAtTime(timeline.total);
         rec.stop();
       }
     }
@@ -730,6 +761,7 @@
     setTimeout(()=>URL.revokeObjectURL(url), 2000);
   });
 
+  // Initial screen
   ctx.fillStyle="#000"; ctx.fillRect(0,0,W,H);
   ctx.fillStyle="rgba(255,255,255,.85)";
   ctx.font="700 44px system-ui, -apple-system, Segoe UI, Roboto, Arial";
