@@ -3,59 +3,35 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Elahi's Lohri Invitation (Slideshow Recorder)</title>
+  <title>Elahi's Lohri Invitation (Recorder)</title>
   <style>
     :root { color-scheme: dark; }
-    body{
-      margin:0; padding:16px; min-height:100vh;
-      display:grid; place-items:center; gap:12px;
-      background:#0b0b0b; color:#fff;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    .wrap{ width:min(460px,95vw); display:grid; gap:10px; }
-    .card{
-      background:#121212;
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      padding:12px;
-      box-shadow:0 10px 30px rgba(0,0,0,.35);
-      display:grid; gap:10px;
-    }
-    canvas{
-      width:min(380px,92vw);
-      aspect-ratio:9/16;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background:#000;
-    }
+    body{ margin:0; padding:16px; min-height:100vh; display:grid; place-items:center; gap:12px;
+      background:#0b0b0b; color:#fff; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    .wrap{ width:min(540px,96vw); display:grid; gap:10px; }
+    .card{ background:#121212; border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.35); display:grid; gap:10px; }
+    canvas{ width:min(380px,92vw); aspect-ratio:9/16; border-radius:14px; border:1px solid rgba(255,255,255,.10); background:#000; }
     .two{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    @media (max-width: 460px){ .two{ grid-template-columns:1fr; } }
+    .three{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+    @media (max-width: 540px){ .two,.three{ grid-template-columns:1fr; } }
     label{ font-size:13px; opacity:.9; }
-    input[type="file"], select, input[type="number"]{ width:100%; }
-    select, input[type="number"]{
-      background:#1a1a1a; color:#fff;
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:10px; padding:10px;
-      outline:none;
-    }
+    input[type="file"], select, input[type="number"], input[type="range"]{ width:100%; }
+    select, input[type="number"]{ background:#1a1a1a; color:#fff; border:1px solid rgba(255,255,255,.14);
+      border-radius:10px; padding:10px; outline:none; }
     input[type="file"]{ padding:8px; background:#1a1a1a; border-radius:10px; border:1px solid rgba(255,255,255,.14); }
-    button{
-      width:100%;
-      border:0; border-radius:12px;
-      padding:12px 14px;
-      font-weight:800;
-      cursor:pointer;
-      background:#f6c65b; color:#1b1305;
-    }
-    button.secondary{
-      background:#2a2a2a; color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-      font-weight:700;
-    }
+    input[type="range"]{ accent-color:#f6c65b; }
+    button{ width:100%; border:0; border-radius:12px; padding:12px 14px; font-weight:800; cursor:pointer;
+      background:#f6c65b; color:#1b1305; }
+    button.secondary{ background:#2a2a2a; color:#fff; border:1px solid rgba(255,255,255,.12); font-weight:700; }
     button:disabled{ opacity:.55; cursor:not-allowed; }
     .hint{ font-size:12px; opacity:.75; line-height:1.35; }
-    .tiny{ font-size:12px; opacity:.75; }
+    .tiny{ font-size:12px; opacity:.72; line-height:1.3; }
     .divider{ height:1px; background:rgba(255,255,255,.08); margin:4px 0; }
+    .sectionTitle{ font-size:13px; font-weight:800; opacity:.9; margin-top:4px; }
+    .kv{ display:flex; justify-content:space-between; gap:10px; font-size:12px; opacity:.8; }
+    .kv span{ white-space:nowrap; }
+    .warn{ background:rgba(246,198,91,.08); border:1px solid rgba(246,198,91,.35); padding:10px; border-radius:12px; }
   </style>
 </head>
 <body>
@@ -63,50 +39,37 @@
     <canvas id="c" width="1080" height="1920"></canvas>
 
     <div class="card">
-      <div class="two">
-        <div>
-          <label>Background 1 (bonfire)</label>
-          <input id="bg1" type="file" accept="image/*" />
-        </div>
-        <div>
-          <label>Background 2 (venue)</label>
-          <input id="bg2" type="file" accept="image/*" />
-        </div>
+
+      <div class="warn tiny">
+        If Elahi photos are not showing in the downloaded video, it’s usually because the phone photo is <b>HEIC</b>.
+        Please use <b>JPG or PNG</b> photos (WhatsApp photos are usually JPG).
       </div>
 
       <div class="two">
-        <div>
-          <label>Background 3 (date)</label>
-          <input id="bg3" type="file" accept="image/*" />
-        </div>
-        <div>
-          <label>Background 4 (gold frame)</label>
-          <input id="bg4" type="file" accept="image/*" />
-        </div>
+        <div><label>Background 1 (bonfire)</label><input id="bg1" type="file" accept="image/*" /></div>
+        <div><label>Background 2 (venue)</label><input id="bg2" type="file" accept="image/*" /></div>
       </div>
 
       <div class="two">
-        <div>
-          <label>Elahi Photo 1 (inside frame slide)</label>
-          <input id="p1" type="file" accept="image/*" />
-        </div>
-        <div>
-          <label>Elahi Photo 2 (optional extra slide)</label>
-          <input id="p2" type="file" accept="image/*" />
-        </div>
+        <div><label>Background 3 (date)</label><input id="bg3" type="file" accept="image/*" /></div>
+        <div><label>Background 4 (gold frame)</label><input id="bg4" type="file" accept="image/*" /></div>
+      </div>
+
+      <div class="two">
+        <div><label>Elahi Photo 1 (FRONT slide)</label><input id="p1" type="file" accept="image/*" /></div>
+        <div><label>Elahi Photo 2 (END slide)</label><input id="p2" type="file" accept="image/*" /></div>
       </div>
 
       <div class="two">
         <div>
           <label>Background Music (optional MP3)</label>
           <input id="music" type="file" accept="audio/*" />
-          <div class="tiny">Tip: desktop Chrome records audio best. Mobile may download silent video depending on device.</div>
+          <div class="tiny">Desktop Chrome records audio best. Some phones may record silent video.</div>
         </div>
         <div>
           <label>Transition Style</label>
           <select id="transition">
             <option value="fold">Fold (premium)</option>
-            <option value="flip">Flip (3D-ish)</option>
             <option value="slide">Slide</option>
             <option value="zoom">Zoom (Ken Burns)</option>
             <option value="fade">Fade</option>
@@ -115,14 +78,52 @@
       </div>
 
       <div class="two">
+        <div><label>Seconds per slide</label><input id="slideSec" type="number" min="2" max="10" step="0.5" value="4.0" /></div>
+        <div><label>Transition seconds</label><input id="fadeSec" type="number" min="0.5" max="3" step="0.1" value="0.8" /></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sectionTitle">Fit Elahi photos inside frame</div>
+
+      <div class="three">
         <div>
-          <label>Seconds per slide</label>
-          <input id="slideSec" type="number" min="2" max="10" step="0.5" value="4.5" />
+          <label>Photo 1 Zoom</label>
+          <input id="p1Zoom" type="range" min="1" max="2.2" step="0.01" value="1.30" />
+          <div class="kv"><span>1.00</span><span id="p1ZoomVal">1.30</span><span>2.20</span></div>
         </div>
         <div>
-          <label>Transition seconds</label>
-          <input id="fadeSec" type="number" min="0.5" max="3" step="0.1" value="1.0" />
+          <label>Photo 1 X</label>
+          <input id="p1X" type="range" min="-250" max="250" step="1" value="0" />
+          <div class="kv"><span>-250</span><span id="p1XVal">0</span><span>250</span></div>
         </div>
+        <div>
+          <label>Photo 1 Y</label>
+          <input id="p1Y" type="range" min="-350" max="350" step="1" value="-60" />
+          <div class="kv"><span>-350</span><span id="p1YVal">-60</span><span>350</span></div>
+        </div>
+      </div>
+
+      <div class="three">
+        <div>
+          <label>Photo 2 Zoom</label>
+          <input id="p2Zoom" type="range" min="1" max="2.2" step="0.01" value="1.30" />
+          <div class="kv"><span>1.00</span><span id="p2ZoomVal">1.30</span><span>2.20</span></div>
+        </div>
+        <div>
+          <label>Photo 2 X</label>
+          <input id="p2X" type="range" min="-250" max="250" step="1" value="0" />
+          <div class="kv"><span>-250</span><span id="p2XVal">0</span><span>250</span></div>
+        </div>
+        <div>
+          <label>Photo 2 Y</label>
+          <input id="p2Y" type="range" min="-350" max="350" step="1" value="-60" />
+          <div class="kv"><span>-350</span><span id="p2YVal">-60</span><span>350</span></div>
+        </div>
+      </div>
+
+      <div class="tiny">
+        Tip: adjust <b>Y</b> for up/down, <b>Zoom</b> for size, <b>X</b> for left/right.
       </div>
 
       <div class="divider"></div>
@@ -133,8 +134,8 @@
       </div>
 
       <div class="hint">
-        • Downloads as <b>.webm</b> (WhatsApp accepts it). If you need MP4, convert with VLC / any converter.<br>
-        • Upload all 4 backgrounds. Photo 1 is recommended. Photo 2 adds an extra slide automatically.
+        • Upload all 4 backgrounds. Photo 1 appears at the start and Photo 2 appears at the end.<br>
+        • Downloads as <b>.webm</b> (WhatsApp supports it). Convert to MP4 if needed.
       </div>
     </div>
   </div>
@@ -158,6 +159,20 @@
     fadeSec: document.getElementById('fadeSec'),
     previewBtn: document.getElementById('previewBtn'),
     recordBtn: document.getElementById('recordBtn'),
+
+    p1Zoom: document.getElementById('p1Zoom'),
+    p1X: document.getElementById('p1X'),
+    p1Y: document.getElementById('p1Y'),
+    p2Zoom: document.getElementById('p2Zoom'),
+    p2X: document.getElementById('p2X'),
+    p2Y: document.getElementById('p2Y'),
+
+    p1ZoomVal: document.getElementById('p1ZoomVal'),
+    p1XVal: document.getElementById('p1XVal'),
+    p1YVal: document.getElementById('p1YVal'),
+    p2ZoomVal: document.getElementById('p2ZoomVal'),
+    p2XVal: document.getElementById('p2XVal'),
+    p2YVal: document.getElementById('p2YVal'),
   };
 
   const DETAILS = {
@@ -171,7 +186,6 @@
   const imgs = { bg1:null, bg2:null, bg3:null, bg4:null, p1:null, p2:null };
   let raf=null;
 
-  // Sparkle particles (subtle)
   const sparkles = Array.from({length: 70}, () => ({
     x: Math.random()*W,
     y: Math.random()*H,
@@ -183,24 +197,40 @@
   function easeInOut(t){ return t<.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; }
   function clamp(v,a,b){ return Math.max(a, Math.min(b,v)); }
 
-  function loadImageFromFile(file){
-    return new Promise((resolve,reject)=>{
-      if(!file) return resolve(null);
+  function setValLabels(){
+    el.p1ZoomVal.textContent = (+el.p1Zoom.value).toFixed(2);
+    el.p1XVal.textContent = el.p1X.value;
+    el.p1YVal.textContent = el.p1Y.value;
+    el.p2ZoomVal.textContent = (+el.p2Zoom.value).toFixed(2);
+    el.p2XVal.textContent = el.p2X.value;
+    el.p2YVal.textContent = el.p2Y.value;
+  }
+  ["input","change"].forEach(evt=>{
+    [el.p1Zoom,el.p1X,el.p1Y,el.p2Zoom,el.p2X,el.p2Y].forEach(r=>r.addEventListener(evt, setValLabels));
+  });
+  setValLabels();
+
+  async function loadImageFromFile(file, label){
+    if(!file) return null;
+    return new Promise((resolve) => {
       const url=URL.createObjectURL(file);
       const im=new Image();
       im.onload=()=>resolve(im);
-      im.onerror=reject;
+      im.onerror=()=> {
+        alert("Could not load " + label + ". Please use JPG/PNG (not HEIC).");
+        resolve(null);
+      };
       im.src=url;
     });
   }
 
   async function loadAll(){
-    imgs.bg1 = await loadImageFromFile(el.bg1.files[0]);
-    imgs.bg2 = await loadImageFromFile(el.bg2.files[0]);
-    imgs.bg3 = await loadImageFromFile(el.bg3.files[0]);
-    imgs.bg4 = await loadImageFromFile(el.bg4.files[0]);
-    imgs.p1  = await loadImageFromFile(el.p1.files[0]);
-    imgs.p2  = await loadImageFromFile(el.p2.files[0]);
+    imgs.bg1 = await loadImageFromFile(el.bg1.files[0], "Background 1");
+    imgs.bg2 = await loadImageFromFile(el.bg2.files[0], "Background 2");
+    imgs.bg3 = await loadImageFromFile(el.bg3.files[0], "Background 3");
+    imgs.bg4 = await loadImageFromFile(el.bg4.files[0], "Background 4");
+    imgs.p1  = await loadImageFromFile(el.p1.files[0],  "Elahi Photo 1");
+    imgs.p2  = await loadImageFromFile(el.p2.files[0],  "Elahi Photo 2");
 
     el.recordBtn.disabled = !(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4);
   }
@@ -273,7 +303,7 @@
 
   function pill({y, icon, label}){
     ctx.save();
-    const padX=34, padY=18;
+    const padX=34;
     ctx.font=`600 44px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
     const textW=ctx.measureText(label).width;
     const w=textW + padX*2 + 70, h=88;
@@ -292,56 +322,72 @@
     ctx.restore();
   }
 
-  function drawPhotoInFrame(photo){
+  function drawPhotoInFrame(photo, controls){
     if(!photo) return;
-    // Fits the gold frame image you generated (tweak if needed)
     const inner = { x:190, y:260, w:700, h:1180, r:30 };
+
+    const zoom = controls.zoom;
+    const offX = controls.x;
+    const offY = controls.y;
 
     ctx.save();
     roundRect(inner.x,inner.y,inner.w,inner.h,inner.r);
     ctx.clip();
 
     const im=photo;
-    const s=Math.max(inner.w/im.width, inner.h/im.height);
+    const base = Math.max(inner.w/im.width, inner.h/im.height);
+    const s = base * zoom;
+
     const sw=im.width*s, sh=im.height*s;
-    const dx=inner.x + (inner.w-sw)/2;
-    const dy=inner.y + (inner.h-sh)/2;
+    const dx=inner.x + (inner.w - sw)/2 + offX;
+    const dy=inner.y + (inner.h - sh)/2 + offY;
+
     ctx.drawImage(im, dx, dy, sw, sh);
     ctx.restore();
   }
 
-  function slideCount(){
-    // base slides: 3 info slides + 1 photo slide; +1 extra if photo2
-    return imgs.p2 ? 5 : 4;
-  }
+  function slideCount(){ return imgs.p2 ? 5 : 4; }
 
   function drawSlide(idx, t){
     ctx.clearRect(0,0,W,H);
-
-    // subtle ken-burns movement always (like many invite videos)
     const kb = 0.02;
     const panX = Math.sin(t*0.5)*18;
     const panY = Math.cos(t*0.45)*12;
 
+    const p1Ctl = { zoom: +el.p1Zoom.value, x: +el.p1X.value, y: +el.p1Y.value };
+    const p2Ctl = { zoom: +el.p2Zoom.value, x: +el.p2X.value, y: +el.p2Y.value };
+
     if(idx===0){
+      coverDraw(imgs.bg4,{scaleBoost:1.01});
+      glowOverlay(0.75);
+      if(imgs.p1) drawPhotoInFrame(imgs.p1, p1Ctl);
+      drawSparkles(t);
+      textBlock({ y:H*0.16, size:84, lines:[DETAILS.title]});
+      textBlock({ y:H*0.84, size:46, weight:500, lines:[ imgs.p1 ? "You’re Invited" : "Upload Elahi Photo 1" ]});
+      return;
+    }
+
+    if(idx===1){
       coverDraw(imgs.bg1,{scaleBoost:1+kb, panX, panY});
       glowOverlay(1);
       drawSparkles(t);
       textBlock({ y:H*0.26, size:92, lines:[DETAILS.headline]});
       textBlock({ y:H*0.40, size:112, lines:[DETAILS.title]});
       textBlock({ y:H*0.53, size:46, weight:500, lines:["Warmth • Tradition • Joy"]});
+      return;
     }
 
-    if(idx===1){
+    if(idx===2){
       coverDraw(imgs.bg2,{scaleBoost:1+kb, panX, panY});
       glowOverlay(1);
       drawSparkles(t);
       textBlock({ y:H*0.28, size:96, lines:["Venue"]});
       textBlock({ y:H*0.40, size:84, lines:[DETAILS.venueLine]});
       textBlock({ y:H*0.55, size:46, weight:500, lines:["A cozy morning celebration"]});
+      return;
     }
 
-    if(idx===2){
+    if(idx===3){
       coverDraw(imgs.bg3,{scaleBoost:1+kb, panX, panY});
       glowOverlay(1);
       drawSparkles(t);
@@ -349,30 +395,20 @@
       pill({ y:H*0.42, icon:"📅", label:DETAILS.dateLine });
       pill({ y:H*0.53, icon:"⏰", label:DETAILS.timeLine });
       pill({ y:H*0.64, icon:"📍", label:DETAILS.venueLine });
+      return;
     }
 
-    // Photo slide 1
-    if(idx===3){
-      coverDraw(imgs.bg4,{scaleBoost:1.01, panX:0, panY:0});
-      glowOverlay(0.75);
-      drawPhotoInFrame(imgs.p1);
-      drawSparkles(t);
-      textBlock({ y:H*0.16, size:84, lines:[DETAILS.title]});
-      textBlock({ y:H*0.84, size:46, weight:500, lines:["See you there!"]});
-    }
-
-    // Photo slide 2 (optional)
     if(idx===4){
-      coverDraw(imgs.bg4,{scaleBoost:1.01, panX:0, panY:0});
+      coverDraw(imgs.bg4,{scaleBoost:1.01});
       glowOverlay(0.75);
-      drawPhotoInFrame(imgs.p2);
+      if(imgs.p2) drawPhotoInFrame(imgs.p2, p2Ctl);
       drawSparkles(t);
       textBlock({ y:H*0.16, size:84, lines:[DETAILS.title]});
-      textBlock({ y:H*0.84, size:46, weight:500, lines:["Let’s celebrate together"]});
+      textBlock({ y:H*0.84, size:46, weight:500, lines:[ imgs.p2 ? "See you there!" : "Upload Elahi Photo 2" ]});
+      return;
     }
   }
 
-  // Transition renderer between two slides (more “video-like”)
   function drawTransition(fromIdx, toIdx, p, type, t){
     const e = easeInOut(p);
 
@@ -383,7 +419,6 @@
     }
 
     if(type==="slide"){
-      // from slides out left, to slides in from right
       ctx.clearRect(0,0,W,H);
       ctx.save(); ctx.translate(-e*W,0); drawSlide(fromIdx,t); ctx.restore();
       ctx.save(); ctx.translate((1-e)*W,0); drawSlide(toIdx,t); ctx.restore();
@@ -391,7 +426,6 @@
     }
 
     if(type==="zoom"){
-      // from zooms in slightly and fades, to zooms from slightly out
       ctx.clearRect(0,0,W,H);
       ctx.save();
       ctx.globalAlpha = 1 - e;
@@ -411,54 +445,30 @@
       return;
     }
 
-    if(type==="flip"){
-      // 3D-ish flip: scale X down to 0 then up
-      ctx.clearRect(0,0,W,H);
-      const first = e < 0.5;
-      const k = first ? (1 - e*2) : ((e-0.5)*2);
-      const sX = clamp(k, 0.02, 1);
-      const shade = first ? e : (1-e);
-
-      ctx.save();
-      ctx.translate(W/2, 0);
-      ctx.scale(sX, 1);
-      ctx.translate(-W/2, 0);
-      drawSlide(first ? fromIdx : toIdx, t);
-      // subtle shading during flip
-      ctx.globalCompositeOperation="multiply";
-      ctx.fillStyle=`rgba(0,0,0,${0.35 + shade*0.35})`;
-      ctx.fillRect(0,0,W,H);
-      ctx.restore();
-      return;
-    }
-
-    // fold (default): looks like premium “page fold”
+    // fold default (soft)
     ctx.clearRect(0,0,W,H);
     const first = e < 0.5;
     const k = first ? (1 - e*2) : ((e-0.5)*2);
-    const sX = clamp(k, 0.02, 1);
-    const skew = (first ? 1 : -1) * (0.18 * (1 - sX));
+    const sX = clamp(k, 0.06, 1);
+    const skew = (first ? 1 : -1) * (0.12 * (1 - sX));
 
     ctx.save();
     ctx.translate(W/2, 0);
-    ctx.transform(sX, 0, skew, 1, 0, 0); // skew X
+    ctx.transform(sX, 0, skew, 1, 0, 0);
     ctx.translate(-W/2, 0);
     drawSlide(first ? fromIdx : toIdx, t);
-
-    // fold shadow edge
     ctx.globalCompositeOperation="multiply";
-    ctx.fillStyle = `rgba(0,0,0,${0.25 + (1-sX)*0.55})`;
+    ctx.fillStyle = `rgba(0,0,0,${0.18 + (1-sX)*0.45})`;
     ctx.fillRect(0,0,W,H);
     ctx.restore();
   }
 
   function buildTimeline(){
-    const per = parseFloat(el.slideSec.value || "4.5");
-    const fade = parseFloat(el.fadeSec.value || "1.0");
+    const per = parseFloat(el.slideSec.value || "4.0");
+    const fade = parseFloat(el.fadeSec.value || "0.8");
     const n = slideCount();
     const total = (n*per) + ((n-1)*fade);
 
-    // segments
     const segments=[];
     let cursor=0;
     for(let i=0;i<n;i++){
@@ -469,7 +479,7 @@
         cursor += fade;
       }
     }
-    return {per, fade, n, total, segments};
+    return {n, total, segments};
   }
 
   function renderAtTime(t){
@@ -486,7 +496,6 @@
     drawTransition(seg.from, seg.to, p, mode, tt);
   }
 
-  // music stream (optional)
   async function buildAudioTrack(){
     const file = el.music.files[0];
     if(!file) return null;
@@ -496,7 +505,6 @@
     audio.loop = true;
     audio.crossOrigin = "anonymous";
 
-    // user-gesture is required; we'll start it right before record
     const AudioContext_ = window.AudioContext || window.webkitAudioContext;
     if(!AudioContext_) return null;
 
@@ -504,10 +512,10 @@
     const source = ac.createMediaElementSource(audio);
     const dest = ac.createMediaStreamDestination();
     source.connect(dest);
-    source.connect(ac.destination); // so you can hear it while recording
-
+    source.connect(ac.destination);
     return {audio, ac, stream: dest.stream};
   }
+
   function animateOnce(onDone){
     const {total} = buildTimeline();
     const start = performance.now();
@@ -523,7 +531,6 @@
     raf = requestAnimationFrame(frame);
   }
 
-  // Preview
   el.previewBtn.addEventListener('click', async ()=>{
     await loadAll();
     if(!(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4)){
@@ -534,7 +541,6 @@
     animateOnce(()=>{});
   });
 
-  // Record
   el.recordBtn.addEventListener('click', async ()=>{
     await loadAll();
     if(!(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4)){
@@ -545,13 +551,11 @@
     const timeline = buildTimeline();
     const videoStream = canvas.captureStream(FPS);
 
-    // Optional audio
     let audioPack = null;
     try { audioPack = await buildAudioTrack(); } catch(e){ audioPack = null; }
 
     let stream = videoStream;
     if(audioPack && audioPack.stream && audioPack.stream.getAudioTracks().length){
-      // combine tracks
       stream = new MediaStream([
         ...videoStream.getVideoTracks(),
         ...audioPack.stream.getAudioTracks()
@@ -568,7 +572,6 @@
     rec.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
     const done = new Promise(resolve => rec.onstop = resolve);
 
-    // Start music (needs user gesture -> this click counts)
     if(audioPack){
       try{
         await audioPack.ac.resume();
@@ -609,15 +612,14 @@
     setTimeout(()=>URL.revokeObjectURL(url), 2000);
   });
 
-  // Initial placeholder
   ctx.fillStyle="#000"; ctx.fillRect(0,0,W,H);
   ctx.fillStyle="rgba(255,255,255,.85)";
   ctx.font="700 44px system-ui, -apple-system, Segoe UI, Roboto, Arial";
   ctx.textAlign="center";
-  ctx.fillText("Upload 4 backgrounds + Elahi photos", W/2, H/2 - 40);
+  ctx.fillText("Upload backgrounds + Elahi photos", W/2, H/2 - 40);
   ctx.fillStyle="rgba(255,255,255,.65)";
   ctx.font="400 34px system-ui, -apple-system, Segoe UI, Roboto, Arial";
-  ctx.fillText("Preview → Record & Download", W/2, H/2 + 20);
+  ctx.fillText("Adjust fit sliders → Preview → Record", W/2, H/2 + 20);
 })();
 </script>
 </body>
