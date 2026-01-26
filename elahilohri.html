@@ -1,149 +1,121 @@
+<!-- FILE: lohri-merge.html  |  PART 1/2  |  START -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Lohri Invitation Card Maker (Elahi Photo)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>Lohri Invitation + Elahi Photo (Merge & Download)</title>
   <style>
     :root{
       --bg:#0b0f14;
       --panel:#121825;
-      --muted:#9aa6b2;
-      --text:#e7eef6;
+      --muted:#a6b2bf;
+      --text:#e9f0f8;
       --accent:#f7c948;
-      --btn:#1f2a3d;
-      --border:#26324a;
+      --border:rgba(255,255,255,.10);
+      --soft:rgba(255,255,255,.04);
     }
+    *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 800px at 20% 0%, #18223a 0%, var(--bg) 60%);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: radial-gradient(1200px 700px at 20% 0%, #1a2540 0%, var(--bg) 62%);
       color:var(--text);
     }
     header{
-      padding:16px 18px;
+      padding:14px 16px;
       border-bottom:1px solid rgba(255,255,255,.06);
       display:flex;
+      gap:12px;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
       flex-wrap:wrap;
     }
-    header h1{
-      font-size:16px;
-      margin:0;
-      letter-spacing:.2px;
-    }
-    header .hint{
-      color:var(--muted);
+    header h1{ font-size:15px; margin:0; }
+    header .sub{ font-size:12px; color:var(--muted); }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.18);
       font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
     }
     main{
       max-width:1100px;
       margin:0 auto;
-      padding:16px;
+      padding:14px;
       display:grid;
-      grid-template-columns: 360px 1fr;
+      grid-template-columns: 380px 1fr;
       gap:14px;
     }
-    @media (max-width: 980px){
-      main{ grid-template-columns: 1fr; }
-    }
+    @media (max-width:980px){ main{ grid-template-columns:1fr; } }
     .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       border-radius:14px;
       padding:14px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+      box-shadow: 0 14px 50px rgba(0,0,0,.35);
     }
-    .panel h2{
-      margin:0 0 10px 0;
-      font-size:14px;
-      color:#dfe8f2;
-    }
-    .row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      margin:10px 0;
-    }
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:6px;
-    }
+    h2{ font-size:13px; margin:0 0 10px 0; color:#e9f0f8; }
+    label{ display:block; font-size:12px; color:var(--muted); margin:10px 0 6px; }
     input[type="file"]{
       width:100%;
       padding:10px;
       background:rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.1);
-      border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:12px;
       color:var(--text);
     }
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
     .ctrl{
-      margin:10px 0;
+      margin-top:10px;
       padding:10px;
+      border:1px solid rgba(255,255,255,.10);
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,a,0.0);
+      background:rgba(0,0,0,.12);
     }
-    .ctrl .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .ctrl .grid.one{
-      grid-template-columns: 1fr;
-    }
-    input[type="range"]{
-      width:100%;
-    }
-    .small{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.35;
-    }
+    input[type="range"]{ width:100%; }
+    .kv{ display:flex; justify-content:space-between; gap:10px; font-size:12px; color:var(--muted); }
+    .kv b{ color:#fff; font-weight:700; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
     .btn{
-      appearance:none;
-      border:1px solid rgba(255,255,255,.12);
-      background: var(--btn);
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.20);
       color:var(--text);
       padding:10px 12px;
       border-radius:12px;
       cursor:pointer;
-      font-weight:600;
+      font-weight:700;
       font-size:13px;
-      transition: transform .06s ease, border-color .2s ease;
       user-select:none;
     }
-    .btn:hover{ border-color: rgba(247,201,72,.45); }
-    .btn:active{ transform: scale(.99); }
+    .btn:hover{ border-color:rgba(247,201,72,.55); }
     .btn.primary{
-      background: linear-gradient(180deg, rgba(247,201,72,.18), rgba(247,201,72,.06));
-      border-color: rgba(247,201,72,.45);
+      border-color:rgba(247,201,72,.55);
+      background:linear-gradient(180deg, rgba(247,201,72,.18), rgba(247,201,72,.07));
     }
     .btn.danger{
-      background: linear-gradient(180deg, rgba(255,90,90,.18), rgba(255,90,90,.06));
-      border-color: rgba(255,90,90,.35);
+      border-color:rgba(255,90,90,.40);
+      background:linear-gradient(180deg, rgba(255,90,90,.18), rgba(255,90,90,.07));
     }
-    .pill{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
+    .note{
+      margin-top:10px;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
       color:var(--muted);
-    }
-    .canvasWrap{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      align-items:stretch;
+      font-size:12px;
+      line-height:1.35;
     }
     .canvasBox{
-      background: rgba(0,0,0,.25);
-      border:1px dashed rgba(255,255,255,.18);
+      border:1px dashed rgba(255,255,255,.20);
+      background:rgba(0,0,0,.20);
       border-radius:14px;
       padding:10px;
       overflow:auto;
@@ -151,609 +123,416 @@
     canvas{
       display:block;
       margin:0 auto;
-      background:#000;
-      border-radius:10px;
       max-width:100%;
       height:auto;
-      touch-action:none; /* for drag on mobile */
+      border-radius:10px;
+      background:#000;
+      touch-action:none; /* IMPORTANT: allows touch drag */
     }
-    .status{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .status .left{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .note{
-      margin-top:10px;
-      padding:10px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-    }
-    .kbd{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      padding:2px 6px;
-      border-radius:8px;
-      color:#cfe0f2;
-      font-size:12px;
-    }
+    .small{ font-size:12px; color:var(--muted); }
   </style>
 </head>
-
 <body>
 <header>
   <div>
-    <h1>Lohri Invitation Card Maker</h1>
-    <div class="hint">Upload the invitation card image + Elahi’s photo → position it → download the final card.</div>
+    <h1>Lohri Invitation Card + Elahi Photo</h1>
+    <div class="sub">Upload both images → drag Elahi photo into place → download final merged invite.</div>
   </div>
-  <div class="pill" id="readyPill">Waiting for uploads…</div>
+  <div class="pill" id="statusPill">Waiting for uploads…</div>
 </header>
 
 <main>
-  <!-- LEFT: CONTROLS -->
   <section class="panel">
-    <h2>1) Upload Images</h2>
+    <h2>1) Upload</h2>
+    <label>Invitation card (background)</label>
+    <input id="bgFile" type="file" accept="image/*" />
 
-    <div class="row" style="flex-direction:column; align-items:stretch;">
-      <label>Invitation card (background)</label>
-      <input id="bgInput" type="file" accept="image/*" />
+    <label>Elahi photo (overlay)</label>
+    <input id="fgFile" type="file" accept="image/*" />
+
+    <div class="note">
+      <b style="color:#fff">How to place photo:</b><br/>
+      • Drag Elahi photo directly on the preview (works on phone).<br/>
+      • Use sliders for perfect position/size.<br/>
+      • Then press <b style="color:#fff">Download PNG</b>.
     </div>
 
-    <div class="row" style="flex-direction:column; align-items:stretch;">
-      <label>Elahi photo (overlay)</label>
-      <input id="fgInput" type="file" accept="image/*" />
-    </div>
-
-    <div class="note small">
-      <div><strong style="color:#fff">Tip:</strong> On mobile, use 1 finger to drag and 2 fingers to pinch-zoom (if your browser supports it). Otherwise use the sliders.</div>
-      <div style="margin-top:8px;">Desktop: drag to move • <span class="kbd">Shift</span> + drag = rotate (optional) • mouse wheel = zoom</div>
-    </div>
-
-    <h2 style="margin-top:14px;">2) Position & Size Elahi Photo</h2>
+    <h2 style="margin-top:14px;">2) Controls</h2>
 
     <div class="ctrl">
-      <div class="grid">
+      <div class="grid2">
         <div>
-          <label>Size</label>
-          <input id="scaleRange" type="range" min="0.1" max="3.0" step="0.01" value="1.0" />
-          <div class="small">Scale: <span id="scaleVal">1.00</span>x</div>
+          <div class="kv"><span>Size</span><b id="sizeTxt">40%</b></div>
+          <input id="sizeRange" type="range" min="10" max="90" value="40" />
         </div>
         <div>
-          <label>Opacity</label>
-          <input id="opacityRange" type="range" min="0" max="1" step="0.01" value="1" />
-          <div class="small">Opacity: <span id="opacityVal">1.00</span></div>
+          <div class="kv"><span>Opacity</span><b id="opTxt">100%</b></div>
+          <input id="opRange" type="range" min="10" max="100" value="100" />
         </div>
       </div>
 
-      <div class="grid" style="margin-top:10px;">
+      <div class="grid2" style="margin-top:10px;">
         <div>
-          <label>Rotate</label>
-          <input id="rotateRange" type="range" min="-180" max="180" step="1" value="0" />
-          <div class="small">Angle: <span id="rotateVal">0</span>°</div>
+          <div class="kv"><span>X Position</span><b id="xTxt">50%</b></div>
+          <input id="xRange" type="range" min="0" max="100" value="50" />
         </div>
         <div>
-          <label>Corner Radius</label>
-          <input id="radiusRange" type="range" min="0" max="200" step="1" value="120" />
-          <div class="small">Round: <span id="radiusVal">120</span>px</div>
+          <div class="kv"><span>Y Position</span><b id="yTxt">55%</b></div>
+          <input id="yRange" type="range" min="0" max="100" value="55" />
         </div>
       </div>
 
-      <div class="grid" style="margin-top:10px;">
+      <div class="grid2" style="margin-top:10px;">
         <div>
-          <label>Photo Width (px)</label>
-          <input id="wRange" type="range" min="100" max="900" step="1" value="420" />
-          <div class="small">W: <span id="wVal">420</span>px</div>
+          <div class="kv"><span>Roundness</span><b id="rTxt">50%</b></div>
+          <input id="rRange" type="range" min="0" max="50" value="50" />
         </div>
         <div>
-          <label>Photo Height (px)</label>
-          <input id="hRange" type="range" min="100" max="900" step="1" value="420" />
-          <div class="small">H: <span id="hVal">420</span>px</div>
+          <div class="kv"><span>Border</span><b id="bTxt">0px</b></div>
+          <input id="bRange" type="range" min="0" max="20" value="0" />
         </div>
       </div>
 
-      <div class="row" style="margin-top:12px;">
-        <button class="btn" id="centerBtn" type="button">Center Photo</button>
-        <button class="btn" id="fitBtn" type="button">Fit Face Box</button>
-        <button class="btn danger" id="resetBtn" type="button">Reset Overlay</button>
+      <div class="row">
+        <button class="btn" id="placeTop" type="button">Place Top</button>
+        <button class="btn" id="placeMid" type="button">Place Middle</button>
+        <button class="btn" id="placeBot" type="button">Place Bottom</button>
       </div>
 
-      <div class="small" style="margin-top:6px;">
-        Drag Elahi photo directly on the preview. Use sliders for perfect positioning.
+      <div class="row">
+        <button class="btn" id="centerBtn" type="button">Center</button>
+        <button class="btn danger" id="resetBtn" type="button">Reset</button>
       </div>
     </div>
 
     <h2 style="margin-top:14px;">3) Download</h2>
     <div class="row">
-      <button class="btn primary" id="downloadPng" type="button">Download PNG</button>
-      <button class="btn" id="downloadJpg" type="button">Download JPG</button>
+      <button class="btn primary" id="dlPng" type="button">Download PNG</button>
+      <button class="btn" id="dlJpg" type="button">Download JPG</button>
     </div>
 
-    <div class="note small">
-      PNG is best quality. JPG gives smaller size. The download will be the exact same size as the card image.
+    <div class="note">
+      If download is blank: upload card again, then photo again (some phones revoke file URLs).
     </div>
   </section>
 
-  <!-- RIGHT: CANVAS PREVIEW -->
-  <section class="panel canvasWrap">
-    <div class="status">
-      <div class="left">
-        <div class="pill" id="sizePill">Canvas: —</div>
-        <div class="pill" id="dragPill">Drag: OFF</div>
-      </div>
-      <div class="small" id="helpLine">Upload the card first, then Elahi photo.</div>
+  <section class="panel">
+    <div class="row" style="justify-content:space-between; align-items:center; margin-top:0;">
+      <div class="pill" id="canvasInfo">Canvas: —</div>
+      <div class="small">Drag Elahi photo on the card preview.</div>
     </div>
-
     <div class="canvasBox">
-      <canvas id="c" width="900" height="1200"></canvas>
+      <canvas id="cv" width="900" height="1200"></canvas>
     </div>
-
-    <div class="small">
-      If the photo looks blurry, try uploading a higher-resolution Elahi image.
+    <div class="small" style="margin-top:10px;">
+      The exported image will be exactly the same size as your uploaded invitation card.
     </div>
   </section>
 </main>
 
 <script>
 (() => {
-  const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d');
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
 
-  const bgInput = document.getElementById('bgInput');
-  const fgInput = document.getElementById('fgInput');
+  const bgFile = document.getElementById('bgFile');
+  const fgFile = document.getElementById('fgFile');
 
-  const scaleRange = document.getElementById('scaleRange');
-  const opacityRange = document.getElementById('opacityRange');
-  const rotateRange = document.getElementById('rotateRange');
-  const radiusRange = document.getElementById('radiusRange');
-  const wRange = document.getElementById('wRange');
-  const hRange = document.getElementById('hRange');
+  const sizeRange = document.getElementById('sizeRange');
+  const opRange   = document.getElementById('opRange');
+  const xRange    = document.getElementById('xRange');
+  const yRange    = document.getElementById('yRange');
+  const rRange    = document.getElementById('rRange');
+  const bRange    = document.getElementById('bRange');
 
-  const scaleVal = document.getElementById('scaleVal');
-  const opacityVal = document.getElementById('opacityVal');
-  const rotateVal = document.getElementById('rotateVal');
-  const radiusVal = document.getElementById('radiusVal');
-  const wVal = document.getElementById('wVal');
-  const hVal = document.getElementById('hVal');
+  const sizeTxt = document.getElementById('sizeTxt');
+  const opTxt   = document.getElementById('opTxt');
+  const xTxt    = document.getElementById('xTxt');
+  const yTxt    = document.getElementById('yTxt');
+  const rTxt    = document.getElementById('rTxt');
+  const bTxt    = document.getElementById('bTxt');
 
+  const placeTop = document.getElementById('placeTop');
+  const placeMid = document.getElementById('placeMid');
+  const placeBot = document.getElementById('placeBot');
   const centerBtn = document.getElementById('centerBtn');
-  const fitBtn = document.getElementById('fitBtn');
-  const resetBtn = document.getElementById('resetBtn');
+  const resetBtn  = document.getElementById('resetBtn');
 
-  const downloadPng = document.getElementById('downloadPng');
-  const downloadJpg = document.getElementById('downloadJpg');
+  const dlPng = document.getElementById('dlPng');
+  const dlJpg = document.getElementById('dlJpg');
 
-  const readyPill = document.getElementById('readyPill');
-  const sizePill = document.getElementById('sizePill');
-  const dragPill = document.getElementById('dragPill');
-  const helpLine = document.getElementById('helpLine');
+  const statusPill = document.getElementById('statusPill');
+  const canvasInfo = document.getElementById('canvasInfo');
 
   let bgImg = null;
   let fgImg = null;
 
-  // Overlay state (in canvas pixels)
-  const overlay = {
-    x: 0,
-    y: 0,
-    w: 420,
-    h: 420,
-    scale: 1,
-    opacity: 1,
-    rot: 0,      // radians
-    radius: 120
+  // Overlay state in percentage terms relative to canvas
+  const st = {
+    sizePct: 40,      // overlay box width as % of canvas width
+    opacityPct: 100,
+    xPct: 50,
+    yPct: 55,
+    roundPct: 50,     // 0..50 => 50 becomes circle if square
+    borderPx: 0
   };
 
-  function setPills() {
-    const bgOk = !!bgImg;
-    const fgOk = !!fgImg;
-    if (!bgOk && !fgOk) readyPill.textContent = 'Waiting for uploads…';
-    if (bgOk && !fgOk)  readyPill.textContent = 'Card uploaded ✓ (add Elahi photo)';
-    if (bgOk && fgOk)   readyPill.textContent = 'Ready ✓ (position & download)';
+  function setStatus(){
+    if (!bgImg && !fgImg) statusPill.textContent = 'Waiting for uploads…';
+    else if (bgImg && !fgImg) statusPill.textContent = 'Card uploaded ✓ (add Elahi photo)';
+    else if (bgImg && fgImg) statusPill.textContent = 'Ready ✓ Drag & download';
   }
 
-  function syncUIFromState() {
-    scaleRange.value = overlay.scale;
-    opacityRange.value = overlay.opacity;
-    rotateRange.value = Math.round(overlay.rot * 180 / Math.PI);
-    radiusRange.value = overlay.radius;
-    wRange.value = overlay.w;
-    hRange.value = overlay.h;
-
-    scaleVal.textContent = Number(overlay.scale).toFixed(2);
-    opacityVal.textContent = Number(overlay.opacity).toFixed(2);
-    rotateVal.textContent = String(Math.round(overlay.rot * 180 / Math.PI));
-    radiusVal.textContent = String(Math.round(overlay.radius));
-    wVal.textContent = String(Math.round(overlay.w));
-    hVal.textContent = String(Math.round(overlay.h));
+  function updateLabels(){
+    sizeTxt.textContent = `${st.sizePct}%`;
+    opTxt.textContent   = `${st.opacityPct}%`;
+    xTxt.textContent    = `${st.xPct}%`;
+    yTxt.textContent    = `${st.yPct}%`;
+    rTxt.textContent    = `${st.roundPct}%`;
+    bTxt.textContent    = `${st.borderPx}px`;
   }
 
-  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
-
-  function readFileAsImage(file) {
+  function readAsImage(file){
     return new Promise((resolve, reject) => {
-      const url = URL.createObjectURL(file);
-      const img = new Image();
-      img.onload = () => {
-        URL.revokeObjectURL(url);
-        resolve(img);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = reader.result; // base64 -> reliable on mobile
       };
-      img.onerror = (e) => reject(e);
-      img.src = url;
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
     });
   }
 
-  function resizeCanvasToBg() {
+  function resizeCanvasToBg(){
     if (!bgImg) return;
-    canvas.width = bgImg.naturalWidth || bgImg.width;
-    canvas.height = bgImg.naturalHeight || bgImg.height;
-    sizePill.textContent = `Canvas: ${canvas.width} × ${canvas.height}`;
+    cv.width  = bgImg.naturalWidth || bgImg.width;
+    cv.height = bgImg.naturalHeight || bgImg.height;
+    canvasInfo.textContent = `Canvas: ${cv.width} × ${cv.height}`;
   }
 
-  function resetOverlay() {
-    // default: put photo near lower-middle area (you can drag)
-    overlay.w = Math.round(canvas.width * 0.28);
-    overlay.h = overlay.w;
-    overlay.scale = 1;
-    overlay.opacity = 1;
-    overlay.rot = 0;
-    overlay.radius = Math.round(overlay.w * 0.28);
-
-    overlay.x = Math.round(canvas.width * 0.5);
-    overlay.y = Math.round(canvas.height * 0.66);
-
-    // Update ranges max based on canvas
-    wRange.max = String(Math.max(300, Math.min(1200, canvas.width)));
-    hRange.max = String(Math.max(300, Math.min(1200, canvas.width)));
-    wRange.min = "80";
-    hRange.min = "80";
-
-    syncUIFromState();
-    draw();
+  function roundedRectPath(c, x, y, w, h, r){
+    const rr = Math.max(0, Math.min(r, w/2, h/2));
+    c.beginPath();
+    c.moveTo(x + rr, y);
+    c.arcTo(x + w, y, x + w, y + h, rr);
+    c.arcTo(x + w, y + h, x, y + h, rr);
+    c.arcTo(x, y + h, x, y, rr);
+    c.arcTo(x, y, x + w, y, rr);
+    c.closePath();
   }
 
-  function roundedRectPath(ctx, x, y, w, h, r) {
-    const rr = Math.min(r, w/2, h/2);
-    ctx.beginPath();
-    ctx.moveTo(x + rr, y);
-    ctx.arcTo(x + w, y, x + w, y + h, rr);
-    ctx.arcTo(x + w, y + h, x, y + h, rr);
-    ctx.arcTo(x, y + h, x, y, rr);
-    ctx.arcTo(x, y, x + w, y, rr);
-    ctx.closePath();
-  }
+  function draw(showGuide=true){
+    ctx.clearRect(0,0,cv.width,cv.height);
 
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // background
-    if (bgImg) {
-      ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-    } else {
-      // placeholder
-      ctx.fillStyle = '#0a0a0a';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'rgba(255,255,255,.7)';
-      ctx.font = '16px system-ui';
-      ctx.fillText('Upload the invitation card image…', 24, 40);
+    if (!bgImg){
+      ctx.fillStyle = "#0a0a0a";
+      ctx.fillRect(0,0,cv.width,cv.height);
+      ctx.fillStyle = "rgba(255,255,255,.8)";
+      ctx.font = "16px system-ui";
+      ctx.fillText("Upload the invitation card image…", 24, 40);
+      setStatus();
       return;
     }
 
-    // overlay
-    if (fgImg) {
-      ctx.save();
-      ctx.globalAlpha = overlay.opacity;
+    // Draw background
+    ctx.drawImage(bgImg, 0, 0, cv.width, cv.height);
 
-      // Transform: move to center, rotate, then draw centered
-      ctx.translate(overlay.x, overlay.y);
-      ctx.rotate(overlay.rot);
-
-      const dw = overlay.w * overlay.scale;
-      const dh = overlay.h * overlay.scale;
-      const dx = -dw / 2;
-      const dy = -dh / 2;
-
-      // Clip (rounded rectangle)
-      roundedRectPath(ctx, dx, dy, dw, dh, overlay.radius);
-      ctx.clip();
-
-      // Draw image to fill box (cover)
-      // We'll cover the box without stretching by cropping.
-      const boxAspect = dw / dh;
-      const imgAspect = fgImg.width / fgImg.height;
-
-      let sx, sy, sw, sh;
-      if (imgAspect > boxAspect) {
-        // image wider than box => crop left/right
-        sh = fgImg.height;
-        sw = Math.round(sh * boxAspect);
-        sx = Math.round((fgImg.width - sw) / 2);
-        sy = 0;
-      } else {
-        // image taller => crop top/bottom
-        sw = fgImg.width;
-        sh = Math.round(sw / boxAspect);
-        sx = 0;
-        sy = Math.round((fgImg.height - sh) / 2);
-      }
-
-      ctx.drawImage(fgImg, sx, sy, sw, sh, dx, dy, dw, dh);
-
-      ctx.restore();
-
-      // helper outline
-      ctx.save();
-      ctx.strokeStyle = 'rgba(247,201,72,.75)';
-      ctx.lineWidth = Math.max(2, Math.round(canvas.width * 0.002));
-      ctx.translate(overlay.x, overlay.y);
-      ctx.rotate(overlay.rot);
-      const dw2 = overlay.w * overlay.scale;
-      const dh2 = overlay.h * overlay.scale;
-      roundedRectPath(ctx, -dw2/2, -dh2/2, dw2, dh2, overlay.radius);
-      ctx.stroke();
-      ctx.restore();
+    if (!fgImg){
+      setStatus();
+      return;
     }
 
-    setPills();
-  }
+    // Compute overlay box in pixels
+    const boxW = (st.sizePct/100) * cv.width;
+    const boxH = boxW; // square photo box
+    const cx = (st.xPct/100) * cv.width;
+    const cy = (st.yPct/100) * cv.height;
+    const x = cx - boxW/2;
+    const y = cy - boxH/2;
 
-  // File handlers
-  bgInput.addEventListener('change', async (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    try {
-      bgImg = await readFileAsImage(file);
-      resizeCanvasToBg();
-      helpLine.textContent = 'Now upload Elahi photo.';
-      setPills();
-      // If fg already set, keep overlay; else reset
-      if (!fgImg) resetOverlay();
-      draw();
-    } catch {
-      alert('Could not load card image. Please try another image.');
-    }
-  });
+    const radius = (st.roundPct/100) * (Math.min(boxW, boxH)/2);
 
-  fgInput.addEventListener('change', async (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    try {
-      fgImg = await readFileAsImage(file);
-      helpLine.textContent = 'Drag the photo to position it, then download.';
-      setPills();
-      if (!bgImg) {
-        alert('Please upload the invitation card first.');
-        return;
-      }
-      resetOverlay();
-      draw();
-    } catch {
-      alert('Could not load Elahi photo. Please try another image.');
-    }
-  });
+    // Clip rounded box
+    ctx.save();
+    ctx.globalAlpha = st.opacityPct/100;
+    roundedRectPath(ctx, x, y, boxW, boxH, radius);
+    ctx.clip();
 
-  // Slider bindings
-  function bindRange(rangeEl, onChange){
-    rangeEl.addEventListener('input', () => onChange());
-    rangeEl.addEventListener('change', () => onChange());
-  }
-
-  bindRange(scaleRange, () => {
-    overlay.scale = Number(scaleRange.value);
-    scaleVal.textContent = overlay.scale.toFixed(2);
-    draw();
-  });
-
-  bindRange(opacityRange, () => {
-    overlay.opacity = Number(opacityRange.value);
-    opacityVal.textContent = overlay.opacity.toFixed(2);
-    draw();
-  });
-
-  bindRange(rotateRange, () => {
-    const deg = Number(rotateRange.value);
-    overlay.rot = deg * Math.PI / 180;
-    rotateVal.textContent = String(deg);
-    draw();
-  });
-
-  bindRange(radiusRange, () => {
-    overlay.radius = Number(radiusRange.value);
-    radiusVal.textContent = String(Math.round(overlay.radius));
-    draw();
-  });
-
-  bindRange(wRange, () => {
-    overlay.w = Number(wRange.value);
-    wVal.textContent = String(Math.round(overlay.w));
-    overlay.radius = clamp(overlay.radius, 0, Math.min(overlay.w, overlay.h) / 2);
-    radiusRange.value = overlay.radius;
-    radiusVal.textContent = String(Math.round(overlay.radius));
-    draw();
-  });
-
-  bindRange(hRange, () => {
-    overlay.h = Number(hRange.value);
-    hVal.textContent = String(Math.round(overlay.h));
-    overlay.radius = clamp(overlay.radius, 0, Math.min(overlay.w, overlay.h) / 2);
-    radiusRange.value = overlay.radius;
-    radiusVal.textContent = String(Math.round(overlay.radius));
-    draw();
-  });
-
-  // Buttons
-  centerBtn.addEventListener('click', () => {
-    overlay.x = Math.round(canvas.width / 2);
-    overlay.y = Math.round(canvas.height / 2);
-    draw();
-  });
-
-  // A simple "fit" that places the photo in the upper-middle area (like a profile spot)
-  fitBtn.addEventListener('click', () => {
-    overlay.w = Math.round(canvas.width * 0.26);
-    overlay.h = overlay.w;
-    overlay.scale = 1;
-    overlay.radius = Math.round(overlay.w * 0.5); // circle-like
-    overlay.x = Math.round(canvas.width * 0.50);
-    overlay.y = Math.round(canvas.height * 0.54);
-    syncUIFromState();
-    draw();
-  });
-
-  resetBtn.addEventListener('click', () => {
-    if (!bgImg) return;
-    resetOverlay();
-  });
-
-  // Download helpers
-  function downloadAs(type) {
-    if (!bgImg) { alert('Upload the invitation card first.'); return; }
-    if (!fgImg) { alert('Upload Elahi photo first.'); return; }
-
-    // Draw without helper outline
-    const temp = document.createElement('canvas');
-    temp.width = canvas.width;
-    temp.height = canvas.height;
-    const tctx = temp.getContext('2d');
-
-    // background
-    tctx.drawImage(bgImg, 0, 0, temp.width, temp.height);
-
-    // overlay (same logic, but no outline)
-    tctx.save();
-    tctx.globalAlpha = overlay.opacity;
-    tctx.translate(overlay.x, overlay.y);
-    tctx.rotate(overlay.rot);
-
-    const dw = overlay.w * overlay.scale;
-    const dh = overlay.h * overlay.scale;
-    const dx = -dw/2;
-    const dy = -dh/2;
-
-    // clip
-    const rr = Math.min(overlay.radius, dw/2, dh/2);
-    tctx.beginPath();
-    tctx.moveTo(dx + rr, dy);
-    tctx.arcTo(dx + dw, dy, dx + dw, dy + dh, rr);
-    tctx.arcTo(dx + dw, dy + dh, dx, dy + dh, rr);
-    tctx.arcTo(dx, dy + dh, dx, dy, rr);
-    tctx.arcTo(dx, dy, dx + dw, dy, rr);
-    tctx.closePath();
-    tctx.clip();
-
-    // cover crop
-    const boxAspect = dw / dh;
+    // Draw photo as "cover"
+    const boxAspect = boxW / boxH;
     const imgAspect = fgImg.width / fgImg.height;
+
     let sx, sy, sw, sh;
-    if (imgAspect > boxAspect) {
+    if (imgAspect > boxAspect){
       sh = fgImg.height;
       sw = Math.round(sh * boxAspect);
-      sx = Math.round((fgImg.width - sw) / 2);
+      sx = Math.round((fgImg.width - sw)/2);
       sy = 0;
     } else {
       sw = fgImg.width;
       sh = Math.round(sw / boxAspect);
       sx = 0;
-      sy = Math.round((fgImg.height - sh) / 2);
+      sy = Math.round((fgImg.height - sh)/2);
     }
-    tctx.drawImage(fgImg, sx, sy, sw, sh, dx, dy, dw, dh);
-    tctx.restore();
+    ctx.drawImage(fgImg, sx, sy, sw, sh, x, y, boxW, boxH);
+    ctx.restore();
 
-    const mime = type === 'jpg' ? 'image/jpeg' : 'image/png';
-    const quality = type === 'jpg' ? 0.92 : 1.0;
+    // optional border + guide
+    if (st.borderPx > 0 || showGuide){
+      ctx.save();
+      ctx.lineWidth = Math.max(1, st.borderPx || Math.round(cv.width*0.004));
+      ctx.strokeStyle = showGuide ? "rgba(247,201,72,.85)" : "rgba(255,255,255,.9)";
+      roundedRectPath(ctx, x, y, boxW, boxH, radius);
+      ctx.stroke();
+      ctx.restore();
+    }
 
-    const url = temp.toDataURL(mime, quality);
+    setStatus();
+  }
+
+  // Upload handlers
+  bgFile.addEventListener('change', async (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    try{
+      bgImg = await readAsImage(f);
+      resizeCanvasToBg();
+      draw();
+    }catch(err){
+      alert("Could not load card image. Try another file.");
+    }
+  });
+
+  fgFile.addEventListener('change', async (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (!bgImg){
+      alert("Please upload the invitation card first.");
+      fgFile.value = "";
+      return;
+    }
+    try{
+      fgImg = await readAsImage(f);
+      draw();
+    }catch(err){
+      alert("Could not load Elahi photo. Try another file.");
+    }
+  });
+
+  // Slider bindings
+  function bind(rangeEl, on){
+    rangeEl.addEventListener('input', on);
+    rangeEl.addEventListener('change', on);
+  }
+
+  bind(sizeRange, () => { st.sizePct = Number(sizeRange.value); updateLabels(); draw(); });
+  bind(opRange,   () => { st.opacityPct = Number(opRange.value); updateLabels(); draw(); });
+  bind(xRange,    () => { st.xPct = Number(xRange.value); updateLabels(); draw(); });
+  bind(yRange,    () => { st.yPct = Number(yRange.value); updateLabels(); draw(); });
+  bind(rRange,    () => { st.roundPct = Number(rRange.value); updateLabels(); draw(); });
+  bind(bRange,    () => { st.borderPx = Number(bRange.value); updateLabels(); draw(); });
+
+  // Presets
+  placeTop.addEventListener('click', () => { st.yPct = 35; yRange.value = st.yPct; updateLabels(); draw(); });
+  placeMid.addEventListener('click', () => { st.yPct = 55; yRange.value = st.yPct; updateLabels(); draw(); });
+  placeBot.addEventListener('click', () => { st.yPct = 72; yRange.value = st.yPct; updateLabels(); draw(); });
+
+  centerBtn.addEventListener('click', () => {
+    st.xPct = 50; st.yPct = 50;
+    xRange.value = st.xPct; yRange.value = st.yPct;
+    updateLabels(); draw();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    st.sizePct = 40; st.opacityPct = 100; st.xPct = 50; st.yPct = 55; st.roundPct = 50; st.borderPx = 0;
+    sizeRange.value = st.sizePct; opRange.value = st.opacityPct; xRange.value = st.xPct; yRange.value = st.yPct; rRange.value = st.roundPct; bRange.value = st.borderPx;
+    updateLabels(); draw();
+  });
+
+  // Drag on canvas (mouse + touch)
+  let dragging = false;
+  let startX = 0, startY = 0;
+  let startXPct = 0, startYPct = 0;
+
+  function getPos(evt){
+    const rect = cv.getBoundingClientRect();
+    const clientX = (evt.touches && evt.touches[0]) ? evt.touches[0].clientX : evt.clientX;
+    const clientY = (evt.touches && evt.touches[0]) ? evt.touches[0].clientY : evt.clientY;
+    const x = (clientX - rect.left) / rect.width;  // 0..1
+    const y = (clientY - rect.top) / rect.height; // 0..1
+    return {x, y};
+  }
+
+  function startDrag(evt){
+    if (!bgImg || !fgImg) return;
+    evt.preventDefault();
+    dragging = true;
+    const p = getPos(evt);
+    startX = p.x; startY = p.y;
+    startXPct = st.xPct; startYPct = st.yPct;
+  }
+
+  function moveDrag(evt){
+    if (!dragging) return;
+    evt.preventDefault();
+    const p = getPos(evt);
+    const dx = (p.x - startX) * 100;
+    const dy = (p.y - startY) * 100;
+    st.xPct = Math.max(0, Math.min(100, startXPct + dx));
+    st.yPct = Math.max(0, Math.min(100, startYPct + dy));
+    xRange.value = st.xPct;
+    yRange.value = st.yPct;
+    updateLabels();
+    draw();
+  }
+
+  function endDrag(){
+    dragging = false;
+  }
+
+  // Mouse
+  cv.addEventListener('mousedown', startDrag);
+  window.addEventListener('mousemove', moveDrag);
+  window.addEventListener('mouseup', endDrag);
+
+  // Touch
+  cv.addEventListener('touchstart', startDrag, {passive:false});
+  cv.addEventListener('touchmove', moveDrag, {passive:false});
+  window.addEventListener('touchend', endDrag);
+
+  // Download (draw without guide)
+  function download(type){
+    if (!bgImg){ alert("Upload invitation card first."); return; }
+    if (!fgImg){ alert("Upload Elahi photo first."); return; }
+
+    draw(false);
+    const mime = type === "jpg" ? "image/jpeg" : "image/png";
+    const quality = type === "jpg" ? 0.92 : 1.0;
+    const url = cv.toDataURL(mime, quality);
+
+    // redraw guide back
+    draw(true);
+
     const a = document.createElement('a');
     a.href = url;
-    a.download = type === 'jpg' ? 'lohari_invitation_final.jpg' : 'lohari_invitation_final.png';
+    a.download = type === "jpg" ? "lohri_invitation_with_elahi.jpg" : "lohri_invitation_with_elahi.png";
     document.body.appendChild(a);
     a.click();
     a.remove();
   }
 
-  downloadPng.addEventListener('click', () => downloadAs('png'));
-  downloadJpg.addEventListener('click', () => downloadAs('jpg'));
+  dlPng.addEventListener('click', () => download("png"));
+  dlJpg.addEventListener('click', () => download("jpg"));
 
-  // Drag & wheel zoom
-  let dragging = false;
-  let last = {x:0, y:0};
-  let dragMode = 'move'; // move | rotate
-
-  function getPointerPos(ev) {
-    const rect = canvas.getBoundingClientRect();
-    const x = (ev.clientX - rect.left) * (canvas.width / rect.width);
-    const y = (ev.clientY - rect.top) * (canvas.height / rect.height);
-    return {x,y};
-  }
-
-  function canDragOverlay() {
-    return !!bgImg && !!fgImg;
-  }
-
-  canvas.addEventListener('pointerdown', (ev) => {
-    if (!canDragOverlay()) return;
-    canvas.setPointerCapture(ev.pointerId);
-    dragging = true;
-    dragMode = ev.shiftKey ? 'rotate' : 'move';
-    last = getPointerPos(ev);
-    dragPill.textContent = 'Drag: ON';
-    draw();
-  });
-
-  canvas.addEventListener('pointermove', (ev) => {
-    if (!dragging || !canDragOverlay()) return;
-    const p = getPointerPos(ev);
-    const dx = p.x - last.x;
-    const dy = p.y - last.y;
-
-    if (dragMode === 'move') {
-      overlay.x += dx;
-      overlay.y += dy;
-    } else {
-      // rotate by horizontal drag
-      const deg = (dx) * 0.35;
-      overlay.rot += deg * Math.PI / 180;
-      rotateRange.value = String(Math.round(overlay.rot * 180 / Math.PI));
-      rotateVal.textContent = rotateRange.value;
-    }
-
-    last = p;
-    draw();
-  });
-
-  function stopDrag(ev){
-    if (!dragging) return;
-    dragging = false;
-    dragPill.textContent = 'Drag: OFF';
-    draw();
-  }
-  canvas.addEventListener('pointerup', stopDrag);
-  canvas.addEventListener('pointercancel', stopDrag);
-  canvas.addEventListener('pointerleave', stopDrag);
-
-  // Wheel zoom (desktop)
-  canvas.addEventListener('wheel', (ev) => {
-    if (!canDragOverlay()) return;
-    ev.preventDefault();
-    const delta = Math.sign(ev.deltaY);
-    overlay.scale = clamp(overlay.scale + (delta > 0 ? -0.05 : 0.05), 0.1, 3.0);
-    scaleRange.value = overlay.scale;
-    scaleVal.textContent = overlay.scale.toFixed(2);
-    draw();
-  }, { passive:false });
-
-  // Initial draw
-  syncUIFromState();
+  // Init UI
+  updateLabels();
   draw();
-  setPills();
+  setStatus();
 })();
 </script>
 </body>
 </html>
+<!-- FILE: lohri-merge.html  |  PART 1/2  |  END -->
