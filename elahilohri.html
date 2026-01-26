@@ -2,774 +2,757 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Elahi's Lohri Invitation (Recorder)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lohri Invitation Card Maker (Elahi Photo)</title>
   <style>
-    :root { color-scheme: dark; }
-    body{
-      margin:0; padding:16px; min-height:100vh;
-      display:grid; place-items:center; gap:12px;
-      background:#0b0b0b; color:#fff;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    :root{
+      --bg:#0b0f14;
+      --panel:#121825;
+      --muted:#9aa6b2;
+      --text:#e7eef6;
+      --accent:#f7c948;
+      --btn:#1f2a3d;
+      --border:#26324a;
     }
-    .wrap{ width:min(560px,96vw); display:grid; gap:10px; }
-    .card{
-      background:#121212;
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 20% 0%, #18223a 0%, var(--bg) 60%);
+      color:var(--text);
+    }
+    header{
+      padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    header h1{
+      font-size:16px;
+      margin:0;
+      letter-spacing:.2px;
+    }
+    header .hint{
+      color:var(--muted);
+      font-size:12px;
+    }
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:16px;
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      main{ grid-template-columns: 1fr; }
+    }
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
       border:1px solid rgba(255,255,255,.08);
       border-radius:14px;
-      padding:12px;
-      box-shadow:0 10px 30px rgba(0,0,0,.35);
-      display:grid; gap:10px;
+      padding:14px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
     }
-    canvas{
-      width:min(390px,92vw);
-      aspect-ratio:9/16;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background:#000;
+    .panel h2{
+      margin:0 0 10px 0;
+      font-size:14px;
+      color:#dfe8f2;
     }
-    .two{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    .three{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
-    @media (max-width: 560px){ .two,.three{ grid-template-columns:1fr; } }
-    label{ font-size:13px; opacity:.9; }
-    input[type="file"], select, input[type="number"], input[type="range"]{ width:100%; }
-    select, input[type="number"]{
-      background:#1a1a1a; color:#fff;
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:10px; padding:10px; outline:none;
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin:10px 0;
+    }
+    label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
     }
     input[type="file"]{
-      padding:8px; background:#1a1a1a;
-      border-radius:10px; border:1px solid rgba(255,255,255,.14);
-    }
-    input[type="range"]{ accent-color:#f6c65b; }
-    button{
       width:100%;
-      border:0; border-radius:12px;
-      padding:12px 14px;
-      font-weight:800; cursor:pointer;
-      background:#f6c65b; color:#1b1305;
+      padding:10px;
+      background:rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:10px;
+      color:var(--text);
     }
-    button.secondary{
-      background:#2a2a2a; color:#fff;
+    .ctrl{
+      margin:10px 0;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,a,0.0);
+    }
+    .ctrl .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .ctrl .grid.one{
+      grid-template-columns: 1fr;
+    }
+    input[type="range"]{
+      width:100%;
+    }
+    .small{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.35;
+    }
+    .btn{
+      appearance:none;
       border:1px solid rgba(255,255,255,.12);
-      font-weight:700;
+      background: var(--btn);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+      transition: transform .06s ease, border-color .2s ease;
+      user-select:none;
     }
-    button:disabled{ opacity:.55; cursor:not-allowed; }
-    .hint{ font-size:12px; opacity:.75; line-height:1.35; }
-    .tiny{ font-size:12px; opacity:.72; line-height:1.3; }
-    .divider{ height:1px; background:rgba(255,255,255,.08); margin:4px 0; }
-    .sectionTitle{ font-size:13px; font-weight:800; opacity:.9; margin-top:4px; }
-    .kv{ display:flex; justify-content:space-between; gap:10px; font-size:12px; opacity:.8; }
-    .kv span{ white-space:nowrap; }
-    .warn{
-      background:rgba(246,198,91,.08);
-      border:1px solid rgba(246,198,91,.35);
-      padding:10px; border-radius:12px;
+    .btn:hover{ border-color: rgba(247,201,72,.45); }
+    .btn:active{ transform: scale(.99); }
+    .btn.primary{
+      background: linear-gradient(180deg, rgba(247,201,72,.18), rgba(247,201,72,.06));
+      border-color: rgba(247,201,72,.45);
+    }
+    .btn.danger{
+      background: linear-gradient(180deg, rgba(255,90,90,.18), rgba(255,90,90,.06));
+      border-color: rgba(255,90,90,.35);
+    }
+    .pill{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--muted);
+    }
+    .canvasWrap{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:stretch;
+    }
+    .canvasBox{
+      background: rgba(0,0,0,.25);
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius:14px;
+      padding:10px;
+      overflow:auto;
+    }
+    canvas{
+      display:block;
+      margin:0 auto;
+      background:#000;
+      border-radius:10px;
+      max-width:100%;
+      height:auto;
+      touch-action:none; /* for drag on mobile */
+    }
+    .status{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .status .left{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .note{
+      margin-top:10px;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      padding:2px 6px;
+      border-radius:8px;
+      color:#cfe0f2;
+      font-size:12px;
     }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <canvas id="c" width="1080" height="1920"></canvas>
+<header>
+  <div>
+    <h1>Lohri Invitation Card Maker</h1>
+    <div class="hint">Upload the invitation card image + Elahi’s photo → position it → download the final card.</div>
+  </div>
+  <div class="pill" id="readyPill">Waiting for uploads…</div>
+</header>
 
-    <div class="card">
-      <div class="warn tiny">
-        ✅ If Elahi photos show in Preview but disappear in the downloaded video: this page converts uploads into a <b>safe bitmap</b> before recording (fixes many Android/Chrome recorder bugs).<br>
-        If your phone photo is <b>HEIC</b>, convert to JPG/PNG first.
-      </div>
+<main>
+  <!-- LEFT: CONTROLS -->
+  <section class="panel">
+    <h2>1) Upload Images</h2>
 
-      <div class="two">
-        <div><label>Background 1 (bonfire / festive)</label><input id="bg1" type="file" accept="image/*" /></div>
-        <div><label>Background 2 (venue / ambience)</label><input id="bg2" type="file" accept="image/*" /></div>
-      </div>
+    <div class="row" style="flex-direction:column; align-items:stretch;">
+      <label>Invitation card (background)</label>
+      <input id="bgInput" type="file" accept="image/*" />
+    </div>
 
-      <div class="two">
-        <div><label>Background 3 (date / calendar style)</label><input id="bg3" type="file" accept="image/*" /></div>
-        <div><label>Background 4 (gold frame)</label><input id="bg4" type="file" accept="image/*" /></div>
-      </div>
+    <div class="row" style="flex-direction:column; align-items:stretch;">
+      <label>Elahi photo (overlay)</label>
+      <input id="fgInput" type="file" accept="image/*" />
+    </div>
 
-      <div class="two">
-        <div><label>Elahi Photo 1 (FRONT slide)</label><input id="p1" type="file" accept="image/*" /></div>
-        <div><label>Elahi Photo 2 (END slide)</label><input id="p2" type="file" accept="image/*" /></div>
-      </div>
+    <div class="note small">
+      <div><strong style="color:#fff">Tip:</strong> On mobile, use 1 finger to drag and 2 fingers to pinch-zoom (if your browser supports it). Otherwise use the sliders.</div>
+      <div style="margin-top:8px;">Desktop: drag to move • <span class="kbd">Shift</span> + drag = rotate (optional) • mouse wheel = zoom</div>
+    </div>
 
-      <div class="two">
+    <h2 style="margin-top:14px;">2) Position & Size Elahi Photo</h2>
+
+    <div class="ctrl">
+      <div class="grid">
         <div>
-          <label>Background Music (optional MP3)</label>
-          <input id="music" type="file" accept="audio/*" />
-          <div class="tiny">Desktop Chrome records audio best. Some phones may record silent video.</div>
+          <label>Size</label>
+          <input id="scaleRange" type="range" min="0.1" max="3.0" step="0.01" value="1.0" />
+          <div class="small">Scale: <span id="scaleVal">1.00</span>x</div>
         </div>
         <div>
-          <label>Transition Style</label>
-          <select id="transition">
-            <option value="fold">Fold (premium)</option>
-            <option value="slide">Slide</option>
-            <option value="zoom">Zoom (Ken Burns)</option>
-            <option value="fade">Fade</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="two">
-        <div><label>Seconds per slide</label><input id="slideSec" type="number" min="2" max="10" step="0.5" value="4.0" /></div>
-        <div><label>Transition seconds</label><input id="fadeSec" type="number" min="0.5" max="3" step="0.1" value="0.8" /></div>
-      </div>
-
-      <div class="divider"></div>
-      <div class="sectionTitle">Fit Elahi photos inside frame</div>
-
-      <div class="three">
-        <div>
-          <label>Photo 1 Zoom</label>
-          <input id="p1Zoom" type="range" min="1" max="2.2" step="0.01" value="1.30" />
-          <div class="kv"><span>1.00</span><span id="p1ZoomVal">1.30</span><span>2.20</span></div>
-        </div>
-        <div>
-          <label>Photo 1 X</label>
-          <input id="p1X" type="range" min="-250" max="250" step="1" value="0" />
-          <div class="kv"><span>-250</span><span id="p1XVal">0</span><span>250</span></div>
-        </div>
-        <div>
-          <label>Photo 1 Y</label>
-          <input id="p1Y" type="range" min="-350" max="350" step="1" value="-60" />
-          <div class="kv"><span>-350</span><span id="p1YVal">-60</span><span>350</span></div>
+          <label>Opacity</label>
+          <input id="opacityRange" type="range" min="0" max="1" step="0.01" value="1" />
+          <div class="small">Opacity: <span id="opacityVal">1.00</span></div>
         </div>
       </div>
 
-      <div class="three">
+      <div class="grid" style="margin-top:10px;">
         <div>
-          <label>Photo 2 Zoom</label>
-          <input id="p2Zoom" type="range" min="1" max="2.2" step="0.01" value="1.30" />
-          <div class="kv"><span>1.00</span><span id="p2ZoomVal">1.30</span><span>2.20</span></div>
+          <label>Rotate</label>
+          <input id="rotateRange" type="range" min="-180" max="180" step="1" value="0" />
+          <div class="small">Angle: <span id="rotateVal">0</span>°</div>
         </div>
         <div>
-          <label>Photo 2 X</label>
-          <input id="p2X" type="range" min="-250" max="250" step="1" value="0" />
-          <div class="kv"><span>-250</span><span id="p2XVal">0</span><span>250</span></div>
-        </div>
-        <div>
-          <label>Photo 2 Y</label>
-          <input id="p2Y" type="range" min="-350" max="350" step="1" value="-60" />
-          <div class="kv"><span>-350</span><span id="p2YVal">-60</span><span>350</span></div>
+          <label>Corner Radius</label>
+          <input id="radiusRange" type="range" min="0" max="200" step="1" value="120" />
+          <div class="small">Round: <span id="radiusVal">120</span>px</div>
         </div>
       </div>
 
-      <div class="tiny">Tip: adjust <b>Y</b> for up/down, <b>Zoom</b> for size, <b>X</b> for left/right.</div>
-
-      <div class="divider"></div>
-      <div class="two">
-        <button id="previewBtn" class="secondary">Preview</button>
-        <button id="recordBtn" disabled>Record & Download Video</button>
+      <div class="grid" style="margin-top:10px;">
+        <div>
+          <label>Photo Width (px)</label>
+          <input id="wRange" type="range" min="100" max="900" step="1" value="420" />
+          <div class="small">W: <span id="wVal">420</span>px</div>
+        </div>
+        <div>
+          <label>Photo Height (px)</label>
+          <input id="hRange" type="range" min="100" max="900" step="1" value="420" />
+          <div class="small">H: <span id="hVal">420</span>px</div>
+        </div>
       </div>
 
-      <div class="hint">
-        • Upload all 4 backgrounds. Elahi Photo 1 is first, Elahi Photo 2 is last.<br>
-        • Downloads as <b>.webm</b> (WhatsApp supports it). Convert to MP4 if needed.
+      <div class="row" style="margin-top:12px;">
+        <button class="btn" id="centerBtn" type="button">Center Photo</button>
+        <button class="btn" id="fitBtn" type="button">Fit Face Box</button>
+        <button class="btn danger" id="resetBtn" type="button">Reset Overlay</button>
+      </div>
+
+      <div class="small" style="margin-top:6px;">
+        Drag Elahi photo directly on the preview. Use sliders for perfect positioning.
       </div>
     </div>
-  </div>
+
+    <h2 style="margin-top:14px;">3) Download</h2>
+    <div class="row">
+      <button class="btn primary" id="downloadPng" type="button">Download PNG</button>
+      <button class="btn" id="downloadJpg" type="button">Download JPG</button>
+    </div>
+
+    <div class="note small">
+      PNG is best quality. JPG gives smaller size. The download will be the exact same size as the card image.
+    </div>
+  </section>
+
+  <!-- RIGHT: CANVAS PREVIEW -->
+  <section class="panel canvasWrap">
+    <div class="status">
+      <div class="left">
+        <div class="pill" id="sizePill">Canvas: —</div>
+        <div class="pill" id="dragPill">Drag: OFF</div>
+      </div>
+      <div class="small" id="helpLine">Upload the card first, then Elahi photo.</div>
+    </div>
+
+    <div class="canvasBox">
+      <canvas id="c" width="900" height="1200"></canvas>
+    </div>
+
+    <div class="small">
+      If the photo looks blurry, try uploading a higher-resolution Elahi image.
+    </div>
+  </section>
+</main>
 
 <script>
 (() => {
-  const W=1080, H=1920, FPS=30;
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
 
-  // ✅ extra hold so slide 6 stays visible and never gets cut off
-  const END_HOLD_SEC = 1.2;
+  const bgInput = document.getElementById('bgInput');
+  const fgInput = document.getElementById('fgInput');
 
-  const canvas=document.getElementById('c');
-  const ctx=canvas.getContext('2d');
+  const scaleRange = document.getElementById('scaleRange');
+  const opacityRange = document.getElementById('opacityRange');
+  const rotateRange = document.getElementById('rotateRange');
+  const radiusRange = document.getElementById('radiusRange');
+  const wRange = document.getElementById('wRange');
+  const hRange = document.getElementById('hRange');
 
-  const el = {
-    bg1: document.getElementById('bg1'),
-    bg2: document.getElementById('bg2'),
-    bg3: document.getElementById('bg3'),
-    bg4: document.getElementById('bg4'),
-    p1: document.getElementById('p1'),
-    p2: document.getElementById('p2'),
-    music: document.getElementById('music'),
-    transition: document.getElementById('transition'),
-    slideSec: document.getElementById('slideSec'),
-    fadeSec: document.getElementById('fadeSec'),
-    previewBtn: document.getElementById('previewBtn'),
-    recordBtn: document.getElementById('recordBtn'),
+  const scaleVal = document.getElementById('scaleVal');
+  const opacityVal = document.getElementById('opacityVal');
+  const rotateVal = document.getElementById('rotateVal');
+  const radiusVal = document.getElementById('radiusVal');
+  const wVal = document.getElementById('wVal');
+  const hVal = document.getElementById('hVal');
 
-    p1Zoom: document.getElementById('p1Zoom'),
-    p1X: document.getElementById('p1X'),
-    p1Y: document.getElementById('p1Y'),
-    p2Zoom: document.getElementById('p2Zoom'),
-    p2X: document.getElementById('p2X'),
-    p2Y: document.getElementById('p2Y'),
+  const centerBtn = document.getElementById('centerBtn');
+  const fitBtn = document.getElementById('fitBtn');
+  const resetBtn = document.getElementById('resetBtn');
 
-    p1ZoomVal: document.getElementById('p1ZoomVal'),
-    p1XVal: document.getElementById('p1XVal'),
-    p1YVal: document.getElementById('p1YVal'),
-    p2ZoomVal: document.getElementById('p2ZoomVal'),
-    p2XVal: document.getElementById('p2XVal'),
-    p2YVal: document.getElementById('p2YVal'),
+  const downloadPng = document.getElementById('downloadPng');
+  const downloadJpg = document.getElementById('downloadJpg');
+
+  const readyPill = document.getElementById('readyPill');
+  const sizePill = document.getElementById('sizePill');
+  const dragPill = document.getElementById('dragPill');
+  const helpLine = document.getElementById('helpLine');
+
+  let bgImg = null;
+  let fgImg = null;
+
+  // Overlay state (in canvas pixels)
+  const overlay = {
+    x: 0,
+    y: 0,
+    w: 420,
+    h: 420,
+    scale: 1,
+    opacity: 1,
+    rot: 0,      // radians
+    radius: 120
   };
 
-  const DETAILS = {
-    title: "Elahi’s Lohri",
-    dateLine: "28 January 2026",
-    timeLine: "11:00 AM",
-    venueLine: "Thousand Spices",
-  };
-
-  const imgs = { bg1:null, bg2:null, bg3:null, bg4:null, p1:null, p2:null };
-  let raf=null;
-
-  const sparkles = Array.from({length: 70}, () => ({
-    x: Math.random()*W,
-    y: Math.random()*H,
-    r: 2 + Math.random()*4,
-    s: 10 + Math.random()*25,
-    a: 0.08 + Math.random()*0.12
-  }));
-
-  function easeInOut(t){ return t<.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; }
-  function clamp(v,a,b){ return Math.max(a, Math.min(b,v)); }
-
-  function setValLabels(){
-    el.p1ZoomVal.textContent = (+el.p1Zoom.value).toFixed(2);
-    el.p1XVal.textContent = el.p1X.value;
-    el.p1YVal.textContent = el.p1Y.value;
-    el.p2ZoomVal.textContent = (+el.p2Zoom.value).toFixed(2);
-    el.p2XVal.textContent = el.p2X.value;
-    el.p2YVal.textContent = el.p2Y.value;
+  function setPills() {
+    const bgOk = !!bgImg;
+    const fgOk = !!fgImg;
+    if (!bgOk && !fgOk) readyPill.textContent = 'Waiting for uploads…';
+    if (bgOk && !fgOk)  readyPill.textContent = 'Card uploaded ✓ (add Elahi photo)';
+    if (bgOk && fgOk)   readyPill.textContent = 'Ready ✓ (position & download)';
   }
-  ["input","change"].forEach(evt=>{
-    [el.p1Zoom,el.p1X,el.p1Y,el.p2Zoom,el.p2X,el.p2Y].forEach(r=>r.addEventListener(evt, setValLabels));
-  });
-  setValLabels();
 
-  async function loadSafeBitmap(file, label){
-    if(!file) return null;
+  function syncUIFromState() {
+    scaleRange.value = overlay.scale;
+    opacityRange.value = overlay.opacity;
+    rotateRange.value = Math.round(overlay.rot * 180 / Math.PI);
+    radiusRange.value = overlay.radius;
+    wRange.value = overlay.w;
+    hRange.value = overlay.h;
 
-    try{
-      const bmp = await createImageBitmap(file);
-      return bmp;
-    }catch(e){ /* fall back */ }
+    scaleVal.textContent = Number(overlay.scale).toFixed(2);
+    opacityVal.textContent = Number(overlay.opacity).toFixed(2);
+    rotateVal.textContent = String(Math.round(overlay.rot * 180 / Math.PI));
+    radiusVal.textContent = String(Math.round(overlay.radius));
+    wVal.textContent = String(Math.round(overlay.w));
+    hVal.textContent = String(Math.round(overlay.h));
+  }
 
-    return new Promise((resolve) => {
+  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+  function readFileAsImage(file) {
+    return new Promise((resolve, reject) => {
       const url = URL.createObjectURL(file);
-      const im = new Image();
-      im.onload = async () => {
-        try{
-          const oc = document.createElement("canvas");
-          oc.width = im.naturalWidth || im.width;
-          oc.height = im.naturalHeight || im.height;
-          const octx = oc.getContext("2d");
-          octx.drawImage(im, 0, 0);
-          URL.revokeObjectURL(url);
-
-          const bmp2 = await createImageBitmap(oc);
-          resolve(bmp2);
-        }catch(err){
-          alert("Could not load " + label + ". Please use JPG/PNG (not HEIC).");
-          resolve(null);
-        }
-      };
-      im.onerror = () => {
+      const img = new Image();
+      img.onload = () => {
         URL.revokeObjectURL(url);
-        alert("Could not load " + label + ". Please use JPG/PNG (not HEIC).");
-        resolve(null);
+        resolve(img);
       };
-      im.src = url;
+      img.onerror = (e) => reject(e);
+      img.src = url;
     });
   }
 
-  async function loadAll(){
-    imgs.bg1 = await loadSafeBitmap(el.bg1.files[0], "Background 1");
-    imgs.bg2 = await loadSafeBitmap(el.bg2.files[0], "Background 2");
-    imgs.bg3 = await loadSafeBitmap(el.bg3.files[0], "Background 3");
-    imgs.bg4 = await loadSafeBitmap(el.bg4.files[0], "Background 4");
-    imgs.p1  = await loadSafeBitmap(el.p1.files[0],  "Elahi Photo 1");
-    imgs.p2  = await loadSafeBitmap(el.p2.files[0],  "Elahi Photo 2");
-
-    el.recordBtn.disabled = !(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4);
+  function resizeCanvasToBg() {
+    if (!bgImg) return;
+    canvas.width = bgImg.naturalWidth || bgImg.width;
+    canvas.height = bgImg.naturalHeight || bgImg.height;
+    sizePill.textContent = `Canvas: ${canvas.width} × ${canvas.height}`;
   }
 
-  function coverDraw(bmp, opts={}){
-    if(!bmp) return;
-    const {alpha=1, panX=0, panY=0, scaleBoost=1} = opts;
-    ctx.save();
-    ctx.globalAlpha=alpha;
+  function resetOverlay() {
+    // default: put photo near lower-middle area (you can drag)
+    overlay.w = Math.round(canvas.width * 0.28);
+    overlay.h = overlay.w;
+    overlay.scale = 1;
+    overlay.opacity = 1;
+    overlay.rot = 0;
+    overlay.radius = Math.round(overlay.w * 0.28);
 
-    const iw=bmp.width, ih=bmp.height;
-    const base=Math.max(W/iw, H/ih) * scaleBoost;
-    const sw=iw*base, sh=ih*base;
-    const dx=(W-sw)/2 + panX;
-    const dy=(H-sh)/2 + panY;
-    ctx.drawImage(bmp, dx, dy, sw, sh);
-    ctx.restore();
+    overlay.x = Math.round(canvas.width * 0.5);
+    overlay.y = Math.round(canvas.height * 0.66);
+
+    // Update ranges max based on canvas
+    wRange.max = String(Math.max(300, Math.min(1200, canvas.width)));
+    hRange.max = String(Math.max(300, Math.min(1200, canvas.width)));
+    wRange.min = "80";
+    hRange.min = "80";
+
+    syncUIFromState();
+    draw();
   }
 
-  function glowOverlay(alpha=1){
-    ctx.save();
-    ctx.globalAlpha=alpha;
-    const g=ctx.createRadialGradient(W*.5,H*.30,80, W*.5,H*.30,H*1.0);
-    g.addColorStop(0,"rgba(255,220,140,0.22)");
-    g.addColorStop(1,"rgba(0,0,0,0.58)");
-    ctx.fillStyle=g;
-    ctx.fillRect(0,0,W,H);
-    ctx.restore();
-  }
-
-  function drawSparkles(t){
-    ctx.save();
-    ctx.globalCompositeOperation="screen";
-    for(const p of sparkles){
-      const yy = (p.y + (t*p.s)) % (H+200) - 100;
-      const tw = 0.5 + 0.5*Math.sin((t*1.6) + p.x*0.002);
-      ctx.globalAlpha = p.a * (0.6 + tw);
-      ctx.beginPath();
-      ctx.arc(p.x, yy, p.r*(0.7+tw), 0, Math.PI*2);
-      ctx.fillStyle="rgba(255,210,140,1)";
-      ctx.fill();
-    }
-    ctx.restore();
-  }
-
-  // ===== TEXT: WRAP + AUTO-SHRINK (Fixes “out of frame”) =====
-  function wrapTextLines(text, maxWidth, font) {
-    ctx.save();
-    ctx.font = font;
-    const words = String(text).split(/\s+/);
-    const out = [];
-    let line = "";
-    for (const w of words) {
-      const test = line ? (line + " " + w) : w;
-      if (ctx.measureText(test).width <= maxWidth) {
-        line = test;
-      } else {
-        if (line) out.push(line);
-        line = w;
-      }
-    }
-    if (line) out.push(line);
-    ctx.restore();
-    return out;
-  }
-
-  function textBlock({ y, lines, size=64, weight=700, maxWidth=860, minSize=34, lineGap=1.18 }) {
-    const safeX = 110;
-    const safeW = W - safeX*2;
-    const w = Math.min(maxWidth, safeW);
-
-    let fontSize = size;
-    let flat = [];
-
-    while (fontSize >= minSize) {
-      flat = [];
-      const font = `${weight} ${fontSize}px Georgia, "Times New Roman", serif`;
-
-      for (const item of lines) {
-        const parts = String(item).split("\n");
-        for (const p of parts) {
-          const wrapped = wrapTextLines(p, w, font);
-          flat.push(...wrapped);
-        }
-      }
-
-      ctx.save();
-      ctx.font = `${weight} ${fontSize}px Georgia, "Times New Roman", serif`;
-      const tooWide = flat.some(t => ctx.measureText(t).width > w);
-      ctx.restore();
-
-      if (!tooWide) break;
-      fontSize -= 2;
-    }
-
-    ctx.save();
-    ctx.textAlign="center";
-    ctx.textBaseline="middle";
-    ctx.fillStyle="rgba(255,245,220,0.98)";
-    ctx.shadowColor="rgba(0,0,0,0.65)";
-    ctx.shadowBlur=18;
-    ctx.shadowOffsetY=6;
-    ctx.font=`${weight} ${fontSize}px Georgia, "Times New Roman", serif`;
-
-    const lineH = fontSize * lineGap;
-    const startY = y - ((flat.length-1)*lineH)/2;
-
-    flat.forEach((t,i)=>ctx.fillText(t, W/2, startY + i*lineH));
-    ctx.restore();
-  }
-  // ==========================================================
-
-  function roundRect(x,y,w,h,r){
+  function roundedRectPath(ctx, x, y, w, h, r) {
+    const rr = Math.min(r, w/2, h/2);
     ctx.beginPath();
-    ctx.moveTo(x+r,y);
-    ctx.arcTo(x+w,y,x+w,y+h,r);
-    ctx.arcTo(x+w,y+h,x,y+h,r);
-    ctx.arcTo(x,y+h,x,y,r);
-    ctx.arcTo(x,y,x+w,y,r);
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
     ctx.closePath();
   }
 
-  function pill({y, icon, label}){
-    ctx.save();
-    const padX=34;
-    ctx.font=`600 44px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-    const textW=ctx.measureText(label).width;
-    const w=textW + padX*2 + 70, h=88;
-    const x=(W-w)/2;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.globalAlpha=0.92;
-    ctx.fillStyle="rgba(0,0,0,0.46)";
-    roundRect(x, y-h/2, w, h, 26);
-    ctx.fill();
-
-    ctx.globalAlpha=1;
-    ctx.fillStyle="rgba(255,240,210,0.98)";
-    ctx.textAlign="left"; ctx.textBaseline="middle";
-    ctx.fillText(icon, x+26, y);
-    ctx.fillText(label, x+26+54, y);
-    ctx.restore();
-  }
-
-  function drawPhotoInFrame(photoBmp, controls){
-    if(!photoBmp) return;
-
-    const inner = { x:190, y:260, w:700, h:1180, r:30 };
-
-    const zoom = controls.zoom;
-    const offX = controls.x;
-    const offY = controls.y;
-
-    ctx.save();
-    roundRect(inner.x,inner.y,inner.w,inner.h,inner.r);
-    ctx.clip();
-
-    const iw=photoBmp.width, ih=photoBmp.height;
-    const base = Math.max(inner.w/iw, inner.h/ih);
-    const s = base * zoom;
-
-    const sw=iw*s, sh=ih*s;
-    const dx=inner.x + (inner.w - sw)/2 + offX;
-    const dy=inner.y + (inner.h - sh)/2 + offY;
-
-    ctx.drawImage(photoBmp, dx, dy, sw, sh);
-    ctx.restore();
-  }
-
-  function slideCount(){ return 6; }
-
-  function drawSlide(idx, t){
-    ctx.clearRect(0,0,W,H);
-    const kb = 0.02;
-    const panX = Math.sin(t*0.5)*18;
-    const panY = Math.cos(t*0.45)*12;
-
-    const p1Ctl = { zoom: +el.p1Zoom.value, x: +el.p1X.value, y: +el.p1Y.value };
-    const p2Ctl = { zoom: +el.p2Zoom.value, x: +el.p2X.value, y: +el.p2Y.value };
-
-    if(idx===0){
-      coverDraw(imgs.bg4,{scaleBoost:1.01});
-      glowOverlay(0.75);
-      if(imgs.p1) drawPhotoInFrame(imgs.p1, p1Ctl);
-      drawSparkles(t);
-
-      textBlock({ y:H*0.16, size:92, weight:800, maxWidth:860, lines:["Please Join Us"]});
-      textBlock({ y:H*0.25, size:44, weight:500, maxWidth:860, lines:["for a warm celebration of"]});
-      textBlock({ y:H*0.84, size:58, weight:700, maxWidth:860, lines:[DETAILS.title]});
+    // background
+    if (bgImg) {
+      ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+    } else {
+      // placeholder
+      ctx.fillStyle = '#0a0a0a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(255,255,255,.7)';
+      ctx.font = '16px system-ui';
+      ctx.fillText('Upload the invitation card image…', 24, 40);
       return;
     }
 
-    if(idx===1){
-      coverDraw(imgs.bg1,{scaleBoost:1+kb, panX, panY});
-      glowOverlay(1);
-      drawSparkles(t);
-
-      textBlock({ y:H*0.36, size:68, weight:600, maxWidth:860, lines:["Please join us to celebrate"]});
-      textBlock({ y:H*0.50, size:104, weight:800, maxWidth:860, lines:["Elahi’s Lohri"]});
-      return;
-    }
-
-    if(idx===2){
-      coverDraw(imgs.bg2,{scaleBoost:1+kb, panX, panY});
-      glowOverlay(1);
-      drawSparkles(t);
-
-      textBlock({ y:H*0.45, size:70, weight:600, maxWidth:860, lines:["Make this occasion more joyful"]});
-      textBlock({ y:H*0.58, size:64, weight:500, maxWidth:860, lines:["with your gracious presence"]});
-      return;
-    }
-
-    if(idx===3){
-      coverDraw(imgs.bg3,{scaleBoost:1+kb, panX, panY});
-      glowOverlay(1);
-      drawSparkles(t);
-
-      textBlock({ y:H*0.24, size:90, weight:800, maxWidth:860, lines:["Date & Time"]});
-      pill({ y:H*0.42, icon:"📅", label:DETAILS.dateLine });
-      pill({ y:H*0.53, icon:"⏰", label:DETAILS.timeLine });
-      pill({ y:H*0.64, icon:"📍", label:DETAILS.venueLine });
-      return;
-    }
-
-    if(idx===4){
-      coverDraw(imgs.bg1,{scaleBoost:1+kb, panX, panY});
-      glowOverlay(1);
-      drawSparkles(t);
-
-      textBlock({ y:H*0.45, size:70, weight:600, maxWidth:860, lines:["An evening of warmth, tradition,"]});
-      textBlock({ y:H*0.58, size:76, weight:800, maxWidth:860, lines:["and togetherness"]});
-      return;
-    }
-
-    if(idx===5){
-      coverDraw(imgs.bg4,{scaleBoost:1.01});
-      glowOverlay(0.75);
-      if(imgs.p2) drawPhotoInFrame(imgs.p2, p2Ctl);
-      drawSparkles(t);
-
-      textBlock({ y:H*0.16, size:84, weight:800, maxWidth:860, lines:[DETAILS.title]});
-      textBlock({ y:H*0.84, size:80, weight:800, maxWidth:860, lines:["See you there"]});
-      return;
-    }
-  }
-
-  function drawTransition(fromIdx, toIdx, p, type, t){
-    const e = easeInOut(p);
-
-    if(type==="fade"){
-      drawSlide(fromIdx, t);
-      ctx.save(); ctx.globalAlpha = e; drawSlide(toIdx, t); ctx.restore();
-      return;
-    }
-
-    if(type==="slide"){
-      ctx.clearRect(0,0,W,H);
-      ctx.save(); ctx.translate(-e*W,0); drawSlide(fromIdx,t); ctx.restore();
-      ctx.save(); ctx.translate((1-e)*W,0); drawSlide(toIdx,t); ctx.restore();
-      return;
-    }
-
-    if(type==="zoom"){
-      ctx.clearRect(0,0,W,H);
+    // overlay
+    if (fgImg) {
       ctx.save();
-      ctx.globalAlpha = 1 - e;
-      ctx.translate(W/2,H/2);
-      ctx.scale(1 + e*0.06, 1 + e*0.06);
-      ctx.translate(-W/2,-H/2);
-      drawSlide(fromIdx,t);
-      ctx.restore();
+      ctx.globalAlpha = overlay.opacity;
 
-      ctx.save();
-      ctx.globalAlpha = e;
-      ctx.translate(W/2,H/2);
-      ctx.scale(0.94 + e*0.06, 0.94 + e*0.06);
-      ctx.translate(-W/2,-H/2);
-      drawSlide(toIdx,t);
-      ctx.restore();
-      return;
-    }
+      // Transform: move to center, rotate, then draw centered
+      ctx.translate(overlay.x, overlay.y);
+      ctx.rotate(overlay.rot);
 
-    // fold default
-    ctx.clearRect(0,0,W,H);
-    const first = e < 0.5;
-    const k = first ? (1 - e*2) : ((e-0.5)*2);
-    const sX = clamp(k, 0.06, 1);
-    const skew = (first ? 1 : -1) * (0.12 * (1 - sX));
+      const dw = overlay.w * overlay.scale;
+      const dh = overlay.h * overlay.scale;
+      const dx = -dw / 2;
+      const dy = -dh / 2;
 
-    ctx.save();
-    ctx.translate(W/2, 0);
-    ctx.transform(sX, 0, skew, 1, 0, 0);
-    ctx.translate(-W/2, 0);
-    drawSlide(first ? fromIdx : toIdx, t);
-    ctx.globalCompositeOperation="multiply";
-    ctx.fillStyle = `rgba(0,0,0,${0.18 + (1-sX)*0.45})`;
-    ctx.fillRect(0,0,W,H);
-    ctx.restore();
-  }
+      // Clip (rounded rectangle)
+      roundedRectPath(ctx, dx, dy, dw, dh, overlay.radius);
+      ctx.clip();
 
-  // ✅ FIXED timeline: extends final hold so slide 6 is fully visible
-  function buildTimeline(){
-    const per = parseFloat(el.slideSec.value || "4.0");
-    const fade = parseFloat(el.fadeSec.value || "0.8");
-    const n = slideCount();
+      // Draw image to fill box (cover)
+      // We'll cover the box without stretching by cropping.
+      const boxAspect = dw / dh;
+      const imgAspect = fgImg.width / fgImg.height;
 
-    const segments=[];
-    let cursor=0;
-
-    for(let i=0;i<n;i++){
-      segments.push({type:"hold", i, start:cursor, end:cursor+per});
-      cursor += per;
-
-      if(i<n-1){
-        segments.push({type:"x", from:i, to:i+1, start:cursor, end:cursor+fade});
-        cursor += fade;
-      }
-    }
-
-    // Extend last hold only
-    segments[segments.length - 1].end += END_HOLD_SEC;
-    cursor += END_HOLD_SEC;
-
-    return {n, total: cursor, segments};
-  }
-
-  // ✅ FIXED render: if time reaches the end, force last slide
-  function renderAtTime(t){
-    const tt = Math.max(0, t);
-    const {segments, n, total} = buildTimeline();
-    const mode = el.transition.value || "fold";
-
-    if(tt >= total){
-      drawSlide(n - 1, total - 0.0001);
-      return;
-    }
-
-    const seg = segments.find(s => tt >= s.start && tt < s.end);
-
-    if(!seg){
-      drawSlide(n - 1, tt);
-      return;
-    }
-
-    if(seg.type==="hold"){
-      drawSlide(seg.i, tt);
-      return;
-    }
-
-    const p = (tt - seg.start) / (seg.end - seg.start);
-    drawTransition(seg.from, seg.to, p, mode, tt);
-  }
-
-  async function buildAudioTrack(){
-    const file = el.music.files[0];
-    if(!file) return null;
-
-    const audio = new Audio();
-    audio.src = URL.createObjectURL(file);
-    audio.loop = true;
-    audio.crossOrigin = "anonymous";
-
-    const AudioContext_ = window.AudioContext || window.webkitAudioContext;
-    if(!AudioContext_) return null;
-
-    const ac = new AudioContext_();
-    const source = ac.createMediaElementSource(audio);
-    const dest = ac.createMediaStreamDestination();
-    source.connect(dest);
-    source.connect(ac.destination);
-    return {audio, ac, stream: dest.stream};
-  }
-
-  // ✅ FIXED preview: always draws last slide at end
-  function animateOnce(onDone){
-    const {total} = buildTimeline();
-    const start = performance.now();
-
-    function frame(now){
-      const t = (now - start)/1000;
-      renderAtTime(t);
-
-      if(t < total){
-        raf = requestAnimationFrame(frame);
+      let sx, sy, sw, sh;
+      if (imgAspect > boxAspect) {
+        // image wider than box => crop left/right
+        sh = fgImg.height;
+        sw = Math.round(sh * boxAspect);
+        sx = Math.round((fgImg.width - sw) / 2);
+        sy = 0;
       } else {
-        renderAtTime(total);
-        if(onDone) onDone();
+        // image taller => crop top/bottom
+        sw = fgImg.width;
+        sh = Math.round(sw / boxAspect);
+        sx = 0;
+        sy = Math.round((fgImg.height - sh) / 2);
       }
+
+      ctx.drawImage(fgImg, sx, sy, sw, sh, dx, dy, dw, dh);
+
+      ctx.restore();
+
+      // helper outline
+      ctx.save();
+      ctx.strokeStyle = 'rgba(247,201,72,.75)';
+      ctx.lineWidth = Math.max(2, Math.round(canvas.width * 0.002));
+      ctx.translate(overlay.x, overlay.y);
+      ctx.rotate(overlay.rot);
+      const dw2 = overlay.w * overlay.scale;
+      const dh2 = overlay.h * overlay.scale;
+      roundedRectPath(ctx, -dw2/2, -dh2/2, dw2, dh2, overlay.radius);
+      ctx.stroke();
+      ctx.restore();
     }
-    raf = requestAnimationFrame(frame);
+
+    setPills();
   }
 
-  el.previewBtn.addEventListener('click', async ()=>{
-    await loadAll();
-    if(!(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4)){
-      alert("Please upload all 4 background images first.");
-      return;
+  // File handlers
+  bgInput.addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    try {
+      bgImg = await readFileAsImage(file);
+      resizeCanvasToBg();
+      helpLine.textContent = 'Now upload Elahi photo.';
+      setPills();
+      // If fg already set, keep overlay; else reset
+      if (!fgImg) resetOverlay();
+      draw();
+    } catch {
+      alert('Could not load card image. Please try another image.');
     }
-    if(raf) cancelAnimationFrame(raf);
-    animateOnce(()=>{});
   });
 
-  el.recordBtn.addEventListener('click', async ()=>{
-    await loadAll();
-    if(!(imgs.bg1 && imgs.bg2 && imgs.bg3 && imgs.bg4)){
-      alert("Please upload all 4 background images first.");
-      return;
-    }
-
-    const timeline = buildTimeline();
-    const videoStream = canvas.captureStream(FPS);
-
-    let audioPack = null;
-    try { audioPack = await buildAudioTrack(); } catch(e){ audioPack = null; }
-
-    let stream = videoStream;
-    if(audioPack && audioPack.stream && audioPack.stream.getAudioTracks().length){
-      stream = new MediaStream([
-        ...videoStream.getVideoTracks(),
-        ...audioPack.stream.getAudioTracks()
-      ]);
-    }
-
-    let mime = "video/webm;codecs=vp9";
-    if(!MediaRecorder.isTypeSupported(mime)) mime = "video/webm;codecs=vp8";
-    if(!MediaRecorder.isTypeSupported(mime)) mime = "video/webm";
-
-    const rec = new MediaRecorder(stream, { mimeType:mime, videoBitsPerSecond: 7_000_000 });
-    const chunks=[];
-
-    rec.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
-    const done = new Promise(resolve => rec.onstop = resolve);
-
-    if(audioPack){
-      try{
-        await audioPack.ac.resume();
-        audioPack.audio.currentTime = 0;
-        await audioPack.audio.play();
-      }catch(e){}
-    }
-
-    rec.start(250);
-
-    const start = performance.now();
-    function tick(now){
-      const t = (now - start)/1000;
-      renderAtTime(t);
-
-      if(t < timeline.total){
-        requestAnimationFrame(tick);
-      } else {
-        // ✅ Force last slide drawn before stopping
-        renderAtTime(timeline.total);
-        rec.stop();
+  fgInput.addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    try {
+      fgImg = await readFileAsImage(file);
+      helpLine.textContent = 'Drag the photo to position it, then download.';
+      setPills();
+      if (!bgImg) {
+        alert('Please upload the invitation card first.');
+        return;
       }
+      resetOverlay();
+      draw();
+    } catch {
+      alert('Could not load Elahi photo. Please try another image.');
     }
-    requestAnimationFrame(tick);
+  });
 
-    await done;
+  // Slider bindings
+  function bindRange(rangeEl, onChange){
+    rangeEl.addEventListener('input', () => onChange());
+    rangeEl.addEventListener('change', () => onChange());
+  }
 
-    if(audioPack){
-      try{ audioPack.audio.pause(); }catch(e){}
-      try{ audioPack.ac.close(); }catch(e){}
+  bindRange(scaleRange, () => {
+    overlay.scale = Number(scaleRange.value);
+    scaleVal.textContent = overlay.scale.toFixed(2);
+    draw();
+  });
+
+  bindRange(opacityRange, () => {
+    overlay.opacity = Number(opacityRange.value);
+    opacityVal.textContent = overlay.opacity.toFixed(2);
+    draw();
+  });
+
+  bindRange(rotateRange, () => {
+    const deg = Number(rotateRange.value);
+    overlay.rot = deg * Math.PI / 180;
+    rotateVal.textContent = String(deg);
+    draw();
+  });
+
+  bindRange(radiusRange, () => {
+    overlay.radius = Number(radiusRange.value);
+    radiusVal.textContent = String(Math.round(overlay.radius));
+    draw();
+  });
+
+  bindRange(wRange, () => {
+    overlay.w = Number(wRange.value);
+    wVal.textContent = String(Math.round(overlay.w));
+    overlay.radius = clamp(overlay.radius, 0, Math.min(overlay.w, overlay.h) / 2);
+    radiusRange.value = overlay.radius;
+    radiusVal.textContent = String(Math.round(overlay.radius));
+    draw();
+  });
+
+  bindRange(hRange, () => {
+    overlay.h = Number(hRange.value);
+    hVal.textContent = String(Math.round(overlay.h));
+    overlay.radius = clamp(overlay.radius, 0, Math.min(overlay.w, overlay.h) / 2);
+    radiusRange.value = overlay.radius;
+    radiusVal.textContent = String(Math.round(overlay.radius));
+    draw();
+  });
+
+  // Buttons
+  centerBtn.addEventListener('click', () => {
+    overlay.x = Math.round(canvas.width / 2);
+    overlay.y = Math.round(canvas.height / 2);
+    draw();
+  });
+
+  // A simple "fit" that places the photo in the upper-middle area (like a profile spot)
+  fitBtn.addEventListener('click', () => {
+    overlay.w = Math.round(canvas.width * 0.26);
+    overlay.h = overlay.w;
+    overlay.scale = 1;
+    overlay.radius = Math.round(overlay.w * 0.5); // circle-like
+    overlay.x = Math.round(canvas.width * 0.50);
+    overlay.y = Math.round(canvas.height * 0.54);
+    syncUIFromState();
+    draw();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    if (!bgImg) return;
+    resetOverlay();
+  });
+
+  // Download helpers
+  function downloadAs(type) {
+    if (!bgImg) { alert('Upload the invitation card first.'); return; }
+    if (!fgImg) { alert('Upload Elahi photo first.'); return; }
+
+    // Draw without helper outline
+    const temp = document.createElement('canvas');
+    temp.width = canvas.width;
+    temp.height = canvas.height;
+    const tctx = temp.getContext('2d');
+
+    // background
+    tctx.drawImage(bgImg, 0, 0, temp.width, temp.height);
+
+    // overlay (same logic, but no outline)
+    tctx.save();
+    tctx.globalAlpha = overlay.opacity;
+    tctx.translate(overlay.x, overlay.y);
+    tctx.rotate(overlay.rot);
+
+    const dw = overlay.w * overlay.scale;
+    const dh = overlay.h * overlay.scale;
+    const dx = -dw/2;
+    const dy = -dh/2;
+
+    // clip
+    const rr = Math.min(overlay.radius, dw/2, dh/2);
+    tctx.beginPath();
+    tctx.moveTo(dx + rr, dy);
+    tctx.arcTo(dx + dw, dy, dx + dw, dy + dh, rr);
+    tctx.arcTo(dx + dw, dy + dh, dx, dy + dh, rr);
+    tctx.arcTo(dx, dy + dh, dx, dy, rr);
+    tctx.arcTo(dx, dy, dx + dw, dy, rr);
+    tctx.closePath();
+    tctx.clip();
+
+    // cover crop
+    const boxAspect = dw / dh;
+    const imgAspect = fgImg.width / fgImg.height;
+    let sx, sy, sw, sh;
+    if (imgAspect > boxAspect) {
+      sh = fgImg.height;
+      sw = Math.round(sh * boxAspect);
+      sx = Math.round((fgImg.width - sw) / 2);
+      sy = 0;
+    } else {
+      sw = fgImg.width;
+      sh = Math.round(sw / boxAspect);
+      sx = 0;
+      sy = Math.round((fgImg.height - sh) / 2);
     }
+    tctx.drawImage(fgImg, sx, sy, sw, sh, dx, dy, dw, dh);
+    tctx.restore();
 
-    const blob = new Blob(chunks, {type:mime});
-    const url = URL.createObjectURL(blob);
+    const mime = type === 'jpg' ? 'image/jpeg' : 'image/png';
+    const quality = type === 'jpg' ? 0.92 : 1.0;
+
+    const url = temp.toDataURL(mime, quality);
     const a = document.createElement('a');
     a.href = url;
-    a.download = "Elahi-Lohri-Invitation.webm";
+    a.download = type === 'jpg' ? 'lohari_invitation_final.jpg' : 'lohari_invitation_final.png';
     document.body.appendChild(a);
     a.click();
     a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url), 2000);
+  }
+
+  downloadPng.addEventListener('click', () => downloadAs('png'));
+  downloadJpg.addEventListener('click', () => downloadAs('jpg'));
+
+  // Drag & wheel zoom
+  let dragging = false;
+  let last = {x:0, y:0};
+  let dragMode = 'move'; // move | rotate
+
+  function getPointerPos(ev) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (ev.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (ev.clientY - rect.top) * (canvas.height / rect.height);
+    return {x,y};
+  }
+
+  function canDragOverlay() {
+    return !!bgImg && !!fgImg;
+  }
+
+  canvas.addEventListener('pointerdown', (ev) => {
+    if (!canDragOverlay()) return;
+    canvas.setPointerCapture(ev.pointerId);
+    dragging = true;
+    dragMode = ev.shiftKey ? 'rotate' : 'move';
+    last = getPointerPos(ev);
+    dragPill.textContent = 'Drag: ON';
+    draw();
   });
 
-  // Initial screen
-  ctx.fillStyle="#000"; ctx.fillRect(0,0,W,H);
-  ctx.fillStyle="rgba(255,255,255,.85)";
-  ctx.font="700 44px system-ui, -apple-system, Segoe UI, Roboto, Arial";
-  ctx.textAlign="center";
-  ctx.fillText("Upload backgrounds + Elahi photos", W/2, H/2 - 40);
-  ctx.fillStyle="rgba(255,255,255,.65)";
-  ctx.font="400 34px system-ui, -apple-system, Segoe UI, Roboto, Arial";
-  ctx.fillText("Adjust fit sliders → Preview → Record", W/2, H/2 + 20);
+  canvas.addEventListener('pointermove', (ev) => {
+    if (!dragging || !canDragOverlay()) return;
+    const p = getPointerPos(ev);
+    const dx = p.x - last.x;
+    const dy = p.y - last.y;
+
+    if (dragMode === 'move') {
+      overlay.x += dx;
+      overlay.y += dy;
+    } else {
+      // rotate by horizontal drag
+      const deg = (dx) * 0.35;
+      overlay.rot += deg * Math.PI / 180;
+      rotateRange.value = String(Math.round(overlay.rot * 180 / Math.PI));
+      rotateVal.textContent = rotateRange.value;
+    }
+
+    last = p;
+    draw();
+  });
+
+  function stopDrag(ev){
+    if (!dragging) return;
+    dragging = false;
+    dragPill.textContent = 'Drag: OFF';
+    draw();
+  }
+  canvas.addEventListener('pointerup', stopDrag);
+  canvas.addEventListener('pointercancel', stopDrag);
+  canvas.addEventListener('pointerleave', stopDrag);
+
+  // Wheel zoom (desktop)
+  canvas.addEventListener('wheel', (ev) => {
+    if (!canDragOverlay()) return;
+    ev.preventDefault();
+    const delta = Math.sign(ev.deltaY);
+    overlay.scale = clamp(overlay.scale + (delta > 0 ? -0.05 : 0.05), 0.1, 3.0);
+    scaleRange.value = overlay.scale;
+    scaleVal.textContent = overlay.scale.toFixed(2);
+    draw();
+  }, { passive:false });
+
+  // Initial draw
+  syncUIFromState();
+  draw();
+  setPills();
 })();
 </script>
 </body>
