@@ -26,8 +26,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <!-- Client-side PDF generation. If blocked, the page falls back to print/save as PDF. -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- Client-side PDF generation. Uses jsPDF + AutoTable so selected rate tables are written directly into the PDF. If blocked, the page falls back to print/save as PDF. -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <style>
     :root{
@@ -111,12 +112,12 @@
         <span class="marquee-item"><span class="marquee-dot" aria-hidden="true"></span> Registered NDIS Provider</span>
         <span class="marquee-item">NDIS 2025–26 price limits</span>
         <span class="marquee-item">Download one category or multiple categories</span>
-        <span class="marquee-item">Service agreement before supports start</span>
+        <span class="marquee-item">Pricing confirmed before supports start</span>
         <span class="marquee-item">Contact: 02 8630 5500</span>
         <span class="marquee-item"><span class="marquee-dot" aria-hidden="true"></span> Registered NDIS Provider</span>
         <span class="marquee-item">NDIS 2025–26 price limits</span>
         <span class="marquee-item">Download one category or multiple categories</span>
-        <span class="marquee-item">Service agreement before supports start</span>
+        <span class="marquee-item">Pricing confirmed before supports start</span>
         <span class="marquee-item">Email: info@hdheed.com.au</span>
       </div>
     </div>
@@ -138,7 +139,6 @@
         <a href="services.html">Services</a>
         <a href="referral.html">Referral</a>
         <a href="ailr.html">Intake</a>
-        <a href="serviceagreement.html">Service agreement</a>
         <a class="cta" href="contact.html">Enquiry</a>
       </nav>
     </div>
@@ -189,9 +189,10 @@
           <button class="btn btn-ghost" type="button" id="selectAll">Select all categories</button>
           <button class="btn btn-ghost" type="button" id="clearAll">Clear selection</button>
         </div>
+        <div class="hint" id="pdfStatus" role="status" aria-live="polite" style="margin-top:10px">PDF downloads create a selected rate list from the tables on this page.</div>
         <div class="source-box">
           <strong>Pricing source:</strong><br />
-          Based on NDIS Pricing Arrangements and Price Limits 2025–26 and common support items for NSW / National MMM 1–5. Final billing must match the participant’s plan, support ratio, service agreement and current NDIA rules.
+          Based on NDIS Pricing Arrangements and Price Limits 2025–26 and common support items for NSW / National MMM 1–5. Final billing must match the participant’s plan, support ratio, agreed arrangements and current NDIA rules.
         </div>
       </aside>
 
@@ -218,8 +219,8 @@
 
         <section class="note-card" id="important-notes">
           <h2>Important pricing notes</h2>
-          <p><span class="tagchip">NDIS price limits</span> <span class="tagchip">Service agreement first</span> <span class="tagchip">Travel by agreement</span> <span class="tagchip">Cancellations may apply</span></p>
-          <p>Prices shown are public-facing NDIS price limits for common HD HeeD supports. They are not a guarantee that a support can be delivered or funded. Before services start, HD HeeD confirms the participant’s goals, support needs, risk level, funding category, schedule, location, staff availability, travel arrangements and service agreement.</p>
+          <p><span class="tagchip">NDIS price limits</span> <span class="tagchip">Direct confirmation first</span> <span class="tagchip">Travel by agreement</span> <span class="tagchip">Cancellations may apply</span></p>
+          <p>Prices shown are public-facing NDIS price limits for common HD HeeD supports. They are not a guarantee that a support can be delivered or funded. Before services start, HD HeeD confirms the participant’s goals, support needs, risk level, funding category, schedule, location, staff availability, travel arrangements and direct confirmation with HD HeeD.</p>
           <p>Where a rate, travel cost, cancellation rule, or support item changes under the NDIS, the current NDIA pricing arrangements take priority.</p>
         </section>
       </section>
@@ -240,7 +241,7 @@
         Phone: <a href="tel:0286305500">02 8630 5500</a> • Email: <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>
       </div>
       <div>
-        Source basis: <a href="https://www.ndis.gov.au/providers/pricing-and-payments/pricing/pricing-arrangements-and-price-limits" target="_blank" rel="noopener">NDIS Pricing Arrangements and Price Limits 2025–26</a>. Always check current NDIS pricing before finalising a new service agreement.
+        Source basis: <a href="https://www.ndis.gov.au/providers/pricing-and-payments/pricing/pricing-arrangements-and-price-limits" target="_blank" rel="noopener">NDIS Pricing Arrangements and Price Limits 2025–26</a>. Always check current NDIS pricing before confirming a new support arrangement with HD HeeD.
       </div>
     </div>
   </footer>
@@ -308,7 +309,7 @@
       },
       {
         id:'transport', icon:'🚗', title:'Transport and provider travel',
-        subtitle:'Transport and travel are only charged where agreed with the participant or representative and included in the service agreement.',
+        subtitle:'Transport and travel are only charged where agreed with the participant or representative and included in the direct confirmation with HD HeeD.',
         rows:[
           ['Activity Based Transport — Community Participation','04_590_0125_6_1','Vehicle running cost while transporting participant during community access','Each / km as agreed','$1.00'],
           ['Provider Travel — Non-labour Costs','04_799_0125_6_1','Non-labour travel costs to deliver agreed support','Each','$1.00'],
@@ -399,34 +400,131 @@
         </div>
         ${cats.map(cat => `<section class="pdf-category"><h2>${esc(cat.title)}</h2><p>${esc(cat.subtitle)}</p>${makeTable(cat,true)}</section>`).join('')}
         <div class="pdf-note">
-          <strong>Important:</strong> Prices are based on common NDIS 2025–26 price limits for NSW / National MMM 1–5 areas. Final supports, travel, cancellation rules, schedule and payment arrangements must be confirmed in a service agreement. Always check the current NDIS Pricing Arrangements and Price Limits before finalising a new service agreement.
+          <strong>Important:</strong> Prices are based on common NDIS 2025–26 price limits for NSW / National MMM 1–5 areas. Final supports, travel, cancellation rules, schedule and payment arrangements must be confirmed directly with HD HeeD before supports start. Always check the current NDIS Pricing Arrangements and Price Limits before confirming a new support arrangement with HD HeeD.
         </div>
       </div>`;
+    }
+
+    function drawWrapped(doc, text, x, y, maxWidth, lineHeight){
+      const lines = doc.splitTextToSize(String(text || ''), maxWidth);
+      lines.forEach(line => { doc.text(line, x, y); y += lineHeight; });
+      return y;
+    }
+
+    function openPrintFallback(ids, filename){
+      const win = window.open('', '_blank');
+      if(!win){ alert('Please allow pop-ups, or use Print / Save page.'); return; }
+      win.document.write(`<!doctype html><html><head><title>${filename}</title><style>
+        body{font-family:Arial,sans-serif;color:#0f172a;margin:0;background:#fff}.pdf-doc{padding:24px}.pdf-cover{border-bottom:4px solid #512b8a;padding-bottom:14px;margin-bottom:18px}.pdf-cover h1{margin:0;font-size:26px}.pdf-cover p{margin:6px 0;color:#475569}.pdf-category{page-break-inside:avoid;margin:18px 0 24px}.pdf-category h2{color:#512b8a;margin:0 0 8px}.pdf-category p{color:#334155;margin:0 0 10px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #dbe2ef;padding:7px;font-size:11px;text-align:left;vertical-align:top}th{background:#eef2ff;color:#1e3a8a}.money{font-weight:bold}.pdf-note{font-size:11px;color:#475569;border-top:1px solid #e5e7eb;padding-top:10px;margin-top:16px}@media print{@page{size:A4;margin:12mm}}
+      </style></head><body>${pdfHtml(ids)}<script>window.onload=function(){setTimeout(function(){window.print()},250)};<\/script></body></html>`);
+      win.document.close();
     }
 
     async function downloadPdf(ids){
       if(!ids || !ids.length){ alert('Please select at least one category.'); return; }
       const cats = CATEGORIES.filter(c => ids.includes(c.id));
-      const name = cats.length === 1 ? slug(cats[0].title) : 'selected-categories';
-      const shell = document.getElementById('pdfShell');
-      shell.innerHTML = pdfHtml(ids);
+      const pdfStatus = document.getElementById('pdfStatus');
+      if(pdfStatus) pdfStatus.textContent = 'Preparing PDF…';
+      const name = cats.length === 1 ? slug(cats[0].title) : (cats.length === CATEGORIES.length ? 'full-rate-list' : 'selected-categories');
       const filename = `HD-HeeD-NDIS-rate-list-${name}.pdf`;
+      const date = new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
 
-      if(window.html2pdf){
-        const opt = {
-          margin: [8,8,8,8],
-          filename,
-          image: { type:'jpeg', quality:0.98 },
-          html2canvas: { scale:2, useCORS:true, backgroundColor:'#ffffff' },
-          jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
-          pagebreak: { mode:['avoid-all','css','legacy'] }
-        };
-        try{ await html2pdf().set(opt).from(shell.firstElementChild).save(); return; }
-        catch(e){ console.warn('PDF library failed, falling back to print window', e); }
+      try{
+        const jsPDF = window.jspdf && window.jspdf.jsPDF;
+        if(!jsPDF) throw new Error('jsPDF not loaded');
+        const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+        const pageW = doc.internal.pageSize.getWidth();
+        const pageH = doc.internal.pageSize.getHeight();
+        const margin = 14;
+        let y = 16;
+
+        doc.setProperties({
+          title: 'HD HeeD NDIS Rate List',
+          subject: cats.map(c => c.title).join(', '),
+          author: 'HD HeeD'
+        });
+
+        // Cover/header
+        doc.setFillColor(81,43,138);
+        doc.rect(0,0,pageW,28,'F');
+        doc.setTextColor(255,255,255);
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(19);
+        doc.text('HD HeeD — NDIS Rate List', margin, 18);
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(9);
+        doc.text('Phone: 02 8630 5500   |   Email: info@hdheed.com.au', pageW - margin, 18, { align:'right' });
+
+        y = 40;
+        doc.setTextColor(15,23,42);
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(12);
+        doc.text(`Prepared: ${date}`, margin, y); y += 7;
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(9);
+        y = drawWrapped(doc, `Categories included: ${cats.map(c=>c.title).join(', ')}`, margin, y, pageW - margin*2, 5) + 2;
+
+        cats.forEach((cat, idx) => {
+          if(y > pageH - 55){ doc.addPage(); y = 18; }
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(14);
+          doc.setTextColor(81,43,138);
+          doc.text(`${cat.icon} ${cat.title}`, margin, y); y += 6;
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(9);
+          doc.setTextColor(51,65,85);
+          y = drawWrapped(doc, cat.subtitle, margin, y, pageW - margin*2, 4.8) + 2;
+
+          if(typeof doc.autoTable !== 'function') throw new Error('AutoTable not loaded');
+          doc.autoTable({
+            startY: y,
+            head: [HEADERS],
+            body: cat.rows,
+            margin: { left: margin, right: margin },
+            theme: 'grid',
+            styles: { font: 'helvetica', fontSize: 7.5, cellPadding: 2.1, overflow: 'linebreak', valign:'top', textColor:[15,23,42], lineColor:[219,226,239], lineWidth:0.2 },
+            headStyles: { fillColor:[81,43,138], textColor:[255,255,255], fontStyle:'bold', fontSize:7.5 },
+            alternateRowStyles: { fillColor:[248,250,252] },
+            columnStyles: {
+              0: { cellWidth: 34 },
+              1: { cellWidth: 32, fontSize: 6.7, textColor:[51,65,85] },
+              2: { cellWidth: 62 },
+              3: { cellWidth: 20 },
+              4: { cellWidth: 22, halign:'right', fontStyle:'bold' }
+            }
+          });
+          y = doc.lastAutoTable.finalY + 10;
+        });
+
+        if(y > pageH - 42){ doc.addPage(); y = 18; }
+        doc.setDrawColor(229,231,235);
+        doc.line(margin, y, pageW-margin, y); y += 7;
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(9);
+        doc.setTextColor(15,23,42);
+        doc.text('Important notes', margin, y); y += 5;
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(8);
+        doc.setTextColor(71,85,105);
+        y = drawWrapped(doc, 'Prices are based on common NDIS 2025–26 price limits for NSW / National MMM 1–5 areas. Final supports, travel, cancellation rules, schedule and payment arrangements must be confirmed directly with HD HeeD before supports start. Always check the current NDIS Pricing Arrangements and Price Limits before confirming supports.', margin, y, pageW - margin*2, 4.5);
+
+        const pages = doc.internal.getNumberOfPages();
+        for(let i=1;i<=pages;i++){
+          doc.setPage(i);
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(7.5);
+          doc.setTextColor(100,116,139);
+          doc.text(`HD HeeD • NDIS Rate List • Page ${i} of ${pages}`, margin, pageH - 8);
+          doc.text('info@hdheed.com.au • 02 8630 5500', pageW - margin, pageH - 8, { align:'right' });
+        }
+
+        doc.save(filename);
+        if(pdfStatus) pdfStatus.textContent = 'PDF generated. Check your downloads folder.';
+      }catch(e){
+        console.warn('PDF generation fallback:', e);
+        if(pdfStatus) pdfStatus.textContent = 'PDF library blocked. Opened print/save PDF fallback.';
+        openPrintFallback(ids, filename);
       }
-      const win = window.open('', '_blank');
-      win.document.write(`<!doctype html><html><head><title>${filename}</title><style>${document.querySelector('style').innerHTML}</style></head><body><div class="pdf-shell" style="position:static;width:auto">${pdfHtml(ids)}</div><script>window.onload=function(){window.print()};<\/script></body></html>`);
-      win.document.close();
     }
 
     document.getElementById('downloadSelected').addEventListener('click', () => downloadPdf(selectedIds()));
