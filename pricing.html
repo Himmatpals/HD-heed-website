@@ -3,12 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HD HeeD — NDIS Pricing & Rate List</title>
-  <meta name="description" content="HD HeeD NDIS pricing and rate list for personal care, community access, domestic assistance, high intensity support, nursing, sleepover and transport." />
+  <title>HD HEED RATE LIST</title>
+  <meta name="description" content="HD HeeD NDIS rate list for personal care, high intensity support, domestic assistance, community access, nursing care and transport." />
   <meta name="theme-color" content="#512b8a" />
-  <meta name="color-scheme" content="dark light" />
 
-  <!-- Favicons / App Icons matching HD HeeD site -->
+  <!-- Favicons / App Icons matching HD HeeD website -->
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
@@ -16,82 +15,129 @@
   <link rel="manifest" href="/site.webmanifest?v=3" />
   <link rel="shortcut icon" href="images/favicon.ico" />
 
-  <!-- Social preview -->
-  <meta property="og:title" content="HD HeeD — NDIS Pricing & Rate List" />
-  <meta property="og:description" content="View and download NDIS pricing categories for HD HeeD supports." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="/images/logo.png" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <!-- Client-side PDF generation. Uses jsPDF + AutoTable so selected rate tables are written directly into the PDF. If blocked, the page falls back to print/save as PDF. -->
+  <!-- PDF generation. PDF text is plain ASCII only to avoid corrupted symbols. -->
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <style>
     :root{
-      --purple:#512b8a; --purple2:#6d28d9; --pink:#ec4899; --gold:#ffc107;
-      --ink:#0f172a; --muted:#64748b; --line:#e5e7eb; --soft:#f6f7fb;
-      --night:#0b0f1a; --panel:#10172a; --panel2:#141d38; --text:#e8edff; --ice:#cfe0ff;
-      --blue:#2563eb; --cyan:#06b6d4; --green:#22c55e; --orange:#ff5722;
-      --grad:linear-gradient(135deg,var(--purple2),var(--pink));
-      --grad2:linear-gradient(135deg,var(--cyan),var(--blue));
-      --glow:rgba(236,72,153,.35);
+      --purple:#512b8a;
+      --purple2:#6d28d9;
+      --gold:#ffc107;
+      --orange:#ff5722;
+      --green:#16a34a;
+      --blue:#2563eb;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --soft:#f6f7fb;
+      --white:#ffffff;
+      --shadow:0 18px 50px rgba(15,23,42,.12);
+      --radius:18px;
     }
     *{box-sizing:border-box}
-    html,body{min-height:100%;scroll-behavior:smooth}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:
-      radial-gradient(900px 480px at 0% -10%,rgba(79,70,229,.34),transparent 58%),
-      radial-gradient(900px 480px at 100% 0%,rgba(236,72,153,.24),transparent 58%),
-      linear-gradient(180deg,#0b0f1a 0%,#121a3b 46%,#0c1028 100%);overflow-x:hidden}
-    a{color:#b6d3ff;text-decoration:none} a:hover{color:#fff}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--soft);color:var(--ink);line-height:1.55}
+    a{color:var(--purple);text-decoration:none;font-weight:800}
+    a:hover{text-decoration:underline}
     img{max-width:100%;height:auto;display:block}
-    .container{width:min(1160px,calc(100% - 32px));margin-inline:auto}
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    button,a{touch-action:manipulation}
+    .container{width:min(1120px,calc(100% - 32px));margin-inline:auto}
+    .topbar{background:#0b1220;color:#fff;font-size:13px}
+    .topbar .inner{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;flex-wrap:wrap}
+    .topbar a{color:#fff;text-decoration:none}
+    header.site{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 8px 24px rgba(15,23,42,.06)}
+    header .inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo img{width:46px;height:46px;border-radius:12px;object-fit:cover;background:#eef2ff}
+    .logo-mark{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;font-weight:900;letter-spacing:.03em}
+    .brand-title{font-weight:900;letter-spacing:-.02em}
+    .brand-sub{color:var(--muted);font-size:13px}
+    nav{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+    nav a{color:var(--ink);padding:10px 12px;border-radius:12px;text-decoration:none;font-size:14px}
+    nav a:hover{background:#f1f5f9;text-decoration:none;color:var(--purple)}
+    nav a.cta{background:var(--purple);color:#fff}
+    .menu-toggle{display:none;border:1px solid var(--line);border-radius:12px;background:#f8fafc;padding:10px 12px;font-weight:900;color:var(--ink)}
+    @media(max-width:820px){
+      .menu-toggle{display:inline-flex}
+      nav{display:none;position:absolute;top:72px;right:16px;left:16px;flex-direction:column;align-items:stretch;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--shadow)}
+      nav.open{display:flex}
+      nav a{width:100%}
+    }
 
-    .topbar{background:#070b14;color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
-    .topbar .inner{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 0;font-size:13px}
-    .topbar a{color:#fff;font-weight:800}.contact-links{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+    .hero{background:linear-gradient(135deg,#31105e 0%,#512b8a 48%,#7c3aed 100%);color:#fff;padding:40px 0 34px}
+    .hero-card{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+    .hero h1{margin:0;font-size:clamp(32px,6vw,56px);line-height:1;letter-spacing:-.06em;font-weight:900;text-transform:uppercase}
+    .hero p{margin:12px 0 0;color:#eef2ff;max-width:760px;font-size:clamp(15px,2.2vw,18px)}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .btn{appearance:none;border:0;border-radius:14px;padding:13px 16px;min-height:46px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:transform .16s ease,box-shadow .16s ease,background .16s ease;box-shadow:0 8px 22px rgba(15,23,42,.12);font-family:inherit}
+    .btn:hover{transform:translateY(-1px);text-decoration:none}
+    .btn-primary{background:var(--gold);color:#1e1b4b}
+    .btn-purple{background:var(--purple);color:#fff}
+    .btn-white{background:#fff;color:var(--purple)}
+    .btn-outline{background:#fff;color:var(--ink);border:1px solid var(--line)}
+    .btn-danger{background:var(--orange);color:#fff}
+    .btn-small{padding:9px 11px;min-height:38px;border-radius:12px;font-size:13px}
+    .hero-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:10px 14px;border-radius:999px;color:#fff;font-weight:900;display:inline-flex;width:max-content;font-size:13px}
+    @media(max-width:760px){.hero-card{grid-template-columns:1fr}.hero-actions .btn{width:100%}}
 
-    .marquee-wrap{position:sticky;top:0;z-index:70;background:rgba(7,11,20,.78);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07);padding:6px 0}
-    .marquee{overflow:hidden}.marquee-track{display:flex;gap:28px;align-items:center;white-space:nowrap;will-change:transform;animation:marquee 58s linear infinite}.marquee:hover .marquee-track{animation-play-state:paused}
-    .marquee-item{display:inline-flex;align-items:center;gap:10px;background:rgba(236,254,255,.94);color:#075985;border:1px solid #bae6fd;padding:8px 14px;border-radius:999px;font-weight:900;box-shadow:0 8px 18px rgba(7,89,133,.15)}
-    .marquee-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
-    @keyframes marquee{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
-    @media(max-width:820px){.marquee-track{animation-duration:24s}}
-    @media(prefers-reduced-motion:reduce){.marquee-track{animation:none}}
+    .main{padding:24px 0 36px}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .download-panel{display:grid;grid-template-columns:1fr;gap:16px;margin-top:-34px;position:relative;z-index:2}
+    .panel h2{margin:0 0 8px;font-size:22px;letter-spacing:-.03em}
+    .muted{color:var(--muted)}
+    .controls{display:grid;grid-template-columns:1fr 240px;gap:12px;margin-top:14px}
+    .field{display:grid;gap:6px}
+    .field label{font-weight:900;font-size:13px;color:#334155}
+    .field input,.field select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 13px;font:inherit;background:#fff;color:var(--ink);outline:none}
+    .field input:focus,.field select:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(81,43,138,.12)}
+    @media(max-width:760px){.controls{grid-template-columns:1fr}}
 
-    header.site{position:sticky;top:45px;z-index:65;background:rgba(255,255,255,.96);color:var(--ink);border-bottom:1px solid var(--line);box-shadow:0 12px 30px rgba(2,6,23,.18)}
-    header.site .inner{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0}
-    .logo{display:flex;gap:10px;align-items:center}.logo img{height:46px;width:46px;border-radius:13px;object-fit:cover}.logo-fallback{display:none;width:46px;height:46px;border-radius:13px;background:var(--grad);color:#fff;align-items:center;justify-content:center;font-weight:900;box-shadow:0 8px 22px rgba(81,43,138,.25)}
-    .brandname{font-weight:900;letter-spacing:-.02em}.brandtag{font-size:13px;color:var(--muted)}
-    nav.topnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}nav.topnav a{color:var(--ink);font-weight:800;padding:10px 12px;border-radius:12px}nav.topnav a:hover{background:#eef2ff;color:var(--purple)}nav.topnav a.cta{background:var(--grad);color:#fff;box-shadow:0 8px 24px rgba(81,43,138,.25)}
-    .menu-toggle{display:none;border:1px solid var(--line);background:#f8fafc;border-radius:12px;padding:10px 12px;font-weight:900}
-    @media(max-width:880px){header.site{top:44px}.menu-toggle{display:inline-flex}.topnav{position:absolute;top:72px;right:16px;left:16px;display:none!important;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px;box-shadow:0 18px 45px rgba(2,6,23,.2)}.topnav.open{display:flex!important}.topnav a{width:100%}}
+    .choose-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+    @media(max-width:900px){.choose-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:560px){.choose-grid{grid-template-columns:1fr}}
+    .check-card{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:12px;background:#f8fafc;cursor:pointer;min-height:62px}
+    .check-card:hover{border-color:#c4b5fd;background:#faf5ff}
+    .check-card input{width:18px;height:18px;margin-top:2px;accent-color:var(--purple)}
+    .check-card strong{display:block;font-size:14px;line-height:1.25}
+    .check-card span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+    .download-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+    .status{font-size:13px;color:var(--muted);margin-top:10px}
 
-    .hero{padding:26px 0 16px}.hero-card{position:relative;overflow:hidden;border-radius:28px;background:linear-gradient(180deg,rgba(18,26,50,.92),rgba(12,19,38,.92));border:1px solid rgba(255,255,255,.12);box-shadow:0 24px 70px rgba(0,0,0,.55),inset 0 0 20px rgba(255,255,255,.05);padding:clamp(22px,5vw,42px);display:grid;gap:18px}.hero-card:before{content:"";position:absolute;inset:-40%;background:radial-gradient(45% 30% at 82% 20%,rgba(255,193,7,.18),transparent 62%),radial-gradient(35% 30% at 15% 10%,rgba(6,182,212,.16),transparent 60%);animation:sweep 9s ease-in-out infinite;pointer-events:none}.hero-card>*{position:relative}.eyebrow{display:inline-flex;align-items:center;gap:8px;width:max-content;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);border-radius:999px;padding:8px 12px;color:#dbeafe;font-weight:900;font-size:13px}.hero h1{margin:0;font-size:clamp(31px,7vw,58px);line-height:1.02;letter-spacing:-.055em;font-weight:900}.gradtext{background:linear-gradient(135deg,#fff 5%,#d9e7ff 30%,#ffc8e6 75%,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{max-width:820px;margin:0;color:#cfe0ff;line-height:1.65;font-size:clamp(15px,2.2vw,18px)}.hero-actions{display:flex;gap:12px;flex-wrap:wrap}.btn{appearance:none;border:0;border-radius:16px;padding:14px 18px;font-weight:900;cursor:pointer;min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}.btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.34)}.btn-primary{background:var(--grad);color:#fff}.btn-gold{background:var(--gold);color:#1e1b4b}.btn-ghost{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.2)}.btn-white{background:#fff;color:var(--purple)}.btn-orange{background:var(--orange);color:#fff}.btn-small{min-height:38px;padding:9px 12px;border-radius:12px;font-size:13px}.pillbar{display:flex;gap:8px;flex-wrap:wrap}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);border-radius:999px;padding:8px 12px;color:#dbeafe;font-weight:800;font-size:13px}
-    @keyframes sweep{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(-5%) translateY(-2%)}}
+    .quick-notes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
+    @media(max-width:900px){.quick-notes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:560px){.quick-notes{grid-template-columns:1fr}}
+    .note{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 8px 28px rgba(15,23,42,.07)}
+    .note strong{display:block;color:var(--purple);font-size:24px;line-height:1}
+    .note span{display:block;color:var(--muted);font-weight:700;font-size:13px;margin-top:6px}
 
-    .layout{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start;padding:10px 0 32px}@media(max-width:1020px){.layout{grid-template-columns:1fr}}
-    .side{position:sticky;top:128px;background:linear-gradient(180deg,rgba(15,22,48,.95),rgba(11,16,38,.95));border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,.45)}@media(max-width:1020px){.side{position:relative;top:auto}}
-    .side h2{margin:0 0 10px;font-size:18px}.side .hint{font-size:13px;color:#a8bbf0;line-height:1.5}.field{display:grid;gap:6px;margin-top:12px}.field label{font-weight:900;font-size:13px;color:#d7e2ff}.field input,.field select{width:100%;padding:13px 14px;border-radius:14px;border:1px solid #2a3b68;background:linear-gradient(135deg,#0f1b3b,#1a2748);color:#e7ebff;font-size:15px;outline:none}.field input:focus,.field select:focus{border-color:#ec4899;box-shadow:0 0 0 4px rgba(236,72,153,.18)}.checklist{display:grid;gap:8px;margin:13px 0}.checkrow{display:flex;gap:9px;align-items:flex-start;border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px;background:rgba(255,255,255,.04)}.checkrow input{margin-top:2px;accent-color:var(--pink)}.checkrow span{font-size:13px;color:#dce7ff;font-weight:800;line-height:1.25}.side-actions{display:grid;gap:9px;margin-top:13px}.side .btn{width:100%}.source-box{margin-top:12px;border:1px dashed rgba(255,255,255,.18);border-radius:16px;padding:12px;color:#adc2ff;font-size:12px;line-height:1.5}
+    .rates{display:grid;gap:16px;margin-top:18px}
+    .category{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+    .cat-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:18px;background:linear-gradient(180deg,#fff,#fbfbff)}
+    .cat-head h2{margin:0;font-size:clamp(20px,3vw,28px);line-height:1.18;letter-spacing:-.035em;color:var(--purple)}
+    .cat-head p{margin:8px 0 0;color:#475569;max-width:820px}
+    .cat-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    @media(max-width:760px){.cat-head{flex-direction:column}.cat-actions{width:100%}.cat-actions .btn{width:100%}}
+    .table-wrap{overflow:auto;border-top:1px solid var(--line)}
+    table{width:100%;min-width:760px;border-collapse:collapse}
+    th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+    th{background:#f8fafc;color:#334155;text-transform:uppercase;font-size:12px;letter-spacing:.04em}
+    tbody tr:hover{background:#faf5ff}
+    td.price{font-weight:900;color:#111827;font-size:15px;white-space:nowrap}
+    td.code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;color:#475569;white-space:nowrap}
+    .category.hidden{display:none}
 
-    .main{display:grid;gap:16px}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);border-radius:20px;padding:14px}.toolbar strong{font-size:14px}.toolbar .mini{font-size:13px;color:#b6c8ff}.summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}@media(max-width:900px){.summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.summary-grid{grid-template-columns:1fr}}
-    .stat{border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.12);padding:16px;box-shadow:0 10px 28px rgba(0,0,0,.18)}.stat .num{font-weight:900;font-size:27px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.stat .label{font-size:13px;color:#cfe0ff;font-weight:800;margin-top:3px}
-    .category{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(180deg,rgba(16,23,42,.92),rgba(12,19,38,.92));border:1px solid rgba(255,255,255,.10);box-shadow:0 20px 60px rgba(0,0,0,.42);padding:18px}.category:before{content:"";position:absolute;inset:0;background:radial-gradient(500px 160px at 100% 0%,rgba(236,72,153,.12),transparent 70%);pointer-events:none}.category>*{position:relative}.cat-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.cat-title{display:flex;gap:12px;align-items:flex-start}.icon{width:46px;height:46px;border-radius:16px;background:var(--grad2);display:grid;place-items:center;font-size:23px;box-shadow:0 12px 30px rgba(37,99,235,.25)}.category h2{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.025em}.category p{margin:6px 0 0;color:#cfe0ff;line-height:1.6}.cat-actions{display:flex;gap:8px;flex-wrap:wrap}.table-wrap{margin-top:14px;overflow:auto;border-radius:18px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.02)}table{width:100%;min-width:760px;border-collapse:separate;border-spacing:0}th,td{padding:12px 14px;text-align:left;border-bottom:1px solid rgba(255,255,255,.09);vertical-align:top}th{background:rgba(255,255,255,.08);color:#ffe28f;font-size:12px;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0}td{color:#e4ebff;font-size:14px}tr:last-child td{border-bottom:0}tr:hover td{background:rgba(79,70,229,.13)}.money{font-weight:900;color:#fff;font-size:16px}.code{font-size:12px;color:#a8bbf0;word-break:break-all}.tagchip{display:inline-flex;border:1px solid rgba(255,255,255,.12);background:#111a38;color:#cfe0ff;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:800}.note-card{border-radius:24px;background:linear-gradient(135deg,rgba(255,193,7,.13),rgba(236,72,153,.12));border:1px solid rgba(255,255,255,.12);padding:18px;color:#f8fbff}.note-card h2{margin:0 0 8px}.note-card p{color:#e5ecff;line-height:1.6}.hidden{display:none!important}
-
-    .sticky-cta{position:sticky;bottom:12px;z-index:45;margin:10px auto 26px;width:min(920px,calc(100% - 32px));background:rgba(7,11,20,.88);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);box-shadow:0 18px 45px rgba(2,6,23,.45);border-radius:999px;padding:10px;display:flex;gap:10px;justify-content:center}.sticky-cta a{flex:1 1 0}@media(max-width:700px){.sticky-cta{border-radius:22px;flex-direction:column}}
-
-    footer{border-top:1px solid rgba(255,255,255,.10);padding:24px 0 42px;color:#aabdf0;font-size:13px;line-height:1.65}.footer-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}@media(max-width:760px){.footer-grid{grid-template-columns:1fr}}
-
-    .pdf-shell{position:fixed;left:-9999px;top:0;width:794px;background:#fff;color:#0f172a;padding:0;font-family:Inter,Arial,sans-serif}.pdf-doc{padding:34px}.pdf-cover{border-bottom:4px solid #512b8a;padding-bottom:16px;margin-bottom:18px}.pdf-cover h1{margin:0;font-size:28px;color:#111827}.pdf-cover p{margin:6px 0 0;color:#475569}.pdf-category{page-break-inside:avoid;margin:18px 0 22px}.pdf-category h2{margin:0 0 8px;color:#512b8a;font-size:20px}.pdf-category p{margin:0 0 10px;color:#334155}.pdf-category table{min-width:0;width:100%;border-collapse:collapse}.pdf-category th,.pdf-category td{border:1px solid #dbe2ef;color:#0f172a;padding:8px;font-size:11px}.pdf-category th{background:#eef2ff;color:#1e3a8a}.pdf-category .money{color:#0f172a;font-size:12px}.pdf-note{font-size:11px;color:#475569;margin-top:16px;border-top:1px solid #e5e7eb;padding-top:10px}
+    .notice{background:#fff7ed;border:1px solid #fed7aa;border-radius:18px;padding:16px;color:#7c2d12;margin-top:18px}
+    .notice h2{margin:0 0 6px;color:#9a3412;font-size:20px}
+    .notice p{margin:6px 0}
+    footer{padding:26px 0 42px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);background:#fff}
 
     @media print{
-      .topbar,.marquee-wrap,header.site,.hero-actions,.side,.toolbar,.cat-actions,.sticky-cta,.btn,.source-box{display:none!important}
-      body{background:#fff;color:#111}.container{width:100%;padding:0 10mm}.hero{padding:0}.hero-card,.category,.note-card,.stat{background:#fff!important;color:#111!important;border:1px solid #d1d5db;box-shadow:none}.hero-card:before,.category:before{display:none}.gradtext,.stat .num{background:none;-webkit-text-fill-color:#111}.hero p,.category p,.note-card p,.stat .label,td{color:#111}.layout{display:block}.summary-grid{grid-template-columns:repeat(2,1fr)}table{min-width:0}th,td{color:#111;border-color:#ddd}th{background:#eef2ff;color:#111}.money{color:#111}.code{color:#334155}a{color:#111}
+      .topbar,header.site,.hero-actions,.download-panel,.quick-notes,.cat-actions,.notice .no-print{display:none!important}
+      .hero{background:#fff;color:#111;padding:0 0 8mm}.hero p{color:#333}.container{width:100%;padding:0 10mm}.main{padding:0}.category{box-shadow:none;break-inside:avoid;border-color:#bbb}.cat-head{background:#fff}.cat-head h2{color:#111}table{min-width:0}th,td{font-size:10px;padding:6px}.notice{border:1px solid #ddd;background:#fff;color:#111}footer{display:none}
     }
   </style>
 </head>
@@ -99,194 +145,149 @@
   <div class="topbar">
     <div class="inner container">
       <div>Because we care, we provide HD care</div>
-      <div class="contact-links">
-        <a href="tel:0286305500">📞 02 8630 5500</a>
-        <a href="mailto:info@hdheed.com.au">✉️ info@hdheed.com.au</a>
-      </div>
+      <div><a href="tel:0286305500">Phone: 02 8630 5500</a> &nbsp; | &nbsp; <a href="mailto:info@hdheed.com.au">Email: info@hdheed.com.au</a></div>
     </div>
   </div>
 
-  <div class="marquee-wrap" role="region" aria-label="HD HeeD pricing ticker">
-    <div class="marquee">
-      <div class="marquee-track">
-        <span class="marquee-item"><span class="marquee-dot" aria-hidden="true"></span> Registered NDIS Provider</span>
-        <span class="marquee-item">NDIS 2025–26 price limits</span>
-        <span class="marquee-item">Download one category or multiple categories</span>
-        <span class="marquee-item">Pricing confirmed before supports start</span>
-        <span class="marquee-item">Contact: 02 8630 5500</span>
-        <span class="marquee-item"><span class="marquee-dot" aria-hidden="true"></span> Registered NDIS Provider</span>
-        <span class="marquee-item">NDIS 2025–26 price limits</span>
-        <span class="marquee-item">Download one category or multiple categories</span>
-        <span class="marquee-item">Pricing confirmed before supports start</span>
-        <span class="marquee-item">Email: info@hdheed.com.au</span>
-      </div>
-    </div>
-  </div>
-
-  <header class="site" aria-label="Site header">
+  <header class="site">
     <div class="inner container">
       <a class="logo" href="index.html" aria-label="HD HeeD home">
-        <img src="images/logo.png" alt="HD HeeD logo" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='grid'" />
-        <span id="logoFallback" class="logo-fallback" aria-hidden="true">HD</span>
+        <img src="images/logo.png" alt="HD HeeD logo" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'" />
+        <span class="logo-mark" aria-hidden="true" style="display:none">HD</span>
         <span>
-          <span class="brandname">HD HeeD</span><br />
-          <span class="brandtag">NDIS Pricing & Rate List</span>
+          <span class="brand-title">HD HeeD</span><br />
+          <span class="brand-sub">NDIS Registered Provider</span>
         </span>
       </a>
-      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="topnav">Menu ☰</button>
-      <nav class="topnav" id="topnav" aria-label="Top navigation">
+      <button class="menu-toggle" type="button" id="menuToggle" aria-expanded="false" aria-controls="topNav">Menu</button>
+      <nav id="topNav" aria-label="Top navigation">
         <a href="index.html">Home</a>
         <a href="services.html">Services</a>
-        <a href="referral.html">Referral</a>
-        <a href="ailr.html">Intake</a>
-        <a class="cta" href="contact.html">Enquiry</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="referral.html" class="cta">Start referral</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="container">
-        <div class="hero-card">
-          <span class="eyebrow">💜 Transparent NDIS rate guide</span>
-          <h1><span class="gradtext">NDIS pricing made easy to check, share and download.</span></h1>
-          <p>Choose the support category you need, download a PDF for one category, or select multiple categories to create a custom rate list for a participant, family member, support coordinator or plan manager.</p>
-          <div class="pillbar" aria-label="Pricing categories">
-            <span class="pill">Personal care</span>
-            <span class="pill">High intensity support</span>
-            <span class="pill">Domestic assistance</span>
-            <span class="pill">Community access</span>
-            <span class="pill">Nursing</span>
-            <span class="pill">Transport</span>
-          </div>
-          <div class="hero-actions">
-            <a class="btn btn-gold" href="#download-panel">Download rate list</a>
-            <a class="btn btn-primary" href="referral.html">Start referral</a>
-            <a class="btn btn-ghost" href="tel:0286305500">Call 02 8630 5500</a>
-          </div>
+  <section class="hero">
+    <div class="container hero-card">
+      <div>
+        <span class="hero-badge">NDIS 2025-26 NSW price limits</span>
+        <h1>HD HEED RATE LIST</h1>
+        <p>Simple rate list for common HD HeeD supports. View all rates, download one category, or tick multiple categories and download one combined PDF.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#choose">Choose PDF sections</a>
+          <a class="btn btn-white" href="referral.html">Start referral</a>
+          <a class="btn btn-white" href="contact.html">Make an enquiry</a>
         </div>
       </div>
-    </section>
-
-    <div class="container layout">
-      <aside class="side" id="download-panel" aria-label="Pricing download panel">
-        <h2>Download rate list</h2>
-        <div class="hint">Select one or more categories, then download a clean PDF rate list. Each category also has its own quick PDF button.</div>
-        <div class="field">
-          <label for="searchInput">Search price list</label>
-          <input id="searchInput" type="search" placeholder="Search support, code, rate…" autocomplete="off" />
-        </div>
-        <div class="field">
-          <label for="categoryFilter">Show category</label>
-          <select id="categoryFilter">
-            <option value="all">All categories</option>
-          </select>
-        </div>
-        <div class="checklist" id="categoryChecks" aria-label="Select PDF categories"></div>
-        <div class="side-actions">
-          <button class="btn btn-gold" type="button" id="downloadSelected">Download selected PDF</button>
-          <button class="btn btn-primary" type="button" id="downloadAll">Download full PDF</button>
-          <button class="btn btn-ghost" type="button" id="selectAll">Select all categories</button>
-          <button class="btn btn-ghost" type="button" id="clearAll">Clear selection</button>
-        </div>
-        <div class="hint" id="pdfStatus" role="status" aria-live="polite" style="margin-top:10px">PDF downloads create a selected rate list from the tables on this page.</div>
-        <div class="source-box">
-          <strong>Pricing source:</strong><br />
-          Based on NDIS Pricing Arrangements and Price Limits 2025–26 and common support items for NSW / National MMM 1–5. Final billing must match the participant’s plan, support ratio, agreed arrangements and current NDIA rules.
-        </div>
-      </aside>
-
-      <section class="main" aria-label="Pricing content">
-        <div class="toolbar">
-          <div>
-            <strong id="resultCount">Showing all rates</strong><br />
-            <span class="mini">Last page review: 25 May 2026 • Current NDIS update effective 24 November 2025</span>
-          </div>
-          <div class="hero-actions">
-            <button class="btn btn-white btn-small" type="button" onclick="window.print()">Print / Save page</button>
-            <a class="btn btn-ghost btn-small" href="mailto:info@hdheed.com.au?subject=NDIS%20pricing%20enquiry">Ask about pricing</a>
-          </div>
-        </div>
-
-        <section class="summary-grid" aria-label="Quick summary">
-          <div class="stat"><div class="num" id="statCats">0</div><div class="label">Pricing categories</div></div>
-          <div class="stat"><div class="num" id="statRates">0</div><div class="label">Common line items</div></div>
-          <div class="stat"><div class="num">PDF</div><div class="label">Single or multiple categories</div></div>
-          <div class="stat"><div class="num">NSW</div><div class="label">National MMM 1–5 rates shown</div></div>
-        </section>
-
-        <div id="categoriesRoot"></div>
-
-        <section class="note-card" id="important-notes">
-          <h2>Important pricing notes</h2>
-          <p><span class="tagchip">NDIS price limits</span> <span class="tagchip">Direct confirmation first</span> <span class="tagchip">Travel by agreement</span> <span class="tagchip">Cancellations may apply</span></p>
-          <p>Prices shown are public-facing NDIS price limits for common HD HeeD supports. They are not a guarantee that a support can be delivered or funded. Before services start, HD HeeD confirms the participant’s goals, support needs, risk level, funding category, schedule, location, staff availability, travel arrangements and direct confirmation with HD HeeD.</p>
-          <p>Where a rate, travel cost, cancellation rule, or support item changes under the NDIS, the current NDIA pricing arrangements take priority.</p>
-        </section>
-      </section>
+      <div class="hero-badge">Phone: 02 8630 5500</div>
     </div>
+  </section>
 
-    <div class="sticky-cta">
-      <a class="btn btn-primary" href="referral.html">Start referral</a>
-      <a class="btn btn-gold" href="#download-panel">Download rates</a>
-      <a class="btn btn-ghost" href="contact.html">Enquiry</a>
+  <main class="main">
+    <div class="container">
+      <section class="panel download-panel" id="choose">
+        <div>
+          <h2>Choose what rate list to download</h2>
+          <p class="muted">Tick one or more sections, then download a PDF. You can also download each section separately from the section heading below.</p>
+        </div>
+
+        <div class="controls" aria-label="Search and filter controls">
+          <div class="field">
+            <label for="searchInput">Search rates</label>
+            <input id="searchInput" type="search" placeholder="Search, e.g. nursing, Saturday, domestic, transport" />
+          </div>
+          <div class="field">
+            <label for="categoryFilter">Show category</label>
+            <select id="categoryFilter">
+              <option value="all">All categories</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="choose-grid" id="categoryChecks"></div>
+        <div class="download-actions">
+          <button class="btn btn-purple" type="button" id="downloadSelected">Download selected PDF</button>
+          <button class="btn btn-outline" type="button" id="downloadFull">Download full rate list</button>
+          <button class="btn btn-outline" type="button" id="selectAll">Tick all</button>
+          <button class="btn btn-outline" type="button" id="clearAll">Clear ticks</button>
+        </div>
+        <div class="status" id="pdfStatus" role="status" aria-live="polite">PDFs are generated in plain text to prevent corrupted symbols.</div>
+      </section>
+
+      <section class="quick-notes" aria-label="Quick pricing notes">
+        <div class="note"><strong>6</strong><span>Rate categories</span></div>
+        <div class="note"><strong>29</strong><span>Common support items</span></div>
+        <div class="note"><strong>PDF</strong><span>One section or multiple sections</span></div>
+        <div class="note"><strong>NSW</strong><span>Price limits used</span></div>
+      </section>
+
+      <section class="rates" id="ratesRoot" aria-label="Rate categories"></section>
+
+      <section class="notice">
+        <h2>Important pricing notes</h2>
+        <p>These rates are based on common NDIS 2025-26 price limits for NSW / National MMM 1-5 areas. The final supports, schedule, travel, cancellation rules and payment arrangements must be confirmed directly with HD HeeD before supports start.</p>
+        <p>NDIS price limits are maximum prices. Where applicable, providers and participants can agree a lower rate. Always check the current NDIS Pricing Arrangements and Price Limits before confirming supports.</p>
+      </section>
     </div>
   </main>
 
   <footer>
-    <div class="container footer-grid">
-      <div>
-        <strong>HD HeeD</strong><br />
-        Registered NDIS Provider • Clinically led • Person-centred support<br />
-        Phone: <a href="tel:0286305500">02 8630 5500</a> • Email: <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>
-      </div>
-      <div>
-        Source basis: <a href="https://www.ndis.gov.au/providers/pricing-and-payments/pricing/pricing-arrangements-and-price-limits" target="_blank" rel="noopener">NDIS Pricing Arrangements and Price Limits 2025–26</a>. Always check current NDIS pricing before confirming a new support arrangement with HD HeeD.
-      </div>
+    <div class="container">
+      HD HeeD | Phone: 02 8630 5500 | Email: info@hdheed.com.au<br />
+      Because we care, we provide HD care
     </div>
   </footer>
-
-  <div class="pdf-shell" id="pdfShell" aria-hidden="true"></div>
 
   <script>
     const CATEGORIES = [
       {
-        id:'standard', icon:'🤝', title:'Personal care and daily living support',
-        subtitle:'Assistance with self-care activities, daily routine, showering, dressing, toileting, mobility and related personal supports.',
+        id:'personal-care',
+        title:'Personal care and daily living support',
+        short:'Personal care',
+        description:'Support with daily routine, showering, dressing, toileting, mobility and related personal supports.',
         rows:[
-          ['Weekday Daytime','01_011_0107_1_1','Standard personal support on weekdays during daytime','Hour','$70.23'],
-          ['Weekday Evening','01_015_0107_1_1','Standard personal support on weekday evenings','Hour','$77.38'],
-          ['Weekday Night','01_002_0107_1_1','Active overnight standard personal support','Hour','$78.81'],
-          ['Saturday','01_013_0107_1_1','Standard personal support on Saturday','Hour','$98.83'],
-          ['Sunday','01_014_0107_1_1','Standard personal support on Sunday','Hour','$127.43'],
-          ['Public Holiday','01_012_0107_1_1','Standard personal support on a public holiday','Hour','$156.03'],
-          ['Night-Time Sleepover','01_010_0107_1_1','Sleepover where the worker can sleep when not actively supporting','Each shift','$297.60']
+          ['Weekday Daytime','01_011_0107_1_1','Standard self-care support on weekdays during daytime','Hour','$70.23'],
+          ['Weekday Evening','01_015_0107_1_1','Standard self-care support on weekday evenings','Hour','$77.38'],
+          ['Weekday Night','01_002_0107_1_1','Active overnight standard self-care support','Hour','$78.81'],
+          ['Saturday','01_013_0107_1_1','Standard self-care support on Saturday','Hour','$98.83'],
+          ['Sunday','01_014_0107_1_1','Standard self-care support on Sunday','Hour','$127.43'],
+          ['Public Holiday','01_012_0107_1_1','Standard self-care support on a public holiday','Hour','$156.03'],
+          ['Night-Time Sleepover','01_010_0107_1_1','Sleepover shift where worker can sleep when not actively supporting','Each shift','$297.60']
         ]
       },
       {
-        id:'high', icon:'🧩', title:'High intensity personal support',
-        subtitle:'For more complex supports requiring a more skilled or experienced worker due to higher disability-related or clinical support needs.',
+        id:'high-intensity',
+        title:'High intensity personal support',
+        short:'High intensity',
+        description:'More complex personal supports that require a more skilled or experienced worker.',
         rows:[
-          ['High Intensity — Weekday Daytime','01_400_0104_1_1','Weekday daytime high intensity personal support','Hour','$75.98'],
-          ['High Intensity — Weekday Evening','01_401_0104_1_1','Weekday evening high intensity support','Hour','$83.72'],
-          ['High Intensity — Weekday Night','01_405_0104_1_1','Weekday active overnight high intensity support','Hour','$85.27'],
-          ['High Intensity — Saturday','01_402_0104_1_1','Saturday high intensity support','Hour','$106.93'],
-          ['High Intensity — Sunday','01_403_0104_1_1','Sunday high intensity support','Hour','$137.87'],
-          ['High Intensity — Public Holiday','01_404_0104_1_1','Public holiday high intensity support','Hour','$168.81']
+          ['High Intensity Weekday Daytime','01_400_0104_1_1','Weekday daytime high intensity personal support','Hour','$75.98'],
+          ['High Intensity Weekday Evening','01_401_0104_1_1','Weekday evening high intensity personal support','Hour','$83.72'],
+          ['High Intensity Weekday Night','01_405_0104_1_1','Weekday active overnight high intensity personal support','Hour','$85.27'],
+          ['High Intensity Saturday','01_402_0104_1_1','Saturday high intensity personal support','Hour','$106.93'],
+          ['High Intensity Sunday','01_403_0104_1_1','Sunday high intensity personal support','Hour','$137.87'],
+          ['High Intensity Public Holiday','01_404_0104_1_1','Public holiday high intensity personal support','Hour','$168.81']
         ]
       },
       {
-        id:'domestic', icon:'🏠', title:'Domestic assistance and household tasks',
-        subtitle:'Cleaning, laundry, household activities and basic home or yard support where it is disability-related and funded in the participant’s plan.',
+        id:'domestic-assistance',
+        title:'Domestic assistance and household tasks',
+        short:'Domestic assistance',
+        description:'Cleaning, laundry, household activities and basic home or yard support where funded in the participant plan.',
         rows:[
-          ['Assistance with Personal Domestic Activities','01_004_0107_1_1','Domestic assistance related to daily living support','Hour','$59.06'],
+          ['Personal Domestic Activities','01_004_0107_1_1','Domestic assistance related to daily living support','Hour','$59.06'],
           ['House Cleaning and Other Household Activities','01_020_0120_1_1','Cleaning and household task support','Hour','$58.03'],
           ['House or Yard Maintenance','01_019_0120_1_1','Basic house or yard maintenance where funded','Hour','$56.98']
         ]
       },
       {
-        id:'community', icon:'🌿', title:'Community access, social and recreational support',
-        subtitle:'Individual community participation support, appointments, shopping support, recreational participation and community-based skill building where appropriate.',
+        id:'community-access',
+        title:'Community access and social support',
+        short:'Community access',
+        description:'Individual support for community participation, appointments, shopping, recreational participation and community activities.',
         rows:[
           ['Weekday Daytime','04_104_0125_6_1','Weekday daytime community access support','Hour','$70.23'],
           ['Weekday Evening','04_103_0125_6_1','Weekday evening community access support','Hour','$77.38'],
@@ -296,254 +297,258 @@
         ]
       },
       {
-        id:'nursing', icon:'🩺', title:'Community nursing care — Registered Nurse',
-        subtitle:'Disability-related health supports delivered by a Registered Nurse, such as wound care, catheter support, diabetes-related care, health monitoring, clinical review and nursing care planning where funded.',
+        id:'nursing-care',
+        title:'Community nursing care - Registered Nurse',
+        short:'Nursing care',
+        description:'Disability-related health supports delivered by a Registered Nurse, such as wound care, catheter support, diabetes-related care, health monitoring and nursing care planning where funded.',
         rows:[
-          ['Registered Nurse — Weekday Daytime','01_606_0114_1_1','Weekday RN support','Hour','$123.65'],
-          ['Registered Nurse — Weekday Evening','01_607_0114_1_1','Weekday evening RN support','Hour','$136.41'],
-          ['Registered Nurse — Weekday Night','01_611_0114_1_1','Weekday active overnight RN support','Hour','$138.95'],
-          ['Registered Nurse — Saturday','01_608_0114_1_1','Saturday RN support','Hour','$176.47'],
-          ['Registered Nurse — Sunday','01_609_0114_1_1','Sunday RN support','Hour','$202.87'],
-          ['Registered Nurse — Public Holiday','01_610_0114_1_1','Public holiday RN support','Hour','$229.27']
+          ['Registered Nurse Weekday Daytime','01_606_0114_1_1','Weekday RN support','Hour','$123.65'],
+          ['Registered Nurse Weekday Evening','01_607_0114_1_1','Weekday evening RN support','Hour','$136.41'],
+          ['Registered Nurse Weekday Night','01_611_0114_1_1','Weekday active overnight RN support','Hour','$138.95'],
+          ['Registered Nurse Saturday','01_608_0114_1_1','Saturday RN support','Hour','$176.47'],
+          ['Registered Nurse Sunday','01_609_0114_1_1','Sunday RN support','Hour','$202.87'],
+          ['Registered Nurse Public Holiday','01_610_0114_1_1','Public holiday RN support','Hour','$229.27']
         ]
       },
       {
-        id:'transport', icon:'🚗', title:'Transport and provider travel',
-        subtitle:'Transport and travel are only charged where agreed with the participant or representative and included in the direct confirmation with HD HeeD.',
+        id:'transport-travel',
+        title:'Transport and provider travel',
+        short:'Transport and travel',
+        description:'Transport and travel costs are only charged when agreed with the participant or representative before supports start.',
         rows:[
-          ['Activity Based Transport — Community Participation','04_590_0125_6_1','Vehicle running cost while transporting participant during community access','Each / km as agreed','$1.00'],
-          ['Provider Travel — Non-labour Costs','04_799_0125_6_1','Non-labour travel costs to deliver agreed support','Each','$1.00'],
-          ['Parking / tolls / public transport','As applicable','Charged at actual cost only if agreed before service','Actual cost','By agreement']
+          ['Activity Based Transport','04_590_0125_6_1','Vehicle running cost while transporting participant during community access','Each / km as agreed','$1.00'],
+          ['Provider Travel Non-Labour Costs','04_799_0125_6_1','Non-labour travel costs to deliver agreed support','Each','$1.00'],
+          ['Parking, tolls or public transport','As applicable','Charged at actual cost only if agreed before service','Actual cost','By agreement']
         ]
       }
     ];
 
     const HEADERS = ['Support item','Line item','When used','Unit','Price limit'];
-    const root = document.getElementById('categoriesRoot');
-    const categoryFilter = document.getElementById('categoryFilter');
     const categoryChecks = document.getElementById('categoryChecks');
+    const categoryFilter = document.getElementById('categoryFilter');
     const searchInput = document.getElementById('searchInput');
-    const resultCount = document.getElementById('resultCount');
-    const statCats = document.getElementById('statCats');
-    const statRates = document.getElementById('statRates');
+    const ratesRoot = document.getElementById('ratesRoot');
+    const pdfStatus = document.getElementById('pdfStatus');
 
-    function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-    function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
-
-    function makeTable(cat, forPdf=false){
-      return `<div class="table-wrap"><table><thead><tr>${HEADERS.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${cat.rows.map(row=>`<tr>${row.map((cell,i)=>`<td class="${i===1?'code':''} ${i===4?'money':''}">${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    function esc(value){
+      return String(value ?? '').replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
+    }
+    function slug(value){
+      return String(value).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'rate-list';
+    }
+    function cleanPdfText(value){
+      return String(value ?? '')
+        .replace(/[\u2010\u2011\u2012\u2013\u2014\u2212]/g,'-')
+        .replace(/[\u2018\u2019]/g,"'")
+        .replace(/[\u201C\u201D]/g,'"')
+        .replace(/[^\x09\x0A\x0D\x20-\x7E]/g,'')
+        .trim();
     }
 
-    function renderCategories(){
-      root.innerHTML = CATEGORIES.map(cat => `
-        <section class="category" id="${cat.id}" data-cat="${cat.id}" data-search="${esc((cat.title+' '+cat.subtitle+' '+cat.rows.flat().join(' ')).toLowerCase())}">
-          <div class="cat-head">
-            <div class="cat-title">
-              <div class="icon" aria-hidden="true">${cat.icon}</div>
-              <div><h2>${esc(cat.title)}</h2><p>${esc(cat.subtitle)}</p></div>
-            </div>
-            <div class="cat-actions">
-              <button class="btn btn-gold btn-small" type="button" data-pdf-one="${cat.id}">Download this PDF</button>
-              <button class="btn btn-ghost btn-small" type="button" data-select-one="${cat.id}">Select</button>
-            </div>
-          </div>
-          ${makeTable(cat)}
-        </section>`).join('');
+    function renderSelectors(){
+      categoryChecks.innerHTML = CATEGORIES.map(function(cat){
+        return '<label class="check-card" for="check-'+cat.id+'">'+
+          '<input id="check-'+cat.id+'" type="checkbox" value="'+cat.id+'" />'+
+          '<span><strong>'+esc(cat.short)+'</strong><span>'+esc(cat.title)+'</span></span>'+ 
+        '</label>';
+      }).join('');
 
-      document.querySelectorAll('[data-pdf-one]').forEach(btn => btn.addEventListener('click', () => downloadPdf([btn.dataset.pdfOne])));
-      document.querySelectorAll('[data-select-one]').forEach(btn => btn.addEventListener('click', () => {
-        const cb = document.querySelector(`#cat-${btn.dataset.selectOne}`);
-        if(cb){ cb.checked = true; cb.focus(); }
-      }));
+      categoryFilter.innerHTML = '<option value="all">All categories</option>' + CATEGORIES.map(function(cat){
+        return '<option value="'+cat.id+'">'+esc(cat.short)+'</option>';
+      }).join('');
     }
 
-    function renderControls(){
-      CATEGORIES.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat.id; option.textContent = cat.title; categoryFilter.appendChild(option);
+    function renderRates(){
+      ratesRoot.innerHTML = CATEGORIES.map(function(cat){
+        return '<section class="category" id="'+cat.id+'" data-id="'+cat.id+'" data-search="'+esc((cat.title+' '+cat.short+' '+cat.description+' '+cat.rows.flat().join(' ')).toLowerCase())+'">'+
+          '<div class="cat-head">'+
+            '<div><h2>'+esc(cat.title)+'</h2><p>'+esc(cat.description)+'</p></div>'+
+            '<div class="cat-actions">'+
+              '<button class="btn btn-primary btn-small" type="button" data-download-one="'+cat.id+'">Download this section</button>'+
+              '<button class="btn btn-outline btn-small" type="button" data-tick-one="'+cat.id+'">Tick this section</button>'+
+            '</div>'+
+          '</div>'+
+          '<div class="table-wrap"><table><thead><tr>'+HEADERS.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+cat.rows.map(function(row){
+            return '<tr>'+row.map(function(cell,i){
+              return '<td class="'+(i===1?'code ':'')+(i===4?'price':'')+'">'+esc(cell)+'</td>';
+            }).join('')+'</tr>';
+          }).join('')+'</tbody></table></div>'+ 
+        '</section>';
+      }).join('');
 
-        const label = document.createElement('label');
-        label.className = 'checkrow';
-        label.innerHTML = `<input id="cat-${cat.id}" type="checkbox" value="${cat.id}" checked><span>${cat.icon} ${esc(cat.title)}</span>`;
-        categoryChecks.appendChild(label);
+      document.querySelectorAll('[data-download-one]').forEach(function(btn){
+        btn.addEventListener('click', function(){ downloadPdf([btn.dataset.downloadOne]); });
       });
-      statCats.textContent = CATEGORIES.length;
-      statRates.textContent = CATEGORIES.reduce((sum,c)=>sum+c.rows.length,0);
-    }
-
-    function filterPage(){
-      const q = (searchInput.value || '').trim().toLowerCase();
-      const selected = categoryFilter.value;
-      let visible = 0;
-      document.querySelectorAll('.category').forEach(sec => {
-        const okCat = selected === 'all' || sec.dataset.cat === selected;
-        const okSearch = !q || sec.dataset.search.includes(q);
-        sec.classList.toggle('hidden', !(okCat && okSearch));
-        if(okCat && okSearch) visible++;
+      document.querySelectorAll('[data-tick-one]').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          const checkbox = document.getElementById('check-'+btn.dataset.tickOne);
+          if(checkbox){ checkbox.checked = true; checkbox.focus(); pdfStatus.textContent = 'Section ticked. You can now download selected PDF.'; }
+        });
       });
-      resultCount.textContent = visible === CATEGORIES.length ? 'Showing all rates' : `Showing ${visible} categor${visible===1?'y':'ies'}`;
     }
 
     function selectedIds(){
-      return Array.from(categoryChecks.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      return Array.from(categoryChecks.querySelectorAll('input[type="checkbox"]:checked')).map(function(input){ return input.value; });
+    }
+    function categoriesByIds(ids){
+      const set = new Set(ids);
+      return CATEGORIES.filter(function(cat){ return set.has(cat.id); });
     }
 
-    function pdfHtml(ids){
-      const cats = CATEGORIES.filter(c => ids.includes(c.id));
-      const date = new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
-      return `<div class="pdf-doc">
-        <div class="pdf-cover">
-          <h1>HD HeeD — NDIS Rate List</h1>
-          <p><strong>Prepared:</strong> ${date}</p>
-          <p><strong>Categories:</strong> ${cats.map(c=>esc(c.title)).join(', ')}</p>
-          <p>Phone: 02 8630 5500 &nbsp; | &nbsp; Email: info@hdheed.com.au</p>
-        </div>
-        ${cats.map(cat => `<section class="pdf-category"><h2>${esc(cat.title)}</h2><p>${esc(cat.subtitle)}</p>${makeTable(cat,true)}</section>`).join('')}
-        <div class="pdf-note">
-          <strong>Important:</strong> Prices are based on common NDIS 2025–26 price limits for NSW / National MMM 1–5 areas. Final supports, travel, cancellation rules, schedule and payment arrangements must be confirmed directly with HD HeeD before supports start. Always check the current NDIS Pricing Arrangements and Price Limits before confirming a new support arrangement with HD HeeD.
-        </div>
-      </div>`;
+    function applyFilters(){
+      const term = (searchInput.value || '').trim().toLowerCase();
+      const filter = categoryFilter.value;
+      document.querySelectorAll('.category').forEach(function(section){
+        const matchCat = filter === 'all' || section.dataset.id === filter;
+        const matchTerm = !term || section.dataset.search.includes(term);
+        section.classList.toggle('hidden', !(matchCat && matchTerm));
+      });
     }
 
-    function drawWrapped(doc, text, x, y, maxWidth, lineHeight){
-      const lines = doc.splitTextToSize(String(text || ''), maxWidth);
-      lines.forEach(line => { doc.text(line, x, y); y += lineHeight; });
-      return y;
-    }
-
-    function openPrintFallback(ids, filename){
+    function fallbackPrint(cats){
+      const title = cats.length === 1 ? cats[0].title : 'Selected rate list';
+      const html = '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(title)+'</title>'+
+        '<style>body{font-family:Arial,sans-serif;color:#111;margin:24px}h1{font-size:26px;margin:0 0 4px}h2{font-size:18px;margin:24px 0 8px;color:#512b8a}p{color:#444}table{width:100%;border-collapse:collapse;margin:8px 0 18px}th,td{border:1px solid #ddd;padding:8px;text-align:left;font-size:12px;vertical-align:top}th{background:#f3f4f6}.note{margin-top:18px;border-top:1px solid #ddd;padding-top:10px;font-size:12px}</style></head><body>'+ 
+        '<h1>HD HEED RATE LIST</h1><p>Phone: 02 8630 5500 | Email: info@hdheed.com.au</p><p>Prepared: '+new Date().toLocaleDateString('en-AU')+'</p>'+ 
+        cats.map(function(cat){ return '<h2>'+esc(cat.title)+'</h2><p>'+esc(cat.description)+'</p><table><thead><tr>'+HEADERS.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+cat.rows.map(row=>'<tr>'+row.map(cell=>'<td>'+esc(cell)+'</td>').join('')+'</tr>').join('')+'</tbody></table>'; }).join('')+
+        '<div class="note">These rates are based on common NDIS 2025-26 price limits for NSW / National MMM 1-5 areas. Final supports, travel, cancellation rules, schedule and payment arrangements must be confirmed directly with HD HeeD before supports start.</div>'+ 
+        '<script>window.onload=function(){window.print();};<\/script></body></html>';
       const win = window.open('', '_blank');
-      if(!win){ alert('Please allow pop-ups, or use Print / Save page.'); return; }
-      win.document.write(`<!doctype html><html><head><title>${filename}</title><style>
-        body{font-family:Arial,sans-serif;color:#0f172a;margin:0;background:#fff}.pdf-doc{padding:24px}.pdf-cover{border-bottom:4px solid #512b8a;padding-bottom:14px;margin-bottom:18px}.pdf-cover h1{margin:0;font-size:26px}.pdf-cover p{margin:6px 0;color:#475569}.pdf-category{page-break-inside:avoid;margin:18px 0 24px}.pdf-category h2{color:#512b8a;margin:0 0 8px}.pdf-category p{color:#334155;margin:0 0 10px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #dbe2ef;padding:7px;font-size:11px;text-align:left;vertical-align:top}th{background:#eef2ff;color:#1e3a8a}.money{font-weight:bold}.pdf-note{font-size:11px;color:#475569;border-top:1px solid #e5e7eb;padding-top:10px;margin-top:16px}@media print{@page{size:A4;margin:12mm}}
-      </style></head><body>${pdfHtml(ids)}<script>window.onload=function(){setTimeout(function(){window.print()},250)};<\/script></body></html>`);
-      win.document.close();
+      if(win){ win.document.write(html); win.document.close(); }
     }
 
-    async function downloadPdf(ids){
-      if(!ids || !ids.length){ alert('Please select at least one category.'); return; }
-      const cats = CATEGORIES.filter(c => ids.includes(c.id));
-      const pdfStatus = document.getElementById('pdfStatus');
-      if(pdfStatus) pdfStatus.textContent = 'Preparing PDF…';
-      const name = cats.length === 1 ? slug(cats[0].title) : (cats.length === CATEGORIES.length ? 'full-rate-list' : 'selected-categories');
-      const filename = `HD-HeeD-NDIS-rate-list-${name}.pdf`;
-      const date = new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
-
-      try{
-        const jsPDF = window.jspdf && window.jspdf.jsPDF;
-        if(!jsPDF) throw new Error('jsPDF not loaded');
-        const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
-        const pageW = doc.internal.pageSize.getWidth();
-        const pageH = doc.internal.pageSize.getHeight();
-        const margin = 14;
-        let y = 16;
-
-        doc.setProperties({
-          title: 'HD HeeD NDIS Rate List',
-          subject: cats.map(c => c.title).join(', '),
-          author: 'HD HeeD'
-        });
-
-        // Cover/header
-        doc.setFillColor(81,43,138);
-        doc.rect(0,0,pageW,28,'F');
-        doc.setTextColor(255,255,255);
-        doc.setFont('helvetica','bold');
-        doc.setFontSize(19);
-        doc.text('HD HeeD — NDIS Rate List', margin, 18);
-        doc.setFont('helvetica','normal');
-        doc.setFontSize(9);
-        doc.text('Phone: 02 8630 5500   |   Email: info@hdheed.com.au', pageW - margin, 18, { align:'right' });
-
-        y = 40;
-        doc.setTextColor(15,23,42);
-        doc.setFont('helvetica','bold');
-        doc.setFontSize(12);
-        doc.text(`Prepared: ${date}`, margin, y); y += 7;
-        doc.setFont('helvetica','normal');
-        doc.setFontSize(9);
-        y = drawWrapped(doc, `Categories included: ${cats.map(c=>c.title).join(', ')}`, margin, y, pageW - margin*2, 5) + 2;
-
-        cats.forEach((cat, idx) => {
-          if(y > pageH - 55){ doc.addPage(); y = 18; }
-          doc.setFont('helvetica','bold');
-          doc.setFontSize(14);
-          doc.setTextColor(81,43,138);
-          doc.text(`${cat.icon} ${cat.title}`, margin, y); y += 6;
-          doc.setFont('helvetica','normal');
-          doc.setFontSize(9);
-          doc.setTextColor(51,65,85);
-          y = drawWrapped(doc, cat.subtitle, margin, y, pageW - margin*2, 4.8) + 2;
-
-          if(typeof doc.autoTable !== 'function') throw new Error('AutoTable not loaded');
-          doc.autoTable({
-            startY: y,
-            head: [HEADERS],
-            body: cat.rows,
-            margin: { left: margin, right: margin },
-            theme: 'grid',
-            styles: { font: 'helvetica', fontSize: 7.5, cellPadding: 2.1, overflow: 'linebreak', valign:'top', textColor:[15,23,42], lineColor:[219,226,239], lineWidth:0.2 },
-            headStyles: { fillColor:[81,43,138], textColor:[255,255,255], fontStyle:'bold', fontSize:7.5 },
-            alternateRowStyles: { fillColor:[248,250,252] },
-            columnStyles: {
-              0: { cellWidth: 34 },
-              1: { cellWidth: 32, fontSize: 6.7, textColor:[51,65,85] },
-              2: { cellWidth: 62 },
-              3: { cellWidth: 20 },
-              4: { cellWidth: 22, halign:'right', fontStyle:'bold' }
-            }
-          });
-          y = doc.lastAutoTable.finalY + 10;
-        });
-
-        if(y > pageH - 42){ doc.addPage(); y = 18; }
-        doc.setDrawColor(229,231,235);
-        doc.line(margin, y, pageW-margin, y); y += 7;
-        doc.setFont('helvetica','bold');
-        doc.setFontSize(9);
-        doc.setTextColor(15,23,42);
-        doc.text('Important notes', margin, y); y += 5;
+    function addFooter(doc){
+      const pageCount = doc.internal.getNumberOfPages();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      for(let i=1;i<=pageCount;i++){
+        doc.setPage(i);
         doc.setFont('helvetica','normal');
         doc.setFontSize(8);
-        doc.setTextColor(71,85,105);
-        y = drawWrapped(doc, 'Prices are based on common NDIS 2025–26 price limits for NSW / National MMM 1–5 areas. Final supports, travel, cancellation rules, schedule and payment arrangements must be confirmed directly with HD HeeD before supports start. Always check the current NDIS Pricing Arrangements and Price Limits before confirming supports.', margin, y, pageW - margin*2, 4.5);
-
-        const pages = doc.internal.getNumberOfPages();
-        for(let i=1;i<=pages;i++){
-          doc.setPage(i);
-          doc.setFont('helvetica','normal');
-          doc.setFontSize(7.5);
-          doc.setTextColor(100,116,139);
-          doc.text(`HD HeeD • NDIS Rate List • Page ${i} of ${pages}`, margin, pageH - 8);
-          doc.text('info@hdheed.com.au • 02 8630 5500', pageW - margin, pageH - 8, { align:'right' });
-        }
-
-        doc.save(filename);
-        if(pdfStatus) pdfStatus.textContent = 'PDF generated. Check your downloads folder.';
-      }catch(e){
-        console.warn('PDF generation fallback:', e);
-        if(pdfStatus) pdfStatus.textContent = 'PDF library blocked. Opened print/save PDF fallback.';
-        openPrintFallback(ids, filename);
+        doc.setTextColor(100);
+        doc.text('HD HeeD Rate List', 40, pageHeight - 24);
+        doc.text('info@hdheed.com.au | 02 8630 5500', pageWidth / 2, pageHeight - 24, {align:'center'});
+        doc.text('Page '+i+' of '+pageCount, pageWidth - 40, pageHeight - 24, {align:'right'});
       }
     }
 
-    document.getElementById('downloadSelected').addEventListener('click', () => downloadPdf(selectedIds()));
-    document.getElementById('downloadAll').addEventListener('click', () => downloadPdf(CATEGORIES.map(c => c.id)));
-    document.getElementById('selectAll').addEventListener('click', () => categoryChecks.querySelectorAll('input').forEach(cb => cb.checked = true));
-    document.getElementById('clearAll').addEventListener('click', () => categoryChecks.querySelectorAll('input').forEach(cb => cb.checked = false));
-    searchInput.addEventListener('input', filterPage);
-    categoryFilter.addEventListener('change', filterPage);
+    function downloadPdf(ids){
+      const cats = categoriesByIds(ids);
+      if(!cats.length){
+        alert('Please tick at least one rate list section first.');
+        return;
+      }
+      const filePart = cats.length === 1 ? slug(cats[0].short) : (cats.length === CATEGORIES.length ? 'full-rate-list' : 'selected-rate-list');
+      const filename = 'HD-HeeD-rate-list-'+filePart+'.pdf';
+      pdfStatus.textContent = 'Preparing PDF...';
 
-    const toggle = document.getElementById('menuToggle');
-    const nav = document.getElementById('topnav');
-    toggle?.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
+      try{
+        const jsPDF = window.jspdf && window.jspdf.jsPDF;
+        if(!jsPDF || typeof window.jspdf === 'undefined') throw new Error('PDF library unavailable');
+        const doc = new jsPDF({orientation:'portrait', unit:'pt', format:'a4'});
+        if(typeof doc.autoTable !== 'function') throw new Error('PDF table library unavailable');
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const margin = 40;
+        let y = 42;
+
+        doc.setFont('helvetica','bold');
+        doc.setTextColor(81,43,138);
+        doc.setFontSize(22);
+        doc.text('HD HEED RATE LIST', margin, y);
+        y += 18;
+
+        doc.setFont('helvetica','normal');
+        doc.setTextColor(70);
+        doc.setFontSize(10);
+        doc.text('Phone: 02 8630 5500 | Email: info@hdheed.com.au', margin, y);
+        y += 14;
+        doc.text('Prepared: '+new Date().toLocaleDateString('en-AU'), margin, y);
+        y += 14;
+        doc.text('Categories included: '+cleanPdfText(cats.map(c=>c.short).join(', ')), margin, y, {maxWidth:pageWidth - margin*2});
+        y += 26;
+
+        cats.forEach(function(cat, index){
+          const minSpace = 120;
+          if(index > 0 && y > doc.internal.pageSize.getHeight() - minSpace){
+            doc.addPage();
+            y = 42;
+          }
+          doc.setFont('helvetica','bold');
+          doc.setTextColor(81,43,138);
+          doc.setFontSize(14);
+          doc.text(cleanPdfText(cat.title), margin, y, {maxWidth:pageWidth - margin*2});
+          y += 16;
+          doc.setFont('helvetica','normal');
+          doc.setTextColor(70);
+          doc.setFontSize(9);
+          const descLines = doc.splitTextToSize(cleanPdfText(cat.description), pageWidth - margin*2);
+          doc.text(descLines, margin, y);
+          y += descLines.length * 11 + 8;
+
+          doc.autoTable({
+            startY:y,
+            margin:{left:margin,right:margin},
+            head:[HEADERS.map(cleanPdfText)],
+            body:cat.rows.map(function(row){ return row.map(cleanPdfText); }),
+            theme:'grid',
+            styles:{font:'helvetica',fontSize:8,cellPadding:5,overflow:'linebreak',valign:'top',textColor:[15,23,42],lineColor:[220,226,239],lineWidth:.5},
+            headStyles:{fillColor:[81,43,138],textColor:255,fontStyle:'bold'},
+            alternateRowStyles:{fillColor:[248,250,252]},
+            columnStyles:{0:{cellWidth:112},1:{cellWidth:92},2:{cellWidth:178},3:{cellWidth:58},4:{cellWidth:72,fontStyle:'bold'}},
+            didDrawPage:function(){
+              // Footer is added once at the end to avoid duplication.
+            }
+          });
+          y = (doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : y) + 24;
+        });
+
+        const pageHeight = doc.internal.pageSize.getHeight();
+        if(y > pageHeight - 100){ doc.addPage(); y = 42; }
+        doc.setFont('helvetica','bold');
+        doc.setTextColor(81,43,138);
+        doc.setFontSize(12);
+        doc.text('Important notes', margin, y);
+        y += 14;
+        doc.setFont('helvetica','normal');
+        doc.setTextColor(70);
+        doc.setFontSize(9);
+        const notes = 'These rates are based on common NDIS 2025-26 price limits for NSW / National MMM 1-5 areas. Final supports, travel, cancellation rules, schedule and payment arrangements must be confirmed directly with HD HeeD before supports start. NDIS price limits are maximum prices.';
+        doc.text(doc.splitTextToSize(cleanPdfText(notes), pageWidth - margin*2), margin, y);
+        addFooter(doc);
+        doc.save(filename);
+        pdfStatus.textContent = 'PDF generated. Check your downloads folder.';
+      }catch(err){
+        console.warn(err);
+        pdfStatus.textContent = 'PDF library was blocked. Opening print version instead.';
+        fallbackPrint(cats);
+      }
+    }
+
+    document.getElementById('downloadSelected').addEventListener('click', function(){ downloadPdf(selectedIds()); });
+    document.getElementById('downloadFull').addEventListener('click', function(){ downloadPdf(CATEGORIES.map(c=>c.id)); });
+    document.getElementById('selectAll').addEventListener('click', function(){
+      categoryChecks.querySelectorAll('input[type="checkbox"]').forEach(function(input){ input.checked = true; });
+      pdfStatus.textContent = 'All sections ticked.';
     });
+    document.getElementById('clearAll').addEventListener('click', function(){
+      categoryChecks.querySelectorAll('input[type="checkbox"]').forEach(function(input){ input.checked = false; });
+      pdfStatus.textContent = 'Ticks cleared.';
+    });
+    searchInput.addEventListener('input', applyFilters);
+    categoryFilter.addEventListener('change', applyFilters);
 
-    renderControls();
-    renderCategories();
-    filterPage();
+    const menuToggle = document.getElementById('menuToggle');
+    const topNav = document.getElementById('topNav');
+    if(menuToggle){
+      menuToggle.addEventListener('click', function(){
+        const open = topNav.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(open));
+      });
+    }
+
+    renderSelectors();
+    renderRates();
   </script>
 </body>
 </html>
