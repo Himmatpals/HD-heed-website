@@ -118,16 +118,23 @@
     .controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
     .finish-box{display:none;margin-top:18px}
 
-    .certificate{display:none;background:#fff;border:8px solid #1f2937;border-radius:18px;padding:32px;margin-top:18px;text-align:center;min-height:560px}
-    .certificate .cert-top{font-weight:900;color:#512b8a;font-size:30px;letter-spacing:.03em;margin-bottom:4px}
-    .certificate h2{font-size:30px;margin:12px 0 6px;color:#111827}
-    .certificate p{font-size:16px;line-height:1.5}
-    .cert-name{font-size:30px;font-weight:900;margin:18px 0;color:#111827}
-    .cert-grid{display:grid;gap:10px;margin:18px auto;max-width:720px;text-align:left}
+    .certificate{display:none;position:relative;background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);border:1px solid #cbd5e1;border-radius:24px;padding:34px;margin-top:18px;text-align:center;min-height:560px;overflow:hidden;box-shadow:0 20px 70px rgba(15,23,42,.12)}
+    .certificate::before{content:"";position:absolute;inset:14px;border:3px double #512b8a;border-radius:18px;pointer-events:none;opacity:.75}
+    .certificate::after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(81,43,138,.09),transparent 65%);right:-90px;top:-90px;pointer-events:none}
+    .cert-logo-wrap{position:relative;z-index:1;display:flex;justify-content:center;margin-bottom:8px}
+    .cert-logo{width:82px;height:82px;border-radius:20px;object-fit:cover;box-shadow:0 12px 30px rgba(15,23,42,.18)}
+    .certificate .cert-top{position:relative;z-index:1;font-weight:950;color:#512b8a;font-size:32px;letter-spacing:.04em;margin-bottom:6px}
+    .cert-ribbon{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#512b8a,#2563eb);color:#fff;border-radius:999px;padding:8px 18px;font-weight:900;font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin:4px 0 10px;box-shadow:0 12px 28px rgba(81,43,138,.22)}
+    .certificate h2{position:relative;z-index:1;font-size:30px;margin:10px 0 8px;color:#111827;line-height:1.15}
+    .certificate p{position:relative;z-index:1;font-size:16px;line-height:1.5}
+    .cert-intro{max-width:760px;margin:0 auto 12px;color:#334155}
+    .cert-name{position:relative;z-index:1;font-size:34px;font-weight:950;margin:18px auto;color:#111827;border-bottom:2px solid #cbd5e1;max-width:620px;padding-bottom:10px}
+    .cert-grid{position:relative;z-index:1;display:grid;gap:10px;margin:20px auto;max-width:760px;text-align:left}
     @media(min-width:720px){.cert-grid{grid-template-columns:1fr 1fr}}
-    .cert-field{border:1px solid #d1d5db;border-radius:12px;padding:12px;background:#f9fafb}
-    .cert-field b{display:block;font-size:12px;text-transform:uppercase;color:#475569;margin-bottom:4px}
-    .sig{margin:34px auto 6px;border-top:1px solid #111827;max-width:360px;padding-top:8px;font-weight:800}
+    .cert-field{border:1px solid #d1d5db;border-radius:14px;padding:13px;background:#f8fafc}
+    .cert-field b{display:block;font-size:12px;text-transform:uppercase;color:#475569;margin-bottom:5px;letter-spacing:.04em}
+    .cert-field span{font-weight:850;color:#111827}
+    .cert-summary{max-width:820px;margin:16px auto 0;color:#334155}
     .hidden{display:none!important}
 
     .source-box{font-size:12px;color:#64748b;border-top:1px solid var(--line);margin-top:16px;padding-top:12px}
@@ -147,7 +154,9 @@
       .layout{display:block}
       .card{border:0;box-shadow:none;padding:0}
       .module{display:none}
-      .certificate{display:block!important;border:8px solid #111827;border-radius:0;margin:0;padding:28px;min-height:auto}
+      .certificate{display:block!important;border:1px solid #111827;border-radius:0;margin:0;padding:28px;min-height:auto;box-shadow:none}
+      .certificate::before{inset:10px;border:2px double #111827}
+      .cert-logo{box-shadow:none}
     }
   </style>
 </head>
@@ -244,10 +253,13 @@
         </section>
 
         <section class="certificate" id="certificate">
+          <div class="cert-logo-wrap">
+            <img class="cert-logo" src="images/logo.png" alt="HD HeeD logo" onerror="this.style.display='none'" />
+          </div>
           <div class="cert-top">HD HeeD</div>
+          <div class="cert-ribbon">Certificate of Completion</div>
           <h2>Infection Prevention and Control Induction</h2>
-          <p>Internal completion certificate for employees and contractors</p>
-          <p>This confirms that the worker named below has completed the HD HeeD Infection Prevention and Control Induction and passed all required knowledge checks.</p>
+          <p class="cert-intro">This confirms that the worker named below has completed the HD HeeD Infection Prevention and Control Induction and passed all required knowledge checks.</p>
           <div class="cert-name" id="certName">Worker Name</div>
           <div class="cert-grid">
             <div class="cert-field"><b>Worker role/type</b><span id="certRole">—</span></div>
@@ -255,8 +267,7 @@
             <div class="cert-field"><b>Course result</b><span>Completed and passed</span></div>
             <div class="cert-field"><b>Record type</b><span>Internal induction evidence</span></div>
           </div>
-          <p>Completion of this induction confirms understanding of HD HeeD’s minimum infection prevention expectations, including standard precautions, hand hygiene, PPE use, respiratory hygiene, fit-for-work requirements, cleaning, waste/linen handling, outbreak precautions and reporting obligations.</p>
-          <div class="sig">HD HeeD Manager / RN Signature</div>
+          <p class="cert-summary">Completion confirms understanding of HD HeeD’s minimum infection prevention expectations, including standard precautions, hand hygiene, PPE use, respiratory hygiene, fit-for-work requirements, cleaning, waste/linen handling, outbreak precautions and reporting obligations.</p>
           <p class="small">This is an internal induction record only and is not an externally accredited qualification.</p>
         </section>
 
