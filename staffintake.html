@@ -3,573 +3,360 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>HD HeeD — Care Staff Intake</title>
-  <meta name="description" content="HD HeeD care staff intake and onboarding checklist for support workers and personal care staff." />
+  <title>HD HeeD — Staff Minimum Requirements Form</title>
+  <meta name="description" content="HD HeeD minimum staff readiness form for personal care and support workers." />
+  <meta name="theme-color" content="#512b8a" />
 
-  <!-- Favicons / App Icons (HD-only) -->
+  <!-- Favicons / App Icons (matching HD HeeD site setup) -->
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
   <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="#512b8a">
   <link rel="manifest" href="/site.webmanifest?v=3">
-  <meta name="theme-color" content="#512b8a">
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <style>
     :root{
       --purple:#512b8a;
-      --accent:#ffc107;
-      --blue:#2563eb;
-      --green:#22c55e;
-      --orange:#ff5722;
-      --bg:#f6f7fb;
+      --gold:#ffc107;
       --ink:#0f172a;
       --muted:#64748b;
+      --bg:#f6f7fb;
+      --card:#ffffff;
       --line:#e5e7eb;
-      --panel:#ffffff;
+      --blue:#2563eb;
+      --green:#22c55e;
+      --red:#ef4444;
+      --dark:#0b1220;
       --soft:#f8fafc;
-      --danger:#dc2626;
-      --warn:#f59e0b;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:
-        radial-gradient(900px 460px at 10% -10%, rgba(81,43,138,.16), transparent 60%),
-        radial-gradient(900px 460px at 90% 0%, rgba(37,99,235,.14), transparent 62%),
-        var(--bg);
-      color:var(--ink);
-    }
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
     a{color:var(--blue);text-decoration:none}
-    .container{max-width:1120px;margin:0 auto;padding:16px}
-    .topbar{background:#0b1220;color:#fff}
-    .topbar .inner{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 16px}
+    .topbar{background:var(--dark);color:#fff}
+    .topbar .inner{max-width:1120px;margin:0 auto;padding:8px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px}
     .topbar a{color:#fff;font-weight:800}
-    .small{font-size:13px;color:#cbd5e1}
-    .contact-links{display:flex;gap:12px;flex-wrap:wrap}
-
-    header.site{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 12px rgba(15,23,42,.05)}
-    header .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
-    .logo{display:flex;gap:10px;align-items:center}
-    .logo img{height:44px;width:44px;border-radius:10px;object-fit:cover}
-    .logo-title{font-weight:900}
-    .logo-sub{font-size:13px;color:var(--muted)}
-    nav{display:flex;gap:12px;flex-wrap:wrap}
-    nav a{font-weight:800;color:var(--ink)}
-    nav a:hover{color:var(--purple)}
-
-    .hero{
-      margin:18px auto 12px;
-      border-radius:22px;
-      overflow:hidden;
-      background:
-        linear-gradient(135deg, rgba(11,18,32,.92), rgba(81,43,138,.88)),
-        linear-gradient(135deg, #0b1220, #512b8a);
-      color:#fff;
-      box-shadow:0 24px 60px rgba(2,6,23,.25);
-    }
-    .hero .content{padding:28px}
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      background:#eef2ff;color:#1e40af;border:1px solid #c7d2fe;
-      padding:7px 11px;border-radius:999px;font-weight:900;font-size:12px;
-    }
-    .hero .badge{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.28)}
-    h1{font-size:clamp(28px,5vw,44px);line-height:1.05;margin:14px 0 8px;font-weight:900}
-    .hero p{max-width:800px;color:#e5e7eb;line-height:1.65;margin:0}
-    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-
-    .btn{
-      appearance:none;border:0;border-radius:14px;padding:13px 16px;
-      min-height:44px;font-weight:900;cursor:pointer;
-      transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    }
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:var(--accent);color:#1e1b4b;box-shadow:0 10px 24px rgba(2,6,23,.18)}
-    .btn-blue{background:var(--blue);color:#fff}
-    .btn-purple{background:var(--purple);color:#fff}
-    .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
-    .btn-soft{background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0}
-    .btn-danger{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
-    .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-
+    header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+    header .inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--purple),#7c3aed);display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 10px 25px rgba(81,43,138,.25)}
+    .brand strong{font-size:18px}
+    .brand span{font-size:12px;color:var(--muted);display:block}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{appearance:none;border:0;border-radius:14px;padding:12px 16px;font-weight:900;cursor:pointer;min-height:44px;background:#eef2ff;color:#1e3a8a;transition:transform .15s ease,box-shadow .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 25px rgba(2,6,23,.12)}
+    .btn.primary{background:var(--gold);color:#1e1b4b}
+    .btn.dark{background:var(--dark);color:#fff}
+    .btn.red{background:#fee2e2;color:#991b1b}
+    main{max-width:1120px;margin:0 auto;padding:18px 16px 80px}
+    .hero{background:linear-gradient(135deg,#111827,#312e81 55%,#512b8a);border-radius:24px;color:#fff;padding:28px;box-shadow:0 20px 60px rgba(17,24,39,.20);overflow:hidden;position:relative}
+    .hero:after{content:"";position:absolute;inset:auto -15% -60% auto;width:360px;height:360px;border-radius:999px;background:rgba(255,193,7,.22);filter:blur(4px)}
+    .hero h1{margin:0;font-size:clamp(28px,5vw,44px);line-height:1.1;font-weight:900;letter-spacing:-.02em}
+    .hero p{margin:10px 0 0;color:#e5e7eb;max-width:780px}
+    .notice{margin-top:14px;display:inline-flex;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:10px 12px;border-radius:999px;font-size:13px;font-weight:800;position:relative;z-index:1}
     .grid{display:grid;gap:16px}
     .two{grid-template-columns:repeat(2,minmax(0,1fr))}
     .three{grid-template-columns:repeat(3,minmax(0,1fr))}
-    @media (max-width:900px){.two,.three{grid-template-columns:1fr} nav{display:none}}
-
-    .card{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:18px;
-      box-shadow:0 12px 30px rgba(15,23,42,.06);
-    }
-    .section-title{font-size:clamp(20px,4vw,30px);font-weight:900;margin:22px 0 10px}
-    .muted{color:var(--muted);line-height:1.6}
-    .notice{
-      border-left:5px solid var(--purple);
-      background:#f8fafc;
-      padding:14px;
-      border-radius:14px;
-      color:#334155;
-    }
-
-    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-    .tab{
-      border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 13px;font-weight:900;cursor:pointer
-    }
-    .tab[aria-selected="true"]{background:var(--purple);color:#fff;border-color:var(--purple)}
-    .section{display:none}
-    .section.active{display:block}
-
-    label{display:block;font-weight:800;font-size:14px;margin:0 0 7px}
-    input,select,textarea{
-      width:100%;
-      border:1px solid #cbd5e1;
-      background:#fff;
-      color:#0f172a;
-      border-radius:12px;
-      padding:12px;
-      font:inherit;
-      outline:none;
-    }
-    input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px #dbeafe}
-    textarea{min-height:96px;resize:vertical}
-    .field{margin-bottom:12px}
-    .checkgrid{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
-    @media (max-width:720px){.checkgrid{grid-template-columns:1fr}}
-    .check{
-      display:flex;align-items:flex-start;gap:10px;
-      border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px;
-    }
-    .check input{width:auto;margin-top:3px}
-    .check span{font-weight:700}
-    .mini{font-size:12px;color:var(--muted);margin-top:4px}
-
-    .doc-table{width:100%;border-collapse:separate;border-spacing:0 8px}
-    .doc-table th{font-size:13px;text-align:left;color:#334155;padding:8px}
-    .doc-table td{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px;vertical-align:top}
-    .doc-table td:first-child{border-left:1px solid var(--line);border-radius:12px 0 0 12px;font-weight:800}
-    .doc-table td:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0}
-    .status-pill{display:inline-block;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:900;background:#ecfeff;color:#075985;border:1px solid #bae6fd}
-
-    .sticky-actions{
-      position:sticky;bottom:10px;z-index:18;
-      margin:20px auto 0;max-width:1120px;padding:0 16px;
-    }
-    .sticky-actions .inner{
-      background:#0b1220;color:#fff;border-radius:999px;padding:10px;
-      display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
-      box-shadow:0 18px 50px rgba(2,6,23,.28);
-    }
-
-    .summary{
-      white-space:pre-wrap;background:#0f172a;color:#e5e7eb;border-radius:14px;padding:14px;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.5;
-      max-height:420px;overflow:auto;
-    }
-    footer{margin:24px 0;text-align:center;color:var(--muted);font-size:13px}
-
+    @media(max-width:850px){.two,.three{grid-template-columns:1fr}.actions{width:100%}.actions .btn{flex:1}.hero{padding:22px}}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 12px 30px rgba(2,6,23,.06);margin-top:16px}
+    .card h2{margin:0 0 12px;font-size:22px;color:var(--purple)}
+    .card h3{margin:0 0 10px;font-size:16px}
+    .muted{color:var(--muted)}
+    label{font-weight:800;font-size:14px;color:#1f2937}
+    input,select,textarea{width:100%;margin-top:6px;border:1px solid #d1d5db;border-radius:12px;padding:12px 12px;font:inherit;background:#fff;color:var(--ink)}
+    textarea{min-height:84px;resize:vertical}
+    input:focus,select:focus,textarea:focus{outline:3px solid #dbeafe;border-color:#60a5fa}
+    .field{display:block}
+    .checklist{display:grid;gap:10px;margin-top:8px}
+    .check{display:flex;gap:10px;align-items:flex-start;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:12px}
+    .check input{width:20px;height:20px;margin:2px 0 0;flex:0 0 auto}
+    .check label{font-weight:700;margin:0;cursor:pointer}
+    .check small{display:block;color:var(--muted);font-weight:400;margin-top:2px}
+    .status{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:8px 12px;background:#f1f5f9;color:#334155;font-weight:800;font-size:12px;border:1px solid #e2e8f0}
+    .pill.ok{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+    .pill.warn{background:#fef3c7;color:#92400e;border-color:#fde68a}
+    .pill.stop{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+    .footerbar{position:sticky;bottom:10px;z-index:30;max-width:1120px;margin:20px auto 0;background:#0b1220;border-radius:999px;padding:10px;display:flex;gap:8px;box-shadow:0 12px 40px rgba(2,6,23,.35)}
+    .footerbar .btn{flex:1}
+    .summary{white-space:pre-wrap;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:14px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;display:none;margin-top:12px}
+    .required{color:#b91c1c}
+    .tiny{font-size:12px;color:var(--muted)}
     @media print{
-      header.site,.topbar,.hero-actions,.tabs,.sticky-actions,.no-print,footer{display:none!important}
-      body{background:#fff}
-      .container{max-width:none;padding:0}
-      .hero{box-shadow:none;background:#fff;color:#000;border-radius:0;margin:0}
-      .hero .content{padding:0 0 12px}
-      .hero .badge{display:none}
-      .hero p{color:#333}
-      .section{display:block!important;page-break-inside:avoid}
-      .card{box-shadow:none;border:1px solid #ddd;margin-bottom:12px}
-      input,select,textarea{border:none;border-bottom:1px solid #999;border-radius:0}
-      .btn{display:none}
+      body{background:#fff;color:#111}
+      .topbar,header,.footerbar,.no-print{display:none!important}
+      main{padding:0;max-width:none}
+      .hero{background:#fff;color:#111;box-shadow:none;border:0;border-radius:0;padding:0 0 10px}
+      .hero p,.notice{color:#111;background:none;border:0;padding:0;border-radius:0}
+      .card{box-shadow:none;border:1px solid #bbb;border-radius:10px;break-inside:avoid;margin-top:10px}
+      input,select,textarea{border:1px solid #999}
     }
   </style>
 </head>
-
 <body>
   <div class="topbar">
-    <div class="inner container">
-      <div class="small">HD HeeD staff onboarding</div>
-      <div class="contact-links">
-        <a href="tel:0286305500">02 8630 5500</a>
-        <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>
-      </div>
+    <div class="inner">
+      <div>HD HeeD • Minimum staff readiness form</div>
+      <div><a href="tel:0286305500">02 8630 5500</a> &nbsp; | &nbsp; <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
     </div>
   </div>
 
-  <header class="site">
-    <div class="inner container">
-      <div class="logo">
-        <img src="images/logo.png" alt="HD HeeD logo">
-        <div>
-          <div class="logo-title">HD HeeD</div>
-          <div class="logo-sub">Care Staff Intake and Onboarding</div>
-        </div>
+  <header>
+    <div class="inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">HD</div>
+        <div><strong>HD HeeD</strong><span>Care Staff Minimum Requirements</span></div>
       </div>
-      <nav aria-label="Navigation">
-        <a href="index.html">Home</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+      <div class="actions no-print">
+        <button class="btn" type="button" onclick="copySummary()">Copy summary</button>
+        <button class="btn primary" type="button" onclick="window.print()">Print / Save PDF</button>
+      </div>
     </div>
   </header>
 
-  <main class="container">
+  <main>
     <section class="hero">
-      <div class="content">
-        <span class="badge">Staff onboarding</span>
-        <h1>HD HEED CARE STAFF INTAKE</h1>
-        <p>This page is for care staff, support workers, and personal care workers who may provide NDIS supports through HD HeeD. Complete the sections below, then print/save the completed intake or copy the summary for internal records.</p>
-        <div class="hero-actions no-print">
-          <button class="btn btn-primary" type="button" onclick="showTab('details')">Start form</button>
-          <button class="btn btn-ghost" type="button" onclick="window.print()">Print or save PDF</button>
-          <button class="btn btn-ghost" type="button" onclick="copySummary()">Copy summary</button>
-        </div>
+      <h1>HD HEED CARE STAFF MINIMUM REQUIREMENTS</h1>
+      <p>This form is for personal care/support workers before they are considered for shifts. It only collects the minimum information needed to check identity, worker screening, right to work, core training and basic readiness.</p>
+      <div class="notice">Do not roster staff until all mandatory items are confirmed.</div>
+    </section>
+
+    <section class="card">
+      <h2>1. Worker details</h2>
+      <div class="grid two">
+        <label class="field">Full legal name <span class="required">*</span><input id="name" autocomplete="name"></label>
+        <label class="field">Preferred name<input id="preferred"></label>
+        <label class="field">Mobile number <span class="required">*</span><input id="phone" autocomplete="tel"></label>
+        <label class="field">Email <span class="required">*</span><input id="email" type="email" autocomplete="email"></label>
+        <label class="field">Suburb / area <span class="required">*</span><input id="suburb"></label>
+        <label class="field">Emergency contact name and phone <span class="required">*</span><input id="emergency"></label>
       </div>
     </section>
 
-    <div class="notice">
-      <strong>Important:</strong> This intake does not confirm employment or shifts. HD HeeD must verify identity, right to work, worker screening, training, policy acknowledgements and client-specific readiness before any participant-facing work is allocated.
-    </div>
-
-    <div class="tabs no-print" role="tablist" aria-label="Staff intake sections">
-      <button class="tab" type="button" aria-selected="true" data-tab="details" onclick="showTab('details')">1. Details</button>
-      <button class="tab" type="button" aria-selected="false" data-tab="availability" onclick="showTab('availability')">2. Availability</button>
-      <button class="tab" type="button" aria-selected="false" data-tab="checks" onclick="showTab('checks')">3. Checks</button>
-      <button class="tab" type="button" aria-selected="false" data-tab="training" onclick="showTab('training')">4. Training</button>
-      <button class="tab" type="button" aria-selected="false" data-tab="declarations" onclick="showTab('declarations')">5. Declarations</button>
-      <button class="tab" type="button" aria-selected="false" data-tab="documents" onclick="showTab('documents')">6. Documents</button>
-      <button class="tab" type="button" aria-selected="false" data-tab="summary" onclick="showTab('summary')">7. Summary</button>
-    </div>
-
-    <form id="staffForm" autocomplete="on">
-      <section id="details" class="section active">
-        <h2 class="section-title">1. Staff details</h2>
-        <div class="grid two">
-          <div class="card">
-            <div class="field"><label>Full legal name</label><input name="Full legal name"></div>
-            <div class="field"><label>Preferred name</label><input name="Preferred name"></div>
-            <div class="field"><label>Date of birth</label><input type="date" name="Date of birth"></div>
-            <div class="field"><label>Mobile number</label><input name="Mobile number"></div>
-            <div class="field"><label>Email address</label><input type="email" name="Email address"></div>
-            <div class="field"><label>Residential address</label><textarea name="Residential address"></textarea></div>
-          </div>
-          <div class="card">
-            <div class="field"><label>Emergency contact name</label><input name="Emergency contact name"></div>
-            <div class="field"><label>Emergency contact relationship</label><input name="Emergency contact relationship"></div>
-            <div class="field"><label>Emergency contact phone</label><input name="Emergency contact phone"></div>
-            <div class="field"><label>Role applying for</label>
-              <select name="Role applying for">
-                <option value="">Select</option>
-                <option>Support Worker</option>
-                <option>Personal Care Worker</option>
-                <option>Domestic Assistance Worker</option>
-                <option>Community Access Support Worker</option>
-                <option>Registered Nurse</option>
-                <option>Enrolled Nurse</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="field"><label>Engagement type discussed</label>
-              <select name="Engagement type discussed">
-                <option value="">Select</option>
-                <option>Casual employee</option>
-                <option>Part-time employee</option>
-                <option>Contractor</option>
-                <option>Not decided yet</option>
-              </select>
-              <div class="mini">HD HeeD should confirm the correct engagement type before offering shifts.</div>
-            </div>
-            <div class="field"><label>ABN, if contractor</label><input name="ABN if contractor"></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="availability" class="section">
-        <h2 class="section-title">2. Availability and work preferences</h2>
-        <div class="grid two">
-          <div class="card">
-            <div class="field"><label>Preferred work suburbs/areas</label><textarea name="Preferred work suburbs"></textarea></div>
-            <div class="field"><label>Maximum travel distance</label><input name="Maximum travel distance" placeholder="Example: 20 km from home"></div>
-            <div class="field"><label>Languages spoken</label><input name="Languages spoken"></div>
-            <div class="field"><label>Preferred participant groups or experience</label><textarea name="Preferred participant groups"></textarea></div>
-          </div>
-          <div class="card">
-            <label>Availability</label>
-            <div class="checkgrid">
-              <label class="check"><input type="checkbox" name="Availability" value="Weekday mornings"><span>Weekday mornings</span></label>
-              <label class="check"><input type="checkbox" name="Availability" value="Weekday afternoons"><span>Weekday afternoons</span></label>
-              <label class="check"><input type="checkbox" name="Availability" value="Weekday evenings"><span>Weekday evenings</span></label>
-              <label class="check"><input type="checkbox" name="Availability" value="Weekends"><span>Weekends</span></label>
-              <label class="check"><input type="checkbox" name="Availability" value="Sleepovers"><span>Sleepovers</span></label>
-              <label class="check"><input type="checkbox" name="Availability" value="Public holidays"><span>Public holidays</span></label>
-            </div>
-            <div class="field" style="margin-top:12px"><label>Own reliable transport?</label>
-              <select name="Own reliable transport">
-                <option value="">Select</option><option>Yes</option><option>No</option>
-              </select>
-            </div>
-            <div class="field"><label>Willing to transport participants?</label>
-              <select name="Willing to transport participants">
-                <option value="">Select</option><option>Yes</option><option>No</option><option>Only if agreed in writing</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="checks" class="section">
-        <h2 class="section-title">3. Identity, work rights and screening</h2>
-        <div class="grid two">
-          <div class="card">
-            <div class="field"><label>Photo ID sighted/collected</label>
-              <select name="Photo ID status"><option value="">Select</option><option>Pending</option><option>Sighted</option><option>Copy saved</option><option>Not applicable</option></select>
-            </div>
-            <div class="field"><label>Right to work in Australia confirmed</label>
-              <select name="Right to work"><option value="">Select</option><option>Confirmed</option><option>Pending</option><option>Not applicable</option></select>
-            </div>
-            <div class="field"><label>Visa conditions, if applicable</label><textarea name="Visa conditions"></textarea></div>
-            <div class="field"><label>Driver licence number, if driving</label><input name="Driver licence number"></div>
-            <div class="field"><label>Driver licence expiry</label><input type="date" name="Driver licence expiry"></div>
-          </div>
-          <div class="card">
-            <div class="field"><label>NDIS Worker Screening Clearance status</label>
-              <select name="NDIS Worker Screening status"><option value="">Select</option><option>Cleared</option><option>Pending</option><option>Not provided</option><option>Not required for role</option></select>
-            </div>
-            <div class="field"><label>NDIS Worker Screening clearance/reference number</label><input name="NDIS Worker Screening number"></div>
-            <div class="field"><label>NDIS Worker Screening expiry date</label><input type="date" name="NDIS Worker Screening expiry"></div>
-            <div class="field"><label>WWCC, if supporting children</label><input name="WWCC details"></div>
-            <div class="field"><label>Vehicle registration and insurance, if transporting</label><textarea name="Vehicle insurance details"></textarea></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="training" class="section">
-        <h2 class="section-title">4. Qualifications and training</h2>
-        <div class="card">
-          <table class="doc-table">
-            <thead>
-              <tr><th>Training / certificate</th><th>Status</th><th>Issue date</th><th>Expiry date</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Certificate III/IV or relevant qualification</td><td><select name="Qualification status"><option></option><option>Provided</option><option>Pending</option><option>Not applicable</option></select></td><td><input type="date" name="Qualification issue"></td><td><input type="date" name="Qualification expiry"></td><td><input name="Qualification notes"></td></tr>
-              <tr><td>NDIS Worker Orientation Module</td><td><select name="Orientation status"><option></option><option>Completed</option><option>Pending</option></select></td><td><input type="date" name="Orientation issue"></td><td><input type="date" name="Orientation expiry"></td><td><input name="Orientation notes"></td></tr>
-              <tr><td>First Aid</td><td><select name="First Aid status"><option></option><option>Current</option><option>Expired</option><option>Pending</option></select></td><td><input type="date" name="First Aid issue"></td><td><input type="date" name="First Aid expiry"></td><td><input name="First Aid notes"></td></tr>
-              <tr><td>CPR</td><td><select name="CPR status"><option></option><option>Current</option><option>Expired</option><option>Pending</option></select></td><td><input type="date" name="CPR issue"></td><td><input type="date" name="CPR expiry"></td><td><input name="CPR notes"></td></tr>
-              <tr><td>Manual handling</td><td><select name="Manual handling status"><option></option><option>Completed</option><option>Pending</option></select></td><td><input type="date" name="Manual handling issue"></td><td><input type="date" name="Manual handling expiry"></td><td><input name="Manual handling notes"></td></tr>
-              <tr><td>Infection prevention and control</td><td><select name="Infection control status"><option></option><option>Completed</option><option>Pending</option></select></td><td><input type="date" name="Infection control issue"></td><td><input type="date" name="Infection control expiry"></td><td><input name="Infection control notes"></td></tr>
-              <tr><td>Medication assistance, if applicable</td><td><select name="Medication training status"><option></option><option>Completed</option><option>Pending</option><option>Not applicable</option></select></td><td><input type="date" name="Medication training issue"></td><td><input type="date" name="Medication training expiry"></td><td><input name="Medication training notes"></td></tr>
-              <tr><td>Mealtime / dysphagia support, if applicable</td><td><select name="Mealtime training status"><option></option><option>Completed</option><option>Pending</option><option>Not applicable</option></select></td><td><input type="date" name="Mealtime training issue"></td><td><input type="date" name="Mealtime training expiry"></td><td><input name="Mealtime training notes"></td></tr>
-              <tr><td>Behaviour support, if applicable</td><td><select name="Behaviour support training status"><option></option><option>Completed</option><option>Pending</option><option>Not applicable</option></select></td><td><input type="date" name="Behaviour support training issue"></td><td><input type="date" name="Behaviour support training expiry"></td><td><input name="Behaviour support training notes"></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section id="declarations" class="section">
-        <h2 class="section-title">5. Staff declarations and policy acknowledgement</h2>
-        <div class="grid two">
-          <div class="card">
-            <label>Staff must acknowledge</label>
-            <div class="checkgrid">
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="NDIS Code of Conduct"><span>NDIS Code of Conduct</span></label>
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="Privacy and confidentiality"><span>Privacy and confidentiality</span></label>
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="Incident reporting"><span>Incident reporting</span></label>
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="Complaints and feedback"><span>Complaints and feedback</span></label>
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="Abuse neglect exploitation reporting"><span>Abuse, neglect and exploitation reporting</span></label>
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="Professional boundaries"><span>Professional boundaries</span></label>
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="Restrictive practices boundaries"><span>Restrictive practices boundaries</span></label>
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="Progress notes and documentation"><span>Progress notes and documentation</span></label>
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="Emergency escalation"><span>Emergency escalation</span></label>
-              <label class="check"><input type="checkbox" name="Acknowledgements" value="Mobile phone and social media boundaries"><span>Mobile phone and social media boundaries</span></label>
-            </div>
-          </div>
-          <div class="card">
-            <div class="field"><label>Declaration</label>
-              <select name="Worker declaration">
-                <option value="">Select</option>
-                <option>I declare the information provided is true and correct.</option>
-                <option>I need help to complete this form.</option>
-              </select>
-            </div>
-            <div class="field"><label>Worker name for declaration</label><input name="Worker declaration name"></div>
-            <div class="field"><label>Declaration date</label><input type="date" name="Declaration date"></div>
-            <div class="field"><label>Additional notes or restrictions</label><textarea name="Additional staff notes"></textarea></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="documents" class="section">
-        <h2 class="section-title">6. Documents to collect and store securely</h2>
-        <div class="card">
-          <p class="muted">Do not collect identity documents through an unsecured public website form. Use a secure staff folder, encrypted email, password-protected link, or HR system with access limited to authorised HD HeeD personnel.</p>
-          <table class="doc-table">
-            <thead><tr><th>Document</th><th>Required before work?</th><th>Status</th><th>Notes</th></tr></thead>
-            <tbody>
-              <tr><td>Photo ID</td><td>Yes</td><td><span class="status-pill">Collect and verify</span></td><td>Driver licence, passport or other suitable ID.</td></tr>
-              <tr><td>Right to work evidence</td><td>Yes, if applicable</td><td><span class="status-pill">Verify</span></td><td>Visa conditions must be checked if relevant.</td></tr>
-              <tr><td>NDIS Worker Screening Clearance</td><td>Yes for risk-assessed roles</td><td><span class="status-pill">Verify in portal</span></td><td>Record clearance number and expiry date.</td></tr>
-              <tr><td>NDIS Worker Orientation Module certificate</td><td>Yes</td><td><span class="status-pill">Save copy</span></td><td>Quality, Safety and You.</td></tr>
-              <tr><td>Training certificates</td><td>Role dependent</td><td><span class="status-pill">Save copy</span></td><td>First aid, CPR, manual handling, infection control and other supports.</td></tr>
-              <tr><td>Driver licence and insurance</td><td>If driving/transporting</td><td><span class="status-pill">Check expiry</span></td><td>Keep licence expiry and insurance renewal date.</td></tr>
-              <tr><td>Employee or contractor agreement</td><td>Yes</td><td><span class="status-pill">Sign before shifts</span></td><td>Use the correct engagement type.</td></tr>
-              <tr><td>Policy acknowledgements</td><td>Yes</td><td><span class="status-pill">Sign and save</span></td><td>Code of Conduct, privacy, incidents, complaints and boundaries.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section id="summary" class="section">
-        <h2 class="section-title">7. Summary for HD HeeD records</h2>
-        <div class="card">
-          <p class="muted">Use this summary to review readiness, copy into your staff register, or save as a PDF.</p>
-          <div id="summaryBox" class="summary">Complete the form to generate a summary.</div>
-          <div class="btn-row no-print">
-            <button class="btn btn-blue" type="button" onclick="refreshSummary()">Refresh summary</button>
-            <button class="btn btn-purple" type="button" onclick="copySummary()">Copy summary</button>
-            <button class="btn btn-ghost" type="button" onclick="downloadText()">Download text summary</button>
-            <button class="btn btn-ghost" type="button" onclick="window.print()">Print or save PDF</button>
-            <button class="btn btn-danger" type="button" onclick="clearDraft()">Clear saved draft</button>
-          </div>
-        </div>
-      </section>
-    </form>
-
-    <div class="sticky-actions no-print">
-      <div class="inner">
-        <button class="btn btn-primary" type="button" onclick="nextTab()">Next section</button>
-        <button class="btn btn-ghost" type="button" onclick="refreshSummary();showTab('summary')">Review summary</button>
-        <button class="btn btn-ghost" type="button" onclick="window.print()">Print / save PDF</button>
+    <section class="card">
+      <h2>2. Role and availability</h2>
+      <div class="grid two">
+        <label class="field">Role type <span class="required">*</span>
+          <select id="role">
+            <option value="">Select</option>
+            <option>Personal care worker</option>
+            <option>Support worker</option>
+            <option>Domestic assistance worker</option>
+            <option>Community access worker</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label class="field">Employment type to be confirmed <span class="required">*</span>
+          <select id="engagement">
+            <option value="">Select</option>
+            <option>Casual employee</option>
+            <option>Contractor</option>
+            <option>Not decided yet</option>
+          </select>
+        </label>
+        <label class="field">Available days/times <span class="required">*</span><textarea id="availability" placeholder="Example: Mon-Fri mornings, weekends, evenings"></textarea></label>
+        <label class="field">Preferred work suburbs / travel radius<textarea id="areas" placeholder="Example: Blacktown, Parramatta, Penrith, 20 km radius"></textarea></label>
       </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Mandatory checks</h2>
+      <div class="grid two">
+        <label class="field">NDIS Worker Screening Clearance status <span class="required">*</span>
+          <select id="ndisStatus">
+            <option value="">Select</option>
+            <option>Cleared</option>
+            <option>Applied / pending</option>
+            <option>Not yet applied</option>
+          </select>
+        </label>
+        <label class="field">NDIS clearance number / application number<input id="ndisNumber"></label>
+        <label class="field">NDIS clearance expiry date<input id="ndisExpiry" type="date"></label>
+        <label class="field">Right to work in Australia confirmed? <span class="required">*</span>
+          <select id="workRights">
+            <option value="">Select</option>
+            <option>Yes</option>
+            <option>No</option>
+            <option>Need to check</option>
+          </select>
+        </label>
+      </div>
+      <div class="checklist">
+        <div class="check"><input type="checkbox" id="photoId"><label for="photoId">Photo ID sighted/saved <small>Driver licence, passport or other acceptable ID.</small></label></div>
+        <div class="check"><input type="checkbox" id="orientation"><label for="orientation">NDIS Worker Orientation Module completed <small>Quality, Safety and You certificate received or sighted.</small></label></div>
+        <div class="check"><input type="checkbox" id="codeConduct"><label for="codeConduct">NDIS Code of Conduct acknowledged <small>Worker understands expected behaviour, respect, safety and reporting obligations.</small></label></div>
+        <div class="check"><input type="checkbox" id="privacy"><label for="privacy">Privacy and confidentiality acknowledged <small>No sharing participant information, photos, documents or details without authority.</small></label></div>
+        <div class="check"><input type="checkbox" id="incident"><label for="incident">Incident reporting process explained <small>Worker knows what must be reported immediately and who to contact.</small></label></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. Minimum training for personal care</h2>
+      <p class="muted">Tick what has been confirmed. If not yet completed, do not roster the worker for duties that require that skill.</p>
+      <div class="checklist">
+        <div class="check"><input type="checkbox" id="firstAid"><label for="firstAid">First Aid certificate received/sighted</label></div>
+        <div class="check"><input type="checkbox" id="cpr"><label for="cpr">CPR certificate received/sighted</label></div>
+        <div class="check"><input type="checkbox" id="manual"><label for="manual">Manual handling training confirmed</label></div>
+        <div class="check"><input type="checkbox" id="infection"><label for="infection">Infection control basics confirmed</label></div>
+        <div class="check"><input type="checkbox" id="personalCare"><label for="personalCare">Personal care experience or qualification confirmed</label></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5. Driving and transport, only if applicable</h2>
+      <div class="grid two">
+        <label class="field">Will the worker drive to shifts?<select id="driveShift"><option value="">Select</option><option>Yes</option><option>No</option></select></label>
+        <label class="field">Will the worker transport participants?<select id="driveClient"><option value="">Select</option><option>Yes</option><option>No</option><option>Not approved yet</option></select></label>
+      </div>
+      <div class="checklist">
+        <div class="check"><input type="checkbox" id="licence"><label for="licence">Driver licence sighted/saved, if driving is required</label></div>
+        <div class="check"><input type="checkbox" id="insurance"><label for="insurance">Vehicle insurance/rego sighted, if participant transport is required</label></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>6. HD HeeD decision</h2>
+      <div class="grid two">
+        <label class="field">Internal status <span class="required">*</span>
+          <select id="status">
+            <option>Pending documents</option>
+            <option>Ready for induction</option>
+            <option>Inducted - not yet rostered</option>
+            <option>Ready to roster</option>
+            <option>Active</option>
+            <option>Do not roster</option>
+          </select>
+        </label>
+        <label class="field">Reviewed by<input id="reviewedBy"></label>
+        <label class="field">Review date<input id="reviewDate" type="date"></label>
+        <label class="field">Next follow-up date<input id="followUp" type="date"></label>
+      </div>
+      <label class="field" style="margin-top:12px">Notes / missing items<textarea id="notes" placeholder="Example: Awaiting NDIS clearance expiry date and CPR certificate."></textarea></label>
+      <div class="status" id="readiness"></div>
+      <div id="summary" class="summary"></div>
+    </section>
+
+    <div class="footerbar no-print">
+      <button class="btn" type="button" onclick="resetForm()">Clear form</button>
+      <button class="btn" type="button" onclick="showSummary()">Show summary</button>
+      <button class="btn primary" type="button" onclick="window.print()">Print / Save PDF</button>
     </div>
   </main>
 
-  <footer>
-    © 2026 HD HeeD • Staff intake and onboarding checklist
-  </footer>
-
   <script>
-    const STORAGE_KEY = "hdheed_staff_intake_v1";
-    const tabs = ["details","availability","checks","training","declarations","documents","summary"];
-    const form = document.getElementById("staffForm");
+    const KEY = 'hdheed_min_staff_form_v1';
+    const ids = ['name','preferred','phone','email','suburb','emergency','role','engagement','availability','areas','ndisStatus','ndisNumber','ndisExpiry','workRights','driveShift','driveClient','status','reviewedBy','reviewDate','followUp','notes'];
+    const checks = ['photoId','orientation','codeConduct','privacy','incident','firstAid','cpr','manual','infection','personalCare','licence','insurance'];
 
-    function showTab(id){
-      document.querySelectorAll(".section").forEach(s => s.classList.toggle("active", s.id === id));
-      document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.tab === id)));
-      if(id === "summary") refreshSummary();
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
-    function nextTab(){
-      const current = document.querySelector(".section.active")?.id || "details";
-      const idx = tabs.indexOf(current);
-      showTab(tabs[Math.min(idx + 1, tabs.length - 1)]);
-    }
-
-    function collectData(){
+    function save(){
       const data = {};
-      const fd = new FormData(form);
-      for(const [k,v] of fd.entries()){
-        if(!v) continue;
-        if(data[k]){
-          if(Array.isArray(data[k])) data[k].push(v);
-          else data[k] = [data[k], v];
-        } else {
-          data[k] = v;
-        }
-      }
-      return data;
+      ids.forEach(id => data[id] = document.getElementById(id)?.value || '');
+      checks.forEach(id => data[id] = !!document.getElementById(id)?.checked);
+      localStorage.setItem(KEY, JSON.stringify(data));
+      updateReadiness();
     }
-
-    function formatValue(v){
-      if(Array.isArray(v)) return v.join(", ");
-      return v || "";
-    }
-
-    function buildSummary(){
-      const d = collectData();
-      const lines = [];
-      lines.push("HD HEED CARE STAFF INTAKE SUMMARY");
-      lines.push("Generated: " + new Date().toLocaleString("en-AU"));
-      lines.push("");
-      const groups = [
-        ["Staff details", ["Full legal name","Preferred name","Date of birth","Mobile number","Email address","Residential address","Emergency contact name","Emergency contact relationship","Emergency contact phone","Role applying for","Engagement type discussed","ABN if contractor"]],
-        ["Availability", ["Preferred work suburbs","Maximum travel distance","Languages spoken","Preferred participant groups","Availability","Own reliable transport","Willing to transport participants"]],
-        ["Checks", ["Photo ID status","Right to work","Visa conditions","Driver licence number","Driver licence expiry","NDIS Worker Screening status","NDIS Worker Screening number","NDIS Worker Screening expiry","WWCC details","Vehicle insurance details"]],
-        ["Training", ["Qualification status","Qualification issue","Qualification expiry","Qualification notes","Orientation status","Orientation issue","Orientation expiry","Orientation notes","First Aid status","First Aid issue","First Aid expiry","First Aid notes","CPR status","CPR issue","CPR expiry","CPR notes","Manual handling status","Manual handling issue","Manual handling expiry","Manual handling notes","Infection control status","Infection control issue","Infection control expiry","Infection control notes","Medication training status","Medication training issue","Medication training expiry","Medication training notes","Mealtime training status","Mealtime training issue","Mealtime training expiry","Mealtime training notes","Behaviour support training status","Behaviour support training issue","Behaviour support training expiry","Behaviour support training notes"]],
-        ["Declarations", ["Acknowledgements","Worker declaration","Worker declaration name","Declaration date","Additional staff notes"]]
-      ];
-      groups.forEach(([title, keys]) => {
-        lines.push(title.toUpperCase());
-        keys.forEach(k => {
-          if(d[k]) lines.push(k + ": " + formatValue(d[k]));
-        });
-        lines.push("");
-      });
-      lines.push("Internal readiness rule:");
-      lines.push("Do not roster until ID, right to work, NDIS Worker Screening, orientation module, role agreement, policy acknowledgements and client-specific handover are completed.");
-      return lines.join("\n");
-    }
-
-    function refreshSummary(){
-      document.getElementById("summaryBox").textContent = buildSummary();
-      saveDraft();
-    }
-
-    function copySummary(){
-      refreshSummary();
-      navigator.clipboard.writeText(document.getElementById("summaryBox").textContent)
-        .then(() => alert("Summary copied."))
-        .catch(() => alert("Could not copy automatically. Please select and copy the summary manually."));
-    }
-
-    function downloadText(){
-      refreshSummary();
-      const blob = new Blob([document.getElementById("summaryBox").textContent], {type:"text/plain;charset=utf-8"});
-      const a = document.createElement("a");
-      const name = (collectData()["Full legal name"] || "staff-member").toString().replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"").toLowerCase();
-      a.href = URL.createObjectURL(blob);
-      a.download = "hdheed-staff-intake-" + name + ".txt";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    }
-
-    function saveDraft(){
-      const data = {};
-      form.querySelectorAll("input,select,textarea").forEach(el => {
-        if(el.type === "checkbox") data[el.name + "::" + el.value] = el.checked;
-        else data[el.name] = el.value;
-      });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    }
-
-    function loadDraft(){
+    function load(){
       try{
-        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-        form.querySelectorAll("input,select,textarea").forEach(el => {
-          if(el.type === "checkbox") el.checked = !!data[el.name + "::" + el.value];
-          else if(data[el.name] !== undefined) el.value = data[el.name];
-        });
+        const data = JSON.parse(localStorage.getItem(KEY) || '{}');
+        ids.forEach(id => { if(document.getElementById(id) && data[id] !== undefined) document.getElementById(id).value = data[id]; });
+        checks.forEach(id => { if(document.getElementById(id)) document.getElementById(id).checked = !!data[id]; });
       }catch(e){}
+      updateReadiness();
     }
+    document.addEventListener('input', save);
+    document.addEventListener('change', save);
 
-    function clearDraft(){
-      if(confirm("Clear the saved draft on this browser?")){
-        localStorage.removeItem(STORAGE_KEY);
-        form.reset();
-        refreshSummary();
-      }
+    function val(id){ return document.getElementById(id)?.value || ''; }
+    function tick(id){ return !!document.getElementById(id)?.checked; }
+    function missingMandatory(){
+      const missing = [];
+      if(!val('name')) missing.push('worker name');
+      if(!val('phone')) missing.push('phone');
+      if(!val('email')) missing.push('email');
+      if(!val('suburb')) missing.push('suburb');
+      if(!val('emergency')) missing.push('emergency contact');
+      if(!val('role')) missing.push('role type');
+      if(!val('engagement')) missing.push('engagement type');
+      if(!val('availability')) missing.push('availability');
+      if(val('ndisStatus') !== 'Cleared') missing.push('NDIS Worker Screening clearance not confirmed as cleared');
+      if(!val('workRights') || val('workRights') !== 'Yes') missing.push('right to work not confirmed');
+      ['photoId','orientation','codeConduct','privacy','incident'].forEach(id => { if(!tick(id)) missing.push(document.querySelector('label[for="'+id+'"]').innerText.split('\n')[0]); });
+      return missing;
     }
-
-    form.addEventListener("input", () => { saveDraft(); });
-    form.addEventListener("change", () => { saveDraft(); });
-    loadDraft();
-    refreshSummary();
+    function updateReadiness(){
+      const box = document.getElementById('readiness');
+      const missing = missingMandatory();
+      const coreTraining = ['firstAid','cpr','manual','infection','personalCare'].filter(id=>tick(id)).length;
+      box.innerHTML = '';
+      const pill = (text, cls) => `<span class="pill ${cls||''}">${text}</span>`;
+      if(missing.length === 0){ box.innerHTML += pill('Minimum mandatory items complete', 'ok'); }
+      else{ box.innerHTML += pill(missing.length + ' mandatory item(s) missing', 'stop'); }
+      box.innerHTML += pill(coreTraining + '/5 personal care training items confirmed', coreTraining>=4?'ok':'warn');
+      if(val('status')) box.innerHTML += pill('Status: ' + val('status'));
+    }
+    function buildSummary(){
+      const missing = missingMandatory();
+      const lines = [];
+      lines.push('HD HEED CARE STAFF MINIMUM REQUIREMENTS SUMMARY');
+      lines.push('');
+      lines.push('Worker: ' + val('name'));
+      lines.push('Preferred name: ' + val('preferred'));
+      lines.push('Phone: ' + val('phone'));
+      lines.push('Email: ' + val('email'));
+      lines.push('Suburb/area: ' + val('suburb'));
+      lines.push('Emergency contact: ' + val('emergency'));
+      lines.push('');
+      lines.push('Role: ' + val('role'));
+      lines.push('Engagement type: ' + val('engagement'));
+      lines.push('Availability: ' + val('availability'));
+      lines.push('Preferred areas: ' + val('areas'));
+      lines.push('');
+      lines.push('NDIS Worker Screening: ' + val('ndisStatus'));
+      lines.push('NDIS number/application: ' + val('ndisNumber'));
+      lines.push('NDIS expiry: ' + val('ndisExpiry'));
+      lines.push('Right to work confirmed: ' + val('workRights'));
+      lines.push('');
+      lines.push('Mandatory acknowledgements:');
+      ['photoId','orientation','codeConduct','privacy','incident'].forEach(id => lines.push('- ' + document.querySelector('label[for="'+id+'"]').innerText.split('\n')[0] + ': ' + (tick(id)?'Yes':'No')));
+      lines.push('');
+      lines.push('Training confirmed:');
+      ['firstAid','cpr','manual','infection','personalCare'].forEach(id => lines.push('- ' + document.querySelector('label[for="'+id+'"]').innerText.split('\n')[0] + ': ' + (tick(id)?'Yes':'No')));
+      lines.push('');
+      lines.push('Driving to shifts: ' + val('driveShift'));
+      lines.push('Transporting participants: ' + val('driveClient'));
+      lines.push('Driver licence sighted: ' + (tick('licence')?'Yes':'No'));
+      lines.push('Vehicle insurance/rego sighted: ' + (tick('insurance')?'Yes':'No'));
+      lines.push('');
+      lines.push('Internal status: ' + val('status'));
+      lines.push('Reviewed by: ' + val('reviewedBy'));
+      lines.push('Review date: ' + val('reviewDate'));
+      lines.push('Follow-up date: ' + val('followUp'));
+      lines.push('Notes/missing items: ' + val('notes'));
+      lines.push('');
+      lines.push('Mandatory missing items: ' + (missing.length ? missing.join(', ') : 'None'));
+      return lines.join('\n');
+    }
+    function showSummary(){
+      const s = document.getElementById('summary');
+      s.textContent = buildSummary();
+      s.style.display = 'block';
+      s.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+    async function copySummary(){
+      const text = buildSummary();
+      try{ await navigator.clipboard.writeText(text); alert('Summary copied.'); }
+      catch(e){ showSummary(); alert('Copy not available. Summary displayed instead.'); }
+    }
+    function resetForm(){
+      if(!confirm('Clear this form on this browser?')) return;
+      localStorage.removeItem(KEY);
+      ids.forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = ''; });
+      checks.forEach(id => { if(document.getElementById(id)) document.getElementById(id).checked = false; });
+      document.getElementById('status').value = 'Pending documents';
+      document.getElementById('summary').style.display = 'none';
+      updateReadiness();
+    }
+    load();
   </script>
 </body>
 </html>
