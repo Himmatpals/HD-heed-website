@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HD HeeD — Staff Minimum Requirements Form</title>
+  <meta name="description" content="HD HeeD minimum staff readiness form for personal care and support workers." />
+  <meta name="theme-color" content="#512b8a" />
+
+  <!-- Favicons / App Icons (matching HD HeeD site setup) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="#512b8a">
+  <link rel="manifest" href="/site.webmanifest?v=3">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --purple:#512b8a;
+      --gold:#ffc107;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --line:#e5e7eb;
+      --blue:#2563eb;
+      --green:#22c55e;
+      --red:#ef4444;
+      --dark:#0b1220;
+      --soft:#f8fafc;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+    a{color:var(--blue);text-decoration:none}
+    .topbar{background:var(--dark);color:#fff}
+    .topbar .inner{max-width:1120px;margin:0 auto;padding:8px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px}
+    .topbar a{color:#fff;font-weight:800}
+    header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+    header .inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--purple),#7c3aed);display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 10px 25px rgba(81,43,138,.25)}
+    .brand strong{font-size:18px}
+    .brand span{font-size:12px;color:var(--muted);display:block}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{appearance:none;border:0;border-radius:14px;padding:12px 16px;font-weight:900;cursor:pointer;min-height:44px;background:#eef2ff;color:#1e3a8a;transition:transform .15s ease,box-shadow .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 25px rgba(2,6,23,.12)}
+    .btn.primary{background:var(--gold);color:#1e1b4b}
+    .btn.dark{background:var(--dark);color:#fff}
+    .btn.red{background:#fee2e2;color:#991b1b}
+    main{max-width:1120px;margin:0 auto;padding:18px 16px 80px}
+    .hero{background:linear-gradient(135deg,#111827,#312e81 55%,#512b8a);border-radius:24px;color:#fff;padding:28px;box-shadow:0 20px 60px rgba(17,24,39,.20);overflow:hidden;position:relative}
+    .hero:after{content:"";position:absolute;inset:auto -15% -60% auto;width:360px;height:360px;border-radius:999px;background:rgba(255,193,7,.22);filter:blur(4px)}
+    .hero h1{margin:0;font-size:clamp(28px,5vw,44px);line-height:1.1;font-weight:900;letter-spacing:-.02em}
+    .hero p{margin:10px 0 0;color:#e5e7eb;max-width:780px}
+    .notice{margin-top:14px;display:inline-flex;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:10px 12px;border-radius:999px;font-size:13px;font-weight:800;position:relative;z-index:1}
+    .grid{display:grid;gap:16px}
+    .two{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media(max-width:850px){.two,.three{grid-template-columns:1fr}.actions{width:100%}.actions .btn{flex:1}.hero{padding:22px}}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 12px 30px rgba(2,6,23,.06);margin-top:16px}
+    .card h2{margin:0 0 12px;font-size:22px;color:var(--purple)}
+    .card h3{margin:0 0 10px;font-size:16px}
+    .muted{color:var(--muted)}
+    label{font-weight:800;font-size:14px;color:#1f2937}
+    input,select,textarea{width:100%;margin-top:6px;border:1px solid #d1d5db;border-radius:12px;padding:12px 12px;font:inherit;background:#fff;color:var(--ink)}
+    textarea{min-height:84px;resize:vertical}
+    input:focus,select:focus,textarea:focus{outline:3px solid #dbeafe;border-color:#60a5fa}
+    .field{display:block}
+    .checklist{display:grid;gap:10px;margin-top:8px}
+    .check{display:flex;gap:10px;align-items:flex-start;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:12px}
+    .check input{width:20px;height:20px;margin:2px 0 0;flex:0 0 auto}
+    .check label{font-weight:700;margin:0;cursor:pointer}
+    .check small{display:block;color:var(--muted);font-weight:400;margin-top:2px}
+    .status{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:8px 12px;background:#f1f5f9;color:#334155;font-weight:800;font-size:12px;border:1px solid #e2e8f0}
+    .pill.ok{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+    .pill.warn{background:#fef3c7;color:#92400e;border-color:#fde68a}
+    .pill.stop{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+    .footerbar{position:sticky;bottom:10px;z-index:30;max-width:1120px;margin:20px auto 0;background:#0b1220;border-radius:999px;padding:10px;display:flex;gap:8px;box-shadow:0 12px 40px rgba(2,6,23,.35)}
+    .footerbar .btn{flex:1}
+    .summary{white-space:pre-wrap;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:14px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;display:none;margin-top:12px}
+    .required{color:#b91c1c}
+    .tiny{font-size:12px;color:var(--muted)}
+    @media print{
+      body{background:#fff;color:#111}
+      .topbar,header,.footerbar,.no-print{display:none!important}
+      main{padding:0;max-width:none}
+      .hero{background:#fff;color:#111;box-shadow:none;border:0;border-radius:0;padding:0 0 10px}
+      .hero p,.notice{color:#111;background:none;border:0;padding:0;border-radius:0}
+      .card{box-shadow:none;border:1px solid #bbb;border-radius:10px;break-inside:avoid;margin-top:10px}
+      input,select,textarea{border:1px solid #999}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="inner">
+      <div>HD HeeD • Minimum staff readiness form</div>
+      <div><a href="tel:0286305500">02 8630 5500</a> &nbsp; | &nbsp; <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
+    </div>
+  </div>
+
+  <header>
+    <div class="inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">HD</div>
+        <div><strong>HD HeeD</strong><span>Care Staff Minimum Requirements</span></div>
+      </div>
+      <div class="actions no-print">
+        <button class="btn" type="button" onclick="copySummary()">Copy summary</button>
+        <button class="btn primary" type="button" onclick="window.print()">Print / Save PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>HD HEED CARE STAFF MINIMUM REQUIREMENTS</h1>
+      <p>This form is for personal care/support workers before they are considered for shifts. It only collects the minimum information needed to check identity, worker screening, right to work, core training and basic readiness.</p>
+      <div class="notice">Do not roster staff until all mandatory items are confirmed.</div>
+    </section>
+
+    <section class="card">
+      <h2>Required policy acknowledgements</h2>
+      <p class="muted">Open each policy, read it with the worker, print/save it if required, then tick the acknowledgement boxes in section 3.</p>
+      <div class="grid three">
+        <a class="btn" href="hdheed-policy-ndis-code-of-conduct.html" target="_blank" rel="noopener">Open Code of Conduct</a>
+        <a class="btn" href="hdheed-policy-privacy-confidentiality.html" target="_blank" rel="noopener">Open Privacy Policy</a>
+        <a class="btn" href="hdheed-policy-incident-reporting.html" target="_blank" rel="noopener">Open Incident Reporting</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>1. Worker details</h2>
+      <div class="grid two">
+        <label class="field">Full legal name <span class="required">*</span><input id="name" autocomplete="name"></label>
+        <label class="field">Preferred name<input id="preferred"></label>
+        <label class="field">Mobile number <span class="required">*</span><input id="phone" autocomplete="tel"></label>
+        <label class="field">Email <span class="required">*</span><input id="email" type="email" autocomplete="email"></label>
+        <label class="field">Suburb / area <span class="required">*</span><input id="suburb"></label>
+        <label class="field">Emergency contact name and phone <span class="required">*</span><input id="emergency"></label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Role and availability</h2>
+      <div class="grid two">
+        <label class="field">Role type <span class="required">*</span>
+          <select id="role">
+            <option value="">Select</option>
+            <option>Personal care worker</option>
+            <option>Support worker</option>
+            <option>Domestic assistance worker</option>
+            <option>Community access worker</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label class="field">Employment type to be confirmed <span class="required">*</span>
+          <select id="engagement">
+            <option value="">Select</option>
+            <option>Casual employee</option>
+            <option>Contractor</option>
+            <option>Not decided yet</option>
+          </select>
+        </label>
+        <label class="field">Available days/times <span class="required">*</span><textarea id="availability" placeholder="Example: Mon-Fri mornings, weekends, evenings"></textarea></label>
+        <label class="field">Preferred work suburbs / travel radius<textarea id="areas" placeholder="Example: Blacktown, Parramatta, Penrith, 20 km radius"></textarea></label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Mandatory checks</h2>
+      <div class="grid two">
+        <label class="field">NDIS Worker Screening Clearance status <span class="required">*</span>
+          <select id="ndisStatus">
+            <option value="">Select</option>
+            <option>Cleared</option>
+            <option>Applied / pending</option>
+            <option>Not yet applied</option>
+          </select>
+        </label>
+        <label class="field">NDIS clearance number / application number<input id="ndisNumber"></label>
+        <label class="field">NDIS clearance expiry date<input id="ndisExpiry" type="date"></label>
+        <label class="field">Right to work in Australia confirmed? <span class="required">*</span>
+          <select id="workRights">
+            <option value="">Select</option>
+            <option>Yes</option>
+            <option>No</option>
+            <option>Need to check</option>
+          </select>
+        </label>
+      </div>
+      <div class="checklist">
+        <div class="check"><input type="checkbox" id="photoId"><label for="photoId">Photo ID sighted/saved <small>Driver licence, passport or other acceptable ID.</small></label></div>
+        <div class="check"><input type="checkbox" id="orientation"><label for="orientation">NDIS Worker Orientation Module completed <small>Quality, Safety and You certificate received or sighted.</small></label></div>
+        <div class="check"><input type="checkbox" id="codeConduct"><label for="codeConduct">NDIS Code of Conduct acknowledged <small>Worker understands expected behaviour, respect, safety and reporting obligations. <a href="hdheed-policy-ndis-code-of-conduct.html" target="_blank" rel="noopener">Open printable policy</a>.</small></label></div>
+        <div class="check"><input type="checkbox" id="privacy"><label for="privacy">Privacy and confidentiality acknowledged <small>No sharing participant information, photos, documents or details without authority. <a href="hdheed-policy-privacy-confidentiality.html" target="_blank" rel="noopener">Open printable policy</a>.</small></label></div>
+        <div class="check"><input type="checkbox" id="incident"><label for="incident">Incident reporting process explained <small>Worker knows what must be reported immediately and who to contact. <a href="hdheed-policy-incident-reporting.html" target="_blank" rel="noopener">Open printable policy</a>.</small></label></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. Minimum training for personal care</h2>
+      <p class="muted">Tick what has been confirmed. If not yet completed, do not roster the worker for duties that require that skill.</p>
+      <div class="checklist">
+        <div class="check"><input type="checkbox" id="firstAid"><label for="firstAid">First Aid certificate received/sighted</label></div>
+        <div class="check"><input type="checkbox" id="cpr"><label for="cpr">CPR certificate received/sighted</label></div>
+        <div class="check"><input type="checkbox" id="manual"><label for="manual">Manual handling training confirmed</label></div>
+        <div class="check"><input type="checkbox" id="infection"><label for="infection">Infection control basics confirmed</label></div>
+        <div class="check"><input type="checkbox" id="personalCare"><label for="personalCare">Personal care experience or qualification confirmed</label></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5. Driving and transport, only if applicable</h2>
+      <div class="grid two">
+        <label class="field">Will the worker drive to shifts?<select id="driveShift"><option value="">Select</option><option>Yes</option><option>No</option></select></label>
+        <label class="field">Will the worker transport participants?<select id="driveClient"><option value="">Select</option><option>Yes</option><option>No</option><option>Not approved yet</option></select></label>
+      </div>
+      <div class="checklist">
+        <div class="check"><input type="checkbox" id="licence"><label for="licence">Driver licence sighted/saved, if driving is required</label></div>
+        <div class="check"><input type="checkbox" id="insurance"><label for="insurance">Vehicle insurance/rego sighted, if participant transport is required</label></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>6. HD HeeD decision</h2>
+      <div class="grid two">
+        <label class="field">Internal status <span class="required">*</span>
+          <select id="status">
+            <option>Pending documents</option>
+            <option>Ready for induction</option>
+            <option>Inducted - not yet rostered</option>
+            <option>Ready to roster</option>
+            <option>Active</option>
+            <option>Do not roster</option>
+          </select>
+        </label>
+        <label class="field">Reviewed by<input id="reviewedBy"></label>
+        <label class="field">Review date<input id="reviewDate" type="date"></label>
+        <label class="field">Next follow-up date<input id="followUp" type="date"></label>
+      </div>
+      <label class="field" style="margin-top:12px">Notes / missing items<textarea id="notes" placeholder="Example: Awaiting NDIS clearance expiry date and CPR certificate."></textarea></label>
+      <div class="status" id="readiness"></div>
+      <div id="summary" class="summary"></div>
+    </section>
+
+    <div class="footerbar no-print">
+      <button class="btn" type="button" onclick="resetForm()">Clear form</button>
+      <button class="btn" type="button" onclick="showSummary()">Show summary</button>
+      <button class="btn primary" type="button" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </main>
+
+  <script>
+    const KEY = 'hdheed_min_staff_form_v2_policies';
+    const ids = ['name','preferred','phone','email','suburb','emergency','role','engagement','availability','areas','ndisStatus','ndisNumber','ndisExpiry','workRights','driveShift','driveClient','status','reviewedBy','reviewDate','followUp','notes'];
+    const checks = ['photoId','orientation','codeConduct','privacy','incident','firstAid','cpr','manual','infection','personalCare','licence','insurance'];
+
+    function save(){
+      const data = {};
+      ids.forEach(id => data[id] = document.getElementById(id)?.value || '');
+      checks.forEach(id => data[id] = !!document.getElementById(id)?.checked);
+      localStorage.setItem(KEY, JSON.stringify(data));
+      updateReadiness();
+    }
+    function load(){
+      try{
+        const data = JSON.parse(localStorage.getItem(KEY) || '{}');
+        ids.forEach(id => { if(document.getElementById(id) && data[id] !== undefined) document.getElementById(id).value = data[id]; });
+        checks.forEach(id => { if(document.getElementById(id)) document.getElementById(id).checked = !!data[id]; });
+      }catch(e){}
+      updateReadiness();
+    }
+    document.addEventListener('input', save);
+    document.addEventListener('change', save);
+
+    function val(id){ return document.getElementById(id)?.value || ''; }
+    function tick(id){ return !!document.getElementById(id)?.checked; }
+    function missingMandatory(){
+      const missing = [];
+      if(!val('name')) missing.push('worker name');
+      if(!val('phone')) missing.push('phone');
+      if(!val('email')) missing.push('email');
+      if(!val('suburb')) missing.push('suburb');
+      if(!val('emergency')) missing.push('emergency contact');
+      if(!val('role')) missing.push('role type');
+      if(!val('engagement')) missing.push('engagement type');
+      if(!val('availability')) missing.push('availability');
+      if(val('ndisStatus') !== 'Cleared') missing.push('NDIS Worker Screening clearance not confirmed as cleared');
+      if(!val('workRights') || val('workRights') !== 'Yes') missing.push('right to work not confirmed');
+      ['photoId','orientation','codeConduct','privacy','incident'].forEach(id => { if(!tick(id)) missing.push(document.querySelector('label[for="'+id+'"]').innerText.split('\n')[0]); });
+      return missing;
+    }
+    function updateReadiness(){
+      const box = document.getElementById('readiness');
+      const missing = missingMandatory();
+      const coreTraining = ['firstAid','cpr','manual','infection','personalCare'].filter(id=>tick(id)).length;
+      box.innerHTML = '';
+      const pill = (text, cls) => `<span class="pill ${cls||''}">${text}</span>`;
+      if(missing.length === 0){ box.innerHTML += pill('Minimum mandatory items complete', 'ok'); }
+      else{ box.innerHTML += pill(missing.length + ' mandatory item(s) missing', 'stop'); }
+      box.innerHTML += pill(coreTraining + '/5 personal care training items confirmed', coreTraining>=4?'ok':'warn');
+      if(val('status')) box.innerHTML += pill('Status: ' + val('status'));
+    }
+    function buildSummary(){
+      const missing = missingMandatory();
+      const lines = [];
+      lines.push('HD HEED CARE STAFF MINIMUM REQUIREMENTS SUMMARY');
+      lines.push('');
+      lines.push('Worker: ' + val('name'));
+      lines.push('Preferred name: ' + val('preferred'));
+      lines.push('Phone: ' + val('phone'));
+      lines.push('Email: ' + val('email'));
+      lines.push('Suburb/area: ' + val('suburb'));
+      lines.push('Emergency contact: ' + val('emergency'));
+      lines.push('');
+      lines.push('Role: ' + val('role'));
+      lines.push('Engagement type: ' + val('engagement'));
+      lines.push('Availability: ' + val('availability'));
+      lines.push('Preferred areas: ' + val('areas'));
+      lines.push('');
+      lines.push('NDIS Worker Screening: ' + val('ndisStatus'));
+      lines.push('NDIS number/application: ' + val('ndisNumber'));
+      lines.push('NDIS expiry: ' + val('ndisExpiry'));
+      lines.push('Right to work confirmed: ' + val('workRights'));
+      lines.push('');
+      lines.push('Mandatory acknowledgements:');
+      ['photoId','orientation','codeConduct','privacy','incident'].forEach(id => lines.push('- ' + document.querySelector('label[for="'+id+'"]').innerText.split('\n')[0] + ': ' + (tick(id)?'Yes':'No')));
+      lines.push('');
+      lines.push('Training confirmed:');
+      ['firstAid','cpr','manual','infection','personalCare'].forEach(id => lines.push('- ' + document.querySelector('label[for="'+id+'"]').innerText.split('\n')[0] + ': ' + (tick(id)?'Yes':'No')));
+      lines.push('');
+      lines.push('Driving to shifts: ' + val('driveShift'));
+      lines.push('Transporting participants: ' + val('driveClient'));
+      lines.push('Driver licence sighted: ' + (tick('licence')?'Yes':'No'));
+      lines.push('Vehicle insurance/rego sighted: ' + (tick('insurance')?'Yes':'No'));
+      lines.push('');
+      lines.push('Internal status: ' + val('status'));
+      lines.push('Reviewed by: ' + val('reviewedBy'));
+      lines.push('Review date: ' + val('reviewDate'));
+      lines.push('Follow-up date: ' + val('followUp'));
+      lines.push('Notes/missing items: ' + val('notes'));
+      lines.push('');
+      lines.push('Mandatory missing items: ' + (missing.length ? missing.join(', ') : 'None'));
+      return lines.join('\n');
+    }
+    function showSummary(){
+      const s = document.getElementById('summary');
+      s.textContent = buildSummary();
+      s.style.display = 'block';
+      s.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+    async function copySummary(){
+      const text = buildSummary();
+      try{ await navigator.clipboard.writeText(text); alert('Summary copied.'); }
+      catch(e){ showSummary(); alert('Copy not available. Summary displayed instead.'); }
+    }
+    function resetForm(){
+      if(!confirm('Clear this form on this browser?')) return;
+      localStorage.removeItem(KEY);
+      ids.forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = ''; });
+      checks.forEach(id => { if(document.getElementById(id)) document.getElementById(id).checked = false; });
+      document.getElementById('status').value = 'Pending documents';
+      document.getElementById('summary').style.display = 'none';
+      updateReadiness();
+    }
+    load();
+  </script>
+</body>
+</html>
