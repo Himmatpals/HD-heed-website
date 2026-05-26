@@ -3,667 +3,747 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>HD HeeD Infection Control Basics Induction</title>
-  <meta name="description" content="HD HeeD internal infection control basics induction for support workers and personal care staff." />
+  <title>HD HeeD — Infection Prevention and Control Induction</title>
+  <meta name="description" content="HD HeeD Infection Prevention and Control Induction for employees and contractors." />
+  <meta name="theme-color" content="#512b8a" />
 
-  <!-- Favicons / App Icons (HD-only) -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="#512b8a">
-  <link rel="manifest" href="/site.webmanifest?v=3">
-  <meta name="theme-color" content="#512b8a">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Favicons / App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="#512b8a" />
+  <link rel="manifest" href="/site.webmanifest?v=3" />
 
   <style>
     :root{
       --purple:#512b8a;
-      --accent:#ffc107;
+      --blue:#2563eb;
+      --green:#15803d;
+      --red:#b91c1c;
+      --amber:#b45309;
       --ink:#0f172a;
       --muted:#64748b;
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --line:#e5e7eb;
-      --blue:#2563eb;
-      --green:#16a34a;
-      --red:#dc2626;
-      --orange:#f97316;
-      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --line:#dbe2ea;
+      --soft:#f8fafc;
+      --dark:#0b1220;
+      --grad:linear-gradient(135deg,#512b8a,#2563eb);
     }
+
     *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-    a{color:var(--blue);text-decoration:none;font-weight:700}
+    html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    a{color:var(--blue);text-decoration:none}
     a:hover{text-decoration:underline}
+    button,input,select{font:inherit}
+
+    .topbar{background:var(--dark);color:#fff}
+    .topbar-inner{max-width:1120px;margin:0 auto;padding:9px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:13px}
+    .topbar a{color:#fff;font-weight:800}
+
+    header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;box-shadow:0 8px 24px rgba(15,23,42,.05)}
+    .header-inner{max-width:1120px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand-mark{width:50px;height:50px;border-radius:14px;background:var(--grad);color:#fff;display:grid;place-items:center;font-weight:900;letter-spacing:.5px;box-shadow:0 12px 28px rgba(81,43,138,.25)}
+    .brand-title{font-weight:900;font-size:18px;line-height:1.15;margin:0}
+    .brand-sub{font-size:13px;color:var(--muted);margin:3px 0 0}
+    .header-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+    .btn{border:0;border-radius:12px;padding:11px 14px;font-weight:900;cursor:pointer;min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+    .btn:hover{text-decoration:none}
+    .btn.primary{background:var(--purple);color:#fff}
+    .btn.blue{background:var(--blue);color:#fff}
+    .btn.green{background:var(--green);color:#fff}
+    .btn.ghost{background:#eef2ff;color:#1e3a8a;border:1px solid #dbeafe}
+    .btn.warn{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+    .btn:disabled{opacity:.45;cursor:not-allowed}
+
     .container{max-width:1120px;margin:0 auto;padding:16px}
-    .topbar{background:#0b1220;color:white}
-    .topbar .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 16px;flex-wrap:wrap}
-    .topbar a{color:white}
-    .small{font-size:13px;color:#cbd5e1}
-    header.site{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-    header .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
-    .logo{display:flex;align-items:center;gap:10px}
-    .logo img{height:44px;width:44px;border-radius:12px;object-fit:cover;background:#eef2ff}
-    .logo-title{font-weight:900;font-size:18px}
-    .logo-sub{font-size:13px;color:var(--muted)}
-    nav{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
-    nav a{color:var(--ink);font-size:14px}
-    .hero{margin:16px 0;border-radius:24px;background:linear-gradient(130deg,#0b1220 0%,#512b8a 48%,#2563eb 100%);color:#fff;overflow:hidden;box-shadow:var(--shadow);position:relative}
-    .hero:after{content:"";position:absolute;inset:-40%;background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.16),transparent 32%);pointer-events:none}
-    .hero .content{position:relative;z-index:1;padding:28px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:center}
-    @media (max-width:820px){.hero .content{grid-template-columns:1fr}.hero .content{padding:22px}}
-    h1{font-size:clamp(28px,5vw,44px);line-height:1.05;margin:0 0 10px;font-weight:900;letter-spacing:-.03em}
-    h2{font-size:clamp(20px,3vw,28px);margin:0 0 8px;font-weight:900;letter-spacing:-.02em}
-    h3{margin:0 0 8px;font-size:18px;color:var(--purple)}
-    p{line-height:1.6}
-    .hero p{color:#e5e7eb;margin:0 0 14px}
-    .badge{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;background:#eef2ff;border:1px solid #dbeafe;color:#1e40af;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
-    .hero .badge{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.24);color:white}
-    .btn{appearance:none;border:none;border-radius:14px;padding:12px 16px;min-height:44px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .16s ease, box-shadow .16s ease;text-decoration:none}
-    .btn:hover{text-decoration:none;transform:translateY(-1px)}
-    .btn-primary{background:var(--accent);color:#1e1b4b;box-shadow:0 10px 26px rgba(0,0,0,.2)}
-    .btn-blue{background:var(--blue);color:#fff}
-    .btn-green{background:var(--green);color:#fff}
-    .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
-    .btn-dark{background:#0b1220;color:#fff}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-    .quick-card{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:18px;padding:16px}
-    .quick-card strong{display:block;margin-bottom:8px}
-    .grid{display:grid;gap:16px}
-    .two{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .three{grid-template-columns:repeat(3,minmax(0,1fr))}
-    @media (max-width:900px){.two,.three{grid-template-columns:1fr}}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 8px 24px rgba(15,23,42,.06)}
-    .muted{color:var(--muted)}
-    .notice{background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;border-radius:16px;padding:14px;line-height:1.55}
-    .okbox{background:#f0fdf4;border:1px solid #bbf7d0;color:#14532d;border-radius:16px;padding:14px;line-height:1.55}
-    .module{scroll-margin-top:90px}
-    .module ul{margin:10px 0 0 20px;padding:0;line-height:1.65}
-    .module li{margin:4px 0}
-    .read-check{display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:14px;padding:12px;margin-top:14px}
-    input[type="checkbox"], input[type="radio"]{width:18px;height:18px;accent-color:var(--purple);margin-top:2px;flex:0 0 auto}
-    label{line-height:1.45}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:760px){.form-row{grid-template-columns:1fr}}
-    .field{display:grid;gap:6px}
-    .field label{font-weight:800}
-    input[type="text"],input[type="email"],select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;background:#fff;color:var(--ink)}
-    input:focus,select:focus,textarea:focus{outline:3px solid #dbeafe;border-color:var(--blue)}
-    .quiz-item{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff;margin-bottom:12px}
-    .quiz-item.incorrect{border-color:#fecaca;background:#fff7f7}
-    .quiz-item.correct{border-color:#bbf7d0;background:#f7fff9}
-    .quiz-q{font-weight:900;margin-bottom:10px;color:var(--ink)}
-    .options{display:grid;gap:8px}
-    .option{display:flex;align-items:flex-start;gap:8px;padding:10px;border:1px solid #edf2f7;border-radius:12px;background:#f8fafc}
-    .feedback{margin-top:8px;font-weight:800;font-size:14px}
-    .feedback.good{color:var(--green)}
-    .feedback.bad{color:var(--red)}
-    .progress-wrap{display:grid;gap:6px;margin:12px 0}
-    .progress-bar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}
-    .progress-bar div{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));width:0%;transition:width .25s ease}
-    .sticky-panel{position:sticky;top:76px;z-index:10}
-    @media (max-width:900px){.sticky-panel{position:static}}
-    .status-list{display:grid;gap:8px;margin-top:10px}
-    .status-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px dashed #e5e7eb;padding:8px 0;font-size:14px}
-    .status-pill{border-radius:999px;padding:4px 8px;font-size:12px;font-weight:900;background:#fee2e2;color:#991b1b;white-space:nowrap}
-    .status-pill.done{background:#dcfce7;color:#166534}
-    .certificate{display:none;background:white;border:2px solid var(--purple);border-radius:22px;padding:26px;margin-top:16px;position:relative;box-shadow:var(--shadow)}
-    .certificate.show{display:block}
-    .cert-title{text-align:center;font-size:28px;font-weight:900;color:var(--purple);margin:4px 0 12px}
-    .cert-sub{text-align:center;font-weight:800;color:#334155;margin-bottom:18px}
-    .cert-name{text-align:center;font-size:26px;font-weight:900;border-bottom:2px solid #cbd5e1;padding:12px;margin:18px auto;max-width:700px}
-    .cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-    @media (max-width:700px){.cert-grid{grid-template-columns:1fr}}
-    .cert-field{border:1px solid var(--line);border-radius:12px;padding:10px;background:#f8fafc}
-    .cert-field b{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
-    .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
-    @media (max-width:700px){.sig-grid{grid-template-columns:1fr}}
-    .sig-line{border-top:1.5px solid #334155;padding-top:8px;color:#334155}
-    .footer{margin:26px 0 12px;text-align:center;color:var(--muted);font-size:13px}
+
+    .hero{background:#fff;border:1px solid var(--line);border-radius:22px;margin:16px 0;padding:0;overflow:hidden;box-shadow:0 16px 44px rgba(15,23,42,.08)}
+    .hero-head{background:var(--grad);color:#fff;padding:24px}
+    .hero-head h1{font-size:clamp(26px,4vw,42px);margin:0 0 8px;line-height:1.1}
+    .hero-head p{margin:0;color:#eef2ff;line-height:1.55;max-width:900px}
+    .doc-strip{display:grid;gap:0;border-top:1px solid rgba(255,255,255,.18)}
+    @media(min-width:760px){.doc-strip{grid-template-columns:repeat(4,1fr)}}
+    .doc-box{padding:14px 16px;background:#fff;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .doc-box:last-child{border-right:0}
+    .doc-box b{display:block;font-size:12px;color:#334155;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+    .doc-box span{font-weight:800;color:#111827}
+
+    .layout{display:grid;gap:16px}
+    @media(min-width:960px){.layout{grid-template-columns:330px 1fr}}
+
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,.055)}
+    .sidebar{position:sticky;top:92px;align-self:start}
+
+    .field-grid{display:grid;gap:12px;margin-top:12px}
+    @media(min-width:640px){.field-grid.two{grid-template-columns:1fr 1fr}}
+    label{font-weight:850;display:block;font-size:14px;color:#0f172a}
+    input,select{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:12px;margin-top:6px;background:#fff;font-size:16px}
+    input:focus,select:focus{outline:3px solid #dbeafe;border-color:#60a5fa}
+
+    .progress{height:12px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin:12px 0}
+    .progress-bar{height:100%;width:0;background:var(--grad);transition:width .3s ease}
+    .small{font-size:13px;color:var(--muted);line-height:1.45}
+
+    .module-list{display:grid;gap:8px;margin-top:14px;max-height:58vh;overflow:auto;padding-right:3px}
+    .module-item{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+    .module-item:hover{border-color:#c4b5fd;background:#faf5ff}
+    .module-item.active{border-color:#7c3aed;background:#f5f3ff;box-shadow:0 0 0 3px #ede9fe}
+    .module-item.done{border-color:#bbf7d0;background:#f0fdf4}
+    .status{width:24px;height:24px;border-radius:999px;background:#e2e8f0;color:#334155;display:grid;place-items:center;font-weight:900;font-size:12px;flex:0 0 auto}
+    .done .status{background:#dcfce7;color:#166534}
+    .module-item-title{font-weight:850;font-size:14px;line-height:1.25}
+
+    .module h2{font-size:26px;margin:0 0 8px;color:#111827;line-height:1.2}
+    .module h3{font-size:18px;margin:20px 0 8px;color:#1e3a8a}
+    .module p,.module li{line-height:1.62}
+    .module ul{padding-left:22px}
+    .notice{border-left:5px solid var(--purple);background:#faf5ff;border-radius:12px;padding:12px 14px;margin:14px 0}
+    .warning{border-left:5px solid var(--amber);background:#fffbeb;border-radius:12px;padding:12px 14px;margin:14px 0}
+    .critical{border-left:5px solid var(--red);background:#fef2f2;border-radius:12px;padding:12px 14px;margin:14px 0}
+    .success{border-left:5px solid var(--green);background:#f0fdf4;border-radius:12px;padding:12px 14px;margin:14px 0}
+
+    .quiz{margin-top:18px;padding-top:18px;border-top:1px dashed var(--line)}
+    .quiz-title{font-size:20px;font-weight:900;margin:0 0 4px}
+    .qcard{border:1px solid var(--line);background:#fcfdff;border-radius:14px;padding:14px;margin:12px 0}
+    .qcard legend{font-weight:900;margin-bottom:8px;color:#111827}
+    .option{display:block;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;margin:8px 0;font-weight:700;cursor:pointer}
+    .option:hover{background:#f8fafc;border-color:#93c5fd}
+    .option input{width:auto;margin:0 8px 0 0}
+    .feedback{font-weight:900;margin-top:8px}
+    .pass{color:#166534}.fail{color:#b91c1c}
+
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .finish-box{display:none;margin-top:18px}
+
+    .certificate{display:none;background:#fff;border:8px solid #1f2937;border-radius:18px;padding:32px;margin-top:18px;text-align:center;min-height:560px}
+    .certificate .cert-top{font-weight:900;color:#512b8a;font-size:30px;letter-spacing:.03em;margin-bottom:4px}
+    .certificate h2{font-size:30px;margin:12px 0 6px;color:#111827}
+    .certificate p{font-size:16px;line-height:1.5}
+    .cert-name{font-size:30px;font-weight:900;margin:18px 0;color:#111827}
+    .cert-grid{display:grid;gap:10px;margin:18px auto;max-width:720px;text-align:left}
+    @media(min-width:720px){.cert-grid{grid-template-columns:1fr 1fr}}
+    .cert-field{border:1px solid #d1d5db;border-radius:12px;padding:12px;background:#f9fafb}
+    .cert-field b{display:block;font-size:12px;text-transform:uppercase;color:#475569;margin-bottom:4px}
+    .sig{margin:34px auto 6px;border-top:1px solid #111827;max-width:360px;padding-top:8px;font-weight:800}
     .hidden{display:none!important}
 
+    .source-box{font-size:12px;color:#64748b;border-top:1px solid var(--line);margin-top:16px;padding-top:12px}
+    footer{text-align:center;color:#64748b;font-size:13px;padding:30px 16px}
+
+    @media(max-width:760px){
+      .header-inner{align-items:flex-start;flex-direction:column}
+      .header-actions{width:100%}
+      .header-actions .btn{flex:1}
+      .sidebar{position:static}
+    }
+
     @media print{
-      body{background:white;color:#000}
-      .topbar, header.site, .hero, .no-print, .sticky-panel, .module, #detailsCard, #quizCard, #ackCard, .footer{display:none!important}
-      .container{max-width:none;padding:0}
-      .certificate{display:block!important;border:2px solid #000;box-shadow:none;border-radius:0;margin:0;padding:18mm;min-height:260mm}
-      .cert-title{color:#000}
-      .cert-field{background:white}
-      a{color:#000}
+      body{background:#fff}
+      .topbar,header,.hero,.sidebar,.quiz,.controls,.finish-box,.source-box,footer,.no-print{display:none!important}
+      .container{max-width:100%;padding:0}
+      .layout{display:block}
+      .card{border:0;box-shadow:none;padding:0}
+      .module{display:none}
+      .certificate{display:block!important;border:8px solid #111827;border-radius:0;margin:0;padding:28px;min-height:auto}
     }
   </style>
 </head>
 <body>
-  <div class="topbar no-print">
-    <div class="inner container">
-      <div class="small">HD HeeD staff induction resource</div>
-      <div style="display:flex;gap:14px;flex-wrap:wrap"><a href="tel:0286305500">02 8630 5500</a><a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div>HD HeeD • Staff Induction and Compliance Record</div>
+      <div><a href="tel:0286305500">02 8630 5500</a> • <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
     </div>
   </div>
 
-  <header class="site no-print">
-    <div class="inner container">
-      <div class="logo">
-        <img src="images/logo.png" alt="HD HeeD logo" />
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">HD</div>
         <div>
-          <div class="logo-title">HD HeeD</div>
-          <div class="logo-sub">Infection Control Basics Induction</div>
+          <p class="brand-title">Infection Prevention and Control Induction</p>
+          <p class="brand-sub">For HD HeeD employees and contractors</p>
         </div>
       </div>
-      <nav aria-label="Staff training navigation">
-        <a href="#course">Course</a>
-        <a href="#quiz">Quiz</a>
-        <a href="#certificateArea">Certificate</a>
-        <a href="hdheed-staff-bare-minimum-form.html">Staff form</a>
-      </nav>
+      <div class="header-actions no-print">
+        <a class="btn ghost" href="hdheed-staff-bare-minimum-form.html">Back to staff form</a>
+        <button class="btn warn" id="resetBtn" type="button">Reset progress</button>
+      </div>
     </div>
   </header>
 
   <main class="container">
-    <section class="hero no-print">
-      <div class="content">
-        <div>
-          <span class="badge">Internal induction</span>
-          <h1>HD HeeD Infection Control Basics</h1>
-          <p>Simple training for support workers before basic personal care or direct support shifts.</p>
-          <div class="actions">
-            <a class="btn btn-primary" href="#course">Start course</a>
-            <a class="btn btn-ghost" href="#quiz">Go to quiz</a>
-          </div>
-        </div>
-        <div class="quick-card">
-          <strong>How it works</strong>
-          <p style="margin:0;color:#e5e7eb">Read the short sections, tick that you understand, answer single-answer quiz questions, then print the completion certificate. Questions can be reattempted until passed.</p>
-        </div>
+    <section class="hero">
+      <div class="hero-head">
+        <h1>HD HeeD Infection Prevention and Control Induction</h1>
+        <p>This induction forms part of HD HeeD’s staff onboarding process for employees and contractors who provide NDIS, aged care, in-home, community or personal support services. Completion confirms that the worker has reviewed HD HeeD’s infection prevention and control expectations and passed the knowledge check.</p>
+      </div>
+      <div class="doc-strip">
+        <div class="doc-box"><b>Document type</b><span>Internal induction</span></div>
+        <div class="doc-box"><b>Applies to</b><span>Employees and contractors</span></div>
+        <div class="doc-box"><b>Completion evidence</b><span>Quiz and certificate</span></div>
+        <div class="doc-box"><b>Version</b><span>1.0</span></div>
       </div>
     </section>
 
-    <section class="grid two no-print" style="align-items:start" id="course">
-      <div class="grid">
-        <div class="card" id="detailsCard">
-          <span class="badge">Step 1</span>
-          <h2 style="margin-top:10px">Worker details</h2>
-          <p class="muted">These details appear on the completion certificate.</p>
-          <div class="form-row">
-            <div class="field">
-              <label for="workerName">Worker full name</label>
-              <input id="workerName" type="text" autocomplete="name" placeholder="Enter worker name" />
-            </div>
-            <div class="field">
-              <label for="workerRole">Role</label>
-              <select id="workerRole">
-                <option value="Support Worker">Support Worker</option>
-                <option value="Personal Care Worker">Personal Care Worker</option>
-                <option value="Domestic Assistance Worker">Domestic Assistance Worker</option>
-                <option value="Community Access Worker">Community Access Worker</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
+    <section class="layout">
+      <aside class="card sidebar no-print">
+        <h2 style="margin:0;font-size:20px">Worker details</h2>
+        <div class="field-grid">
+          <div>
+            <label for="workerName">Worker full name</label>
+            <input id="workerName" type="text" placeholder="Enter full name" autocomplete="name" />
           </div>
-          <div class="form-row" style="margin-top:12px">
-            <div class="field">
-              <label for="workerEmail">Email optional</label>
-              <input id="workerEmail" type="email" autocomplete="email" placeholder="name@example.com" />
-            </div>
-            <div class="field">
-              <label for="trainerName">Explained/authorised by optional</label>
-              <input id="trainerName" type="text" placeholder="HD HeeD representative" />
-            </div>
+          <div>
+            <label for="workerRole">Worker type / role</label>
+            <select id="workerRole">
+              <option value="">Select</option>
+              <option>Employee — Support Worker</option>
+              <option>Employee — Personal Care Worker</option>
+              <option>Contractor — Support Worker</option>
+              <option>Contractor — Personal Care Worker</option>
+              <option>Community Access Worker</option>
+              <option>Domestic Assistance Worker</option>
+              <option>Registered Nurse</option>
+              <option>Other</option>
+            </select>
           </div>
         </div>
 
-        <div class="card notice">
-          <strong>Important:</strong> This is an internal HD HeeD induction record. It is not an accredited infection control qualification and does not replace extra training required for high-risk or complex supports.
+        <h2 style="margin:18px 0 0;font-size:20px">Progress</h2>
+        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+        <p class="small" id="progressText">0% complete</p>
+
+        <div class="module-list" id="moduleList"></div>
+
+        <div class="controls">
+          <button class="btn ghost" id="prevBtn" type="button">Back</button>
+          <button class="btn blue" id="nextBtn" type="button">Next</button>
         </div>
 
-        <article class="card module" id="m1">
-          <span class="badge">Module 1</span>
-          <h2 style="margin-top:10px">Why infection control matters</h2>
-          <p>Infection control protects participants, workers, families and the wider community. Many participants may be more vulnerable to infection because of disability, age, health conditions, wounds, reduced immunity, breathing problems or personal care needs.</p>
-          <ul>
-            <li>Use standard precautions with every participant.</li>
-            <li>Assume blood and body fluids can carry infection.</li>
-            <li>Stop and ask for guidance if a task feels unsafe.</li>
-            <li>Report concerns early instead of waiting until the end of the shift.</li>
-          </ul>
-          <div class="read-check"><input type="checkbox" id="read1" data-read="1"><label for="read1"><b>I have read and understood Module 1.</b></label></div>
-        </article>
-
-        <article class="card module" id="m2">
-          <span class="badge">Module 2</span>
-          <h2 style="margin-top:10px">Hand hygiene</h2>
-          <p>Hand hygiene is the most important infection control step. Use soap and water when hands are visibly dirty. Use alcohol-based hand rub when hands are not visibly dirty and it is available.</p>
-          <ul>
-            <li>Clean hands before and after participant contact.</li>
-            <li>Clean hands before preparing food, assisting meals or medication prompting.</li>
-            <li>Clean hands after toileting support, personal care, cleaning, waste handling or touching body fluids.</li>
-            <li>Clean hands before putting on gloves and after removing gloves.</li>
-            <li>Gloves do not replace hand hygiene.</li>
-          </ul>
-          <div class="read-check"><input type="checkbox" id="read2" data-read="2"><label for="read2"><b>I have read and understood Module 2.</b></label></div>
-        </article>
-
-        <article class="card module" id="m3">
-          <span class="badge">Module 3</span>
-          <h2 style="margin-top:10px">PPE basics</h2>
-          <p>PPE means personal protective equipment. It may include gloves, mask, apron/gown and eye protection depending on the task and risk.</p>
-          <ul>
-            <li>Wear gloves for contact with blood, body fluids, wounds, continence care or contaminated items.</li>
-            <li>Change gloves between different tasks and between participants.</li>
-            <li>Wear a mask if directed, if there are respiratory symptoms, or if HD HeeD or public health advice requires it.</li>
-            <li>Wear an apron/gown if clothing may be contaminated.</li>
-            <li>Remove PPE safely and perform hand hygiene straight after removal.</li>
-          </ul>
-          <div class="read-check"><input type="checkbox" id="read3" data-read="3"><label for="read3"><b>I have read and understood Module 3.</b></label></div>
-        </article>
-
-        <article class="card module" id="m4">
-          <span class="badge">Module 4</span>
-          <h2 style="margin-top:10px">Respiratory hygiene and staying home when unwell</h2>
-          <p>Workers must not attend shifts when they may spread infection. This protects participants and other staff.</p>
-          <ul>
-            <li>Cover coughs and sneezes with a tissue or elbow.</li>
-            <li>Dispose of tissues promptly and clean hands afterwards.</li>
-            <li>Do not attend work if you have fever, vomiting, diarrhoea, flu-like symptoms, new cough, infectious rash, or have been told to isolate.</li>
-            <li>Contact HD HeeD as early as possible if you are unwell before a shift.</li>
-            <li>Tell HD HeeD if a participant appears unwell or reports infectious symptoms.</li>
-          </ul>
-          <div class="read-check"><input type="checkbox" id="read4" data-read="4"><label for="read4"><b>I have read and understood Module 4.</b></label></div>
-        </article>
-
-        <article class="card module" id="m5">
-          <span class="badge">Module 5</span>
-          <h2 style="margin-top:10px">Cleaning, waste and equipment</h2>
-          <p>Keep the participant environment safe and clean within the duties of the shift. Follow the participant care plan and HD HeeD instructions.</p>
-          <ul>
-            <li>Clean shared equipment before and after use if directed.</li>
-            <li>Do not use visibly dirty or damaged equipment; report it.</li>
-            <li>Dispose of gloves, masks and contaminated waste safely.</li>
-            <li>Handle soiled linen/clothing carefully and avoid shaking it.</li>
-            <li>Do not bring unnecessary personal items into personal care areas.</li>
-          </ul>
-          <div class="read-check"><input type="checkbox" id="read5" data-read="5"><label for="read5"><b>I have read and understood Module 5.</b></label></div>
-        </article>
-
-        <article class="card module" id="m6">
-          <span class="badge">Module 6</span>
-          <h2 style="margin-top:10px">What to report immediately</h2>
-          <p>Report infection risks as soon as possible. Do not wait until the next day if there is a risk to the participant or others.</p>
-          <ul>
-            <li>Participant has fever, flu-like symptoms, vomiting, diarrhoea or new respiratory symptoms.</li>
-            <li>You are unwell before or during a shift.</li>
-            <li>There is exposure to blood or body fluids.</li>
-            <li>PPE is unavailable when required.</li>
-            <li>There is a wound, infection concern, unsafe equipment or environmental risk.</li>
-            <li>Call emergency services for urgent or life-threatening concerns.</li>
-          </ul>
-          <div class="read-check"><input type="checkbox" id="read6" data-read="6"><label for="read6"><b>I have read and understood Module 6.</b></label></div>
-        </article>
-      </div>
-
-      <aside class="sticky-panel">
-        <div class="card">
-          <span class="badge">Progress</span>
-          <h2 style="margin-top:10px">Completion status</h2>
-          <div class="progress-wrap">
-            <div class="progress-bar" aria-label="Course progress"><div id="progressFill"></div></div>
-            <div class="muted" id="progressText">0% complete</div>
-          </div>
-          <div class="status-list" id="statusList"></div>
-          <div class="actions">
-            <a class="btn btn-blue" href="#quiz">Go to quiz</a>
-            <button class="btn btn-ghost" type="button" id="resetBtn">Clear saved progress</button>
-          </div>
-        </div>
+        <p class="small" style="margin-top:14px">This course is an internal HD HeeD induction record. It does not replace external accredited training where that is required by law, participant risk, funding requirements or HD HeeD direction.</p>
       </aside>
-    </section>
 
-    <section class="card no-print" id="ackCard" style="margin-top:16px">
-      <span class="badge">Step 2</span>
-      <h2 style="margin-top:10px">Worker declaration</h2>
-      <p class="muted">Tick this before completing the quiz.</p>
-      <div class="read-check"><input type="checkbox" id="declaration"><label for="declaration"><b>I confirm I understand HD HeeD’s basic infection control expectations and will follow hand hygiene, PPE, respiratory hygiene, staying-home-when-unwell and reporting requirements.</b></label></div>
-    </section>
+      <section class="card">
+        <article class="module" id="moduleContent"></article>
 
-    <section class="card no-print" id="quizCard" style="margin-top:16px">
-      <span class="badge">Step 3</span>
-      <h2 style="margin-top:10px" id="quiz">Quiz: single-answer questions</h2>
-      <p class="muted">Choose one answer for each question. You can reattempt until all answers are correct.</p>
-      <div id="quizArea"></div>
-      <div id="quizMessage" class="notice hidden" style="margin-top:12px"></div>
-      <div class="actions">
-        <button class="btn btn-green" type="button" id="checkQuizBtn">Check answers</button>
-        <button class="btn btn-ghost" type="button" id="retryBtn">Retry incorrect answers</button>
-      </div>
-    </section>
+        <section class="finish-box" id="finishBox">
+          <div class="success">
+            <h2 style="margin:0 0 6px">Course completed</h2>
+            <p style="margin:0">All induction modules and quiz questions have been completed successfully. Generate and print/save the completion certificate for the staff file.</p>
+          </div>
+          <div class="controls no-print">
+            <button class="btn green" id="generateCertBtn" type="button">Generate certificate</button>
+            <button class="btn ghost" id="copyRecordBtn" type="button">Copy completion record</button>
+            <button class="btn primary" id="printCertBtn" type="button">Print / Save PDF</button>
+          </div>
+          <p class="small" id="copyStatus"></p>
+        </section>
 
-    <section id="certificateArea">
-      <div class="certificate" id="certificate">
-        <div style="text-align:center;font-weight:900;font-size:18px">HD HeeD</div>
-        <div class="cert-title">Internal Infection Control Basics Induction</div>
-        <div class="cert-sub">Completion Certificate</div>
-        <p style="text-align:center;margin:0">This certifies that</p>
-        <div class="cert-name" id="certName">Worker Name</div>
-        <p style="text-align:center;max-width:760px;margin:0 auto;line-height:1.6">has completed the HD HeeD internal infection control basics induction covering hand hygiene, PPE basics, respiratory hygiene and cough etiquette, staying home when unwell, safe cleaning/waste basics, and reporting infection risks.</p>
-        <div class="cert-grid">
-          <div class="cert-field"><b>Role</b><span id="certRole">Support Worker</span></div>
-          <div class="cert-field"><b>Completion date and time</b><span id="certDate">-</span></div>
-          <div class="cert-field"><b>Quiz result</b><span id="certScore">10 / 10</span></div>
-          <div class="cert-field"><b>Course version</b><span>HDH-ICB-v1.0</span></div>
-          <div class="cert-field"><b>Trainer / authorised by</b><span id="certTrainer">HD HeeD representative</span></div>
-          <div class="cert-field"><b>Certificate type</b><span>Internal induction record, not an accredited qualification</span></div>
+        <section class="certificate" id="certificate">
+          <div class="cert-top">HD HeeD</div>
+          <h2>Infection Prevention and Control Induction</h2>
+          <p>Internal completion certificate for employees and contractors</p>
+          <p>This confirms that the worker named below has completed the HD HeeD Infection Prevention and Control Induction and passed all required knowledge checks.</p>
+          <div class="cert-name" id="certName">Worker Name</div>
+          <div class="cert-grid">
+            <div class="cert-field"><b>Worker role/type</b><span id="certRole">—</span></div>
+            <div class="cert-field"><b>Completion date/time</b><span id="certDate">—</span></div>
+            <div class="cert-field"><b>Course result</b><span>Completed and passed</span></div>
+            <div class="cert-field"><b>Record type</b><span>Internal induction evidence</span></div>
+          </div>
+          <p>Completion of this induction confirms understanding of HD HeeD’s minimum infection prevention expectations, including standard precautions, hand hygiene, PPE use, respiratory hygiene, fit-for-work requirements, cleaning, waste/linen handling, outbreak precautions and reporting obligations.</p>
+          <div class="sig">HD HeeD Manager / RN Signature</div>
+          <p class="small">This is an internal induction record only and is not an externally accredited qualification.</p>
+        </section>
+
+        <div class="source-box">
+          Course content is aligned to standard infection prevention principles used in NDIS, aged care and community support settings, including standard precautions, hand hygiene, respiratory hygiene, PPE, fit-for-work expectations, environmental cleaning, waste handling and escalation/reporting.
         </div>
-        <div class="sig-grid">
-          <div class="sig-line">Worker signature</div>
-          <div class="sig-line">HD HeeD representative signature</div>
-        </div>
-        <p style="text-align:center;margin-top:22px;color:#475569;font-size:13px">Keep a copy of this certificate in the worker file. Refresher training should be completed as required by HD HeeD, participant risk, outbreak direction, policy change or at least annually.</p>
-      </div>
-      <div class="actions no-print hidden" id="certActions" style="margin:14px 0 26px">
-        <button class="btn btn-primary" type="button" onclick="window.print()">Print / Save Certificate as PDF</button>
-        <button class="btn btn-dark" type="button" id="copyRecordBtn">Copy completion record</button>
-      </div>
-    </section>
-
-    <section class="footer no-print">
-      <p>HD HeeD internal staff resource. This course supports basic infection control induction for low-risk supports and does not replace extra training for complex or high-intensity supports.</p>
+      </section>
     </section>
   </main>
 
+  <footer>
+    © HD HeeD • Infection Prevention and Control Induction • Internal staff record
+  </footer>
+
   <script>
-    const STORAGE_KEY = 'hdheed_icb_course_v1';
-    const totalModules = 6;
-    const questions = [
+    const modules = [
       {
-        q:'When should hand hygiene be performed?',
-        options:['Only at the start of the shift','Before and after participant contact and after removing gloves','Only if the participant asks','Only after using the bathroom'],
-        correct:1,
-        why:'Hand hygiene is required before and after participant contact and after glove removal.'
+        title:"1. Purpose and worker responsibilities",
+        body:`
+          <p>This induction sets out HD HeeD’s minimum infection prevention and control expectations for employees and contractors delivering supports to participants in home, community, aged care and disability settings.</p>
+          <h3>Worker responsibilities</h3>
+          <ul>
+            <li>Follow standard precautions during every shift.</li>
+            <li>Use hand hygiene, PPE and safe work practices correctly.</li>
+            <li>Do not attend work when unwell or potentially infectious.</li>
+            <li>Report infection risks, symptoms, incidents, exposures and PPE issues promptly.</li>
+            <li>Follow participant-specific care plans, risk instructions and HD HeeD directions.</li>
+          </ul>
+          <div class="notice"><strong>Key requirement:</strong> Infection prevention is part of safe support delivery. It applies to employees, contractors and any worker providing direct services on behalf of HD HeeD.</div>
+        `,
+        quiz:[{q:"Who must follow HD HeeD infection prevention expectations?",a:"Employees and contractors providing supports",options:["Only nurses","Employees and contractors providing supports","Only office staff"]}]
       },
       {
-        q:'Do gloves replace hand hygiene?',
-        options:['Yes, gloves are enough','Only when gloves look clean','No, hand hygiene is still required','Only during domestic assistance'],
-        correct:2,
-        why:'Gloves do not replace hand hygiene.'
+        title:"2. Standard precautions",
+        body:`
+          <p>Standard precautions are the basic infection control practices used with every participant, regardless of whether the person appears unwell.</p>
+          <h3>Standard precautions include</h3>
+          <ul>
+            <li>Hand hygiene.</li>
+            <li>Respiratory hygiene and cough etiquette.</li>
+            <li>Correct use of PPE when required.</li>
+            <li>Safe handling of blood, body fluids, wounds, continence products and contaminated items.</li>
+            <li>Safe handling of waste and linen.</li>
+            <li>Cleaning of shared equipment and frequently touched surfaces.</li>
+            <li>Early reporting of infection risks and incidents.</li>
+          </ul>
+          <div class="warning"><strong>Important:</strong> Workers must not wait for a confirmed infection before using basic infection control practices.</div>
+        `,
+        quiz:[{q:"What are standard precautions?",a:"Basic infection control practices used with every participant",options:["Practices used only during outbreaks","Basic infection control practices used with every participant","Practices used only in hospitals"]}]
       },
       {
-        q:'What should a worker do if they develop fever, vomiting, diarrhoea or flu-like symptoms before a shift?',
-        options:['Attend the shift and wear gloves','Contact HD HeeD early and do not attend until advised','Wait until the shift ends to report it','Only tell the participant'],
-        correct:1,
-        why:'Workers should stay home when unwell and contact HD HeeD early.'
+        title:"3. Hand hygiene",
+        body:`
+          <p>Hand hygiene is one of the most important ways to prevent infection. Workers must clean their hands at the correct times and use the correct method.</p>
+          <h3>When to perform hand hygiene</h3>
+          <ul>
+            <li>Before and after participant contact.</li>
+            <li>Before clean tasks, meal support or personal care.</li>
+            <li>After contact with body fluids, wounds, continence products, waste or used linen.</li>
+            <li>Before putting on gloves and after removing gloves.</li>
+            <li>After coughing, sneezing, touching the face or using the toilet.</li>
+            <li>When entering and leaving a participant’s home.</li>
+          </ul>
+          <h3>Method</h3>
+          <ul>
+            <li>Use alcohol-based hand rub when hands are not visibly dirty.</li>
+            <li>Use soap and water when hands are visibly dirty, after toileting, after body fluid exposure, and when gastroenteritis is suspected.</li>
+          </ul>
+          <div class="critical"><strong>Gloves do not replace hand hygiene.</strong> Clean hands before and after glove use.</div>
+        `,
+        quiz:[{q:"Do gloves replace hand hygiene?",a:"No, hands must be cleaned before and after glove use",options:["Yes, gloves are enough","No, hands must be cleaned before and after glove use","Only if the gloves look clean"]}]
       },
       {
-        q:'When should gloves be worn?',
-        options:['For all tasks, even if not needed','When there may be contact with blood, body fluids, wounds, continence care or contaminated items','Only when driving','Only when writing notes'],
-        correct:1,
-        why:'Gloves are used when there is risk of contact with blood, body fluids or contamination.'
+        title:"4. Personal protective equipment",
+        body:`
+          <p>PPE protects workers and participants when there is risk of contact with body fluids, respiratory droplets, contaminated items, chemicals or infection.</p>
+          <h3>Common PPE</h3>
+          <ul>
+            <li><strong>Gloves:</strong> for body fluids, wounds, continence care, dirty linen, waste and cleaning chemicals.</li>
+            <li><strong>Mask:</strong> for respiratory symptoms or when instructed.</li>
+            <li><strong>Apron or gown:</strong> when clothing may be contaminated.</li>
+            <li><strong>Eye protection:</strong> where splashes or sprays may occur.</li>
+          </ul>
+          <h3>Safe PPE practice</h3>
+          <ul>
+            <li>Use PPE only when required for the task or risk.</li>
+            <li>Change gloves between dirty and clean tasks.</li>
+            <li>Remove PPE carefully to avoid contamination.</li>
+            <li>Perform hand hygiene after PPE removal.</li>
+            <li>Report if required PPE is not available.</li>
+          </ul>
+        `,
+        quiz:[{q:"When should gloves be used?",a:"When there is risk of contact with body fluids, waste or contaminated items",options:["For every task even when not needed","When there is risk of contact with body fluids, waste or contaminated items","Only when the participant asks"]}]
       },
       {
-        q:'What should happen after removing PPE?',
-        options:['Put it in your pocket for later','Perform hand hygiene','Touch the participant immediately','Leave it on the table'],
-        correct:1,
-        why:'Hand hygiene is required after PPE removal.'
+        title:"5. Respiratory hygiene and cough etiquette",
+        body:`
+          <p>Respiratory infections can spread through coughs, sneezes, droplets, contaminated hands and contaminated surfaces.</p>
+          <h3>Worker expectations</h3>
+          <ul>
+            <li>Cover coughs and sneezes with a tissue or elbow.</li>
+            <li>Dispose of tissues immediately.</li>
+            <li>Perform hand hygiene after coughing, sneezing or touching the face.</li>
+            <li>Wear a mask when instructed or when required by risk controls.</li>
+            <li>Report participant respiratory symptoms to HD HeeD.</li>
+          </ul>
+          <div class="notice"><strong>Reminder:</strong> Respiratory symptoms can be serious for older people and participants with disability or complex health needs.</div>
+        `,
+        quiz:[{q:"After coughing into a tissue, what should the worker do?",a:"Dispose of the tissue and perform hand hygiene",options:["Put the tissue in a pocket","Dispose of the tissue and perform hand hygiene","Continue working without hand hygiene"]}]
       },
       {
-        q:'What is the correct respiratory hygiene practice?',
-        options:['Cough into hands and continue working','Cover coughs/sneezes, dispose of tissues and clean hands','Ignore mild coughing','Only wear gloves'],
-        correct:1,
-        why:'Respiratory hygiene includes covering coughs/sneezes, disposing of tissues and cleaning hands.'
+        title:"6. Fit for work and staying home when unwell",
+        body:`
+          <p>Workers must not attend supports when they may be infectious. Attending work while unwell may place participants, families, other staff and the wider community at risk.</p>
+          <h3>Do not attend a shift if you have</h3>
+          <ul>
+            <li>Fever, chills or flu-like symptoms.</li>
+            <li>Vomiting or diarrhoea.</li>
+            <li>New cough, sore throat, runny nose or respiratory symptoms.</li>
+            <li>COVID-19, influenza or gastro symptoms.</li>
+            <li>Contagious skin condition, unexplained rash or suspected scabies.</li>
+            <li>Been directed to isolate or not attend work.</li>
+          </ul>
+          <div class="critical"><strong>Required action:</strong> Notify HD HeeD as early as possible. Do not attend and do not make independent decisions to continue working while unwell.</div>
+        `,
+        quiz:[{q:"What should a worker do if they develop vomiting or diarrhoea before a shift?",a:"Do not attend and notify HD HeeD",options:["Attend if the shift is short","Do not attend and notify HD HeeD","Attend but wear gloves only"]}]
       },
       {
-        q:'What should a worker do if required PPE is not available for a task?',
-        options:['Complete the task anyway','Use personal clothing instead','Stop and contact HD HeeD for advice','Ask the participant to buy PPE immediately'],
-        correct:2,
-        why:'If required PPE is unavailable, stop and escalate for guidance.'
+        title:"7. Cleaning and shared equipment",
+        body:`
+          <p>Germs can survive on surfaces and shared equipment. Workers must keep equipment and frequently touched areas clean within their role and the participant’s support plan.</p>
+          <h3>Examples of items requiring attention</h3>
+          <ul>
+            <li>Mobility aids, shower chairs, commodes and hoist controls.</li>
+            <li>Meal preparation surfaces and utensils.</li>
+            <li>Bathroom surfaces after personal care.</li>
+            <li>Shared phones, tablets or communication devices used during support.</li>
+            <li>Door handles, taps, light switches and other frequently touched surfaces.</li>
+          </ul>
+          <div class="warning"><strong>Chemical safety:</strong> Never mix cleaning chemicals. Follow product instructions and HD HeeD directions.</div>
+        `,
+        quiz:[{q:"What should workers avoid when cleaning?",a:"Mixing chemicals",options:["Using clean cloths","Mixing chemicals","Following product instructions"]}]
       },
       {
-        q:'How should soiled linen or clothing be handled?',
-        options:['Shake it to remove debris','Handle carefully and avoid shaking it','Place it with clean items','Take it home to wash'],
-        correct:1,
-        why:'Soiled linen should be handled carefully and not shaken.'
+        title:"8. Waste and linen handling",
+        body:`
+          <p>Used linen, continence products and waste may carry germs. Workers must handle these items safely and respectfully.</p>
+          <h3>Safe practice</h3>
+          <ul>
+            <li>Wear gloves when handling soiled linen, continence products or waste.</li>
+            <li>Keep soiled linen away from your face, clothing and personal items.</li>
+            <li>Do not shake linen.</li>
+            <li>Place waste in the correct bin or bag as instructed.</li>
+            <li>Perform hand hygiene after removing gloves.</li>
+            <li>Report sharps, body fluid spills or unsafe waste concerns.</li>
+          </ul>
+          <div class="critical"><strong>Sharps:</strong> Do not handle needles or sharps unless trained, authorised and directed. Report immediately.</div>
+        `,
+        quiz:[{q:"What should workers avoid when handling used linen?",a:"Shaking the linen",options:["Wearing gloves if soiled","Shaking the linen","Keeping linen away from the face"]}]
       },
       {
-        q:'When should infection risks be reported?',
-        options:['Only during monthly supervision','At the end of the year','As soon as possible','Only if the participant complains'],
-        correct:2,
-        why:'Infection risks should be reported early.'
+        title:"9. Body fluids, wounds and clinical risks",
+        body:`
+          <p>Blood, urine, faeces, vomit, sputum, wound fluid and other body fluids can carry infection. Workers must stay within their role and escalate concerns early.</p>
+          <h3>Report promptly if you notice</h3>
+          <ul>
+            <li>New or worsening wound redness, heat, swelling, odour, discharge or pain.</li>
+            <li>Blood or body fluid spills.</li>
+            <li>Participant fever, sudden confusion, new cough or sudden decline.</li>
+            <li>Catheter, PEG, stoma, continence or dressing issues outside your role.</li>
+            <li>Exposure to blood or body fluids.</li>
+          </ul>
+          <div class="notice"><strong>Role boundary:</strong> Do not perform clinical tasks unless trained, authorised and documented in the support plan.</div>
+        `,
+        quiz:[{q:"What should a worker do with a new wound concern?",a:"Report it to HD HeeD promptly",options:["Ignore it if the participant is not worried","Report it to HD HeeD promptly","Apply any dressing without instruction"]}]
       },
       {
-        q:'What is this certificate?',
-        options:['A nationally accredited qualification','An internal HD HeeD induction completion record','A first aid certificate','A nursing qualification'],
-        correct:1,
-        why:'This is an internal induction record, not an accredited qualification.'
+        title:"10. Food handling and meal support",
+        body:`
+          <p>When preparing meals or assisting with eating and drinking, workers must reduce infection and food safety risks.</p>
+          <h3>Safe food support</h3>
+          <ul>
+            <li>Perform hand hygiene before food preparation or meal assistance.</li>
+            <li>Use clean surfaces, cups, plates and utensils.</li>
+            <li>Keep raw and ready-to-eat food separate.</li>
+            <li>Check food expiry dates where relevant.</li>
+            <li>Do not perform food support tasks if you have vomiting or diarrhoea.</li>
+            <li>Follow swallowing, texture-modified diet or thickened fluid instructions where documented.</li>
+          </ul>
+          <div class="warning"><strong>Swallowing risk:</strong> If a participant coughs, chokes or has difficulty swallowing, stop and report immediately.</div>
+        `,
+        quiz:[{q:"Before preparing food or assisting with meals, what must the worker do?",a:"Perform hand hygiene",options:["Perform hand hygiene","Skip hand hygiene if wearing gloves","Use the participant’s towel to wipe hands"]}]
+      },
+      {
+        title:"11. Transmission-based precautions",
+        body:`
+          <p>Transmission-based precautions are extra infection control measures used when a participant has, or may have, an infection that spreads by contact, droplets or airborne transmission.</p>
+          <h3>Examples</h3>
+          <ul>
+            <li><strong>Contact precautions:</strong> gastro, scabies and some wound infections.</li>
+            <li><strong>Droplet precautions:</strong> influenza and many respiratory infections.</li>
+            <li><strong>Airborne precautions:</strong> specific infections requiring higher-level advice and direction.</li>
+          </ul>
+          <div class="critical"><strong>Required action:</strong> Follow HD HeeD instructions, participant-specific directions and public health advice. Do not ignore or change precautions without approval.</div>
+        `,
+        quiz:[{q:"When are transmission-based precautions used?",a:"When extra precautions are needed for a known or suspected infection",options:["For every participant all the time","When extra precautions are needed for a known or suspected infection","Only after the worker becomes sick"]}]
+      },
+      {
+        title:"12. Common risks: COVID, flu, gastro and scabies",
+        body:`
+          <p>NDIS and aged care workers may encounter infectious risks such as COVID-19, influenza, gastroenteritis and scabies.</p>
+          <h3>Practical expectations</h3>
+          <ul>
+            <li><strong>COVID/flu:</strong> report symptoms, use PPE when directed, follow respiratory hygiene and do not work while infectious.</li>
+            <li><strong>Gastro:</strong> soap and water handwashing is especially important. Do not attend while symptomatic.</li>
+            <li><strong>Scabies:</strong> follow treatment/contact precaution instructions and handle clothing/linen carefully.</li>
+            <li><strong>Outbreak risk:</strong> follow HD HeeD instructions and report symptoms or exposure early.</li>
+          </ul>
+          <div class="notice"><strong>Early reporting matters:</strong> One worker may support multiple participants, so infection risks must be escalated quickly.</div>
+        `,
+        quiz:[{q:"For gastro symptoms, which hand hygiene method is especially important?",a:"Soap and water",options:["Soap and water","No hand hygiene if gloves were worn","Perfumed hand cream"]}]
+      },
+      {
+        title:"13. Infection control in home and community visits",
+        body:`
+          <p>Home and community support settings change from shift to shift. Workers must apply infection control practices even when the environment feels informal.</p>
+          <h3>Before and during visits</h3>
+          <ul>
+            <li>Check shift notes, alerts and participant-specific risk instructions.</li>
+            <li>Carry or access required hand hygiene products and PPE.</li>
+            <li>Keep personal items away from dirty areas.</li>
+            <li>Do not use participant towels for hand drying unless clean and appropriate.</li>
+            <li>Report lack of PPE, unsafe waste, animal contamination, hoarding or environmental hazards.</li>
+          </ul>
+          <div class="warning"><strong>Safety rule:</strong> If required PPE is not available for a task, stop and contact HD HeeD for direction.</div>
+        `,
+        quiz:[{q:"What should a worker do if required PPE is not available for a task?",a:"Stop and contact HD HeeD for direction",options:["Do the task anyway","Stop and contact HD HeeD for direction","Use a towel instead of PPE"]}]
+      },
+      {
+        title:"14. Reporting and escalation",
+        body:`
+          <p>Workers must report infection risks and incidents promptly. Early reporting helps HD HeeD protect participants, workers and service continuity.</p>
+          <h3>Report immediately</h3>
+          <ul>
+            <li>Worker illness before or during a shift.</li>
+            <li>Participant fever, cough, vomiting, diarrhoea, rash or sudden decline.</li>
+            <li>Body fluid exposure, splash injury, needlestick or sharps concern.</li>
+            <li>Lack of PPE for required tasks.</li>
+            <li>Suspected outbreak or multiple people unwell.</li>
+            <li>Any infection control breach or concern.</li>
+          </ul>
+          <div class="success"><strong>HD HeeD expectation:</strong> If unsure, report and ask. Early escalation is safer than delayed reporting.</div>
+        `,
+        quiz:[{q:"What should a worker do if unsure whether something is an infection risk?",a:"Report and ask HD HeeD for advice",options:["Wait until next month","Report and ask HD HeeD for advice","Ignore it if the shift is finished"]}]
+      },
+      {
+        title:"15. Worker declaration",
+        body:`
+          <p>This final section confirms the worker’s understanding of HD HeeD’s infection prevention and control expectations.</p>
+          <h3>Declaration</h3>
+          <ul>
+            <li>I will follow standard precautions during all support work.</li>
+            <li>I will perform hand hygiene correctly and at required times.</li>
+            <li>I will use PPE when required and remove it safely.</li>
+            <li>I will not attend work when unwell or potentially infectious.</li>
+            <li>I will report infection risks, symptoms, exposure incidents, PPE concerns and breaches promptly.</li>
+            <li>I understand this is an internal HD HeeD induction record and not an externally accredited qualification.</li>
+          </ul>
+          <div class="notice"><strong>After passing this question, the certificate section will unlock.</strong></div>
+        `,
+        quiz:[{q:"Which statement is correct?",a:"I must report infection risks and stay away from work when unwell",options:["I must report infection risks and stay away from work when unwell","I only need infection control during outbreaks","I can attend work with gastro if I wear gloves"]}]
       }
     ];
 
-    const els = {
-      workerName: document.getElementById('workerName'),
-      workerRole: document.getElementById('workerRole'),
-      workerEmail: document.getElementById('workerEmail'),
-      trainerName: document.getElementById('trainerName'),
-      declaration: document.getElementById('declaration'),
-      progressFill: document.getElementById('progressFill'),
-      progressText: document.getElementById('progressText'),
-      statusList: document.getElementById('statusList'),
-      quizArea: document.getElementById('quizArea'),
-      quizMessage: document.getElementById('quizMessage'),
-      checkQuizBtn: document.getElementById('checkQuizBtn'),
-      retryBtn: document.getElementById('retryBtn'),
-      cert: document.getElementById('certificate'),
-      certActions: document.getElementById('certActions'),
-      certName: document.getElementById('certName'),
-      certRole: document.getElementById('certRole'),
-      certDate: document.getElementById('certDate'),
-      certScore: document.getElementById('certScore'),
-      certTrainer: document.getElementById('certTrainer'),
-      resetBtn: document.getElementById('resetBtn'),
-      copyRecordBtn: document.getElementById('copyRecordBtn')
-    };
+    const STORAGE_KEY = "hdheed_ipc_induction_official_v1";
+    let state = loadState();
 
-    let state = {
-      workerName:'', workerRole:'Support Worker', workerEmail:'', trainerName:'', declaration:false,
-      read:{}, answers:{}, quizPassed:false, completedAt:''
-    };
-
-    function load(){
+    function loadState(){
       try{
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-        if(saved) state = Object.assign(state, saved);
-      }catch(e){}
-      els.workerName.value = state.workerName || '';
-      els.workerRole.value = state.workerRole || 'Support Worker';
-      els.workerEmail.value = state.workerEmail || '';
-      els.trainerName.value = state.trainerName || '';
-      els.declaration.checked = !!state.declaration;
-      document.querySelectorAll('[data-read]').forEach(c=>{ c.checked = !!state.read[c.dataset.read]; });
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {i:0,done:{},answers:{},name:"",role:"",cert:null};
+      }catch(e){
+        return {i:0,done:{},answers:{},name:"",role:"",cert:null};
+      }
     }
-    function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); updateProgress(); }
-    function updateFromInputs(){
-      state.workerName = els.workerName.value.trim();
-      state.workerRole = els.workerRole.value;
-      state.workerEmail = els.workerEmail.value.trim();
-      state.trainerName = els.trainerName.value.trim();
-      state.declaration = els.declaration.checked;
-      document.querySelectorAll('[data-read]').forEach(c=>{ state.read[c.dataset.read] = c.checked; });
-      save();
+
+    function saveState(){
+      state.name = document.getElementById("workerName").value || "";
+      state.role = document.getElementById("workerRole").value || "";
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
-    function renderQuiz(){
-      els.quizArea.innerHTML = '';
-      questions.forEach((item, idx)=>{
-        const wrap = document.createElement('div');
-        wrap.className = 'quiz-item';
-        wrap.id = 'quizItem' + idx;
-        const q = document.createElement('div');
-        q.className = 'quiz-q';
-        q.textContent = (idx+1) + '. ' + item.q;
-        const opts = document.createElement('div');
-        opts.className = 'options';
-        item.options.forEach((opt, oi)=>{
-          const id = `q${idx}_${oi}`;
-          const label = document.createElement('label');
-          label.className = 'option';
-          label.setAttribute('for', id);
-          label.innerHTML = `<input type="radio" id="${id}" name="q${idx}" value="${oi}"><span>${opt}</span>`;
-          opts.appendChild(label);
+
+    function esc(value){
+      return String(value).replace(/[&<>"']/g, function(s){
+        return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[s];
+      });
+    }
+
+    function moduleShortTitle(title){
+      return title.replace(/^\d+\.\s*/, "");
+    }
+
+    function renderModuleList(){
+      const list = document.getElementById("moduleList");
+      list.innerHTML = "";
+      modules.forEach((mod, index) => {
+        const item = document.createElement("div");
+        item.className = "module-item" + (state.done[index] ? " done" : "") + (index === state.i ? " active" : "");
+        item.innerHTML = `<div class="status">${state.done[index] ? "✓" : index + 1}</div><div class="module-item-title">${esc(moduleShortTitle(mod.title))}</div>`;
+        item.addEventListener("click", () => {
+          state.i = index;
+          saveState();
+          render();
+          window.scrollTo({top:0,behavior:"smooth"});
         });
-        const fb = document.createElement('div');
-        fb.className = 'feedback hidden';
-        fb.id = 'fb' + idx;
-        wrap.appendChild(q); wrap.appendChild(opts); wrap.appendChild(fb);
-        els.quizArea.appendChild(wrap);
-      });
-      Object.keys(state.answers || {}).forEach(k=>{
-        const input = document.querySelector(`input[name="q${k}"][value="${state.answers[k]}"]`);
-        if(input) input.checked = true;
-      });
-      document.querySelectorAll('#quizArea input[type="radio"]').forEach(r=>{
-        r.addEventListener('change', ()=>{
-          const qIndex = r.name.replace('q','');
-          state.answers[qIndex] = Number(r.value);
-          state.quizPassed = false;
-          save();
-        });
+        list.appendChild(item);
       });
     }
+
     function updateProgress(){
-      const reads = Object.values(state.read || {}).filter(Boolean).length;
-      const details = state.workerName ? 1 : 0;
-      const dec = state.declaration ? 1 : 0;
-      const quiz = state.quizPassed ? 1 : 0;
-      const done = reads + details + dec + quiz;
-      const total = totalModules + 3;
-      const pct = Math.round(done / total * 100);
-      els.progressFill.style.width = pct + '%';
-      els.progressText.textContent = pct + '% complete';
-      els.statusList.innerHTML = '';
-      const rows = [
-        ['Worker name entered', !!state.workerName],
-        ['All modules read', reads === totalModules],
-        ['Declaration ticked', !!state.declaration],
-        ['Quiz passed', !!state.quizPassed]
-      ];
-      rows.forEach(([txt, done])=>{
-        const row = document.createElement('div'); row.className = 'status-row';
-        row.innerHTML = `<span>${txt}</span><span class="status-pill ${done?'done':''}">${done?'Done':'Pending'}</span>`;
-        els.statusList.appendChild(row);
-      });
+      const complete = Object.keys(state.done).filter(key => state.done[key]).length;
+      const percent = Math.round((complete / modules.length) * 100);
+      document.getElementById("progressBar").style.width = percent + "%";
+      document.getElementById("progressText").textContent = `${percent}% complete — ${complete} of ${modules.length} modules passed`;
+      document.getElementById("finishBox").style.display = percent === 100 ? "block" : "none";
+      return percent;
     }
-    function checkQuiz(){
-      updateFromInputs();
-      let allAnswered = true;
-      let correctCount = 0;
-      questions.forEach((item, idx)=>{
-        const selected = document.querySelector(`input[name="q${idx}"]:checked`);
-        const wrap = document.getElementById('quizItem' + idx);
-        const fb = document.getElementById('fb' + idx);
-        wrap.classList.remove('correct','incorrect');
-        fb.classList.remove('hidden','good','bad');
+
+    function render(){
+      document.getElementById("workerName").value = state.name || "";
+      document.getElementById("workerRole").value = state.role || "";
+
+      const mod = modules[state.i];
+      const savedAnswers = state.answers[state.i] || {};
+      const content = document.getElementById("moduleContent");
+      content.innerHTML = `
+        <h2>${esc(mod.title)}</h2>
+        ${mod.body}
+        <section class="quiz">
+          <p class="quiz-title">Knowledge check</p>
+          <p class="small">Select one answer. You may reattempt until the correct answer is selected.</p>
+          ${mod.quiz.map((q, qIndex) => `
+            <fieldset class="qcard">
+              <legend>${esc(q.q)}</legend>
+              ${q.options.map(option => `
+                <label class="option">
+                  <input type="radio" name="q${qIndex}" value="${esc(option)}" ${savedAnswers[qIndex] === option ? "checked" : ""} />
+                  ${esc(option)}
+                </label>
+              `).join("")}
+              <div class="feedback" id="feedback${qIndex}"></div>
+            </fieldset>
+          `).join("")}
+          <div class="controls">
+            <button class="btn primary" type="button" id="checkBtn">Check answer</button>
+          </div>
+        </section>
+      `;
+
+      document.getElementById("checkBtn").addEventListener("click", checkAnswers);
+      document.getElementById("prevBtn").disabled = state.i === 0;
+      document.getElementById("nextBtn").disabled = !state.done[state.i];
+      document.getElementById("nextBtn").textContent = state.i === modules.length - 1 ? "Finish" : "Next";
+
+      renderModuleList();
+      updateProgress();
+      if(state.cert) renderCertificate(state.cert);
+    }
+
+    function checkAnswers(){
+      const mod = modules[state.i];
+      state.answers[state.i] = state.answers[state.i] || {};
+      let allCorrect = true;
+
+      mod.quiz.forEach((q, qIndex) => {
+        const selected = document.querySelector(`input[name="q${qIndex}"]:checked`);
+        const feedback = document.getElementById(`feedback${qIndex}`);
+
         if(!selected){
-          allAnswered = false;
-          wrap.classList.add('incorrect');
-          fb.classList.add('bad');
-          fb.textContent = 'Please select one answer.';
+          feedback.textContent = "Please select one answer.";
+          feedback.className = "feedback fail";
+          allCorrect = false;
           return;
         }
-        const val = Number(selected.value);
-        state.answers[idx] = val;
-        if(val === item.correct){
-          correctCount++;
-          wrap.classList.add('correct');
-          fb.classList.add('good');
-          fb.textContent = 'Correct.';
+
+        state.answers[state.i][qIndex] = selected.value;
+
+        if(selected.value === q.a){
+          feedback.textContent = "Correct.";
+          feedback.className = "feedback pass";
         }else{
-          wrap.classList.add('incorrect');
-          fb.classList.add('bad');
-          fb.textContent = 'Not correct. Hint: ' + item.why;
+          feedback.textContent = "Not correct. Please try again.";
+          feedback.className = "feedback fail";
+          allCorrect = false;
         }
       });
 
-      const reads = Object.values(state.read || {}).filter(Boolean).length;
-      const missing = [];
-      if(!state.workerName) missing.push('enter worker name');
-      if(reads !== totalModules) missing.push('tick all module read boxes');
-      if(!state.declaration) missing.push('tick worker declaration');
-
-      els.quizMessage.classList.remove('hidden');
-      if(!allAnswered){
-        state.quizPassed = false;
-        els.quizMessage.textContent = 'Please answer every question. You can reattempt as many times as needed.';
-      }else if(correctCount !== questions.length){
-        state.quizPassed = false;
-        els.quizMessage.textContent = `Result: ${correctCount} / ${questions.length}. Please review the highlighted questions and try again.`;
-      }else if(missing.length){
-        state.quizPassed = false;
-        els.quizMessage.textContent = 'Quiz result: 10 / 10. Before the certificate can be created, please ' + missing.join(', ') + '.';
+      if(allCorrect){
+        state.done[state.i] = true;
+        document.getElementById("nextBtn").disabled = false;
       }else{
-        state.quizPassed = true;
-        state.completedAt = new Date().toLocaleString('en-AU', { dateStyle:'medium', timeStyle:'short' });
-        els.quizMessage.className = 'okbox';
-        els.quizMessage.textContent = 'Passed: 10 / 10. Certificate is ready below.';
-        showCertificate();
-        setTimeout(()=>document.getElementById('certificateArea').scrollIntoView({behavior:'smooth'}), 250);
+        state.done[state.i] = false;
+        document.getElementById("nextBtn").disabled = true;
       }
-      save();
-    }
-    function showCertificate(){
-      if(!state.quizPassed) return;
-      els.certName.textContent = state.workerName || 'Worker Name';
-      els.certRole.textContent = state.workerRole || 'Support Worker';
-      els.certDate.textContent = state.completedAt || new Date().toLocaleString('en-AU', { dateStyle:'medium', timeStyle:'short' });
-      els.certScore.textContent = questions.length + ' / ' + questions.length;
-      els.certTrainer.textContent = state.trainerName || 'HD HeeD representative';
-      els.cert.classList.add('show');
-      els.certActions.classList.remove('hidden');
-    }
-    function retryIncorrect(){
-      questions.forEach((item, idx)=>{
-        const selected = state.answers[idx];
-        if(selected !== item.correct){
-          const inputs = document.querySelectorAll(`input[name="q${idx}"]`);
-          inputs.forEach(i=> i.checked = false);
-          delete state.answers[idx];
-          const wrap = document.getElementById('quizItem' + idx);
-          const fb = document.getElementById('fb' + idx);
-          wrap.classList.remove('correct','incorrect');
-          fb.className = 'feedback hidden';
-          fb.textContent = '';
-        }
-      });
-      state.quizPassed = false;
-      els.quizMessage.className = 'notice hidden';
-      save();
-    }
-    function copyRecord(){
-      const text = [
-        'HD HeeD Internal Infection Control Basics Induction - Completion Record',
-        'Worker: ' + (state.workerName || ''),
-        'Role: ' + (state.workerRole || ''),
-        'Email: ' + (state.workerEmail || ''),
-        'Completed: ' + (state.completedAt || ''),
-        'Quiz result: ' + questions.length + ' / ' + questions.length,
-        'Course version: HDH-ICB-v1.0',
-        'Trainer / authorised by: ' + (state.trainerName || 'HD HeeD representative'),
-        'Certificate type: Internal induction record, not an accredited qualification'
-      ].join('\n');
-      navigator.clipboard.writeText(text).then(()=>alert('Completion record copied.')).catch(()=>alert(text));
+
+      saveState();
+      renderModuleList();
+      updateProgress();
     }
 
-    document.querySelectorAll('input,select').forEach(el=> el.addEventListener('input', updateFromInputs));
-    document.querySelectorAll('[data-read]').forEach(el=> el.addEventListener('change', updateFromInputs));
-    els.declaration.addEventListener('change', updateFromInputs);
-    els.checkQuizBtn.addEventListener('click', checkQuiz);
-    els.retryBtn.addEventListener('click', retryIncorrect);
-    els.resetBtn.addEventListener('click', ()=>{
-      if(confirm('Clear saved progress for this course on this browser?')){
-        localStorage.removeItem(STORAGE_KEY); location.reload();
+    function renderCertificate(cert){
+      document.getElementById("certificate").style.display = "block";
+      document.getElementById("certName").textContent = cert.name;
+      document.getElementById("certRole").textContent = cert.role;
+      document.getElementById("certDate").textContent = cert.date;
+    }
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      if(state.i > 0){
+        state.i--;
+        saveState();
+        render();
+        window.scrollTo({top:0,behavior:"smooth"});
       }
     });
-    els.copyRecordBtn.addEventListener('click', copyRecord);
 
-    load();
-    renderQuiz();
-    updateProgress();
-    if(state.quizPassed) showCertificate();
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      if(!state.done[state.i]) return;
+      if(state.i < modules.length - 1){
+        state.i++;
+        saveState();
+        render();
+        window.scrollTo({top:0,behavior:"smooth"});
+      }else{
+        document.getElementById("finishBox").scrollIntoView({behavior:"smooth",block:"start"});
+      }
+    });
+
+    document.getElementById("workerName").addEventListener("input", saveState);
+    document.getElementById("workerRole").addEventListener("change", saveState);
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      if(confirm("Reset course progress on this device?")){
+        localStorage.removeItem(STORAGE_KEY);
+        state = {i:0,done:{},answers:{},name:"",role:"",cert:null};
+        document.getElementById("certificate").style.display = "none";
+        render();
+      }
+    });
+
+    document.getElementById("generateCertBtn").addEventListener("click", () => {
+      const name = document.getElementById("workerName").value.trim();
+      const role = document.getElementById("workerRole").value.trim();
+      if(!name || !role){
+        alert("Please enter worker full name and role/type before generating the certificate.");
+        return;
+      }
+      const date = new Date().toLocaleString("en-AU", {dateStyle:"full", timeStyle:"short"});
+      state.cert = {name,role,date};
+      saveState();
+      renderCertificate(state.cert);
+      document.getElementById("certificate").scrollIntoView({behavior:"smooth",block:"start"});
+    });
+
+    document.getElementById("printCertBtn").addEventListener("click", () => {
+      if(!state.cert){
+        document.getElementById("generateCertBtn").click();
+        if(!state.cert) return;
+      }
+      window.print();
+    });
+
+    document.getElementById("copyRecordBtn").addEventListener("click", async () => {
+      const complete = Object.keys(state.done).filter(key => state.done[key]).length;
+      const name = document.getElementById("workerName").value.trim() || "Not entered";
+      const role = document.getElementById("workerRole").value.trim() || "Not entered";
+      const date = state.cert ? state.cert.date : new Date().toLocaleString("en-AU", {dateStyle:"full", timeStyle:"short"});
+      const result = complete === modules.length ? "Completed and passed" : "Not complete";
+      const record = `HD HeeD Infection Prevention and Control Induction\nWorker: ${name}\nRole/type: ${role}\nModules completed: ${complete}/${modules.length}\nResult: ${result}\nCompletion date/time: ${date}\nRecord type: Internal induction evidence for employee/contractor staff file. Not an externally accredited qualification.`;
+      try{
+        await navigator.clipboard.writeText(record);
+        document.getElementById("copyStatus").textContent = "Completion record copied.";
+      }catch(e){
+        document.getElementById("copyStatus").textContent = record;
+      }
+    });
+
+    render();
   </script>
 </body>
 </html>
