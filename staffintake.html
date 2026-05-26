@@ -3,341 +3,511 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>HD HeeD — Bare Minimum Staff Readiness Form</title>
-  <meta name="description" content="Bare minimum staff readiness form for HD HeeD personal care/support workers before first shift." />
+  <title>HD HeeD — Staff Intake and Pre-Shift Requirements</title>
+  <meta name="description" content="HD HeeD staff intake and minimum pre-shift requirements for employees and contractors." />
   <meta name="theme-color" content="#512b8a" />
 
-  <!-- Favicons / App Icons (HD HeeD) -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="#512b8a">
-  <link rel="manifest" href="/site.webmanifest?v=3">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <!-- Favicons / App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="#512b8a" />
+  <link rel="manifest" href="/site.webmanifest?v=3" />
 
   <style>
     :root{
-      --purple:#512b8a; --gold:#ffc107; --ink:#0f172a; --muted:#64748b;
-      --bg:#f6f7fb; --line:#e5e7eb; --ok:#16a34a; --warn:#f59e0b; --bad:#dc2626;
-      --panel:#ffffff; --soft:#f8fafc; --blue:#2563eb;
+      --purple:#512b8a; --blue:#2563eb; --green:#15803d; --red:#b91c1c; --amber:#b45309;
+      --ink:#0f172a; --muted:#64748b; --bg:#f5f7fb; --panel:#ffffff; --line:#dbe2ea;
+      --soft:#f8fafc; --dark:#0b1220; --grad:linear-gradient(135deg,#512b8a,#2563eb);
     }
     *{box-sizing:border-box}
     html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-    a{color:var(--blue);text-decoration:none;font-weight:800}
+    a{color:var(--blue);text-decoration:none}
     a:hover{text-decoration:underline}
-    .topbar{background:#0b1220;color:#fff}
-    .topbar .inner{max-width:1100px;margin:auto;padding:9px 16px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;font-size:14px}
-    .topbar a{color:#fff}
-    header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;box-shadow:0 4px 16px rgba(2,6,23,.04)}
-    .head{max-width:1100px;margin:auto;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    button,input,select,textarea{font:inherit}
+    .topbar{background:var(--dark);color:#fff}
+    .topbar .inner{max-width:1120px;margin:0 auto;padding:9px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px}
+    .topbar a{color:#fff;font-weight:800}
+    header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;box-shadow:0 8px 24px rgba(15,23,42,.05)}
+    .header-inner{max-width:1120px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
     .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--purple),#8b5cf6);display:grid;place-items:center;color:#fff;font-weight:900;letter-spacing:.5px;box-shadow:0 10px 26px rgba(81,43,138,.25)}
-    .brand b{font-size:18px}.brand small{display:block;color:var(--muted);margin-top:2px}
-    .container{max-width:1100px;margin:auto;padding:18px 16px 36px}
-    .hero{background:linear-gradient(135deg,#111827,var(--purple));color:#fff;border-radius:24px;padding:24px;margin:16px 0;box-shadow:0 20px 50px rgba(2,6,23,.18)}
-    .hero h1{margin:0 0 8px;font-size:clamp(28px,5vw,44px);font-weight:900;letter-spacing:-.02em}
-    .hero p{margin:0;color:#eef2ff;line-height:1.55;max-width:820px}
-    .note{background:#fff8e1;border:1px solid #fde68a;color:#713f12;border-radius:16px;padding:12px 14px;margin-top:14px;line-height:1.45}
-    .grid{display:grid;gap:14px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
-    @media(max-width:850px){.two,.three{grid-template-columns:1fr}}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 10px 28px rgba(2,6,23,.05)}
-    h2{margin:0 0 12px;font-size:22px}.muted{color:var(--muted)}
-    label{font-weight:800;font-size:14px;display:block;margin-bottom:6px}
-    input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:12px 13px;font:inherit;background:#fff;color:var(--ink);outline:none}
-    textarea{min-height:86px;resize:vertical}
-    input:focus,select:focus,textarea:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(81,43,138,.12)}
-    .field{display:grid;gap:6px}
-    .check{display:flex;gap:10px;align-items:flex-start;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:11px 12px}
-    .check input{width:20px;height:20px;flex:0 0 auto;margin-top:1px}
-    .check span{font-weight:800}.check small{display:block;color:var(--muted);line-height:1.35;margin-top:2px}
-    .required{border-left:5px solid var(--purple)}
-    .conditional{border-left:5px solid var(--warn)}
-    .optional{border-left:5px solid #94a3b8}
-    .status{border-radius:18px;padding:16px;border:1px solid var(--line);background:#fff;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
-    .status strong{font-size:19px}.status.ready{border-color:#86efac;background:#f0fdf4}.status.warn{border-color:#fde68a;background:#fffbeb}.status.stop{border-color:#fecaca;background:#fef2f2}
-    .tag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 10px;font-weight:900;font-size:12px;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-    button,.btn{border:0;border-radius:14px;padding:13px 16px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px}
-    .primary{background:var(--gold);color:#1f2937}.dark{background:#0b1220;color:#fff}.ghost{background:#eef2f7;color:#0f172a;border:1px solid #dbe3ee}.danger{background:#fee2e2;color:#991b1b}
-    .links{display:flex;gap:10px;flex-wrap:wrap}.links a{display:inline-flex;background:#eef2ff;border:1px solid #c7d2fe;border-radius:999px;padding:9px 12px;color:#3730a3}
-    .summary{white-space:pre-wrap;background:#0b1220;color:#e5e7eb;border-radius:16px;padding:14px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.45}
-    footer{text-align:center;color:var(--muted);font-size:13px;margin-top:18px}
-    .print-only{display:none}
+    .brand img{width:54px;height:54px;border-radius:14px;object-fit:cover;box-shadow:0 10px 24px rgba(15,23,42,.16)}
+    .brand-mark{width:54px;height:54px;border-radius:14px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 10px 24px rgba(81,43,138,.22)}
+    .brand-title{font-size:18px;font-weight:950;margin:0;line-height:1.15}
+    .brand-sub{font-size:13px;color:var(--muted);margin:3px 0 0}
+    .header-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .container{max-width:1120px;margin:0 auto;padding:16px}
+    .hero{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;margin:16px 0;box-shadow:0 16px 44px rgba(15,23,42,.08)}
+    .hero-head{background:var(--grad);color:#fff;padding:26px}
+    .hero-head h1{font-size:clamp(26px,4vw,42px);line-height:1.1;margin:0 0 8px}
+    .hero-head p{max-width:900px;line-height:1.55;margin:0;color:#eef2ff}
+    .strip{display:grid;border-top:1px solid rgba(255,255,255,.2)}
+    @media(min-width:760px){.strip{grid-template-columns:repeat(4,1fr)}}
+    .strip div{padding:14px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}
+    .strip div:last-child{border-right:0}
+    .strip b{display:block;text-transform:uppercase;letter-spacing:.05em;color:#475569;font-size:12px;margin-bottom:4px}
+    .strip span{font-weight:900;color:#111827}
+    .grid{display:grid;gap:16px}
+    @media(min-width:940px){.two{grid-template-columns:1fr 1fr}.main-layout{grid-template-columns:330px 1fr}}
+    .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,.055)}
+    .sidebar{position:sticky;top:92px;align-self:start}
+    h2{font-size:24px;margin:0 0 10px}
+    h3{font-size:18px;margin:18px 0 8px;color:#1e3a8a}
+    p,li{line-height:1.58}
+    .small{font-size:13px;color:var(--muted);line-height:1.45}
+    .btn{border:0;border-radius:12px;padding:11px 14px;font-weight:900;cursor:pointer;min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+    .btn:hover{text-decoration:none}
+    .btn.primary{background:var(--purple);color:#fff}
+    .btn.blue{background:var(--blue);color:#fff}
+    .btn.green{background:var(--green);color:#fff}
+    .btn.ghost{background:#eef2ff;color:#1e3a8a;border:1px solid #dbeafe}
+    .btn.warn{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+    .btns{display:flex;gap:10px;flex-wrap:wrap}
+    label{font-weight:850;display:block;font-size:14px;color:#0f172a}
+    input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:12px;margin-top:6px;background:#fff;font-size:16px}
+    textarea{min-height:90px;resize:vertical}
+    input:focus,select:focus,textarea:focus{outline:3px solid #dbeafe;border-color:#60a5fa}
+    .formgrid{display:grid;gap:12px}
+    @media(min-width:720px){.formgrid.two{grid-template-columns:1fr 1fr}.formgrid.three{grid-template-columns:1fr 1fr 1fr}}
+    .notice{border-left:5px solid var(--purple);background:#faf5ff;border-radius:12px;padding:12px 14px;margin:14px 0}
+    .warning{border-left:5px solid var(--amber);background:#fffbeb;border-radius:12px;padding:12px 14px;margin:14px 0}
+    .success{border-left:5px solid var(--green);background:#f0fdf4;border-radius:12px;padding:12px 14px;margin:14px 0}
+    .critical{border-left:5px solid var(--red);background:#fef2f2;border-radius:12px;padding:12px 14px;margin:14px 0}
+    .checklist{display:grid;gap:10px;margin:12px 0}
+    .check{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px}
+    .check input{width:auto;margin:4px 0 0;flex:0 0 auto}
+    .check strong{display:block}
+    .check span{display:block;color:#64748b;font-size:13px;line-height:1.45;margin-top:2px}
+    .step{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff;margin:10px 0}
+    .num{width:30px;height:30px;border-radius:999px;background:var(--purple);color:#fff;display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+    .link-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fcfdff;display:grid;gap:8px;margin:10px 0}
+    .pill{display:inline-flex;align-items:center;gap:6px;background:#eef2ff;color:#1e3a8a;border:1px solid #dbeafe;border-radius:999px;padding:6px 10px;font-weight:850;font-size:12px;width:max-content}
+    .navlist{display:grid;gap:8px;margin-top:12px}
+    .navlist a{display:block;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff;font-weight:850}
+    .status-box{font-weight:900;padding:12px;border-radius:12px;background:#f8fafc;border:1px solid var(--line)}
+    .status-good{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
+    .status-warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
+    .summary-box{white-space:pre-wrap;background:#0b1220;color:#e5e7eb;border-radius:14px;padding:14px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:1.5;max-height:360px;overflow:auto}
+    footer{text-align:center;color:#64748b;font-size:13px;padding:30px 16px}
+    @media(max-width:760px){.sidebar{position:static}.header-actions{width:100%}.header-actions .btn{flex:1}.brand img,.brand-mark{width:48px;height:48px}}
     @media print{
-      body{background:#fff}.topbar,header,.actions,.no-print{display:none!important}.container{max-width:none;padding:0}.hero,.card,.status{box-shadow:none;border-color:#d1d5db}.hero{color:#111;background:#fff;border:1px solid #d1d5db}.hero p{color:#374151}.print-only{display:block}.summary{color:#111;background:#fff;border:1px solid #d1d5db}
-      input,select,textarea{border:0;border-bottom:1px solid #999;border-radius:0;padding:4px}
+      body{background:#fff}
+      .topbar,header,.hero,.sidebar,.no-print,footer{display:none!important}
+      .container{max-width:100%;padding:0}
+      .grid,.main-layout,.two{display:block}
+      .card{box-shadow:none;border:0;padding:0}
+      a{color:#000;text-decoration:none}
+      .check{break-inside:avoid}
+      .summary-box{background:#fff;color:#000;border:1px solid #000;max-height:none}
     }
   </style>
 </head>
 <body>
   <div class="topbar">
     <div class="inner">
-      <div>HD HeeD staff readiness</div>
-      <div><a href="tel:0286305500">02 8630 5500</a> · <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
+      <div>HD HeeD • Staff Intake and Pre-Shift Requirements</div>
+      <div><a href="tel:0286305500">02 8630 5500</a> • <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
     </div>
   </div>
 
   <header>
-    <div class="head">
+    <div class="header-inner">
       <div class="brand">
-        <div class="logo">HD</div>
-        <div><b>HD HeeD</b><small>Bare minimum staff readiness form</small></div>
+        <img src="images/logo.png" alt="HD HeeD logo" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'brand-mark',textContent:'HD'}))">
+        <div>
+          <p class="brand-title">Staff Intake and Pre-Shift Requirements</p>
+          <p class="brand-sub">For HD HeeD employees and contractors</p>
+        </div>
       </div>
-      <span class="tag">Before first personal care/support shift</span>
+      <div class="header-actions no-print">
+        <a class="btn ghost" href="index.html">Home</a>
+        <button class="btn ghost" type="button" onclick="window.print()">Print / Save PDF</button>
+      </div>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
-      <h1>HD HeeD Bare Minimum Staff Form</h1>
-      <p>This form is only for minimum readiness before a basic low-risk personal care/support shift. It does not replace a full employment contract, contractor agreement, payroll setup, or participant-specific care plan.</p>
-      <div class="note"><b>Important:</b> First Aid and CPR are preferred for basic low-risk supports, but should be required before high-risk or complex supports.</div>
-    </section>
-
-    <section id="statusBox" class="status warn" aria-live="polite">
-      <div><strong id="readyTitle">Readiness: not checked yet</strong><div id="readyDetails" class="muted">Complete the minimum items below.</div></div>
-      <button class="dark no-print" type="button" onclick="checkReady()">Check readiness</button>
-    </section>
-
-    <form id="staffForm" class="grid" autocomplete="on">
-      <section class="card">
-        <h2>1. Worker details</h2>
-        <div class="grid two">
-          <div class="field"><label for="workerName">Full legal name</label><input id="workerName" name="workerName" required></div>
-          <div class="field"><label for="preferredName">Preferred name</label><input id="preferredName" name="preferredName"></div>
-          <div class="field"><label for="phone">Mobile number</label><input id="phone" name="phone" type="tel" required></div>
-          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email"></div>
-          <div class="field"><label for="suburb">Suburb</label><input id="suburb" name="suburb"></div>
-          <div class="field"><label for="role">Role</label><select id="role" name="role"><option>Personal care / support worker</option><option>Domestic assistance</option><option>Community access support</option><option>Other</option></select></div>
-          <div class="field"><label for="emergencyName">Emergency contact name</label><input id="emergencyName" name="emergencyName"></div>
-          <div class="field"><label for="emergencyPhone">Emergency contact phone</label><input id="emergencyPhone" name="emergencyPhone" type="tel"></div>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>2. Minimum items before first basic shift</h2>
-        <p class="muted">For basic low-risk personal care/support work, these are the core items to complete before rostering.</p>
-        <div class="grid two">
-          <label class="check required"><input type="checkbox" name="photoId" data-required><div><span>Photo ID checked</span><small>Driver licence, passport or other suitable ID.</small></div></label>
-          <label class="check required"><input type="checkbox" name="rightToWork" data-required><div><span>Right to work confirmed</span><small>Australian citizen/resident, visa evidence, or other suitable right-to-work evidence.</small></div></label>
-          <label class="check required"><input type="checkbox" name="ndisClearance" data-required><div><span>NDIS Worker Screening Clearance checked</span><small>Required for risk-assessed roles. Record clearance number and expiry below.</small></div></label>
-          <label class="check required"><input type="checkbox" name="orientation" data-required><div><span>NDIS Worker Orientation Module completed</span><small>Quality, Safety and You certificate sighted/saved.</small></div></label>
-          <label class="check required"><input type="checkbox" name="codeConduct" data-required><div><span>NDIS Code of Conduct acknowledged</span><small>Worker understands expected behaviour, respect, safety and reporting obligations.</small></div></label>
-          <label class="check required"><input type="checkbox" name="privacy" data-required><div><span>Privacy and confidentiality acknowledged</span><small>No sharing participant information, photos, documents or details without authority.</small></div></label>
-          <label class="check required"><input type="checkbox" name="incident" data-required><div><span>Incident reporting process explained</span><small>Worker knows what must be reported immediately and who to contact.</small></div></label>
-          <label class="check required"><input type="checkbox" name="infectionControl" data-required><div><span>Infection control basics completed</span><small>Hand hygiene, PPE basics, staying home when unwell, and safe practice explained.</small></div></label>
-        </div>
-
-        <div class="grid two" style="margin-top:14px">
-          <div class="field"><label for="clearanceNo">NDIS clearance number / reference</label><input id="clearanceNo" name="clearanceNo"></div>
-          <div class="field"><label for="clearanceExpiry">NDIS clearance expiry</label><input id="clearanceExpiry" name="clearanceExpiry" type="date"></div>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>3. Policy links for staff to read/print</h2>
-        <p class="muted">Open these short policies, print/save if needed, then tick the matching acknowledgement above.</p>
-        <div class="links">
-          <a href="hdheed-policy-ndis-code-of-conduct.html" target="_blank" rel="noopener">NDIS Code of Conduct</a>
-          <a href="hdheed-policy-privacy-confidentiality.html" target="_blank" rel="noopener">Privacy & Confidentiality</a>
-          <a href="hdheed-policy-incident-reporting.html" target="_blank" rel="noopener">Incident Reporting</a>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>4. First Aid / CPR decision</h2>
-        <p class="muted">Do not block a basic low-risk first shift only because First Aid/CPR is not yet supplied. For higher-risk supports, require them first.</p>
-        <div class="grid two">
-          <label class="check conditional"><input type="checkbox" id="highRisk" name="highRisk"><div><span>This worker will attend high-risk/complex supports</span><small>Examples: seizure risk, choking/dysphagia, diabetes support, PEG/tube feeding, tracheostomy, ventilation, complex clinical support, active overnight risk.</small></div></label>
-          <label class="check optional"><input type="checkbox" id="firstAid" name="firstAid"><div><span>First Aid certificate sighted</span><small>Preferred for basic supports; required before high-risk supports.</small></div></label>
-          <label class="check optional"><input type="checkbox" id="cpr" name="cpr"><div><span>CPR certificate sighted</span><small>Preferred for basic supports; required before high-risk supports.</small></div></label>
-          <div class="field"><label for="firstAidExpiry">First Aid/CPR expiry, if available</label><input id="firstAidExpiry" name="firstAidExpiry" type="date"></div>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>5. Before the first actual shift</h2>
-        <p class="muted">Complete these after a participant is allocated.</p>
-        <div class="grid two">
-          <div class="field"><label for="participantName">Participant name</label><input id="participantName" name="participantName"></div>
-          <div class="field"><label for="firstShiftDate">First shift date</label><input id="firstShiftDate" name="firstShiftDate" type="date"></div>
-          <label class="check required"><input type="checkbox" name="handover" data-required><div><span>Participant-specific handover completed</span><small>Care needs, risks, access instructions, documentation and escalation process explained.</small></div></label>
-          <label class="check required"><input type="checkbox" name="contactPathway" data-required><div><span>Worker knows who to call if unsure</span><small>Manager/RN/on-call contact provided before shift.</small></div></label>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>6. Internal decision</h2>
-        <div class="grid two">
-          <div class="field"><label for="decision">Readiness decision</label><select id="decision" name="decision"><option>Pending documents</option><option>Ready for basic low-risk shift</option><option>Ready only after First Aid/CPR</option><option>Do not roster</option></select></div>
-          <div class="field"><label for="reviewedBy">Reviewed by</label><input id="reviewedBy" name="reviewedBy" placeholder="HD HeeD reviewer name"></div>
-          <div class="field"><label for="reviewDate">Review date</label><input id="reviewDate" name="reviewDate" type="date"></div>
-          <div class="field"><label for="employmentType">Worker arrangement to confirm</label><select id="employmentType" name="employmentType"><option>To be confirmed</option><option>Employee</option><option>Contractor</option></select></div>
-        </div>
-        <div class="field" style="margin-top:14px"><label for="notes">Notes</label><textarea id="notes" name="notes" placeholder="Any limits, missing items, follow-up needed, or first shift instructions."></textarea></div>
-      </section>
-    </form>
-
-    <section class="card">
-      <h2>Summary</h2>
-      <div id="summary" class="summary">Complete the form and click “Check readiness”.</div>
-      <div class="actions no-print">
-        <button class="dark" type="button" onclick="checkReady()">Check readiness</button>
-        <button class="primary" type="button" onclick="window.print()">Print / Save PDF</button>
-        <button class="ghost" type="button" onclick="copySummary()">Copy summary</button>
-        <button class="danger" type="button" onclick="clearForm()">Clear saved form</button>
+      <div class="hero-head">
+        <h1>HD HeeD Staff Intake</h1>
+        <p>This page explains the minimum documents, checks, acknowledgements and training evidence required before an employee or contractor can be rostered for participant-facing work with HD HeeD.</p>
+      </div>
+      <div class="strip">
+        <div><b>Applies to</b><span>Employees and contractors</span></div>
+        <div><b>Purpose</b><span>Pre-shift readiness</span></div>
+        <div><b>Return documents to</b><span>info@hdheed.com.au</span></div>
+        <div><b>Version</b><span>1.0</span></div>
       </div>
     </section>
 
-    <section class="card">
-      <h2>Compliance note</h2>
-      <p class="muted">This page is a practical internal checklist. It is based on NDIS Commission guidance that records of worker identity, right to work, pre-employment checks, qualifications/experience, mandatory orientation module completion and infection prevention/control training should be maintained; and that registered providers must ensure people in risk-assessed roles have appropriate NDIS worker screening clearance.</p>
-    </section>
+    <section class="grid main-layout">
+      <aside class="card sidebar no-print">
+        <h2>Quick links</h2>
+        <div class="navlist">
+          <a href="#worker-details">Worker details</a>
+          <a href="#required-documents">Required documents</a>
+          <a href="#acknowledgements">Acknowledgements</a>
+          <a href="#training">Training and certificates</a>
+          <a href="#attached">Tick attached documents</a>
+          <a href="#submit">How to submit</a>
+        </div>
+        <div class="notice">
+          <strong>Minimum rule</strong>
+          <p class="small">Do not attend a participant-facing shift until HD HeeD confirms your clearance, documents, acknowledgements and induction evidence are complete.</p>
+        </div>
+        <div id="readinessStatus" class="status-box status-warn">Readiness: Not yet complete</div>
+      </aside>
 
-    <footer>HD HeeD • Bare Minimum Staff Readiness Form • Keep a signed/printed copy or secure electronic copy in the worker file.</footer>
+      <section class="card">
+        <section id="worker-details">
+          <h2>1. Worker details</h2>
+          <p>Please complete these details before sending your documents to HD HeeD.</p>
+          <div class="formgrid two">
+            <div><label for="fullName">Full legal name</label><input id="fullName" autocomplete="name" placeholder="Full legal name"></div>
+            <div><label for="preferredName">Preferred name</label><input id="preferredName" placeholder="Preferred name"></div>
+            <div><label for="mobile">Mobile number</label><input id="mobile" autocomplete="tel" placeholder="Mobile number"></div>
+            <div><label for="email">Email address</label><input id="email" autocomplete="email" type="email" placeholder="Email address"></div>
+            <div><label for="suburb">Suburb / area</label><input id="suburb" placeholder="e.g. Blacktown, Parramatta, Penrith"></div>
+            <div>
+              <label for="roleType">Worker type / role</label>
+              <select id="roleType">
+                <option value="">Select</option>
+                <option>Employee — Support Worker</option>
+                <option>Employee — Personal Care Worker</option>
+                <option>Contractor — Support Worker</option>
+                <option>Contractor — Personal Care Worker</option>
+                <option>Community Access Worker</option>
+                <option>Domestic Assistance Worker</option>
+                <option>Registered Nurse</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <h3>Availability</h3>
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-check><div><strong>Weekday mornings</strong><span>Available for morning shifts.</span></div></label>
+            <label class="check"><input type="checkbox" data-check><div><strong>Weekday afternoons/evenings</strong><span>Available for afternoon or evening shifts.</span></div></label>
+            <label class="check"><input type="checkbox" data-check><div><strong>Weekends</strong><span>Available for Saturday/Sunday shifts.</span></div></label>
+            <label class="check"><input type="checkbox" data-check><div><strong>Transport/community access</strong><span>Available for community access or transport support if approved by HD HeeD.</span></div></label>
+          </div>
+        </section>
+
+        <section id="required-documents">
+          <h2>2. Required before first participant-facing shift</h2>
+          <p>Send clear scanned copies/photos by email, or provide paper copies to HD HeeD.</p>
+
+          <div class="checklist">
+            <label class="check"><input type="checkbox" data-required><div><strong>Photo ID</strong><span>Driver licence, passport or other government-issued photo ID.</span></div></label>
+            <label class="check"><input type="checkbox" data-required><div><strong>Right to work in Australia</strong><span>Australian passport/birth certificate/citizenship evidence, or visa/right-to-work evidence if applicable.</span></div></label>
+            <label class="check"><input type="checkbox" data-required><div><strong>NDIS Worker Screening Clearance</strong><span>Provide clearance number, expiry date and enough information for HD HeeD to verify/link you in the provider portal. A police check alone does not replace this for risk-assessed NDIS roles.</span></div></label>
+            <label class="check"><input type="checkbox" data-required><div><strong>NDIS Worker Orientation Module certificate</strong><span>Provide your certificate for “Quality, Safety and You”, or complete the module using the official link below.</span></div></label>
+            <label class="check"><input type="checkbox" data-required><div><strong>Signed acknowledgements</strong><span>Download/sign the three acknowledgement forms below and return scanned copies, photos or paper copies.</span></div></label>
+            <label class="check"><input type="checkbox" data-required><div><strong>HD HeeD Infection Prevention and Control Induction certificate</strong><span>Complete the HD HeeD course below, then download/print and return the completion certificate.</span></div></label>
+            <label class="check"><input type="checkbox" data-required><div><strong>Participant-specific handover before first shift</strong><span>HD HeeD will provide participant-specific instructions before any first shift. Do not attend without receiving this handover.</span></div></label>
+          </div>
+
+          <div class="warning">
+            <strong>First Aid and CPR</strong>
+            <p>Preferred for basic low-risk support. Required before high-risk or complex supports if requested by HD HeeD, participant risk, funding requirements, insurer requirements or the specific service arrangement.</p>
+          </div>
+
+          <div class="notice">
+            <strong>National Police Check</strong>
+            <p>Not required where a current NDIS Worker Screening Clearance is confirmed, unless HD HeeD requests it for a specific service arrangement, insurer requirement, aged care setting or participant risk.</p>
+          </div>
+        </section>
+
+        <section id="acknowledgements">
+          <h2>3. Download and sign acknowledgements</h2>
+          <p>Please open each policy page, print/save it if needed, sign the acknowledgement section, and return a scanned copy/photo or paper copy to HD HeeD.</p>
+
+          <div class="grid two">
+            <div class="link-card">
+              <span class="pill">Required</span>
+              <strong>NDIS Code of Conduct acknowledgement</strong>
+              <span class="small">Expected behaviour, respect, safety, privacy and reporting obligations.</span>
+              <a class="btn blue" href="hdheed-policy-ndis-code-of-conduct.html" target="_blank" rel="noopener">Open acknowledgement</a>
+            </div>
+            <div class="link-card">
+              <span class="pill">Required</span>
+              <strong>Privacy and confidentiality acknowledgement</strong>
+              <span class="small">No sharing participant information, photos, documents or details without authority.</span>
+              <a class="btn blue" href="hdheed-policy-privacy-confidentiality.html" target="_blank" rel="noopener">Open acknowledgement</a>
+            </div>
+            <div class="link-card">
+              <span class="pill">Required</span>
+              <strong>Incident reporting process acknowledgement</strong>
+              <span class="small">Worker knows what must be reported immediately and who to contact.</span>
+              <a class="btn blue" href="hdheed-policy-incident-reporting.html" target="_blank" rel="noopener">Open acknowledgement</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="training">
+          <h2>4. Training and certificates</h2>
+
+          <div class="step">
+            <div class="num">1</div>
+            <div>
+              <strong>NDIS Worker Orientation Module — Quality, Safety and You</strong>
+              <p>Provide your completion certificate. If you have not completed it, use the official NDIS Commission training link below.</p>
+              <div class="btns">
+                <a class="btn blue" href="https://training.ndiscommission.gov.au/" target="_blank" rel="noopener">Open NDIS Worker Orientation Module</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">2</div>
+            <div>
+              <strong>HD HeeD Infection Prevention and Control Induction</strong>
+              <p>Complete the HD HeeD internal induction, pass the questions, then print/save and send the completion certificate to HD HeeD.</p>
+              <div class="btns">
+                <a class="btn green" href="infectioncontrolcourse.html" target="_blank" rel="noopener">Open HD HeeD infection control induction</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">3</div>
+            <div>
+              <strong>Other certificates if available</strong>
+              <p>Send First Aid, CPR, manual handling, medication assistance, hoist training or other relevant certificates if you already have them. HD HeeD may require extra certificates before high-risk or complex shifts.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="contractor">
+          <h2>5. Additional information for contractors</h2>
+          <p>If you are engaged as a contractor, HD HeeD may also request:</p>
+          <ul>
+            <li>ABN details</li>
+            <li>contractor agreement</li>
+            <li>insurance evidence if required</li>
+            <li>invoice/payment details</li>
+            <li>confirmation that you understand you must still follow HD HeeD policies, participant instructions and reporting requirements</li>
+          </ul>
+        </section>
+
+        <section id="attached">
+          <h2>6. Tick what you are attaching/sending</h2>
+          <p>Tick the documents or certificates you are sending to HD HeeD. Then download/print this completed intake page and include it with your email or paper copies.</p>
+
+          <div class="checklist" id="attachedChecks">
+            <label class="check"><input type="checkbox" data-attach value="Photo ID"><div><strong>Photo ID attached</strong><span>Driver licence, passport or other photo ID.</span></div></label>
+            <label class="check"><input type="checkbox" data-attach value="Right to work evidence"><div><strong>Right to work evidence attached</strong><span>Citizenship, passport, visa or other evidence.</span></div></label>
+            <label class="check"><input type="checkbox" data-attach value="NDIS Worker Screening Clearance details"><div><strong>NDIS Worker Screening Clearance details attached</strong><span>Clearance number and expiry details.</span></div></label>
+            <label class="check"><input type="checkbox" data-attach value="NDIS Worker Orientation Module certificate"><div><strong>NDIS Worker Orientation Module certificate attached</strong><span>Quality, Safety and You completion certificate.</span></div></label>
+            <label class="check"><input type="checkbox" data-attach value="NDIS Code of Conduct acknowledgement"><div><strong>NDIS Code of Conduct acknowledgement signed/attached</strong></div></label>
+            <label class="check"><input type="checkbox" data-attach value="Privacy and confidentiality acknowledgement"><div><strong>Privacy and confidentiality acknowledgement signed/attached</strong></div></label>
+            <label class="check"><input type="checkbox" data-attach value="Incident reporting acknowledgement"><div><strong>Incident reporting acknowledgement signed/attached</strong></div></label>
+            <label class="check"><input type="checkbox" data-attach value="HD HeeD infection control induction certificate"><div><strong>HD HeeD infection control induction certificate attached</strong></div></label>
+            <label class="check"><input type="checkbox" data-attach value="First Aid certificate"><div><strong>First Aid certificate attached, if available/required</strong></div></label>
+            <label class="check"><input type="checkbox" data-attach value="CPR certificate"><div><strong>CPR certificate attached, if available/required</strong></div></label>
+            <label class="check"><input type="checkbox" data-attach value="Manual handling certificate"><div><strong>Manual handling certificate attached, if available/required</strong></div></label>
+            <label class="check"><input type="checkbox" data-attach value="ABN/contractor documents"><div><strong>ABN/contractor documents attached, if applicable</strong></div></label>
+          </div>
+
+          <div class="formgrid two">
+            <div>
+              <label for="notes">Notes for HD HeeD</label>
+              <textarea id="notes" placeholder="Example: I have applied for NDIS clearance and will send when available."></textarea>
+            </div>
+            <div>
+              <label for="dateCompleted">Date completed</label>
+              <input id="dateCompleted" type="date">
+            </div>
+          </div>
+
+          <div class="success">
+            <strong>Email all documents to info@hdheed.com.au</strong>
+            <p>Attach your documents/certificates and include this completed intake summary. You may also provide paper copies directly to HD HeeD.</p>
+          </div>
+
+          <div class="btns no-print">
+            <button class="btn primary" type="button" id="buildSummaryBtn">Update completed intake summary</button>
+            <button class="btn green" type="button" id="downloadSummaryBtn">Download completed summary</button>
+            <button class="btn ghost" type="button" onclick="window.print()">Print / Save completed page as PDF</button>
+            <a class="btn blue" id="emailBtn" href="mailto:info@hdheed.com.au?subject=HD%20HeeD%20Staff%20Intake%20Documents">Email HD HeeD</a>
+          </div>
+
+          <h3>Completed intake summary</h3>
+          <div class="summary-box" id="summaryBox">Click “Update completed intake summary” after ticking the documents you are sending.</div>
+        </section>
+
+        <section id="submit">
+          <h2>7. How to submit</h2>
+          <div class="step">
+            <div class="num">1</div>
+            <div><strong>Complete this page</strong><p>Fill your details and tick the documents/certificates you are sending.</p></div>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <div><strong>Download or print the completed intake summary</strong><p>Use “Download completed summary” or “Print / Save completed page as PDF”.</p></div>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <div><strong>Email documents to HD HeeD</strong><p>Email the completed summary and all required documents to <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a>. If emailing is not possible, provide paper copies directly to HD HeeD.</p></div>
+          </div>
+
+          <div class="critical">
+            <strong>Do not attend a shift until confirmed</strong>
+            <p>Submitting documents does not automatically approve you to work. HD HeeD must review and confirm your pre-shift readiness first.</p>
+          </div>
+        </section>
+      </section>
+    </section>
   </main>
 
-<script>
-(function(){
-  const KEY='hdheed_bare_minimum_staff_form_v1';
-  const form=document.getElementById('staffForm');
-  const inputs=[...document.querySelectorAll('input, select, textarea')];
-  const today=new Date().toISOString().slice(0,10);
-  const reviewDate=document.getElementById('reviewDate');
-  if(reviewDate && !reviewDate.value) reviewDate.value=today;
+  <footer>
+    © HD HeeD • Staff Intake and Pre-Shift Requirements • Internal onboarding page
+  </footer>
 
-  function save(){
-    const data={};
-    inputs.forEach(el=>{ data[el.name||el.id]=el.type==='checkbox'?el.checked:el.value; });
-    localStorage.setItem(KEY, JSON.stringify(data));
-  }
-  function load(){
-    try{
-      const data=JSON.parse(localStorage.getItem(KEY)||'{}');
-      inputs.forEach(el=>{
-        const k=el.name||el.id;
-        if(data[k]!==undefined){ if(el.type==='checkbox') el.checked=!!data[k]; else el.value=data[k]; }
-      });
-    }catch(e){}
-  }
-  inputs.forEach(el=>el.addEventListener('input', save));
-  inputs.forEach(el=>el.addEventListener('change', save));
-  load();
+  <script>
+    const STORAGE_KEY = "hdheed_staffintake_v1";
+    const fields = ["fullName","preferredName","mobile","email","suburb","roleType","notes","dateCompleted"];
 
-  window.checkReady=function(){
-    const missing=[];
-    document.querySelectorAll('[data-required]').forEach(cb=>{
-      if(!cb.checked){
-        const text=cb.closest('.check')?.querySelector('span')?.textContent || cb.name;
-        missing.push(text);
+    function $(id){ return document.getElementById(id); }
+
+    function save(){
+      const data = {};
+      fields.forEach(id => data[id] = $(id)?.value || "");
+      data.required = Array.from(document.querySelectorAll("[data-required]")).map(c => c.checked);
+      data.check = Array.from(document.querySelectorAll("[data-check]")).map(c => c.checked);
+      data.attach = Array.from(document.querySelectorAll("[data-attach]")).map(c => c.checked);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      updateStatus();
+      updateEmailLink();
+    }
+
+    function restore(){
+      try{
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        fields.forEach(id => { if($(id) && data[id]) $(id).value = data[id]; });
+        document.querySelectorAll("[data-required]").forEach((c,i) => c.checked = !!data.required?.[i]);
+        document.querySelectorAll("[data-check]").forEach((c,i) => c.checked = !!data.check?.[i]);
+        document.querySelectorAll("[data-attach]").forEach((c,i) => c.checked = !!data.attach?.[i]);
+      }catch(e){}
+      if(!$("dateCompleted").value){
+        const today = new Date();
+        $("dateCompleted").value = today.toISOString().slice(0,10);
       }
-    });
-    if(!document.getElementById('workerName').value.trim()) missing.push('Worker full legal name');
-    if(!document.getElementById('phone').value.trim()) missing.push('Worker mobile number');
-    if(!document.getElementById('clearanceNo').value.trim()) missing.push('NDIS clearance number/reference recorded');
-    if(!document.getElementById('clearanceExpiry').value) missing.push('NDIS clearance expiry recorded');
-
-    const highRisk=document.getElementById('highRisk').checked;
-    const firstAid=document.getElementById('firstAid').checked;
-    const cpr=document.getElementById('cpr').checked;
-    if(highRisk && !firstAid) missing.push('First Aid certificate for high-risk/complex support');
-    if(highRisk && !cpr) missing.push('CPR certificate for high-risk/complex support');
-
-    const statusBox=document.getElementById('statusBox');
-    const title=document.getElementById('readyTitle');
-    const details=document.getElementById('readyDetails');
-    const decision=document.getElementById('decision');
-
-    if(missing.length===0){
-      statusBox.className='status ready';
-      title.textContent=highRisk ? 'Readiness: ready for high-risk support, if participant-specific training is appropriate' : 'Readiness: ready for basic low-risk shift';
-      details.textContent='Minimum items are complete. Still provide participant-specific handover before the shift.';
-      decision.value=highRisk ? 'Ready for basic low-risk shift' : 'Ready for basic low-risk shift';
-    }else{
-      statusBox.className= highRisk ? 'status stop' : 'status warn';
-      title.textContent='Readiness: not ready yet';
-      details.textContent='Missing: ' + missing.join('; ');
-      decision.value= highRisk && (!firstAid || !cpr) ? 'Ready only after First Aid/CPR' : 'Pending documents';
+      updateStatus();
+      updateEmailLink();
     }
 
-    const summary=makeSummary(missing, highRisk, firstAid, cpr);
-    document.getElementById('summary').textContent=summary;
-    save();
-  }
-
-  function val(id){return document.getElementById(id)?.value || '—'}
-  function chk(name){return document.querySelector(`[name="${name}"]`)?.checked ? 'Yes' : 'No'}
-  function makeSummary(missing, highRisk, firstAid, cpr){
-    const lines=[];
-    lines.push('HD HEED — BARE MINIMUM STAFF READINESS SUMMARY');
-    lines.push('Generated: '+new Date().toLocaleString('en-AU'));
-    lines.push('');
-    lines.push('Worker: '+val('workerName'));
-    lines.push('Preferred name: '+val('preferredName'));
-    lines.push('Phone: '+val('phone'));
-    lines.push('Email: '+val('email'));
-    lines.push('Suburb: '+val('suburb'));
-    lines.push('Role: '+val('role'));
-    lines.push('Emergency contact: '+val('emergencyName')+' / '+val('emergencyPhone'));
-    lines.push('');
-    lines.push('Minimum checks:');
-    lines.push('- Photo ID checked: '+chk('photoId'));
-    lines.push('- Right to work confirmed: '+chk('rightToWork'));
-    lines.push('- NDIS Worker Screening checked: '+chk('ndisClearance'));
-    lines.push('- NDIS clearance no/ref: '+val('clearanceNo'));
-    lines.push('- NDIS clearance expiry: '+val('clearanceExpiry'));
-    lines.push('- NDIS Worker Orientation Module: '+chk('orientation'));
-    lines.push('- NDIS Code of Conduct acknowledged: '+chk('codeConduct'));
-    lines.push('- Privacy/confidentiality acknowledged: '+chk('privacy'));
-    lines.push('- Incident reporting explained: '+chk('incident'));
-    lines.push('- Infection control basics completed: '+chk('infectionControl'));
-    lines.push('');
-    lines.push('First Aid / CPR:');
-    lines.push('- High-risk/complex support: '+(highRisk?'Yes':'No'));
-    lines.push('- First Aid sighted: '+(firstAid?'Yes':'No'));
-    lines.push('- CPR sighted: '+(cpr?'Yes':'No'));
-    lines.push('- Expiry: '+val('firstAidExpiry'));
-    lines.push('');
-    lines.push('First shift:');
-    lines.push('- Participant: '+val('participantName'));
-    lines.push('- First shift date: '+val('firstShiftDate'));
-    lines.push('- Participant-specific handover: '+chk('handover'));
-    lines.push('- Worker knows who to call: '+chk('contactPathway'));
-    lines.push('');
-    lines.push('Internal decision: '+val('decision'));
-    lines.push('Reviewed by: '+val('reviewedBy'));
-    lines.push('Review date: '+val('reviewDate'));
-    lines.push('Worker arrangement: '+val('employmentType'));
-    lines.push('Notes: '+val('notes'));
-    lines.push('');
-    if(missing.length){
-      lines.push('NOT READY — Missing items:');
-      missing.forEach(m=>lines.push('- '+m));
-    }else{
-      lines.push('READY — Minimum items complete. Provide participant-specific handover before shift.');
+    function getAttached(){
+      return Array.from(document.querySelectorAll("[data-attach]:checked")).map(c => c.value);
     }
-    return lines.join('\n');
-  }
 
-  window.copySummary=async function(){
-    window.checkReady();
-    const text=document.getElementById('summary').textContent;
-    try{ await navigator.clipboard.writeText(text); alert('Summary copied.'); }
-    catch(e){ alert('Could not copy automatically. Please select and copy the summary.'); }
-  }
+    function getAvailability(){
+      return Array.from(document.querySelectorAll("[data-check]:checked")).map(c => c.closest(".check").querySelector("strong").textContent.trim());
+    }
 
-  window.clearForm=function(){
-    if(!confirm('Clear this saved staff form from this browser?')) return;
-    localStorage.removeItem(KEY);
-    form.reset();
-    if(reviewDate) reviewDate.value=today;
-    document.getElementById('summary').textContent='Complete the form and click “Check readiness”.';
-    document.getElementById('statusBox').className='status warn';
-    document.getElementById('readyTitle').textContent='Readiness: not checked yet';
-    document.getElementById('readyDetails').textContent='Complete the minimum items below.';
-  }
-})();
-</script>
+    function buildSummary(){
+      const attached = getAttached();
+      const availability = getAvailability();
+      const requiredCount = document.querySelectorAll("[data-required]").length;
+      const requiredDone = document.querySelectorAll("[data-required]:checked").length;
+
+      const lines = [
+        "HD HeeD Staff Intake Summary",
+        "================================",
+        "",
+        "Worker details",
+        "Full legal name: " + ($("fullName").value || "Not provided"),
+        "Preferred name: " + ($("preferredName").value || "Not provided"),
+        "Mobile: " + ($("mobile").value || "Not provided"),
+        "Email: " + ($("email").value || "Not provided"),
+        "Suburb/area: " + ($("suburb").value || "Not provided"),
+        "Worker type/role: " + ($("roleType").value || "Not provided"),
+        "Date completed: " + ($("dateCompleted").value || "Not provided"),
+        "",
+        "Availability ticked",
+        availability.length ? availability.map(x => "- " + x).join("\\n") : "- None ticked",
+        "",
+        "Required items ticked as completed on this page",
+        requiredDone + " of " + requiredCount + " ticked",
+        "",
+        "Documents/certificates being attached or provided",
+        attached.length ? attached.map(x => "- " + x).join("\\n") : "- None ticked",
+        "",
+        "Notes",
+        $("notes").value || "No notes provided",
+        "",
+        "Submission instruction",
+        "Email this completed summary and all documents/certificates to info@hdheed.com.au, or provide paper copies directly to HD HeeD.",
+        "",
+        "Important",
+        "Submitting documents does not automatically approve the worker for shifts. HD HeeD must review and confirm readiness before any participant-facing shift."
+      ];
+
+      const summary = lines.join("\\n");
+      $("summaryBox").textContent = summary;
+      updateEmailLink(summary);
+      return summary;
+    }
+
+    function downloadSummary(){
+      const summary = buildSummary();
+      const name = ($("fullName").value || "worker").trim().replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"").toLowerCase();
+      const blob = new Blob([summary], {type:"text/plain;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "hdheed-staff-intake-summary-" + (name || "worker") + ".txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function updateEmailLink(summary){
+      const subject = encodeURIComponent("HD HeeD Staff Intake Documents");
+      const body = encodeURIComponent((summary || buildSummaryForEmail()).slice(0,1800) + "\\n\\nPlease attach the required documents/certificates to this email before sending.");
+      $("emailBtn").href = "mailto:info@hdheed.com.au?subject=" + subject + "&body=" + body;
+    }
+
+    function buildSummaryForEmail(){
+      const attached = getAttached();
+      return [
+        "Hello HD HeeD,",
+        "",
+        "Please find my staff intake documents/certificates attached.",
+        "",
+        "Worker name: " + ($("fullName").value || ""),
+        "Role/type: " + ($("roleType").value || ""),
+        "Phone: " + ($("mobile").value || ""),
+        "Email: " + ($("email").value || ""),
+        "",
+        "Documents/certificates I am attaching/providing:",
+        attached.length ? attached.map(x => "- " + x).join("\\n") : "- Not ticked yet",
+        "",
+        "Notes:",
+        $("notes").value || ""
+      ].join("\\n");
+    }
+
+    function updateStatus(){
+      const required = Array.from(document.querySelectorAll("[data-required]"));
+      const done = required.filter(c => c.checked).length;
+      const status = $("readinessStatus");
+      if(done === required.length && required.length){
+        status.textContent = "Readiness checklist: Required items ticked";
+        status.className = "status-box status-good";
+      }else{
+        status.textContent = "Readiness checklist: " + done + " of " + required.length + " required items ticked";
+        status.className = "status-box status-warn";
+      }
+    }
+
+    document.addEventListener("input", save);
+    document.addEventListener("change", save);
+    $("buildSummaryBtn").addEventListener("click", buildSummary);
+    $("downloadSummaryBtn").addEventListener("click", downloadSummary);
+
+    restore();
+  </script>
 </body>
 </html>
