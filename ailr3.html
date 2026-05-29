@@ -549,7 +549,7 @@ function select(label,path,options,hint="",mark=""){ const current=val(path)||""
 function radio(label,path,options,mark=""){ const current=val(path)||""; return `<div class="field"><label>${label}${marker(mark)}</label><div class="choice-grid two">${options.map(o=>`<label class="choice"><input type="radio" name="${esc(path)}" value="${esc(o)}" data-path="${esc(path)}" ${current===o?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div></div>`; }
 function checks(label,path,options,mark=""){ const current=val(path)||[]; return `<div class="field"><label>${label}${marker(mark)}</label><div class="choice-grid two">${options.map(o=>`<label class="choice"><input type="checkbox" value="${esc(o)}" data-check="${esc(path)}" ${current.includes(o)?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div></div>`; }
 function boolCheck(label,path,hint=""){ return `<label class="choice"><input type="checkbox" data-bool="${esc(path)}" ${val(path)?"checked":""}><span>${esc(label)}</span>${hint?`<small>${esc(hint)}</small>`:""}</label>`; }
-function nav(){ return `<div class="footer-nav"><button class="btn ghost" id="prevStep" ${S.step===0?"disabled":""}>Back</button><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" id="saveProgress">Save progress</button><button class="btn primary" id="nextStep">${S.step===sections.length-1?"Review again":"Next"}</button></div></div>`; }
+function nav(){ return `<div class="footer-nav"><button type="button" class="btn ghost" id="prevStep" ${S.step===0?"disabled":""}>Back</button><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn ghost" id="saveProgress">Save progress</button><button type="button" class="btn primary" id="nextStep">${S.step===sections.length-1?"Review again":"Next"}</button></div></div>`; }
 
 function missingRequired(){
   const missing=[];
@@ -608,10 +608,21 @@ function renderSteps(){
   list.innerHTML=sections.map((s,i)=>{
     const done=sectionState(s.key);
     const warn=!done && ["who","consent","participant","plan","contacts","supports","schedule","review"].includes(s.key);
-    return `<button class="step-btn ${S.step===i?"active":""} ${done?"done":""} ${warn?"warned":""}" data-step="${i}"><span class="num">${done?"✓":i+1}</span><span class="step-title">${esc(s.title)}</span></button>`;
+    return `<button type="button" class="step-btn ${S.step===i?"active":""} ${done?"done":""} ${warn?"warned":""}" data-step="${i}"><span class="num">${done?"✓":i+1}</span><span class="step-title">${esc(s.title)}</span></button>`;
   }).join("");
-  list.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{S.step=Number(b.dataset.step);save();render();window.scrollTo({top:0,behavior:"smooth"});});
+  list.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{S.step=Number(b.dataset.step);save();render();});
 }
+
+function focusCurrentSection(){
+  const section = document.getElementById("section");
+  if(!section) return;
+  // Keep desktop stable. On mobile, bring the active section just below the sticky header.
+  if(window.matchMedia("(max-width: 820px)").matches){
+    const y = section.getBoundingClientRect().top + window.pageYOffset - 90;
+    window.scrollTo({top:y, behavior:"smooth"});
+  }
+}
+
 function render(){
   const sec=sections[S.step];
   document.getElementById("section").innerHTML = renderSection(sec.key);
@@ -806,9 +817,9 @@ function renderReview(){
     ${warn.length?`<div class="warn"><b>Recommended before services start:</b><ul class="missing-list">${warn.map(m=>`<li>${esc(m)}</li>`).join("")}</ul></div>`:""}
     <div class="summary">${buildSummaryHTML()}</div>
     <div class="footer-nav">
-      <button class="btn ghost" id="prevStep">Back</button>
+      <button type="button" class="btn ghost" id="prevStep">Back</button>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn ghost" id="saveProgress">Save progress</button>
+        <button type="button" class="btn ghost" id="saveProgress">Save progress</button>
         <button class="btn green" id="downloadPdf" ${missing.length?"disabled":""}>Download / Save full intake PDF</button>
         <button class="btn ghost" id="downloadRtf" ${missing.length?"disabled":""}>Download editable RTF</button>
         <button class="btn ghost" id="downloadSummary" ${missing.length?"disabled":""}>Download short summary PDF</button>
@@ -821,8 +832,8 @@ function bind(){
   document.querySelectorAll("[data-check]").forEach(el=>{ el.onchange=()=>{ const arr=val(el.dataset.check)||[]; if(el.checked&&!arr.includes(el.value)) arr.push(el.value); if(!el.checked){const i=arr.indexOf(el.value); if(i>-1) arr.splice(i,1);} setVal(el.dataset.check, arr); }; });
   document.querySelectorAll("[data-bool]").forEach(el=>{ el.onchange=()=>{ const p=el.dataset.bool.split("."); let o=S; for(let i=0;i<p.length-1;i++) o=o[p[i]]; o[p[p.length-1]]=el.checked; save(); updateProgress(); }; });
   const prev=document.getElementById("prevStep"), next=document.getElementById("nextStep"), saveP=document.getElementById("saveProgress");
-  if(prev) prev.onclick=()=>{ if(S.step>0){S.step--;save();render();window.scrollTo({top:0,behavior:"smooth"});} };
-  if(next) next.onclick=()=>{ if(S.step<sections.length-1){S.step++;save();render();window.scrollTo({top:0,behavior:"smooth"});} };
+  if(prev) prev.onclick=()=>{ if(S.step>0){S.step--;save();render();} };
+  if(next) next.onclick=()=>{ if(S.step<sections.length-1){S.step++;save();render();} };
   if(saveP) saveP.onclick=()=>{save();alert("Progress saved on this device.")};
   const pdf=document.getElementById("downloadPdf"), rtf=document.getElementById("downloadRtf"), summ=document.getElementById("downloadSummary");
   if(pdf) pdf.onclick=()=>exportPrint("full");
@@ -907,7 +918,7 @@ function downloadRTF(){
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 document.getElementById("saveBtn").onclick=()=>{save();alert("Progress saved on this device.")};
-document.getElementById("clearBtn").onclick=()=>{ if(confirm("Clear all saved intake answers on this device?")){ localStorage.removeItem(STORAGE_KEY); S=deepClone(initial); render(); } };
+document.getElementById("clearBtn").onclick=()=>{ if(confirm("Clear all saved intake answers on this device?")){ localStorage.removeItem(STORAGE_KEY); S=deepClone(initial); render(); focusCurrentSection(); } };
 render();
 </script>
 </body>
