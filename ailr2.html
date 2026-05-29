@@ -163,45 +163,69 @@
       @page{size:A4;margin:12mm}
     }
 
-    /* ===============================
-       Desktop-enhanced layout
-       Same HTML, separate desktop/mobile experience
-       =============================== */
-    .desktop-help{display:none}
-    .desktop-help h3{margin:0 0 10px;font-size:18px;color:#111827}
-    .helper-card{border:1px solid #e5e7eb;background:linear-gradient(180deg,#fff,#f8fafc);border-radius:16px;padding:14px;margin-bottom:12px}
-    .helper-card b{display:block;color:#1e3a8a;margin-bottom:5px}
-    .helper-card p,.helper-card li{font-size:13px;color:#475569;line-height:1.45}
-    .helper-card ul{margin:8px 0 0 18px;padding:0}
-    .mini-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #dbeafe;background:#eff6ff;color:#1e40af;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:850;margin:3px 3px 0 0}
-    .btn{border:1px solid transparent;box-shadow:0 8px 20px rgba(15,23,42,.08);letter-spacing:.01em}
-    .btn.primary,.btn.green,.btn.blue{box-shadow:0 12px 28px rgba(81,43,138,.18)}
-    .btn.primary{background:linear-gradient(135deg,#512b8a,#6d28d9)}
-    .btn.blue{background:linear-gradient(135deg,#2563eb,#06b6d4)}
-    .btn.green{background:linear-gradient(135deg,#15803d,#16a34a)}
+
+    /* =========================================================
+       Desktop-first enhancement: full width form on large screens
+       Mobile still remains stacked and simple.
+       ========================================================= */
+    .btn{
+      border:1px solid transparent;
+      border-radius:999px;
+      letter-spacing:.01em;
+      box-shadow:0 10px 24px rgba(15,23,42,.10);
+    }
+    .btn.primary{background:linear-gradient(135deg,#512b8a,#7c3aed);box-shadow:0 14px 32px rgba(81,43,138,.22)}
+    .btn.blue{background:linear-gradient(135deg,#2563eb,#06b6d4);box-shadow:0 14px 32px rgba(37,99,235,.20)}
+    .btn.green{background:linear-gradient(135deg,#15803d,#16a34a);box-shadow:0 14px 32px rgba(21,128,61,.18)}
     .btn.ghost{background:linear-gradient(180deg,#ffffff,#eef2ff);border-color:#dbeafe;color:#1e3a8a}
-    .btn.warn{background:linear-gradient(180deg,#ffffff,#fff7ed);border-color:#fed7aa}
-    .choice{transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease}
-    .choice:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(15,23,42,.07)}
-    .choice:has(input:checked){border-color:#7c3aed;background:linear-gradient(180deg,#ffffff,#f5f3ff);box-shadow:0 0 0 3px #ede9fe, 0 12px 28px rgba(81,43,138,.08)}
-    .choice:has(input:checked) span{color:#3b0764}
-    @media(min-width:1200px){
-      .container{max-width:1460px}.header-inner,.topbar .inner,.ribbon div{max-width:1460px}
-      .layout{grid-template-columns:320px minmax(0,1fr) 300px;align-items:start}
-      .desktop-help{display:block;position:sticky;top:86px;align-self:start}
-      .section h2{font-size:32px}.section .lead{font-size:16px;max-width:900px}.card{padding:22px}
-      .grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
-      .choice-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.choice-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
-      .choice{padding:14px 15px;border-radius:16px}textarea{min-height:132px}
-      .footer-nav{background:linear-gradient(180deg,rgba(255,255,255,.85),#fff);position:sticky;bottom:0;margin-left:-22px;margin-right:-22px;margin-bottom:-22px;padding:16px 22px;border-top:1px solid #e5e7eb;backdrop-filter:blur(10px);border-radius:0 0 var(--radius) var(--radius)}
-      .steps{max-height:66vh}.step-btn{padding:11px 12px}.hero-main{grid-template-columns:1fr 190px;padding:32px}.hero-logo img{width:148px;height:148px}
+    .btn.warn{background:linear-gradient(180deg,#ffffff,#fff7ed);border-color:#fed7aa;color:#9a3412}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(15,23,42,.14)}
+
+    .brand p::after{content:" • NDIS Registered • Clinically led • Person-centred";}
+    .home-chipbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .home-chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:8px 12px;font-size:13px;font-weight:850;color:#fff}
+
+    .choice{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
+    .choice:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(15,23,42,.08)}
+    @supports selector(:has(*)){
+      .choice:has(input:checked){border-color:#7c3aed;background:linear-gradient(180deg,#ffffff,#f5f3ff);box-shadow:0 0 0 3px #ede9fe,0 12px 26px rgba(81,43,138,.08)}
+      .choice:has(input:checked) span{color:#3b0764}
     }
-    @media(min-width:1500px){
-      .container{max-width:1560px}.header-inner,.topbar .inner,.ribbon div{max-width:1560px}
-      .layout{grid-template-columns:340px minmax(0,1fr) 330px}.section h2{font-size:34px}.choice-grid.two{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+    @media(min-width:1100px){
+      .container{max-width:min(96vw,1660px);padding-left:20px;padding-right:20px}
+      .header-inner,.topbar .inner,.ribbon div{max-width:min(96vw,1660px)}
+      .layout{grid-template-columns:280px minmax(0,1fr);gap:22px;align-items:start}
+      .sidebar{top:92px}
+      .card{padding:26px;border-radius:24px}
+      .section h2{font-size:34px;letter-spacing:-.02em}
+      .section .lead{font-size:16px;max-width:980px}
+      .grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .choice-grid.two{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .choice-grid.three{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .choice{padding:15px 16px;border-radius:18px;min-height:58px}
+      input,select,textarea{border-radius:16px;padding:14px 15px}
+      textarea{min-height:132px}
+      .footer-nav{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,255,.86),#fff);backdrop-filter:blur(12px);margin:22px -26px -26px;padding:16px 26px;border-top:1px solid #e5e7eb;border-radius:0 0 24px 24px}
+      .hero-main{padding:34px;grid-template-columns:1fr 190px}
+      .hero-logo img{width:150px;height:150px;border-radius:30px}
+      .steps{max-height:68vh}
     }
+
+    @media(min-width:1450px){
+      .layout{grid-template-columns:300px minmax(0,1fr)}
+      .choice-grid.two{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .section h2{font-size:36px}
+      .card{padding:30px}
+      .footer-nav{margin:24px -30px -30px;padding:18px 30px}
+    }
+
     @media(max-width:760px){
-      .btn{width:auto;box-shadow:0 6px 16px rgba(15,23,42,.07)}.hero-main{padding:22px}.hero-actions .btn{flex:1 1 100%}.choice{padding:13px}.footer-nav .btn{flex:1 1 auto}
+      .brand p::after{content:""}
+      .btn{border-radius:14px;box-shadow:0 6px 16px rgba(15,23,42,.08)}
+      .choice{border-radius:14px}
+      .footer-nav .btn,.hero-actions .btn{flex:1 1 100%}
     }
 
   </style>
@@ -240,6 +264,7 @@
         <div>
           <h2>HD HeeD Participant Intake Form</h2>
           <p>This form helps HD HeeD understand the participant’s support needs, preferences, goals, risks, communication needs and documents required before supports commence.</p>
+          <div class="home-chipbar"><span class="home-chip">Registered NDIS Provider</span><span class="home-chip">Clinically led care</span><span class="home-chip">Person-centred</span><span class="home-chip">Not sure options included</span></div>
           <div class="hero-actions">
             <a class="btn ghost" href="tel:0286305500">Call 02 8630 5500</a>
             <a class="btn ghost" href="mailto:info@hdheed.com.au">Email HD HeeD</a>
@@ -274,37 +299,6 @@
         <div class="section" id="section"></div>
         <section class="print-report" id="printReport"></section>
       </section>
-
-      <aside class="card desktop-help no-print" aria-label="Desktop guidance panel">
-        <h3>Desktop guide</h3>
-        <div class="helper-card">
-          <b>How to complete</b>
-          <p>Use the left menu to move between sections. Required items are kept minimal so the client can finish without getting stuck.</p>
-          <span class="mini-pill">Autosave</span>
-          <span class="mini-pill">Review</span>
-          <span class="mini-pill">Export PDF</span>
-        </div>
-        <div class="helper-card">
-          <b>What HD HeeD reviews</b>
-          <ul>
-            <li>Requested supports and service area</li>
-            <li>Funding and plan management</li>
-            <li>Health, medication and risk information</li>
-            <li>Behaviour support or restrictive practices</li>
-            <li>Documents and consent forms required</li>
-          </ul>
-        </div>
-        <div class="helper-card">
-          <b>Final step</b>
-          <p>At review/export, download the full PDF and email it with any signed consent forms to:</p>
-          <p><a href="mailto:info@hdheed.com.au"><b>info@hdheed.com.au</b></a></p>
-        </div>
-        <div class="helper-card">
-          <b>Before services start</b>
-          <p>HD HeeD will review suitability, prepare the service agreement, confirm staff availability, and arrange participant-specific handover.</p>
-        </div>
-      </aside>
-
     </section>
   </main>
 
