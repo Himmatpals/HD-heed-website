@@ -1,1817 +1,636 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AILR — Advanced Intake & Long-form Registration | HD HeeD</title>
-<meta name="theme-color" content="#0b0f1a" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AILR — Advanced Intake & Long-form Registration | HD HeeD</title>
+  <meta name="description" content="HD HeeD AILR participant intake form for NDIS supports. Complete, review, download/print and email to HD HeeD.">
+  <meta name="theme-color" content="#512b8a">
 
-<style>
-  :root{
-    /* Core theme */
-    --al-ink:#0c1226; --al-bg:#0b0f1a; --al-panel:#10172a; --al-line:#243153;
-    --al-text:#e8edff; --al-a1:#4f46e5; --al-a2:#ec4899;
-    --al-ok:#22c55e; --al-warn:#f59e0b; --al-danger:#ef4444;
+  <!-- Favicons / App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="#512b8a">
+  <link rel="manifest" href="/site.webmanifest?v=3">
 
-    /* FX */
-    --al-accent: linear-gradient(135deg, var(--al-a1), var(--al-a2));
-    --al-secondary: linear-gradient(135deg, #06b6d4, #3b82f6);
-    --al-glow: rgba(236,72,153,.45);
-  }
-  *{ box-sizing:border-box }
-  html,body{ height:100% }
-  body{
-    margin:0; font-family: system-ui,Segoe UI,Roboto,Arial,sans-serif;
-    background: radial-gradient(1200px 600px at 10% -10%, rgba(79,70,229,.25), transparent 60%),
-                radial-gradient(1200px 600px at 90% 10%, rgba(236,72,153,.2), transparent 60%),
-                linear-gradient(180deg,#0b0f1a 0%, #11183a 45%, #0c1028 100%);
-    color:var(--al-text);
-    overflow-x:hidden;
-  }
-  a{ color:#9ec1ff; text-decoration:none }
-  a:hover{ color:#d4d4ff }
-
-  /* Header */
-  header{
-    position:sticky; top:0; z-index:50;
-    background: linear-gradient(135deg, #0a0e1f, #1a1f3a);
-    border-bottom:1px solid var(--al-line);
-    box-shadow: 0 6px 24px rgba(0,0,0,.55);
-    backdrop-filter: blur(6px);
-  }
-  header .bar{
-    display:flex; align-items:center; gap:12px; padding:12px 16px;
-    max-width:1120px; margin:0 auto;
-  }
-  .brand{
-    display:flex; align-items:center; gap:12px;
-  }
-  .brand img{
-    height:42px;
-    border-radius:10px;
-    box-shadow:0 4px 12px rgba(0,0,0,.5);
-  }
-  .brand-text{
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-  }
-  .brand-text .name{
-    font-weight:900;
-    letter-spacing:.2px;
-  }
-  .brand-text .tag{
-    font-size:12px;
-    color:#b6c8ff;
-  }
-  .biz-details{
-    font-size:12px;
-    color:#c5d5ff;
-    text-align:right;
-  }
-  .biz-details div{ white-space:nowrap }
-  .hint{font-size:12px; color:#9fb4ff}
-
-  @media (max-width:720px){
-    header .bar{
-      flex-direction:column;
-      align-items:flex-start;
-      gap:6px;
+  <style>
+    :root{
+      --purple:#512b8a;
+      --blue:#2563eb;
+      --green:#15803d;
+      --red:#b91c1c;
+      --amber:#b45309;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --bg:#f6f7fb;
+      --panel:#ffffff;
+      --line:#e5e7eb;
+      --soft:#f8fafc;
+      --dark:#0b1220;
+      --grad:linear-gradient(135deg,#512b8a,#2563eb);
+      --radius:18px;
+      --shadow:0 14px 40px rgba(15,23,42,.08);
     }
-    .biz-details{
-      text-align:left;
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:var(--blue);text-decoration:none}
+    a:hover{text-decoration:underline}
+    button,input,select,textarea{font:inherit}
+    .topbar{background:var(--dark);color:#fff}
+    .topbar .inner{max-width:1120px;margin:0 auto;padding:9px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px}
+    .topbar a{color:#fff;font-weight:800}
+    header.site{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 8px 24px rgba(15,23,42,.05)}
+    .header-inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .mark{width:48px;height:48px;border-radius:14px;background:var(--grad);color:#fff;display:grid;place-items:center;font-weight:900;box-shadow:0 12px 28px rgba(81,43,138,.25)}
+    .brand h1{font-size:18px;margin:0;line-height:1.15}
+    .brand p{font-size:13px;color:var(--muted);margin:3px 0 0}
+    .header-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{appearance:none;border:0;border-radius:14px;padding:12px 15px;font-weight:900;cursor:pointer;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:.18s}
+    .btn:hover{text-decoration:none;transform:translateY(-1px)}
+    .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .btn.primary{background:var(--purple);color:#fff}
+    .btn.blue{background:var(--blue);color:#fff}
+    .btn.green{background:var(--green);color:#fff}
+    .btn.ghost{background:#eef2ff;color:#1e3a8a;border:1px solid #dbeafe}
+    .btn.warn{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+    .btn.danger{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .container{max-width:1120px;margin:0 auto;padding:16px}
+    .hero{background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);margin:16px 0}
+    .hero-main{background:var(--grad);color:#fff;padding:28px}
+    .hero-main h2{font-size:clamp(27px,4vw,44px);margin:0 0 10px;line-height:1.05}
+    .hero-main p{max-width:900px;color:#eef2ff;line-height:1.6;margin:0}
+    .hero-strip{display:grid;border-top:1px solid rgba(255,255,255,.18)}
+    @media(min-width:760px){.hero-strip{grid-template-columns:repeat(4,1fr)}}
+    .hero-strip div{padding:14px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}
+    .hero-strip b{display:block;font-size:12px;text-transform:uppercase;color:#475569;letter-spacing:.04em;margin-bottom:4px}
+    .hero-strip span{font-weight:850;color:#111827}
+    .layout{display:grid;gap:16px}
+    @media(min-width:980px){.layout{grid-template-columns:300px 1fr}}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    .sidebar{position:sticky;top:86px;align-self:start}
+    .progress{height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:12px 0}
+    .bar{height:100%;width:0;background:var(--grad);transition:.25s}
+    .steps{display:grid;gap:8px;max-height:62vh;overflow:auto;padding-right:3px}
+    .step-btn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;text-align:left;display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+    .step-btn:hover{background:#f8fafc;border-color:#93c5fd}
+    .step-btn.active{background:#f5f3ff;border-color:#8b5cf6;box-shadow:0 0 0 3px #ede9fe}
+    .step-btn.done{background:#f0fdf4;border-color:#bbf7d0}
+    .step-btn.warned{background:#fffbeb;border-color:#fde68a}
+    .num{width:24px;height:24px;border-radius:999px;display:grid;place-items:center;background:#e2e8f0;color:#334155;font-size:12px;font-weight:900;flex:0 0 auto}
+    .done .num{background:#dcfce7;color:#166534}
+    .warned .num{background:#fef3c7;color:#92400e}
+    .step-title{font-weight:850;font-size:14px;line-height:1.25}
+    .small{font-size:13px;color:var(--muted);line-height:1.45}
+    .section h2{font-size:28px;line-height:1.15;margin:0 0 7px}
+    .section h3{font-size:18px;margin:18px 0 8px;color:#1e3a8a}
+    .section .lead{color:#475569;margin:0 0 16px;line-height:1.55}
+    .grid{display:grid;gap:14px}
+    @media(min-width:720px){.grid.two{grid-template-columns:1fr 1fr}.grid.three{grid-template-columns:repeat(3,1fr)}}
+    label{display:block;font-weight:850;font-size:14px;color:#111827}
+    input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:13px;padding:12px;margin-top:6px;background:#fff;color:var(--ink);font-size:16px}
+    textarea{min-height:110px;resize:vertical}
+    input:focus,select:focus,textarea:focus{outline:3px solid #dbeafe;border-color:#60a5fa}
+    .field{display:grid;gap:4px}
+    .hint{font-size:12px;color:#64748b;line-height:1.4}
+    .req{font-size:11px;background:#fee2e2;color:#991b1b;border-radius:999px;padding:3px 8px;margin-left:6px}
+    .rec{font-size:11px;background:#e0f2fe;color:#075985;border-radius:999px;padding:3px 8px;margin-left:6px}
+    .choice-grid{display:grid;gap:10px}
+    @media(min-width:720px){.choice-grid.two{grid-template-columns:1fr 1fr}.choice-grid.three{grid-template-columns:repeat(3,1fr)}}
+    .choice{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px;cursor:pointer}
+    .choice:hover{border-color:#93c5fd;background:#f8fafc}
+    .choice input{width:auto;margin:3px 0 0;flex:0 0 auto}
+    .choice span{font-weight:750}
+    .choice small{display:block;color:#64748b;margin-top:2px;line-height:1.35}
+    .notice{border-left:5px solid var(--purple);background:#faf5ff;border-radius:12px;padding:12px 14px;margin:14px 0;line-height:1.55}
+    .warn{border-left:5px solid var(--amber);background:#fffbeb;border-radius:12px;padding:12px 14px;margin:14px 0;line-height:1.55}
+    .ok{border-left:5px solid var(--green);background:#f0fdf4;border-radius:12px;padding:12px 14px;margin:14px 0;line-height:1.55}
+    .dangerbox{border-left:5px solid var(--red);background:#fef2f2;border-radius:12px;padding:12px 14px;margin:14px 0;line-height:1.55}
+    .docs{display:grid;gap:12px}
+    .doc{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff;display:grid;gap:10px}
+    .doc h3{margin:0;color:#111827;font-size:17px}
+    .doc p{margin:0;color:#475569;font-size:14px;line-height:1.45}
+    .doc-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .footer-nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px;border-top:1px dashed var(--line);padding-top:14px}
+    .summary{display:grid;gap:12px}
+    .summary details{border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px}
+    .summary summary{font-weight:900;color:#1e3a8a;cursor:pointer}
+    .kv{display:grid;gap:7px;margin-top:10px}
+    .kv-row{display:grid;gap:4px;border-bottom:1px dashed #eef2f7;padding-bottom:7px}
+    @media(min-width:700px){.kv-row{grid-template-columns:230px 1fr}}
+    .kv-row b{color:#334155}
+    .missing-list li{margin:5px 0}
+    .badge{display:inline-block;border-radius:999px;border:1px solid #dbeafe;background:#eff6ff;color:#1e40af;font-weight:850;padding:4px 10px;font-size:12px;margin:3px}
+    .print-only{display:none}
+    footer{text-align:center;font-size:13px;color:#64748b;padding:28px 16px}
+    .print-report{display:none}
+    .print-pack{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a}
+    .print-cover{border:1px solid #dbe2ea;border-radius:18px;overflow:hidden;margin-bottom:16px}
+    .print-cover-head{background:linear-gradient(135deg,#512b8a,#2563eb);color:#fff;padding:22px}
+    .print-cover-head h1{margin:0 0 8px;font-size:28px;line-height:1.1}
+    .print-cover-head p{margin:0;color:#eaf0ff}
+    .print-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+    .print-meta div{border-right:1px solid #e5e7eb;padding:12px;background:#fff}
+    .print-meta b{display:block;color:#475569;font-size:11px;text-transform:uppercase}
+    .print-meta span{font-weight:850}
+    .print-section{break-inside:avoid;border:1px solid #e5e7eb;border-radius:14px;background:#fff;margin:12px 0;padding:14px}
+    .print-section h2{font-size:18px;margin:0 0 10px;color:#1e3a8a}
+    .print-row{display:grid;grid-template-columns:220px 1fr;gap:10px;border-bottom:1px dashed #eef2f7;padding:7px 0}
+    .print-row b{color:#334155}
+    .signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+    .signature-box{border:1px dashed #94a3b8;border-radius:12px;padding:16px;min-height:120px}
+    @media(max-width:760px){
+      .header-inner{flex-direction:column;align-items:flex-start}
+      .header-actions{width:100%}.header-actions .btn{flex:1}
+      .sidebar{position:static}
     }
-  }
-
-  /* Hero */
-  .hero{ max-width:1120px; margin:14px auto 0; padding:16px; }
-  .hero .card{
-    background: linear-gradient(180deg, rgba(18,26,50,.85), rgba(12,19,38,.85));
-    border: 1px solid transparent; border-image: var(--al-accent) 1;
-    border-radius: 24px; padding: 24px; display:grid; gap:12px;
-    box-shadow: 0 24px 70px rgba(0,0,0,.55), inset 0 0 16px rgba(255,255,255,.05);
-    animation: fadeInUp .7s ease both;
-  }
-  .hero h1{
-    margin:0; font-size: clamp(24px, 4.8vw, 38px); font-weight:900;
-    background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  }
-  .hero p{ margin:0; color:#cfe0ff; opacity:.95; line-height:1.6 }
-  .meta{ display:flex; gap:8px; flex-wrap:wrap }
-  .pill{
-    border:1px solid var(--al-line); background: linear-gradient(135deg,#0f1937,#1a2345);
-    border-radius:999px; padding:8px 12px; color:#cfe0ff; font-size:13px;
-    box-shadow:0 2px 8px rgba(0,0,0,.3)
-  }
-  .notice{ font-size:14px; color:#99adff; font-style:italic }
-
-  /* Layout */
-  .wrap{
-    max-width:1120px; margin:12px auto 24px; padding:0 16px; display:grid; gap:16px;
-    grid-template-columns:1fr;
-  }
-  @media (min-width:980px){ .wrap{ grid-template-columns: 280px 1fr; } }
-
-  /* Sidebar (nav) */
-  .nav-sidebar{
-    position:sticky; top:92px; align-self:start; display:none;
-    background: linear-gradient(180deg, rgba(15,22,48,.85), rgba(11,16,38,.85));
-    border:1px solid transparent; border-image: var(--al-secondary) 1;
-    border-radius:20px; padding:16px;
-    box-shadow: 0 20px 50px rgba(0,0,0,.55), 0 0 14px var(--al-glow);
-    max-height: calc(100vh - 140px); overflow:auto;
-    animation: softPulse 3s ease-in-out infinite alternate;
-  }
-  @media (min-width:980px){ .nav-sidebar{ display:block } }
-  .nav-sidebar h3{
-    margin:0 0 12px; font-size:18px; font-weight:800;
-    background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  }
-  .nav-list{ list-style:none; padding:0; margin:0; display:grid; gap:8px }
-  .nav-item{
-    position:relative; padding:10px 12px; border-radius:12px; cursor:pointer; font-size:14px; color:#cfe0ff;
-    border:1px solid transparent; transform: translateZ(0);
-  }
-  .nav-item:hover{ background: linear-gradient(135deg,#121a3a,#1a2345); border-color:var(--al-line) }
-  .nav-item.current{ background: var(--al-accent); color:#fff; border-color:transparent; box-shadow: 0 0 10px var(--al-glow) }
-  .nav-item.completed{ color:var(--al-ok); border-left:3px solid var(--al-ok) }
-  .nav-item.locked{ opacity:.55; cursor:not-allowed; filter:saturate(.5) }
-  .nav-item.locked::after{
-    content:"🔒"; position:absolute; right:8px; top:8px; font-size:12px; opacity:.8
-  }
-
-  /* Stage */
-  .stage{
-    border:1px solid transparent; border-image: var(--al-accent) 1; border-radius:24px; padding:20px;
-    background: linear-gradient(180deg, rgba(16,23,42,.88), rgba(12,19,38,.88));
-    box-shadow: 0 20px 60px rgba(0,0,0,.55), inset 0 0 15px rgba(255,255,255,.05);
-    overflow:hidden;
-  }
-  .head{ display:flex; align-items:center; gap:12px; margin-bottom:8px }
-  .head .step{ font-weight:900; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
-  .meter{ height:10px; background: linear-gradient(90deg,#101838,#1a2345); border:1px solid var(--al-line); border-radius:999px; overflow:hidden; flex:1; box-shadow: inset 0 1px 3px rgba(0,0,0,.5) }
-  .meter>div{ height:100%; width:0%; background: var(--al-accent); transition: width .5s ease; box-shadow: 0 0 10px var(--al-glow) }
-
-  .q{ font-size: clamp(20px, 3.8vw, 26px); font-weight:900; line-height:1.35; margin:12px 0;
-      background: var(--al-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
-  .sub{ font-size:15px; color:#cfe0ff; margin:0 0 8px; line-height:1.6 }
-  .sub .consent-box{
-    border:1px dashed var(--al-line); background: linear-gradient(135deg,#0e162e,#1a223f);
-    border-radius:12px; padding:12px; margin-top:10px; box-shadow:0 4px 12px rgba(0,0,0,.3)
-  }
-  .sub ul{ margin:10px 0 0 20px; color:#d1e7ff }
-
-  /* Options & Inputs */
-  .opts{ display:grid; gap:12px }
-  .al-chip{
-    border:1px solid var(--al-line); background: linear-gradient(180deg,#121a3a,#0f172f);
-    color:#e7ebff; border-radius:16px; padding:16px; text-align:left; cursor:pointer; font-size:1.05rem;
-    box-shadow:0 4px 12px rgba(0,0,0,.3); transition: transform .25s ease, box-shadow .25s ease;
-    transform-style: preserve-3d; perspective: 600px;
-  }
-  .al-chip:hover{
-    transform: translateY(-2px) rotateX(3deg) rotateY(-2deg);
-    box-shadow: 0 16px 34px rgba(0,0,0,.32), 0 0 12px var(--al-glow);
-  }
-  .al-chip[aria-pressed="true"]{ box-shadow: 0 0 0 4px rgba(236,72,153,.35); border-image: var(--al-accent) 1 }
-
-  .inlinebox{
-    border:1px solid var(--al-line); background: linear-gradient(135deg,#0e162e,#1a223f);
-    border-radius:16px; padding:14px; display:grid; gap:12px; box-shadow:0 4px 12px rgba(0,0,0,.3)
-  }
-  .inlinebox input,.inlinebox select,.inlinebox textarea{
-    width:100%; padding:14px; border-radius:12px; border:1px solid #2a3b68;
-    background: linear-gradient(135deg,#0f1b3b,#1a2748); color:#e7ebff; font-size:16px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,.4); outline:none; transition:border-color .2s ease, box-shadow .2s ease
-  }
-  .inlinebox input:focus,.inlinebox select:focus,.inlinebox textarea:focus{
-    border-color:#ec4899; box-shadow: 0 0 8px var(--al-glow)
-  }
-  .row{ display:grid; gap:12px }
-  @media (min-width:680px){
-    .row.two{ grid-template-columns:repeat(2,minmax(0,1fr)) }
-    .row.three{ grid-template-columns:repeat(3,minmax(0,1fr)) }
-  }
-
-  /* Footer buttons */
-  .foot{
-    position:sticky; bottom:0; left:0; right:0; display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
-    margin-top:14px; padding-top:12px; border-top:1px dashed var(--al-line); background:transparent
-  }
-  .btn{
-    border:0; border-radius:16px; padding:14px 18px; font-weight:900; cursor:pointer; min-height:48px;
-    box-shadow:0 6px 20px rgba(0,0,0,.4); transition: transform .25s ease, box-shadow .25s ease
-  }
-  .btn:hover{ transform: translateY(-2px); box-shadow:0 12px 30px rgba(0,0,0,.5) }
-  .btn.primary{ background: var(--al-accent); color:#fff }
-  .btn.ghost{ background: linear-gradient(135deg,#121a3a,#1a2345); color:#e7ebff; border:1px solid var(--al-line) }
-  .btn.warn{ background: linear-gradient(135deg,#173155,#334c85); color:#ffd95c; border:1px solid #334c85 }
-
-  /* Review cards */
-  .review{ display:grid; gap:12px }
-  details.card{
-    border:1px solid var(--al-line); background: linear-gradient(135deg,#0f1731,#1a223f);
-    border-radius:16px; padding:12px; box-shadow:0 4px 12px rgba(0,0,0,.3)
-  }
-  summary{
-    cursor:pointer; font-weight:900; background: var(--al-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent
-  }
-  .kv{ display:grid; gap:6px; margin-top:10px }
-  .kv div{ display:flex; gap:12px; font-size:15px; color:#cedaff }
-  .kv div b{ min-width:220px; color:#ffe28f; font-weight:800; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
-  @media (max-width:520px){ .kv div{ flex-direction:column } .kv div b{ min-width:unset } }
-
-  /* Checklists */
-  .ck-list{ list-style:none; padding:0; margin:0; display:grid; gap:10px }
-  .ck-row{ display:flex; align-items:center; gap:12px; position:relative }
-  .ck-row input[type="checkbox"]{ position:absolute; opacity:0; pointer-events:none }
-  .ck-row label{
-    position:relative; padding-left:36px; cursor:pointer; user-select:none; line-height:1.2
-  }
-  .ck-row label::before{
-    content:""; position:absolute; left:6px; top:50%; transform:translateY(-50%);
-    width:22px; height:22px; border:2px solid #6677a8; border-radius:6px; margin-right:10px;
-    background:#0e162e; box-shadow:inset 0 2px 4px rgba(0,0,0,.35); transition: all .25s ease;
-  }
-  .ck-row input[type="checkbox"]:checked + label::before{
-    background: linear-gradient(135deg, var(--al-a1), var(--al-a2));
-    border-color: transparent;
-    box-shadow: 0 0 0 3px rgba(236,72,153,.25);
-  }
-  .ck-row input[type="checkbox"]:checked + label::after{
-    content:""; position:absolute; left:12px; top:50%;
-    width:8px; height:14px; border: solid #fff; border-width:0 3px 3px 0;
-    transform: translateY(-58%) rotate(45deg); border-radius:1px; box-shadow:0 0 6px rgba(0,0,0,.25);
-  }
-
-  /* Drop area (kept for completeness) */
-  .drop{ border:2px dashed #2a3b68; border-radius:16px; padding:14px; text-align:center; color:#cfe0ff; background: rgba(18,26,50,.2) }
-  .drop input{ display:none }
-  .drop label{ display:inline-block; padding:12px 14px; border-radius:12px; border:1px solid var(--al-line); background: linear-gradient(135deg,#121a3a,#1a2345); cursor:pointer; font-weight:800 }
-  .drop label:hover{ background: var(--al-accent); color:#fff }
-
-  .ok{color:var(--al-ok)} .warntext{color:var(--al-warn)} .danger{color:var(--al-danger)}
-  .hide{display:none}
-
-  /* Modal for docs */
-  .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.7); z-index:1000; backdrop-filter: blur(5px) }
-  .modal.open{ display:flex; animation: fadeIn .4s ease }
-  .modal .panel{
-    width:min(1000px,96vw); height:min(88vh,1000px); background: linear-gradient(135deg,#0b1226,#1a1f3a);
-    border:1px solid var(--al-line); border-radius:18px; overflow:hidden; display:flex; flex-direction:column;
-    box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 20px var(--al-glow)
-  }
-  .modal .head{ display:flex; align-items:center; justify-content:space-between; padding:12px; border-bottom:1px solid var(--al-line) }
-  .modal .head .ttl{ font-weight:900; background: var(--al-accent); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
-  .modal .body{ flex:1; background: linear-gradient(135deg,#0e162e,#1a223f) }
-  .modal embed{ width:100%; height:100% }
-  .modal .foot{ padding:12px; border-top:1px solid var(--al-line); display:flex; gap:10px; justify-content:flex-end }
-
-  .doc-list{ margin:10px 0 0 20px; color:#cfe0ff }
-  .doc-list li{ margin:8px 0 }
-  .doc-list b{ color:#ffe28f; background: var(--al-secondary); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
-  .doc-privacy{ margin-top:10px; font-size:13px; color:#9fb4ff }
-
-  /* Animations */
-  @keyframes fadeIn{ from{opacity:0; transform: translateY(10px)} to{opacity:1; transform:none} }
-  @keyframes fadeInUp{ from{opacity:0; transform: translateY(20px)} to{opacity:1; transform:none} }
-  @keyframes slideIn{ from{opacity:0; transform: translateX(24px)} to{opacity:1; transform:none} }
-  @keyframes slideOut{ from{opacity:1; transform:none} to{opacity:0; transform: translateX(-24px)} }
-  @keyframes softPulse{
-    from{ box-shadow: 0 20px 50px rgba(0,0,0,.55), 0 0 8px var(--al-glow) }
-    to  { box-shadow: 0 20px 50px rgba(0,0,0,.55), 0 0 20px var(--al-glow) }
-  }
-
-  .slide-enter{ animation: slideIn .35s cubic-bezier(.2,.8,.2,1) both }
-  .slide-exit{ animation: slideOut .25s cubic-bezier(.4,0,.2,1) both }
-</style>
+    @media print{
+      body{background:#fff;color:#111}
+      .topbar,header.site,.hero,.sidebar,.section,.no-print,footer{display:none!important}
+      .container{max-width:100%;padding:0}
+      .layout{display:block}
+      .card{border:0;box-shadow:none;padding:0}
+      .print-report{display:block!important}
+      .print-only{display:block}
+      .print-cover,.print-section{box-shadow:none}
+      .print-section{page-break-inside:avoid}
+      a{color:#111;text-decoration:none}
+      @page{size:A4;margin:12mm}
+    }
+  </style>
 </head>
 <body>
-
-<header>
-  <div class="bar">
-    <div class="brand">
-      <img src="hd heed.jpg" alt="HD HeeD logo">
-      <div class="brand-text">
-        <div class="name">HD HeeD</div>
-        <div class="tag">AILR — Advanced Intake &amp; Long-form Registration</div>
-      </div>
-    </div>
-    <div style="margin-left:auto" class="biz-details">
-      <div>HD HeeD Pty Ltd &nbsp;•&nbsp; ABN 47 665 228 768</div>
-      <div>info@hdheed.com.au &nbsp;•&nbsp; 02 8630 5500</div>
-      <div>www.hdheed.com.au</div>
+  <div class="topbar">
+    <div class="inner">
+      <div>HD HeeD • AILR participant intake</div>
+      <div><a href="tel:0286305500">02 8630 5500</a> • <a href="mailto:info@hdheed.com.au">info@hdheed.com.au</a></div>
     </div>
   </div>
-</header>
 
-<section class="hero">
-  <div class="card">
-    <h1>Let’s get you set up — thoroughly and simply</h1>
-    <p>Answer clear, step-by-step questions. Pick a card, or type your own answer. Choose <em>Not sure</em> or <em>Prefer not to say</em> whenever you like — you can finish later. At the end you can <strong>download</strong> your completed form and email it to <strong>info@hdheed.com.au</strong>.</p>
-    <div class="meta">
-      <span class="pill">NDIS participant onboarding</span>
-      <span class="pill">Consents & risks included</span>
-    </div>
-    <p class="notice">Tip: On mobile, you’ll see one focused screen at a time with large tap targets.</p>
-  </div>
-</section>
-
-<div class="wrap" id="app">
-  <!-- NAVIGATION SIDEBAR -->
-  <nav class="nav-sidebar" aria-label="Form navigation">
-    <h3>Form Progress</h3>
-    <ul id="navList" class="nav-list"></ul>
-  </nav>
-
-  <!-- MAIN STAGE -->
-  <main class="stage" role="region" aria-live="polite">
-    <div class="head">
-      <span id="stepTxt" class="step">Step 1/16</span>
-      <div class="meter" aria-label="Progress"><div id="bar"></div></div>
-    </div>
-
-    <div id="q" class="q">Welcome — let’s begin</div>
-    <p id="sub" class="sub">Pick a card or type. You can choose Not sure or Prefer not to say anywhere.</p>
-
-    <div id="opts" class="opts">
-      <!-- Initial content is replaced by JS builders -->
-    </div>
-
-    <div class="foot">
-      <div class="hint" id="saveHint">Draft saved</div>
-      <div style="display:flex; gap:8px; flex-wrap:wrap">
-        <button class="btn ghost" id="backBtn" type="button">← Back</button>
-        <button class="btn warn" id="saveExitBtn" type="button">Save & Exit</button>
-        <button class="btn primary" id="nextBtn" type="button">Next →</button>
+  <header class="site">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="mark">HD</div>
+        <div>
+          <h1>AILR — Advanced Intake & Long-form Registration</h1>
+          <p>Complete, review, download/print and email to info@hdheed.com.au</p>
+        </div>
+      </div>
+      <div class="header-actions no-print">
+        <button class="btn ghost" id="saveBtn" type="button">Save progress</button>
+        <button class="btn warn" id="clearBtn" type="button">Clear form</button>
       </div>
     </div>
+  </header>
+
+  <main class="container">
+    <section class="hero no-print">
+      <div class="hero-main">
+        <h2>HD HeeD Participant Intake Form</h2>
+        <p>This form helps HD HeeD understand the participant’s support needs, preferences, goals, risks, communication needs and documents required before supports commence.</p>
+      </div>
+      <div class="hero-strip">
+        <div><b>1. Complete</b><span>Answer what you know</span></div>
+        <div><b>2. Review</b><span>Check required items</span></div>
+        <div><b>3. Download</b><span>Save as PDF or RTF</span></div>
+        <div><b>4. Email</b><span>Send to HD HeeD</span></div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="card sidebar no-print">
+        <h2 style="margin:0;font-size:20px">Form progress</h2>
+        <div class="progress"><div class="bar" id="bar"></div></div>
+        <p class="small" id="progressText">0% complete</p>
+        <div class="steps" id="stepList"></div>
+        <div class="notice">
+          <b>Consent does not block browsing.</b><br>
+          The participant can view and complete the form first. Consent is checked before final download/export.
+        </div>
+        <p class="small">Autosave is stored only on this device/browser. Do not use a public/shared device unless appropriate.</p>
+      </aside>
+
+      <section class="card">
+        <div class="section" id="section"></div>
+        <section class="print-report" id="printReport"></section>
+      </section>
+    </section>
   </main>
-</div>
 
-<!-- DOC VIEWER MODAL -->
-<div id="docModal" class="modal" aria-hidden="true">
-  <div class="panel">
-    <div class="head">
-      <div class="ttl" id="docTitle">Document</div>
-      <button id="docClose" class="btn ghost">Close</button>
-    </div>
-    <div class="body"><embed id="docViewer" src="" type="application/pdf" /></div>
-    <div class="foot">
-      <a id="docDownload" class="btn primary" href="#" download>Download PDF</a>
-    </div>
-  </div>
-</div>
-
-<!-- CONFETTI CANVAS -->
-<canvas id="confetti" class="hide" style="position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:1500"></canvas>
+  <footer>© HD HeeD • AILR participant intake • Internal onboarding record</footer>
 
 <script>
-(function(){
-  /* ====== Config (no online submission now) ====== */
-  var STORAGE_KEY = "hdheed_ailr_v17";
+const STORAGE_KEY = "hdheed_ailr_reviewed_2026_v1";
+const EMAIL = "info@hdheed.com.au";
 
-  /* === Your 11 PDFs (unchanged) === */
-  var DOCS = [
-    { id:"handbook", title:"Client Handbook", requiresConsent:false,
-      fileUrl:"https://drive.google.com/file/d/1Du5TxEIgD9n--Gw5vkkkFXEij_SaLwLE/view?usp=sharing" },
-    { id:"privacy", title:"Privacy and Confidentiality Agreement", requiresConsent:true,
-      fileUrl:"https://drive.google.com/file/d/16qAcoUWtXC57hCg-B2atxpQRfDr53jK3/view?usp=sharing" },
-    { id:"money_property", title:"Participant Money and Property Consent Form", requiresConsent:true,
-      fileUrl:"https://drive.google.com/file/d/1OymxyfOYxtaqW2keNrRB_kmW8JmfP6vz/view?usp=sharing" },
-    { id:"incident_ack", title:"Incident Management Acknowledgement Form", requiresConsent:false,
-      fileUrl:"https://drive.google.com/file/d/1EYfi-4SoOxk8y70PNc2Fw70RiO7yxZ8a/view?usp=sharing" },
-    { id:"share_ndis_plan", title:"Consent to Share NDIS Plan", requiresConsent:true,
-      fileUrl:"https://drive.google.com/file/d/10j5FmZg1zfKeE9XrclmFZFY3BaGQj-mo/view?usp=sharing" },
-    { id:"share_info", title:"Consent to Share Information", requiresConsent:true,
-      fileUrl:"https://drive.google.com/file/d/1uJ3XCrdms2yHdnnDvXyaCEgUu91fZ1ip/view?usp=sharing" },
-    { id:"media_photos", title:"Consent for Media and Photographs", requiresConsent:true,
-      fileUrl:"https://drive.google.com/file/d/1UuNf69LxSLTOZNhwvi-17d3SeRRjik3t/view?usp=sharing" },
-    { id:"emergency_med", title:"Consent for Emergency Medical Treatment", requiresConsent:true,
-      fileUrl:"https://drive.google.com/file/d/1mGUnc7z9gVkYw3KEC6qiEhBxOUrB_zIx/view?usp=sharing" },
-    { id:"complaints_feedback", title:"Complaints and Feedback Form", requiresConsent:false,
-      fileUrl:"https://drive.google.com/file/d/12fK9zFbu0SnXyJ0z77hOvdXp-D9bwDU/view?usp=sharing" },
-    { id:"advocacy_auth", title:"Authority to Act as an Advocate", requiresConsent:true,
-      fileUrl:"https://drive.google.com/file/d/1Ips2uYAXgsg_35ATUJzsWpad4haMlAtD/view?usp=sharing" },
-    { id:"key_authority", title:"Authority to Hold a Key", requiresConsent:true,
-      fileUrl:"https://drive.google.com/file/d/1sBNptUA3mTu55NdDPNUAexqLOjfPmPQ-/view?usp=sharing" }
-  ];
-  function driveUrl(url){
-    return url || "#";
-  }
+const docs = [
+  {id:"handbook", title:"Client Handbook", note:"Information about HD HeeD services, participant rights, responsibilities and service pathways.", required:false, url:"https://drive.google.com/file/d/1Du5TxEIgD9n--Gw5vkkkFXEij_SaLwLE/view?usp=sharing"},
+  {id:"privacy", title:"Privacy and Confidentiality Agreement", note:"Explains how personal and health information is collected, used, stored and shared.", required:true, url:"https://drive.google.com/uc?export=download&id=16qAcoUWtXC57hCg-B2atxpQRfDr53jK3"},
+  {id:"money_property", title:"Participant Money and Property Consent Form", note:"Use if staff may handle participant money, property, cards, keys or valuables.", required:false, url:"https://drive.google.com/file/d/1OymxyfOYxtaqW2keNrRB_kmW8JmfP6vz/view?usp=sharing"},
+  {id:"incident_ack", title:"Incident Management Acknowledgement Form", note:"Explains how incidents are reported, managed and followed up.", required:false, url:"https://drive.google.com/file/d/1EYfi-4SoOxk8y70PNc2Fw70RiO7yxZ8a/view?usp=sharing"},
+  {id:"share_ndis_plan", title:"Consent to Share NDIS Plan", note:"Allows HD HeeD to receive or discuss relevant NDIS plan information.", required:false, url:"https://drive.google.com/file/d/10j5FmZg1zfKeE9XrclmFZFY3BaGQj-mo/view?usp=sharing"},
+  {id:"share_info", title:"Consent to Share Information", note:"Allows HD HeeD to liaise with nominated people or professionals involved in support.", required:false, url:"https://drive.google.com/file/d/1uJ3XCrdms2yHdnnDvXyaCEgUu91fZ1ip/view?usp=sharing"},
+  {id:"media_photos", title:"Consent for Media and Photographs", note:"Only required if photos/media may be used outside ordinary care documentation.", required:false, url:"https://drive.google.com/file/d/1UuNf69LxSLTOZNhwvi-17d3SeRRjik3t/view?usp=sharing"},
+  {id:"emergency_med", title:"Consent for Emergency Medical Treatment", note:"Supports emergency response and medical communication where required.", required:false, url:"https://drive.google.com/file/d/1mGUnc7z9gVkYw3KEC6qiEhBxOUrB_zIx/view?usp=sharing"},
+  {id:"complaints_feedback", title:"Complaints and Feedback Form", note:"Explains how feedback and complaints can be raised.", required:false, url:"https://drive.google.com/file/d/12fK9zFbu0SnXyJ0Zs77hOvdXp-D9bwDU/view?usp=sharing"},
+  {id:"advocacy_auth", title:"Authority to Act as an Advocate", note:"Use if someone is authorised to act or communicate on behalf of the participant.", required:false, url:"https://drive.google.com/file/d/1Ips2uYAXgsg_35ATUJzsWpad4haMlAtD/view?usp=sharing"},
+  {id:"key_authority", title:"Authority to Hold a Key", note:"Use only if HD HeeD is required to hold or access a key/key safe arrangement.", required:false, url:"https://drive.google.com/file/d/1sBNptUA3mTu55NdDPNUAexqLOjfPmPQ-/view?usp=sharing"}
+];
 
-  /* ====== Helpers ====== */
-  function $(s,r){ return (r||document).querySelector(s); }
-  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
-  function setSaveHint(t){ var elh=$("#saveHint"); if(elh) elh.textContent=t; }
-  function cloneSafe(obj){
-    try{ if (typeof structuredClone==="function") return structuredClone(obj); }catch(e){}
-    try{ return JSON.parse(JSON.stringify(obj)); }catch(e){ return obj; }
-  }
+const initial = {
+  step:0,
+  who:{role:"", name:"", relationship:"", authority:""},
+  consent:{collect:"", share:"", emergency:"", declaration:"", notes:""},
+  participant:{legal_name:"", preferred_name:"", pronouns:"", dob:"", ndis_number:"", address1:"", address2:"", suburb:"", state:"NSW", postcode:""},
+  plan:{management:"", start:"", end:"", plan_manager_org:"", plan_manager_contact:"", plan_manager_email:"", plan_manager_phone:"", support_category:""},
+  contacts:{preferred_method:"", email:"", phone:"", emergency_name:"", emergency_relationship:"", emergency_phone:"", sc_name:"", sc_org:"", sc_email:"", sc_phone:"", gp_name:"", gp_practice:"", gp_phone:"", gp_email:""},
+  communication:{language:"", interpreter:"", interpreter_language:"", cultural:"", decision_support:"", worker_gender:"", transport:""},
+  living:{residence:"", lives_with:"", access:"", key_safe:"", smoking:"", hazards:"", pets:""},
+  supports:{types:[], other:"", details:"", goals:"", outcomes:""},
+  schedule:{windows:[], days:[], hours:"", urgency:"", start:""},
+  clinical:{diagnoses:"", other_diagnoses:"", allergies:"", mobility:"", equipment:"", continence:"", cognition:"", falls:"", pressure:"", seizures:"", seizure_plan:"", diet:"", swallowing:"", stoma:""},
+  meds:{has_meds:"", method:"", webster:"", storage:"", notes:""},
+  risks:{behaviour:"", behaviour_notes:"", clinical:[], environmental:[], home:[], other:"", overall:""},
+  bsp:{has_bsp:"", restrictive:"", provider:"", notes:""},
+  documents:{},
+  submitter:{name:"", email:"", phone:""}
+};
+docs.forEach(d => initial.documents[d.id] = {read:false, applies:false});
 
-  /* ====== State ====== */
-  var S = {
-    i: 0,
-    caller: { role:null, name:null, relationship:null, consent:null },
-    participant: {
-      legal_name:null, preferred_name:null, pronouns:null, dob:null, ndis_number:null,
-      address:{ line1:null, line2:null, suburb:null, postcode:null, state:null },
-      plan_mgmt:null, plan_manager:{ org:null, contact:null, email:null, phone:null },
-      plan_dates:{ start:null, end:null }
-    },
-    contacts:{
-      email:null, phone:null,
-      emergency:{ name:null, relationship:null, phone:null },
-      support_coordinator:{ name:null, org:null, email:null, phone:null },
-      gp:{ name:null, practice:null, email:null, phone:null }
-    },
-    comms:{
-      primary_language:null, interpreter:null, interpreter_language:null,
-      cultural_considerations:null,
-      preferences:{ worker_gender:null, worker_gender_other:null, transport_required:null }
-    },
-    living:{
-      residence_type:null, lives_with:null, entry_notes:null, keysafe:null, smoking_on_premises:null, hazards:null
-    },
-    clinical:{
-      primary_diagnoses:null, other_diagnoses:null, allergies:"",
-      mobility:null, equipment:null, continence:null, cognition:null, pressure_injury_risk:null,
-      seizures:{ has:null, plan:null, frequency:null }, falls_risk:null, diet_notes:null,
-      stoma_care:null
-    },
-    medications:{
-      has_meds:null, method:"Not sure", storage:null, webster_pack:null, self_admin:null, staff_admin:null, notes:null
-    },
-    risks:{
-      behavioural:{ present:null, notes:null },
-      clinical:{ wounds:false, diabetes:false, tracheostomy:false, tube_feeding:false, mental_health:false, stoma_care:false, other:null },
-      environmental:{ animals:false, hoarding:false, other:null, weapons:false },
-      home_checklist:{ trip_hazards:false, smoke_alarms:false, lighting:false, bathroom_safety:false, notes:null },
-      other_notes:null,
-      overall_rating:"Not sure"
-    },
-    bsp:{ has_bsp:null, provider:null, restrictive_practices:null, notes:null },
-    supports:{
-      required:[],
-      required_other:null,
-      details_text:null,
-      core:[], capacity:[],
-      core_other:null, capacity_other:null,
-      goals:null, outcomes:null
-    },
-    schedule:{ windows:[], days:[], start_preference:null, hours_per_week:null, urgency:"Not sure" },
-    policy_ack:{ handbook:false, incident:false, complaints:false },
-    emergency_advocacy:null,
-    uploads:{ files:[] },
-    submitter:{ name:null, email:null, phone:null },
-    acks:{},
-    notes:[]
+let S = load();
+
+const sections = [
+  {key:"notice", title:"Collection notice"},
+  {key:"who", title:"Who is completing"},
+  {key:"consent", title:"Consent"},
+  {key:"participant", title:"Participant"},
+  {key:"plan", title:"NDIS plan"},
+  {key:"contacts", title:"Contacts"},
+  {key:"communication", title:"Communication"},
+  {key:"living", title:"Living/access"},
+  {key:"supports", title:"Supports"},
+  {key:"schedule", title:"Schedule"},
+  {key:"clinical", title:"Health"},
+  {key:"meds", title:"Medication"},
+  {key:"risks", title:"Risks"},
+  {key:"bsp", title:"BSP / restrictive practices"},
+  {key:"documents", title:"Documents"},
+  {key:"review", title:"Review/export"}
+];
+
+function deepClone(obj){ return JSON.parse(JSON.stringify(obj)); }
+function load(){ try{return JSON.parse(localStorage.getItem(STORAGE_KEY)) || deepClone(initial)} catch(e){return deepClone(initial)} }
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); }
+function val(path){ return path.split(".").reduce((o,k)=> o ? o[k] : undefined, S); }
+function setVal(path, value){ const p=path.split("."); let o=S; for(let i=0;i<p.length-1;i++) o=o[p[i]]; o[p[p.length-1]]=value; save(); updateProgress(); }
+function esc(s){ return String(s ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+function marker(type){ return type==="required" ? `<span class="req">required before export</span>` : type==="recommended" ? `<span class="rec">recommended</span>` : ""; }
+function field(label,path,type="text",hint="",mark=""){ const id=path.replaceAll(".","_"); return `<div class="field"><label for="${id}">${label}${marker(mark)}</label><input id="${id}" type="${type}" value="${esc(val(path)||"")}" data-path="${path}">${hint?`<div class="hint">${hint}</div>`:""}</div>`; }
+function textarea(label,path,hint="",mark=""){ const id=path.replaceAll(".","_"); return `<div class="field"><label for="${id}">${label}${marker(mark)}</label><textarea id="${id}" data-path="${path}">${esc(val(path)||"")}</textarea>${hint?`<div class="hint">${hint}</div>`:""}</div>`; }
+function select(label,path,options,hint="",mark=""){ const current=val(path)||""; return `<div class="field"><label>${label}${marker(mark)}</label><select data-path="${path}"><option value="">Select...</option>${options.map(o=>`<option ${current===o?"selected":""}>${esc(o)}</option>`).join("")}</select>${hint?`<div class="hint">${hint}</div>`:""}</div>`; }
+function radio(label,path,options,mark=""){ const current=val(path)||""; return `<div class="field"><label>${label}${marker(mark)}</label><div class="choice-grid two">${options.map(o=>`<label class="choice"><input type="radio" name="${esc(path)}" value="${esc(o)}" data-path="${esc(path)}" ${current===o?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div></div>`; }
+function checks(label,path,options,mark=""){ const current=val(path)||[]; return `<div class="field"><label>${label}${marker(mark)}</label><div class="choice-grid two">${options.map(o=>`<label class="choice"><input type="checkbox" value="${esc(o)}" data-check="${esc(path)}" ${current.includes(o)?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div></div>`; }
+function boolCheck(label,path,hint=""){ return `<label class="choice"><input type="checkbox" data-bool="${esc(path)}" ${val(path)?"checked":""}><span>${esc(label)}</span>${hint?`<small>${esc(hint)}</small>`:""}</label>`; }
+function nav(){ return `<div class="footer-nav"><button class="btn ghost" id="prevStep" ${S.step===0?"disabled":""}>Back</button><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" id="saveProgress">Save progress</button><button class="btn primary" id="nextStep">${S.step===sections.length-1?"Review again":"Next"}</button></div></div>`; }
+
+function missingRequired(){
+  const missing=[];
+  if(!S.who.role) missing.push("Who is completing this form");
+  if(!S.who.authority) missing.push("Authority / relationship declaration");
+  if(S.consent.collect!=="Yes") missing.push("Consent to collect and use information");
+  if(!S.consent.declaration) missing.push("Final declaration that information is correct");
+  if(!S.participant.legal_name) missing.push("Participant legal name");
+  if(!S.participant.address1 || !S.participant.suburb || !S.participant.state || !S.participant.postcode) missing.push("Participant address");
+  if(!S.plan.management) missing.push("Plan management type");
+  if(!S.contacts.email && !S.contacts.phone) missing.push("At least one contact method");
+  if(!S.supports.other && (!S.supports.types || S.supports.types.length===0)) missing.push("Support type or support details");
+  if(!S.schedule.urgency) missing.push("Urgency / start timeframe");
+  if(!S.submitter.email && !S.submitter.phone) missing.push("Submitter email or phone");
+  if(S.communication.interpreter==="Yes" && !S.communication.interpreter_language) missing.push("Interpreter language");
+  if(S.meds.has_meds==="Yes" && !S.meds.method) missing.push("Medication management method");
+  if(S.bsp.has_bsp==="Yes" && !S.bsp.provider && !S.bsp.notes) missing.push("Behaviour Support Plan provider or notes");
+  if(S.bsp.restrictive==="Yes" && !S.bsp.notes) missing.push("Restrictive practice notes");
+  return missing;
+}
+function warnings(){
+  const w=[];
+  if(!S.participant.dob) w.push("Date of birth is recommended for participant identification.");
+  if(!S.participant.ndis_number) w.push("NDIS number is recommended if known.");
+  if(!S.contacts.emergency_name || !S.contacts.emergency_phone) w.push("Emergency contact is recommended before services start.");
+  if(!S.contacts.gp_name && !S.contacts.gp_phone) w.push("GP details are recommended for higher-risk or clinical supports.");
+  if(!S.clinical.allergies) w.push("Allergies should be completed if known, or write 'No known allergies'.");
+  if(S.risks.overall==="High") w.push("High risk selected — HD HeeD must review suitability before confirming services.");
+  if(S.risks.clinical.includes("High intensity support") || S.supports.types.includes("High intensity personal activities")) w.push("High intensity supports require additional assessment, worker training and service suitability review.");
+  return w;
+}
+function sectionState(key){
+  if(key==="notice") return true;
+  if(key==="who") return !!S.who.role && !!S.who.authority;
+  if(key==="consent") return !!S.consent.collect;
+  if(key==="participant") return !!(S.participant.legal_name && S.participant.address1 && S.participant.suburb && S.participant.state && S.participant.postcode);
+  if(key==="plan") return !!S.plan.management;
+  if(key==="contacts") return !!(S.contacts.email || S.contacts.phone);
+  if(key==="communication") return S.communication.interpreter!=="Yes" || !!S.communication.interpreter_language;
+  if(key==="supports") return !!(S.supports.other || S.supports.types.length);
+  if(key==="schedule") return !!S.schedule.urgency;
+  if(key==="meds") return S.meds.has_meds!=="Yes" || !!S.meds.method;
+  if(key==="bsp") return (S.bsp.has_bsp!=="Yes" || !!S.bsp.provider || !!S.bsp.notes) && (S.bsp.restrictive!=="Yes" || !!S.bsp.notes);
+  if(key==="review") return missingRequired().length===0;
+  return true;
+}
+function updateProgress(){
+  const done = sections.filter(s=>sectionState(s.key)).length;
+  const pct = Math.round(done/sections.length*100);
+  document.getElementById("bar").style.width = pct+"%";
+  document.getElementById("progressText").textContent = `${pct}% complete — ${done} of ${sections.length} sections ready`;
+  renderSteps();
+}
+function renderSteps(){
+  const list=document.getElementById("stepList");
+  list.innerHTML=sections.map((s,i)=>{
+    const done=sectionState(s.key);
+    const warn=!done && ["who","consent","participant","plan","contacts","supports","schedule","review"].includes(s.key);
+    return `<button class="step-btn ${S.step===i?"active":""} ${done?"done":""} ${warn?"warned":""}" data-step="${i}"><span class="num">${done?"✓":i+1}</span><span class="step-title">${esc(s.title)}</span></button>`;
+  }).join("");
+  list.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{S.step=Number(b.dataset.step);save();render();window.scrollTo({top:0,behavior:"smooth"});});
+}
+function render(){
+  const sec=sections[S.step];
+  document.getElementById("section").innerHTML = renderSection(sec.key);
+  bind();
+  updateProgress();
+}
+function renderSection(key){
+  const views={
+    notice:()=>`<h2>Collection notice</h2><p class="lead">Please read this before entering information. This form is for intake and service suitability review only.</p>
+      <div class="notice"><b>Why HD HeeD collects this information:</b> to understand the participant’s support needs, preferences, goals, safety risks, contact details, NDIS funding pathway and documents needed before services can commence.</div>
+      <div class="warn"><b>Privacy and minimisation:</b> Only provide information relevant to requested supports. Do not include unrelated health history, bank details, Medicare number, keysafe code, or unnecessary identity documents in this form.</div>
+      <div class="ok"><b>No online submission:</b> your answers are saved only in this browser. At the end, download/print the intake and email it to <a href="mailto:${EMAIL}">${EMAIL}</a>.</div>
+      ${nav()}`,
+
+    who:()=>`<h2>Who is completing this form?</h2><p class="lead">Tell us who is providing the information and whether they have authority to do so.</p>
+      ${radio("I am the", "who.role", ["Participant","Family / carer","Nominee / guardian","Support coordinator","Plan manager","Health professional","Other"], "required")}
+      <div class="grid two">${field("Your name","who.name")}${field("Relationship to participant","who.relationship")}</div>
+      ${radio("Do you have authority or consent to provide this information?", "who.authority", ["Yes","Participant is completing","Not sure","No"], "required")}
+      ${nav()}`,
+
+    consent:()=>`<h2>Consent</h2><p class="lead">Consent is not used to stop the participant from viewing the form. It is required before final export because this form includes personal and sensitive health information.</p>
+      ${radio("Do you consent to HD HeeD collecting and using this information for intake, assessment and service coordination?", "consent.collect", ["Yes","Not yet","No","Not sure"], "required")}
+      ${radio("Can HD HeeD contact the support coordinator, plan manager, nominee, GP or other listed professionals if required?", "consent.share", ["Yes","No","Not sure"])}
+      ${radio("In an emergency or serious safety concern, can HD HeeD share relevant information to keep the participant or others safe?", "consent.emergency", ["Yes","No","Not sure"])}
+      ${textarea("Consent notes or restrictions","consent.notes")}
+      ${radio("Final declaration: the information provided is accurate to the best of my knowledge", "consent.declaration", ["Yes","Not yet"], "required")}
+      ${nav()}`,
+
+    participant:()=>`<h2>Participant details</h2><p class="lead">Basic details needed to identify the participant and assess service area.</p>
+      <div class="grid two">${field("Legal name","participant.legal_name","text","","required")}${field("Preferred name","participant.preferred_name")}</div>
+      <div class="grid three">${field("Pronouns","participant.pronouns")}${field("Date of birth","participant.dob","date","","recommended")}${field("NDIS number","participant.ndis_number","text","","recommended")}</div>
+      <h3>Address</h3>
+      <div class="grid two">${field("Address line 1","participant.address1","text","","required")}${field("Address line 2","participant.address2")}</div>
+      <div class="grid three">${field("Suburb","participant.suburb","text","","required")}${field("State","participant.state","text","","required")}${field("Postcode","participant.postcode","text","","required")}</div>${nav()}`,
+
+    plan:()=>`<h2>NDIS plan and funding</h2><p class="lead">This helps HD HeeD understand the payment pathway and prepare the later service agreement.</p>
+      ${radio("Plan management type","plan.management",["NDIA-managed","Plan-managed","Self-managed","Not sure"], "required")}
+      <div class="grid two">${field("Plan start date","plan.start","date")}${field("Plan end date","plan.end","date")}</div>
+      ${select("Likely support category / funding area","plan.support_category",["Assistance with daily life","Community participation","Capacity building","Core supports","Nursing / disability-related health support","Not sure"])}
+      <h3>Plan manager, if applicable</h3>
+      <div class="grid two">${field("Plan manager organisation","plan.plan_manager_org")}${field("Contact person","plan.plan_manager_contact")}</div>
+      <div class="grid two">${field("Plan manager email","plan.plan_manager_email","email")}${field("Plan manager phone","plan.plan_manager_phone","tel")}</div>${nav()}`,
+
+    contacts:()=>`<h2>Contacts and professionals</h2><p class="lead">At least one contact method is needed so HD HeeD can continue intake.</p>
+      ${select("Preferred contact method","contacts.preferred_method",["Phone","Email","SMS","Support coordinator","Nominee / representative"])}
+      <div class="grid two">${field("Participant / representative email","contacts.email","email","","required")}${field("Participant / representative phone","contacts.phone","tel","","required")}</div>
+      <h3>Emergency contact</h3>
+      <div class="grid three">${field("Name","contacts.emergency_name","text","","recommended")}${field("Relationship","contacts.emergency_relationship")}${field("Phone","contacts.emergency_phone","tel","","recommended")}</div>
+      <h3>Support coordinator</h3>
+      <div class="grid two">${field("Name","contacts.sc_name")}${field("Organisation","contacts.sc_org")}</div>
+      <div class="grid two">${field("Email","contacts.sc_email","email")}${field("Phone","contacts.sc_phone","tel")}</div>
+      <h3>GP / primary care</h3>
+      <div class="grid two">${field("GP name","contacts.gp_name")}${field("Practice","contacts.gp_practice")}</div>
+      <div class="grid two">${field("GP phone","contacts.gp_phone","tel")}${field("GP email","contacts.gp_email","email")}</div>${nav()}`,
+
+    communication:()=>`<h2>Communication and preferences</h2><p class="lead">This helps HD HeeD provide person-centred, respectful support.</p>
+      <div class="grid two">${field("Primary language","communication.language")}${field("Interpreter language, if needed","communication.interpreter_language","text",S.communication.interpreter==="Yes"?"Required because interpreter is selected.":"","")}</div>
+      ${radio("Interpreter required?","communication.interpreter",["Yes","No","Not sure"])}
+      ${select("Decision-making support","communication.decision_support",["Independent decision-maker","Supported decision-making","Nominee / guardian involved","Not sure"])}
+      ${textarea("Cultural, religious, communication or trauma-informed considerations","communication.cultural")}
+      <div class="grid two">${select("Worker gender preference","communication.worker_gender",["No preference","Female","Male","Other","Prefer not to say"])}${radio("Transport required?","communication.transport",["Yes","No","Not sure"])}</div>${nav()}`,
+
+    living:()=>`<h2>Living situation and access</h2><p class="lead">This supports safe home visits and respectful planning.</p>
+      <div class="grid two">${select("Residence type","living.residence",["Private home","Unit/apartment","Group home","Supported accommodation","SIL/SDA","Other"])}${field("Lives with","living.lives_with")}</div>
+      ${textarea("Entry/access notes","living.access","Gate, parking, lift, pets, who opens the door, support worker arrival instructions.")}
+      <div class="grid two">${radio("Key safe available?","living.key_safe",["Yes","No","Not sure"])}${radio("Smoking on premises?","living.smoking",["Yes","No","Prefer not to say"])}</div>
+      ${field("Pets / animals at home","living.pets")}
+      ${textarea("Home hazards or access concerns","living.hazards","Stairs, loose rugs, animals, hoarding, poor lighting, bathroom safety concerns.")}${nav()}`,
+
+    supports:()=>`<h2>Supports required</h2><p class="lead">Select all that apply. Use the notes box for anything specific.</p>
+      ${checks("Support types","supports.types",["Personal care","Domestic assistance","Community access","Transport / travel support","Nursing care","Medication prompting","High intensity personal activities","Daily living skills","Respite / carer relief","Daily tasks / shared living","Not sure"], "required")}
+      ${field("Other support required","supports.other")}
+      ${textarea("Specific support details","supports.details","Example: showering 3 mornings/week, community access, wound dressing, meal preparation, continence support.")}
+      ${textarea("Participant goals","supports.goals","Goals from the NDIS plan, or what the participant wants to achieve.")}
+      ${textarea("Preferred outcomes / what success looks like","supports.outcomes")}${nav()}`,
+
+    schedule:()=>`<h2>Schedule and urgency</h2><p class="lead">Approximate details are enough at intake stage.</p>
+      ${checks("Preferred time windows","schedule.windows",["Weekday mornings","Weekday afternoons","Evenings","Weekends","Public holidays if required"])}
+      ${checks("Preferred days","schedule.days",["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"])}
+      <div class="grid three">${field("Approx. hours per week","schedule.hours","number")}${select("Urgency","schedule.urgency",["Urgent 24–72 hours","Soon 1–2 weeks","Flexible","Exploring options","Not sure"],"","required")}${field("Preferred start date","schedule.start","date")}</div>${nav()}`,
+
+    clinical:()=>`<h2>Health and clinical information</h2><p class="lead">Only provide details relevant to safe support planning. Write “No known allergies” if applicable.</p>
+      ${textarea("Primary disability / diagnoses","clinical.diagnoses")}
+      ${textarea("Other health conditions","clinical.other_diagnoses")}
+      ${field("Allergies","clinical.allergies","text","Recommended. Write No known allergies if none.","recommended")}
+      <div class="grid two">${select("Mobility","clinical.mobility",["Independent","Walking aid","Wheelchair","Requires transfer assistance","Hoist","Bed-bound","Not sure"])}${field("Equipment / aids","clinical.equipment")}</div>
+      <div class="grid two">${select("Continence","clinical.continence",["Independent","Prompting required","Continence aids","Catheter","Stoma","Other","Not sure"])}${select("Cognition","clinical.cognition",["Clear","Mild impairment","Moderate impairment","Severe impairment","Fluctuates","Not sure"])}</div>
+      <div class="grid two">${select("Falls risk","clinical.falls",["Low","Medium","High","Not sure"])}${select("Pressure injury risk","clinical.pressure",["Low","Medium","High","Not sure"])}</div>
+      <div class="grid two">${radio("Seizure history?","clinical.seizures",["Yes","No","Not sure"])}${field("Seizure plan / frequency","clinical.seizure_plan")}</div>
+      <div class="grid two">${radio("Stoma/ostomy care required?","clinical.stoma",["Yes","No","Not sure"])}${field("Diet requirements","clinical.diet")}</div>
+      ${field("Swallowing / choking risk notes","clinical.swallowing")}${nav()}`,
+
+    meds:()=>`<h2>Medication information</h2><p class="lead">This helps clarify whether workers will prompt, observe, escalate, or whether nursing/medication support is required.</p>
+      ${radio("Does the participant take regular medication?","meds.has_meds",["Yes","No","Not sure"])}
+      ${select("How are medications currently managed?","meds.method",["Self-administered","Family administers","Prompting only","Staff administer","Nurse administers","Not sure"], S.meds.has_meds==="Yes"?"Required because medication is selected.":"")}
+      <div class="grid two">${radio("Webster pack / dose administration aid?","meds.webster",["Yes","No","Not sure"])}${field("Medication storage location","meds.storage")}</div>
+      ${textarea("Medication notes","meds.notes","Include PRN medication, medication chart availability, safety concerns, or write not applicable.")}${nav()}`,
+
+    risks:()=>`<h2>Risk overview</h2><p class="lead">This helps HD HeeD decide whether supports can be safely provided and what must be handed over to workers.</p>
+      ${radio("Behaviours of concern?","risks.behaviour",["None known","Yes","Not sure","Prefer not to say"])}
+      ${textarea("Behaviour notes, triggers or strategies","risks.behaviour_notes")}
+      ${checks("Clinical risk areas","risks.clinical",["Wounds/dressings","Diabetes","Catheter","Stoma care","PEG/tube feeding","Tracheostomy","Seizures","Dysphagia/choking risk","Mental health risk","Recent hospital discharge","High intensity support"])}
+      ${checks("Environmental risk areas","risks.environmental",["Reactive animals","Hoarding/clutter","Weapons on site","Smoking/oxygen risk","Unsafe access","Poor hygiene/infection risk"])}
+      ${checks("Home safety checklist","risks.home",["Trip hazards","Poor lighting","Bathroom safety concerns","No working smoke alarm known","Manual handling concern","Transport safety concern"])}
+      ${textarea("Other risks or concerns","risks.other")}
+      ${select("Overall risk rating, your view","risks.overall",["Low","Medium","High","Not sure"])}${nav()}`,
+
+    bsp:()=>`<h2>Behaviour support / restrictive practices</h2><p class="lead">This is important for safe and lawful support planning where behaviour support or restrictive practices are involved.</p>
+      ${radio("Is there a Behaviour Support Plan?","bsp.has_bsp",["Yes","No","Not sure"])}
+      ${radio("Are restrictive practices involved?","bsp.restrictive",["Yes","No","Not sure"])}
+      <div class="grid two">${field("Behaviour support practitioner / provider","bsp.provider")}${field("Notes","bsp.notes", "text", S.bsp.restrictive==="Yes"?"Required because restrictive practice is selected.":"")}</div>
+      <div class="warn"><b>Important:</b> HD HeeD must review any behaviour support or restrictive practice information before confirming services.</div>${nav()}`,
+
+    documents:()=>`<h2>Documents and consent forms</h2><p class="lead">You can view/download these documents without being blocked. If a form applies, download/sign it and send it with the completed intake to info@hdheed.com.au.</p>
+      <div class="docs">${docs.map(d=>`
+        <div class="doc">
+          <h3>${esc(d.title)}</h3>
+          <p>${esc(d.note)}</p>
+          <p><b>${d.required ? "Recommended consent document" : "Information / conditional document"}</b></p>
+          <div class="doc-actions"><a class="btn ghost" href="${esc(d.url)}" target="_blank" rel="noopener">View / download</a></div>
+          <div class="choice-grid two">
+            ${boolCheck("I have received/read this document",`documents.${d.id}.read`)}
+            ${boolCheck("This form applies / will be provided if required",`documents.${d.id}.applies`)}
+          </div>
+        </div>`).join("")}</div>
+      <div class="notice"><b>Email reminder:</b> Send the completed intake PDF and any relevant signed consent documents to <a href="mailto:${EMAIL}">${EMAIL}</a>.</div>${nav()}`,
+
+    review:()=>renderReview()
   };
+  return views[key]();
+}
 
-  /* ====== Save / Restore ====== */
-  function save(){
-    try{
-      var clone = cloneSafe(S);
-      if (clone.uploads) clone.uploads = { files: [] }; // don’t persist file blobs
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(clone));
-      setSaveHint("Draft saved");
-      history.replaceState({ step: S.i }, "", window.location.href);
-    }catch(e){
-      console.error("Failed to save state:", e);
-    }
-  }
-
-  var qEl = $("#q");
-  var subEl = $("#sub");
-  var optsEl = $("#opts");
-  var stepTxt = $("#stepTxt");
-  var barEl = $("#bar");
-  var backBtn = $("#backBtn");
-  var nextBtn = $("#nextBtn");
-  var saveExitBtn = $("#saveExitBtn");
-  var navList = $("#navList");
-  var docModal = $("#docModal");
-  var docTitle = $("#docTitle");
-  var docViewer = $("#docViewer");
-  var docDownload = $("#docDownload");
-  var docClose = $("#docClose");
-  var confettiCanvas = $("#confetti");
-  var confettiCtx = confettiCanvas.getContext ? confettiCanvas.getContext("2d") : null;
-
-  /* Portrait images (stub only, keeping API) */
-  var AILR_IMAGES = {
-    intro:"", caller:"", participant:"", contacts:"", comms:"",
-    living:"", clinical:"", medications:"", risks:"", bsp:"",
-    supports:"", schedule:"", policies:"", consents:"", uploads:"",
-    review:"", submit:""
-  };
-  function setPortrait(){}
-
-  /* ====== UI builders ====== */
-  function button(txt,variant,onClick){
-    var b = el("button","btn "+(variant||"ghost"));
-    b.type="button";
-    b.textContent=txt;
-    if (onClick) b.addEventListener("click",onClick);
-    return b;
-  }
-  function divider(txt){ return el("div","hint",txt); }
-  function row(cols, children){
-    var r = el("div","row "+(cols||""));
-    children.forEach(function(ch){ r.appendChild(ch); });
-    return r;
-  }
-  function input(label, obj, key, type){
-    var box = el("div","inlinebox");
-    var id = "in_"+key+"_"+Math.random().toString(36).slice(2,7);
-    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var i = el("input");
-    i.id = id;
-    i.type = type || "text";
-    i.value = obj[key] || "";
-    i.placeholder = "";
-    i.addEventListener("input", function(){
-      obj[key] = i.value || null;
-      save();
-    });
-    box.appendChild(i);
-    return box;
-  }
-  function textarea(label, obj, key, placeholder){
-    var box = el("div","inlinebox");
-    var id = "ta_"+key+"_"+Math.random().toString(36).slice(2,7);
-    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var t = el("textarea");
-    t.id=id;
-    t.rows=3;
-    t.placeholder = placeholder || "";
-    t.value = obj[key] || "";
-    t.addEventListener("input", function(){
-      obj[key] = t.value || null;
-      save();
-    });
-    box.appendChild(t);
-    return box;
-  }
-  function select(label, obj, key, options){
-    var box = el("div","inlinebox");
-    var id = "sel_"+key+"_"+Math.random().toString(36).slice(2,7);
-    box.innerHTML = '<label for="'+id+'" style="font-weight:800">'+label+'</label>';
-    var s = el("select");
-    s.id=id;
-    var html = '<option value="">Select…</option>';
-    options.forEach(function(o){ html += '<option value="'+o+'">'+o+'</option>'; });
-    s.innerHTML = html;
-    if (obj[key]!==null && obj[key]!==undefined) s.value = obj[key];
-    s.addEventListener("change", function(){
-      obj[key] = s.value || null;
-      save();
-    });
-    box.appendChild(s);
-    return box;
-  }
-  function radioChips(label, obj, key, items){
-    var wrap = el("div","inlinebox");
-    wrap.innerHTML = '<label style="font-weight:800">'+label+'</label>';
-    var roww = el("div");
-    roww.style = "display:flex; gap:8px; flex-wrap:wrap";
-    var buttons = [];
-    items.forEach(function(pair){
-      var txt = pair[0], val = pair[1];
-      var b = button(txt,"ghost",function(){
-        obj[key] = val;
-        buttons.forEach(function(x){ x.removeAttribute("aria-pressed"); });
-        b.setAttribute("aria-pressed","true");
-        save();
-        updateNavigation();
-      });
-      b.className = "al-chip";
-      if (obj[key]===val) b.setAttribute("aria-pressed","true");
-      buttons.push(b);
-      roww.appendChild(b);
-    });
-    wrap.appendChild(roww);
-    return wrap;
-  }
-  function radioChipsInline(label, obj, key, items){
-    return radioChips(label, obj, key, items);
-  }
-  function checks(label, targetObj, map, arrayKey){
-    var box = el("div","inlinebox");
-    box.innerHTML = '<label style="font-weight:800">'+label+'</label>';
-    var list = el("ul","ck-list");
-
-    if (arrayKey){
-      if (!Array.isArray(targetObj[arrayKey])) targetObj[arrayKey] = [];
-      Object.keys(map).forEach(function(k){
-        var txt = map[k];
-        var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
-        var li = el("li","ck-row");
-        var c = el("input");
-        c.type="checkbox";
-        c.id=id;
-        c.checked = targetObj[arrayKey].indexOf(k)!==-1;
-        var lab = el("label",null,txt);
-        lab.htmlFor=id;
-        c.addEventListener("change", function(){
-          var arr = targetObj[arrayKey];
-          if (c.checked){
-            if (arr.indexOf(k)===-1) arr.push(k);
-          } else {
-            targetObj[arrayKey] = arr.filter(function(x){ return x!==k; });
-          }
-          save();
-        });
-        li.appendChild(c); li.appendChild(lab); list.appendChild(li);
-      });
-    } else {
-      Object.keys(map).forEach(function(k){
-        var txt = map[k];
-        var id = "ck_"+k+"_"+Math.random().toString(36).slice(2,7);
-        var li = el("li","ck-row");
-        var c = el("input");
-        c.type="checkbox";
-        c.id=id;
-        c.checked = !!targetObj[k];
-        var lab = el("label",null,txt);
-        lab.htmlFor=id;
-        c.addEventListener("change", function(){
-          targetObj[k] = c.checked;
-          save();
-        });
-        li.appendChild(c); li.appendChild(lab); list.appendChild(li);
-      });
-    }
-
-    box.appendChild(list);
-    return box;
-  }
-
-  /* ====== STEPS ====== */
-  var Steps = [
-    {
-      key:"intro",
-      title:"Who is completing this form?",
-      sub:"Tell us who you are in relation to the participant.",
-      build:function(m){
-        m.appendChild(radioChips("I am…", S.caller, "role", [
-          ["The participant", "participant"],
-          ["Parent / guardian", "parent"],
-          ["Family member", "family"],
-          ["Support coordinator", "support_coordinator"],
-          ["Support worker", "support_worker"],
-          ["Other", "other"]
-        ]));
-        m.appendChild(row("two",[
-          input("Your full name", S.caller, "name"),
-          input("Relationship to participant (if not self)", S.caller, "relationship")
-        ]));
-        m.appendChild(textarea("Anything important we should know upfront? (optional)", S.caller, "consent", "E.g., urgent start, safety concern, court order, key goals"));
-      }
-    },
-    {
-      key:"participant",
-      title:"Participant details",
-      sub:"Basic details so we know exactly who we are supporting.",
-      build:function(m){
-        m.appendChild(row("two",[
-          input("Legal name (as per NDIS / ID)", S.participant, "legal_name"),
-          input("Preferred name (if different)", S.participant, "preferred_name")
-        ]));
-        m.appendChild(row("two",[
-          input("Pronouns (optional)", S.participant, "pronouns"),
-          input("Date of birth", S.participant, "dob","date")
-        ]));
-        m.appendChild(row("two",[
-          input("NDIS number (if known)", S.participant, "ndis_number"),
-          input("Primary disability (optional)", S.clinical, "primary_diagnoses")
-        ]));
-        var addr = S.participant.address;
-        m.appendChild(row("two",[
-          input("Street address line 1", addr, "line1"),
-          input("Street address line 2 (optional)", addr, "line2")
-        ]));
-        m.appendChild(row("three",[
-          input("Suburb", addr, "suburb"),
-          input("Postcode", addr, "postcode"),
-          input("State", addr, "state")
-        ]));
-        m.appendChild(select("How is the NDIS plan managed?", S.participant, "plan_mgmt",
-          ["NDIA-managed","Plan-managed","Self-managed","Combination","Not sure"]
-        ));
-        var pm = S.participant.plan_manager;
-        m.appendChild(row("two",[
-          input("Plan manager organisation (if applicable)", pm, "org"),
-          input("Plan manager contact name (optional)", pm, "contact")
-        ]));
-        m.appendChild(row("two",[
-          input("Plan manager email", pm, "email"),
-          input("Plan manager phone", pm, "phone")
-        ]));
-        var pd = S.participant.plan_dates;
-        m.appendChild(row("two",[
-          input("Plan start date", pd, "start","date"),
-          input("Plan end date", pd, "end","date")
-        ]));
-      }
-    },
-    {
-      key:"contacts",
-      title:"Key contacts",
-      sub:"How can we reach you, and who should we contact in an emergency?",
-      build:function(m){
-        m.appendChild(row("two",[
-          input("Best email for contact & onboarding documents", S.contacts, "email"),
-          input("Best phone number", S.contacts, "phone")
-        ]));
-        var em = S.contacts.emergency;
-        m.appendChild(divider("Emergency contact"));
-        m.appendChild(row("three",[
-          input("Emergency contact name", em, "name"),
-          input("Relationship", em, "relationship"),
-          input("Phone", em, "phone")
-        ]));
-        var sc = S.contacts.support_coordinator;
-        m.appendChild(divider("Support coordinator (if any)"));
-        m.appendChild(row("two",[
-          input("Support coordinator name", sc, "name"),
-          input("Organisation", sc, "org")
-        ]));
-        m.appendChild(row("two",[
-          input("Support coordinator email", sc, "email"),
-          input("Support coordinator phone", sc, "phone")
-        ]));
-        var gp = S.contacts.gp;
-        m.appendChild(divider("GP / medical practice"));
-        m.appendChild(row("three",[
-          input("GP name", gp, "name"),
-          input("Practice name", gp, "practice"),
-          input("Practice phone", gp, "phone")
-        ]));
-        m.appendChild(input("GP / practice email (optional)", gp, "email"));
-      }
-    },
-    {
-      key:"comms",
-      title:"Communication & preferences",
-      sub:"Language, communication needs and important preferences.",
-      build:function(m){
-        m.appendChild(row("two",[
-          input("Primary language", S.comms, "primary_language"),
-          input("Other languages (optional)", S.comms, "cultural_considerations")
-        ]));
-        m.appendChild(radioChips("Interpreter required?", S.comms, "interpreter", [
-          ["Yes", true],
-          ["No", false],
-          ["Not sure", null]
-        ]));
-        m.appendChild(input("If interpreter required, which language?", S.comms, "interpreter_language"));
-        var pref = S.comms.preferences;
-        m.appendChild(radioChips("Preferred support worker gender (if any)", pref, "worker_gender", [
-          ["No preference","none"],
-          ["Female worker","female"],
-          ["Male worker","male"],
-          ["Other preference","other"]
-        ]));
-        m.appendChild(input("If other gender preference, please describe (optional)", pref, "worker_gender_other"));
-        m.appendChild(radioChipsInline("Transport required for appointments & community access?", pref, "transport_required", [
-          ["Yes", true],
-          ["No", false],
-          ["Not sure", null]
-        ]));
-      }
-    },
-    {
-      key:"living",
-      title:"Living situation & environment",
-      sub:"Where does the participant live and who with?",
-      build:function(m){
-        m.appendChild(select("Type of residence", S.living, "residence_type", [
-          "Private rental","Own home","Public housing","Group home / SIL","Family home","Other","Not sure"
-        ]));
-        m.appendChild(input("Who lives in the home with the participant? (names / relationships)", S.living, "lives_with"));
-        m.appendChild(textarea("Entry / access notes (door codes, pets, parking, etc.)", S.living, "entry_notes", "E.g., key safe code, parking instructions, pets in yard"));
-        m.appendChild(radioChipsInline("Is there a keysafe on site?", S.living, "keysafe", [
-          ["Yes", true],["No", false],["Not sure", null]
-        ]));
-        m.appendChild(radioChipsInline("Smoking on premises?", S.living, "smoking_on_premises", [
-          ["Yes", "yes"],["No", "no"],["Outside only","outside"],["Not sure","not_sure"]
-        ]));
-        m.appendChild(textarea("Any home/environment hazards you’re aware of? (optional)", S.living, "hazards", "E.g., steps without rails, narrow bathroom, clutter, aggressive pets"));
-      }
-    },
-    {
-      key:"clinical",
-      title:"Clinical profile & health overview",
-      sub:"This helps us plan safe, appropriate supports. You can be brief.",
-      build:function(m){
-        m.appendChild(textarea("Primary diagnoses (NDIS / medical)", S.clinical, "primary_diagnoses", "E.g., autism, intellectual disability, schizophrenia, T2DM"));
-        m.appendChild(textarea("Other diagnoses (optional)", S.clinical, "other_diagnoses", "Any other relevant health conditions"));
-        m.appendChild(textarea("Allergies (include nil known if none)", S.clinical, "allergies", "E.g., penicillin allergy, nut allergy, no known drug allergies"));
-        m.appendChild(select("Mobility status", S.clinical, "mobility", [
-          "Independent","Independent with aids","Supervision only","Hands-on assist 1","Hands-on assist 2","Hoist transfers","Bedfast","Not sure"
-        ]));
-        m.appendChild(textarea("Equipment / aids (optional)", S.clinical, "equipment", "E.g., 4WW, wheelchair, hoist, pressure mattress, splints"));
-        m.appendChild(select("Continence", S.clinical, "continence", [
-          "Continent","Urinary incontinence","Bowel incontinence","Double incontinence","Uses continence products","Not sure"
-        ]));
-        m.appendChild(select("Cognition", S.clinical, "cognition", [
-          "No cognitive impairment","Mild","Moderate","Severe","Fluctuating","Not sure"
-        ]));
-        m.appendChild(select("Pressure injury risk (if known)", S.clinical, "pressure_injury_risk", [
-          "Low","Moderate","High","Very high","Not assessed","Not sure"
-        ]));
-        m.appendChild(select("Falls risk (if known)", S.clinical, "falls_risk", [
-          "Low","Medium","High","Very high","Not assessed","Not sure"
-        ]));
-        var sz = S.clinical.seizures;
-        m.appendChild(radioChipsInline("Does the participant have seizures?", sz, "has", [
-          ["Yes", true],["No", false],["Not sure", null]
-        ]));
-        m.appendChild(input("Seizure plan provider / details (if applicable)", sz, "plan"));
-        m.appendChild(input("Seizure frequency (if applicable)", sz, "frequency"));
-        m.appendChild(radioChipsInline("Stoma / ostomy care required?", S.clinical, "stoma_care", [
-          ["Yes", true],["No", false],["Not sure", null]
-        ]));
-        m.appendChild(textarea("Diet / swallowing / texture modifications", S.clinical, "diet_notes", "E.g., IDDSI level, choking risk, swallowing review, diabetes diet"));
-      }
-    },
-    {
-      key:"medications",
-      title:"Medication & administration",
-      sub:"We’ll confirm details later with prescriptions. This is just an overview.",
-      build:function(m){
-        m.appendChild(radioChips("Participant has medications?", S.medications, "has_meds", [
-          ["Yes",true],["No",false],["Not sure",null]
-        ]));
-        m.appendChild(select("How are meds managed?", S.medications, "method", [
-          "Self-administered","Prompting only","Staff administer","Family administers","Not sure"
-        ]));
-        m.appendChild(row("two",[
-          radioChipsInline("Webster pack?", S.medications, "webster_pack", [
-            ["Yes",true],["No",false],["Not sure",null]
-          ]),
-          input("Storage location (optional)", S.medications, "storage")
-        ]));
-        m.appendChild(row("two",[
-          radioChipsInline("Self-admin?", S.medications, "self_admin", [
-            ["Yes",true],["No",false],["Not sure",null]
-          ]),
-          radioChipsInline("Staff admin?", S.medications, "staff_admin", [
-            ["Yes",true],["No",false],["Not sure",null]
-          ])
-        ]));
-        m.appendChild(textarea("Medication notes (optional)", S.medications, "notes", "You can list regular and PRN medications if you like."));
-      }
-    },
-    {
-      key:"risks",
-      title:"Risk assessment — quick overview",
-      sub:"We’ll use this to plan safe, appropriate supports.",
-      build:function(m){
-        m.appendChild(divider("Behavioural"));
-        m.appendChild(radioChips("Behaviours of concern present?", S.risks.behavioural, "present", [
-          ["None","None"],
-          ["Present","Present"],
-          ["Not sure","Not sure"],
-          ["Prefer not to say","Prefer not to say"]
-        ]));
-        m.appendChild(textarea("Behaviour notes (optional)", S.risks.behavioural, "notes", "Triggers, successful strategies, Behaviour Support Plan provider"));
-        m.appendChild(divider("Clinical"));
-        m.appendChild(checks("Select applicable", S.risks.clinical, {
-          wounds:"Wounds / dressings",
-          diabetes:"Diabetes",
-          tracheostomy:"Tracheostomy",
-          tube_feeding:"Enteral tube feeding",
-          mental_health:"Significant mental health needs",
-          stoma_care:"Stoma care"
-        }));
-        m.appendChild(textarea("Other clinical concerns (optional)", S.risks.clinical, "other", "Anything else clinically important"));
-        m.appendChild(divider("Environmental"));
-        m.appendChild(checks("Select applicable", S.risks.environmental, {
-          animals:"Reactive animals",
-          hoarding:"Hoarding / clutter",
-          weapons:"Weapons on site"
-        }));
-        m.appendChild(textarea("Other environmental concerns (optional)", S.risks.environmental, "other", "Any other environmental risks"));
-        m.appendChild(divider("Home risk checklist (quick)"));
-        m.appendChild(checks("Tick any present", S.risks.home_checklist, {
-          trip_hazards:"Trip hazards",
-          smoke_alarms:"No working smoke alarms",
-          lighting:"Poor lighting",
-          bathroom_safety:"Bathroom lacks safety rails / mats"
-        }));
-        m.appendChild(input("Home risk notes (optional)", S.risks.home_checklist, "notes"));
-        m.appendChild(textarea("Other risk notes (optional)", S.risks, "other_notes", "Anything else we should consider when planning supports"));
-        m.appendChild(select("Overall risk rating (your view)", S.risks, "overall_rating", [
-          "Low","Medium","High","Not sure"
-        ]));
-      }
-    },
-    {
-      key:"bsp",
-      title:"Behaviour Support Plan (if applicable)",
-      sub:"Always shown, only fill if required.",
-      build:function(m){
-        m.appendChild(radioChips("Behaviour Support Plan in place?", S.bsp, "has_bsp", [
-          ["Yes",true],["No",false],["Not sure",null]
-        ]));
-        m.appendChild(radioChipsInline("Restrictive practices involved?", S.bsp, "restrictive_practices", [
-          ["Yes",true],["No",false],["Not sure",null]
-        ]));
-        m.appendChild(row("two",[
-          input("Behaviour Support Plan provider (if any)", S.bsp, "provider"),
-          input("Notes (optional)", S.bsp, "notes")
-        ]));
-      }
-    },
-    {
-      key:"supports",
-      title:"Which supports are required? (select one or more)",
-      sub:"Pick all that apply, then press Next. You can also type specifics if helpful.",
-      build:function(m){
-        var options = {
-          personal_care:"Personal care (showering / dressing / toileting / meal prep / prompting)",
-          high_intensity:"High-intensity personal care (wound care / medications / stoma care / PEG feeds / catheter care / bowel care / pressure care)",
-          household_tasks:"Household tasks (domestic help / cleaning / laundry / meal prep)",
-          life_skills:"Development of life skills (cooking / budgeting / travel training / daily routines)",
-          community_participation:"Community participation (appointments / shopping / social & community activities / outings)",
-          group_centre:"Group or centre-based activities (programs / day activities)",
-          travel_transport:"Assist with travel & transport (support worker transport / escorted travel)",
-          daily_tasks_sil:"Daily tasks & shared living (SIL-style supports)",
-          not_sure:"Not sure — guide me"
-        };
-        m.appendChild(checks("Tick supports you are seeking", S.supports, options, "required"));
-        m.appendChild(input("Other supports (optional)", S.supports, "required_other"));
-        m.appendChild(textarea("Specific support details (optional)", S.supports, "details_text", "E.g., morning routine, showering, medication prompts, community trips"));
-        m.appendChild(textarea("Goals (optional)", S.supports, "goals", "Short summary of key NDIS goals you want these supports to help with."));
-        m.appendChild(textarea("Preferred outcomes (optional)", S.supports, "outcomes", "What would good support look like for you?"));
-      }
-    },
-    {
-      key:"schedule",
-      title:"Schedule & availability",
-      sub:"Rough idea of days/times. We’ll confirm exact rosters later.",
-      build:function(m){
-        m.appendChild(checks("Preferred time windows", S.schedule, {
-          morning:"Mornings (6am–10am)",
-          day:"Daytime (10am–3pm)",
-          afternoon:"Afternoons (3pm–6pm)",
-          evening:"Evenings (6pm–10pm)",
-          overnight:"Overnight supports",
-          flexible:"Flexible / to be discussed"
-        },"windows"));
-        m.appendChild(checks("Preferred days", S.schedule, {
-          weekdays:"Weekdays",
-          weekends:"Weekends",
-          specific_days:"Specific days only",
-          not_sure:"Not sure yet"
-        },"days"));
-        m.appendChild(textarea("If specific days, please note them here (optional)", S.schedule, "days_notes", "E.g., Mon / Wed / Fri mornings only"));
-        m.appendChild(input("Approximate hours of support per week (if known)", S.schedule, "hours_per_week"));
-        m.appendChild(select("How urgent is support start?", S.schedule, "urgency", [
-          "Immediate (within 1 week)",
-          "Soon (within 2–4 weeks)",
-          "Flexible (4+ weeks)",
-          "Not sure"
-        ]));
-        m.appendChild(input("Preferred start date or timeframe (optional)", S.schedule, "start_preference"));
-      }
-    },
-    {
-      key:"policies",
-      title:"Key policies & information",
-      sub:"You can open each document in a viewer and download it. Please read these carefully.",
-      build:function(m){
-        var list = el("ul","doc-list");
-        DOCS.forEach(function(d){
-          var li = el("li");
-          var link = el("a",null,"Open “"+d.title+"”");
-          link.href="#";
-          link.addEventListener("click", function(ev){
-            ev.preventDefault();
-            openDoc(d);
-          });
-          li.appendChild(el("b",null,d.title+" — "));
-          li.appendChild(link);
-          list.appendChild(li);
-          if (!S.acks[d.id]) S.acks[d.id]={ read:false, consent:false };
-        });
-        m.appendChild(list);
-        var info = el("div","doc-privacy","You can download, print and sign these documents as needed. For this online form, we’ll just record that you have received and read them, and (where required) that you consent.");
-        m.appendChild(info);
-      }
-    },
-    {
-      key:"consents",
-      title:"Acknowledgements & consents",
-      sub:"Confirm which documents you’ve received, read and consented to.",
-      build:function(m){
-        DOCS.forEach(function(d){
-          if (!S.acks[d.id]) S.acks[d.id]={ read:false, consent:false };
-          var card = el("div","inlinebox");
-          card.innerHTML = "<b>"+d.title+"</b>";
-          var actions = el("div","hint");
-          var view = button("Open document","ghost",function(){ openDoc(d); });
-          actions.appendChild(view);
-          var hint = el("span",null,d.requiresConsent
-            ? "Please sign the PDF and email it to info@hdheed.com.au."
-            : "Please read this document before proceeding."
-          );
-          actions.appendChild(hint);
-          card.appendChild(actions);
-
-          var row1 = el("div","ck-row");
-          var c1 = el("input");
-          c1.type="checkbox";
-          c1.id="ack_read_"+d.id;
-          c1.checked = !!S.acks[d.id].read;
-          var l1 = el("label",null,"I have received & read this document.");
-          l1.htmlFor=c1.id;
-          c1.addEventListener("change", function(){
-            S.acks[d.id].read = c1.checked;
-            save(); updateConsentSummary();
-          });
-          row1.appendChild(c1); row1.appendChild(l1);
-          card.appendChild(row1);
-
-          if (d.requiresConsent){
-            var row2 = el("div","ck-row");
-            var c2 = el("input");
-            c2.type="checkbox";
-            c2.id="ack_con_"+d.id;
-            c2.checked = !!S.acks[d.id].consent;
-            var l2 = el("label",null,"I consent to the terms in this form.");
-            l2.htmlFor=c2.id;
-            c2.addEventListener("change", function(){
-              S.acks[d.id].consent = c2.checked;
-              save(); updateConsentSummary();
-            });
-            row2.appendChild(c2); row2.appendChild(l2);
-            card.appendChild(row2);
-          }
-          m.appendChild(card);
-        });
-
-        var sum = el("div","hint");
-        sum.style.marginTop="6px";
-        function updateSum(){
-          var total = DOCS.length, readCt=0;
-          var needCon = DOCS.filter(function(d){return d.requiresConsent;}).length;
-          var conCt=0;
-          DOCS.forEach(function(d){
-            var ack=S.acks[d.id]||{};
-            if (ack.read) readCt++;
-            if (d.requiresConsent && ack.consent) conCt++;
-          });
-          sum.textContent = "Acknowledged: "+readCt+"/"+total+" read • Consents: "+conCt+"/"+needCon;
-        }
-        function updateConsentSummary(){ updateSum(); }
-        updateSum();
-        m.appendChild(sum);
-      }
-    },
-    {
-      key:"uploads",
-      title:"Documents — please email them",
-      sub:'You can proceed without attachments. Email documents to <a href="mailto:info@hdheed.com.au?subject=Onboarding%20documents&body=Please%20include%20participant%20name%20and%20NDIS%20number%20if%20available.">info@hdheed.com.au</a>\
-            <div class="consent-box" style="margin-top:10px">\
-              <b>What to send (simple reminder)</b>\
-              <ul>\
-                <li>Photo ID (e.g., driver licence or passport)</li>\
-                <li>Medicare card (optional, for GP/pharmacy liaison or emergencies)</li>\
-                <li>NDIS plan (latest)</li>\
-                <li>Care plans (e.g., BSP, diabetes plan, seizure plan)</li>\
-                <li>Medication chart / current medication list (if any)</li>\
-                <li>Signed consent forms — Refer to step 13.</li>\
-              </ul>\
-            </div>',
-      build:function(m){
-        S.uploads.files = [];
-        save();
-        m.appendChild(divider("No upload required here — this step is just a reminder list for what to email to us."));
-      }
-    },
-    {
-      key:"review",
-      title:"Review your answers",
-      sub:"Check the sections below. You can go back to edit anything.",
-      build:function(m){
-        m.appendChild(renderReview());
-      }
-    },
-    {
-      key:"submit",
-      title:"Download & email your completed form",
-      sub:"Final step. We’ll generate a detailed report containing every answer you’ve entered. Save it as a PDF or Word/RTF, then email it to <b>info@hdheed.com.au</b>.",
-      build:function(m){
-        m.appendChild(row("two",[
-          input("Your name (person completing this form)", S.submitter, "name"),
-          input("Your email (for our records on the form)", S.submitter, "email")
-        ]));
-        m.appendChild(input("Your best contact number", S.submitter, "phone"));
-        var info = el("div","hint","When you click “Download full form (PDF view)”, a new window/tab will open with your full admission form. Use your browser’s “Print” → “Save as PDF”, then email that PDF to info@hdheed.com.au.");
-        m.appendChild(info);
-
-        var btnRow = el("div");
-        btnRow.style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px";
-
-        var btnPdf = button("Download full form (PDF view)", "primary", function(){
-          if (!canProceed(Steps.length-1)) return;
-          openFullPDF();
-          alert("Your full AILR admission form will open in a new window.\nUse Print → Save as PDF, then email it to info@hdheed.com.au.");
-        });
-        var btnLite = button("Open printable summary (lighter)", "ghost", function(){
-          openPrintableSummary();
-        });
-        var btnRtf = button("Download editable (.rtf)", "ghost", function(){
-          if (!canProceed(Steps.length-1)) return;
-          downloadEditableRTF();
-        });
-
-        btnRow.appendChild(btnPdf);
-        btnRow.appendChild(btnLite);
-        btnRow.appendChild(btnRtf);
-        m.appendChild(btnRow);
-      }
-    }
+function pair(k,v){return `<div class="kv-row"><b>${esc(k)}</b><span>${esc(v || "—")}</span></div>`}
+function join(arr){return (arr||[]).join(", ")}
+function summaryBlocks(){
+  return [
+    ["Consent and submitter",[
+      pair("Completed by", [S.who.role,S.who.name,S.who.relationship].filter(Boolean).join(" / ")),
+      pair("Authority", S.who.authority),
+      pair("Consent to collect/use", S.consent.collect),
+      pair("Consent to liaise/share", S.consent.share),
+      pair("Emergency information sharing", S.consent.emergency),
+      pair("Submitter", [S.submitter.name,S.submitter.email,S.submitter.phone].filter(Boolean).join(" / "))
+    ]],
+    ["Participant",[
+      pair("Legal name",S.participant.legal_name),pair("Preferred name",S.participant.preferred_name),pair("DOB",S.participant.dob),pair("NDIS number",S.participant.ndis_number),
+      pair("Address",[S.participant.address1,S.participant.address2,S.participant.suburb,S.participant.state,S.participant.postcode].filter(Boolean).join(", "))
+    ]],
+    ["NDIS plan and contacts",[
+      pair("Plan management",S.plan.management),pair("Plan dates",[S.plan.start,S.plan.end].filter(Boolean).join(" to ")),pair("Support category",S.plan.support_category),
+      pair("Plan manager",[S.plan.plan_manager_org,S.plan.plan_manager_contact,S.plan.plan_manager_email,S.plan.plan_manager_phone].filter(Boolean).join(" / ")),
+      pair("Participant contact",[S.contacts.preferred_method,S.contacts.email,S.contacts.phone].filter(Boolean).join(" / ")),
+      pair("Emergency contact",[S.contacts.emergency_name,S.contacts.emergency_relationship,S.contacts.emergency_phone].filter(Boolean).join(" / ")),
+      pair("Support coordinator",[S.contacts.sc_name,S.contacts.sc_org,S.contacts.sc_email,S.contacts.sc_phone].filter(Boolean).join(" / ")),
+      pair("GP",[S.contacts.gp_name,S.contacts.gp_practice,S.contacts.gp_phone,S.contacts.gp_email].filter(Boolean).join(" / "))
+    ]],
+    ["Communication, living and preferences",[
+      pair("Language",S.communication.language),pair("Interpreter",S.communication.interpreter),pair("Interpreter language",S.communication.interpreter_language),
+      pair("Decision support",S.communication.decision_support),pair("Cultural/communication notes",S.communication.cultural),
+      pair("Worker gender preference",S.communication.worker_gender),pair("Transport required",S.communication.transport),
+      pair("Residence",S.living.residence),pair("Lives with",S.living.lives_with),pair("Access notes",S.living.access),pair("Home hazards",S.living.hazards)
+    ]],
+    ["Support needs and schedule",[
+      pair("Supports",join(S.supports.types)),pair("Other support",S.supports.other),pair("Details",S.supports.details),pair("Goals",S.supports.goals),
+      pair("Outcomes",S.supports.outcomes),pair("Windows",join(S.schedule.windows)),pair("Days",join(S.schedule.days)),pair("Hours/week",S.schedule.hours),pair("Urgency",S.schedule.urgency),pair("Start",S.schedule.start)
+    ]],
+    ["Health and medications",[
+      pair("Diagnoses",S.clinical.diagnoses),pair("Other health conditions",S.clinical.other_diagnoses),pair("Allergies",S.clinical.allergies),
+      pair("Mobility",S.clinical.mobility),pair("Equipment",S.clinical.equipment),pair("Continence",S.clinical.continence),pair("Cognition",S.clinical.cognition),
+      pair("Falls risk",S.clinical.falls),pair("Pressure risk",S.clinical.pressure),pair("Seizures",S.clinical.seizures),pair("Diet/swallowing", [S.clinical.diet,S.clinical.swallowing].filter(Boolean).join(" / ")),
+      pair("Medications",S.meds.has_meds),pair("Medication method",S.meds.method),pair("Medication notes",S.meds.notes)
+    ]],
+    ["Risks and behaviour support",[
+      pair("Behaviour concerns",S.risks.behaviour),pair("Behaviour notes",S.risks.behaviour_notes),pair("Clinical risks",join(S.risks.clinical)),
+      pair("Environmental risks",join(S.risks.environmental)),pair("Home risks",join(S.risks.home)),pair("Other risks",S.risks.other),pair("Overall risk",S.risks.overall),
+      pair("BSP",S.bsp.has_bsp),pair("Restrictive practices",S.bsp.restrictive),pair("BSP provider",S.bsp.provider),pair("BSP notes",S.bsp.notes)
+    ]],
+    ["Documents", docs.map(d=>pair(d.title, `${S.documents[d.id]?.read ? "Read" : "Not marked read"}; ${S.documents[d.id]?.applies ? "Applies/provide if required" : "Not marked applicable"}`))]
   ];
-  /* ====== Navigation helpers ====== */
-  function buildNavigation(){
-    if (!navList) return;
-    navList.innerHTML = "";
-    Steps.forEach(function(st, idx){
-      var li = el("li","nav-item",'<div>'+ (idx+1)+". "+st.title+'</div>');
-      li.dataset.index = idx;
-      navList.appendChild(li);
+}
+function buildSummaryHTML(open=true){
+  return summaryBlocks().map(([title,content])=>`<details ${open?"open":""}><summary>${esc(title)}</summary><div class="kv">${content.join("")}</div></details>`).join("");
+}
+function renderReview(){
+  const missing=missingRequired(), warn=warnings();
+  return `<h2>Review and export</h2><p class="lead">Review the intake. When required items are complete, download/print and email to <b>${EMAIL}</b>.</p>
+    <div class="grid two">${field("Submitter name","submitter.name")}${field("Submitter email","submitter.email","email","","required")}</div>
+    <div class="grid two">${field("Submitter phone","submitter.phone","tel","","required")}<div></div></div>
+    ${missing.length?`<div class="dangerbox"><b>Required before export:</b><ul class="missing-list">${missing.map(m=>`<li>${esc(m)}</li>`).join("")}</ul></div>`:`<div class="ok"><b>Ready to export:</b> required items are completed.</div>`}
+    ${warn.length?`<div class="warn"><b>Recommended before services start:</b><ul class="missing-list">${warn.map(m=>`<li>${esc(m)}</li>`).join("")}</ul></div>`:""}
+    <div class="summary">${buildSummaryHTML()}</div>
+    <div class="footer-nav">
+      <button class="btn ghost" id="prevStep">Back</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost" id="saveProgress">Save progress</button>
+        <button class="btn green" id="downloadPdf" ${missing.length?"disabled":""}>Download / Save full intake PDF</button>
+        <button class="btn ghost" id="downloadRtf" ${missing.length?"disabled":""}>Download editable RTF</button>
+        <button class="btn ghost" id="downloadSummary" ${missing.length?"disabled":""}>Download short summary PDF</button>
+        <a class="btn blue" href="mailto:${EMAIL}?subject=HD%20HeeD%20Participant%20Intake&body=Please%20attach%20the%20completed%20intake%20PDF%20and%20any%20signed%20consent%20forms.">Open email to HD HeeD</a>
+      </div>
+    </div>`;
+}
+function bind(){
+  document.querySelectorAll("[data-path]").forEach(el=>{ el.oninput=el.onchange=()=>setVal(el.dataset.path, el.value); });
+  document.querySelectorAll("[data-check]").forEach(el=>{ el.onchange=()=>{ const arr=val(el.dataset.check)||[]; if(el.checked&&!arr.includes(el.value)) arr.push(el.value); if(!el.checked){const i=arr.indexOf(el.value); if(i>-1) arr.splice(i,1);} setVal(el.dataset.check, arr); }; });
+  document.querySelectorAll("[data-bool]").forEach(el=>{ el.onchange=()=>{ const p=el.dataset.bool.split("."); let o=S; for(let i=0;i<p.length-1;i++) o=o[p[i]]; o[p[p.length-1]]=el.checked; save(); updateProgress(); }; });
+  const prev=document.getElementById("prevStep"), next=document.getElementById("nextStep"), saveP=document.getElementById("saveProgress");
+  if(prev) prev.onclick=()=>{ if(S.step>0){S.step--;save();render();window.scrollTo({top:0,behavior:"smooth"});} };
+  if(next) next.onclick=()=>{ if(S.step<sections.length-1){S.step++;save();render();window.scrollTo({top:0,behavior:"smooth"});} };
+  if(saveP) saveP.onclick=()=>{save();alert("Progress saved on this device.")};
+  const pdf=document.getElementById("downloadPdf"), rtf=document.getElementById("downloadRtf"), summ=document.getElementById("downloadSummary");
+  if(pdf) pdf.onclick=()=>exportPrint("full");
+  if(summ) summ.onclick=()=>exportPrint("summary");
+  if(rtf) rtf.onclick=()=>downloadRTF();
+}
+function printableRows(rows){ return rows.map(([title,content])=>`<section class="print-section"><h2>${esc(title)}</h2>${content.map(x=>x.replace('kv-row','print-row')).join("")}</section>`).join(""); }
+function buildPrintReport(mode){
+  const date=new Date().toLocaleString("en-AU",{dateStyle:"full",timeStyle:"short"});
+  const blocks = mode==="summary" ? summaryBlocks().slice(0,5) : summaryBlocks();
+  return `<div class="print-pack">
+    <section class="print-cover">
+      <div class="print-cover-head">
+        <h1>HD HeeD AILR Participant Intake</h1>
+        <p>Completed intake record for review before service agreement and commencement of supports.</p>
+      </div>
+      <div class="print-meta">
+        <div><b>Prepared</b><span>${esc(date)}</span></div>
+        <div><b>Participant</b><span>${esc(S.participant.legal_name || "—")}</span></div>
+        <div><b>Email to</b><span>${EMAIL}</span></div>
+      </div>
+    </section>
+    ${printableRows(blocks)}
+    <section class="print-section">
+      <h2>Documents to attach if applicable</h2>
+      ${docs.map(d=>`<div class="print-row"><b>${esc(d.title)}</b><span>${S.documents[d.id]?.applies ? "Applies / provide if required" : "Not marked applicable"}</span></div>`).join("")}
+    </section>
+    <section class="print-section">
+      <h2>Declaration and signatures</h2>
+      <p>I confirm the information provided is accurate to the best of my knowledge and I consent to HD HeeD using this information for intake, assessment and service coordination.</p>
+      <div class="signature-grid">
+        <div class="signature-box"><b>Participant / representative name</b><br><br>Signature:<br><br>Date:</div>
+        <div class="signature-box"><b>HD HeeD representative</b><br><br>Signature:<br><br>Date:</div>
+      </div>
+    </section>
+  </div>`;
+}
+function exportPrint(mode){
+  const missing=missingRequired();
+  if(missing.length){ alert("Please complete required items first:\n\n"+missing.join("\n")); return; }
+  document.getElementById("printReport").innerHTML = buildPrintReport(mode);
+  window.print();
+}
+function strip(s){ return String(s||"").replace(/[\\{}]/g, m=>"\\"+m).replace(/\n/g,"\\par "); }
+function downloadRTF(){
+  const missing=missingRequired();
+  if(missing.length){ alert("Please complete required items first:\n\n"+missing.join("\n")); return; }
+  let rtf="{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Arial;}}\\fs22 ";
+  rtf += "\\b HD HeeD AILR Participant Intake\\b0\\par\\par ";
+  summaryBlocks().forEach(([title,content])=>{
+    rtf += "\\b\\ul "+strip(title)+"\\ul0\\b0\\par ";
+    content.forEach(row=>{
+      const txt = row.replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
+      rtf += strip(txt)+"\\par ";
     });
-    updateNavigation();
-  }
-
-  function isStepLocked(idx){
-    // Simple rule: you can always go back; forward steps unlock progressively
-    return idx > S.i + 1;
-  }
-
-  function updateNavigation(){
-    var items = navList ? navList.querySelectorAll(".nav-item") : [];
-    items.forEach(function(li){
-      var idx = parseInt(li.dataset.index,10);
-      li.classList.remove("current","completed","locked");
-      if (idx === S.i) li.classList.add("current");
-      else if (idx < S.i) li.classList.add("completed");
-      if (isStepLocked(idx)) li.classList.add("locked");
-    });
-  }
-
-  /* ====== Review builder ====== */
-  function kvBlock(title, pairs){
-    var d = el("details","card");
-    d.open = true;
-    var s = el("summary",null,title);
-    d.appendChild(s);
-    var wrap = el("div","kv");
-    pairs.forEach(function(p){
-      var r = el("div",null,"");
-      var k = el("b",null,p[0]);
-      var v = el("span",null,p[1] || "—");
-      r.appendChild(k); r.appendChild(v); wrap.appendChild(r);
-    });
-    d.appendChild(wrap);
-    return d;
-  }
-  function yesno(val){
-    return val===true ? "Yes" : (val===false ? "No" : (val===null ? "Not sure" : "—"));
-  }
-  function listTrue(obj, map){
-    var out=[]; for (var k in map){ if(obj && obj[k]) out.push(map[k]); }
-    return out.join(", ");
-  }
-  function supportsList(){
-    var map = {
-      personal_care:"Personal care",
-      high_intensity:"High-intensity personal care",
-      household_tasks:"Household tasks",
-      life_skills:"Development of life skills",
-      community_participation:"Community participation",
-      group_centre:"Group/centre-based activities",
-      travel_transport:"Assist with travel & transport",
-      daily_tasks_sil:"Daily tasks & shared living",
-      not_sure:"Not sure — guide me"
-    };
-    var l = (S.supports.required||[]).map(function(k){ return map[k]||k; });
-    if (S.supports.required_other) l.push("Other: "+S.supports.required_other);
-    return l.join(", ");
-  }
-
-  function renderReview(){
-    var wrap = el("div","review");
-
-    wrap.appendChild(kvBlock("Caller / referrer",[
-      ["Role", S.caller.role],
-      ["Name", S.caller.name],
-      ["Relationship", S.caller.relationship],
-      ["Upfront notes", S.caller.consent]
-    ]));
-
-    var addr = S.participant.address;
-    wrap.appendChild(kvBlock("Participant details",[
-      ["Legal name", S.participant.legal_name],
-      ["Preferred name", S.participant.preferred_name],
-      ["Pronouns", S.participant.pronouns],
-      ["Date of birth", S.participant.dob],
-      ["NDIS number", S.participant.ndis_number],
-      ["Address line 1", addr.line1],
-      ["Address line 2", addr.line2],
-      ["Suburb", addr.suburb],
-      ["Postcode", addr.postcode],
-      ["State", addr.state],
-      ["Plan management", S.participant.plan_mgmt]
-    ]));
-
-    var pm = S.participant.plan_manager;
-    var pd = S.participant.plan_dates;
-    wrap.appendChild(kvBlock("Plan manager & dates",[
-      ["Plan manager organisation", pm.org],
-      ["Plan manager contact", pm.contact],
-      ["Plan manager email", pm.email],
-      ["Plan manager phone", pm.phone],
-      ["Plan start date", pd.start],
-      ["Plan end date", pd.end]
-    ]));
-
-    var em = S.contacts.emergency;
-    var sc = S.contacts.support_coordinator;
-    var gp = S.contacts.gp;
-    wrap.appendChild(kvBlock("Key contacts",[
-      ["Best contact email", S.contacts.email],
-      ["Best contact phone", S.contacts.phone],
-      ["Emergency contact name", em.name],
-      ["Emergency relationship", em.relationship],
-      ["Emergency phone", em.phone],
-      ["Support coordinator name", sc.name],
-      ["Support coordinator organisation", sc.org],
-      ["Support coordinator email", sc.email],
-      ["Support coordinator phone", sc.phone],
-      ["GP name", gp.name],
-      ["GP practice", gp.practice],
-      ["GP email", gp.email],
-      ["GP phone", gp.phone]
-    ]));
-
-    var pref = S.comms.preferences;
-    wrap.appendChild(kvBlock("Communication & preferences",[
-      ["Primary language", S.comms.primary_language],
-      ["Other languages / cultural notes", S.comms.cultural_considerations],
-      ["Interpreter required", yesno(S.comms.interpreter)],
-      ["Interpreter language", S.comms.interpreter_language],
-      ["Preferred worker gender", pref.worker_gender],
-      ["Gender preference notes", pref.worker_gender_other],
-      ["Transport required", yesno(pref.transport_required)]
-    ]));
-
-    wrap.appendChild(kvBlock("Living situation",[
-      ["Residence type", S.living.residence_type],
-      ["Lives with", S.living.lives_with],
-      ["Entry / access notes", S.living.entry_notes],
-      ["Keysafe", yesno(S.living.keysafe)],
-      ["Smoking on premises", S.living.smoking_on_premises || "—"],
-      ["Hazards", S.living.hazards]
-    ]));
-
-    var sz = S.clinical.seizures;
-    wrap.appendChild(kvBlock("Clinical profile",[
-      ["Primary diagnoses", S.clinical.primary_diagnoses],
-      ["Other diagnoses", S.clinical.other_diagnoses],
-      ["Allergies", S.clinical.allergies],
-      ["Mobility", S.clinical.mobility],
-      ["Equipment / aids", S.clinical.equipment],
-      ["Continence", S.clinical.continence],
-      ["Cognition", S.clinical.cognition],
-      ["Pressure injury risk", S.clinical.pressure_injury_risk],
-      ["Falls risk", S.clinical.falls_risk],
-      ["Seizures", yesno(sz.has)],
-      ["Seizure plan", sz.plan],
-      ["Seizure frequency", sz.frequency],
-      ["Stoma / ostomy care", yesno(S.clinical.stoma_care)],
-      ["Diet / swallowing notes", S.clinical.diet_notes]
-    ]));
-
-    wrap.appendChild(kvBlock("Medication management",[
-      ["Has medications", yesno(S.medications.has_meds)],
-      ["Method", S.medications.method],
-      ["Webster pack", yesno(S.medications.webster_pack)],
-      ["Storage location", S.medications.storage],
-      ["Self-admin", yesno(S.medications.self_admin)],
-      ["Staff admin", yesno(S.medications.staff_admin)],
-      ["Notes", S.medications.notes]
-    ]));
-
-    wrap.appendChild(kvBlock("Risks",[
-      ["Behavioural concerns", S.risks.behavioural.present],
-      ["Behaviour notes", S.risks.behavioural.notes],
-      ["Clinical concerns", listTrue(S.risks.clinical,{
-        wounds:"Wounds/dressings",
-        diabetes:"Diabetes",
-        tracheostomy:"Tracheostomy",
-        tube_feeding:"Enteral tube feeding",
-        mental_health:"Significant mental health needs",
-        stoma_care:"Stoma care"
-      })],
-      ["Clinical other", S.risks.clinical.other],
-      ["Environmental concerns", listTrue(S.risks.environmental,{
-        animals:"Reactive animals",
-        hoarding:"Hoarding / clutter",
-        weapons:"Weapons on site"
-      })],
-      ["Environmental other", S.risks.environmental.other],
-      ["Home risks", listTrue(S.risks.home_checklist,{
-        trip_hazards:"Trip hazards",
-        smoke_alarms:"No working smoke alarms",
-        lighting:"Poor lighting",
-        bathroom_safety:"Bathroom lacks safety rails / mats"
-      })],
-      ["Home notes", S.risks.home_checklist.notes],
-      ["Other risk notes", S.risks.other_notes],
-      ["Overall risk rating", S.risks.overall_rating]
-    ]));
-
-    wrap.appendChild(kvBlock("Behaviour Support Plan",[
-      ["BSP in place", yesno(S.bsp.has_bsp)],
-      ["Restrictive practices", yesno(S.bsp.restrictive_practices)],
-      ["BSP provider", S.bsp.provider],
-      ["Notes", S.bsp.notes]
-    ]));
-
-    wrap.appendChild(kvBlock("Supports & schedule",[
-      ["Required supports", supportsList()],
-      ["Specific support details", S.supports.details_text],
-      ["Goals", S.supports.goals],
-      ["Preferred outcomes", S.supports.outcomes],
-      ["Time windows", (S.schedule.windows||[]).join(", ") || "—"],
-      ["Days", (S.schedule.days||[]).join(", ") || "—"],
-      ["Hours per week", S.schedule.hours_per_week],
-      ["Urgency", S.schedule.urgency],
-      ["Start preference", S.schedule.start_preference]
-    ]));
-
-    var ackSummary = DOCS.map(function(d){
-      var ack = S.acks[d.id] || {};
-      var status = (ack.read ? "Read ✓" : "Read —");
-      if (d.requiresConsent){
-        status += " • Consent: " + (ack.consent ? "Yes ✓" : "—");
-      }
-      return [d.title, status];
-    });
-    wrap.appendChild(kvBlock("Policies & consents (acknowledgements)", ackSummary));
-
-    wrap.appendChild(kvBlock("Submitter details",[
-      ["Form completed by (name)", S.submitter.name],
-      ["Submitter email", S.submitter.email],
-      ["Submitter phone", S.submitter.phone]
-    ]));
-
-    return wrap;
-  }
-
-  /* ====== Printable / downloadable report ====== */
-  function buildFullReportHTML(){
-    var html = "<!DOCTYPE html><html><head><meta charset='utf-8'><title>HD HeeD AILR — Admission Form</title>";
-    html += "<style>body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:20px;color:#111;background:#fff;}h1,h2{color:#111;}h1{font-size:22px;margin-bottom:4px;}h2{font-size:18px;margin-top:18px;margin-bottom:6px;}table{border-collapse:collapse;width:100%;margin-bottom:12px;}th,td{border:1px solid #ccc;padding:6px 8px;font-size:13px;text-align:left;vertical-align:top;}th{background:#f5f5f5;width:260px;}small{color:#555;}@media print{body{margin:10mm;}table{page-break-inside:avoid;}}</style>";
-    html += "</head><body>";
-
-    html += "<div style='display:flex;align-items:center;gap:12px;margin-bottom:10px;'>";
-    html += "<img src='hd heed.jpg' alt='HD HeeD logo' style='height:60px;border-radius:10px;margin-right:4px;'>";
-    html += "<div>";
-    html += "<div style='font-size:20px;font-weight:700;'>HD HeeD Pty Ltd</div>";
-    html += "<div>ABN 47 665 228 768</div>";
-    html += "<div>info@hdheed.com.au &nbsp;&bull;&nbsp; 02 8630 5500</div>";
-    html += "<div>www.hdheed.com.au</div>";
-    html += "</div></div>";
-
-    html += "<h1>Advanced Intake & Long-form Registration (AILR)</h1>";
-    html += "<small>Date generated: "+new Date().toLocaleString()+"</small>";
-
-    function tableStart(title){ return "<h2>"+title+"</h2><table>"; }
-    function row(label,val){ return "<tr><th>"+label+"</th><td>"+(val?String(val).replace(/\n/g,"<br>"):"&mdash;")+"</td></tr>"; }
-    function tableEnd(){ return "</table>"; }
-    function yesNo(val){ return val===true?"Yes":val===false?"No":val===null?"Not sure":"—"; }
-    function listTrue2(obj,map){
-      var out=[]; for (var k in map){ if(obj && obj[k]) out.push(map[k]); }
-      return out.join(", ");
-    }
-    function supportsList2(){
-      var map={personal_care:"Personal care",high_intensity:"High-intensity personal care",household_tasks:"Household tasks",life_skills:"Development of life skills",community_participation:"Community participation",group_centre:"Group/centre-based activities",travel_transport:"Assist with travel & transport",daily_tasks_sil:"Daily tasks & shared living",not_sure:"Not sure — guide me"};
-      var l=(S.supports.required||[]).map(function(k){return map[k]||k;});
-      if(S.supports.required_other) l.push("Other: "+S.supports.required_other);
-      return l.join(", ");
-    }
-
-    // Caller
-    html += tableStart("Caller / referrer");
-    html += row("Role", S.caller.role);
-    html += row("Name", S.caller.name);
-    html += row("Relationship", S.caller.relationship);
-    html += row("Upfront notes", S.caller.consent);
-    html += tableEnd();
-
-    // Participant
-    var addr=S.participant.address;
-    html += tableStart("Participant details");
-    html += row("Legal name", S.participant.legal_name);
-    html += row("Preferred name", S.participant.preferred_name);
-    html += row("Pronouns", S.participant.pronouns);
-    html += row("Date of birth", S.participant.dob);
-    html += row("NDIS number", S.participant.ndis_number);
-    html += row("Address line 1", addr.line1);
-    html += row("Address line 2", addr.line2);
-    html += row("Suburb", addr.suburb);
-    html += row("Postcode", addr.postcode);
-    html += row("State", addr.state);
-    html += row("Plan management", S.participant.plan_mgmt);
-    html += tableEnd();
-
-    // Plan manager & dates
-    var pm=S.participant.plan_manager, pd=S.participant.plan_dates;
-    html += tableStart("Plan manager & dates");
-    html += row("Plan manager organisation", pm.org);
-    html += row("Plan manager contact", pm.contact);
-    html += row("Plan manager email", pm.email);
-    html += row("Plan manager phone", pm.phone);
-    html += row("Plan start date", pd.start);
-    html += row("Plan end date", pd.end);
-    html += tableEnd();
-
-    // Contacts
-    var em=S.contacts.emergency, sc=S.contacts.support_coordinator, gp=S.contacts.gp;
-    html += tableStart("Key contacts");
-    html += row("Best contact email", S.contacts.email);
-    html += row("Best contact phone", S.contacts.phone);
-    html += row("Emergency contact name", em.name);
-    html += row("Emergency contact relationship", em.relationship);
-    html += row("Emergency contact phone", em.phone);
-    html += row("Support coordinator name", sc.name);
-    html += row("Support coordinator organisation", sc.org);
-    html += row("Support coordinator email", sc.email);
-    html += row("Support coordinator phone", sc.phone);
-    html += row("GP name", gp.name);
-    html += row("GP practice", gp.practice);
-    html += row("GP email", gp.email);
-    html += row("GP phone", gp.phone);
-    html += tableEnd();
-
-    // Comms
-    var pref=S.comms.preferences;
-    html += tableStart("Communication & preferences");
-    html += row("Primary language", S.comms.primary_language);
-    html += row("Other languages / cultural notes", S.comms.cultural_considerations);
-    html += row("Interpreter required", yesNo(S.comms.interpreter));
-    html += row("Interpreter language", S.comms.interpreter_language);
-    html += row("Preferred worker gender", pref.worker_gender);
-    html += row("Gender preference notes", pref.worker_gender_other);
-    html += row("Transport required", yesNo(pref.transport_required));
-    html += tableEnd();
-
-    // Living
-    html += tableStart("Living situation");
-    html += row("Residence type", S.living.residence_type);
-    html += row("Lives with", S.living.lives_with);
-    html += row("Entry / access notes", S.living.entry_notes);
-    html += row("Keysafe", yesNo(S.living.keysafe));
-    html += row("Smoking on premises", S.living.smoking_on_premises || "—");
-    html += row("Hazards", S.living.hazards);
-    html += tableEnd();
-
-    // Clinical
-    var sz=S.clinical.seizures;
-    html += tableStart("Clinical profile");
-    html += row("Primary diagnoses", S.clinical.primary_diagnoses);
-    html += row("Other diagnoses", S.clinical.other_diagnoses);
-    html += row("Allergies", S.clinical.allergies);
-    html += row("Mobility", S.clinical.mobility);
-    html += row("Equipment / aids", S.clinical.equipment);
-    html += row("Continence", S.clinical.continence);
-    html += row("Cognition", S.clinical.cognition);
-    html += row("Pressure injury risk", S.clinical.pressure_injury_risk);
-    html += row("Falls risk", S.clinical.falls_risk);
-    html += row("Seizures", yesNo(sz.has));
-    html += row("Seizure plan", sz.plan);
-    html += row("Seizure frequency", sz.frequency);
-    html += row("Stoma / ostomy care", yesNo(S.clinical.stoma_care));
-    html += row("Diet / swallowing notes", S.clinical.diet_notes);
-    html += tableEnd();
-
-    // Medications
-    html += tableStart("Medication management");
-    html += row("Has medications", yesNo(S.medications.has_meds));
-    html += row("Method", S.medications.method);
-    html += row("Webster pack", yesNo(S.medications.webster_pack));
-    html += row("Storage location", S.medications.storage);
-    html += row("Self-admin", yesNo(S.medications.self_admin));
-    html += row("Staff admin", yesNo(S.medications.staff_admin));
-    html += row("Notes", S.medications.notes);
-    html += tableEnd();
-
-    // Risks
-    html += tableStart("Risks");
-    html += row("Behavioural concerns", S.risks.behavioural.present);
-    html += row("Behaviour notes", S.risks.behavioural.notes);
-    html += row("Clinical concerns", listTrue2(S.risks.clinical,{
-      wounds:"Wounds/dressings", diabetes:"Diabetes", tracheostomy:"Tracheostomy",
-      tube_feeding:"Enteral tube feeding", mental_health:"Significant mental health needs",
-      stoma_care:"Stoma care"
-    }));
-    html += row("Clinical other", S.risks.clinical.other);
-    html += row("Environmental concerns", listTrue2(S.risks.environmental,{
-      animals:"Reactive animals", hoarding:"Hoarding / clutter", weapons:"Weapons on site"
-    }));
-    html += row("Environmental other", S.risks.environmental.other);
-    html += row("Home risks", listTrue2(S.risks.home_checklist,{
-      trip_hazards:"Trip hazards", smoke_alarms:"No working smoke alarms",
-      lighting:"Poor lighting", bathroom_safety:"Bathroom lacks safety rails / mats"
-    }));
-    html += row("Home notes", S.risks.home_checklist.notes);
-    html += row("Other risk notes", S.risks.other_notes);
-    html += row("Overall risk rating", S.risks.overall_rating);
-    html += tableEnd();
-
-    // BSP
-    html += tableStart("Behaviour Support Plan");
-    html += row("BSP in place", yesNo(S.bsp.has_bsp));
-    html += row("Restrictive practices", yesNo(S.bsp.restrictive_practices));
-    html += row("BSP provider", S.bsp.provider);
-    html += row("Notes", S.bsp.notes);
-    html += tableEnd();
-
-    // Supports & schedule
-    html += tableStart("Supports & schedule");
-    html += row("Required supports", supportsList2());
-    html += row("Specific support details", S.supports.details_text);
-    html += row("Goals", S.supports.goals);
-    html += row("Preferred outcomes", S.supports.outcomes);
-    html += row("Time windows", (S.schedule.windows||[]).join(", "));
-    html += row("Days", (S.schedule.days||[]).join(", "));
-    html += row("Hours per week", S.schedule.hours_per_week);
-    html += row("Urgency", S.schedule.urgency);
-    html += row("Start preference", S.schedule.start_preference);
-    html += tableEnd();
-
-    // Policies & consents
-    html += tableStart("Policies & consents (acknowledgements)");
-    DOCS.forEach(function(d){
-      var ack=S.acks[d.id]||{};
-      var status = (ack.read?"Read ✓":"Read —");
-      if (d.requiresConsent){
-        status += " • Consent: "+(ack.consent?"Yes ✓":"—");
-      }
-      html += row(d.title, status);
-    });
-    html += tableEnd();
-
-    // Submitter
-    html += tableStart("Submitter details");
-    html += row("Form completed by (name)", S.submitter.name);
-    html += row("Submitter email", S.submitter.email);
-    html += row("Submitter phone", S.submitter.phone);
-    html += tableEnd();
-
-    html += "<p><strong>Next step:</strong> Please print and sign any required consent forms and email this completed admission form and supporting documents to <strong>info@hdheed.com.au</strong>.</p>";
-    html += "</body></html>";
-    return html;
-  }
-
-  function openFullPDF(){
-    var html = buildFullReportHTML();
-    var w = window.open("", "_blank");
-    if (!w){ alert("Please allow pop-ups to view the full PDF view."); return; }
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
-    w.focus();
-  }
-
-  function openPrintableSummary(){
-    var w = window.open("", "_blank");
-    if (!w){ alert("Please allow pop-ups to view the printable summary."); return; }
-    var html = "<!DOCTYPE html><html><head><meta charset='utf-8'><title>AILR — Summary</title>";
-    html += "<style>body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:20px;color:#111;}h1{font-size:20px;margin-bottom:8px;}details{margin-bottom:8px;}summary{font-weight:bold;cursor:pointer;}table{border-collapse:collapse;width:100%;margin-bottom:8px;}th,td{border:1px solid #ccc;padding:4px 6px;font-size:12px;text-align:left;}@media print{body{margin:10mm;}}</style>";
-    html += "</head><body>";
-
-    html += "<div style='display:flex;align-items:center;gap:12px;margin-bottom:10px;'>";
-    html += "<img src='hd heed.jpg' alt='HD HeeD logo' style='height:50px;border-radius:10px;margin-right:4px;'>";
-    html += "<div>";
-    html += "<div style='font-size:18px;font-weight:700;'>HD HeeD Pty Ltd</div>";
-    html += "<div>ABN 47 665 228 768</div>";
-    html += "<div>info@hdheed.com.au &nbsp;&bull;&nbsp; 02 8630 5500</div>";
-    html += "<div>www.hdheed.com.au</div>";
-    html += "</div></div>";
-
-    html += "<h1>AILR — Summary (for quick review)</h1>";
-    var rev = renderReview();
-    html += rev.outerHTML;
-    html += "<p><strong>Note:</strong> This is a lighter summary. For the full admission document, please use the “Download full form (PDF view)” option on the main form.</p>";
-    html += "</body></html>";
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
-    w.focus();
-  }
-
-  function downloadEditableRTF(){
-    var html = buildFullReportHTML();
-    // Very simple HTML-as-RTF wrapper so user can open in Word and adjust if needed
-    var rtfHeader = "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Arial;}}\n";
-    var body = html
-      .replace(/\\/g,"\\\\")
-      .replace(/\n/g,"\\par\n")
-      .replace(/{/g,"\\{").replace(/}/g,"\\}");
-    var rtf = rtfHeader + body + "}";
-    var blob = new Blob([rtf], {type:"application/rtf"});
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    a.href = url;
-    a.download = "HD_HeeD_AILR_Onboarding.rtf";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
-
-  /* ====== Validation ====== */
-  function canProceed(idx){
-    var step = Steps[idx];
-    if (!step) return true;
-
-    if (step.key === "intro"){
-      if (!S.caller.name){
-        alert("Please enter your name to continue.");
-        return false;
-      }
-    }
-    if (step.key === "participant"){
-      if (!S.participant.legal_name || !S.participant.dob){
-        alert("Please complete at least the participant’s legal name and date of birth.");
-        return false;
-      }
-    }
-    if (step.key === "contacts"){
-      if (!S.contacts.email && !S.contacts.phone){
-        alert("Please provide at least one contact method (email or phone).");
-        return false;
-      }
-    }
-    if (step.key === "supports"){
-      if (!S.supports.required || !S.supports.required.length){
-        alert("Please tick at least one support type, or select 'Not sure — guide me'.");
-        return false;
-      }
-    }
-    if (step.key === "submit"){
-      if (!S.submitter.name || (!S.submitter.email && !S.submitter.phone)){
-        alert("Please provide your name and at least an email or phone so it prints correctly on the final form.");
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function render(animate){
-    var st = Steps[S.i];
-    if (!st) return;
-    stepTxt.textContent = "Step "+(S.i+1)+"/"+Steps.length;
-    barEl.style.width = ((S.i)/(Steps.length-1))*100 + "%";
-    qEl.textContent = st.title;
-    subEl.innerHTML = st.sub || "";
-    optsEl.innerHTML = "";
-    if (animate) optsEl.classList.add("slide-enter");
-    st.build(optsEl);
-    updateNavigation();
-    setPortrait(st.key);
-    nextBtn.textContent = S.i === Steps.length-1 ? "Download form →" : "Next →";
-    backBtn.disabled = S.i === 0;
-  }
-
-  function go(delta){
-    var newIndex = S.i + delta;
-    if (newIndex < 0 || newIndex >= Steps.length) return;
-    if (delta>0 && !canProceed(S.i)) return;
-    S.i = newIndex;
-    save();
-    render(true);
-  }
-
-  /* ====== Modal handling ====== */
-  function openDoc(doc){
-    if (!docModal) return;
-    docTitle.textContent = doc.title;
-    var url = driveUrl(doc.fileUrl);
-    docViewer.setAttribute("src", url);
-    docDownload.href = url;
-    docModal.classList.add("open");
-    docModal.setAttribute("aria-hidden","false");
-  }
-  function closeDoc(){
-    if (!docModal) return;
-    docModal.classList.remove("open");
-    docModal.setAttribute("aria-hidden","true");
-    docViewer.setAttribute("src","");
-  }
-
-  /* ====== Confetti (kept) ====== */
-  function launchConfetti(){
-    if (!confettiCanvas || !confettiCtx) return;
-    confettiCanvas.classList.remove("hide");
-    var w = confettiCanvas.width = window.innerWidth;
-    var h = confettiCanvas.height = window.innerHeight;
-    var pieces = [];
-    for (var i=0;i<180;i++){
-      pieces.push({
-        x: Math.random()*w,
-        y: Math.random()*h - h,
-        vy: 2 + Math.random()*3,
-        size: 4 + Math.random()*4
-      });
-    }
-    var start = performance.now();
-    function frame(now){
-      var t = now - start;
-      confettiCtx.clearRect(0,0,w,h);
-      pieces.forEach(function(p){
-        p.y += p.vy;
-        if (p.y>h+20) p.y = -20;
-        confettiCtx.fillRect(p.x,p.y,p.size,p.size);
-      });
-      if (t<4000) requestAnimationFrame(frame);
-      else confettiCanvas.classList.add("hide");
-    }
-    requestAnimationFrame(frame);
-  }
-
-  /* ====== Restore & events ====== */
-  function restoreState(){
-    try{
-      var prev = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-      if (prev && typeof prev==="object"){
-        Object.assign(S, prev);
-        if (typeof S.i!=="number") S.i = 0;
-        if (S.i<0 || S.i>=Steps.length) S.i = 0;
-      }
-    }catch(e){
-      console.error("Failed to restore state:", e);
-    }
-    render(false);
-    buildNavigation();
-  }
-
-  // Nav clicks
-  if (navList){
-    navList.addEventListener("click", function(e){
-      var li = e.target.closest(".nav-item");
-      if (!li) return;
-      var idx = parseInt(li.dataset.index,10);
-      if (isNaN(idx) || isStepLocked(idx)) return;
-      if (idx > S.i && !canProceed(S.i)) return;
-      S.i = idx;
-      save();
-      render(true);
-    });
-  }
-
-  // Modal close
-  if (docClose) docClose.addEventListener("click", closeDoc);
-  if (docModal){
-    docModal.addEventListener("click", function(e){
-      if (e.target === docModal) closeDoc();
-    });
-  }
-
-  // Buttons
-  backBtn.addEventListener("click", function(){ go(-1); });
-  nextBtn.addEventListener("click", function(){
-    if (S.i === Steps.length-1){
-      // Final step: just open the full PDF and celebrate
-      if (!canProceed(S.i)) return;
-      openFullPDF();
-      launchConfetti();
-      alert("Your detailed admission form has been opened.\nPlease save it as PDF and email to info@hdheed.com.au.");
-      return;
-    }
-    go(1);
+    rtf += "\\par ";
   });
-  saveExitBtn.addEventListener("click", function(){
-    save();
-    alert("Your progress has been saved on this device.\nYou can safely close this window and return later using the same browser.");
-  });
-
-  window.addEventListener("load", restoreState);
-  window.addEventListener("popstate", function(ev){
-    if (ev.state && typeof ev.state.step === "number"){
-      S.i = Math.max(0, Math.min(Steps.length-1, ev.state.step));
-      render(false);
-      updateNavigation();
-    }
-  });
-})();
+  rtf += "Email completed intake and documents to "+EMAIL+"\\par }";
+  const blob=new Blob([rtf],{type:"application/rtf"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="HD_HeeD_AILR_Intake_Editable.rtf";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+document.getElementById("saveBtn").onclick=()=>{save();alert("Progress saved on this device.")};
+document.getElementById("clearBtn").onclick=()=>{ if(confirm("Clear all saved intake answers on this device?")){ localStorage.removeItem(STORAGE_KEY); S=deepClone(initial); render(); } };
+render();
 </script>
 </body>
 </html>
