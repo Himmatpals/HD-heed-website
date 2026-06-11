@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HD HeeD Referral Follow-up Playbook</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #152238;
+      --muted: #637083;
+      --line: #d7e0ea;
+      --brand: #134e6f;
+      --brand2: #0b7a75;
+      --soft: #eaf5f7;
+      --soft2: #f0f7ec;
+      --warn: #fff7e6;
+      --danger: #fff0f0;
+      --shadow: 0 12px 30px rgba(15, 44, 70, 0.10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0d3b55, #0b7a75);
+      color: white;
+      padding: 34px 28px 28px;
+    }
+
+    header .wrap {
+      max-width: 1220px;
+      margin: auto;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      letter-spacing: -0.5px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 25px;
+      letter-spacing: -0.2px;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 19px;
+    }
+
+    h4 {
+      margin: 18px 0 8px;
+      font-size: 16px;
+    }
+
+    p { margin: 8px 0 12px; }
+
+    .subtitle {
+      max-width: 900px;
+      color: rgba(255,255,255,0.88);
+      font-size: 17px;
+    }
+
+    .top-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: inherit;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,0.95);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    nav .wrap {
+      max-width: 1220px;
+      margin: auto;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 18px;
+    }
+
+    nav a {
+      color: var(--brand);
+      text-decoration: none;
+      white-space: nowrap;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: white;
+      font-size: 13px;
+    }
+
+    main {
+      max-width: 1220px;
+      margin: 24px auto 80px;
+      padding: 0 18px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.two {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .card.soft { background: var(--soft); box-shadow: none; }
+    .card.green { background: var(--soft2); box-shadow: none; }
+    .card.warn { background: var(--warn); box-shadow: none; }
+    .card.danger { background: var(--danger); box-shadow: none; }
+
+    label {
+      display: block;
+      font-weight: 700;
+      color: #26364a;
+      margin: 10px 0 6px;
+      font-size: 13px;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      padding: 12px 12px;
+      border: 1px solid #bfd0df;
+      border-radius: 12px;
+      background: white;
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    textarea { min-height: 88px; resize: vertical; }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .row.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+      background: var(--brand);
+      margin: 6px 6px 6px 0;
+      font-size: 13px;
+    }
+
+    button.secondary { background: var(--brand2); }
+    button.ghost {
+      background: white;
+      color: var(--brand);
+      border: 1px solid var(--line);
+    }
+
+    .copyline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 10px 0;
+    }
+
+    .output {
+      white-space: pre-wrap;
+      background: #fbfdff;
+      border: 1px solid #cddae7;
+      border-radius: 14px;
+      padding: 15px;
+      min-height: 80px;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+
+    .small { font-size: 13px; color: var(--muted); }
+    .tiny { font-size: 12px; color: var(--muted); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #edf4f8;
+      color: #20344a;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e9f3ff;
+      color: #15518a;
+      font-weight: 700;
+      font-size: 12px;
+      margin: 2px 4px 2px 0;
+    }
+
+    .pill.green { background: #e7f7ed; color: #23633c; }
+    .pill.orange { background: #fff1d6; color: #8a5300; }
+    .pill.red { background: #ffe5e5; color: #9c2424; }
+
+    .checklist label {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-weight: 400;
+      margin: 8px 0;
+    }
+
+    .checklist input[type="checkbox"] {
+      width: auto;
+      margin-top: 3px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .call-box {
+      border-left: 5px solid var(--brand2);
+      padding: 12px 14px;
+      background: #f9ffff;
+      border-radius: 0 14px 14px 0;
+      margin: 10px 0;
+    }
+
+    .daybar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 6px;
+    }
+
+    .daychip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 10px;
+      background: white;
+      color: var(--brand);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .daychip.active {
+      background: var(--brand);
+      color: white;
+      border-color: var(--brand);
+    }
+
+    details {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin: 10px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .fixed-footer {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 12;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 999px;
+      padding: 8px;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 860px) {
+      .grid.two, .grid.three, .row, .row.three {
+        grid-template-columns: 1fr;
+      }
+      h1 { font-size: 27px; }
+      header { padding: 26px 18px; }
+    }
+
+    @media print {
+      nav, .fixed-footer, button, .no-print { display: none !important; }
+      body { background: white; }
+      .card { box-shadow: none; break-inside: avoid; }
+      main { margin: 0; max-width: none; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>HD HeeD Referral Follow-up Playbook</h1>
+    <p class="subtitle">Open this page, choose the follow-up day and referral partner type, then copy the exact email, call script, SMS wording, CRM note, checklist and next step. Built for Richmond, Hawkesbury, Penrith and Western Sydney NDIS referral outreach.</p>
+    <div class="top-badges">
+      <span class="badge">7-touch follow-up system</span>
+      <span class="badge">Support coordinators, LACs, GPs, allied health, hospitals, schools, community organisations</span>
+      <span class="badge">Local, clinically led, participant-first messaging</span>
+      <span class="badge">Compliance prompts included</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#generator">Follow-up Generator</a>
+    <a href="#sequence">7-Touch Sequence</a>
+    <a href="#call">Call Day Scripts</a>
+    <a href="#emails">Email Library</a>
+    <a href="#sms">SMS Library</a>
+    <a href="#crm">CRM Tracker</a>
+    <a href="#contacts">Priority Targets</a>
+    <a href="#nurture">Monthly Nurture</a>
+    <a href="#compliance">Compliance</a>
+  </div>
+</nav>
+
+<main>
+  <section class="card soft" id="how">
+    <h2>How to use this page</h2>
+    <p><strong>Step 1:</strong> Select the contact type and follow-up day below. <strong>Step 2:</strong> Fill in the organisation and person’s name. <strong>Step 3:</strong> Copy the email, call script or SMS. <strong>Step 4:</strong> Log the result in your spreadsheet/CRM and set the next follow-up date.</p>
+    <p class="small"><strong>Important:</strong> Use SMS only when you have permission or a clear professional reason to use that number. Always respect unsubscribe/no-contact requests. Do not put participant health details into marketing follow-up notes.</p>
+  </section>
+
+  <section class="card" id="generator">
+    <div class="section-title">
+      <div>
+        <h2>Follow-up Generator</h2>
+        <p class="small">Choose the follow-up day and contact type. The page will generate the recommended action, email, call script, SMS, CRM note and next step.</p>
+      </div>
+      <button class="ghost" onclick="window.print()">Print / Save PDF</button>
+    </div>
+
+    <div class="grid two">
+      <div>
+        <div class="row">
+          <div>
+            <label for="segment">Referral partner type</label>
+            <select id="segment" onchange="generate()">
+              <option value="support">Support Coordinator / LAC</option>
+              <option value="plan">Plan Manager</option>
+              <option value="gp">GP Clinic</option>
+              <option value="allied">Allied Health Clinic</option>
+              <option value="hospital">Hospital / Community Health / Discharge Team</option>
+              <option value="community">Council / School / Community Organisation</option>
+              <option value="aged">Aged Care / Retirement / Carer Network</option>
+              <option value="generic">General Local Referral Partner</option>
+            </select>
+          </div>
+          <div>
+            <label for="day">Follow-up day / situation</label>
+            <select id="day" onchange="generate()">
+              <option value="0">Day 0 — First introduction email</option>
+              <option value="2">Day 2 — Confirm right person / first call</option>
+              <option value="5">Day 5 — Value email / referral guide</option>
+              <option value="7">Day 7 — Main call day</option>
+              <option value="10">Day 10 — Social proof / local fit email</option>
+              <option value="14">Day 14 — Permission-based close / final nudge</option>
+              <option value="21">Day 21 — Soft re-open / meeting ask</option>
+              <option value="30">Day 30 — Monthly nurture update</option>
+              <option value="45">Day 45 — Relationship building check</option>
+              <option value="60">Day 60 — Re-engagement</option>
+              <option value="meeting">Meeting booked — Confirmation and agenda</option>
+              <option value="referral">Referral received — Intake response</option>
+              <option value="noresponse">No response — Move to nurture</option>
+              <option value="donotcontact">Do not contact — Stop sequence</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="contactName">Contact name</label>
+            <input id="contactName" placeholder="e.g. Sarah / Practice Manager / Team" oninput="generate()" />
+          </div>
+          <div>
+            <label for="orgName">Organisation</label>
+            <input id="orgName" placeholder="e.g. Breakthru Penrith" oninput="generate()" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="suburb">Suburb / catchment</label>
+            <input id="suburb" placeholder="e.g. Penrith, Windsor, Richmond" oninput="generate()" />
+          </div>
+          <div>
+            <label for="warmth">Lead status</label>
+            <select id="warmth" onchange="generate()">
+              <option value="cold">Cold — no previous contact</option>
+              <option value="sent">Email sent, no reply yet</option>
+              <option value="warm">Warm — replied or showed interest</option>
+              <option value="partner">Partner — already referred or met</option>
+              <option value="notfit">Not fit / do not contact</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="serviceFocus">Service focus for this contact</label>
+        <select id="serviceFocus" onchange="generate()">
+          <option value="general">General NDIS support / local provider introduction</option>
+          <option value="personal">Personal care and daily living support</option>
+          <option value="community">Community access and social participation</option>
+          <option value="nursing">Community nursing / clinical support</option>
+          <option value="respite">Carer relief / respite / short-term support</option>
+          <option value="discharge">Hospital discharge / transition support</option>
+          <option value="complex">Complex participant coordination and responsive support</option>
+        </select>
+
+        <label for="customNotes">Your notes for this lead</label>
+        <textarea id="customNotes" placeholder="Example: They said they have difficulty finding reliable local support for community access. Mention quick response and local coverage." oninput="generate()"></textarea>
+
+        <div class="copyline">
+          <button onclick="generate()">Generate follow-up</button>
+          <button class="secondary" onclick="saveSettings()">Save my details</button>
+          <button class="ghost" onclick="clearLead()">Clear lead fields</button>
+        </div>
+      </div>
+
+      <div class="card green">
+        <h3>Your HD HeeD details</h3>
+        <p class="small">These are saved in this browser only. Update once, then templates will use your details.</p>
+
+        <label for="senderName">Your name</label>
+        <input id="senderName" placeholder="Himmat Syan" oninput="generate()" />
+
+        <label for="senderRole">Role</label>
+        <input id="senderRole" placeholder="Director / Registered Nurse / HD HeeD" oninput="generate()" />
+
+        <div class="row">
+          <div>
+            <label for="senderPhone">Phone</label>
+            <input id="senderPhone" placeholder="Your business phone" oninput="generate()" />
+          </div>
+          <div>
+            <label for="senderEmail">Email</label>
+            <input id="senderEmail" placeholder="Your business email" oninput="generate()" />
+          </div>
+        </div>
+
+        <label for="website">Website</label>
+        <input id="website" placeholder="https://www.hdheed.com.au" oninput="generate()" />
+
+        <h4>Core positioning</h4>
+        <div class="output" id="positioning"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid two">
+    <div class="card">
+      <h2>Today’s recommended action</h2>
+      <div id="todayAction" class="output"></div>
+      <div class="copyline">
+        <button onclick="copyText('todayAction')">Copy action</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Next step after today</h2>
+      <div id="nextStep" class="output"></div>
+      <div class="copyline">
+        <button onclick="copyText('nextStep')">Copy next step</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid two">
+    <div class="card" id="emailOutputCard">
+      <h2>Email for today</h2>
+      <label>Subject</label>
+      <div id="emailSubject" class="output"></div>
+      <label>Email body</label>
+      <div id="emailBody" class="output"></div>
+      <div class="copyline">
+        <button onclick="copyText('emailSubject')">Copy subject</button>
+        <button onclick="copyText('emailBody')">Copy email body</button>
+      </div>
+    </div>
+
+    <div class="card" id="callOutputCard">
+      <h2>Call script for today</h2>
+      <div id="callScript" class="output"></div>
+      <div class="copyline">
+        <button onclick="copyText('callScript')">Copy call script</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid two">
+    <div class="card" id="smsOutputCard">
+      <h2>SMS / short message for today</h2>
+      <div class="card warn">
+        <strong>Use SMS only if appropriate.</strong> Prefer phone or email for first outreach unless you already have permission or the number is clearly published for professional contact.
+      </div>
+      <div id="smsText" class="output"></div>
+      <div class="copyline">
+        <button onclick="copyText('smsText')">Copy SMS</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>CRM / spreadsheet note</h2>
+      <div id="crmNote" class="output"></div>
+      <div class="copyline">
+        <button onclick="copyText('crmNote')">Copy CRM note</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="checklistCard">
+    <h2>Checklist for today</h2>
+    <div class="checklist" id="checklist"></div>
+  </section>
+
+  <section class="card" id="sequence">
+    <h2>7-touch follow-up sequence</h2>
+    <p class="small">This is the core sequence. Keep the tone respectful, local, and helpful. The aim is to build referral trust, not pressure anyone.</p>
+    <div class="daybar" id="daybar"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Touch</th>
+          <th>Timing</th>
+          <th>Channel</th>
+          <th>Purpose</th>
+          <th>What to log</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>Day 0</td>
+          <td>Email</td>
+          <td>Introduce HD HeeD as a local NDIS support option and ask permission to send a referral guide.</td>
+          <td>Email sent, segment, suburb, service focus.</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>Day 2</td>
+          <td>Phone task or short email</td>
+          <td>Confirm the right contact and ask what service gaps they see locally.</td>
+          <td>Right person confirmed, wrong person, voicemail, no answer, call-back date.</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>Day 5</td>
+          <td>Email</td>
+          <td>Send value: one-page referral guide, catchment, response time, intake criteria.</td>
+          <td>Guide sent, attachment/link sent, any click/reply.</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>Day 7</td>
+          <td>Phone</td>
+          <td>Main conversation day. Ask about referral gaps, waitlists, difficult-to-place supports, and what would make referral easier.</td>
+          <td>Need identified, objections, meeting requested, follow-up promised.</td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td>Day 10</td>
+          <td>Email</td>
+          <td>Reinforce local fit, responsiveness, clinical background, participant-first approach.</td>
+          <td>Second follow-up sent, updated status.</td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td>Day 14</td>
+          <td>Short email or SMS only if appropriate</td>
+          <td>Permission-based final nudge. Ask whether to keep them on local referral updates.</td>
+          <td>Nurture yes/no, unsubscribe/no contact, next review date.</td>
+        </tr>
+        <tr>
+          <td><strong>7</strong></td>
+          <td>Monthly</td>
+          <td>Email / relationship call</td>
+          <td>Warm nurture: capacity update, local availability, helpful NDIS support tip, invitation to connect.</td>
+          <td>Monthly touch sent, referrals received, relationship score.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" id="call">
+    <h2>Detailed call day conversation guide</h2>
+    <p>This section gives deeper scripts for Day 2 and Day 7, including branching responses.</p>
+
+    <details open>
+      <summary>Universal call structure</summary>
+      <div class="call-box">
+        <p><strong>1. Open respectfully:</strong> “Hi, this is [Your name] from HD HeeD. I know you may be busy, so I’ll be brief.”</p>
+        <p><strong>2. Explain relevance:</strong> “We support NDIS participants around Richmond/Hawkesbury and Penrith, and I’m introducing ourselves to local referral partners.”</p>
+        <p><strong>3. Ask permission:</strong> “Is now a suitable time for a two-minute introduction, or should I call another time?”</p>
+        <p><strong>4. Find the right person:</strong> “Who is the best person to receive local NDIS provider information or referral pathway details?”</p>
+        <p><strong>5. Ask one useful question:</strong> “What type of local support is hardest to find at the moment?”</p>
+        <p><strong>6. Offer value:</strong> “I can send a one-page referral guide with our service area, intake process and contact details.”</p>
+        <p><strong>7. Close clearly:</strong> “I’ll send that today and check back next week unless you prefer no follow-up.”</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>If they are busy</summary>
+      <div class="call-box">
+        <p>“No problem at all. I do not want to interrupt your day. Would it be better if I send a short email with our local referral details, and you can forward it to the right person if relevant?”</p>
+        <p><strong>If yes:</strong> “Thank you. I’ll keep it brief. Is this the best email address?”</p>
+        <p><strong>If no:</strong> “No worries. I’ll leave it there. Thank you for your time.”</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>If they ask what HD HeeD does</summary>
+      <div class="call-box">
+        <p>“HD HeeD is a local NDIS provider supporting participants across Richmond, Hawkesbury, Penrith and surrounding Western Sydney areas. We focus on practical, person-centred supports such as daily living support, personal care, community access, carer relief/respite and clinically informed coordination where appropriate. Our aim is to be responsive, easy to communicate with, and respectful of participant choice and control.”</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>If they say they already have providers</summary>
+      <div class="call-box">
+        <p>“That’s completely understandable. I’m not asking to replace any provider or create an exclusive arrangement. I’m simply introducing HD HeeD as another local option for times when your usual providers are full, not the right fit, or when a participant specifically wants a provider in the Richmond/Hawkesbury or Penrith area.”</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>If they ask for proof or experience</summary>
+      <div class="call-box">
+        <p>“The main value we bring is that we are locally focused and clinically led. We understand documentation, risk, communication with families, and the importance of reliable follow-up. We also understand that NDIS supports must respect participant choice and control. We are happy to start with a small, appropriate referral and demonstrate our responsiveness.”</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>If they may refer someone</summary>
+      <div class="call-box">
+        <p>“Thank you. To keep it safe and appropriate, please only send participant details through the correct referral pathway and with consent. For the first step, you can send general details about the support need, suburb, funding type and urgency, and we can confirm whether we are suitable before receiving detailed health information.”</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="card" id="emails">
+    <h2>Email template library</h2>
+    <p class="small">Use the generator above first. These are extra full templates you can copy when needed.</p>
+
+    <details open>
+      <summary>Support coordinator / LAC — first introduction</summary>
+      <div class="output" id="librarySupportEmail">Subject: Local NDIS support option for Penrith and Hawkesbury
+
+Hi [First name],
+
+I’m [Your name] from HD HeeD. We support NDIS participants across Richmond/Hawkesbury, Penrith and surrounding Western Sydney areas.
+
+I’m reaching out because support coordinators and local area coordinators are often the people who need practical, responsive local provider options when participants are choosing supports.
+
+We aim to make referrals easier by being clear about:
+- who we can support
+- where we operate
+- how quickly we respond
+- the best intake contact for urgent or routine enquiries
+
+If useful, I can send you a one-page referral guide for your team.
+
+If there is a current service gap you are finding hard to place locally, I would also be happy to indicate whether we may be a suitable fit.
+
+Kind regards,
+[Your name]
+[Role] | HD HeeD
+[Phone]
+[Email]</div>
+      <button onclick="copyText('librarySupportEmail')">Copy this email</button>
+    </details>
+
+    <details>
+      <summary>Plan manager — first introduction</summary>
+      <div class="output" id="libraryPlanEmail">Subject: Local provider contact for participants in Penrith and Hawkesbury
+
+Hi [First name],
+
+I’m [Your name] from HD HeeD. We support NDIS participants in Richmond/Hawkesbury, Penrith and surrounding Western Sydney areas.
+
+I know plan managers are often asked which local providers are responsive, easy to communicate with, and clear with documentation. I am not asking for anything exclusive. I simply want to make it easy for your team to know when HD HeeD may be a suitable local option.
+
+If helpful, I can send a short summary with our catchment, service focus, intake process and best contact point.
+
+Kind regards,
+[Your name]
+[Role] | HD HeeD
+[Phone]
+[Email]</div>
+      <button onclick="copyText('libraryPlanEmail')">Copy this email</button>
+    </details>
+
+    <details>
+      <summary>GP / allied health — first introduction</summary>
+      <div class="output" id="libraryGpEmail">Subject: Local disability support pathway for your patients and families
+
+Hi [Practice Manager / Team],
+
+I’m [Your name] from HD HeeD. We provide local NDIS supports across Penrith, Richmond/Hawkesbury and surrounding Western Sydney areas.
+
+We are introducing ourselves to local practices and allied health teams so your staff have a clear community option when a patient, family member or carer asks about disability support in the area.
+
+If useful, I can send a one-page referral guide with:
+- our local coverage
+- support types
+- intake contact details
+- how to make a general enquiry safely and appropriately
+
+Kind regards,
+[Your name]
+[Role] | HD HeeD
+[Phone]
+[Email]</div>
+      <button onclick="copyText('libraryGpEmail')">Copy this email</button>
+    </details>
+
+    <details>
+      <summary>Hospital / community health — first introduction</summary>
+      <div class="output" id="libraryHospitalEmail">Subject: Community support contact for discharge and ongoing care
+
+Hi [Team / Name],
+
+I’m [Your name] from HD HeeD. We support NDIS participants across Penrith, Richmond/Hawkesbury and surrounding Western Sydney areas.
+
+I’m reaching out so your team has a straightforward local contact for community-based disability support when discharge planning or longer-term support coordination is needed.
+
+If helpful, I can send a concise referral sheet with our catchment, response time, intake process and best contact details.
+
+Kind regards,
+[Your name]
+[Role] | HD HeeD
+[Phone]
+[Email]</div>
+      <button onclick="copyText('libraryHospitalEmail')">Copy this email</button>
+    </details>
+
+    <details>
+      <summary>Council / school / community organisation — first introduction</summary>
+      <div class="output" id="libraryCommunityEmail">Subject: Local disability support contact for families in Penrith and Hawkesbury
+
+Hi [Name / Team],
+
+I’m [Your name] from HD HeeD. We support people with disability and their families across Richmond/Hawkesbury, Penrith and surrounding Western Sydney areas.
+
+We know community-facing teams are often asked where families can start when they need local disability support. I would be glad to send a short guide your staff can keep on hand.
+
+If there is a community event, inclusion network or information session where local providers can contribute practically, I would welcome that conversation too.
+
+Warm regards,
+[Your name]
+[Role] | HD HeeD
+[Phone]
+[Email]</div>
+      <button onclick="copyText('libraryCommunityEmail')">Copy this email</button>
+    </details>
+  </section>
+
+  <section class="card" id="sms">
+    <h2>SMS / short message library</h2>
+    <div class="card warn">
+      <p><strong>Compliance reminder:</strong> Do not add people to bulk SMS marketing unless you have clear consent. For first contact, email or phone is usually safer. If they ask not to be contacted, stop immediately and record it.</p>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Situation</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>After email, appropriate professional mobile</td>
+          <td>Hi [Name], this is [Your name] from HD HeeD. I sent a short email about local NDIS supports in [Area]. Just checking if you are the right person for referral pathway information. Thanks, [Your name].</td>
+        </tr>
+        <tr>
+          <td>After missed call</td>
+          <td>Hi [Name], this is [Your name] from HD HeeD. I tried calling briefly about local NDIS referral support around [Area]. I’ll also send the details by email. Please let me know if you prefer no follow-up.</td>
+        </tr>
+        <tr>
+          <td>Meeting reminder</td>
+          <td>Hi [Name], confirming our HD HeeD intro call for [day/time]. I’ll keep it short and focus on local referral pathways and support gaps. Thanks, [Your name].</td>
+        </tr>
+        <tr>
+          <td>Referral received</td>
+          <td>Hi [Name], thank you for the referral. We have received it and will review suitability/next steps. Please ensure participant consent has been obtained before sending any sensitive details.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" id="crm">
+    <h2>CRM / spreadsheet tracker</h2>
+    <p>Use this structure in Google Sheets, HubSpot, Mailchimp, ActiveCampaign or any CRM. The key is to always record the current follow-up day and next action date.</p>
+
+    <h3>Recommended columns</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Use</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Priority</td><td>Sort outreach order</td><td>A1, A2, B1, B2</td></tr>
+        <tr><td>Contact type</td><td>Segment templates</td><td>Support Coordinator, GP, Allied Health</td></tr>
+        <tr><td>Organisation</td><td>Lead name</td><td>Breakthru Penrith</td></tr>
+        <tr><td>Contact person</td><td>Specific person if known</td><td>Practice Manager / Intake Team</td></tr>
+        <tr><td>Phone</td><td>Call task</td><td>02 xxxx xxxx</td></tr>
+        <tr><td>Email</td><td>Email task</td><td>intake@example.com</td></tr>
+        <tr><td>Suburb / catchment</td><td>Local relevance</td><td>Penrith / Windsor / Richmond</td></tr>
+        <tr><td>Stage</td><td>Pipeline status</td><td>New, Email sent, Called, Warm, Meeting booked, Nurture, Do not contact</td></tr>
+        <tr><td>Follow-up day</td><td>Where you are in the sequence</td><td>Day 0, Day 2, Day 5, Day 7, Day 14</td></tr>
+        <tr><td>Last contact date</td><td>Record activity</td><td>11/06/2026</td></tr>
+        <tr><td>Next action date</td><td>Don’t lose leads</td><td>13/06/2026</td></tr>
+        <tr><td>Service focus</td><td>Personalise value</td><td>Community access, personal care, respite, discharge</td></tr>
+        <tr><td>Consent status</td><td>Compliance</td><td>Email okay, SMS consent, phone only, no contact</td></tr>
+        <tr><td>Notes</td><td>Relationship details</td><td>Needs reliable local support for participants in Windsor</td></tr>
+        <tr><td>Referral count</td><td>Relationship value</td><td>0, 1, 2+</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Pipeline stages</h3>
+    <div>
+      <span class="pill">New lead</span>
+      <span class="pill">Day 0 email sent</span>
+      <span class="pill">Right person confirmed</span>
+      <span class="pill">Called</span>
+      <span class="pill green">Warm reply</span>
+      <span class="pill green">Meeting booked</span>
+      <span class="pill green">Referral received</span>
+      <span class="pill orange">Monthly nurture</span>
+      <span class="pill red">Do not contact</span>
+    </div>
+
+    <h3>Weekly KPI dashboard</h3>
+    <table>
+      <thead>
+        <tr><th>KPI</th><th>Target for first 90 days</th><th>Why it matters</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>New contacts added</td><td>25–40 per week</td><td>Build enough local referral coverage.</td></tr>
+        <tr><td>Day 0 emails sent</td><td>20–30 per week</td><td>Consistent first-touch outreach.</td></tr>
+        <tr><td>Calls completed</td><td>10–20 per week</td><td>Referral relationships need voice contact.</td></tr>
+        <tr><td>Positive replies</td><td>5–10 per month initially</td><td>Shows message-market fit.</td></tr>
+        <tr><td>Meetings booked</td><td>2–4 per month initially</td><td>Strong leading indicator for referrals.</td></tr>
+        <tr><td>Referral enquiries</td><td>1–3 per month initially, then growing</td><td>Outcome measure.</td></tr>
+        <tr><td>Average response time</td><td>Same day or next business day</td><td>Responsiveness is a key differentiator.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" id="contacts">
+    <h2>Priority target groups from the research</h2>
+    <p>Start with A1 and A2 contacts in Richmond, Windsor, Hawkesbury and Penrith. These are the strongest referral relationship categories.</p>
+
+    <div class="grid two">
+      <div class="card soft">
+        <h3>A1 — Highest priority</h3>
+        <ul>
+          <li>NDIS Local Area Coordinator offices in Penrith and Windsor</li>
+          <li>Support coordinators and specialist support coordinators</li>
+          <li>Hospitals, discharge teams and community health intake</li>
+          <li>High-footfall GP clinics in Richmond, Windsor, Penrith and Kingswood</li>
+          <li>Disability providers that may have overflow, waitlist or reciprocal referral opportunities</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>A2 — Strong local partners</h3>
+        <ul>
+          <li>Allied health clinics: OT, physio, speech, exercise physiology</li>
+          <li>Plan managers with local client relationships</li>
+          <li>Community hubs and multicultural services</li>
+          <li>Employment services and school transition networks</li>
+          <li>Aged care and carer support organisations</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Example local organisations to prioritise</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Examples</th>
+          <th>Best person to ask for</th>
+          <th>Best first ask</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LAC / NDIS gateway</td>
+          <td>Uniting LAC Penrith, Uniting LAC Windsor, NDIS Windsor office</td>
+          <td>LAC team, community engagement person</td>
+          <td>“Can I send a one-page local provider guide?”</td>
+        </tr>
+        <tr>
+          <td>Support coordination</td>
+          <td>Breakthru Penrith, Ability Options, Marli and Moe, Taylored Support, Interaction Services, Evolution Disability</td>
+          <td>Support coordination team leader or intake</td>
+          <td>“What local support is hardest for you to place?”</td>
+        </tr>
+        <tr>
+          <td>Hospitals / community health</td>
+          <td>Hawkesbury District Hospital, Hawkesbury Community Health, Nepean Hospital, Penrith Community Health, Lemongrove Community Health</td>
+          <td>Discharge planner, social worker, community intake, allied health team leader</td>
+          <td>“Who should receive our referral pathway sheet?”</td>
+        </tr>
+        <tr>
+          <td>GP clinics</td>
+          <td>Richmond Marketplace Medical Centre, Advance Medical Practice Windsor, Windsor Family Practice, Kable Street Medical Centre, Octa Medical Kingswood</td>
+          <td>Practice manager</td>
+          <td>“Can I send a short guide for patients/families asking about NDIS support?”</td>
+        </tr>
+        <tr>
+          <td>Allied health</td>
+          <td>Penrith Physiotherapy, Sydney Muscle & Joint Clinic, Ability Action Australia, Physio Inq, Active Ability, Inspire Healthcare</td>
+          <td>Practice manager, NDIS intake, senior clinician</td>
+          <td>“Can we be a local support option when therapy identifies support needs?”</td>
+        </tr>
+        <tr>
+          <td>Community / councils / schools</td>
+          <td>Penrith City Council, Hawkesbury City Council, Peppercorn Services, SydWest, NOVA Employment, Richmond High, Windsor High, Penrith Valley School</td>
+          <td>Community development, inclusion officer, wellbeing team, learning support</td>
+          <td>“Can we share a local disability support information sheet?”</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" id="nurture">
+    <h2>Monthly nurture system</h2>
+    <p>The goal is to stay useful without becoming annoying. Send only to warm contacts or contacts who have not opted out.</p>
+
+    <h3>Monthly email structure</h3>
+    <div class="output" id="monthlyStructure">Subject: HD HeeD local availability update — [Month]
+
+Hi [Name],
+
+I hope you are well.
+
+This is a short local update from HD HeeD for Richmond/Hawkesbury, Penrith and surrounding Western Sydney areas.
+
+This month, we can assist with:
+- [Service/capacity 1]
+- [Service/capacity 2]
+- [Service/capacity 3]
+
+A quick reminder: we aim to respond quickly, communicate clearly, and support participant choice and control. If you have a participant or family looking for a local option, you are welcome to send a general enquiry first so we can confirm whether we are suitable.
+
+Kind regards,
+[Your name]
+HD HeeD
+[Phone]
+[Email]
+
+If you prefer not to receive these local referral updates, please reply “unsubscribe”.</div>
+    <button onclick="copyText('monthlyStructure')">Copy monthly structure</button>
+
+    <h3>Quarterly relationship call</h3>
+    <div class="call-box">
+      <p>“Hi [Name], this is [Your name] from HD HeeD. I’m just checking in because we connected earlier about local NDIS supports. I wanted to ask whether there are any current service gaps in Richmond/Hawkesbury or Penrith that your team is finding difficult to place. I’m not asking for anything urgent — just trying to keep our local support availability useful and realistic.”</p>
+    </div>
+
+    <h3>Relationship-building ideas</h3>
+    <ul>
+      <li>Offer a simple referral pathway sheet, not a long brochure.</li>
+      <li>Invite coordinators to send a general suitability enquiry before full referral.</li>
+      <li>Give fast “yes/no/not suitable” responses so coordinators trust your communication.</li>
+      <li>Send thank-you updates after referrals, without breaching participant privacy.</li>
+      <li>Ask what support gaps exist instead of only promoting services.</li>
+      <li>Attend local disability networks, council inclusion events, carer groups and provider expos.</li>
+    </ul>
+  </section>
+
+  <section class="card" id="objections">
+    <h2>Objections and responses</h2>
+    <table>
+      <thead>
+        <tr><th>What they say</th><th>Professional response</th><th>Next step</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>“We already have providers.”</td>
+          <td>“That makes sense. I am not asking to replace existing providers. I only want HD HeeD to be known as another local option when a participant needs a different fit, urgent capacity, or a provider in Richmond/Hawkesbury or Penrith.”</td>
+          <td>Ask to send referral guide and move to monthly nurture.</td>
+        </tr>
+        <tr>
+          <td>“We do not refer to specific providers.”</td>
+          <td>“I understand. Participant choice and control is essential. I am only providing information so participants and families can make informed choices if they ask about local options.”</td>
+          <td>Send information-only guide, no pressure.</td>
+        </tr>
+        <tr>
+          <td>“Send me information.”</td>
+          <td>“Thank you. I’ll send a concise one-page guide with our service area, supports and intake contact. Is this the best email?”</td>
+          <td>Send Day 5 value email immediately and set Day 7 call task.</td>
+        </tr>
+        <tr>
+          <td>“We have no current need.”</td>
+          <td>“No problem. Would it be okay if I keep your team on a light monthly local availability update, or would you prefer no follow-up?”</td>
+          <td>If yes, monthly nurture. If no, mark do not contact.</td>
+        </tr>
+        <tr>
+          <td>“What makes you different?”</td>
+          <td>“We are local, responsive and clinically led. We focus on clear communication, reliable follow-up, safe documentation and participant-first support.”</td>
+          <td>Offer short meeting or guide.</td>
+        </tr>
+        <tr>
+          <td>“Can you take a referral today?”</td>
+          <td>“We can review suitability. Please make sure consent is in place before sending participant details. You can first send suburb, support need, urgency and funding type, then we can confirm if we are suitable.”</td>
+          <td>Move to referral received workflow.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" id="compliance">
+    <h2>Compliance and safe outreach rules</h2>
+    <div class="grid two">
+      <div class="card danger">
+        <h3>Do not do this</h3>
+        <ul>
+          <li>Do not pressure support coordinators, clinicians or families.</li>
+          <li>Do not offer commissions or exclusive referral deals.</li>
+          <li>Do not add people to bulk SMS without permission.</li>
+          <li>Do not ignore unsubscribe or do-not-contact requests.</li>
+          <li>Do not store participant health details in a marketing spreadsheet.</li>
+          <li>Do not claim capacity, registration, services or response times that are not accurate.</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>Do this instead</h3>
+        <ul>
+          <li>Keep outreach professional, relevant and local.</li>
+          <li>Provide information that supports participant choice and control.</li>
+          <li>Use clear unsubscribe wording in marketing-style emails.</li>
+          <li>Record consent status and do-not-contact requests.</li>
+          <li>Separate referral-partner CRM from participant/client records.</li>
+          <li>Respond quickly and honestly when a referral is not suitable.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Recommended unsubscribe line</h3>
+    <div class="output" id="unsubscribeLine">If you prefer not to receive follow-up emails from me about local referral pathways, please reply “unsubscribe” and I will update my records.</div>
+    <button onclick="copyText('unsubscribeLine')">Copy unsubscribe line</button>
+
+    <h3>Participant information rule</h3>
+    <div class="output" id="participantRule">Please only send participant details through the correct referral pathway and with consent. For the first suitability check, send general information only: suburb, support need, urgency, funding type and preferred contact process. Avoid sending detailed health information until consent and intake pathway are confirmed.</div>
+    <button onclick="copyText('participantRule')">Copy participant information rule</button>
+  </section>
+
+  <section class="card">
+    <h2>90-day execution plan</h2>
+    <table>
+      <thead>
+        <tr><th>Period</th><th>Main focus</th><th>Actions</th><th>Target outcome</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Weeks 1–2</td>
+          <td>A1 contacts</td>
+          <td>Support coordinators, LACs, hospitals/community health, high-priority GP clinics.</td>
+          <td>First 50 contacts loaded and first 20–30 emails sent.</td>
+        </tr>
+        <tr>
+          <td>Weeks 3–4</td>
+          <td>Calls and value follow-up</td>
+          <td>Day 2 and Day 7 calls, referral guide follow-up, first meetings.</td>
+          <td>At least 5 warm conversations and 1–2 meetings.</td>
+        </tr>
+        <tr>
+          <td>Month 2</td>
+          <td>A2/B1 expansion</td>
+          <td>Allied health, plan managers, councils, schools, aged care/carer networks.</td>
+          <td>Second layer of referral ecosystem built.</td>
+        </tr>
+        <tr>
+          <td>Month 3</td>
+          <td>Nurture and conversion</td>
+          <td>Monthly updates, referral readiness, follow-up meetings, local network attendance.</td>
+          <td>Consistent referral enquiries and repeat relationship building.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<div class="fixed-footer">
+  <button onclick="window.scrollTo({top:0, behavior:'smooth'})">Top</button>
+</div>
+
+<script>
+  const segments = {
+    support: {
+      label: "Support Coordinator / LAC",
+      decision: "support coordinator, LAC team member or intake lead",
+      relevance: "your role is often where service coordination gets solved in real time and participants need practical local provider options",
+      value: "clear local capacity, fast response, easy intake, participant-first communication and reliable follow-up",
+      ask: "Can I send a one-page referral guide and ask what local support gaps are hardest to place at the moment?",
+      proof: "local Richmond/Hawkesbury and Penrith focus, clinically led understanding, responsive communication and clear referral pathway",
+      caution: "Keep this information-only. Do not imply exclusive referral arrangements. Respect participant choice and control."
+    },
+    plan: {
+      label: "Plan Manager",
+      decision: "plan manager, provider relations contact or intake team",
+      relevance: "participants often ask plan managers which local providers are easy to work with, communicate clearly and invoice correctly",
+      value: "clear service information, clean invoicing, professional communication and a reliable provider contact for local participants",
+      ask: "Can I send a short provider summary so your team knows when HD HeeD may be a suitable local option?",
+      proof: "clear documentation, local coverage, professional communication and no exclusive-referral expectation",
+      caution: "Plan managers may not actively refer. Position HD HeeD as information for participant choice."
+    },
+    gp: {
+      label: "GP Clinic",
+      decision: "practice manager, nurse, care coordinator or reception lead",
+      relevance: "patients and families often ask GP clinics where they can find local disability support",
+      value: "simple local referral pathway, clear intake contact, support for families and clinically informed communication",
+      ask: "Who is the best person to receive a short local NDIS provider guide for your practice?",
+      proof: "local support option for patients and carers, responsive communication and clinically led approach",
+      caution: "Do not ask for patient details unless proper consent and referral process are in place."
+    },
+    allied: {
+      label: "Allied Health Clinic",
+      decision: "NDIS intake team, practice manager, senior clinician or therapy lead",
+      relevance: "therapy teams often identify support needs that sit outside therapy sessions, such as daily living, community access or carer relief",
+      value: "a local support provider that can complement therapy goals and help participants implement practical routines",
+      ask: "Can I send a concise guide so your team knows when HD HeeD may complement therapy goals?",
+      proof: "practical support, local coverage, clear communication with consent and participant-first care",
+      caution: "Frame this as complementary support, not competition with therapy services."
+    },
+    hospital: {
+      label: "Hospital / Community Health / Discharge Team",
+      decision: "discharge planner, social worker, NUM, community intake or allied health team leader",
+      relevance: "discharge and community teams need responsive community support options with clear intake and safe communication",
+      value: "quick suitability review, local community support, transition support and clear communication",
+      ask: "Who is the correct person to receive a short referral pathway sheet for community support options?",
+      proof: "local provider focus, clinically led understanding, safe intake and response clarity",
+      caution: "Avoid sensitive details until consent and proper referral pathway are confirmed."
+    },
+    community: {
+      label: "Council / School / Community Organisation",
+      decision: "community development officer, inclusion officer, wellbeing team, learning support coordinator or service manager",
+      relevance: "families often ask community-facing staff where to start when they need disability support",
+      value: "simple information sheet, local presence and practical support pathway for families",
+      ask: "Can I send a one-page guide your staff can keep on hand for families asking about local disability support?",
+      proof: "local family-focused presence and willingness to contribute to community information sessions",
+      caution: "Keep the tone educational and community-focused. Do not ask schools for student details."
+    },
+    aged: {
+      label: "Aged Care / Carer Network",
+      decision: "admissions lead, care advisor, community liaison, carer support worker or facility manager",
+      relevance: "families and carers often need disability, respite or community support information for adults with complex needs",
+      value: "carer relief, practical support, local responsiveness and clinically informed communication",
+      ask: "Can I send a short guide for families or carers who ask about NDIS-related local supports?",
+      proof: "aged care understanding, documentation awareness, respectful family communication and local availability",
+      caution: "Do not mix aged care resident information with NDIS marketing contacts. Use proper consent."
+    },
+    generic: {
+      label: "General Local Referral Partner",
+      decision: "service manager, intake lead or community contact",
+      relevance: "your organisation may speak with people who are looking for practical disability support locally",
+      value: "local, responsive, person-centred NDIS support with a clear intake pathway",
+      ask: "Can I send a concise local referral guide and learn what support gaps you see in the area?",
+      proof: "Richmond/Hawkesbury and Penrith focus, clinical background, reliable communication and participant-first approach",
+      caution: "Keep contact professional, relevant and easy to opt out."
+    }
+  };
+
+  const services = {
+    general: "general NDIS supports, local provider information and practical referral pathways",
+    personal: "personal care, daily living assistance, routine support and practical in-home help",
+    community: "community access, social participation, transport-related support and confidence-building routines",
+    nursing: "community nursing, clinical monitoring, wound support, medication-related prompts where appropriate and care coordination communication",
+    respite: "carer relief, respite-style support, short-term assistance and family support",
+    discharge: "hospital discharge transition support, community settling, safety checks and practical short-term support",
+    complex: "complex participant coordination, responsive support, communication with stakeholders and practical problem-solving"
+  };
+
+  const dayMeta = {
+    "0": { label: "Day 0", channel: "Email", next: "Set next action for Day 2. If they reply, move to Warm and call within 1 business day." },
+    "2": { label: "Day 2", channel: "Phone / right-person check", next: "If right person confirmed, send the Day 5 referral guide email. If no answer, leave short voicemail if appropriate and set Day 5 follow-up." },
+    "5": { label: "Day 5", channel: "Value email", next: "Set a Day 7 call task. Prepare to ask about referral gaps and waitlists." },
+    "7": { label: "Day 7", channel: "Main call", next: "If positive, send meeting invite or referral guide. If no answer, send Day 10 email." },
+    "10": { label: "Day 10", channel: "Social proof / local fit email", next: "Set Day 14 final permission-based nudge. If they engage, move to Warm." },
+    "14": { label: "Day 14", channel: "Final nudge / permission check", next: "If no response, move to Monthly Nurture. If they ask not to be contacted, mark Do Not Contact." },
+    "21": { label: "Day 21", channel: "Soft re-open", next: "If no response, wait until monthly nurture. If positive, book a short intro call." },
+    "30": { label: "Day 30", channel: "Monthly nurture", next: "Set next monthly update. Track any replies or referrals." },
+    "45": { label: "Day 45", channel: "Relationship check", next: "If warm, offer a 10-minute intro. If cold, keep in light nurture only." },
+    "60": { label: "Day 60", channel: "Re-engagement", next: "If no response after this, keep in low-frequency nurture or pause outreach." },
+    "meeting": { label: "Meeting booked", channel: "Confirmation email + agenda", next: "Prepare referral guide, service map, capacity notes and 3 questions about their referral gaps." },
+    "referral": { label: "Referral received", channel: "Intake acknowledgement", next: "Confirm consent, suitability, urgency, funding type and next contact process." },
+    "noresponse": { label: "No response", channel: "Move to nurture", next: "Do not continue frequent chasing. Place on monthly nurture only if appropriate and not opted out." },
+    "donotcontact": { label: "Do not contact", channel: "Stop", next: "Do not send further emails, SMS or calls. Update CRM immediately." }
+  };
+
+  function val(id, fallback="") {
+    const el = document.getElementById(id);
+    return (el && el.value.trim()) ? el.value.trim() : fallback;
+  }
+
+  function firstName() {
+    const raw = val("contactName", "there");
+    if (raw.toLowerCase().includes("team")) return raw;
+    if (raw.toLowerCase().includes("manager")) return raw;
+    return raw.split(" ")[0];
+  }
+
+  function sender() {
+    return {
+      name: val("senderName", "Himmat"),
+      role: val("senderRole", "HD HeeD"),
+      phone: val("senderPhone", "[Phone]"),
+      email: val("senderEmail", "[Email]"),
+      website: val("website", "https://www.hdheed.com.au")
+    };
+  }
+
+  function signature() {
+    const s = sender();
+    return `${s.name}\n${s.role} | HD HeeD\n${s.phone}\n${s.email}\n${s.website}`;
+  }
+
+  function contactContext() {
+    const seg = segments[val("segment", "support")];
+    const org = val("orgName", "[Organisation]");
+    const area = val("suburb", "Richmond/Hawkesbury and Penrith");
+    const service = services[val("serviceFocus", "general")];
+    const notes = val("customNotes", "");
+    return { seg, org, area, service, notes };
+  }
+
+  function subjectFor(day, c) {
+    const area = c.area;
+    const segLabel = c.seg.label;
+    const map = {
+      "0": `Local NDIS support option for ${area}`,
+      "2": `Checking the right contact for local NDIS referrals`,
+      "5": `Referral guide: HD HeeD local supports in ${area}`,
+      "7": `Quick call about local NDIS support gaps`,
+      "10": `HD HeeD: local, responsive NDIS support option`,
+      "14": `Should I keep you on local referral updates?`,
+      "21": `Quick local provider introduction — ${area}`,
+      "30": `HD HeeD local availability update — ${area}`,
+      "45": `Checking current support gaps in ${area}`,
+      "60": `Reconnecting about local NDIS supports`,
+      "meeting": `Confirming our HD HeeD introduction call`,
+      "referral": `Referral received — HD HeeD`,
+      "noresponse": `Local NDIS support information — no further chasing`,
+      "donotcontact": `No further contact recorded`
+    };
+    return map[day] || `HD HeeD follow-up for ${segLabel}`;
+  }
+
+  function emailFor(day, c) {
+    const name = firstName();
+    const s = signature();
+    const notesLine = c.notes ? `\n\nI noted: ${c.notes}` : "";
+    const unsub = `\n\nIf you prefer not to receive follow-up emails from me about local referral pathways, please reply “unsubscribe” and I will update my records.`;
+
+    if (day === "0") {
+      return `Hi ${name},
+
+I’m ${sender().name} from HD HeeD. We support NDIS participants across ${c.area} and surrounding Western Sydney areas.
+
+I’m reaching out because ${c.seg.relevance}.
+
+We aim to make referrals easier by being clear about:
+- who we can support
+- where we operate
+- how quickly we respond
+- the best intake contact for urgent or routine enquiries
+
+For ${c.org}, I thought the most relevant area may be ${c.service}.
+
+${c.seg.ask}
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "2") {
+      return `Hi ${name},
+
+I’m just checking whether you are the right person at ${c.org} to receive local NDIS provider and referral pathway information.
+
+HD HeeD supports participants around ${c.area}, with a focus on ${c.service}.
+
+If you are not the best contact, would you be able to point me to the correct ${c.seg.decision}?
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "5") {
+      return `Hi ${name},
+
+I wanted to follow up with a concise summary of HD HeeD’s local support pathway.
+
+HD HeeD may be suitable where a participant or family is looking for:
+- local support around ${c.area}
+- ${c.service}
+- clear intake communication
+- responsive follow-up
+- a provider that respects participant choice and control
+
+A safe first enquiry can be very simple:
+1. suburb / service area
+2. support type required
+3. urgency
+4. funding type if known
+5. best person to contact
+
+Please only send participant details where consent and the correct referral pathway are in place.
+
+Would it be helpful for me to send a one-page referral guide your team can keep on hand?
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "7") {
+      return `Hi ${name},
+
+I tried to reach you briefly today regarding local NDIS support options for ${c.area}.
+
+The reason for my call was simple: I wanted to understand whether your team is seeing any local gaps in ${c.service}, and whether HD HeeD may be useful as an additional local provider option.
+
+No pressure at all. If useful, I can send a one-page referral guide with our service area, intake process and best contact details.
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "10") {
+      return `Hi ${name},
+
+I wanted to share why I thought HD HeeD may be relevant for ${c.org}.
+
+Our focus is not only providing support. We want to make the referral process easier by being:
+- local to Richmond/Hawkesbury, Penrith and surrounding Western Sydney areas
+- responsive with communication
+- clear about suitability
+- respectful of participant choice and control
+- clinically informed in the way we understand risk, documentation and family communication
+
+If there is ever a participant, family or coordinator looking for ${c.service}, you are welcome to send a general suitability enquiry first.
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "14") {
+      return `Hi ${name},
+
+I do not want to keep following up if this is not relevant.
+
+Would you like me to keep ${c.org} on occasional local referral updates for HD HeeD in ${c.area}, or would you prefer that I do not follow up further?
+
+Either response is completely fine.
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "21") {
+      return `Hi ${name},
+
+I’m reconnecting briefly in case this is useful for your team.
+
+HD HeeD is building local referral relationships across ${c.area}. If your team ever needs another local option for ${c.service}, I would be happy to have a short 10-minute introduction call and explain when we are suitable and when we are not.
+
+Would next week be suitable for a brief introduction, or should I simply send the referral guide by email?
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "30") {
+      return `Hi ${name},
+
+This is a short local update from HD HeeD for ${c.area}.
+
+This month, we can assist with enquiries related to:
+- ${c.service}
+- practical disability support
+- local participant/family support needs
+- clear intake and suitability review
+
+If you have a participant or family looking for a local option, you are welcome to send a general enquiry first so we can confirm whether we are suitable.
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "45") {
+      return `Hi ${name},
+
+I hope you are well.
+
+I’m checking in to ask whether your team is currently seeing any service gaps around ${c.area}, especially related to ${c.service}.
+
+I’m not asking for a referral directly. I’m trying to understand local needs properly so HD HeeD can be useful and realistic in how we support the area.
+
+If helpful, I can book a short introduction call or send our updated referral pathway sheet.
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "60") {
+      return `Hi ${name},
+
+I’m reconnecting once more about HD HeeD’s local NDIS support pathway around ${c.area}.
+
+If this is not relevant, I will not continue regular follow-up. If it is useful, I can send a short referral guide or arrange a brief introduction call.
+
+HD HeeD may be relevant when families or participants are looking for ${c.service} and need a responsive local provider option.
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "meeting") {
+      return `Hi ${name},
+
+Thank you for agreeing to speak with me.
+
+Confirming our HD HeeD introduction call:
+
+Date/time: [insert date and time]
+Purpose: short introduction to HD HeeD and local referral pathways
+Focus area: ${c.area}
+Likely discussion: ${c.service}, intake process, suitability, and current local referral gaps
+
+I will keep the conversation practical and brief. My aim is to understand what would actually help your team and to explain clearly when HD HeeD may or may not be suitable.
+
+Kind regards,
+${s}`;
+    }
+
+    if (day === "referral") {
+      return `Hi ${name},
+
+Thank you for sending the referral/enquiry to HD HeeD.
+
+We have received it and will review suitability and next steps. To keep the process safe and appropriate, please confirm that participant consent has been obtained before any sensitive participant information is shared.
+
+For the first review, the most helpful details are:
+- participant suburb
+- support required
+- urgency
+- funding type if known
+- preferred contact person
+- any immediate safety or access considerations
+
+We will respond as soon as possible with whether HD HeeD is suitable and what the next step will be.
+
+Kind regards,
+${s}`;
+    }
+
+    if (day === "noresponse") {
+      return `Hi ${name},
+
+I have not been able to connect, so I will not keep chasing.
+
+I will keep this as a light local referral contact only, unless you prefer no further contact. If HD HeeD may be useful in the future for ${c.service} around ${c.area}, you are welcome to contact me directly.
+
+Kind regards,
+${s}${unsub}`;
+    }
+
+    if (day === "donotcontact") {
+      return `Do not send an email. Record the contact as DO NOT CONTACT in your CRM/spreadsheet.`;
+    }
+
+    return "";
+  }
+
+  function actionFor(day, c) {
+    const base = `Contact type: ${c.seg.label}
+Organisation: ${c.org}
+Area: ${c.area}
+Focus: ${c.service}
+
+`;
+    const actions = {
+      "0": `Send the first introduction email. Keep it short, local and helpful. Do not attach too many documents on the first touch unless the recipient asked for it.`,
+      "2": `Call to confirm the right person. If they answer, ask who handles local NDIS referral information. If they are busy, ask permission to email a one-page referral guide.`,
+      "5": `Send a value follow-up email. Include your referral guide or summarise the referral pathway inside the email. Highlight clear intake, locality and response time.`,
+      "7": `Main call day. Have a proper conversation: ask about local service gaps, waitlists, hard-to-place supports and what would make referral easier. Do not sell too aggressively.`,
+      "10": `Send a local-fit follow-up. Reinforce why HD HeeD is useful: local, responsive, clinically led, clear communication and participant-first.`,
+      "14": `Send a permission-based close. Ask whether to keep them on local referral updates or stop following up. Respect the answer.`,
+      "21": `Soft re-open. Offer a 10-minute intro call or ask whether the referral guide should go to someone else.`,
+      "30": `Monthly nurture. Send a short availability update only if appropriate and not opted out. Focus on usefulness, not pressure.`,
+      "45": `Relationship check. Ask what service gaps they are seeing. This is for learning and relationship building, not a hard sell.`,
+      "60": `Final re-engagement. Give them an easy way to opt out. If no response, reduce to low-frequency nurture or pause.`,
+      "meeting": `Prepare for meeting. Bring referral guide, service list, service area, intake pathway, response-time promise and 3 questions about their referral pain points.`,
+      "referral": `Move to intake workflow. Confirm consent before receiving sensitive details. Check suburb, support type, urgency, funding, risks and next contact.`,
+      "noresponse": `Stop active chasing. Move to monthly nurture only if appropriate. Do not continue repeated direct follow-up.`,
+      "donotcontact": `Stop all outreach. Mark do-not-contact, remove from sequences, and do not call, email or SMS again unless they initiate contact.`
+    };
+    return base + (actions[day] || "");
+  }
+
+  function nextFor(day) {
+    return dayMeta[day] ? dayMeta[day].next : "";
+  }
+
+  function callFor(day, c) {
+    const s = sender();
+    if (day === "donotcontact") return "Do not call. This contact has opted out or is not appropriate for further contact.";
+    if (day === "referral") {
+      return `Referral intake call script:
+
+Hi [Name], thank you for the referral/enquiry to HD HeeD.
+
+Before we discuss details, can I confirm that the participant or authorised representative has consented for this information to be shared with us?
+
+I’ll ask a few initial suitability questions:
+1. What suburb is the participant located in?
+2. What support is being requested?
+3. Is the need urgent or routine?
+4. What funding type is available?
+5. Are there any immediate safety, access or communication needs we should know before arranging next steps?
+6. Who is the best contact person for intake?
+
+To protect privacy, please avoid sending detailed health information by general email unless the correct referral pathway and consent are confirmed.
+
+Close:
+Thank you. I’ll review suitability and come back with a clear yes/no/next step.`;
+    }
+    if (day === "meeting") {
+      return `Meeting conversation guide:
+
+1. Thank them:
+“Thank you for making time to speak with me. I’ll keep this practical.”
+
+2. Introduce HD HeeD:
+“HD HeeD is a local NDIS provider supporting participants around ${c.area}. Our focus is ${c.service}, clear communication and responsive support.”
+
+3. Explain purpose:
+“I’m not asking for exclusive referrals. I want to understand where local gaps exist and make sure your team knows when we may be suitable.”
+
+4. Ask discovery questions:
+- What supports are hardest to find locally?
+- Which suburbs are most difficult to cover?
+- What causes you frustration with providers?
+- What makes you trust a new provider?
+- What information should our referral guide include?
+- How do you prefer providers to respond to enquiries?
+
+5. Position HD HeeD:
+“Our goal is to respond quickly, be clear when we are suitable or not suitable, and respect participant choice and control.”
+
+6. Agree next step:
+“Would it be useful if I send our referral guide and check back in one month with availability updates?”`;
+    }
+
+    const intro = `Hi, this is ${s.name} from HD HeeD. I know you may be busy, so I’ll be brief.
+
+We support NDIS participants around ${c.area}. I’m calling because ${c.seg.relevance}.`;
+
+    if (day === "2") {
+      return `${intro}
+
+I’m just trying to confirm the right person at ${c.org} to receive local referral pathway information.
+
+If you are the right person:
+“Thank you. I wanted to ask one quick question: what kind of local support is hardest for your team to find at the moment?”
+
+If they answer:
+“That’s helpful. HD HeeD may be relevant for ${c.service}. Would it be okay if I send a one-page guide with our service area and intake contact?”
+
+If they are not the right person:
+“No problem. Who would be the best ${c.seg.decision} to send this to?”
+
+If they are busy:
+“I understand. I’ll keep it short by email. Is this the best email address?”
+
+Close:
+“Thank you. I’ll send the guide and follow up only if helpful.”`;
+    }
+
+    if (day === "7") {
+      return `${intro}
+
+Main purpose:
+“I wanted to understand whether your team is seeing any service gaps around ${c.area}, especially for ${c.service}.”
+
+Discovery questions:
+1. What supports are hardest to place locally right now?
+2. Are there particular suburbs where provider availability is difficult?
+3. When you look for a provider, what matters most: response time, reliability, communication, cultural fit, or documentation?
+4. If HD HeeD sends a referral guide, what information would make it actually useful?
+5. Do you prefer email, phone, referral form, or a quick suitability check first?
+
+Positioning:
+“HD HeeD is not asking for exclusive referrals. We want to be a practical local option when a participant chooses us or when your usual options are full or not suitable.”
+
+If they are interested:
+“Great. I can send a one-page guide today and, if useful, book a 10-minute intro call to explain our intake process.”
+
+If they are not interested:
+“No problem. Would you prefer I do not follow up further, or is an occasional local availability update okay?”
+
+Close:
+“Thank you for your time. I’ll record your preference and keep communication practical.”`;
+    }
+
+    return `${intro}
+
+Short conversation:
+“I wanted to send a concise local referral guide so your team knows when HD HeeD may be suitable and how to contact us.”
+
+Ask:
+${c.seg.ask}
+
+If positive:
+“Thank you. I’ll send it today. Is this the best email?”
+
+If uncertain:
+“No pressure. I can send a short information-only email, and you can decide if it is useful.”
+
+If no:
+“No problem at all. I’ll update my records. Thank you for your time.”`;
+  }
+
+  function smsFor(day, c) {
+    if (day === "donotcontact") return "Do not send SMS. Mark do-not-contact.";
+    if (day === "referral") return `Hi ${firstName()}, thank you for the referral to HD HeeD. We have received it and will review suitability/next steps. Please confirm participant consent before sending sensitive details.`;
+    if (day === "meeting") return `Hi ${firstName()}, confirming our HD HeeD intro call for [date/time]. I’ll keep it practical and focus on local referral pathways around ${c.area}. Thanks, ${sender().name}.`;
+    if (["0","5","10","14","21","30","45","60","noresponse"].includes(day)) return `Hi ${firstName()}, this is ${sender().name} from HD HeeD. I sent a short email about local NDIS supports around ${c.area}. Please let me know if you are the right contact or prefer no follow-up. Thanks.`;
+    if (day === "2" || day === "7") return `Hi ${firstName()}, this is ${sender().name} from HD HeeD. I tried calling briefly about local NDIS referral information for ${c.area}. I’ll send details by email as well. Thanks.`;
+    return "";
+  }
+
+  function crmFor(day, c) {
+    const warmth = val("warmth", "cold");
+    const notes = c.notes || "No extra notes recorded.";
+    return `CRM NOTE
+Date: ${new Date().toLocaleDateString("en-AU")}
+Stage/follow-up: ${dayMeta[day].label}
+Contact type: ${c.seg.label}
+Organisation: ${c.org}
+Area: ${c.area}
+Service focus: ${c.service}
+Lead status: ${warmth}
+Action completed: ${dayMeta[day].channel}
+Key message: ${c.seg.value}
+Notes: ${notes}
+Next step: ${nextFor(day)}
+Compliance: ${c.seg.caution}`;
+  }
+
+  function checklistFor(day, c) {
+    const common = [
+      "Confirm contact details are professional/public or provided with permission.",
+      "Check whether the contact has opted out or requested no further contact.",
+      "Personalise the first sentence with organisation, suburb or service focus.",
+      "Keep participant choice and control in the wording.",
+      "Do not include participant health information in marketing notes.",
+      "Update CRM/spreadsheet stage, last contact date and next action date."
+    ];
+    const daySpecific = {
+      "0": ["Send first introduction email.", "Do not overload with attachments unless the contact requested a pack.", "Set Day 2 follow-up task."],
+      "2": ["Call to confirm the right person.", "Ask one discovery question.", "If voicemail, keep it short and follow by email."],
+      "5": ["Send referral guide or inline referral summary.", "Include safe first enquiry details.", "Set Day 7 call task."],
+      "7": ["Prepare discovery questions.", "Ask about current local support gaps.", "Record exact words they use about pain points.", "Ask permission for next step."],
+      "10": ["Send local-fit/social-proof email.", "Mention responsiveness and clinical understanding.", "Set Day 14 permission check."],
+      "14": ["Ask whether to continue local updates or stop.", "Respect no-response by moving to nurture.", "Record opt-out immediately if requested."],
+      "21": ["Offer a 10-minute intro call.", "Ask if another person is more suitable.", "Avoid pressure."],
+      "30": ["Send monthly update only to appropriate contacts.", "Keep it brief.", "Include unsubscribe wording."],
+      "45": ["Ask about support gaps.", "Offer practical help.", "Do not ask for confidential participant details."],
+      "60": ["Final re-engagement.", "Pause if no response.", "Do not keep chasing frequently."],
+      "meeting": ["Prepare agenda.", "Prepare referral guide.", "Prepare questions.", "Confirm next step before ending meeting."],
+      "referral": ["Confirm consent.", "Confirm suburb, support type, urgency and funding.", "Move participant information to intake system, not marketing CRM.", "Respond with clear suitability decision."],
+      "noresponse": ["Stop active chasing.", "Move to monthly nurture only if appropriate.", "Record no response after sequence."],
+      "donotcontact": ["Remove from all sequences.", "Do not email.", "Do not call.", "Do not SMS.", "Record date and reason."]
+    };
+    return [...(daySpecific[day] || []), ...common];
+  }
+
+  function generate() {
+    const day = val("day", "0");
+    const c = contactContext();
+
+    document.getElementById("positioning").textContent =
+      `HD HeeD positioning for this lead:
+Local focus: Richmond/Hawkesbury, Penrith and surrounding Western Sydney.
+Primary value: ${c.seg.value}.
+Best ask: ${c.seg.ask}
+Proof point: ${c.seg.proof}
+Caution: ${c.seg.caution}`;
+
+    document.getElementById("todayAction").textContent = actionFor(day, c);
+    document.getElementById("nextStep").textContent = nextFor(day);
+    document.getElementById("emailSubject").textContent = subjectFor(day, c);
+    document.getElementById("emailBody").textContent = emailFor(day, c);
+    document.getElementById("callScript").textContent = callFor(day, c);
+    document.getElementById("smsText").textContent = smsFor(day, c);
+    document.getElementById("crmNote").textContent = crmFor(day, c);
+
+    const checklist = document.getElementById("checklist");
+    checklist.innerHTML = "";
+    checklistFor(day, c).forEach((item, idx) => {
+      const label = document.createElement("label");
+      label.innerHTML = `<input type="checkbox" /> <span>${escapeHtml(item)}</span>`;
+      checklist.appendChild(label);
+    });
+
+    document.querySelectorAll(".daychip").forEach(ch => ch.classList.toggle("active", ch.dataset.day === day));
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, function(m) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[m];
+    });
+  }
+
+  async function copyText(id) {
+    const text = document.getElementById(id).innerText;
+    try {
+      await navigator.clipboard.writeText(text);
+      flash("Copied.");
+    } catch (e) {
+      const temp = document.createElement("textarea");
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+      flash("Copied.");
+    }
+  }
+
+  function flash(message) {
+    const old = document.getElementById("flash");
+    if (old) old.remove();
+    const div = document.createElement("div");
+    div.id = "flash";
+    div.textContent = message;
+    div.style.position = "fixed";
+    div.style.left = "50%";
+    div.style.bottom = "24px";
+    div.style.transform = "translateX(-50%)";
+    div.style.background = "#0b7a75";
+    div.style.color = "white";
+    div.style.padding = "12px 18px";
+    div.style.borderRadius = "999px";
+    div.style.boxShadow = "0 10px 24px rgba(0,0,0,0.2)";
+    div.style.zIndex = "99";
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 1400);
+  }
+
+  function saveSettings() {
+    const ids = ["senderName","senderRole","senderPhone","senderEmail","website"];
+    const data = {};
+    ids.forEach(id => data[id] = val(id, ""));
+    localStorage.setItem("hdheedFollowupSettings", JSON.stringify(data));
+    flash("Your HD HeeD details were saved in this browser.");
+  }
+
+  function loadSettings() {
+    const raw = localStorage.getItem("hdheedFollowupSettings");
+    if (!raw) {
+      document.getElementById("senderName").value = "Himmat";
+      document.getElementById("senderRole").value = "Director / Registered Nurse";
+      document.getElementById("website").value = "https://www.hdheed.com.au";
+      return;
+    }
+    try {
+      const data = JSON.parse(raw);
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = data[id];
+      });
+    } catch (e) {}
+  }
+
+  function clearLead() {
+    ["contactName","orgName","suburb","customNotes"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("warmth").value = "cold";
+    document.getElementById("serviceFocus").value = "general";
+    generate();
+  }
+
+  function buildDaybar() {
+    const order = ["0","2","5","7","10","14","21","30","45","60","meeting","referral","noresponse","donotcontact"];
+    const bar = document.getElementById("daybar");
+    order.forEach(d => {
+      const chip = document.createElement("button");
+      chip.className = "daychip";
+      chip.dataset.day = d;
+      chip.textContent = dayMeta[d].label;
+      chip.onclick = () => {
+        document.getElementById("day").value = d;
+        generate();
+        document.getElementById("generator").scrollIntoView({behavior:"smooth"});
+      };
+      bar.appendChild(chip);
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    loadSettings();
+    buildDaybar();
+    generate();
+  });
+</script>
+</body>
+</html>
