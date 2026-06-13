@@ -1,0 +1,780 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HD HeeD Support Coordinator & LAC Contact Directory</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1b2838;
+      --muted: #627184;
+      --line: #d9e2ec;
+      --brand: #134e6f;
+      --brand2: #0b7a75;
+      --a1: #e9f7ef;
+      --a2: #eef4ff;
+      --warn: #fff6dc;
+      --danger: #fff0f0;
+      --shadow: 0 12px 30px rgba(15, 44, 70, 0.10);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    header {
+      background: linear-gradient(135deg, #0d3b55, #0b7a75);
+      color: white;
+      padding: 34px 24px 28px;
+    }
+    .wrap { max-width: 1280px; margin: auto; }
+    h1 { margin: 0 0 8px; font-size: 34px; letter-spacing: -0.5px; }
+    h2 { margin: 0 0 12px; font-size: 24px; }
+    h3 { margin: 0 0 10px; font-size: 18px; }
+    p { margin: 8px 0 12px; }
+    a { color: var(--brand); }
+    header a { color: white; }
+    .subtitle { max-width: 950px; color: rgba(255,255,255,0.9); font-size: 16px; }
+    .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .badge {
+      display: inline-block;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.14);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,0.96);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+    nav .wrap { display: flex; gap: 8px; overflow-x: auto; padding: 10px 16px; }
+    nav a {
+      text-decoration: none;
+      color: var(--brand);
+      border: 1px solid var(--line);
+      padding: 8px 11px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-size: 13px;
+      font-weight: 700;
+      background: white;
+    }
+    main { max-width: 1280px; margin: 22px auto 80px; padding: 0 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    .soft { background: #eef9fb; box-shadow: none; }
+    .green { background: #f0fbf4; box-shadow: none; }
+    .warn { background: var(--warn); box-shadow: none; }
+    .danger { background: var(--danger); box-shadow: none; }
+    .grid { display: grid; gap: 16px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    label { display: block; font-size: 13px; font-weight: 700; margin: 9px 0 5px; color: #2c3a4b; }
+    select, input, textarea {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid #bfd0df;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      background: white;
+      color: var(--text);
+    }
+    textarea { min-height: 72px; resize: vertical; }
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 13px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--brand);
+      color: white;
+      margin: 4px 4px 4px 0;
+    }
+    button.secondary { background: var(--brand2); }
+    button.ghost { background: white; color: var(--brand); border: 1px solid var(--line); }
+    .tiny { color: var(--muted); font-size: 12px; }
+    .small { color: var(--muted); font-size: 13px; }
+    .statbar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 14px 0 0; }
+    .stat {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .stat strong { display: block; font-size: 22px; }
+    .controls {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 12px;
+      align-items: end;
+    }
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 2px 4px 2px 0;
+      background: #edf4ff;
+      color: #205084;
+    }
+    .pill.a1 { background: var(--a1); color: #1d6b3a; }
+    .pill.a2 { background: var(--a2); color: #244f94; }
+    .pill.lac { background: #f4eaff; color: #63308d; }
+    .pill.email { background: #e8f8f3; color: #0b6b51; }
+    .pill.noemail { background: #fff0e2; color: #8a5300; }
+    .table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; background: white; font-size: 13px; min-width: 1120px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; vertical-align: top; }
+    th {
+      background: #edf4f8;
+      color: #24384f;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    tr:hover td { background: #fbfdff; }
+    tr:last-child td { border-bottom: 0; }
+    .contact-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      padding: 14px;
+      margin: 12px 0;
+    }
+    .contact-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+    .contact-head h3 { margin-bottom: 4px; }
+    .contact-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
+    .meta-box { background: #f9fbfd; border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+    .meta-box b { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; }
+    .script {
+      white-space: pre-wrap;
+      background: #fbfdff;
+      border: 1px solid #cbd9e6;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 13px;
+      margin: 8px 0;
+    }
+    details { border: 1px solid var(--line); background: white; border-radius: 14px; padding: 12px 14px; margin: 10px 0; }
+    summary { cursor: pointer; font-weight: 700; color: var(--brand); }
+    .row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .callout { border-left: 5px solid var(--brand2); background: #fbffff; border-radius: 0 14px 14px 0; padding: 12px 14px; }
+    .no-print {}
+    .fixed-footer {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 999px;
+      padding: 8px;
+      z-index: 30;
+    }
+    @media (max-width: 900px) {
+      .grid.two, .grid.three, .controls, .contact-meta, .row, .statbar { grid-template-columns: 1fr; }
+      h1 { font-size: 27px; }
+      header { padding: 24px 16px; }
+      table { min-width: 980px; }
+    }
+    @media print {
+      nav, button, .fixed-footer, .no-print { display: none !important; }
+      body { background: white; }
+      .card { box-shadow: none; break-inside: avoid; }
+      main { max-width: none; margin: 0; }
+      .contact-card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>HD HeeD Support Coordinator & LAC Contact Directory</h1>
+    <p class="subtitle">A practical mini-CRM for contacting support coordinators and Local Area Coordinator/LAC contacts around Richmond, Hawkesbury, Windsor, Penrith and nearby Western Sydney. Built from your uploaded HD HeeD referral strategy report.</p>
+    <div class="badges">
+      <span class="badge">A1 contacts first</span>
+      <span class="badge">Support coordination + LAC only</span>
+      <span class="badge">Copy email and call script</span>
+      <span class="badge">Save follow-up status in browser</span>
+    </div>
+    <div class="statbar">
+      <div class="stat"><strong id="statTotal">0</strong><span>Total contacts</span></div>
+      <div class="stat"><strong id="statA1">0</strong><span>A1 priority</span></div>
+      <div class="stat"><strong id="statEmails">0</strong><span>Direct emails</span></div>
+      <div class="stat"><strong id="statLac">0</strong><span>LAC / NDIS</span></div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#plan">Action Plan</a>
+    <a href="#directory">Directory</a>
+    <a href="#cards">Contact Cards</a>
+    <a href="#scripts">Scripts</a>
+    <a href="#tracker">Tracking</a>
+    <a href="#compliance">Compliance</a>
+  </div>
+</nav>
+
+<main>
+  <section class="card soft" id="plan">
+    <h2>Start here: who to contact first</h2>
+    <p><strong>Best first wave:</strong> contact all <span class="pill a1">A1</span> support coordinators and LAC/NDIS contacts first. Your uploaded strategy says support coordinators and LACs sit closest to participant choice, service navigation and provider connection, so they are the highest-value first wave.</p>
+    <div class="grid three">
+      <div class="card green">
+        <h3>Week 1 — Penrith A1</h3>
+        <p>Email/call Breakthru, Marli and Moe, Taylored, Interaction Services, Northcott, Ability Options, Centre of Hope and Uniting LAC Penrith.</p>
+      </div>
+      <div class="card green">
+        <h3>Week 2 — Windsor/Hawkesbury A1/A2</h3>
+        <p>Contact Uniting LAC Windsor, NDIS Windsor office, Evolution Disability, Support Agency and Bridges Disability Services.</p>
+      </div>
+      <div class="card green">
+        <h3>Week 3 — Follow-up properly</h3>
+        <p>Send Day 5 guide, complete Day 7 calls, then move non-responders to monthly nurture. Do not keep chasing too frequently.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card no-print" id="directory">
+    <h2>Search and filter contacts</h2>
+    <div class="controls">
+      <div>
+        <label for="search">Search by organisation, suburb, phone, email or notes</label>
+        <input id="search" placeholder="Example: Penrith, Windsor, supportcoordinators, A1" oninput="render()" />
+      </div>
+      <div>
+        <label for="priorityFilter">Priority</label>
+        <select id="priorityFilter" onchange="render()">
+          <option value="">All</option>
+          <option value="A1">A1 only</option>
+          <option value="A2">A2 only</option>
+        </select>
+      </div>
+      <div>
+        <label for="regionFilter">Region</label>
+        <select id="regionFilter" onchange="render()">
+          <option value="">All</option>
+          <option value="Penrith">Penrith</option>
+          <option value="Hawkesbury">Hawkesbury / Windsor</option>
+        </select>
+      </div>
+      <div>
+        <label for="typeFilter">Type</label>
+        <select id="typeFilter" onchange="render()">
+          <option value="">All</option>
+          <option value="LAC">LAC / NDIS</option>
+          <option value="support">Support coordination</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top: 12px;">
+      <button onclick="exportCSV()">Export visible contacts as CSV</button>
+      <button class="ghost" onclick="window.print()">Print / Save as PDF</button>
+      <button class="secondary" onclick="clearFilters()">Clear filters</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Compact contact table</h2>
+    <p class="small">Use this table for quick planning. Click “Copy” beside a contact to copy a full row summary.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>Organisation</th>
+            <th>Type</th>
+            <th>Ask for</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address / area</th>
+            <th>Best first action</th>
+            <th>Follow-up stage</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="contactRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" id="cards">
+    <h2>Detailed contact cards</h2>
+    <p class="small">Each card includes the specific angle, first action, source link, and saved follow-up notes.</p>
+    <div id="contactCards"></div>
+  </section>
+
+  <section class="card" id="scripts">
+    <h2>Master scripts for Support Coordinators and LACs</h2>
+
+    <details open>
+      <summary>First email — Support Coordinators / LACs</summary>
+      <div class="script" id="masterEmail">Subject: Local NDIS support option for Penrith and Hawkesbury
+
+Hi [First name / Team],
+
+I’m Himmat from HD HeeD. We support NDIS participants across Richmond/Hawkesbury, Penrith and surrounding Western Sydney areas.
+
+I’m reaching out because your role is often where local service choices and support navigation happen quickly. We aim to make referrals easier by being clear about:
+
+- who we can support
+- where we operate
+- how quickly we respond
+- the best intake contact for urgent or routine enquiries
+
+If useful, I can send you a one-page referral guide for your team.
+
+If there is a current service gap you are finding hard to place locally, I would also be happy to indicate whether HD HeeD may be a suitable fit.
+
+Kind regards,
+Himmat
+HD HeeD</div>
+      <button onclick="copyText('masterEmail')">Copy master email</button>
+    </details>
+
+    <details>
+      <summary>First call opener — Support Coordinator</summary>
+      <div class="script" id="scCall">Hi, this is Himmat from HD HeeD. We support NDIS participants around Richmond/Hawkesbury and Penrith.
+
+I’m reaching out because support coordinators often know very quickly where local service gaps are. I am not calling for an exclusive arrangement. I just want to make sure your team knows who we are and when HD HeeD may be a suitable local option.
+
+Would it be okay if I ask one quick question?
+
+What type of local support is hardest for you to place right now?
+
+[Listen and write the answer.]
+
+That is helpful. If I send a one-page referral guide with our service area, response process and intake contact, would that be useful?
+
+Close:
+Thank you. I will send it through and only follow up if helpful.</div>
+      <button onclick="copyText('scCall')">Copy SC call script</button>
+    </details>
+
+    <details>
+      <summary>First call opener — LAC / NDIS front door</summary>
+      <div class="script" id="lacCall">Hi, this is Himmat from HD HeeD. We are a local NDIS provider supporting participants around Richmond/Hawkesbury and Penrith.
+
+I understand LACs support participant choice and connection, so I am not asking for direct referrals or anything exclusive. I’m simply trying to find the correct person or pathway for sharing a short local provider information sheet.
+
+Who would be the best person to receive local provider information for participants and families who ask about support options in the area?
+
+If they allow:
+Thank you. I can send a concise one-page guide with our service area, intake contact and support types. What email should I use?
+
+If they decline:
+No problem. I understand. Thank you for your time.</div>
+      <button onclick="copyText('lacCall')">Copy LAC call script</button>
+    </details>
+
+    <details>
+      <summary>Follow-up email after call</summary>
+      <div class="script" id="afterCallEmail">Subject: HD HeeD local provider guide
+
+Hi [Name],
+
+Thank you for speaking with me today.
+
+As discussed, HD HeeD supports NDIS participants across Richmond/Hawkesbury, Penrith and surrounding Western Sydney areas.
+
+We may be suitable where a participant or family needs local support such as:
+- daily living support
+- personal care
+- community access and social participation
+- carer relief / respite-style support
+- clinically informed communication where appropriate
+
+A safe first enquiry can be general only:
+- suburb
+- support type required
+- urgency
+- funding type if known
+- preferred contact person
+
+Please only send participant details where consent and the correct referral pathway are in place.
+
+Kind regards,
+Himmat
+HD HeeD</div>
+      <button onclick="copyText('afterCallEmail')">Copy after-call email</button>
+    </details>
+  </section>
+
+  <section class="card" id="tracker">
+    <h2>Follow-up tracker instructions</h2>
+    <p>This HTML file can save follow-up stage and notes in your browser. It does not send emails automatically. It helps you plan and track.</p>
+    <table>
+      <thead><tr><th>Stage</th><th>Meaning</th><th>Next action</th></tr></thead>
+      <tbody>
+        <tr><td>New</td><td>Not contacted yet.</td><td>Send first email or make first call.</td></tr>
+        <tr><td>Day 0 email sent</td><td>Initial introduction sent.</td><td>Call or right-person check in 2 business days.</td></tr>
+        <tr><td>Called / voicemail</td><td>Phone attempt completed.</td><td>Send short follow-up email and set Day 5/7 task.</td></tr>
+        <tr><td>Guide sent</td><td>Referral guide or summary sent.</td><td>Call on Day 7 to ask about local gaps.</td></tr>
+        <tr><td>Warm reply</td><td>They replied positively or asked for more information.</td><td>Offer 10-minute introduction or send intake pathway.</td></tr>
+        <tr><td>Meeting booked</td><td>Intro meeting arranged.</td><td>Prepare service guide and 3 discovery questions.</td></tr>
+        <tr><td>Referral received</td><td>Potential participant enquiry received.</td><td>Move to participant intake workflow, confirm consent.</td></tr>
+        <tr><td>Nurture</td><td>No immediate need but okay to keep light updates.</td><td>Monthly local availability update only.</td></tr>
+        <tr><td>Do not contact</td><td>They declined or opted out.</td><td>Stop all outreach immediately.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" id="compliance">
+    <h2>Safe outreach rules</h2>
+    <div class="grid two">
+      <div class="card danger">
+        <h3>Do not do this</h3>
+        <ul>
+          <li>Do not pressure LACs or coordinators for referrals.</li>
+          <li>Do not offer commissions or exclusive referral arrangements.</li>
+          <li>Do not ask for participant health details during marketing outreach.</li>
+          <li>Do not add people to bulk SMS unless consent is clear.</li>
+          <li>Do not keep contacting anyone who asks to stop.</li>
+        </ul>
+      </div>
+      <div class="card green">
+        <h3>Do this instead</h3>
+        <ul>
+          <li>Use information-only language: “local provider guide”.</li>
+          <li>Respect participant choice and control.</li>
+          <li>Ask about service gaps before selling.</li>
+          <li>Keep a do-not-contact field in your tracker.</li>
+          <li>Move actual referrals into a separate participant intake system.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="fixed-footer no-print">
+  <button onclick="window.scrollTo({top:0, behavior:'smooth'})">Top</button>
+</div>
+
+<script>
+const contacts = [{"priority": "A1", "type": "LAC / NDIS", "organisation": "Uniting LAC Partner Penrith", "decision_maker": "Local Area Coordinator team", "phone": "1300 453 303", "email": "uniting.customercare@ndis.gov.au", "address": "Penrith NSW 2750", "suburb": "Penrith", "region": "Penrith", "referral_potential": "New-participant gateway; high local navigation influence.", "source": "Official page listed in uploaded report", "url": "https://www.ndis.gov.au/print/view/pdf/office_locations/locations?page=1&view_args%5B0%5D=-33.8354%2C151.2095&view_args%5B1%5D=250&view_args%5B2%5D=418", "best_angle": "Ask who handles local provider information and whether HD HeeD can send a one-page referral guide.", "first_action": "Email first, then call after 2 business days.", "notes": "Do not ask for participant details. Keep the approach as information-only and participant-choice focused."}, {"priority": "A1", "type": "LAC / NDIS", "organisation": "Uniting LAC Partner Windsor", "decision_maker": "Local Area Coordinator team", "phone": "1300 453 303", "email": "uniting.customercare@ndis.gov.au", "address": "Windsor NSW 2756", "suburb": "Windsor", "region": "Hawkesbury", "referral_potential": "Core Hawkesbury front door for local provider awareness.", "source": "Official page listed in uploaded report", "url": "https://www.ndis.gov.au/print/view/pdf/office_locations/locations?page=1&view_args%5B0%5D=-33.8857%2C151.2416&view_args%5B1%5D=100&view_args%5B2%5D=357", "best_angle": "Position HD HeeD as a local Hawkesbury option for participants and families asking about support.", "first_action": "Email first, then call after 2 business days.", "notes": "Strong local awareness contact. Keep wording neutral: LACs support participant choice and may not directly refer."}, {"priority": "A1", "type": "LAC / NDIS", "organisation": "NDIS Windsor office", "decision_maker": "Community and partner liaison / reception", "phone": "1800 800 110", "email": "Unspecified", "address": "309 George Street, Windsor NSW 2756", "suburb": "Windsor", "region": "Hawkesbury", "referral_potential": "Useful for ecosystem visibility and practical navigation.", "source": "Official page listed in uploaded report", "url": "https://www.ndis.gov.au/participants/working-providers/support-coordinators-and-plan-managers/what-support-coordinator", "best_angle": "Ask reception who is best for local provider information and community engagement.", "first_action": "Call first because email is not specified.", "notes": "Use phone only. Do not make repeated calls if they say they cannot receive provider outreach."}, {"priority": "A1", "type": "Disability / support coordination", "organisation": "Northcott Penrith", "decision_maker": "Intake / local service lead", "phone": "1800 818 286", "email": "Unspecified", "address": "32 Woodriff Street, Penrith NSW 2750", "suburb": "Penrith", "region": "Penrith", "referral_potential": "Large disability provider with support coordination and local trust.", "source": "Official page listed in uploaded report", "url": "https://northcott.com.au/locations/northcott-penrith/", "best_angle": "Ask intake/local lead whether HD HeeD can be an overflow or complementary local support option.", "first_action": "Call first or use website contact pathway, then log the correct email/contact person.", "notes": "Large provider; focus on complementary support, not competition."}, {"priority": "A1", "type": "Disability / support coordination", "organisation": "Breakthru Penrith", "decision_maker": "Location lead / intake", "phone": "1800 767 212", "email": "penrith@breakthru.org.au", "address": "Suite 10A, Level 2, 291-295 High Street, Penrith NSW 2750", "suburb": "Penrith", "region": "Penrith", "referral_potential": "High-value local coordination and employment overlap.", "source": "Official page listed in uploaded report", "url": "https://breakthru.org.au/locations/penrith/", "best_angle": "Local provider intro for participants needing daily living, community access, personal care or responsive support.", "first_action": "Email first, then call after 2 business days.", "notes": "Very high priority for first two weeks."}, {"priority": "A1", "type": "Disability / support coordination", "organisation": "Ability Options Penrith", "decision_maker": "Penrith intake / service lead", "phone": "1300 422 454", "email": "Unspecified", "address": "Suite 2, 95 Henry Street, Penrith NSW 2750", "suburb": "Penrith", "region": "Penrith", "referral_potential": "Offers both support coordination and plan management.", "source": "Official page listed in uploaded report", "url": "https://ndsp.com.au/directory/listing/ability-options-1/", "best_angle": "Ask intake/service lead if there are participant support gaps where HD HeeD can assist locally.", "first_action": "Call first because email is not specified.", "notes": "Record the name/email of the correct intake person after first call."}, {"priority": "A1", "type": "Disability / support coordination", "organisation": "Marli and Moe", "decision_maker": "Support coordination intake", "phone": "1300 797 454", "email": "admin@marliandmoe.com.au", "address": "Office 2, Level 1 B Block, 51 Henry Street, Penrith NSW 2750", "suburb": "Penrith", "region": "Penrith", "referral_potential": "Local Penrith specialist support coordination contact.", "source": "Official page listed in uploaded report", "url": "https://www.marliandmoe.com.au/", "best_angle": "Ask what local provider gaps their support coordinators are seeing and offer a one-page guide.", "first_action": "Email first, then call after 2 business days.", "notes": "Good direct email for outreach."}, {"priority": "A1", "type": "Disability / support coordination", "organisation": "Taylored Support Coordination", "decision_maker": "Referral intake", "phone": "1300 816 512", "email": "info@tayloredsupport.com.au", "address": "Suite 2/36 Woodriff Street, Penrith NSW 2750", "suburb": "Penrith", "region": "Penrith", "referral_potential": "Referral-ready posture and published referral pathway.", "source": "Official page listed in uploaded report", "url": "https://tayloredsupport.com.au/contact-us/", "best_angle": "Position HD HeeD as a responsive local provider for participants who need practical supports.", "first_action": "Email first, then call after 2 business days.", "notes": "Very good fit because referral intake is clear."}, {"priority": "A1", "type": "Disability / support coordination", "organisation": "Centre of Hope Penrith", "decision_maker": "Support coordination lead", "phone": "0432 250 900", "email": "Unspecified", "address": "Mobile service across Penrith LGA", "suburb": "Penrith", "region": "Penrith", "referral_potential": "Explicitly local and connected to hospital/community networks.", "source": "Official page listed in uploaded report", "url": "https://centreofhope.com.au/ndis-support-coordination-penrith/", "best_angle": "Ask whether they need reliable local support options for Penrith participants.", "first_action": "Call first because mobile is listed and email is not specified.", "notes": "Use respectful call timing. If they are busy, ask for preferred email."}, {"priority": "A1", "type": "Disability / support coordination", "organisation": "Interaction Services Penrith", "decision_maker": "Support coordination team", "phone": "1300 668 123", "email": "supportcoordinators@interactionservices.org", "address": "Penrith service area, NSW", "suburb": "Penrith", "region": "Penrith", "referral_potential": "Direct coordinator contact published; good reciprocal-referral prospect.", "source": "Official page listed in uploaded report", "url": "https://interactionservices.org/near-penrith/support-coordination/", "best_angle": "Use direct coordinator email and ask about local service gaps and referral guide.", "first_action": "Email first, then call after 2 business days.", "notes": "One of the strongest direct support coordinator contacts."}, {"priority": "A2", "type": "Disability / support coordination", "organisation": "NADO Penrith", "decision_maker": "Support Coordination team", "phone": "Unspecified", "email": "Unspecified", "address": "Penrith NSW", "suburb": "Penrith", "region": "Penrith", "referral_potential": "Penrith-based team serving Western Sydney.", "source": "Official page listed in uploaded report", "url": "https://nado.org.au/services/support_coordination/", "best_angle": "Use the website contact pathway and ask for the support coordination contact.", "first_action": "Use website contact form/source page, then call if a phone becomes available.", "notes": "A2 due to unspecified direct phone/email in the uploaded report."}, {"priority": "A2", "type": "Disability / support coordination", "organisation": "Evolution Disability Services", "decision_maker": "Support coordination intake", "phone": "1800 860 486", "email": "Unspecified", "address": "Suite 18, 1 Dight Street, Windsor NSW 2756; PO Box 5533 South Windsor NSW 2756", "suburb": "Windsor", "region": "Hawkesbury", "referral_potential": "Hawkesbury-based specialist support-coordination provider.", "source": "Official page listed in uploaded report", "url": "https://www.evolutiondisability.com.au/contact-us", "best_angle": "Strong Hawkesbury relationship target; ask about local gaps and complementary supports.", "first_action": "Call first or use website contact pathway.", "notes": "Important for Hawkesbury/Windsor because local support coordination is scarce."}, {"priority": "A2", "type": "Disability / support coordination", "organisation": "Support Agency", "decision_maker": "Support coordination / referral intake", "phone": "Unspecified", "email": "Unspecified", "address": "2/53 Argyle Street, South Windsor NSW 2756", "suburb": "South Windsor", "region": "Hawkesbury", "referral_potential": "Hawkesbury-focused coordinator/behaviour network.", "source": "Official page / event listing listed in uploaded report", "url": "https://www.supportagency.com.au/ndis-provider-hawkesbury/", "best_angle": "Use website contact path and ask for referral intake/support coordination contact.", "first_action": "Use source page/contact form first.", "notes": "A2 because direct phone/email were unspecified in uploaded report."}, {"priority": "A2", "type": "Disability / support coordination", "organisation": "Bridges Disability Services", "decision_maker": "General enquiries / service lead", "phone": "02 4598 0201", "email": "bridgesdisabilityservices@gmail.com", "address": "Peppercorn Place, 320 George Street, Windsor NSW 2756", "suburb": "Windsor", "region": "Hawkesbury", "referral_potential": "Extremely local Windsor presence near hospital/Centrelink.", "source": "Official page listed in uploaded report", "url": "https://bridgesdisabilityservices.org.au/", "best_angle": "Local Windsor relationship; offer HD HeeD as practical support option for participants/families.", "first_action": "Email first, then call after 2 business days.", "notes": "Good local Hawkesbury contact. Mention Windsor/Richmond proximity."}];
+
+function isEmailAvailable(email) {
+  return email && email.toLowerCase() !== "unspecified";
+}
+
+function getState(id, key, fallback) {
+  return localStorage.getItem(`hdheed_sc_lac_${id}_${key}`) || fallback;
+}
+
+function setState(id, key, val) {
+  localStorage.setItem(`hdheed_sc_lac_${id}_${key}`, val);
+}
+
+function matchFilter(c) {
+  const q = document.getElementById("search").value.toLowerCase().trim();
+  const p = document.getElementById("priorityFilter").value;
+  const r = document.getElementById("regionFilter").value;
+  const t = document.getElementById("typeFilter").value;
+
+  if (p && c.priority !== p) return false;
+  if (r && c.region !== r) return false;
+  if (t === "LAC" && !c.type.includes("LAC")) return false;
+  if (t === "support" && !c.type.toLowerCase().includes("support")) return false;
+
+  if (!q) return true;
+  const hay = [
+    c.priority, c.type, c.organisation, c.decision_maker, c.phone, c.email,
+    c.address, c.suburb, c.region, c.referral_potential, c.best_angle, c.notes
+  ].join(" ").toLowerCase();
+  return hay.includes(q);
+}
+
+function rowSummary(c) {
+  return `${c.priority} | ${c.organisation}
+Type: ${c.type}
+Ask for: ${c.decision_maker}
+Phone: ${c.phone}
+Email: ${c.email}
+Address/area: ${c.address}
+Referral potential: ${c.referral_potential}
+Best angle: ${c.best_angle}
+First action: ${c.first_action}
+Source: ${c.url}`;
+}
+
+function emailTemplate(c) {
+  const team = c.decision_maker.includes("team") || c.decision_maker.includes("reception") ? "Team" : "there";
+  return `Subject: Local NDIS support option for ${c.region}
+
+Hi ${team},
+
+I’m Himmat from HD HeeD. We support NDIS participants across Richmond/Hawkesbury, Penrith and surrounding Western Sydney areas.
+
+I’m reaching out because ${c.organisation} is a relevant local ${c.type.toLowerCase()} contact, and your team may speak with participants or families who are looking for local support options.
+
+HD HeeD may be useful where a participant needs practical supports such as daily living assistance, personal care, community access, carer relief/respite-style support, or responsive local provider communication.
+
+I am not asking for anything exclusive. I simply wanted to share HD HeeD as another local option that supports participant choice and control.
+
+Would it be useful if I sent a one-page referral guide with our service area, intake contact and support types?
+
+Kind regards,
+Himmat
+HD HeeD`;
+}
+
+function callTemplate(c) {
+  if (c.type.includes("LAC")) {
+    return `Hi, this is Himmat from HD HeeD. We are a local NDIS provider supporting participants around Richmond/Hawkesbury and Penrith.
+
+I understand LACs support participant choice and connection, so I am not asking for direct referrals or anything exclusive. I’m simply trying to find the correct person or pathway for sharing a short local provider information sheet.
+
+Is ${c.decision_maker} the right contact at ${c.organisation}, or is there someone else I should send this to?
+
+If appropriate:
+Would it be okay if I send a concise one-page guide with our service area, intake contact and support types?
+
+Close:
+Thank you. I will send it through and I will keep the follow-up light and professional.`;
+  }
+  return `Hi, this is Himmat from HD HeeD. We support NDIS participants around Richmond/Hawkesbury and Penrith.
+
+I’m calling because ${c.organisation} appears to be a relevant support coordination contact in the ${c.region} area.
+
+I am not asking for an exclusive arrangement. I just want to understand local support gaps and make sure your team knows when HD HeeD may be a suitable local provider option.
+
+Can I ask one quick question:
+What type of local support is hardest for your team to place at the moment?
+
+[Listen and write the answer.]
+
+That is helpful. If I send a one-page referral guide with our service area, intake pathway and best contact, would that be useful?
+
+Close:
+Thank you. I will send it through and follow up only if helpful.`;
+}
+
+function render() {
+  const filtered = contacts.filter(matchFilter);
+  const rows = document.getElementById("contactRows");
+  rows.innerHTML = "";
+
+  filtered.forEach((c, index) => {
+    const id = c.organisation.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+    const stage = getState(id, "stage", "New");
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><span class="pill ${c.priority.toLowerCase()}">${c.priority}</span></td>
+      <td><strong>${escapeHtml(c.organisation)}</strong><br><span class="tiny">${escapeHtml(c.region)} • ${escapeHtml(c.suburb)}</span></td>
+      <td><span class="pill ${c.type.includes('LAC') ? 'lac' : ''}">${escapeHtml(c.type)}</span></td>
+      <td>${escapeHtml(c.decision_maker)}</td>
+      <td>${c.phone === "Unspecified" ? '<span class="small">Unspecified</span>' : `<a href="tel:${escapeAttr(c.phone.replace(/\s/g,''))}">${escapeHtml(c.phone)}</a>`}</td>
+      <td>${isEmailAvailable(c.email) ? `<a href="mailto:${escapeAttr(c.email)}">${escapeHtml(c.email)}</a><br><span class="pill email">email available</span>` : '<span class="pill noemail">email unspecified</span>'}</td>
+      <td>${escapeHtml(c.address)}</td>
+      <td>${escapeHtml(c.first_action)}</td>
+      <td>
+        <select onchange="saveStage('${id}', this.value)">
+          ${stageOptions(stage)}
+        </select>
+      </td>
+      <td>
+        <button onclick="copyRaw(\`${escapeBacktick(rowSummary(c))}\`)">Copy row</button>
+        <button class="secondary" onclick="copyRaw(\`${escapeBacktick(emailTemplate(c))}\`)">Copy email</button>
+        <button class="ghost" onclick="copyRaw(\`${escapeBacktick(callTemplate(c))}\`)">Copy call</button>
+      </td>
+    `;
+    rows.appendChild(tr);
+  });
+
+  renderCards(filtered);
+  updateStats();
+}
+
+function renderCards(list) {
+  const container = document.getElementById("contactCards");
+  container.innerHTML = "";
+  list.forEach(c => {
+    const id = c.organisation.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+    const stage = getState(id, "stage", "New");
+    const note = getState(id, "note", "");
+    const card = document.createElement("div");
+    card.className = "contact-card";
+    card.innerHTML = `
+      <div class="contact-head">
+        <div>
+          <h3>${escapeHtml(c.organisation)}</h3>
+          <span class="pill ${c.priority.toLowerCase()}">${c.priority}</span>
+          <span class="pill ${c.type.includes('LAC') ? 'lac' : ''}">${escapeHtml(c.type)}</span>
+          <span class="pill">${escapeHtml(c.region)}</span>
+          ${isEmailAvailable(c.email) ? '<span class="pill email">direct email</span>' : '<span class="pill noemail">call/source page first</span>'}
+        </div>
+        <div>
+          <button onclick="copyRaw(\`${escapeBacktick(emailTemplate(c))}\`)">Copy email</button>
+          <button class="secondary" onclick="copyRaw(\`${escapeBacktick(callTemplate(c))}\`)">Copy call</button>
+        </div>
+      </div>
+
+      <div class="contact-meta">
+        <div class="meta-box"><b>Ask for</b>${escapeHtml(c.decision_maker)}</div>
+        <div class="meta-box"><b>Phone</b>${c.phone === "Unspecified" ? "Unspecified" : `<a href="tel:${escapeAttr(c.phone.replace(/\s/g,''))}">${escapeHtml(c.phone)}</a>`}</div>
+        <div class="meta-box"><b>Email</b>${isEmailAvailable(c.email) ? `<a href="mailto:${escapeAttr(c.email)}">${escapeHtml(c.email)}</a>` : "Unspecified"}</div>
+        <div class="meta-box"><b>Address / area</b>${escapeHtml(c.address)}</div>
+        <div class="meta-box"><b>First action</b>${escapeHtml(c.first_action)}</div>
+        <div class="meta-box"><b>Source</b><a href="${escapeAttr(c.url)}" target="_blank" rel="noopener">${escapeHtml(c.source)}</a></div>
+      </div>
+
+      <div class="callout">
+        <strong>Best angle:</strong> ${escapeHtml(c.best_angle)}<br>
+        <strong>Referral potential:</strong> ${escapeHtml(c.referral_potential)}<br>
+        <strong>Important note:</strong> ${escapeHtml(c.notes)}
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Follow-up stage</label>
+          <select onchange="saveStage('${id}', this.value)">
+            ${stageOptions(stage)}
+          </select>
+        </div>
+        <div>
+          <label>Your follow-up notes</label>
+          <textarea oninput="saveNote('${id}', this.value)" placeholder="Example: emailed 13/6, call back Tuesday, asked for referral guide">${escapeHtml(note)}</textarea>
+        </div>
+      </div>
+
+      <details>
+        <summary>View generated email for this contact</summary>
+        <div class="script">${escapeHtml(emailTemplate(c))}</div>
+      </details>
+      <details>
+        <summary>View generated call script for this contact</summary>
+        <div class="script">${escapeHtml(callTemplate(c))}</div>
+      </details>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function stageOptions(selected) {
+  const stages = ["New", "Day 0 email sent", "Called / voicemail", "Guide sent", "Warm reply", "Meeting booked", "Referral received", "Nurture", "Do not contact"];
+  return stages.map(s => `<option value="${escapeAttr(s)}" ${s === selected ? "selected" : ""}>${escapeHtml(s)}</option>`).join("");
+}
+
+function saveStage(id, value) {
+  setState(id, "stage", value);
+  flash("Stage saved.");
+  render();
+}
+
+function saveNote(id, value) {
+  setState(id, "note", value);
+}
+
+function clearFilters() {
+  document.getElementById("search").value = "";
+  document.getElementById("priorityFilter").value = "";
+  document.getElementById("regionFilter").value = "";
+  document.getElementById("typeFilter").value = "";
+  render();
+}
+
+function updateStats() {
+  document.getElementById("statTotal").textContent = contacts.length;
+  document.getElementById("statA1").textContent = contacts.filter(c => c.priority === "A1").length;
+  document.getElementById("statEmails").textContent = contacts.filter(c => isEmailAvailable(c.email)).length;
+  document.getElementById("statLac").textContent = contacts.filter(c => c.type.includes("LAC")).length;
+}
+
+function exportCSV() {
+  const filtered = contacts.filter(matchFilter);
+  const headers = ["priority","type","organisation","decision_maker","phone","email","address","suburb","region","referral_potential","best_angle","first_action","notes","source_url"];
+  const lines = [headers.join(",")];
+  filtered.forEach(c => {
+    const row = headers.map(h => {
+      const key = h === "source_url" ? "url" : h;
+      return `"${String(c[key] || "").replace(/"/g, '""')}"`;
+    });
+    lines.push(row.join(","));
+  });
+  const blob = new Blob([lines.join("\n")], {type: "text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "hdheed_support_coordinator_lac_contacts.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+async function copyText(id) {
+  const text = document.getElementById(id).innerText;
+  copyRaw(text);
+}
+
+async function copyRaw(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    const temp = document.createElement("textarea");
+    temp.value = text;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+  }
+  flash("Copied.");
+}
+
+function flash(message) {
+  const old = document.getElementById("flash");
+  if (old) old.remove();
+  const div = document.createElement("div");
+  div.id = "flash";
+  div.textContent = message;
+  div.style.position = "fixed";
+  div.style.left = "50%";
+  div.style.bottom = "24px";
+  div.style.transform = "translateX(-50%)";
+  div.style.background = "#0b7a75";
+  div.style.color = "white";
+  div.style.padding = "12px 18px";
+  div.style.borderRadius = "999px";
+  div.style.boxShadow = "0 10px 24px rgba(0,0,0,0.2)";
+  div.style.zIndex = "99";
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 1300);
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+function escapeAttr(str) { return escapeHtml(str); }
+function escapeBacktick(str) {
+  return String(str).replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\${/g, "\\${");
+}
+
+document.addEventListener("DOMContentLoaded", render);
+</script>
+</body>
+</html>
